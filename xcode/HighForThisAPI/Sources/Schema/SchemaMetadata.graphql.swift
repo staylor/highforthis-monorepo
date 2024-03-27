@@ -34,10 +34,6 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "ImageUpload": return HighForThisAPI.Objects.ImageUpload
     case "VideoUpload": return HighForThisAPI.Objects.VideoUpload
     case "Artist": return HighForThisAPI.Objects.Artist
-    case "Category": return HighForThisAPI.Objects.Category
-    case "CrossStreet": return HighForThisAPI.Objects.CrossStreet
-    case "Neighborhood": return HighForThisAPI.Objects.Neighborhood
-    case "Place": return HighForThisAPI.Objects.Place
     case "Venue": return HighForThisAPI.Objects.Venue
     case "VenueCoordinates": return HighForThisAPI.Objects.VenueCoordinates
     case "ShowConnection": return HighForThisAPI.Objects.ShowConnection

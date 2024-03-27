@@ -78,7 +78,7 @@
     "vitest": "1.3.1"
   },
   "scripts": {
-    "codegen": "graphql-codegen && yarn lint-fix ./web/src/types/graphql.ts",
+    "codegen": "graphql-codegen && yarn lint-fix && ./apollo-ios-cli generate",
     "graphql:dev": "yarn workspace @highforthis/graphql dev",
     "graphql:dev:start": "env-cmd -e dev node ./graphql/lib/index.js",
     "graphql:prod:start": "env-cmd -e prod node ./graphql/lib/index.js",

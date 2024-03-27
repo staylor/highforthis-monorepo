@@ -74,15 +74,6 @@ type AudioUpload implements MediaUpload {
   year: Int
 }
 
-type Category implements Term {
-  description: String
-  featuredMedia: [MediaUpload!]
-  id: ObjID!
-  name: String!
-  slug: String!
-  taxonomy: Taxonomy!
-}
-
 type CodeNode implements ElementNodeType & LexicalNode {
   children: [EditorNode]
   direction: ElementDirection
@@ -130,12 +121,9 @@ input CreateTaxonomyInput {
 input CreateTermInput {
   address: String
   capacity: String
-  categories: [String]
-  crossStreets: [String]
   description: String
   featuredMedia: [String]
   name: String!
-  neighborhood: ObjID
   slug: String
   taxonomy: ObjID!
 }
@@ -158,15 +146,6 @@ input CreateVideoInput {
   slug: String!
   title: String!
   year: Int!
-}
-
-type CrossStreet implements Term {
-  description: String
-  featuredMedia: [MediaUpload!]
-  id: ObjID!
-  name: String!
-  slug: String!
-  taxonomy: Taxonomy!
 }
 
 type DashboardSettings {
@@ -397,15 +376,6 @@ type Mutation {
   updateVideo(id: ObjID!, input: UpdateVideoInput!): Video
 }
 
-type Neighborhood implements Term {
-  description: String
-  featuredMedia: [MediaUpload!]
-  id: ObjID!
-  name: String!
-  slug: String!
-  taxonomy: Taxonomy!
-}
-
 """Id representation, based on Mongo Object Ids"""
 scalar ObjID
 
@@ -414,26 +384,6 @@ type PageInfo {
   hasNextPage: Boolean
   hasPreviousPage: Boolean
   startCursor: String
-}
-
-type Place implements Term {
-  address: String
-  categories: [Category!]!
-  crossStreets: [CrossStreet!]!
-  description: String
-  featuredMedia: [MediaUpload!]
-  id: ObjID!
-  name: String!
-  neighborhood: Neighborhood
-  slug: String!
-  taxonomy: Taxonomy!
-}
-
-enum PlaceOrder {
-  A_TO_Z
-  UPDATED_ASC
-  UPDATED_DESC
-  Z_TO_A
 }
 
 type Podcast {
@@ -527,7 +477,6 @@ type Query {
   dashboardSettings: DashboardSettings!
   media(id: ObjID): MediaUpload
   mediaSettings: MediaSettings!
-  places(after: String, before: String, categories: [String], crossStreets: [String], first: Int, last: Int, neighborhoods: [String], order: PlaceOrder, search: String): TermConnection
   podcast(id: ObjID, slug: String): Podcast
   podcastSettings: PodcastSettings!
   podcasts(after: String, before: String, first: Int, last: Int, order: PodcastOrder, search: String): PodcastConnection
@@ -711,13 +660,10 @@ input UpdateTermInput {
   address: String
   appleMusic: AppleMusicDataInput
   capacity: String
-  categories: [String]
   coordinates: VenueCoordinatesInput
-  crossStreets: [String]
   description: String
   featuredMedia: [String]
   name: String
-  neighborhood: ObjID
   slug: String
   taxonomy: ObjID
 }

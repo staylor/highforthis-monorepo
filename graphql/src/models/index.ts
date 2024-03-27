@@ -2,7 +2,6 @@ import type { Db } from 'mongodb';
 
 import type { ModelContext } from './types';
 import Media from './Media';
-import Place from './Place';
 import Podcast from './Podcast';
 import Post from './Post';
 import Settings from './Settings';
@@ -16,7 +15,6 @@ export default function addModelsToContext(db: Db): any {
   const context = { db } as ModelContext;
   const models = {
     Media: new Media(context),
-    Place: new Place(context),
     Podcast: new Podcast(context),
     Post: new Post(context),
     Settings: new Settings(context),

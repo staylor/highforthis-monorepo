@@ -1,5 +1,3 @@
-import { gql } from 'graphql-tag';
-
 import { uploadUrl } from '@/utils/media';
 import type { ImageUpload, ImageUploadCrop } from '@/types/graphql';
 
@@ -32,20 +30,5 @@ function FeaturedMedia({ featuredMedia, alt = '', cropSize = 640, className }: F
     </>
   );
 }
-
-FeaturedMedia.fragments = {
-  featuredMedia: gql`
-    fragment FeaturedMedia_featuredMedia on MediaUpload {
-      destination
-      id
-      ... on ImageUpload {
-        crops {
-          fileName
-          width
-        }
-      }
-    }
-  `,
-};
 
 export default FeaturedMedia;

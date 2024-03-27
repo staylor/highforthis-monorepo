@@ -7,7 +7,7 @@ import ListTable, { RowTitle, RowActions, Thumbnail, usePath } from '@/component
 import Message from '@/components/Form/Message';
 import query, { addPageOffset } from '@/utils/query';
 import { handleDelete } from '@/utils/action';
-import type { Place, Term, TermConnection, TermsAdminQuery } from '@/types/graphql';
+import type { Term, TermConnection, TermsAdminQuery } from '@/types/graphql';
 import type { Columns } from '@/types';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
@@ -70,28 +70,11 @@ export default function Terms() {
     });
   }
 
-  if (['venue', 'place'].includes(terms.taxonomy.slug)) {
+  if (['venue'].includes(terms.taxonomy.slug)) {
     columns.push({
       label: 'Address',
       prop: 'address',
     });
-  }
-
-  if (['place'].includes(terms.taxonomy.slug)) {
-    columns.push(
-      {
-        label: 'Neighborhood',
-        render: (node: Place) => node.neighborhood && node.neighborhood.name,
-      },
-      {
-        label: 'Cross Streets',
-        render: (node: Place) => node.crossStreets.map((s: Term) => s.name).join(', '),
-      },
-      {
-        label: 'Categories',
-        render: (node: Place) => node.categories.map((s: Term) => s.name).join(', '),
-      }
-    );
   }
 
   return (
@@ -142,21 +125,6 @@ const termsQuery = gql`
           ... on Venue {
             address
             capacity
-          }
-          ... on Place {
-            address
-            categories {
-              id
-              name
-            }
-            crossStreets {
-              id
-              name
-            }
-            neighborhood {
-              id
-              name
-            }
           }
         }
       }

@@ -51,7 +51,16 @@ const venueQuery = gql`
     }
     venue: term(slug: $slug, taxonomy: "venue") {
       featuredMedia {
-        ...FeaturedMedia_featuredMedia
+        destination
+        fileName
+        id
+        type
+        ... on ImageUpload {
+          crops {
+            fileName
+            width
+          }
+        }
       }
       id
       name
@@ -65,6 +74,5 @@ const venueQuery = gql`
       }
     }
   }
-  ${FeaturedMedia.fragments.featuredMedia}
   ${Shows.fragments.shows}
 `;

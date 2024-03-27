@@ -28,9 +28,6 @@ export default function TermAdd() {
 
 const termQuery = gql`
   query TermTaxonomy($id: ObjID) {
-    neighborhoods: terms(first: 250, taxonomy: "neighborhood") @cache(key: "admin") {
-      ...TermForm_terms
-    }
     taxonomy(id: $id) {
       id
       name
@@ -38,7 +35,6 @@ const termQuery = gql`
       slug
     }
   }
-  ${TermForm.fragments.terms}
 `;
 
 const termMutation = gql`

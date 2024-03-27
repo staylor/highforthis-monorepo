@@ -29,6 +29,6 @@ export default {
       'VideoNode',
     ],
     MediaUpload: ['AudioUpload', 'FileUpload', 'ImageUpload', 'VideoUpload'],
-    Term: ['Artist', 'Category', 'CrossStreet', 'Neighborhood', 'Place', 'Venue'],
+    Term: ['Artist', 'Venue'],
   },
 };

@@ -2,10 +2,10 @@
   "schemaNamespace" : "HighForThisAPI",
   "input" : {
     "operationSearchPaths" : [
-      "./HighForThis/graphql/operations/*.graphql"
+      "./xcode/HighForThis/graphql/operations/*.graphql"
     ],
     "schemaSearchPaths" : [
-      "./HighForThis/graphql/schema/schema.graphql"
+      "./graphql/schema.graphql"
     ]
   },
   "output" : {
@@ -14,7 +14,7 @@
       }
     },
     "schemaTypes" : {
-      "path" : "./HighForThisAPI",
+      "path" : "./xcode/HighForThisAPI",
       "moduleType" : {
         "swiftPackageManager" : {
         }

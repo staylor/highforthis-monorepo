@@ -5,9 +5,7 @@ import Form from '@/components/Admin/Form';
 import Input from '@/components/Form/Input';
 import Message from '@/components/Form/Message';
 import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
-import Tags from '@/components/Admin/Form/Tags';
 import type { Fields } from '@/types';
-import type { Term, TermEdge } from '@/types/graphql';
 
 interface TermFormProps {
   data?: any;
@@ -16,7 +14,6 @@ interface TermFormProps {
 }
 
 export default function TermForm({ data = {}, heading, buttonLabel }: TermFormProps) {
-  const { neighborhoods } = data;
   const termFields: Fields = [
     {
       prop: 'taxonomy',
@@ -47,7 +44,7 @@ export default function TermForm({ data = {}, heading, buttonLabel }: TermFormPr
       label: 'Address',
       prop: 'address',
       type: 'textarea',
-      condition: ({ term }) => ['venue', 'place'].includes(term?.taxonomy?.slug),
+      condition: ({ term }) => ['venue'].includes(term?.taxonomy?.slug),
       render: ({ term }) => term?.address,
     },
     {
@@ -75,46 +72,7 @@ export default function TermForm({ data = {}, heading, buttonLabel }: TermFormPr
       prop: 'featuredMedia',
       type: 'custom',
       render: ({ term }) => (term ? <FeaturedMedia media={term.featuredMedia || []} /> : null),
-      condition: ({ term }) => ['artist', 'venue', 'place'].includes(term?.taxonomy?.slug),
-    },
-    {
-      label: 'Neighborhood',
-      prop: 'neighborhood',
-      type: 'select',
-      placeholder: '---',
-      choices: neighborhoods.edges.map(({ node }: TermEdge) => ({
-        label: node.name,
-        value: node.id,
-      })),
-      render: ({ term }) => term?.neighborhood?.id,
-      condition: ({ term }) => term?.taxonomy?.slug === 'place',
-      position: 'meta',
-    },
-    {
-      label: 'Categories',
-      prop: 'categories',
-      type: 'custom',
-      condition: ({ term }) => term?.taxonomy?.slug === 'place',
-      render: ({ term }) => {
-        let tags = term?.categories
-          ? term.categories.filter((t: Term) => t && t.name).map((t: Term) => t.name)
-          : [];
-        return <Tags name="categories" tags={tags} />;
-      },
-      position: 'meta',
-    },
-    {
-      label: 'Cross Streets',
-      prop: 'crossStreets',
-      type: 'custom',
-      condition: ({ term }) => term?.taxonomy?.slug === 'place',
-      render: ({ term }) => {
-        let tags = term?.crossStreets
-          ? term.crossStreets.filter((t: Term) => t && t.name).map((t: Term) => t.name)
-          : [];
-        return <Tags name="crossStreets" tags={tags} />;
-      },
-      position: 'meta',
+      condition: ({ term }) => ['artist', 'venue'].includes(term?.taxonomy?.slug),
     },
   ];
   return (
@@ -150,35 +108,7 @@ TermForm.fragments = {
           longitude
         }
       }
-      ... on Place {
-        address
-        categories {
-          id
-          name
-        }
-        crossStreets {
-          id
-          name
-        }
-        neighborhood {
-          id
-          name
-        }
-      }
     }
     ${FeaturedMedia.fragments.media}
-  `,
-  terms: gql`
-    fragment TermForm_terms on TermConnection {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-      taxonomy {
-        id
-      }
-    }
   `,
 };

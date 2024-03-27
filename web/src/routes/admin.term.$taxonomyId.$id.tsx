@@ -28,15 +28,11 @@ export default function TermEdit() {
 
 const termQuery = gql`
   query TermEdit($id: ObjID) {
-    neighborhoods: terms(first: 250, taxonomy: "neighborhood") @cache(key: "admin") {
-      ...TermForm_terms
-    }
     term(id: $id) {
       ...TermForm_term
     }
   }
   ${TermForm.fragments.term}
-  ${TermForm.fragments.terms}
 `;
 
 const termMutation = gql`
