@@ -42,7 +42,7 @@ module.exports = {
         tailwindcss: {
           config: './web/src/styles/tailwind-base.js',
         },
-      }
+      },
     },
     {
       files: ['./web/src/**/*.tsx', './web/src/**/*.graphql.ts', './web/src/**/graphql.ts'],
@@ -82,4 +82,4 @@ module.exports = {
       version: 29,
     },
   },
-}
+};

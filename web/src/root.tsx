@@ -1,7 +1,6 @@
 import type { LinksFunction, LoaderFunction } from '@remix-run/server-runtime';
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -12,7 +11,7 @@ import {
 } from '@remix-run/react';
 import type { MetaFunction } from '@remix-run/node';
 
-import mainStylesheetUrl from '@/styles/main.css';
+import mainStylesheetUrl from '@/styles/main.css?url';
 
 import { Html, Body, Boundary, useLayout } from './components/Layout';
 import { TWITTER_USERNAME } from './constants';
@@ -93,7 +92,6 @@ export default function Root() {
         </Boundary>
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </Body>
     </Html>
   );

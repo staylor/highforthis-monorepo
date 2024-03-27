@@ -1,1 +1,1 @@
-export { default, loader } from './admin.settings.site';
+export { default, loader, action } from './admin.settings.site';

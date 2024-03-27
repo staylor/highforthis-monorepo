@@ -2,7 +2,7 @@ import type { Params } from '@remix-run/react';
 import type { ApolloError, OperationVariables, QueryOptions, ServerError } from '@apollo/client';
 
 import { PER_PAGE } from '@/constants';
-import { authenticator } from '@/auth.server';
+import { authenticator } from '@/auth';
 
 import { offsetToCursor } from './connection';
 

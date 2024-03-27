@@ -9,8 +9,8 @@ import type { MetaFunction } from '@remix-run/node';
 import NavMenu from '@/components/Admin/NavMenu';
 import titleTemplate from '@/utils/title';
 import query from '@/utils/query';
-import { authenticator } from '@/auth.server';
-import adminCss from '@/styles/admin.css';
+import { authenticator } from '@/auth';
+import adminCss from '@/styles/admin.css?url';
 import { rootData } from '@/utils/rootData';
 
 export const handle = {

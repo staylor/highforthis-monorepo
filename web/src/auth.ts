@@ -4,7 +4,7 @@ import { FormStrategy } from 'remix-auth-form';
 
 import { post } from '@/utils/action';
 
-import { sessionStorage } from './session.server';
+import { sessionStorage } from './session';
 
 interface User {
   token: string;
