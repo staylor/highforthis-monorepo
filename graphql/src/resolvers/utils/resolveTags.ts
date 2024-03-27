@@ -27,7 +27,7 @@ export default async function resolveTags(
     });
 
     if (terms.length > 0) {
-      const termIds = await Promise.all(terms.map(name => Term.insert({ name, taxonomy })));
+      const termIds = await Promise.all(terms.map((name) => Term.insert({ name, taxonomy })));
       ids = ids.concat(termIds);
     }
   }

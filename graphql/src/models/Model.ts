@@ -15,14 +15,14 @@ async function findByIds(collection: Collection, ids: readonly string[]): Promis
       },
     })
     .toArray()
-    .then(docs => {
+    .then((docs) => {
       const idMap: any = {};
       // make a map of documents keyed by id (string)
-      docs.forEach(d => {
+      docs.forEach((d) => {
         idMap[d._id.toString()] = d;
       });
       // return the documents in the order they were requested
-      return ids.map(id => idMap[id]);
+      return ids.map((id) => idMap[id]);
     });
 }
 
@@ -36,7 +36,7 @@ export default class Model {
 
   public constructor(context: ModelContext) {
     this.context = context;
-    this.loader = new DataLoader(ids => findByIds(this.collection, ids));
+    this.loader = new DataLoader((ids) => findByIds(this.collection, ids));
   }
 
   public findOneById(id: string) {

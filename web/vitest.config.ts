@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import { defineConfig } from 'vite';
+import { type UserConfigExport, defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -12,4 +12,4 @@ export default defineConfig({
     environment: 'happy-dom',
     setupFiles: ['./test/setup-test-env.ts'],
   },
-});
+} as UserConfigExport);

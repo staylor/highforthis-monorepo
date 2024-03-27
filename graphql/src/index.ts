@@ -68,7 +68,7 @@ async function startServer(): Promise<void> {
     })
   );
 
-  await new Promise<void>(resolve =>
+  await new Promise<void>((resolve) =>
     httpServer.listen({ port: GRAPHQL_PORT }, () => {
       cronJobs(db);
       resolve();
@@ -81,7 +81,7 @@ startServer()
   .then(() => {
     console.log('All systems go');
   })
-  .catch(e => {
+  .catch((e) => {
     console.error('Uncaught error in startup');
     console.error(e);
     console.trace(e);

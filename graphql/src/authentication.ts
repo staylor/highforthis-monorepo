@@ -26,19 +26,19 @@ export function initialize(app: Router) {
     new Strategy(
       {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: process.env.TOKEN_SECRET,
+        secretOrKey: process.env.TOKEN_SECRET || '',
         passReqToCallback: true,
       },
       (request: Request, jwtPayload: JWTPayload, done: VerifiedCallback) => {
         userFromPayload(request, jwtPayload)
-          .then(user => {
+          .then((user) => {
             if (user) {
               done(null, user);
             } else {
               done(null, false);
             }
           })
-          .catch(e => {
+          .catch((e) => {
             done(e, false);
           });
       }

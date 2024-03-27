@@ -4,33 +4,6 @@ import Model from './Model';
 import type { ModelContext } from './types';
 import { getUniqueSlug } from './utils';
 
-function convertEntityData(entityMap: any): any[] {
-  return entityMap.map((entity: any) => {
-    const normalized: any = {};
-    if (entity.data.type === 'EMBED') {
-      const { type, url, html } = entity.data;
-      normalized.data = { type, url, html };
-    } else if (entity.data.type === 'LINK') {
-      const { type, href, target } = entity.data;
-      normalized.data = { type, href, target };
-    } else if (entity.data.type === 'IMAGE') {
-      const { type, imageId, size } = entity.data;
-      normalized.data = { type, size };
-      normalized.data.imageId = new ObjectId(imageId);
-    } else if (entity.data.type === 'VIDEO') {
-      const { type, videoId } = entity.data;
-      normalized.data = { type };
-      normalized.data.videoId = new ObjectId(videoId);
-    } else {
-      normalized.data = entity.data;
-    }
-    const { type, mutability } = entity;
-    normalized.type = type;
-    normalized.mutability = mutability;
-    return normalized;
-  });
-}
-
 export default class Post extends Model {
   public constructor(context: ModelContext) {
     super(context);

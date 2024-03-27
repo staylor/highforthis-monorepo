@@ -50,7 +50,7 @@ async function fetchPlaylistItems(playlistId: string): Promise<PlainObj[]> {
       const playlistUrl = getPlaylistUrl(playlistId, pageToken);
       // console.log(playlistUrl);
       fetch(playlistUrl)
-        .catch(e => {
+        .catch((e) => {
           if (items.length) {
             resolve(items);
           } else {
@@ -80,7 +80,7 @@ async function updateVideo(
 ) {
   const thumbnails =
     snippet && snippet.thumbnails
-      ? Object.keys(snippet.thumbnails).map(thumb => snippet.thumbnails[thumb])
+      ? Object.keys(snippet.thumbnails).map((thumb) => snippet.thumbnails[thumb])
       : null;
 
   const date = new Date(contentDetails.videoPublishedAt);
@@ -127,7 +127,7 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
     .then((ids: PlainObj[]) => ids.map(({ dataId }) => dataId))
     .then((ids: string[]) =>
       Promise.all(
-        items.map(item => {
+        items.map((item) => {
           if (
             !item ||
             item.snippet.title === 'Private video' ||

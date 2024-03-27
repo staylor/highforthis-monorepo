@@ -42,7 +42,7 @@ for (const venue of venues) {
   }
 
   const geolocation = await fetch(apiUrl(venue.address))
-    .then(response => response.json())
+    .then((response) => response.json())
     .then(({ results }) => {
       if (results.length > 0) {
         const [result] = results;

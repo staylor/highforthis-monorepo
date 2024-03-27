@@ -19,7 +19,7 @@ interface FileData {
 
   const uploads: FileData[] = [];
   const items = await media.collection.find({}).toArray();
-  items.forEach(item => {
+  items.forEach((item) => {
     uploads.push({ destination: item.destination, fileName: item.fileName });
     if (item.type === 'image') {
       item.crops.forEach((crop: FileData) => {

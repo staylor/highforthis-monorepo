@@ -14,7 +14,7 @@ const search = (term: string) =>
       Authorization: `Bearer ${jwtToken}`,
     },
   })
-    .then(response => response.json())
+    .then((response) => response.json())
     .then(({ results }) => {
       const data = results?.artists?.data;
       if (!data) {

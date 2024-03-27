@@ -45,7 +45,7 @@ const typeDefs = `#graphql
     hasNextPage: Boolean
   }
 
-  ${Object.values(modules).map(node => `${node.replace('#graphql', '')}\n\n`)}
+  ${Object.values(modules).map((node) => `${node.replace('#graphql', '')}\n\n`)}
 `;
 
 export default typeDefs;

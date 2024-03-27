@@ -36,7 +36,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['./web/*'],
+      files: ['./web/**/*'],
       extends: ['plugin:tailwindcss/recommended'],
       settings: {
         tailwindcss: {

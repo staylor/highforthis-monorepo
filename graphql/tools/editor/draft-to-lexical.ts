@@ -8,8 +8,8 @@ import Video from '../../src/models/Video';
 const writeDir = path.join(process.cwd(), 'tools', 'editor', 'converted');
 const fileName = (id: string) => `${writeDir}/${id}.json`;
 const writeFile = (name: string, data: any) => {
-  fs.writeFileSync(name, JSON.stringify(data, null, 2) + "\n");
-}
+  fs.writeFileSync(name, JSON.stringify(data, null, 2) + '\n');
+};
 
 const FORMATS = {
   BOLD: 1,
@@ -29,7 +29,7 @@ const ENTITY_TO_TYPE = {
 
 const TYPE_TO_TYPE = {
   'header-three': 'heading',
-  'unstyled': 'paragraph',
+  unstyled: 'paragraph',
 };
 
 const TYPE_TO_TAG = {
@@ -56,7 +56,7 @@ async function main() {
     }
 
     const data = {
-      root: {    
+      root: {
         direction: 'ltr',
         format: 0,
         indent: 0,
@@ -65,12 +65,12 @@ async function main() {
         children: [] as any[],
       },
     };
-  
+
     for (const block of post.contentState.blocks) {
       if (block.type === 'atomic') {
         const [range] = block.entityRanges;
         const entity = post.contentState.entityMap[range.key];
-        const {type, ...rest} = entity.data;
+        const { type, ...rest } = entity.data;
         let fields = rest;
 
         switch (type) {
@@ -93,7 +93,7 @@ async function main() {
             }
             break;
         }
-  
+
         data.root.children.push({
           ...fields,
           format: 0,
@@ -122,14 +122,14 @@ async function main() {
                 range: {},
               });
             }
-  
+
             segments.push({
               text: text.substring(range.offset, range.offset + range.length),
               range,
             });
-  
+
             nextIndex = range.offset + range.length;
-  
+
             if (i + 1 === inlineLength && nextIndex < text.length) {
               segments.push({
                 text: text.substring(nextIndex),
@@ -137,8 +137,8 @@ async function main() {
               });
             }
           }
-  
-          for (const {text, range} of segments) {
+
+          for (const { text, range } of segments) {
             children.push({
               detail: 0,
               format: range.style ? FORMATS[range.style] : 0,
@@ -162,10 +162,13 @@ async function main() {
         }
 
         const blockType = TYPE_TO_TYPE[block.type];
-        if (blockType === 'paragraph' && children.filter((node) => node.type === 'text' && node.text.trim()).length === 0) {
+        if (
+          blockType === 'paragraph' &&
+          children.filter((node) => node.type === 'text' && node.text.trim()).length === 0
+        ) {
           continue;
         }
-  
+
         data.root.children.push({
           direction: 'ltr',
           format: 0,
@@ -177,7 +180,7 @@ async function main() {
         });
       }
     }
-  
+
     console.log('Writing file:', file);
     writeFile(file, data);
   }

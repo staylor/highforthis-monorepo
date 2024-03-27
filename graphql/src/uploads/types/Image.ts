@@ -62,7 +62,7 @@ export default class Image extends Upload {
       height: 0,
       fileSize: 0,
     };
-    const imageMeta = sharp().on('info', info => {
+    const imageMeta = sharp().on('info', (info) => {
       original.width = info.width;
       original.height = info.height;
       original.fileSize = info.size;
@@ -81,7 +81,7 @@ export default class Image extends Upload {
         return [width, height];
       });
 
-      this.crops = await Promise.all(sizes.map(size => this.handleCrop(finalPath, size)));
+      this.crops = await Promise.all(sizes.map((size) => this.handleCrop(finalPath, size)));
 
       cb(null, {
         ...original,
@@ -101,7 +101,7 @@ export default class Image extends Upload {
 
   toArray() {
     return super.toArray().concat(
-      this.crops.map(image => ({
+      this.crops.map((image) => ({
         destination: this.destination,
         fileName: image.fileName,
       }))

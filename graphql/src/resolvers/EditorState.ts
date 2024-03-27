@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+
 import type { AugmentedContext } from '../models/types';
 
 const resolvers = {
@@ -34,13 +35,13 @@ const resolvers = {
   ImageNode: {
     image(data: any, args: any, { Media }: AugmentedContext) {
       return Media.findOneById(new ObjectId(data.imageId));
-    }
+    },
   },
   VideoNode: {
     video(data: any, args: any, { Video }: AugmentedContext) {
       return Video.findOneById(new ObjectId(data.videoId));
     },
-  }
+  },
 };
 
 export default resolvers;

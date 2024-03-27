@@ -159,4 +159,4 @@ const EditorState = `#graphql
   }
 `;
 
-export default EditorState
+export default EditorState;

@@ -7,8 +7,8 @@ import type { FileInfo, ModelContext } from './types';
 import Model from './Model';
 
 const deleteFile = (file: string): Promise<void> =>
-  new Promise(resolve => {
-    fs.unlink(file, err => {
+  new Promise((resolve) => {
+    fs.unlink(file, (err) => {
       if (err) {
         console.log(err);
       }
