@@ -1,0 +1,54 @@
+{
+  "id": "1603491177",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1603491177",
+  "attributes": {
+    "name": "The Smile",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/c4/b2/2a/c4b22a58-84bb-47f9-920c-a2d870e6f936/5dc24a33-271e-455d-a0d2-d1b7b0f28e22_ami-identity-3764b1a88dd356a6fadea05cbbcd5781-2023-11-13T16-54-45.761Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "111113",
+      "textColor1": "d5dad8",
+      "textColor2": "c5c2c4",
+      "textColor3": "adb1b1",
+      "textColor4": "a19fa0"
+    },
+    "url": "https://music.apple.com/us/artist/the-smile/1603491177"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1603491177/albums",
+      "data": [
+        {
+          "id": "1616902433",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1616902433"
+        },
+        {
+          "id": "1711359135",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1711359135"
+        },
+        {
+          "id": "1656070366",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1656070366"
+        },
+        {
+          "id": "1609536507",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1609536507"
+        },
+        {
+          "id": "1690036090",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690036090"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "id": "250007874",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/250007874",
+  "attributes": {
+    "name": "Amanda Shires",
+    "genreNames": [
+      "Singer/Songwriter"
+    ],
+    "artwork": {
+      "width": 1005,
+      "height": 1005,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/5b/38/ee/5b38eeb8-d8cc-e2c9-f119-f73691f63e09/0767025c-b60f-4732-958a-fbda553999fa_file_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "292929",
+      "textColor1": "fafafa",
+      "textColor2": "dcdcdc",
+      "textColor3": "d0d0d0",
+      "textColor4": "b8b8b8"
+    },
+    "url": "https://music.apple.com/us/artist/amanda-shires/250007874"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/250007874/albums",
+      "data": [
+        {
+          "id": "1472976734",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1472976734"
+        },
+        {
+          "id": "1376309972",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1376309972"
+        },
+        {
+          "id": "1644162564",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1644162564"
+        },
+        {
+          "id": "677408415",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/677408415"
+        },
+        {
+          "id": "1680797182",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1680797182"
+        },
+        {
+          "id": "1584224309",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1584224309"
+        },
+        {
+          "id": "1652258354",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1652258354"
+        },
+        {
+          "id": "304384846",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/304384846"
+        },
+        {
+          "id": "1530006791",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1530006791"
+        },
+        {
+          "id": "1582916998",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1582916998"
+        },
+        {
+          "id": "1543750352",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543750352"
+        },
+        {
+          "id": "1655957797",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1655957797"
+        },
+        {
+          "id": "1497342327",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1497342327"
+        },
+        {
+          "id": "962689197",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/962689197"
+        },
+        {
+          "id": "1545418322",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1545418322"
+        },
+        {
+          "id": "1529944163",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1529944163"
+        },
+        {
+          "id": "1535594852",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1535594852"
+        },
+        {
+          "id": "1543777867",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543777867"
+        },
+        {
+          "id": "1439495312",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1439495312"
+        }
+      ]
+    }
+  }
+}

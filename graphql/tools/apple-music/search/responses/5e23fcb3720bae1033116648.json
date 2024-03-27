@@ -1,0 +1,94 @@
+{
+  "id": "1185874882",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1185874882",
+  "attributes": {
+    "name": "Christone \"Kingfish\" Ingram",
+    "genreNames": [
+      "Blues"
+    ],
+    "artwork": {
+      "width": 4000,
+      "height": 4000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/a3/3d/1f/a33d1f14-7193-e210-5cc6-e7a508a7c26c/mzl.llmbahks.jpg/{w}x{h}bb.jpg",
+      "bgColor": "180631",
+      "textColor1": "f6ba22",
+      "textColor2": "e3a828",
+      "textColor3": "ca9625",
+      "textColor4": "bb882a"
+    },
+    "url": "https://music.apple.com/us/artist/christone-kingfish-ingram/1185874882"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1185874882/albums",
+      "data": [
+        {
+          "id": "1455493848",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1455493848"
+        },
+        {
+          "id": "1564762381",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564762381"
+        },
+        {
+          "id": "1717509110",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1717509110"
+        },
+        {
+          "id": "1655214621",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1655214621"
+        },
+        {
+          "id": "1665051523",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1665051523"
+        },
+        {
+          "id": "1498072760",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498072760"
+        },
+        {
+          "id": "1647434306",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1647434306"
+        },
+        {
+          "id": "1498078595",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498078595"
+        },
+        {
+          "id": "1452867767",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1452867767"
+        },
+        {
+          "id": "1538655400",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1538655400"
+        },
+        {
+          "id": "1566010263",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1566010263"
+        },
+        {
+          "id": "1523087049",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523087049"
+        },
+        {
+          "id": "1457981004",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1457981004"
+        }
+      ]
+    }
+  }
+}

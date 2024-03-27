@@ -1,0 +1,19 @@
+query Shows {
+	shows(latest: true, first: 200) {
+		edges {
+			node {
+				id
+				title
+				date
+				artist {
+					id
+					name
+				}
+				venue {
+					id
+					name
+				}
+			}
+		}
+	}
+}

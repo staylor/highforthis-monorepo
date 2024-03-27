@@ -1,0 +1,49 @@
+{
+  "id": "1084999797",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1084999797",
+  "attributes": {
+    "name": "Great Grandpa",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1667,
+      "height": 1667,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/71/7f/e5/717fe5d7-acc2-eb0c-8510-24131a41a164/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "171c18",
+      "textColor1": "f7da58",
+      "textColor2": "e5a686",
+      "textColor3": "cab44b",
+      "textColor4": "bc8b70"
+    },
+    "url": "https://music.apple.com/us/artist/great-grandpa/1084999797"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1084999797/albums",
+      "data": [
+        {
+          "id": "1505812157",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505812157"
+        },
+        {
+          "id": "1505802262",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505802262"
+        },
+        {
+          "id": "1084999795",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1084999795"
+        },
+        {
+          "id": "1509310903",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509310903"
+        }
+      ]
+    }
+  }
+}

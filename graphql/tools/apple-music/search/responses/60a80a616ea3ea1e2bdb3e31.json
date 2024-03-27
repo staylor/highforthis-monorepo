@@ -1,0 +1,149 @@
+{
+  "id": "2092113",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/2092113",
+  "attributes": {
+    "name": "Galactic",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 603,
+      "height": 600,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/97/78/dc/mzi.fqriztlp.jpg/{w}x{h}ac.jpg",
+      "bgColor": "210f1a",
+      "textColor1": "f4d66d",
+      "textColor2": "e8c053",
+      "textColor3": "c9ae5d",
+      "textColor4": "c09c48"
+    },
+    "url": "https://music.apple.com/us/artist/galactic/2092113"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/2092113/albums",
+      "data": [
+        {
+          "id": "304749958",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/304749958"
+        },
+        {
+          "id": "1442701085",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442701085"
+        },
+        {
+          "id": "1485016150",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485016150"
+        },
+        {
+          "id": "684893802",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/684893802"
+        },
+        {
+          "id": "1485024003",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485024003"
+        },
+        {
+          "id": "290666069",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/290666069"
+        },
+        {
+          "id": "1666086518",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1666086518"
+        },
+        {
+          "id": "1485021989",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485021989"
+        },
+        {
+          "id": "269639262",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/269639262"
+        },
+        {
+          "id": "1600945994",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1600945994"
+        },
+        {
+          "id": "253369372",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/253369372"
+        },
+        {
+          "id": "1553225890",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1553225890"
+        },
+        {
+          "id": "1485021022",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485021022"
+        },
+        {
+          "id": "1517467077",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1517467077"
+        },
+        {
+          "id": "1630810170",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1630810170"
+        },
+        {
+          "id": "1601045037",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1601045037"
+        },
+        {
+          "id": "1660378432",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1660378432"
+        },
+        {
+          "id": "1663355718",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1663355718"
+        },
+        {
+          "id": "1497400310",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1497400310"
+        },
+        {
+          "id": "1597864846",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1597864846"
+        },
+        {
+          "id": "1580258729",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1580258729"
+        },
+        {
+          "id": "1421472826",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1421472826"
+        },
+        {
+          "id": "1513870278",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1513870278"
+        },
+        {
+          "id": "1541580095",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1541580095"
+        }
+      ]
+    }
+  }
+}

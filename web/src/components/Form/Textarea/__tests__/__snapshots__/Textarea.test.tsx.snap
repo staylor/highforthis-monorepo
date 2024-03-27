@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Textarea > add className 1`] = `
+<textarea
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full foo"
+/>
+`;
+
+exports[`Textarea > empty 1`] = `
+<textarea
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full"
+/>
+`;

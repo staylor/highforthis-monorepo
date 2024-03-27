@@ -1,0 +1,74 @@
+{
+  "id": "1472792557",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1472792557",
+  "attributes": {
+    "name": "Bonny Light Horseman",
+    "genreNames": [
+      "Folk"
+    ],
+    "artwork": {
+      "width": 1227,
+      "height": 1227,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/e8/a8/cb/e8a8cbf7-761e-2460-c928-c0d8beef601e/5057dc95-ec54-4b94-9d91-e1fd75beeecd_ami-identity-576ff7518c80221183189e678e06c896-2024-02-21T15-14-03.495Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "b5b5b3",
+      "textColor1": "0e1713",
+      "textColor2": "011b1d",
+      "textColor3": "303733",
+      "textColor4": "253a3b"
+    },
+    "url": "https://music.apple.com/us/artist/bonny-light-horseman/1472792557"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1472792557/albums",
+      "data": [
+        {
+          "id": "1480433371",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1480433371"
+        },
+        {
+          "id": "1624495578",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1624495578"
+        },
+        {
+          "id": "1727610102",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1727610102"
+        },
+        {
+          "id": "1663557047",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1663557047"
+        },
+        {
+          "id": "1514279099",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1514279099"
+        },
+        {
+          "id": "1472792556",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1472792556"
+        },
+        {
+          "id": "1514267614",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1514267614"
+        },
+        {
+          "id": "1515827438",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515827438"
+        },
+        {
+          "id": "1535878832",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1535878832"
+        }
+      ]
+    }
+  }
+}

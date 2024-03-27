@@ -1,0 +1,114 @@
+{
+  "id": "6925799",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/6925799",
+  "attributes": {
+    "name": "Broken Social Scene",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3169,
+      "height": 3169,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/61/fc/37/61fc3771-e319-ebf1-fe81-c2e87a3a4042/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "221d1a",
+      "textColor1": "e5e3c8",
+      "textColor2": "d8caa6",
+      "textColor3": "bebba5",
+      "textColor4": "b3a78a"
+    },
+    "url": "https://music.apple.com/us/artist/broken-social-scene/6925799"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/6925799/albums",
+      "data": [
+        {
+          "id": "1442853882",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442853882"
+        },
+        {
+          "id": "1440930581",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440930581"
+        },
+        {
+          "id": "1449493761",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1449493761"
+        },
+        {
+          "id": "1590910405",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1590910405"
+        },
+        {
+          "id": "1456272760",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1456272760"
+        },
+        {
+          "id": "1593074057",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593074057"
+        },
+        {
+          "id": "1442276373",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442276373"
+        },
+        {
+          "id": "1443075425",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443075425"
+        },
+        {
+          "id": "1443197116",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443197116"
+        },
+        {
+          "id": "1442333557",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442333557"
+        },
+        {
+          "id": "1491457170",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1491457170"
+        },
+        {
+          "id": "1595933129",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1595933129"
+        },
+        {
+          "id": "1442282563",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442282563"
+        },
+        {
+          "id": "1443266107",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443266107"
+        },
+        {
+          "id": "1598651390",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598651390"
+        },
+        {
+          "id": "1598970309",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598970309"
+        },
+        {
+          "id": "1444893714",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444893714"
+        }
+      ]
+    }
+  }
+}

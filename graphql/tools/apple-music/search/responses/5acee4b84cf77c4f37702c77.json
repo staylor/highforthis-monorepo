@@ -1,0 +1,99 @@
+{
+  "id": "117038088",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/117038088",
+  "attributes": {
+    "name": "Jenny Lewis",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1102,
+      "height": 1102,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/b7/bb/85/b7bb85fb-1ed5-bc47-e39f-0dcc2a8b2eac/08b59abd-ad84-4764-b3dc-096672aeafb8_ami-identity-ecd39a22ae0cea9345a85d0079994fd3-2023-03-29T12-25-45.982Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "dde7e9",
+      "textColor1": "150507",
+      "textColor2": "250d10",
+      "textColor3": "3d3234",
+      "textColor4": "4a393b"
+    },
+    "url": "https://music.apple.com/us/artist/jenny-lewis/117038088"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/117038088/albums",
+      "data": [
+        {
+          "id": "1449905465",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1449905465"
+        },
+        {
+          "id": "883276305",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/883276305"
+        },
+        {
+          "id": "1677437609",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1677437609"
+        },
+        {
+          "id": "1043297885",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1043297885"
+        },
+        {
+          "id": "290663714",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/290663714"
+        },
+        {
+          "id": "1677439558",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1677439558"
+        },
+        {
+          "id": "1690266750",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690266750"
+        },
+        {
+          "id": "1495409071",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1495409071"
+        },
+        {
+          "id": "1547500826",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1547500826"
+        },
+        {
+          "id": "1560440831",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1560440831"
+        },
+        {
+          "id": "1488961513",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1488961513"
+        },
+        {
+          "id": "1541242125",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1541242125"
+        },
+        {
+          "id": "1554344423",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1554344423"
+        },
+        {
+          "id": "1715757264",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715757264"
+        }
+      ]
+    }
+  }
+}

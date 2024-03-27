@@ -1,0 +1,154 @@
+{
+  "id": "338172312",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/338172312",
+  "attributes": {
+    "name": "Oneohtrix Point Never",
+    "genreNames": [
+      "Electronic"
+    ],
+    "artwork": {
+      "width": 3455,
+      "height": 3455,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/92/ec/a0/92eca0c3-d2b9-7e9b-e9c6-eeb92cb5fe52/85d7121c-b9d1-4694-877c-a1eb134d293b_ami-identity-b66888673142700dd67761fe1a3f4537-2023-09-28T07-14-58.362Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "191a14",
+      "textColor1": "d4c0b7",
+      "textColor2": "d0afa1",
+      "textColor3": "ae9f96",
+      "textColor4": "ab9185"
+    },
+    "url": "https://music.apple.com/us/artist/oneohtrix-point-never/338172312"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/338172312/albums",
+      "data": [
+        {
+          "id": "1529625639",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1529625639"
+        },
+        {
+          "id": "673970570",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/673970570"
+        },
+        {
+          "id": "1714487173",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714487173"
+        },
+        {
+          "id": "1035616150",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1035616150"
+        },
+        {
+          "id": "1359892903",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1359892903"
+        },
+        {
+          "id": "1701849976",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1701849976"
+        },
+        {
+          "id": "1240346102",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1240346102"
+        },
+        {
+          "id": "1439467532",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1439467532"
+        },
+        {
+          "id": "1714480852",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714480852"
+        },
+        {
+          "id": "1714489961",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714489961"
+        },
+        {
+          "id": "1714484140",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714484140"
+        },
+        {
+          "id": "1714484737",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714484737"
+        },
+        {
+          "id": "1714482360",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714482360"
+        },
+        {
+          "id": "1479582107",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1479582107"
+        },
+        {
+          "id": "1407885264",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1407885264"
+        },
+        {
+          "id": "1714485786",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714485786"
+        },
+        {
+          "id": "1727764728",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1727764728"
+        },
+        {
+          "id": "992209669",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/992209669"
+        },
+        {
+          "id": "1714479641",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714479641"
+        },
+        {
+          "id": "1715736980",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715736980"
+        },
+        {
+          "id": "1589489446",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589489446"
+        },
+        {
+          "id": "1564267087",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564267087"
+        },
+        {
+          "id": "1583244602",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1583244602"
+        },
+        {
+          "id": "1633522406",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1633522406"
+        },
+        {
+          "id": "1186695192",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1186695192"
+        }
+      ]
+    }
+  }
+}

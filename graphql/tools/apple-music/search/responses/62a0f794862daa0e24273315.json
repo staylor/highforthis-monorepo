@@ -1,0 +1,149 @@
+{
+  "id": "3271784",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/3271784",
+  "attributes": {
+    "name": "The Shins",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3237,
+      "height": 3237,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/5d/9b/23/5d9b2349-a9ab-9f00-0493-fea39ab490e7/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "ffc1dc",
+      "textColor1": "100b0d",
+      "textColor2": "2a1218",
+      "textColor3": "402f36",
+      "textColor4": "54353f"
+    },
+    "url": "https://music.apple.com/us/artist/the-shins/3271784"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/3271784/albums",
+      "data": [
+        {
+          "id": "669287796",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/669287796"
+        },
+        {
+          "id": "3271807",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/3271807"
+        },
+        {
+          "id": "509630005",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/509630005"
+        },
+        {
+          "id": "1187341560",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1187341560"
+        },
+        {
+          "id": "1322601215",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1322601215"
+        },
+        {
+          "id": "1707948772",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1707948772"
+        },
+        {
+          "id": "251536580",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/251536580"
+        },
+        {
+          "id": "64683686",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/64683686"
+        },
+        {
+          "id": "64684720",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/64684720"
+        },
+        {
+          "id": "73519001",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/73519001"
+        },
+        {
+          "id": "1560914381",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1560914381"
+        },
+        {
+          "id": "1445510732",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445510732"
+        },
+        {
+          "id": "1488032185",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1488032185"
+        },
+        {
+          "id": "510113776",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/510113776"
+        },
+        {
+          "id": "1294762561",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1294762561"
+        },
+        {
+          "id": "1660819918",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1660819918"
+        },
+        {
+          "id": "1559130649",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1559130649"
+        },
+        {
+          "id": "491143677",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/491143677"
+        },
+        {
+          "id": "203311068",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/203311068"
+        },
+        {
+          "id": "1167550584",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1167550584"
+        },
+        {
+          "id": "1531235351",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1531235351"
+        },
+        {
+          "id": "1474882853",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474882853"
+        },
+        {
+          "id": "578027901",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/578027901"
+        },
+        {
+          "id": "1478940670",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1478940670"
+        }
+      ]
+    }
+  }
+}

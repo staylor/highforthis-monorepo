@@ -1,0 +1,134 @@
+{
+  "id": "79166513",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/79166513",
+  "attributes": {
+    "name": "Anaïs Mitchell",
+    "genreNames": [
+      "Singer/Songwriter"
+    ],
+    "artwork": {
+      "width": 4018,
+      "height": 4018,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/38/48/89/3848896d-72d8-1b6e-28d3-c45d2e5c249a/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "c8c8c8",
+      "textColor1": "080808",
+      "textColor2": "232323",
+      "textColor3": "2e2e2e",
+      "textColor4": "444444"
+    },
+    "url": "https://music.apple.com/us/artist/ana%C3%AFs-mitchell/79166513"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/79166513/albums",
+      "data": [
+        {
+          "id": "1466351033",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1466351033"
+        },
+        {
+          "id": "1441690444",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441690444"
+        },
+        {
+          "id": "1624495578",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1624495578"
+        },
+        {
+          "id": "1604196375",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1604196375"
+        },
+        {
+          "id": "608539782",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/608539782"
+        },
+        {
+          "id": "498739583",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/498739583"
+        },
+        {
+          "id": "1679410562",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1679410562"
+        },
+        {
+          "id": "1617863451",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1617863451"
+        },
+        {
+          "id": "1441689156",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441689156"
+        },
+        {
+          "id": "1441813236",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441813236"
+        },
+        {
+          "id": "1441688580",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441688580"
+        },
+        {
+          "id": "1466929132",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1466929132"
+        },
+        {
+          "id": "1483829044",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1483829044"
+        },
+        {
+          "id": "1486946021",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1486946021"
+        },
+        {
+          "id": "1663557047",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1663557047"
+        },
+        {
+          "id": "1483249809",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1483249809"
+        },
+        {
+          "id": "1536901403",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536901403"
+        },
+        {
+          "id": "1486639843",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1486639843"
+        },
+        {
+          "id": "1585572838",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1585572838"
+        },
+        {
+          "id": "1488472598",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1488472598"
+        },
+        {
+          "id": "1438198895",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438198895"
+        }
+      ]
+    }
+  }
+}

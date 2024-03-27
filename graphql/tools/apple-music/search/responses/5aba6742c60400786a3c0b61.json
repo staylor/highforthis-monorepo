@@ -1,0 +1,74 @@
+{
+  "id": "1132854904",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1132854904",
+  "attributes": {
+    "name": "Snail Mail",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1267,
+      "height": 1267,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/d5/2c/cf/d52ccf78-c3b1-78de-21f4-8c6a98e84da5/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "271e17",
+      "textColor1": "e9b888",
+      "textColor2": "dea666",
+      "textColor3": "c29971",
+      "textColor4": "b98a56"
+    },
+    "url": "https://music.apple.com/us/artist/snail-mail/1132854904"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1132854904/albums",
+      "data": [
+        {
+          "id": "1586493976",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586493976"
+        },
+        {
+          "id": "1636341239",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1636341239"
+        },
+        {
+          "id": "1589110061",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589110061"
+        },
+        {
+          "id": "1696516922",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1696516922"
+        },
+        {
+          "id": "1509351369",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509351369"
+        },
+        {
+          "id": "1589283528",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589283528"
+        },
+        {
+          "id": "1606597038",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1606597038"
+        },
+        {
+          "id": "1589292609",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589292609"
+        },
+        {
+          "id": "1589223038",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589223038"
+        }
+      ]
+    }
+  }
+}

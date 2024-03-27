@@ -1,0 +1,109 @@
+{
+  "id": "1058385827",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1058385827",
+  "attributes": {
+    "name": "Julia Jacklin",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3264,
+      "height": 3264,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/84/6e/1c/846e1cee-7667-c994-8847-a6d83f89a1ef/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "d9ddde",
+      "textColor1": "100a0c",
+      "textColor2": "2d2624",
+      "textColor3": "383436",
+      "textColor4": "4f4a49"
+    },
+    "url": "https://music.apple.com/us/artist/julia-jacklin/1058385827"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1058385827/albums",
+      "data": [
+        {
+          "id": "1651268072",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651268072"
+        },
+        {
+          "id": "1651300608",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651300608"
+        },
+        {
+          "id": "1651292908",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651292908"
+        },
+        {
+          "id": "1651254414",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651254414"
+        },
+        {
+          "id": "1651273839",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651273839"
+        },
+        {
+          "id": "1651264199",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651264199"
+        },
+        {
+          "id": "1651294079",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651294079"
+        },
+        {
+          "id": "1651277822",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651277822"
+        },
+        {
+          "id": "1688972572",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1688972572"
+        },
+        {
+          "id": "1651335263",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651335263"
+        },
+        {
+          "id": "1651260372",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651260372"
+        },
+        {
+          "id": "1531974643",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1531974643"
+        },
+        {
+          "id": "1651253600",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651253600"
+        },
+        {
+          "id": "1651289329",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651289329"
+        },
+        {
+          "id": "1651254232",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651254232"
+        },
+        {
+          "id": "1605855055",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1605855055"
+        }
+      ]
+    }
+  }
+}

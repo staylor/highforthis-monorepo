@@ -1,0 +1,94 @@
+{
+  "id": "3064903",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/3064903",
+  "attributes": {
+    "name": "The Format",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/0e/d4/61/0ed4617f-9ce6-3ee6-b5e5-896192382b36/mzl.frjzqqfh.jpg/{w}x{h}bb.jpg",
+      "bgColor": "dadada",
+      "textColor1": "0b0b0b",
+      "textColor2": "242424",
+      "textColor3": "343434",
+      "textColor4": "484848"
+    },
+    "url": "https://music.apple.com/us/artist/the-format/3064903"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/3064903/albums",
+      "data": [
+        {
+          "id": "3335136",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/3335136"
+        },
+        {
+          "id": "1612104423",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612104423"
+        },
+        {
+          "id": "1612098436",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612098436"
+        },
+        {
+          "id": "1612106076",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612106076"
+        },
+        {
+          "id": "1612098217",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612098217"
+        },
+        {
+          "id": "1612097269",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612097269"
+        },
+        {
+          "id": "1612103285",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612103285"
+        },
+        {
+          "id": "1612097405",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612097405"
+        },
+        {
+          "id": "1612097834",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612097834"
+        },
+        {
+          "id": "1612096066",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612096066"
+        },
+        {
+          "id": "1617325642",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1617325642"
+        },
+        {
+          "id": "1612098224",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612098224"
+        },
+        {
+          "id": "3064929",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/3064929"
+        }
+      ]
+    }
+  }
+}

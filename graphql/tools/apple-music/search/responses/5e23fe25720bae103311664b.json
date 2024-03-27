@@ -1,0 +1,119 @@
+{
+  "id": "1464050040",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1464050040",
+  "attributes": {
+    "name": "Habibi",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 3000,
+      "height": 3000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/bb/b9/9e/bbb99e1b-c7da-9d62-393c-bdd651926a85/810025345273_cover.jpg/{w}x{h}ac.jpg",
+      "bgColor": "5d9cab",
+      "textColor1": "060709",
+      "textColor2": "241b16",
+      "textColor3": "182429",
+      "textColor4": "2f3434"
+    },
+    "url": "https://music.apple.com/us/artist/habibi/1464050040"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1464050040/albums",
+      "data": [
+        {
+          "id": "1524762069",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1524762069"
+        },
+        {
+          "id": "1495106629",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1495106629"
+        },
+        {
+          "id": "1346326690",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1346326690"
+        },
+        {
+          "id": "1394034294",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1394034294"
+        },
+        {
+          "id": "1358420754",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1358420754"
+        },
+        {
+          "id": "1585573373",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1585573373"
+        },
+        {
+          "id": "1585289555",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1585289555"
+        },
+        {
+          "id": "1348784631",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1348784631"
+        },
+        {
+          "id": "1610624059",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1610624059"
+        },
+        {
+          "id": "1581009340",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1581009340"
+        },
+        {
+          "id": "1491832049",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1491832049"
+        },
+        {
+          "id": "1486205448",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1486205448"
+        },
+        {
+          "id": "1654845182",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1654845182"
+        },
+        {
+          "id": "1583272645",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1583272645"
+        },
+        {
+          "id": "1588821780",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1588821780"
+        },
+        {
+          "id": "1336722484",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1336722484"
+        },
+        {
+          "id": "1588821275",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1588821275"
+        },
+        {
+          "id": "1718520150",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1718520150"
+        }
+      ]
+    }
+  }
+}

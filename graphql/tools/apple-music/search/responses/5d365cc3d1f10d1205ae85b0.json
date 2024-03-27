@@ -1,0 +1,119 @@
+{
+  "id": "871667491",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/871667491",
+  "attributes": {
+    "name": "Alex G",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/d8/ad/5e/d8ad5ebb-14a0-6026-fc8c-99730b993486/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "a7a5aa",
+      "textColor1": "0e0c0d",
+      "textColor2": "1b1a1d",
+      "textColor3": "2c2a2d",
+      "textColor4": "373539"
+    },
+    "url": "https://music.apple.com/us/artist/alex-g/871667491"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/871667491/albums",
+      "data": [
+        {
+          "id": "1483272616",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1483272616"
+        },
+        {
+          "id": "1463899362",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1463899362"
+        },
+        {
+          "id": "1621299044",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1621299044"
+        },
+        {
+          "id": "1555054065",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1555054065"
+        },
+        {
+          "id": "1207995257",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1207995257"
+        },
+        {
+          "id": "1024622564",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1024622564"
+        },
+        {
+          "id": "1079064127",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1079064127"
+        },
+        {
+          "id": "1483266048",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1483266048"
+        },
+        {
+          "id": "1612013543",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612013543"
+        },
+        {
+          "id": "1457757442",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1457757442"
+        },
+        {
+          "id": "1710450199",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710450199"
+        },
+        {
+          "id": "1728928889",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1728928889"
+        },
+        {
+          "id": "1710442142",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710442142"
+        },
+        {
+          "id": "1606521393",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1606521393"
+        },
+        {
+          "id": "1728919265",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1728919265"
+        },
+        {
+          "id": "1727155672",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1727155672"
+        },
+        {
+          "id": "1245590704",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1245590704"
+        },
+        {
+          "id": "1622606705",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1622606705"
+        }
+      ]
+    }
+  }
+}

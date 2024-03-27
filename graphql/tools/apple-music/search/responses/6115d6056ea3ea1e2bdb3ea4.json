@@ -1,0 +1,114 @@
+{
+  "id": "374950113",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/374950113",
+  "attributes": {
+    "name": "Porches",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/a0/c7/66/a0c76696-161a-2f8d-9bf1-c770677bc6ea/mzl.soaxdbxt.jpg/{w}x{h}bb.jpg",
+      "bgColor": "a69b87",
+      "textColor1": "060e0e",
+      "textColor2": "231f18",
+      "textColor3": "262a26",
+      "textColor4": "3d372e"
+    },
+    "url": "https://music.apple.com/us/artist/porches/374950113"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/374950113/albums",
+      "data": [
+        {
+          "id": "1049722397",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1049722397"
+        },
+        {
+          "id": "1288541372",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1288541372"
+        },
+        {
+          "id": "1575384073",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1575384073"
+        },
+        {
+          "id": "1494506244",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1494506244"
+        },
+        {
+          "id": "1438758715",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438758715"
+        },
+        {
+          "id": "1140414889",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1140414889"
+        },
+        {
+          "id": "1700522095",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1700522095"
+        },
+        {
+          "id": "1663582082",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1663582082"
+        },
+        {
+          "id": "1715660101",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715660101"
+        },
+        {
+          "id": "1683425346",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1683425346"
+        },
+        {
+          "id": "1533657136",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1533657136"
+        },
+        {
+          "id": "1287992359",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1287992359"
+        },
+        {
+          "id": "1343758707",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1343758707"
+        },
+        {
+          "id": "1596761240",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596761240"
+        },
+        {
+          "id": "1584260926",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1584260926"
+        },
+        {
+          "id": "1482248419",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1482248419"
+        },
+        {
+          "id": "1514801152",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1514801152"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "730606893",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/730606893",
+  "attributes": {
+    "name": "Alvvays",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1448,
+      "height": 1448,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/e6/e0/f1/e6e0f174-4962-bd05-6d34-7ffdfb0901f4/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "1d1d1f",
+      "textColor1": "c8cac1",
+      "textColor2": "d4af93",
+      "textColor3": "a6a7a1",
+      "textColor4": "af917b"
+    },
+    "url": "https://music.apple.com/us/artist/alvvays/730606893"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/730606893/albums",
+      "data": [
+        {
+          "id": "1651269389",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651269389"
+        },
+        {
+          "id": "1651310191",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651310191"
+        },
+        {
+          "id": "1651326694",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651326694"
+        }
+      ]
+    }
+  }
+}

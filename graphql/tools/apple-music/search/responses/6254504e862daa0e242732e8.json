@@ -1,0 +1,94 @@
+{
+  "id": "514361724",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/514361724",
+  "attributes": {
+    "name": "Father John Misty",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2000,
+      "height": 2000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/d5/1f/8a/d51f8a59-a1a7-9b40-c637-4edf533c46cf/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "111111",
+      "textColor1": "ffffff",
+      "textColor2": "dadada",
+      "textColor3": "cfcfcf",
+      "textColor4": "b1b1b1"
+    },
+    "url": "https://music.apple.com/us/artist/father-john-misty/514361724"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/514361724/albums",
+      "data": [
+        {
+          "id": "931563362",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/931563362"
+        },
+        {
+          "id": "1193788689",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1193788689"
+        },
+        {
+          "id": "669285159",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/669285159"
+        },
+        {
+          "id": "1364116200",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1364116200"
+        },
+        {
+          "id": "1598486370",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598486370"
+        },
+        {
+          "id": "1521578516",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1521578516"
+        },
+        {
+          "id": "1514044560",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1514044560"
+        },
+        {
+          "id": "1524372817",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1524372817"
+        },
+        {
+          "id": "1274215323",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1274215323"
+        },
+        {
+          "id": "1133711544",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1133711544"
+        },
+        {
+          "id": "1455523088",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1455523088"
+        },
+        {
+          "id": "1623963565",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1623963565"
+        },
+        {
+          "id": "1267508465",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1267508465"
+        }
+      ]
+    }
+  }
+}

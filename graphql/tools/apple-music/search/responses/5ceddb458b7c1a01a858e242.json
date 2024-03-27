@@ -1,0 +1,64 @@
+{
+  "id": "436333749",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/436333749",
+  "attributes": {
+    "name": "Caroline Rose",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3320,
+      "height": 3320,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/12/8e/42/128e4276-17b3-024d-6421-f73abd44f906/415c40e6-9a8b-4728-bcb0-18882318d731_ami-identity-cc11e1d3b552860a9a1e1c11dac02127-2023-05-18T16-48-41.279Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "9e9ba2",
+      "textColor1": "0a0806",
+      "textColor2": "211b19",
+      "textColor3": "282525",
+      "textColor4": "3a3534"
+    },
+    "url": "https://music.apple.com/us/artist/caroline-rose/436333749"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/436333749/albums",
+      "data": [
+        {
+          "id": "1436937253",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436937253"
+        },
+        {
+          "id": "1487503618",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1487503618"
+        },
+        {
+          "id": "1659150742",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1659150742"
+        },
+        {
+          "id": "903629170",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/903629170"
+        },
+        {
+          "id": "1648363596",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1648363596"
+        },
+        {
+          "id": "1551846991",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1551846991"
+        },
+        {
+          "id": "897082091",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/897082091"
+        }
+      ]
+    }
+  }
+}

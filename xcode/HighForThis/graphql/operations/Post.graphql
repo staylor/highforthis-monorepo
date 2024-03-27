@@ -1,0 +1,65 @@
+query Post($slug: String!) {
+    post(slug: $slug) {
+        editorState {
+            root {
+                children {
+                    ... on ElementNodeType {
+                        direction
+                        format
+                        indent
+                        type
+                        version
+                    }
+                    ... on HeadingNode {
+                        children {
+                            ...TextNodes_linebreakNode
+                            ...TextNodes_textNode
+                        }
+                        tag
+                    }
+                    ... on ImageNode {
+                        image {
+                            crops {
+                                fileName
+                                width
+                                height
+                            }
+                            destination
+                            id
+                        }
+                    }
+                    ... on VideoNode {
+                        video {
+                            ...Video_video
+                        }
+                    }
+                    ... on ElementNode {
+                        children {
+                            ...TextNodes_linebreakNode
+                            ...TextNodes_textNode
+                        }
+                    }
+                }
+                direction
+                format
+                indent
+                type
+                version
+            }
+        }
+        featuredMedia {
+            destination
+            id
+            ... on ImageUpload {
+                crops {
+                fileName
+                width
+            }
+        }
+        }
+        id
+        slug
+        summary
+        title
+    }
+  }

@@ -1,0 +1,99 @@
+{
+  "id": "23907941",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/23907941",
+  "attributes": {
+    "name": "Jeff Tweedy",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 2846,
+      "height": 2846,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/e4/f6/2b/e4f62bdb-6262-46ca-6233-d77fa2300b11/mzl.pnznengk.jpg/{w}x{h}bb.jpg",
+      "bgColor": "a7a7a7",
+      "textColor1": "141414",
+      "textColor2": "151515",
+      "textColor3": "313131",
+      "textColor4": "323232"
+    },
+    "url": "https://music.apple.com/us/artist/jeff-tweedy/23907941"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/23907941/albums",
+      "data": [
+        {
+          "id": "1690693175",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690693175"
+        },
+        {
+          "id": "1690692849",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690692849"
+        },
+        {
+          "id": "1690692305",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690692305"
+        },
+        {
+          "id": "1690692891",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690692891"
+        },
+        {
+          "id": "1523719803",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523719803"
+        },
+        {
+          "id": "1690694002",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690694002"
+        },
+        {
+          "id": "1690692321",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690692321"
+        },
+        {
+          "id": "1709547694",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1709547694"
+        },
+        {
+          "id": "1644032728",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1644032728"
+        },
+        {
+          "id": "1665289442",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1665289442"
+        },
+        {
+          "id": "1651236834",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651236834"
+        },
+        {
+          "id": "1564468907",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564468907"
+        },
+        {
+          "id": "1564480628",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564480628"
+        },
+        {
+          "id": "1585434966",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1585434966"
+        }
+      ]
+    }
+  }
+}

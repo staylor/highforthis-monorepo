@@ -1,0 +1,149 @@
+{
+  "id": "75950796",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/75950796",
+  "attributes": {
+    "name": "Paramore",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1500,
+      "height": 1500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/3f/96/79/3f96799e-b6e5-0d32-c39f-475523d928f6/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "554f37",
+      "textColor1": "f4e1ac",
+      "textColor2": "dfd8ca",
+      "textColor3": "d4c495",
+      "textColor4": "c4bdac"
+    },
+    "url": "https://music.apple.com/us/artist/paramore/75950796"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/75950796/albums",
+      "data": [
+        {
+          "id": "1227049864",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1227049864"
+        },
+        {
+          "id": "604804755",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/604804755"
+        },
+        {
+          "id": "1646945378",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1646945378"
+        },
+        {
+          "id": "607337417",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/607337417"
+        },
+        {
+          "id": "604863238",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/604863238"
+        },
+        {
+          "id": "593146366",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/593146366"
+        },
+        {
+          "id": "604800411",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/604800411"
+        },
+        {
+          "id": "607041264",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/607041264"
+        },
+        {
+          "id": "606661046",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/606661046"
+        },
+        {
+          "id": "942088604",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/942088604"
+        },
+        {
+          "id": "1254579675",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1254579675"
+        },
+        {
+          "id": "1293370729",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1293370729"
+        },
+        {
+          "id": "1709212896",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1709212896"
+        },
+        {
+          "id": "1728543210",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1728543210"
+        },
+        {
+          "id": "1021725522",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1021725522"
+        },
+        {
+          "id": "888561114",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/888561114"
+        },
+        {
+          "id": "393066798",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/393066798"
+        },
+        {
+          "id": "1241502841",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1241502841"
+        },
+        {
+          "id": "1697205546",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697205546"
+        },
+        {
+          "id": "440880917",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/440880917"
+        },
+        {
+          "id": "1351975356",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1351975356"
+        },
+        {
+          "id": "1573650006",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1573650006"
+        },
+        {
+          "id": "1573643019",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1573643019"
+        },
+        {
+          "id": "1724205028",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1724205028"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "id": "1209107",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1209107",
+  "attributes": {
+    "name": "M. Ward",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/a1/13/ed/a113ed21-8bf0-087d-c76b-c8b36e135caa/2f3cfcd4-497a-45cc-ab33-e92f97e19a31_ami-identity-794c1f2804953edca2f4880fab55f7ea-2023-04-28T06-03-26.057Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "4d5033",
+      "textColor1": "e4e4c9",
+      "textColor2": "edd3ae",
+      "textColor3": "c6c7ab",
+      "textColor4": "ccb995"
+    },
+    "url": "https://music.apple.com/us/artist/m-ward/1209107"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1209107/albums",
+      "data": [
+        {
+          "id": "171852155",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/171852155"
+        },
+        {
+          "id": "303547006",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/303547006"
+        },
+        {
+          "id": "5455291",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/5455291"
+        },
+        {
+          "id": "1060733593",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1060733593"
+        },
+        {
+          "id": "1436382911",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436382911"
+        },
+        {
+          "id": "1488641400",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1488641400"
+        },
+        {
+          "id": "499594493",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/499594493"
+        },
+        {
+          "id": "1680600874",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1680600874"
+        },
+        {
+          "id": "1532859343",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1532859343"
+        },
+        {
+          "id": "45298745",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/45298745"
+        },
+        {
+          "id": "945830879",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/945830879"
+        },
+        {
+          "id": "1549963244",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1549963244"
+        },
+        {
+          "id": "258867159",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/258867159"
+        },
+        {
+          "id": "209659429",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/209659429"
+        },
+        {
+          "id": "527949359",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/527949359"
+        },
+        {
+          "id": "1506643761",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1506643761"
+        },
+        {
+          "id": "1699305929",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1699305929"
+        },
+        {
+          "id": "1709029659",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1709029659"
+        },
+        {
+          "id": "1643781611",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1643781611"
+        },
+        {
+          "id": "1667661878",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667661878"
+        },
+        {
+          "id": "1667661046",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667661046"
+        },
+        {
+          "id": "1520787202",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1520787202"
+        },
+        {
+          "id": "1589307996",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589307996"
+        },
+        {
+          "id": "1668192117",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1668192117"
+        }
+      ]
+    }
+  }
+}

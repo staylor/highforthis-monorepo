@@ -1,0 +1,89 @@
+{
+  "id": "282078681",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/282078681",
+  "attributes": {
+    "name": "The War on Drugs",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3796,
+      "height": 3796,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/40/ca/0d/40ca0d0e-df22-9f69-2afc-d5cdf4f27be4/a2232cca-9669-4fb8-a5db-eb5d4ebcc7c2_ami-identity-948f97466b96a657c407ffed51491872-2022-10-05T18-37-48.315Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "001010",
+      "textColor1": "fcffff",
+      "textColor2": "e9dcc3",
+      "textColor3": "c9cfcf",
+      "textColor4": "bbb39f"
+    },
+    "url": "https://music.apple.com/us/artist/the-war-on-drugs/282078681"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/282078681/albums",
+      "data": [
+        {
+          "id": "1242366660",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1242366660"
+        },
+        {
+          "id": "765568650",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/765568650"
+        },
+        {
+          "id": "1576851901",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1576851901"
+        },
+        {
+          "id": "1531880099",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1531880099"
+        },
+        {
+          "id": "452135966",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/452135966"
+        },
+        {
+          "id": "1641253831",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1641253831"
+        },
+        {
+          "id": "443233211",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/443233211"
+        },
+        {
+          "id": "547626738",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/547626738"
+        },
+        {
+          "id": "447171183",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/447171183"
+        },
+        {
+          "id": "474766749",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/474766749"
+        },
+        {
+          "id": "1369355686",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1369355686"
+        },
+        {
+          "id": "1241023281",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1241023281"
+        }
+      ]
+    }
+  }
+}

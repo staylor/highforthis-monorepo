@@ -1,0 +1,124 @@
+{
+  "id": "5305611",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/5305611",
+  "attributes": {
+    "name": "The Walkmen",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1185,
+      "height": 1185,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/0f/ea/27/0fea27db-8422-fa33-43f1-285971523125/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "080000",
+      "textColor1": "ffffff",
+      "textColor2": "d6dbc8",
+      "textColor3": "cdcbcb",
+      "textColor4": "adafa0"
+    },
+    "url": "https://music.apple.com/us/artist/the-walkmen/5305611"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/5305611/albums",
+      "data": [
+        {
+          "id": "5305635",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/5305635"
+        },
+        {
+          "id": "514549120",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/514549120"
+        },
+        {
+          "id": "1532091518",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1532091518"
+        },
+        {
+          "id": "1183991250",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1183991250"
+        },
+        {
+          "id": "1623888069",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1623888069"
+        },
+        {
+          "id": "927465149",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/927465149"
+        },
+        {
+          "id": "80919169",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/80919169"
+        },
+        {
+          "id": "319392355",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/319392355"
+        },
+        {
+          "id": "153441567",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/153441567"
+        },
+        {
+          "id": "201234438",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/201234438"
+        },
+        {
+          "id": "927463733",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/927463733"
+        },
+        {
+          "id": "318072365",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/318072365"
+        },
+        {
+          "id": "30526625",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/30526625"
+        },
+        {
+          "id": "209279666",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/209279666"
+        },
+        {
+          "id": "149259162",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/149259162"
+        },
+        {
+          "id": "385938268",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/385938268"
+        },
+        {
+          "id": "516413310",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/516413310"
+        },
+        {
+          "id": "196272835",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/196272835"
+        },
+        {
+          "id": "577911940",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/577911940"
+        }
+      ]
+    }
+  }
+}

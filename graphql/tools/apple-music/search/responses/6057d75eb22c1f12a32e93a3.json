@@ -1,0 +1,79 @@
+{
+  "id": "466131",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/466131",
+  "attributes": {
+    "name": "Fiona Apple",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/7a/6b/55/7a6b55e5-c95f-8d5a-c8aa-03a721c7a1c1/mzl.qfnmnzdm.jpg/{w}x{h}bb.jpg",
+      "bgColor": "f5e9e9",
+      "textColor1": "0a0809",
+      "textColor2": "3c312f",
+      "textColor3": "393535",
+      "textColor4": "615654"
+    },
+    "url": "https://music.apple.com/us/artist/fiona-apple/466131"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/466131/albums",
+      "data": [
+        {
+          "id": "1507811635",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1507811635"
+        },
+        {
+          "id": "309677190",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/309677190"
+        },
+        {
+          "id": "153019510",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/153019510"
+        },
+        {
+          "id": "153432152",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/153432152"
+        },
+        {
+          "id": "1462213924",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462213924"
+        },
+        {
+          "id": "270025998",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/270025998"
+        },
+        {
+          "id": "457273151",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/457273151"
+        },
+        {
+          "id": "1541053895",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1541053895"
+        },
+        {
+          "id": "1491044824",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1491044824"
+        },
+        {
+          "id": "171369960",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/171369960"
+        }
+      ]
+    }
+  }
+}

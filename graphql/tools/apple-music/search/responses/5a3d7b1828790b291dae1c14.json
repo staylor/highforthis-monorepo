@@ -1,0 +1,64 @@
+{
+  "id": "370695831",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/370695831",
+  "attributes": {
+    "name": "Sleigh Bells",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1551,
+      "height": 1551,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/bc/06/7c/bc067c90-c3b7-1923-22ee-393108b29a52/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "cacaca",
+      "textColor1": "030303",
+      "textColor2": "1b1b1b",
+      "textColor3": "2a2a2a",
+      "textColor4": "3e3e3e"
+    },
+    "url": "https://music.apple.com/us/artist/sleigh-bells/370695831"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/370695831/albums",
+      "data": [
+        {
+          "id": "1575621666",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1575621666"
+        },
+        {
+          "id": "1596850637",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596850637"
+        },
+        {
+          "id": "1596848287",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596848287"
+        },
+        {
+          "id": "1596849483",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596849483"
+        },
+        {
+          "id": "1596847183",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596847183"
+        },
+        {
+          "id": "1596848920",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596848920"
+        },
+        {
+          "id": "1596850959",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596850959"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "id": "569539832",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/569539832",
+  "attributes": {
+    "name": "Sturgill Simpson",
+    "genreNames": [
+      "Country"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/3a/49/73/3a4973be-aa91-407a-31f6-ad70115b85f3/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "fcf5e3",
+      "textColor1": "1d1210",
+      "textColor2": "372a24",
+      "textColor3": "49403a",
+      "textColor4": "5e534a"
+    },
+    "url": "https://music.apple.com/us/artist/sturgill-simpson/569539832"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/569539832/albums",
+      "data": [
+        {
+          "id": "865795112",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/865795112"
+        },
+        {
+          "id": "1088518253",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1088518253"
+        },
+        {
+          "id": "1476852029",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1476852029"
+        },
+        {
+          "id": "1533715851",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1533715851"
+        },
+        {
+          "id": "1576732424",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1576732424"
+        },
+        {
+          "id": "657091881",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/657091881"
+        },
+        {
+          "id": "1544125320",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1544125320"
+        },
+        {
+          "id": "1692222821",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1692222821"
+        },
+        {
+          "id": "1464754161",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1464754161"
+        },
+        {
+          "id": "1640762142",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1640762142"
+        }
+      ]
+    }
+  }
+}

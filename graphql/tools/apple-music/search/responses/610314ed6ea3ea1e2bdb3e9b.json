@@ -1,0 +1,124 @@
+{
+  "id": "1053549",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1053549",
+  "attributes": {
+    "name": "Eagles",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/26/60/bf/2660bfdf-0908-033d-71d6-1e32955d6ef8/mza_7087096540841851723.png/{w}x{h}bb.jpg",
+      "bgColor": "323232",
+      "textColor1": "e6dcd6",
+      "textColor2": "dcd2cd",
+      "textColor3": "c2bab5",
+      "textColor4": "bab2ae"
+    },
+    "url": "https://music.apple.com/us/artist/eagles/1053549"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1053549/albums",
+      "data": [
+        {
+          "id": "635829435",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635829435"
+        },
+        {
+          "id": "635770200",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635770200"
+        },
+        {
+          "id": "636866317",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/636866317"
+        },
+        {
+          "id": "635774271",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635774271"
+        },
+        {
+          "id": "635829971",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635829971"
+        },
+        {
+          "id": "635791801",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635791801"
+        },
+        {
+          "id": "1453924216",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1453924216"
+        },
+        {
+          "id": "635807463",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635807463"
+        },
+        {
+          "id": "635800390",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635800390"
+        },
+        {
+          "id": "193434857",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/193434857"
+        },
+        {
+          "id": "1293903288",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1293903288"
+        },
+        {
+          "id": "1521729134",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1521729134"
+        },
+        {
+          "id": "635765828",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635765828"
+        },
+        {
+          "id": "1366515111",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1366515111"
+        },
+        {
+          "id": "635788137",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635788137"
+        },
+        {
+          "id": "1440199153",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440199153"
+        },
+        {
+          "id": "779290454",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/779290454"
+        },
+        {
+          "id": "635815754",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635815754"
+        },
+        {
+          "id": "1729268430",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1729268430"
+        }
+      ]
+    }
+  }
+}

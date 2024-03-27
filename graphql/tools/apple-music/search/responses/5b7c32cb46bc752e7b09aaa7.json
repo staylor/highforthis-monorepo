@@ -1,0 +1,139 @@
+{
+  "id": "274234314",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/274234314",
+  "attributes": {
+    "name": "Kurt Vile",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/93/5d/92/935d9264-afd0-e1a4-96bf-4c3ebb278ad0/5e24a81f-d7f5-4e2a-9daa-2937cd5706af_ami-identity-5b0cc1a64465a5539f4470ca1149ca0c-2023-10-19T17-02-54.884Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "050505",
+      "textColor1": "f6f6f6",
+      "textColor2": "dbd8d9",
+      "textColor3": "c6c6c6",
+      "textColor4": "b0aeaf"
+    },
+    "url": "https://music.apple.com/us/artist/kurt-vile/274234314"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/274234314/albums",
+      "data": [
+        {
+          "id": "1607120340",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1607120340"
+        },
+        {
+          "id": "1586467792",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586467792"
+        },
+        {
+          "id": "1586491648",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586491648"
+        },
+        {
+          "id": "1710246123",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710246123"
+        },
+        {
+          "id": "1586474302",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586474302"
+        },
+        {
+          "id": "1586492404",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586492404"
+        },
+        {
+          "id": "1697559231",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697559231"
+        },
+        {
+          "id": "1589215720",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589215720"
+        },
+        {
+          "id": "1589234453",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589234453"
+        },
+        {
+          "id": "1586482525",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586482525"
+        },
+        {
+          "id": "274234297",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/274234297"
+        },
+        {
+          "id": "1137007438",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1137007438"
+        },
+        {
+          "id": "1603024833",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1603024833"
+        },
+        {
+          "id": "1586475915",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586475915"
+        },
+        {
+          "id": "1589250882",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589250882"
+        },
+        {
+          "id": "1589167625",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589167625"
+        },
+        {
+          "id": "1589291873",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589291873"
+        },
+        {
+          "id": "398300807",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/398300807"
+        },
+        {
+          "id": "1589233994",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589233994"
+        },
+        {
+          "id": "1589278592",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589278592"
+        },
+        {
+          "id": "1586497675",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586497675"
+        },
+        {
+          "id": "1589285774",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589285774"
+        }
+      ]
+    }
+  }
+}

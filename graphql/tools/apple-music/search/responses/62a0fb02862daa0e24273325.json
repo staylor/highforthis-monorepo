@@ -1,0 +1,114 @@
+{
+  "id": "23203991",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/23203991",
+  "attributes": {
+    "name": "Arcade Fire",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/91/80/ce/9180ce15-4af9-5f04-14b7-6d426da1873d/mzl.pggblvgn.jpg/{w}x{h}bb.jpg",
+      "bgColor": "000000",
+      "textColor1": "f8ebe6",
+      "textColor2": "90e87a",
+      "textColor3": "c6bcb8",
+      "textColor4": "73b961"
+    },
+    "url": "https://music.apple.com/us/artist/arcade-fire/23203991"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/23203991/albums",
+      "data": [
+        {
+          "id": "1240796998",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1240796998"
+        },
+        {
+          "id": "1613566080",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1613566080"
+        },
+        {
+          "id": "1249417623",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1249417623"
+        },
+        {
+          "id": "1252757950",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1252757950"
+        },
+        {
+          "id": "1252615522",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1252615522"
+        },
+        {
+          "id": "1446334028",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1446334028"
+        },
+        {
+          "id": "1400275055",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1400275055"
+        },
+        {
+          "id": "1553022037",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1553022037"
+        },
+        {
+          "id": "1439818072",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1439818072"
+        },
+        {
+          "id": "81607965",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/81607965"
+        },
+        {
+          "id": "1304572425",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1304572425"
+        },
+        {
+          "id": "1456058060",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1456058060"
+        },
+        {
+          "id": "1539335170",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1539335170"
+        },
+        {
+          "id": "1311639670",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1311639670"
+        },
+        {
+          "id": "1321522377",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1321522377"
+        },
+        {
+          "id": "1436693872",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436693872"
+        },
+        {
+          "id": "1405610305",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1405610305"
+        }
+      ]
+    }
+  }
+}

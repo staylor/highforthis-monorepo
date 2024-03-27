@@ -1,0 +1,129 @@
+{
+  "id": "1645800",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1645800",
+  "attributes": {
+    "name": "The Mars Volta",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1080,
+      "height": 1080,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/ff/9f/a3/ff9fa32b-1392-5b54-c753-a2835da18259/1e394e84-501f-485c-ad07-fd56413a4914_ami-identity-71a5f5f5fc5319c83fe7e63e1030a6b5-2023-03-08T10-51-37.789Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "f3f3f3",
+      "textColor1": "0a0d09",
+      "textColor2": "1e1d1d",
+      "textColor3": "383b38",
+      "textColor4": "484848"
+    },
+    "url": "https://music.apple.com/us/artist/the-mars-volta/1645800"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1645800/albums",
+      "data": [
+        {
+          "id": "1440736868",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440736868"
+        },
+        {
+          "id": "1443080465",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443080465"
+        },
+        {
+          "id": "1636983430",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1636983430"
+        },
+        {
+          "id": "1443198884",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443198884"
+        },
+        {
+          "id": "501235759",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/501235759"
+        },
+        {
+          "id": "319401333",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/319401333"
+        },
+        {
+          "id": "1440753916",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440753916"
+        },
+        {
+          "id": "1555119299",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1555119299"
+        },
+        {
+          "id": "1442943835",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442943835"
+        },
+        {
+          "id": "1674058410",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1674058410"
+        },
+        {
+          "id": "1553987265",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1553987265"
+        },
+        {
+          "id": "1443262141",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443262141"
+        },
+        {
+          "id": "1445128798",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445128798"
+        },
+        {
+          "id": "1445144227",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445144227"
+        },
+        {
+          "id": "1445286379",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445286379"
+        },
+        {
+          "id": "500958619",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/500958619"
+        },
+        {
+          "id": "1445123843",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445123843"
+        },
+        {
+          "id": "1626361598",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1626361598"
+        },
+        {
+          "id": "1634879915",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1634879915"
+        },
+        {
+          "id": "1631577052",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631577052"
+        }
+      ]
+    }
+  }
+}

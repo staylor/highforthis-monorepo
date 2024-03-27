@@ -1,0 +1,94 @@
+{
+  "id": "1353548841",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1353548841",
+  "attributes": {
+    "name": "Black Pumas",
+    "genreNames": [
+      "R&B/Soul"
+    ],
+    "artwork": {
+      "width": 3000,
+      "height": 3000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/5d/6f/82/5d6f82cb-a596-990a-de47-7dd2865184de/a1c2fdec-d712-4193-ad1a-f80d55451acf_ami-identity-e0e930f768208ab4b14bcdb69f3e804a-2023-08-22T11-52-17.072Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "020202",
+      "textColor1": "cee1e9",
+      "textColor2": "de8125",
+      "textColor3": "a5b5bb",
+      "textColor4": "b2671e"
+    },
+    "url": "https://music.apple.com/us/artist/black-pumas/1353548841"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1353548841/albums",
+      "data": [
+        {
+          "id": "1459935143",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1459935143"
+        },
+        {
+          "id": "1700349203",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1700349203"
+        },
+        {
+          "id": "1523522164",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523522164"
+        },
+        {
+          "id": "1556136056",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1556136056"
+        },
+        {
+          "id": "1573808831",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1573808831"
+        },
+        {
+          "id": "1588451198",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1588451198"
+        },
+        {
+          "id": "1616568522",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1616568522"
+        },
+        {
+          "id": "1494538600",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1494538600"
+        },
+        {
+          "id": "1515852774",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515852774"
+        },
+        {
+          "id": "1494068482",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1494068482"
+        },
+        {
+          "id": "1551389142",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1551389142"
+        },
+        {
+          "id": "1564612184",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564612184"
+        },
+        {
+          "id": "1593115773",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593115773"
+        }
+      ]
+    }
+  }
+}

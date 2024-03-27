@@ -1,0 +1,124 @@
+{
+  "id": "35719",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/35719",
+  "attributes": {
+    "name": "Counting Crows",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/7b/02/9a/7b029a3e-9e86-5678-5bf2-2100a8b8e764/mzl.gtesazdx.jpg/{w}x{h}bb.jpg",
+      "bgColor": "19120d",
+      "textColor1": "e1dcb8",
+      "textColor2": "c0dad9",
+      "textColor3": "b9b496",
+      "textColor4": "9eb2b0"
+    },
+    "url": "https://music.apple.com/us/artist/counting-crows/35719"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/35719/albums",
+      "data": [
+        {
+          "id": "1442449109",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442449109"
+        },
+        {
+          "id": "1440859249",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440859249"
+        },
+        {
+          "id": "1440848379",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440848379"
+        },
+        {
+          "id": "1444194784",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444194784"
+        },
+        {
+          "id": "1442994111",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442994111"
+        },
+        {
+          "id": "1440858296",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440858296"
+        },
+        {
+          "id": "1452855486",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1452855486"
+        },
+        {
+          "id": "730513620",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/730513620"
+        },
+        {
+          "id": "1237288959",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1237288959"
+        },
+        {
+          "id": "1440819091",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440819091"
+        },
+        {
+          "id": "1443061386",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443061386"
+        },
+        {
+          "id": "1443660128",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443660128"
+        },
+        {
+          "id": "1443183904",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443183904"
+        },
+        {
+          "id": "1453155321",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1453155321"
+        },
+        {
+          "id": "1705971744",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1705971744"
+        },
+        {
+          "id": "1694555609",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1694555609"
+        },
+        {
+          "id": "1568988282",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568988282"
+        },
+        {
+          "id": "1445277610",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445277610"
+        },
+        {
+          "id": "1690538640",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690538640"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`media > uploadUrl 1`] = `"https://static.highforthis.com/2018/01/31/foo.png"`;

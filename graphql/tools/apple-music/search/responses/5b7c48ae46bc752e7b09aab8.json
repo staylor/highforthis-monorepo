@@ -1,0 +1,104 @@
+{
+  "id": "64989947",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/64989947",
+  "attributes": {
+    "name": "Phosphorescent",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/13/7c/8b/137c8b3f-1a49-5d38-140a-4db00e681f40/e4a7f301-adad-4512-bce1-303bfb4387a9_ami-identity-a3d7d3958d263b9ea98f3a7f8aea81f9-2024-01-23T17-16-20.528Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "73969c",
+      "textColor1": "0b0a08",
+      "textColor2": "1c1912",
+      "textColor3": "202626",
+      "textColor4": "2d322d"
+    },
+    "url": "https://music.apple.com/us/artist/phosphorescent/64989947"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/64989947/albums",
+      "data": [
+        {
+          "id": "1410262934",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1410262934"
+        },
+        {
+          "id": "719051128",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/719051128"
+        },
+        {
+          "id": "449929961",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/449929961"
+        },
+        {
+          "id": "598968577",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/598968577"
+        },
+        {
+          "id": "537800748",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/537800748"
+        },
+        {
+          "id": "537788094",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/537788094"
+        },
+        {
+          "id": "1558720767",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1558720767"
+        },
+        {
+          "id": "1337943077",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1337943077"
+        },
+        {
+          "id": "1447156928",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1447156928"
+        },
+        {
+          "id": "1457738395",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1457738395"
+        },
+        {
+          "id": "1704449254",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1704449254"
+        },
+        {
+          "id": "537789679",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/537789679"
+        },
+        {
+          "id": "1449315657",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1449315657"
+        },
+        {
+          "id": "1245376187",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1245376187"
+        },
+        {
+          "id": "1725208264",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1725208264"
+        }
+      ]
+    }
+  }
+}

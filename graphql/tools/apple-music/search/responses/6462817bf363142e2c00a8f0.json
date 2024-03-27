@@ -1,0 +1,99 @@
+{
+  "id": "449917675",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/449917675",
+  "attributes": {
+    "name": "Vulfpeck",
+    "genreNames": [
+      "R&B/Soul"
+    ],
+    "artwork": {
+      "width": 1500,
+      "height": 1500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/05/6e/11/056e11ae-cc80-59b7-abaf-3e4410dc18be/a7d7f09c-26c2-46bf-906a-d64410e64789_ami-identity-7f73d301e2750ca2f1dde591c9098d03-2024-01-10T21-42-12.883Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "080607",
+      "textColor1": "f2ede8",
+      "textColor2": "dce1eb",
+      "textColor3": "c3bebb",
+      "textColor4": "b2b5bd"
+    },
+    "url": "https://music.apple.com/us/artist/vulfpeck/449917675"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/449917675/albums",
+      "data": [
+        {
+          "id": "1028880187",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1028880187"
+        },
+        {
+          "id": "1160118965",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1160118965"
+        },
+        {
+          "id": "1280581049",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1280581049"
+        },
+        {
+          "id": "1436319127",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436319127"
+        },
+        {
+          "id": "916004599",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/916004599"
+        },
+        {
+          "id": "1658238233",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1658238233"
+        },
+        {
+          "id": "932897000",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/932897000"
+        },
+        {
+          "id": "1489229464",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1489229464"
+        },
+        {
+          "id": "596531343",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/596531343"
+        },
+        {
+          "id": "491757587",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/491757587"
+        },
+        {
+          "id": "1535037083",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1535037083"
+        },
+        {
+          "id": "1436338100",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436338100"
+        },
+        {
+          "id": "1436418057",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436418057"
+        },
+        {
+          "id": "1436626099",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436626099"
+        }
+      ]
+    }
+  }
+}

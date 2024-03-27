@@ -1,0 +1,8 @@
+fragment TextNodes_textNode on TextNode {
+    detail
+    format
+    mode
+    style
+    text
+    type
+}

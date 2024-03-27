@@ -1,0 +1,104 @@
+{
+  "id": "201419",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/201419",
+  "attributes": {
+    "name": "Lindsey Buckingham",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/9e/81/2d/9e812ddc-5920-83ef-2dc2-5e5f1e07375c/mzl.qakxnbjr.png/{w}x{h}bb.jpg",
+      "bgColor": "181e16",
+      "textColor1": "f9fdd7",
+      "textColor2": "d8dddf",
+      "textColor3": "ccd0b0",
+      "textColor4": "b2b7b7"
+    },
+    "url": "https://music.apple.com/us/artist/lindsey-buckingham/201419"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/201419/albums",
+      "data": [
+        {
+          "id": "1222666640",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1222666640"
+        },
+        {
+          "id": "1570804572",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1570804572"
+        },
+        {
+          "id": "275968935",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/275968935"
+        },
+        {
+          "id": "298888947",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/298888947"
+        },
+        {
+          "id": "357960297",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/357960297"
+        },
+        {
+          "id": "357962619",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/357962619"
+        },
+        {
+          "id": "290075434",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/290075434"
+        },
+        {
+          "id": "193413529",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/193413529"
+        },
+        {
+          "id": "704648301",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/704648301"
+        },
+        {
+          "id": "1424936658",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1424936658"
+        },
+        {
+          "id": "193413701",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/193413701"
+        },
+        {
+          "id": "1444184647",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444184647"
+        },
+        {
+          "id": "1377458344",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1377458344"
+        },
+        {
+          "id": "300058600",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/300058600"
+        },
+        {
+          "id": "1019370042",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1019370042"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "id": "442122051",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/442122051",
+  "attributes": {
+    "name": "Frank Ocean",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features126/v4/d8/90/47/d8904782-ec1f-d3fc-a4cb-3efb713c9ac8/mzl.vhdbrgee.jpg/{w}x{h}bb.jpg",
+      "bgColor": "76c0e3",
+      "textColor1": "161616",
+      "textColor2": "30241a",
+      "textColor3": "29383f",
+      "textColor4": "3e4342"
+    },
+    "url": "https://music.apple.com/us/artist/frank-ocean/442122051"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/442122051/albums",
+      "data": [
+        {
+          "id": "1146195596",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1146195596"
+        },
+        {
+          "id": "1440765580",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440765580"
+        },
+        {
+          "id": "1444860879",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444860879"
+        },
+        {
+          "id": "1445278500",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445278500"
+        },
+        {
+          "id": "1225119790",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1225119790"
+        },
+        {
+          "id": "1236971340",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1236971340"
+        },
+        {
+          "id": "1239960107",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1239960107"
+        },
+        {
+          "id": "1506122739",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1506122739"
+        },
+        {
+          "id": "1485957053",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485957053"
+        },
+        {
+          "id": "1506122308",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1506122308"
+        },
+        {
+          "id": "1214557444",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1214557444"
+        },
+        {
+          "id": "1349524897",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1349524897"
+        },
+        {
+          "id": "1484224393",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484224393"
+        },
+        {
+          "id": "1445147125",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445147125"
+        },
+        {
+          "id": "1239590107",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1239590107"
+        },
+        {
+          "id": "1445302593",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445302593"
+        },
+        {
+          "id": "1486713879",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1486713879"
+        },
+        {
+          "id": "1484535192",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484535192"
+        },
+        {
+          "id": "1229433401",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1229433401"
+        },
+        {
+          "id": "1276055312",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1276055312"
+        }
+      ]
+    }
+  }
+}

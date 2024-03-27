@@ -1,0 +1,49 @@
+{
+  "id": "982569225",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/982569225",
+  "attributes": {
+    "name": "Big Red Machine",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/86/c3/dd/86c3dd62-577a-1511-5592-ef9f57f33ebe/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "081b17",
+      "textColor1": "d9ccce",
+      "textColor2": "d2cec2",
+      "textColor3": "afa9a9",
+      "textColor4": "aaaaa0"
+    },
+    "url": "https://music.apple.com/us/artist/big-red-machine/982569225"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/982569225/albums",
+      "data": [
+        {
+          "id": "1571575880",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1571575880"
+        },
+        {
+          "id": "1404969382",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1404969382"
+        },
+        {
+          "id": "1517083444",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1517083444"
+        },
+        {
+          "id": "1580595317",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1580595317"
+        }
+      ]
+    }
+  }
+}

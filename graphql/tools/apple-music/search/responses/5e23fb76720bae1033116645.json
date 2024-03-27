@@ -1,0 +1,59 @@
+{
+  "id": "881935581",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/881935581",
+  "attributes": {
+    "name": "Puss N Boots",
+    "genreNames": [
+      "Singer/Songwriter"
+    ],
+    "artwork": {
+      "width": 3000,
+      "height": 3000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/70/a4/9f/70a49f68-1f62-442f-1edd-22c6666cec71/19UM1IM09868.rgb.jpg/{w}x{h}ac.jpg",
+      "bgColor": "251d12",
+      "textColor1": "e8e3d6",
+      "textColor2": "d7cec2",
+      "textColor3": "c1bcaf",
+      "textColor4": "b4ab9e"
+    },
+    "url": "https://music.apple.com/us/artist/puss-n-boots/881935581"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/881935581/albums",
+      "data": [
+        {
+          "id": "1492378941",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492378941"
+        },
+        {
+          "id": "1442957685",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442957685"
+        },
+        {
+          "id": "1481466125",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1481466125"
+        },
+        {
+          "id": "1492521980",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492521980"
+        },
+        {
+          "id": "1482297831",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1482297831"
+        },
+        {
+          "id": "1482983890",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1482983890"
+        }
+      ]
+    }
+  }
+}

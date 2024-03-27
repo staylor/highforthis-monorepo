@@ -1,0 +1,134 @@
+{
+  "id": "163966984",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/163966984",
+  "attributes": {
+    "name": "Escort",
+    "genreNames": [
+      "Electronic"
+    ],
+    "artwork": {
+      "width": 2948,
+      "height": 2948,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/90/ed/1d/90ed1d80-5756-4489-ffaa-6cd38306f267/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "000000",
+      "textColor1": "acc5c5",
+      "textColor2": "d6b3c7",
+      "textColor3": "8a9d9d",
+      "textColor4": "ab8f9f"
+    },
+    "url": "https://music.apple.com/us/artist/escort/163966984"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/163966984/albums",
+      "data": [
+        {
+          "id": "475575470",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/475575470"
+        },
+        {
+          "id": "1040903217",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1040903217"
+        },
+        {
+          "id": "1439070773",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1439070773"
+        },
+        {
+          "id": "1441885986",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441885986"
+        },
+        {
+          "id": "1457668552",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1457668552"
+        },
+        {
+          "id": "1685542488",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1685542488"
+        },
+        {
+          "id": "1457939486",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1457939486"
+        },
+        {
+          "id": "567343082",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/567343082"
+        },
+        {
+          "id": "648042725",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/648042725"
+        },
+        {
+          "id": "1593721467",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593721467"
+        },
+        {
+          "id": "637038984",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/637038984"
+        },
+        {
+          "id": "1566374778",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1566374778"
+        },
+        {
+          "id": "666056315",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/666056315"
+        },
+        {
+          "id": "1352654625",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1352654625"
+        },
+        {
+          "id": "595021542",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/595021542"
+        },
+        {
+          "id": "714258275",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/714258275"
+        },
+        {
+          "id": "917768945",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/917768945"
+        },
+        {
+          "id": "477484887",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/477484887"
+        },
+        {
+          "id": "1194025365",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1194025365"
+        },
+        {
+          "id": "1453833486",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1453833486"
+        },
+        {
+          "id": "501323405",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/501323405"
+        }
+      ]
+    }
+  }
+}

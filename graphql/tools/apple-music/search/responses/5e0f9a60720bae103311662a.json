@@ -1,0 +1,69 @@
+{
+  "id": "536709225",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/536709225",
+  "attributes": {
+    "name": "Mannequin Pussy",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2353,
+      "height": 2353,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/69/35/6f/69356fcb-2b4a-4232-c677-aa73f6e57cc2/71cdef6d-c801-4bef-bcae-3be695e8d520_ami-identity-4a0dfdaa4bc4724994580f7563243bd1-2023-11-14T21-40-33.778Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "0b1829",
+      "textColor1": "aabee2",
+      "textColor2": "dfaa8a",
+      "textColor3": "8a9dbd",
+      "textColor4": "b58d76"
+    },
+    "url": "https://music.apple.com/us/artist/mannequin-pussy/536709225"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/536709225/albums",
+      "data": [
+        {
+          "id": "1485074587",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485074587"
+        },
+        {
+          "id": "1555999100",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1555999100"
+        },
+        {
+          "id": "1708265210",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1708265210"
+        },
+        {
+          "id": "1701094219",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1701094219"
+        },
+        {
+          "id": "1670505318",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1670505318"
+        },
+        {
+          "id": "1509327889",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509327889"
+        },
+        {
+          "id": "1670505207",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1670505207"
+        },
+        {
+          "id": "1662696596",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1662696596"
+        }
+      ]
+    }
+  }
+}

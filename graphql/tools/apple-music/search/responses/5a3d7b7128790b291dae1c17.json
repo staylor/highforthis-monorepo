@@ -1,0 +1,139 @@
+{
+  "id": "254571412",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/254571412",
+  "attributes": {
+    "name": "Jason Isbell",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 4122,
+      "height": 4122,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/a9/86/f8/a986f8e6-8d16-0399-aa7b-9f4b26e59e5d/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "c1c1c1",
+      "textColor1": "101010",
+      "textColor2": "272727",
+      "textColor3": "333333",
+      "textColor4": "454545"
+    },
+    "url": "https://music.apple.com/us/artist/jason-isbell/254571412"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/254571412/albums",
+      "data": [
+        {
+          "id": "644761037",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/644761037"
+        },
+        {
+          "id": "986866335",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/986866335"
+        },
+        {
+          "id": "1414572899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1414572899"
+        },
+        {
+          "id": "1414572899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1414572899"
+        },
+        {
+          "id": "573355639",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/573355639"
+        },
+        {
+          "id": "573355639",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/573355639"
+        },
+        {
+          "id": "1436923752",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436923752"
+        },
+        {
+          "id": "1436925743",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436925743"
+        },
+        {
+          "id": "1569703348",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569703348"
+        },
+        {
+          "id": "1704740898",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1704740898"
+        },
+        {
+          "id": "1436934571",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436934571"
+        },
+        {
+          "id": "1710793131",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710793131"
+        },
+        {
+          "id": "1436918547",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436918547"
+        },
+        {
+          "id": "1633318063",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1633318063"
+        },
+        {
+          "id": "962689197",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/962689197"
+        },
+        {
+          "id": "1529944163",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1529944163"
+        },
+        {
+          "id": "663078114",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/663078114"
+        },
+        {
+          "id": "1707455556",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1707455556"
+        },
+        {
+          "id": "1551836768",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1551836768"
+        },
+        {
+          "id": "1543777867",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543777867"
+        },
+        {
+          "id": "1438552860",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438552860"
+        },
+        {
+          "id": "1438552860",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438552860"
+        }
+      ]
+    }
+  }
+}

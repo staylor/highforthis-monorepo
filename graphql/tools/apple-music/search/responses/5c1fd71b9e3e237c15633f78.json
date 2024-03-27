@@ -1,0 +1,94 @@
+{
+  "id": "139266387",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/139266387",
+  "attributes": {
+    "name": "Beirut",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 4480,
+      "height": 4480,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/d6/a5/cb/d6a5cb99-bf80-e0a6-158e-0397adca95d5/5d68e8d0-30b4-400f-837f-240097aa5e9a_ami-identity-889f39140c3e0354eac4a72c3d9fbc03-2023-08-30T16-01-20.839Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "181d16",
+      "textColor1": "a4cbd6",
+      "textColor2": "99c0ca",
+      "textColor3": "88a8af",
+      "textColor4": "7f9fa6"
+    },
+    "url": "https://music.apple.com/us/artist/beirut/139266387"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/139266387/albums",
+      "data": [
+        {
+          "id": "997318492",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/997318492"
+        },
+        {
+          "id": "1438312812",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438312812"
+        },
+        {
+          "id": "1166641216",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1166641216"
+        },
+        {
+          "id": "1309594825",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1309594825"
+        },
+        {
+          "id": "1309355762",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1309355762"
+        },
+        {
+          "id": "1700341218",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1700341218"
+        },
+        {
+          "id": "1583272303",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1583272303"
+        },
+        {
+          "id": "1343371833",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1343371833"
+        },
+        {
+          "id": "1343375744",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1343375744"
+        },
+        {
+          "id": "1343379750",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1343379750"
+        },
+        {
+          "id": "1343379717",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1343379717"
+        },
+        {
+          "id": "1667913718",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667913718"
+        },
+        {
+          "id": "1343384209",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1343384209"
+        }
+      ]
+    }
+  }
+}

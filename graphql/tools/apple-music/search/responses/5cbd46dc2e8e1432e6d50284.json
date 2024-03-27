@@ -1,0 +1,94 @@
+{
+  "id": "271500846",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/271500846",
+  "attributes": {
+    "name": "Santigold",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2500,
+      "height": 2500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/38/85/fd/3885fd02-ff8b-3e52-662d-4c7244e1c5d2/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "d0b69f",
+      "textColor1": "0c0500",
+      "textColor2": "361b0a",
+      "textColor3": "33291f",
+      "textColor4": "553a28"
+    },
+    "url": "https://music.apple.com/us/artist/santigold/271500846"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/271500846/albums",
+      "data": [
+        {
+          "id": "278671865",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/278671865"
+        },
+        {
+          "id": "1054734475",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1054734475"
+        },
+        {
+          "id": "513473335",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/513473335"
+        },
+        {
+          "id": "1669525510",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1669525510"
+        },
+        {
+          "id": "1626312449",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1626312449"
+        },
+        {
+          "id": "513472738",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/513472738"
+        },
+        {
+          "id": "716251623",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716251623"
+        },
+        {
+          "id": "497565881",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/497565881"
+        },
+        {
+          "id": "271957809",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271957809"
+        },
+        {
+          "id": "1604217876",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1604217876"
+        },
+        {
+          "id": "735160010",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/735160010"
+        },
+        {
+          "id": "1719515550",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1719515550"
+        },
+        {
+          "id": "1619165291",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1619165291"
+        }
+      ]
+    }
+  }
+}

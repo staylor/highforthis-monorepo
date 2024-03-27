@@ -1,0 +1,104 @@
+{
+  "id": "4978498",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/4978498",
+  "attributes": {
+    "name": "The New Pornographers",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1993,
+      "height": 1993,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/cb/11/e3/cb11e325-72a7-161b-410f-412a2fdd1b8a/a3a5c66b-5375-4632-90d0-47d8caa49798_ami-identity-8cc22fcc9d6d97dffaed95ba31805065-2023-03-06T21-25-48.319Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "060e11",
+      "textColor1": "d4d9d7",
+      "textColor2": "c7bfc5",
+      "textColor3": "aab0b0",
+      "textColor4": "a09ca1"
+    },
+    "url": "https://music.apple.com/us/artist/the-new-pornographers/4978498"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/4978498/albums",
+      "data": [
+        {
+          "id": "1473992637",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1473992637"
+        },
+        {
+          "id": "1658414386",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1658414386"
+        },
+        {
+          "id": "1440940630",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440940630"
+        },
+        {
+          "id": "1590332004",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1590332004"
+        },
+        {
+          "id": "1589232454",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589232454"
+        },
+        {
+          "id": "1589133947",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589133947"
+        },
+        {
+          "id": "1589233948",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589233948"
+        },
+        {
+          "id": "1710282779",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710282779"
+        },
+        {
+          "id": "1589134685",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589134685"
+        },
+        {
+          "id": "1589169991",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589169991"
+        },
+        {
+          "id": "1609704700",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1609704700"
+        },
+        {
+          "id": "1609706217",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1609706217"
+        },
+        {
+          "id": "1592267077",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1592267077"
+        },
+        {
+          "id": "1589140768",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589140768"
+        },
+        {
+          "id": "1682323423",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1682323423"
+        }
+      ]
+    }
+  }
+}

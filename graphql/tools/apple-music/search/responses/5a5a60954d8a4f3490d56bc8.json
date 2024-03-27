@@ -1,0 +1,94 @@
+{
+  "id": "3647403",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/3647403",
+  "attributes": {
+    "name": "Neko Case",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/99/12/e5/9912e57c-37c5-f355-c999-b94842761770/mzl.dlpgdvnd.jpg/{w}x{h}bb.jpg",
+      "bgColor": "15211f",
+      "textColor1": "fcf3c8",
+      "textColor2": "e6d9d7",
+      "textColor3": "cec9a6",
+      "textColor4": "bcb4b2"
+    },
+    "url": "https://music.apple.com/us/artist/neko-case/3647403"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/3647403/albums",
+      "data": [
+        {
+          "id": "1485072408",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485072408"
+        },
+        {
+          "id": "1485022603",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485022603"
+        },
+        {
+          "id": "1485022627",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485022627"
+        },
+        {
+          "id": "1485023426",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485023426"
+        },
+        {
+          "id": "1616250367",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1616250367"
+        },
+        {
+          "id": "1485022503",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485022503"
+        },
+        {
+          "id": "1485058534",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485058534"
+        },
+        {
+          "id": "1436922578",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436922578"
+        },
+        {
+          "id": "1485020165",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485020165"
+        },
+        {
+          "id": "1631443980",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631443980"
+        },
+        {
+          "id": "1564786547",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564786547"
+        },
+        {
+          "id": "1564257381",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564257381"
+        },
+        {
+          "id": "1564481622",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564481622"
+        }
+      ]
+    }
+  }
+}

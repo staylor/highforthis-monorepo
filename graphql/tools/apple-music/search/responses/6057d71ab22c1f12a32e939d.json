@@ -1,0 +1,99 @@
+{
+  "id": "771396456",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/771396456",
+  "attributes": {
+    "name": "Sault",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1987,
+      "height": 1987,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/14/72/9c/14729cee-135a-b138-b470-f5de444ff4a2/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "0d0c0a",
+      "textColor1": "f2f2f2",
+      "textColor2": "e6e6e6",
+      "textColor3": "c4c4c4",
+      "textColor4": "bbbaba"
+    },
+    "url": "https://music.apple.com/us/artist/sault/771396456"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/771396456/albums",
+      "data": [
+        {
+          "id": "1460826525",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1460826525"
+        },
+        {
+          "id": "1531056843",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1531056843"
+        },
+        {
+          "id": "1518680087",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1518680087"
+        },
+        {
+          "id": "1619140676",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1619140676"
+        },
+        {
+          "id": "1479655459",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1479655459"
+        },
+        {
+          "id": "1653680057",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1653680057"
+        },
+        {
+          "id": "1653685937",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1653685937"
+        },
+        {
+          "id": "1653683510",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1653683510"
+        },
+        {
+          "id": "1653683599",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1653683599"
+        },
+        {
+          "id": "1653678698",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1653678698"
+        },
+        {
+          "id": "1454807294",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1454807294"
+        },
+        {
+          "id": "1460738330",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1460738330"
+        },
+        {
+          "id": "1648770833",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1648770833"
+        },
+        {
+          "id": "1451737465",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1451737465"
+        }
+      ]
+    }
+  }
+}

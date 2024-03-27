@@ -1,0 +1,10 @@
+.cache
+
+node_modules
+
+graphql/lib/**
+graphql/public/**
+
+web/build
+web/public/build
+web/src/types/graphql.ts

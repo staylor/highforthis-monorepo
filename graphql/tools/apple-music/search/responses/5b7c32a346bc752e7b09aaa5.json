@@ -1,0 +1,144 @@
+{
+  "id": "1166315",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1166315",
+  "attributes": {
+    "name": "Tenacious D",
+    "genreNames": [
+      "Hard Rock"
+    ],
+    "artwork": {
+      "width": 3699,
+      "height": 3699,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/06/75/32/0675320c-eb1f-e840-aa18-8a1796d33424/db428f60-b625-4fe2-bab0-df78ead59787_ami-identity-0887d289f8a49cfa2e7ce7b60e36626e-2023-05-16T23-04-31.843Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "000000",
+      "textColor1": "fdfcfa",
+      "textColor2": "dbdddf",
+      "textColor3": "cacac8",
+      "textColor4": "afb0b2"
+    },
+    "url": "https://music.apple.com/us/artist/tenacious-d/1166315"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1166315/albums",
+      "data": [
+        {
+          "id": "385553664",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/385553664"
+        },
+        {
+          "id": "203888402",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/203888402"
+        },
+        {
+          "id": "509871395",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/509871395"
+        },
+        {
+          "id": "1434624186",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1434624186"
+        },
+        {
+          "id": "1005716201",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1005716201"
+        },
+        {
+          "id": "1073272771",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1073272771"
+        },
+        {
+          "id": "203998180",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/203998180"
+        },
+        {
+          "id": "1587187737",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1587187737"
+        },
+        {
+          "id": "202855977",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/202855977"
+        },
+        {
+          "id": "1685758932",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1685758932"
+        },
+        {
+          "id": "1649035738",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1649035738"
+        },
+        {
+          "id": "510145825",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/510145825"
+        },
+        {
+          "id": "1486671811",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1486671811"
+        },
+        {
+          "id": "1536292164",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536292164"
+        },
+        {
+          "id": "1656828362",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1656828362"
+        },
+        {
+          "id": "1627707706",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1627707706"
+        },
+        {
+          "id": "1573106843",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1573106843"
+        },
+        {
+          "id": "1510019957",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1510019957"
+        },
+        {
+          "id": "578029809",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/578029809"
+        },
+        {
+          "id": "1027078389",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1027078389"
+        },
+        {
+          "id": "1680979313",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1680979313"
+        },
+        {
+          "id": "1627277294",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1627277294"
+        },
+        {
+          "id": "1531409788",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1531409788"
+        }
+      ]
+    }
+  }
+}

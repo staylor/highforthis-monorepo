@@ -1,0 +1,158 @@
+{
+  "id": "178834",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/178834",
+  "attributes": {
+    "name": "Bruce Springsteen",
+    "genreNames": [
+      "Rock"
+    ],
+    "editorialNotes": {
+      "short": "Catch a glimpse of the Apple Original Film, an intimate look at the making of Letter To You."
+    },
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/e6/90/17/e6901734-c24d-4c68-cc1f-a74aa1675fca/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "141615",
+      "textColor1": "eac0a3",
+      "textColor2": "eab18a",
+      "textColor3": "bf9e87",
+      "textColor4": "bf9273"
+    },
+    "url": "https://music.apple.com/us/artist/bruce-springsteen/178834"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/178834/albums",
+      "next": "/v1/catalog/us/artists/178834/albums?offset=25",
+      "data": [
+        {
+          "id": "203708420",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/203708420"
+        },
+        {
+          "id": "310730204",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/310730204"
+        },
+        {
+          "id": "1529959055",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1529959055"
+        },
+        {
+          "id": "1459884961",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1459884961"
+        },
+        {
+          "id": "192745941",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/192745941"
+        },
+        {
+          "id": "400713977",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/400713977"
+        },
+        {
+          "id": "1435854353",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1435854353"
+        },
+        {
+          "id": "185798980",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/185798980"
+        },
+        {
+          "id": "186064796",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/186064796"
+        },
+        {
+          "id": "192901525",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/192901525"
+        },
+        {
+          "id": "285119967",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/285119967"
+        },
+        {
+          "id": "1646713825",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1646713825"
+        },
+        {
+          "id": "186149850",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/186149850"
+        },
+        {
+          "id": "1481280479",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1481280479"
+        },
+        {
+          "id": "217291875",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/217291875"
+        },
+        {
+          "id": "1445588120",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445588120"
+        },
+        {
+          "id": "157459955",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/157459955"
+        },
+        {
+          "id": "181545768",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/181545768"
+        },
+        {
+          "id": "1045058131",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1045058131"
+        },
+        {
+          "id": "1325275538",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1325275538"
+        },
+        {
+          "id": "302692899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/302692899"
+        },
+        {
+          "id": "741055385",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/741055385"
+        },
+        {
+          "id": "400848471",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/400848471"
+        },
+        {
+          "id": "192669706",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/192669706"
+        },
+        {
+          "id": "194944243",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/194944243"
+        }
+      ]
+    }
+  }
+}

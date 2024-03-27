@@ -1,0 +1,139 @@
+{
+  "id": "27051074",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/27051074",
+  "attributes": {
+    "name": "Explosions In the Sky",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1200,
+      "height": 1200,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/41/77/d3/4177d355-09e8-b8fb-7a33-c75a86aa8775/mzl.rpecoyjl.jpg/{w}x{h}bb.jpg",
+      "bgColor": "b8c2d0",
+      "textColor1": "0a0a0b",
+      "textColor2": "1c1814",
+      "textColor3": "2d2f32",
+      "textColor4": "3b3a3a"
+    },
+    "url": "https://music.apple.com/us/artist/explosions-in-the-sky/27051074"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/27051074/albums",
+      "data": [
+        {
+          "id": "318951781",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/318951781"
+        },
+        {
+          "id": "1071926057",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1071926057"
+        },
+        {
+          "id": "902524792",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/902524792"
+        },
+        {
+          "id": "319136556",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/319136556"
+        },
+        {
+          "id": "430468957",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/430468957"
+        },
+        {
+          "id": "318867117",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/318867117"
+        },
+        {
+          "id": "1687135882",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1687135882"
+        },
+        {
+          "id": "318950013",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/318950013"
+        },
+        {
+          "id": "1579085507",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1579085507"
+        },
+        {
+          "id": "1003481864",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1003481864"
+        },
+        {
+          "id": "1463656684",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1463656684"
+        },
+        {
+          "id": "324011019",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/324011019"
+        },
+        {
+          "id": "667577232",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/667577232"
+        },
+        {
+          "id": "1708124469",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1708124469"
+        },
+        {
+          "id": "1701672319",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1701672319"
+        },
+        {
+          "id": "1698141407",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1698141407"
+        },
+        {
+          "id": "1686375765",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1686375765"
+        },
+        {
+          "id": "1584839221",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1584839221"
+        },
+        {
+          "id": "1580572481",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1580572481"
+        },
+        {
+          "id": "1581992479",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1581992479"
+        },
+        {
+          "id": "1581992074",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1581992074"
+        },
+        {
+          "id": "1467046313",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1467046313"
+        }
+      ]
+    }
+  }
+}

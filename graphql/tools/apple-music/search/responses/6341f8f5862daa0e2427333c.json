@@ -1,0 +1,114 @@
+{
+  "id": "1104179033",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1104179033",
+  "attributes": {
+    "name": "Dominic Fike",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1975,
+      "height": 1975,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/64/0a/c2/640ac21e-a5f2-d971-50ef-2b87c3edc301/bed67b5e-dc54-4cfa-9761-8477bca7ca0e_ami-identity-c591af659b243bd05700d77c52d34b26-2022-10-09T05-41-04.668Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "ffffff",
+      "textColor1": "120b04",
+      "textColor2": "333026",
+      "textColor3": "423c36",
+      "textColor4": "5c5951"
+    },
+    "url": "https://music.apple.com/us/artist/dominic-fike/1104179033"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1104179033/albums",
+      "data": [
+        {
+          "id": "1438243719",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438243719"
+        },
+        {
+          "id": "1521345121",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1521345121"
+        },
+        {
+          "id": "1694067269",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1694067269"
+        },
+        {
+          "id": "1494065882",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1494065882"
+        },
+        {
+          "id": "1695979461",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1695979461"
+        },
+        {
+          "id": "1704038899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1704038899"
+        },
+        {
+          "id": "1533854401",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1533854401"
+        },
+        {
+          "id": "1466272241",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1466272241"
+        },
+        {
+          "id": "1554593910",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1554593910"
+        },
+        {
+          "id": "1690407306",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690407306"
+        },
+        {
+          "id": "1471407341",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1471407341"
+        },
+        {
+          "id": "1681329077",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1681329077"
+        },
+        {
+          "id": "1466272268",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1466272268"
+        },
+        {
+          "id": "1522967048",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1522967048"
+        },
+        {
+          "id": "1484691676",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484691676"
+        },
+        {
+          "id": "1612296489",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612296489"
+        },
+        {
+          "id": "1554594122",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1554594122"
+        }
+      ]
+    }
+  }
+}

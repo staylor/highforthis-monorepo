@@ -1,0 +1,144 @@
+{
+  "id": "19552743",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/19552743",
+  "attributes": {
+    "name": "The Hold Steady",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3797,
+      "height": 3797,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages123/v4/50/31/36/50313630-b6c5-c4a2-c9b1-12e254bb0917/cc5ab725-a355-41ff-bbf3-cd8962d8e1ed_ami-identity-e88d77aaca15bc0212ff0262894570f6-2023-01-03T21-15-10.905Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "eeeeee",
+      "textColor1": "080708",
+      "textColor2": "101010",
+      "textColor3": "363536",
+      "textColor4": "3c3c3c"
+    },
+    "url": "https://music.apple.com/us/artist/the-hold-steady/19552743"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/19552743/albums",
+      "data": [
+        {
+          "id": "1464237035",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1464237035"
+        },
+        {
+          "id": "1539020630",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1539020630"
+        },
+        {
+          "id": "1656815606",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1656815606"
+        },
+        {
+          "id": "1143274331",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1143274331"
+        },
+        {
+          "id": "1710225983",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710225983"
+        },
+        {
+          "id": "58623804",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/58623804"
+        },
+        {
+          "id": "1143275281",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1143275281"
+        },
+        {
+          "id": "1458507552",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1458507552"
+        },
+        {
+          "id": "1443218253",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443218253"
+        },
+        {
+          "id": "1451968240",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1451968240"
+        },
+        {
+          "id": "1710210574",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710210574"
+        },
+        {
+          "id": "19552775",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/19552775"
+        },
+        {
+          "id": "1470936202",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470936202"
+        },
+        {
+          "id": "1441152874",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441152874"
+        },
+        {
+          "id": "260462604",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/260462604"
+        },
+        {
+          "id": "1176764918",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1176764918"
+        },
+        {
+          "id": "1716342434",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1716342434"
+        },
+        {
+          "id": "1713863715",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1713863715"
+        },
+        {
+          "id": "1318054812",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1318054812"
+        },
+        {
+          "id": "1435193471",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1435193471"
+        },
+        {
+          "id": "1353483228",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1353483228"
+        },
+        {
+          "id": "1412786115",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1412786115"
+        },
+        {
+          "id": "1453623740",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1453623740"
+        }
+      ]
+    }
+  }
+}

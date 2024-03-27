@@ -1,0 +1,12 @@
+.cache
+
+graphql/lib/
+graphql/public/
+graphql/generated/
+
+node_modules
+
+web/build
+web/public/build
+
+/xcode

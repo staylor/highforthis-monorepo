@@ -1,0 +1,109 @@
+{
+  "id": "485087438",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/485087438",
+  "attributes": {
+    "name": "Waxahatchee",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2012,
+      "height": 2012,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/09/55/3e/09553e86-a680-6cbc-6d32-3447dce7333e/091c71d2-c22f-4685-8b84-ee7f89486f93_ami-identity-4422aefe4281923147edf1d960a491d2-2024-01-09T15-28-56.245Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "f6fbfe",
+      "textColor1": "080807",
+      "textColor2": "16261b",
+      "textColor3": "373838",
+      "textColor4": "435148"
+    },
+    "url": "https://music.apple.com/us/artist/waxahatchee/485087438"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/485087438/albums",
+      "data": [
+        {
+          "id": "1493459885",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1493459885"
+        },
+        {
+          "id": "1558594013",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1558594013"
+        },
+        {
+          "id": "956643871",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/956643871"
+        },
+        {
+          "id": "1222703546",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1222703546"
+        },
+        {
+          "id": "1222694400",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1222694400"
+        },
+        {
+          "id": "785719208",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/785719208"
+        },
+        {
+          "id": "785662831",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/785662831"
+        },
+        {
+          "id": "1405146006",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1405146006"
+        },
+        {
+          "id": "1596513652",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596513652"
+        },
+        {
+          "id": "1116159719",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1116159719"
+        },
+        {
+          "id": "1714536339",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714536339"
+        },
+        {
+          "id": "1622103291",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1622103291"
+        },
+        {
+          "id": "1721222332",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1721222332"
+        },
+        {
+          "id": "1336523118",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1336523118"
+        },
+        {
+          "id": "1232074862",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1232074862"
+        },
+        {
+          "id": "1545918207",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1545918207"
+        }
+      ]
+    }
+  }
+}

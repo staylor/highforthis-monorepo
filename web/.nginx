@@ -1,0 +1,91 @@
+proxy_cache_path /data/nginx/cache levels=1:2 keys_zone=highforthis_v3:1m max_size=500m
+                 inactive=5m;
+
+server {
+  if ($host = www.highforthis.com) {
+    return 301 https://$host$request_uri;
+  } # managed by Certbot
+
+  if ($host = highforthis.com) {
+    return 301 https://$host$request_uri;
+  } # managed by Certbot
+
+  location ~ /\.git {
+    deny all;
+  }
+
+
+  listen       80;
+  server_name  highforthis.com www.highforthis.com;
+  root         /var/www/highforthis.com/public_html;
+  access_log   /var/www/highforthis.com/logs/access.log;
+  error_log    /var/www/highforthis.com/logs/error.log;
+
+  location /.well-known/acme-challenge/ {
+  	try_files $uri /dev/null =404;
+  }
+
+  location / {
+  	rewrite ^ https://highforthis.com$request_uri permanent;
+  }
+}
+
+server {
+  listen 443;
+  ssl on;
+  ssl_certificate /etc/letsencrypt/live/goodbyepicasso.com-0005/fullchain.pem; # managed by Certbot
+  ssl_certificate_key /etc/letsencrypt/live/goodbyepicasso.com-0005/privkey.pem; # managed by Certbot
+  server_name  highforthis.com *.highforthis.com;
+  root         /var/www/highforthis.com/highforthis-remix;
+  access_log   /var/www/highforthis.com/logs/ssl.access.log;
+  error_log    /var/www/highforthis.com/logs/ssl.error.log;
+
+  client_body_buffer_size 1M;
+  client_max_body_size 300M;
+
+  location ~ /\.git {
+    deny all;
+  }
+
+  location /youtube {
+    rewrite ^ https://www.youtube.com/channel/UCwQRSPBN5eGmO1nYE40t1hw permanent;
+  }
+
+  location /admin {
+    proxy_pass http://localhost:3006;
+    proxy_set_header Host $host;
+  }
+
+  location /login {
+    proxy_pass http://localhost:3006;
+    proxy_set_header Host $host;
+  }
+
+  location /graphql {
+    try_files $uri @graphql;
+  }
+
+  location @graphql {
+    proxy_pass http://localhost:8084;
+    proxy_set_header Host $host;
+  }
+
+  location / {
+    try_files $uri @app;
+  }
+
+  location @app {
+    proxy_pass http://localhost:3006;
+    proxy_set_header Host $host;
+    proxy_cache highforthis_v3;
+    proxy_cache_valid 200 302 10m;
+    proxy_cache_valid 301      1h;
+    proxy_cache_valid any      1m;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_cache_revalidate on;
+    proxy_cache_lock on;
+    proxy_cache_bypass $cookie_draftauthtoken $cookie_nocache $arg_nocache;
+    add_header X-Cache-Status $upstream_cache_status;
+  }
+
+}

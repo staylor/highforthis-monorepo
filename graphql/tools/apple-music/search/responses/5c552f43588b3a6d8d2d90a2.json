@@ -1,0 +1,155 @@
+{
+  "id": "566639154",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/566639154",
+  "attributes": {
+    "name": "Vince Staples",
+    "genreNames": [
+      "Hip-Hop/Rap"
+    ],
+    "artwork": {
+      "width": 5282,
+      "height": 5282,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/47/ee/cd/47eecdf5-7bba-0c8a-854b-6a8b8bce5141/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "306279",
+      "textColor1": "f5e2cb",
+      "textColor2": "ecc5e7",
+      "textColor3": "cdc8ba",
+      "textColor4": "c6b1d1"
+    },
+    "url": "https://music.apple.com/us/artist/vince-staples/566639154"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/566639154/albums",
+      "next": "/v1/catalog/us/artists/566639154/albums?offset=25",
+      "data": [
+        {
+          "id": "1573959840",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1573959840"
+        },
+        {
+          "id": "1615493782",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1615493782"
+        },
+        {
+          "id": "1440872582",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440872582"
+        },
+        {
+          "id": "1440887126",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440887126"
+        },
+        {
+          "id": "1444178693",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444178693"
+        },
+        {
+          "id": "1440848241",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440848241"
+        },
+        {
+          "id": "1440862836",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440862836"
+        },
+        {
+          "id": "1440845572",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440845572"
+        },
+        {
+          "id": "1573961041",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1573961041"
+        },
+        {
+          "id": "1443924449",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443924449"
+        },
+        {
+          "id": "1444893272",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444893272"
+        },
+        {
+          "id": "1618528675",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1618528675"
+        },
+        {
+          "id": "1442245025",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442245025"
+        },
+        {
+          "id": "1442881975",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442881975"
+        },
+        {
+          "id": "1696567174",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1696567174"
+        },
+        {
+          "id": "1554058756",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1554058756"
+        },
+        {
+          "id": "1554058511",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1554058511"
+        },
+        {
+          "id": "1476604386",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1476604386"
+        },
+        {
+          "id": "1444890649",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444890649"
+        },
+        {
+          "id": "1720479915",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1720479915"
+        },
+        {
+          "id": "1694794720",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1694794720"
+        },
+        {
+          "id": "1571372628",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1571372628"
+        },
+        {
+          "id": "1720480368",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1720480368"
+        },
+        {
+          "id": "1445314120",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445314120"
+        },
+        {
+          "id": "1490648807",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1490648807"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "1445912482",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1445912482",
+  "attributes": {
+    "name": "Better Oblivion Community Center",
+    "genreNames": [
+      "Indie Rock"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/f3/c2/fe/f3c2feca-d43c-d950-78fb-57a8a6a92301/mzl.ncgcnfcq.jpg/{w}x{h}bb.jpg",
+      "bgColor": "315b9b",
+      "textColor1": "faf19e",
+      "textColor2": "e3d784",
+      "textColor3": "d2d39d",
+      "textColor4": "c0be89"
+    },
+    "url": "https://music.apple.com/us/artist/better-oblivion-community-center/1445912482"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1445912482/albums",
+      "data": [
+        {
+          "id": "1445912481",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445912481"
+        },
+        {
+          "id": "1456666071",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1456666071"
+        },
+        {
+          "id": "1449166390",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1449166390"
+        }
+      ]
+    }
+  }
+}

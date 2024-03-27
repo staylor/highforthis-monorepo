@@ -1,0 +1,109 @@
+{
+  "id": "790125",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/790125",
+  "attributes": {
+    "name": "The Breeders",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/ae/2f/b4/ae2fb493-432c-337f-0ea4-ffe48d375d6e/fbd73ea9-f7ee-4007-baae-485accd80216_ami-identity-37264feab7ba03fa01a0bc62545584c1-2023-06-27T14-51-28.398Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "f6f6f6",
+      "textColor1": "000000",
+      "textColor2": "1b1b1b",
+      "textColor3": "313131",
+      "textColor4": "474747"
+    },
+    "url": "https://music.apple.com/us/artist/the-breeders/790125"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/790125/albums",
+      "data": [
+        {
+          "id": "1251495447",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1251495447"
+        },
+        {
+          "id": "310996771",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/310996771"
+        },
+        {
+          "id": "1319598646",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1319598646"
+        },
+        {
+          "id": "1251495429",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1251495429"
+        },
+        {
+          "id": "1691135003",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1691135003"
+        },
+        {
+          "id": "275601786",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/275601786"
+        },
+        {
+          "id": "274176789",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/274176789"
+        },
+        {
+          "id": "273106970",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/273106970"
+        },
+        {
+          "id": "310288408",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/310288408"
+        },
+        {
+          "id": "610601336",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/610601336"
+        },
+        {
+          "id": "1251496715",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1251496715"
+        },
+        {
+          "id": "273106977",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/273106977"
+        },
+        {
+          "id": "1254285122",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1254285122"
+        },
+        {
+          "id": "274176621",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/274176621"
+        },
+        {
+          "id": "1284889293",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1284889293"
+        },
+        {
+          "id": "1554236161",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1554236161"
+        }
+      ]
+    }
+  }
+}

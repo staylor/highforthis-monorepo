@@ -1,0 +1,158 @@
+{
+  "id": "1126808565",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1126808565",
+  "attributes": {
+    "name": "Bad Bunny",
+    "genreNames": [
+      "Urbano latino"
+    ],
+    "editorialNotes": {
+      "short": "Bad Bunny is Apple Music's Artist of the Year for 2022."
+    },
+    "artwork": {
+      "width": 1080,
+      "height": 1080,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/1a/ac/74/1aac745b-0bce-18c5-d4ac-07dbf6192fee/5c71ee0e-11e3-42d8-b1f7-0bf850252dd9_ami-identity-b99c43259683c42629e6b3a66d65af95-2023-09-25T13-13-11.585Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "010101",
+      "textColor1": "62aed1",
+      "textColor2": "5ea0dc",
+      "textColor3": "4e8ca7",
+      "textColor4": "4b80b0"
+    },
+    "url": "https://music.apple.com/us/artist/bad-bunny/1126808565"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1126808565/albums",
+      "next": "/v1/catalog/us/artists/1126808565/albums?offset=25",
+      "data": [
+        {
+          "id": "1622045624",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1622045624"
+        },
+        {
+          "id": "1662168785",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1662168785"
+        },
+        {
+          "id": "1542102907",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1542102907"
+        },
+        {
+          "id": "1500776322",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1500776322"
+        },
+        {
+          "id": "1447554595",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1447554595"
+        },
+        {
+          "id": "1710982865",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710982865"
+        },
+        {
+          "id": "1512629429",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1512629429"
+        },
+        {
+          "id": "1470146332",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470146332"
+        },
+        {
+          "id": "1478181719",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1478181719"
+        },
+        {
+          "id": "1575007987",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1575007987"
+        },
+        {
+          "id": "1707057969",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1707057969"
+        },
+        {
+          "id": "1470490517",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470490517"
+        },
+        {
+          "id": "1470490415",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470490415"
+        },
+        {
+          "id": "1470492098",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470492098"
+        },
+        {
+          "id": "1465503234",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1465503234"
+        },
+        {
+          "id": "1570323047",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1570323047"
+        },
+        {
+          "id": "1573431826",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1573431826"
+        },
+        {
+          "id": "1698529514",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1698529514"
+        },
+        {
+          "id": "1650911779",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650911779"
+        },
+        {
+          "id": "1329018770",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1329018770"
+        },
+        {
+          "id": "1336752444",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1336752444"
+        },
+        {
+          "id": "1445040003",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445040003"
+        },
+        {
+          "id": "1470493817",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470493817"
+        },
+        {
+          "id": "1496945599",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1496945599"
+        },
+        {
+          "id": "1488271433",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1488271433"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "id": "542658",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/542658",
+  "attributes": {
+    "name": "Roger Waters",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1667,
+      "height": 1667,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/39/fc/b9/39fcb980-5b3d-6f63-fe53-18e0b69c8445/e0d6b75e-5045-4659-8faf-093fe47fddf2_ami-identity-215130b4fadc7996005878a0a6f8c633-2023-07-20T23-56-48.406Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "030301",
+      "textColor1": "e8decd",
+      "textColor2": "ddc7bb",
+      "textColor3": "bab2a4",
+      "textColor4": "b1a096"
+    },
+    "url": "https://music.apple.com/us/artist/roger-waters/542658"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/542658/albums",
+      "data": [
+        {
+          "id": "1227077689",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1227077689"
+        },
+        {
+          "id": "180100455",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/180100455"
+        },
+        {
+          "id": "975952384",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/975952384"
+        },
+        {
+          "id": "1042853859",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1042853859"
+        },
+        {
+          "id": "180102794",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/180102794"
+        },
+        {
+          "id": "1517099398",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1517099398"
+        },
+        {
+          "id": "1697479161",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697479161"
+        },
+        {
+          "id": "1657010280",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1657010280"
+        },
+        {
+          "id": "1416495692",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1416495692"
+        },
+        {
+          "id": "1446745757",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1446745757"
+        },
+        {
+          "id": "1436067615",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436067615"
+        },
+        {
+          "id": "696396879",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/696396879"
+        },
+        {
+          "id": "1486307276",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1486307276"
+        },
+        {
+          "id": "218555804",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/218555804"
+        },
+        {
+          "id": "157910809",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/157910809"
+        },
+        {
+          "id": "1654050142",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1654050142"
+        },
+        {
+          "id": "1485028590",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485028590"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "id": "1436413980",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1436413980",
+  "attributes": {
+    "name": "Zach Bryan",
+    "genreNames": [
+      "Country"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/a7/df/ea/a7dfea34-cc0e-0753-b663-48efaf4be5a2/mzl.xxcuvpqq.jpeg/{w}x{h}bb.jpg",
+      "bgColor": "2a1804",
+      "textColor1": "d1d9d4",
+      "textColor2": "d9a17c",
+      "textColor3": "b0b2aa",
+      "textColor4": "b68564"
+    },
+    "url": "https://music.apple.com/us/artist/zach-bryan/1436413980"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1436413980/albums",
+      "data": [
+        {
+          "id": "1703216858",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1703216858"
+        },
+        {
+          "id": "1620257596",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1620257596"
+        },
+        {
+          "id": "1708146424",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1708146424"
+        },
+        {
+          "id": "1543705082",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543705082"
+        },
+        {
+          "id": "1633178682",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1633178682"
+        },
+        {
+          "id": "1541426415",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1541426415"
+        },
+        {
+          "id": "1542103677",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1542103677"
+        },
+        {
+          "id": "1659527649",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1659527649"
+        },
+        {
+          "id": "1649266373",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1649266373"
+        },
+        {
+          "id": "1551630807",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1551630807"
+        },
+        {
+          "id": "1543055653",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543055653"
+        },
+        {
+          "id": "1608535917",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1608535917"
+        },
+        {
+          "id": "1528836995",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528836995"
+        },
+        {
+          "id": "1643975591",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1643975591"
+        },
+        {
+          "id": "1613192455",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1613192455"
+        },
+        {
+          "id": "1543703507",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543703507"
+        },
+        {
+          "id": "1620419728",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1620419728"
+        },
+        {
+          "id": "1654065908",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1654065908"
+        },
+        {
+          "id": "1619466204",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1619466204"
+        },
+        {
+          "id": "1667025291",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667025291"
+        },
+        {
+          "id": "1704734148",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1704734148"
+        }
+      ]
+    }
+  }
+}

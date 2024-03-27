@@ -1,0 +1,139 @@
+{
+  "id": "39390",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/39390",
+  "attributes": {
+    "name": "Lyle Lovett",
+    "genreNames": [
+      "Country"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features122/v4/a8/68/e2/a868e272-5e6f-2d61-bda1-05e594dcfdbe/mzl.mrgykxij.jpg/{w}x{h}bb.jpg",
+      "bgColor": "9f9f9f",
+      "textColor1": "000000",
+      "textColor2": "040404",
+      "textColor3": "202020",
+      "textColor4": "232323"
+    },
+    "url": "https://music.apple.com/us/artist/lyle-lovett/39390"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/39390/albums",
+      "data": [
+        {
+          "id": "259360529",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259360529"
+        },
+        {
+          "id": "259329481",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259329481"
+        },
+        {
+          "id": "1230065579",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1230065579"
+        },
+        {
+          "id": "259339859",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259339859"
+        },
+        {
+          "id": "259314300",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259314300"
+        },
+        {
+          "id": "1615477174",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1615477174"
+        },
+        {
+          "id": "259589105",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259589105"
+        },
+        {
+          "id": "259641974",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259641974"
+        },
+        {
+          "id": "259632793",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259632793"
+        },
+        {
+          "id": "259566123",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259566123"
+        },
+        {
+          "id": "259637599",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259637599"
+        },
+        {
+          "id": "264146758",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/264146758"
+        },
+        {
+          "id": "259372630",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259372630"
+        },
+        {
+          "id": "507810558",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/507810558"
+        },
+        {
+          "id": "1032144106",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1032144106"
+        },
+        {
+          "id": "1193359756",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1193359756"
+        },
+        {
+          "id": "597917576",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/597917576"
+        },
+        {
+          "id": "1436649839",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436649839"
+        },
+        {
+          "id": "1011429111",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1011429111"
+        },
+        {
+          "id": "1484151933",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484151933"
+        },
+        {
+          "id": "679765761",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/679765761"
+        },
+        {
+          "id": "1699474332",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1699474332"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "id": "2249490",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/2249490",
+  "attributes": {
+    "name": "Damien Rice",
+    "genreNames": [
+      "Singer/Songwriter"
+    ],
+    "artwork": {
+      "width": 1200,
+      "height": 1200,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/8d/35/14/8d3514e4-3bf4-a8e1-e625-90a6e461b0cc/mzl.baeaxjjn.jpg/{w}x{h}bb.jpg",
+      "bgColor": "1d221c",
+      "textColor1": "e3b893",
+      "textColor2": "d79f7a",
+      "textColor3": "bb9a7b",
+      "textColor4": "b28667"
+    },
+    "url": "https://music.apple.com/us/artist/damien-rice/2249490"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/2249490/albums",
+      "data": [
+        {
+          "id": "2249511",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/2249511"
+        },
+        {
+          "id": "915616196",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/915616196"
+        },
+        {
+          "id": "203880553",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/203880553"
+        },
+        {
+          "id": "19441001",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/19441001"
+        },
+        {
+          "id": "269193937",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/269193937"
+        },
+        {
+          "id": "326626747",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/326626747"
+        },
+        {
+          "id": "1621590006",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1621590006"
+        },
+        {
+          "id": "1630009910",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1630009910"
+        },
+        {
+          "id": "1501276802",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1501276802"
+        },
+        {
+          "id": "1568812143",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568812143"
+        },
+        {
+          "id": "196273242",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/196273242"
+        },
+        {
+          "id": "1447645913",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1447645913"
+        }
+      ]
+    }
+  }
+}

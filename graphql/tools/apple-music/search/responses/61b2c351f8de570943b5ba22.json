@@ -1,0 +1,134 @@
+{
+  "id": "979458609",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/979458609",
+  "attributes": {
+    "name": "Olivia Rodrigo",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 1260,
+      "height": 1260,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/34/dd/36/34dd3678-40c6-9d8b-fa0f-cb6d82d3103b/6c46071d-e4d2-4671-a110-6ad83a63b89b_ami-identity-5b05d351a6e3c7256ef7680c8aef2894-2023-06-30T03-58-10.754Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "160f0c",
+      "textColor1": "d3b8f2",
+      "textColor2": "c09ff1",
+      "textColor3": "ad96c4",
+      "textColor4": "9e82c3"
+    },
+    "url": "https://music.apple.com/us/artist/olivia-rodrigo/979458609"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/979458609/albums",
+      "data": [
+        {
+          "id": "1560735414",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1560735414"
+        },
+        {
+          "id": "1694386825",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1694386825"
+        },
+        {
+          "id": "1560734944",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1560734944"
+        },
+        {
+          "id": "1582274783",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1582274783"
+        },
+        {
+          "id": "1485659112",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485659112"
+        },
+        {
+          "id": "1714727603",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714727603"
+        },
+        {
+          "id": "1694767605",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1694767605"
+        },
+        {
+          "id": "1582277315",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1582277315"
+        },
+        {
+          "id": "1445308225",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445308225"
+        },
+        {
+          "id": "1576278029",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1576278029"
+        },
+        {
+          "id": "1545042317",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1545042317"
+        },
+        {
+          "id": "1512826061",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1512826061"
+        },
+        {
+          "id": "1571215145",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1571215145"
+        },
+        {
+          "id": "1568071362",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568071362"
+        },
+        {
+          "id": "1501910787",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1501910787"
+        },
+        {
+          "id": "1569243398",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569243398"
+        },
+        {
+          "id": "1444272530",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444272530"
+        },
+        {
+          "id": "1545051447",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1545051447"
+        },
+        {
+          "id": "1564208633",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564208633"
+        },
+        {
+          "id": "1504163605",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1504163605"
+        },
+        {
+          "id": "1569242251",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569242251"
+        }
+      ]
+    }
+  }
+}

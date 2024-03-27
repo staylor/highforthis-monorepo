@@ -1,0 +1,64 @@
+{
+  "id": "85795561",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/85795561",
+  "attributes": {
+    "name": "Isaiah Sharkey",
+    "genreNames": [
+      "R&B/Soul"
+    ],
+    "artwork": {
+      "width": 3642,
+      "height": 3648,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c9/10/07/c910076a-1ebf-8ef4-91d0-ba610a7e8767/content_art_2FbDXRhBN6RpGoqMUE6hjJ_ISAIAH_SHARKEY_LOVE_LIFE_LIVE_2017_COVER_ART.jpg/{w}x{h}ac.jpg",
+      "bgColor": "2a1d26",
+      "textColor1": "f4cb84",
+      "textColor2": "e9b66d",
+      "textColor3": "cca871",
+      "textColor4": "c3975f"
+    },
+    "url": "https://music.apple.com/us/artist/isaiah-sharkey/85795561"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/85795561/albums",
+      "data": [
+        {
+          "id": "1282688338",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1282688338"
+        },
+        {
+          "id": "1467983859",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1467983859"
+        },
+        {
+          "id": "1636849736",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1636849736"
+        },
+        {
+          "id": "1642488054",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1642488054"
+        },
+        {
+          "id": "1620026479",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1620026479"
+        },
+        {
+          "id": "1461824655",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1461824655"
+        },
+        {
+          "id": "1434505087",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1434505087"
+        }
+      ]
+    }
+  }
+}

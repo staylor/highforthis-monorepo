@@ -1,0 +1,3 @@
+fragment TextNodes_linebreakNode on LinebreakNode {
+	type
+}

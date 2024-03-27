@@ -1,0 +1,49 @@
+{
+  "id": "1469244655",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1469244655",
+  "attributes": {
+    "name": "Red Hearse",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/86/06/ce/8606ceb0-da70-4d20-2b57-2f8e46a7b13b/mzl.zkypjzfx.jpg/{w}x{h}bb.jpg",
+      "bgColor": "cdccd1",
+      "textColor1": "0b0803",
+      "textColor2": "033042",
+      "textColor3": "322f2c",
+      "textColor4": "2b4f5f"
+    },
+    "url": "https://music.apple.com/us/artist/red-hearse/1469244655"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1469244655/albums",
+      "data": [
+        {
+          "id": "1475709614",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1475709614"
+        },
+        {
+          "id": "1474665713",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474665713"
+        },
+        {
+          "id": "1469302039",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1469302039"
+        },
+        {
+          "id": "1470501983",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470501983"
+        }
+      ]
+    }
+  }
+}

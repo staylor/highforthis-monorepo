@@ -1,0 +1,119 @@
+{
+  "id": "161731",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/161731",
+  "attributes": {
+    "name": "Built to Spill",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1801,
+      "height": 1801,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/ca/2c/0f/ca2c0f33-8065-9178-bce7-9feebeac871a/mzl.ueyxwmry.jpg/{w}x{h}bb.jpg",
+      "bgColor": "3b3b3b",
+      "textColor1": "f6f6f6",
+      "textColor2": "f1f1f1",
+      "textColor3": "d0d0d0",
+      "textColor4": "cdcdcd"
+    },
+    "url": "https://music.apple.com/us/artist/built-to-spill/161731"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/161731/albums",
+      "data": [
+        {
+          "id": "311570820",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/311570820"
+        },
+        {
+          "id": "77815682",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/77815682"
+        },
+        {
+          "id": "41757310",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/41757310"
+        },
+        {
+          "id": "1615695956",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1615695956"
+        },
+        {
+          "id": "140208918",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/140208918"
+        },
+        {
+          "id": "967409661",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/967409661"
+        },
+        {
+          "id": "332672840",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/332672840"
+        },
+        {
+          "id": "296194043",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/296194043"
+        },
+        {
+          "id": "310538272",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/310538272"
+        },
+        {
+          "id": "259708570",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259708570"
+        },
+        {
+          "id": "1496076187",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1496076187"
+        },
+        {
+          "id": "60293415",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/60293415"
+        },
+        {
+          "id": "41825205",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/41825205"
+        },
+        {
+          "id": "931453635",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/931453635"
+        },
+        {
+          "id": "120992114",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/120992114"
+        },
+        {
+          "id": "1656191048",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1656191048"
+        },
+        {
+          "id": "259321845",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259321845"
+        },
+        {
+          "id": "259321618",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259321618"
+        }
+      ]
+    }
+  }
+}

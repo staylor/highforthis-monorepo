@@ -1,0 +1,158 @@
+{
+  "id": "479756766",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/479756766",
+  "attributes": {
+    "name": "The Weeknd",
+    "genreNames": [
+      "R&B/Soul"
+    ],
+    "artwork": {
+      "width": 1437,
+      "height": 1437,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/2d/85/9c/2d859cc8-7230-8ba7-b741-a7c7c029bed6/8be5558a-5c13-48da-a649-a873856f3fb0_ami-identity-777ad796f94973f081f3e54e4b81fcb1-2023-07-22T13-59-27.161Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "2a3e57",
+      "textColor1": "fdfffc",
+      "textColor2": "e5e5e5",
+      "textColor3": "d2d8da",
+      "textColor4": "bfc3c8"
+    },
+    "editorialNotes": {
+      "short": "A subversive vocalist who emerged from the underground to define millennial R&B."
+    },
+    "url": "https://music.apple.com/us/artist/the-weeknd/479756766"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/479756766/albums",
+      "next": "/v1/catalog/us/artists/479756766/albums?offset=25",
+      "data": [
+        {
+          "id": "1363309866",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1363309866"
+        },
+        {
+          "id": "1499378108",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1499378108"
+        },
+        {
+          "id": "1603171516",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1603171516"
+        },
+        {
+          "id": "1440871397",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440871397"
+        },
+        {
+          "id": "1440826239",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440826239"
+        },
+        {
+          "id": "1505683705",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505683705"
+        },
+        {
+          "id": "1499385848",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1499385848"
+        },
+        {
+          "id": "1363308558",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1363308558"
+        },
+        {
+          "id": "1422667786",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1422667786"
+        },
+        {
+          "id": "1558941834",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1558941834"
+        },
+        {
+          "id": "1445056812",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445056812"
+        },
+        {
+          "id": "1440849138",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440849138"
+        },
+        {
+          "id": "1714908584",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714908584"
+        },
+        {
+          "id": "1603164027",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1603164027"
+        },
+        {
+          "id": "1693891133",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1693891133"
+        },
+        {
+          "id": "1505682596",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505682596"
+        },
+        {
+          "id": "1674298155",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1674298155"
+        },
+        {
+          "id": "1618519111",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1618519111"
+        },
+        {
+          "id": "1579255902",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1579255902"
+        },
+        {
+          "id": "1550875218",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1550875218"
+        },
+        {
+          "id": "1440870373",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440870373"
+        },
+        {
+          "id": "1598758840",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598758840"
+        },
+        {
+          "id": "1659775403",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1659775403"
+        },
+        {
+          "id": "1505683624",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505683624"
+        },
+        {
+          "id": "1444617461",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444617461"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "1593745921",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1593745921",
+  "attributes": {
+    "name": "Bobby Weir & Wolf Bros",
+    "genreNames": [
+      "Rock"
+    ],
+    "url": "https://music.apple.com/us/artist/bobby-weir-wolf-bros/1593745921"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1593745921/albums",
+      "data": []
+    }
+  }
+}

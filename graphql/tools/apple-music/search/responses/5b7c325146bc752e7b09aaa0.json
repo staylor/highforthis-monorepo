@@ -1,0 +1,142 @@
+{
+  "id": "21917595",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/21917595",
+  "attributes": {
+    "name": "Ray LaMontagne",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/92/ac/6c/92ac6cff-4693-b3e6-062b-a7084858ea49/mzl.nhcuhbsu.jpeg/{w}x{h}bb.jpg",
+      "bgColor": "000000",
+      "textColor1": "dabcc5",
+      "textColor2": "82a0d6",
+      "textColor3": "ae969d",
+      "textColor4": "6880ab"
+    },
+    "editorialNotes": {
+      "standard": "First off, he's got that voice. That voice which seems like it fell off of the classic rock convoy of 1972, but crossed with the gruff soul men of a generation before. It's hard not to feel something when he sings. LaMontagne knows this, but he doesn't go overboard. There's always that possibility that he could jump into the fire like Joe Cocker used to, but LaMontagne instead deals with musical atmospheres that revel in their love for soul and folk music, keeping things roots-y and never over the top. His voice and his songs simply add one more layer to the down-home, soulful mix."
+    },
+    "url": "https://music.apple.com/us/artist/ray-lamontagne/21917595"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/21917595/albums",
+      "data": [
+        {
+          "id": "253147213",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/253147213"
+        },
+        {
+          "id": "1514688788",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1514688788"
+        },
+        {
+          "id": "307334147",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/307334147"
+        },
+        {
+          "id": "293864449",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/293864449"
+        },
+        {
+          "id": "311130634",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/311130634"
+        },
+        {
+          "id": "457464833",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/457464833"
+        },
+        {
+          "id": "300310949",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/300310949"
+        },
+        {
+          "id": "1616740351",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1616740351"
+        },
+        {
+          "id": "1616245219",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1616245219"
+        },
+        {
+          "id": "407850989",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/407850989"
+        },
+        {
+          "id": "1616245045",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1616245045"
+        },
+        {
+          "id": "858818503",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/858818503"
+        },
+        {
+          "id": "409414433",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/409414433"
+        },
+        {
+          "id": "251054573",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/251054573"
+        },
+        {
+          "id": "1551382153",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1551382153"
+        },
+        {
+          "id": "1551187535",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1551187535"
+        },
+        {
+          "id": "1547290219",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1547290219"
+        },
+        {
+          "id": "1544001862",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1544001862"
+        },
+        {
+          "id": "1621388481",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1621388481"
+        },
+        {
+          "id": "1127913456",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1127913456"
+        },
+        {
+          "id": "1695035764",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1695035764"
+        },
+        {
+          "id": "1615447695",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1615447695"
+        }
+      ]
+    }
+  }
+}

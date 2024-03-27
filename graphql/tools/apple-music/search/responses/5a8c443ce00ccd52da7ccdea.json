@@ -1,0 +1,144 @@
+{
+  "id": "330823",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/330823",
+  "attributes": {
+    "name": "Drive-By Truckers",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1499,
+      "height": 1499,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/1b/6d/53/1b6d53a9-53b6-2fea-144a-ca6a9ddffedc/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "05060b",
+      "textColor1": "b1d0e2",
+      "textColor2": "99c6da",
+      "textColor3": "8fa7b7",
+      "textColor4": "7b9fb1"
+    },
+    "url": "https://music.apple.com/us/artist/drive-by-truckers/330823"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/330823/albums",
+      "data": [
+        {
+          "id": "1436923752",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436923752"
+        },
+        {
+          "id": "1436925743",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436925743"
+        },
+        {
+          "id": "1452800570",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1452800570"
+        },
+        {
+          "id": "1532815595",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1532815595"
+        },
+        {
+          "id": "1123733375",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1123733375"
+        },
+        {
+          "id": "1436917753",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436917753"
+        },
+        {
+          "id": "436773424",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/436773424"
+        },
+        {
+          "id": "436810165",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/436810165"
+        },
+        {
+          "id": "1677211793",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1677211793"
+        },
+        {
+          "id": "1436920415",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436920415"
+        },
+        {
+          "id": "1442978852",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442978852"
+        },
+        {
+          "id": "1572364027",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1572364027"
+        },
+        {
+          "id": "1436915686",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436915686"
+        },
+        {
+          "id": "1053766142",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1053766142"
+        },
+        {
+          "id": "433055838",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/433055838"
+        },
+        {
+          "id": "1053809646",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1053809646"
+        },
+        {
+          "id": "1486691016",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1486691016"
+        },
+        {
+          "id": "1214690945",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1214690945"
+        },
+        {
+          "id": "1053736020",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1053736020"
+        },
+        {
+          "id": "1410126679",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1410126679"
+        },
+        {
+          "id": "1442825459",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442825459"
+        },
+        {
+          "id": "1436914126",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436914126"
+        },
+        {
+          "id": "1617848474",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1617848474"
+        }
+      ]
+    }
+  }
+}

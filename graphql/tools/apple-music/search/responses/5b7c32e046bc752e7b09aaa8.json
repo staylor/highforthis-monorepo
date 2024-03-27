@@ -1,0 +1,79 @@
+{
+  "id": "497546276",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/497546276",
+  "attributes": {
+    "name": "Mitski",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/33/74/c9/3374c966-953a-ec66-d654-8f1015f45315/65c7d549-a28f-42f8-bfd5-d65f6d4c040d_ami-identity-357f46d0e21d950755075f1c9ac90d04-2023-07-26T16-05-08.789Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "030303",
+      "textColor1": "e4e4e4",
+      "textColor2": "c3c3c3",
+      "textColor3": "b7b7b7",
+      "textColor4": "9c9c9c"
+    },
+    "url": "https://music.apple.com/us/artist/mitski/497546276"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/497546276/albums",
+      "data": [
+        {
+          "id": "1373892692",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1373892692"
+        },
+        {
+          "id": "1087128495",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1087128495"
+        },
+        {
+          "id": "1589295663",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589295663"
+        },
+        {
+          "id": "1070245429",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1070245429"
+        },
+        {
+          "id": "1697335341",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697335341"
+        },
+        {
+          "id": "1635189055",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1635189055"
+        },
+        {
+          "id": "1635185171",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1635185171"
+        },
+        {
+          "id": "1724413931",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1724413931"
+        },
+        {
+          "id": "1631160117",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631160117"
+        },
+        {
+          "id": "1618212810",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1618212810"
+        }
+      ]
+    }
+  }
+}

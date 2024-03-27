@@ -1,0 +1,94 @@
+{
+  "id": "289847086",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/289847086",
+  "attributes": {
+    "name": "Hamilton Leithauser",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 635,
+      "height": 635,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/b4/cf/32/b4cf3284-9ed9-c82f-ace3-a8d179f978a9/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "0a0c0b",
+      "textColor1": "f8d3bc",
+      "textColor2": "f3ba89",
+      "textColor3": "c8ab99",
+      "textColor4": "c49770"
+    },
+    "url": "https://music.apple.com/us/artist/hamilton-leithauser/289847086"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/289847086/albums",
+      "data": [
+        {
+          "id": "1451194779",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1451194779"
+        },
+        {
+          "id": "1640382157",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1640382157"
+        },
+        {
+          "id": "826751934",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/826751934"
+        },
+        {
+          "id": "826646368",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/826646368"
+        },
+        {
+          "id": "1640381156",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1640381156"
+        },
+        {
+          "id": "1042033123",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1042033123"
+        },
+        {
+          "id": "1622154639",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1622154639"
+        },
+        {
+          "id": "1586380873",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586380873"
+        },
+        {
+          "id": "1647989400",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1647989400"
+        },
+        {
+          "id": "1640342062",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1640342062"
+        },
+        {
+          "id": "871415894",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/871415894"
+        },
+        {
+          "id": "1451094383",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1451094383"
+        },
+        {
+          "id": "943562889",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/943562889"
+        }
+      ]
+    }
+  }
+}

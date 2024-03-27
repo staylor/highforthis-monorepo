@@ -1,0 +1,124 @@
+{
+  "id": "461030854",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/461030854",
+  "attributes": {
+    "name": "Purity Ring",
+    "genreNames": [
+      "Electronic"
+    ],
+    "artwork": {
+      "width": 1992,
+      "height": 1992,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/99/8c/fe/998cfee4-09a3-76ed-02d8-3253a583e859/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "1e0004",
+      "textColor1": "fafafc",
+      "textColor2": "d2a1c7",
+      "textColor3": "cec8ca",
+      "textColor4": "ae81a0"
+    },
+    "url": "https://music.apple.com/us/artist/purity-ring/461030854"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/461030854/albums",
+      "data": [
+        {
+          "id": "953409287",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/953409287"
+        },
+        {
+          "id": "1496960742",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1496960742"
+        },
+        {
+          "id": "535907905",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/535907905"
+        },
+        {
+          "id": "1623474057",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1623474057"
+        },
+        {
+          "id": "1635221406",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1635221406"
+        },
+        {
+          "id": "1515347401",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515347401"
+        },
+        {
+          "id": "1695127400",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1695127400"
+        },
+        {
+          "id": "686005668",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/686005668"
+        },
+        {
+          "id": "699589469",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/699589469"
+        },
+        {
+          "id": "1530256429",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1530256429"
+        },
+        {
+          "id": "1540663148",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1540663148"
+        },
+        {
+          "id": "1695005827",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1695005827"
+        },
+        {
+          "id": "1577379656",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1577379656"
+        },
+        {
+          "id": "984484538",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/984484538"
+        },
+        {
+          "id": "1325733956",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1325733956"
+        },
+        {
+          "id": "1048662211",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1048662211"
+        },
+        {
+          "id": "1581746762",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1581746762"
+        },
+        {
+          "id": "1622306324",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1622306324"
+        },
+        {
+          "id": "984484190",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/984484190"
+        }
+      ]
+    }
+  }
+}

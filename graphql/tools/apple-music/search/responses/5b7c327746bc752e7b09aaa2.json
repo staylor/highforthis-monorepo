@@ -1,0 +1,69 @@
+{
+  "id": "314585555",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/314585555",
+  "attributes": {
+    "name": "The Blaze",
+    "genreNames": [
+      "Electronic"
+    ],
+    "artwork": {
+      "width": 1080,
+      "height": 1080,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/f4/a4/2e/f4a42e3b-defe-2ae8-1cee-ca97019874d2/91232c0b-29f1-41a6-88aa-15a925c7486a_ami-identity-946e97daf78ecd5a148bf5b8a060a849-2023-02-10T11-53-25.473Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "624a00",
+      "textColor1": "fcca01",
+      "textColor2": "f2c901",
+      "textColor3": "ddb001",
+      "textColor4": "d5af01"
+    },
+    "url": "https://music.apple.com/us/artist/the-blaze/314585555"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/314585555/albums",
+      "data": [
+        {
+          "id": "1402586838",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1402586838"
+        },
+        {
+          "id": "1203811796",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1203811796"
+        },
+        {
+          "id": "1660811391",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1660811391"
+        },
+        {
+          "id": "1594659733",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1594659733"
+        },
+        {
+          "id": "1668167126",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1668167126"
+        },
+        {
+          "id": "1622846744",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1622846744"
+        },
+        {
+          "id": "1649729265",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1649729265"
+        },
+        {
+          "id": "1492738833",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492738833"
+        }
+      ]
+    }
+  }
+}

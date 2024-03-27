@@ -1,0 +1,109 @@
+{
+  "id": "923255950",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/923255950",
+  "attributes": {
+    "name": "BØRNS",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 4624,
+      "height": 4624,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/0d/61/af/0d61af88-2397-77e5-5686-97b36bf951f3/f56a106a-5d33-456a-9792-d68f9d330020_file_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "191410",
+      "textColor1": "d2ae86",
+      "textColor2": "d2a774",
+      "textColor3": "ad8f6f",
+      "textColor4": "ad8a60"
+    },
+    "url": "https://music.apple.com/us/artist/b%C3%B8rns/923255950"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/923255950/albums",
+      "data": [
+        {
+          "id": "1440848871",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440848871"
+        },
+        {
+          "id": "1440875185",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440875185"
+        },
+        {
+          "id": "1445291882",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445291882"
+        },
+        {
+          "id": "1693728354",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1693728354"
+        },
+        {
+          "id": "1718315362",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1718315362"
+        },
+        {
+          "id": "1444270549",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444270549"
+        },
+        {
+          "id": "1445305698",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445305698"
+        },
+        {
+          "id": "1444274448",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444274448"
+        },
+        {
+          "id": "1445029461",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445029461"
+        },
+        {
+          "id": "1445303038",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445303038"
+        },
+        {
+          "id": "1445149899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445149899"
+        },
+        {
+          "id": "1445299597",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445299597"
+        },
+        {
+          "id": "1445154522",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445154522"
+        },
+        {
+          "id": "1445056225",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445056225"
+        },
+        {
+          "id": "1445289007",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445289007"
+        },
+        {
+          "id": "1417998962",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1417998962"
+        }
+      ]
+    }
+  }
+}

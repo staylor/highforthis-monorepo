@@ -1,0 +1,49 @@
+{
+  "id": "835023665",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/835023665",
+  "attributes": {
+    "name": "Ex Hex",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/54/74/71/54747191-3d45-ff15-4821-6f01468909f9/mzl.oypnsvhg.jpg/{w}x{h}bb.jpg",
+      "bgColor": "010409",
+      "textColor1": "e6f5fa",
+      "textColor2": "01ebe1",
+      "textColor3": "b8c5ca",
+      "textColor4": "01bdb6"
+    },
+    "url": "https://music.apple.com/us/artist/ex-hex/835023665"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/835023665/albums",
+      "data": [
+        {
+          "id": "1447560182",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1447560182"
+        },
+        {
+          "id": "894812391",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/894812391"
+        },
+        {
+          "id": "1476723712",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1476723712"
+        },
+        {
+          "id": "835023570",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/835023570"
+        }
+      ]
+    }
+  }
+}

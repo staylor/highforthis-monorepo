@@ -1,0 +1,119 @@
+{
+  "id": "728490621",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/728490621",
+  "attributes": {
+    "name": "Young Fathers",
+    "genreNames": [
+      "Hip-Hop/Rap"
+    ],
+    "artwork": {
+      "width": 5776,
+      "height": 5776,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/56/fe/8b/56fe8b52-3bf7-5a89-a5af-593db659642a/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "1b1c17",
+      "textColor1": "eff1eb",
+      "textColor2": "d6d7d0",
+      "textColor3": "c5c6c1",
+      "textColor4": "b1b2ab"
+    },
+    "url": "https://music.apple.com/us/artist/young-fathers/728490621"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/728490621/albums",
+      "data": [
+        {
+          "id": "1323229946",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1323229946"
+        },
+        {
+          "id": "1647061933",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1647061933"
+        },
+        {
+          "id": "963510668",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/963510668"
+        },
+        {
+          "id": "728490547",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/728490547"
+        },
+        {
+          "id": "1172841278",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1172841278"
+        },
+        {
+          "id": "1172852480",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1172852480"
+        },
+        {
+          "id": "794531354",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/794531354"
+        },
+        {
+          "id": "786330141",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/786330141"
+        },
+        {
+          "id": "397349665",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/397349665"
+        },
+        {
+          "id": "377966193",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/377966193"
+        },
+        {
+          "id": "1438888394",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438888394"
+        },
+        {
+          "id": "1195968009",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1195968009"
+        },
+        {
+          "id": "1412925625",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1412925625"
+        },
+        {
+          "id": "945471184",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/945471184"
+        },
+        {
+          "id": "294734572",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/294734572"
+        },
+        {
+          "id": "973184331",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/973184331"
+        },
+        {
+          "id": "1627274107",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1627274107"
+        },
+        {
+          "id": "1300171714",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1300171714"
+        }
+      ]
+    }
+  }
+}

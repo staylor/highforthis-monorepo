@@ -1,0 +1,109 @@
+{
+  "id": "679661890",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/679661890",
+  "attributes": {
+    "name": "FKA twigs",
+    "genreNames": [
+      "Electronic"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/bc/26/f8/bc26f885-44ed-de6d-b0a2-0b63ab3c7607/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "171813",
+      "textColor1": "d4ad8d",
+      "textColor2": "d8a13c",
+      "textColor3": "ae8f74",
+      "textColor4": "b18533"
+    },
+    "url": "https://music.apple.com/us/artist/fka-twigs/679661890"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/679661890/albums",
+      "data": [
+        {
+          "id": "1477652618",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1477652618"
+        },
+        {
+          "id": "1603753230",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1603753230"
+        },
+        {
+          "id": "1028920695",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1028920695"
+        },
+        {
+          "id": "763736377",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/763736377"
+        },
+        {
+          "id": "1546107580",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546107580"
+        },
+        {
+          "id": "1183013750",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1183013750"
+        },
+        {
+          "id": "1458754719",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1458754719"
+        },
+        {
+          "id": "1600543535",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1600543535"
+        },
+        {
+          "id": "1526867070",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1526867070"
+        },
+        {
+          "id": "1083092413",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1083092413"
+        },
+        {
+          "id": "1477628670",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1477628670"
+        },
+        {
+          "id": "1627784929",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1627784929"
+        },
+        {
+          "id": "1524325174",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1524325174"
+        },
+        {
+          "id": "1593061158",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593061158"
+        },
+        {
+          "id": "1549288379",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1549288379"
+        },
+        {
+          "id": "1634477858",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1634477858"
+        }
+      ]
+    }
+  }
+}

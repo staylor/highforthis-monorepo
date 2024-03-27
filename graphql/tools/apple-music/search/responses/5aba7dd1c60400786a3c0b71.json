@@ -1,0 +1,144 @@
+{
+  "id": "725086732",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/725086732",
+  "attributes": {
+    "name": "Car Seat Headrest",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2222,
+      "height": 2222,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/7b/63/7f/7b637f0d-3981-a886-a373-fe7b7179628a/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "000000",
+      "textColor1": "ebeaf0",
+      "textColor2": "bbe9d7",
+      "textColor3": "bcbbc0",
+      "textColor4": "95baac"
+    },
+    "url": "https://music.apple.com/us/artist/car-seat-headrest/725086732"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/725086732/albums",
+      "data": [
+        {
+          "id": "1586483380",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586483380"
+        },
+        {
+          "id": "1589252471",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589252471"
+        },
+        {
+          "id": "1589262723",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589262723"
+        },
+        {
+          "id": "1589176246",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589176246"
+        },
+        {
+          "id": "1188039067",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1188039067"
+        },
+        {
+          "id": "733333415",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/733333415"
+        },
+        {
+          "id": "733617866",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/733617866"
+        },
+        {
+          "id": "1589251473",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589251473"
+        },
+        {
+          "id": "1314170184",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1314170184"
+        },
+        {
+          "id": "733646046",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/733646046"
+        },
+        {
+          "id": "1589228637",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589228637"
+        },
+        {
+          "id": "1709359322",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1709359322"
+        },
+        {
+          "id": "1712182434",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1712182434"
+        },
+        {
+          "id": "1589286517",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589286517"
+        },
+        {
+          "id": "1589233848",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589233848"
+        },
+        {
+          "id": "1589256192",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589256192"
+        },
+        {
+          "id": "1589255322",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589255322"
+        },
+        {
+          "id": "1586496530",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586496530"
+        },
+        {
+          "id": "1589282689",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589282689"
+        },
+        {
+          "id": "1589282681",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589282681"
+        },
+        {
+          "id": "1589255535",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589255535"
+        },
+        {
+          "id": "1586494797",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586494797"
+        },
+        {
+          "id": "1586491087",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586491087"
+        }
+      ]
+    }
+  }
+}

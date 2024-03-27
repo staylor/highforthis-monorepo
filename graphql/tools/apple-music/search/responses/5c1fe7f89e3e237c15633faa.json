@@ -1,0 +1,119 @@
+{
+  "id": "1060812309",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1060812309",
+  "attributes": {
+    "name": "Lucy Dacus",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/25/26/d5/2526d541-d3ff-250e-74b9-d8a4aa4bebc9/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "4d6b7d",
+      "textColor1": "eadae2",
+      "textColor2": "eadae2",
+      "textColor3": "cbc4ce",
+      "textColor4": "cbc4ce"
+    },
+    "url": "https://music.apple.com/us/artist/lucy-dacus/1060812309"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1060812309/albums",
+      "data": [
+        {
+          "id": "1586471742",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586471742"
+        },
+        {
+          "id": "1586490315",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586490315"
+        },
+        {
+          "id": "1586499270",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586499270"
+        },
+        {
+          "id": "1589236734",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589236734"
+        },
+        {
+          "id": "1509331440",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509331440"
+        },
+        {
+          "id": "1647989400",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1647989400"
+        },
+        {
+          "id": "1586462591",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586462591"
+        },
+        {
+          "id": "1589229255",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589229255"
+        },
+        {
+          "id": "1586461922",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586461922"
+        },
+        {
+          "id": "1586463619",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586463619"
+        },
+        {
+          "id": "1586499146",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586499146"
+        },
+        {
+          "id": "1586473499",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586473499"
+        },
+        {
+          "id": "1597895641",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1597895641"
+        },
+        {
+          "id": "1644321918",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1644321918"
+        },
+        {
+          "id": "1586461828",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586461828"
+        },
+        {
+          "id": "1586463865",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586463865"
+        },
+        {
+          "id": "1586463321",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586463321"
+        },
+        {
+          "id": "1590649039",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1590649039"
+        }
+      ]
+    }
+  }
+}

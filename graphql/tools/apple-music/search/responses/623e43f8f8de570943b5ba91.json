@@ -1,0 +1,77 @@
+{
+  "id": "635633",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/635633",
+  "attributes": {
+    "name": "The Chicks",
+    "genreNames": [
+      "Country"
+    ],
+    "artwork": {
+      "width": 3840,
+      "height": 3840,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/86/f0/f3/86f0f3ff-0fc6-4d04-f427-3ad1ffc10a13/mza_1621541296116375317.png/{w}x{h}bb.jpg",
+      "bgColor": "566872",
+      "textColor1": "fbf0da",
+      "textColor2": "fcdcba",
+      "textColor3": "dad5c5",
+      "textColor4": "dbc4ab"
+    },
+    "editorialNotes": {
+      "short": "The Chicks revisit significant moments in their life and career with Kelleigh Bannen."
+    },
+    "url": "https://music.apple.com/us/artist/the-chicks/635633"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/635633/albums",
+      "data": [
+        {
+          "id": "1499733036",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1499733036"
+        },
+        {
+          "id": "155681921",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/155681921"
+        },
+        {
+          "id": "309893729",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/309893729"
+        },
+        {
+          "id": "192677147",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/192677147"
+        },
+        {
+          "id": "399048715",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/399048715"
+        },
+        {
+          "id": "283636274",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/283636274"
+        },
+        {
+          "id": "1332765566",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1332765566"
+        },
+        {
+          "id": "193130440",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/193130440"
+        },
+        {
+          "id": "1178163399",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1178163399"
+        }
+      ]
+    }
+  }
+}

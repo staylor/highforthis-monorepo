@@ -1,0 +1,109 @@
+{
+  "id": "39970395",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/39970395",
+  "attributes": {
+    "name": "Tennis",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3922,
+      "height": 3922,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages112/v4/f0/97/b6/f097b6db-b079-7fee-da4d-3bce972c7e89/f99385fa-8809-4821-ad16-61836cd86a5b_ami-identity-f2066c7b77d3546802ad4e6a7ff287f4-2022-11-15T18-44-50.124Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "d1d0ce",
+      "textColor1": "0c0300",
+      "textColor2": "1a1f16",
+      "textColor3": "332c29",
+      "textColor4": "3f433b"
+    },
+    "url": "https://music.apple.com/us/artist/tennis/39970395"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/39970395/albums",
+      "data": [
+        {
+          "id": "1491423108",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1491423108"
+        },
+        {
+          "id": "1188938660",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1188938660"
+        },
+        {
+          "id": "1651271193",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651271193"
+        },
+        {
+          "id": "1289963577",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1289963577"
+        },
+        {
+          "id": "1194794884",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1194794884"
+        },
+        {
+          "id": "1185721430",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1185721430"
+        },
+        {
+          "id": "1509295262",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509295262"
+        },
+        {
+          "id": "1443864077",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443864077"
+        },
+        {
+          "id": "1445294828",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445294828"
+        },
+        {
+          "id": "1444110895",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444110895"
+        },
+        {
+          "id": "1362953254",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1362953254"
+        },
+        {
+          "id": "1482036730",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1482036730"
+        },
+        {
+          "id": "1532301493",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1532301493"
+        },
+        {
+          "id": "1567304411",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1567304411"
+        },
+        {
+          "id": "1272825980",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1272825980"
+        },
+        {
+          "id": "1582007306",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1582007306"
+        }
+      ]
+    }
+  }
+}

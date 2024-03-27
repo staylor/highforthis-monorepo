@@ -1,0 +1,154 @@
+{
+  "id": "1458550407",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1458550407",
+  "attributes": {
+    "name": "Joe Russo's Almost Dead",
+    "genreNames": [
+      "Jam Bands"
+    ],
+    "artwork": {
+      "width": 1400,
+      "height": 1400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/35/9b/d7/359bd7a6-83ce-20c7-8866-05f7734e78c9/8720497e-ba26-401d-b5fc-0326df548349.jpg/{w}x{h}ac.jpg",
+      "bgColor": "ecd6b1",
+      "textColor1": "100604",
+      "textColor2": "0a090a",
+      "textColor3": "3c3026",
+      "textColor4": "37322b"
+    },
+    "url": "https://music.apple.com/us/artist/joe-russos-almost-dead/1458550407"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1458550407/albums",
+      "data": [
+        {
+          "id": "1510846526",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1510846526"
+        },
+        {
+          "id": "1462701953",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462701953"
+        },
+        {
+          "id": "1462490384",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462490384"
+        },
+        {
+          "id": "1462491713",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462491713"
+        },
+        {
+          "id": "1462503527",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462503527"
+        },
+        {
+          "id": "1462477568",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462477568"
+        },
+        {
+          "id": "1546795919",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546795919"
+        },
+        {
+          "id": "1546690413",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546690413"
+        },
+        {
+          "id": "1546691978",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546691978"
+        },
+        {
+          "id": "1509551675",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509551675"
+        },
+        {
+          "id": "1462696046",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462696046"
+        },
+        {
+          "id": "1462506013",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462506013"
+        },
+        {
+          "id": "1546691530",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546691530"
+        },
+        {
+          "id": "1522891086",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1522891086"
+        },
+        {
+          "id": "1507284992",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1507284992"
+        },
+        {
+          "id": "1507299564",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1507299564"
+        },
+        {
+          "id": "1462499355",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462499355"
+        },
+        {
+          "id": "1515654268",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515654268"
+        },
+        {
+          "id": "1462506056",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462506056"
+        },
+        {
+          "id": "1546691831",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546691831"
+        },
+        {
+          "id": "1462478519",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462478519"
+        },
+        {
+          "id": "1462495242",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462495242"
+        },
+        {
+          "id": "1507354382",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1507354382"
+        },
+        {
+          "id": "1524695651",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1524695651"
+        },
+        {
+          "id": "1458550406",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1458550406"
+        }
+      ]
+    }
+  }
+}

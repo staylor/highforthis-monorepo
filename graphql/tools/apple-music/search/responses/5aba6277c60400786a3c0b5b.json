@@ -1,0 +1,139 @@
+{
+  "id": "1137781048",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1137781048",
+  "attributes": {
+    "name": "Soccer Mommy",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/3a/6b/46/3a6b4607-4e20-53b3-150a-1d223dfb845a/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "8b4964",
+      "textColor1": "faebd1",
+      "textColor2": "e7cfad",
+      "textColor3": "e3cbbb",
+      "textColor4": "d4b49f"
+    },
+    "url": "https://music.apple.com/us/artist/soccer-mommy/1137781048"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1137781048/albums",
+      "data": [
+        {
+          "id": "1324319630",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1324319630"
+        },
+        {
+          "id": "1492157909",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492157909"
+        },
+        {
+          "id": "1613263151",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1613263151"
+        },
+        {
+          "id": "1464961135",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1464961135"
+        },
+        {
+          "id": "1229858047",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1229858047"
+        },
+        {
+          "id": "1699496769",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1699496769"
+        },
+        {
+          "id": "1509343257",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509343257"
+        },
+        {
+          "id": "1538229513",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1538229513"
+        },
+        {
+          "id": "1640528230",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1640528230"
+        },
+        {
+          "id": "1670225025",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1670225025"
+        },
+        {
+          "id": "1585831243",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1585831243"
+        },
+        {
+          "id": "1449307663",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1449307663"
+        },
+        {
+          "id": "1649870888",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1649870888"
+        },
+        {
+          "id": "1512833195",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1512833195"
+        },
+        {
+          "id": "1570734929",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1570734929"
+        },
+        {
+          "id": "1533204168",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1533204168"
+        },
+        {
+          "id": "1574707721",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1574707721"
+        },
+        {
+          "id": "1563514783",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1563514783"
+        },
+        {
+          "id": "1520112683",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1520112683"
+        },
+        {
+          "id": "1517737883",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1517737883"
+        },
+        {
+          "id": "1438572308",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438572308"
+        },
+        {
+          "id": "1697202169",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697202169"
+        }
+      ]
+    }
+  }
+}

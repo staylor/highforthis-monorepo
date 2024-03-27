@@ -1,0 +1,124 @@
+{
+  "id": "1129719909",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1129719909",
+  "attributes": {
+    "name": "Geowulf",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/2a/fb/2f/2afb2f98-21dc-711a-ffbe-2027e16f1482/mzl.oijzcvvf.png/{w}x{h}bb.jpg",
+      "bgColor": "8bf1e3",
+      "textColor1": "0a0f0b",
+      "textColor2": "3a241d",
+      "textColor3": "243c36",
+      "textColor4": "4a4d45"
+    },
+    "url": "https://music.apple.com/us/artist/geowulf/1129719909"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1129719909/albums",
+      "data": [
+        {
+          "id": "1316527015",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1316527015"
+        },
+        {
+          "id": "1469562003",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1469562003"
+        },
+        {
+          "id": "1242363749",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1242363749"
+        },
+        {
+          "id": "1614917236",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1614917236"
+        },
+        {
+          "id": "1657736112",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1657736112"
+        },
+        {
+          "id": "1509322226",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509322226"
+        },
+        {
+          "id": "1727231411",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1727231411"
+        },
+        {
+          "id": "1130408778",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1130408778"
+        },
+        {
+          "id": "1219152650",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1219152650"
+        },
+        {
+          "id": "1267406119",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1267406119"
+        },
+        {
+          "id": "1163516607",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1163516607"
+        },
+        {
+          "id": "1235806097",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1235806097"
+        },
+        {
+          "id": "1588808178",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1588808178"
+        },
+        {
+          "id": "1614443814",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1614443814"
+        },
+        {
+          "id": "1581632698",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1581632698"
+        },
+        {
+          "id": "1480599512",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1480599512"
+        },
+        {
+          "id": "1462809373",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462809373"
+        },
+        {
+          "id": "1610424391",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1610424391"
+        },
+        {
+          "id": "1420422499",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1420422499"
+        }
+      ]
+    }
+  }
+}

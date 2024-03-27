@@ -1,0 +1,139 @@
+{
+  "id": "536790978",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/536790978",
+  "attributes": {
+    "name": "Maggie Rogers",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 844,
+      "height": 844,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/63/14/7a/63147ae5-ad60-85a1-4b6b-3bd596ba92c2/b431d4c7-363b-4b07-9bc1-78d7f82624eb_ami-identity-bba226cdaf89fd55ae08ee2f98fc926c-2024-02-09T00-13-12.000Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "b49e91",
+      "textColor1": "0d0d14",
+      "textColor2": "0f1116",
+      "textColor3": "2e2a2d",
+      "textColor4": "302d2e"
+    },
+    "url": "https://music.apple.com/us/artist/maggie-rogers/536790978"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/536790978/albums",
+      "data": [
+        {
+          "id": "1437448293",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437448293"
+        },
+        {
+          "id": "1616063370",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1616063370"
+        },
+        {
+          "id": "1440897454",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440897454"
+        },
+        {
+          "id": "1437453918",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437453918"
+        },
+        {
+          "id": "1540693796",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1540693796"
+        },
+        {
+          "id": "1610579928",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1610579928"
+        },
+        {
+          "id": "1540682645",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1540682645"
+        },
+        {
+          "id": "1624951261",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1624951261"
+        },
+        {
+          "id": "1611476270",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1611476270"
+        },
+        {
+          "id": "1610579554",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1610579554"
+        },
+        {
+          "id": "1543296419",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543296419"
+        },
+        {
+          "id": "1445022956",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445022956"
+        },
+        {
+          "id": "1435975225",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1435975225"
+        },
+        {
+          "id": "1444849669",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444849669"
+        },
+        {
+          "id": "1444269626",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444269626"
+        },
+        {
+          "id": "1487510071",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1487510071"
+        },
+        {
+          "id": "1444270630",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444270630"
+        },
+        {
+          "id": "1444277859",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444277859"
+        },
+        {
+          "id": "1564821740",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564821740"
+        },
+        {
+          "id": "1444858575",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444858575"
+        },
+        {
+          "id": "1727422029",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1727422029"
+        },
+        {
+          "id": "1667025291",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667025291"
+        }
+      ]
+    }
+  }
+}

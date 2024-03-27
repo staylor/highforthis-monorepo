@@ -1,0 +1,155 @@
+{
+  "id": "1265171",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1265171",
+  "attributes": {
+    "name": "Yeah Yeah Yeahs",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3710,
+      "height": 3710,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/bf/b7/b8/bfb7b8af-e699-0684-d3cc-2c66cba0139f/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "414141",
+      "textColor1": "fefefe",
+      "textColor2": "e4e4e4",
+      "textColor3": "d8d8d8",
+      "textColor4": "c3c3c3"
+    },
+    "url": "https://music.apple.com/us/artist/yeah-yeah-yeahs/1265171"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1265171/albums",
+      "next": "/v1/catalog/us/artists/1265171/albums?offset=25",
+      "data": [
+        {
+          "id": "1444267017",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444267017"
+        },
+        {
+          "id": "1623182974",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1623182974"
+        },
+        {
+          "id": "1440916724",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440916724"
+        },
+        {
+          "id": "1440784273",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440784273"
+        },
+        {
+          "id": "1440771833",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440771833"
+        },
+        {
+          "id": "1440799554",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440799554"
+        },
+        {
+          "id": "1440908375",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440908375"
+        },
+        {
+          "id": "1440818498",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440818498"
+        },
+        {
+          "id": "1445308629",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445308629"
+        },
+        {
+          "id": "1446022415",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1446022415"
+        },
+        {
+          "id": "1120145814",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1120145814"
+        },
+        {
+          "id": "1445120062",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445120062"
+        },
+        {
+          "id": "1442833088",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442833088"
+        },
+        {
+          "id": "1681657577",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1681657577"
+        },
+        {
+          "id": "1444598735",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444598735"
+        },
+        {
+          "id": "1445146715",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445146715"
+        },
+        {
+          "id": "1443192143",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443192143"
+        },
+        {
+          "id": "1444878451",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444878451"
+        },
+        {
+          "id": "1445136488",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445136488"
+        },
+        {
+          "id": "1120160264",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1120160264"
+        },
+        {
+          "id": "1446738287",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1446738287"
+        },
+        {
+          "id": "1705713221",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1705713221"
+        },
+        {
+          "id": "1445308540",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445308540"
+        },
+        {
+          "id": "1650465019",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650465019"
+        },
+        {
+          "id": "1445745984",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445745984"
+        }
+      ]
+    }
+  }
+}

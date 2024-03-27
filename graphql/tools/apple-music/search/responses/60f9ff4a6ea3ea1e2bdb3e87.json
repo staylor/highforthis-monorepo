@@ -1,0 +1,99 @@
+{
+  "id": "1006599780",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1006599780",
+  "attributes": {
+    "name": "Yves Tumor",
+    "genreNames": [
+      "Electronic"
+    ],
+    "artwork": {
+      "width": 1716,
+      "height": 1716,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/a8/f5/5e/a8f55ef3-c6a4-689b-97eb-de76b552441a/91201bcc-4fae-4920-ac34-67ea15abc735_ami-identity-1e308b6594f6dfdbf6086e02ce36cb96-2023-01-30T15-03-47.491Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "18181a",
+      "textColor1": "e9b989",
+      "textColor2": "daa371",
+      "textColor3": "bf9972",
+      "textColor4": "b3875f"
+    },
+    "url": "https://music.apple.com/us/artist/yves-tumor/1006599780"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1006599780/albums",
+      "data": [
+        {
+          "id": "1494929769",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1494929769"
+        },
+        {
+          "id": "1663244608",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1663244608"
+        },
+        {
+          "id": "1429971639",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1429971639"
+        },
+        {
+          "id": "1572852841",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1572852841"
+        },
+        {
+          "id": "1100106418",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1100106418"
+        },
+        {
+          "id": "1434725767",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1434725767"
+        },
+        {
+          "id": "1477610065",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1477610065"
+        },
+        {
+          "id": "1568134531",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568134531"
+        },
+        {
+          "id": "1413304542",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1413304542"
+        },
+        {
+          "id": "1569172277",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569172277"
+        },
+        {
+          "id": "1429974177",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1429974177"
+        },
+        {
+          "id": "1649161851",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1649161851"
+        },
+        {
+          "id": "1444311887",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444311887"
+        },
+        {
+          "id": "1544144013",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1544144013"
+        }
+      ]
+    }
+  }
+}

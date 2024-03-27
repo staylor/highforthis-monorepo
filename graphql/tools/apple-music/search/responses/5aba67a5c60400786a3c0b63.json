@@ -1,0 +1,109 @@
+{
+  "id": "1156713197",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1156713197",
+  "attributes": {
+    "name": "Mt. Joy",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3840,
+      "height": 3840,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/17/e2/01/17e2010e-1ace-7927-90e5-0304d9dcc4ba/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "c8cfd7",
+      "textColor1": "0d0d0f",
+      "textColor2": "272320",
+      "textColor3": "333337",
+      "textColor4": "474544"
+    },
+    "url": "https://music.apple.com/us/artist/mt-joy/1156713197"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1156713197/albums",
+      "data": [
+        {
+          "id": "1341841419",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1341841419"
+        },
+        {
+          "id": "1497730017",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1497730017"
+        },
+        {
+          "id": "1616930944",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1616930944"
+        },
+        {
+          "id": "1589083408",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589083408"
+        },
+        {
+          "id": "1706160265",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1706160265"
+        },
+        {
+          "id": "1481724036",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1481724036"
+        },
+        {
+          "id": "1156713119",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1156713119"
+        },
+        {
+          "id": "1484717379",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484717379"
+        },
+        {
+          "id": "1698382677",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1698382677"
+        },
+        {
+          "id": "1536047646",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536047646"
+        },
+        {
+          "id": "1229296219",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1229296219"
+        },
+        {
+          "id": "1612738610",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612738610"
+        },
+        {
+          "id": "1332144742",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1332144742"
+        },
+        {
+          "id": "1298074973",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1298074973"
+        },
+        {
+          "id": "1193821103",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1193821103"
+        },
+        {
+          "id": "1688485411",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1688485411"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "id": "2690433",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/2690433",
+  "attributes": {
+    "name": "Rufus Wainwright",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1027,
+      "height": 1027,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/25/96/2f/25962f2d-6c55-c80f-96ac-c4dd6401d232/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "030102",
+      "textColor1": "e8f5fe",
+      "textColor2": "dfecf3",
+      "textColor3": "bac4cb",
+      "textColor4": "b3bdc3"
+    },
+    "url": "https://music.apple.com/us/artist/rufus-wainwright/2690433"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/2690433/albums",
+      "next": "/v1/catalog/us/artists/2690433/albums?offset=25",
+      "data": [
+        {
+          "id": "1442846753",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442846753"
+        },
+        {
+          "id": "192698491",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/192698491"
+        },
+        {
+          "id": "1440790924",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440790924"
+        },
+        {
+          "id": "1444102406",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444102406"
+        },
+        {
+          "id": "1715085462",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715085462"
+        },
+        {
+          "id": "1440855822",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440855822"
+        },
+        {
+          "id": "1443733386",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443733386"
+        },
+        {
+          "id": "1442969918",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442969918"
+        },
+        {
+          "id": "1729393396",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1729393396"
+        },
+        {
+          "id": "1445830616",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445830616"
+        },
+        {
+          "id": "1445738877",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445738877"
+        },
+        {
+          "id": "1668913576",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1668913576"
+        },
+        {
+          "id": "1442951641",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442951641"
+        },
+        {
+          "id": "1610798592",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1610798592"
+        },
+        {
+          "id": "1452869148",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1452869148"
+        },
+        {
+          "id": "1583807545",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1583807545"
+        },
+        {
+          "id": "1595555637",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1595555637"
+        },
+        {
+          "id": "1482183716",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1482183716"
+        },
+        {
+          "id": "1442460959",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442460959"
+        },
+        {
+          "id": "1686504570",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1686504570"
+        },
+        {
+          "id": "1443656422",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443656422"
+        },
+        {
+          "id": "1442863540",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442863540"
+        },
+        {
+          "id": "1508209617",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1508209617"
+        },
+        {
+          "id": "1575570676",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1575570676"
+        },
+        {
+          "id": "1496454837",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1496454837"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "id": "20006408",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/20006408",
+  "attributes": {
+    "name": "Regina Spektor",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 919,
+      "height": 919,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/e0/ff/0b/e0ff0b58-e086-1984-65b1-bccd28dc3de2/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "e0b44d",
+      "textColor1": "140808",
+      "textColor2": "1c0e07",
+      "textColor3": "3d2a15",
+      "textColor4": "432f15"
+    },
+    "url": "https://music.apple.com/us/artist/regina-spektor/20006408"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/20006408/albums",
+      "next": "/v1/catalog/us/artists/20006408/albums?offset=25",
+      "data": [
+        {
+          "id": "157820746",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/157820746"
+        },
+        {
+          "id": "317333978",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/317333978"
+        },
+        {
+          "id": "1132803049",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1132803049"
+        },
+        {
+          "id": "1611234637",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1611234637"
+        },
+        {
+          "id": "157819402",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/157819402"
+        },
+        {
+          "id": "511506801",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/511506801"
+        },
+        {
+          "id": "398312557",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/398312557"
+        },
+        {
+          "id": "511506672",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/511506672"
+        },
+        {
+          "id": "20006406",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/20006406"
+        },
+        {
+          "id": "1131880308",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1131880308"
+        },
+        {
+          "id": "319401296",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/319401296"
+        },
+        {
+          "id": "1132797621",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1132797621"
+        },
+        {
+          "id": "1634521386",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1634521386"
+        },
+        {
+          "id": "403901596",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/403901596"
+        },
+        {
+          "id": "1490005911",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1490005911"
+        },
+        {
+          "id": "332676022",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/332676022"
+        },
+        {
+          "id": "212990823",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/212990823"
+        },
+        {
+          "id": "265608442",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/265608442"
+        },
+        {
+          "id": "215637618",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/215637618"
+        },
+        {
+          "id": "1636854004",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1636854004"
+        },
+        {
+          "id": "271361573",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271361573"
+        },
+        {
+          "id": "541312603",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/541312603"
+        },
+        {
+          "id": "1440469048",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440469048"
+        },
+        {
+          "id": "740805820",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/740805820"
+        },
+        {
+          "id": "665738401",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/665738401"
+        }
+      ]
+    }
+  }
+}

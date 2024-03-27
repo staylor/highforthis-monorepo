@@ -1,0 +1,144 @@
+{
+  "id": "1883403",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1883403",
+  "attributes": {
+    "name": "Kings of Leon",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 5464,
+      "height": 5464,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages112/v4/c5/b4/54/c5b4548e-88bd-459d-5adc-febc17d10264/28f370c8-9ba6-46e8-98a7-ee248b169612_ami-identity-6afe8e27d161ddbe92fc250daff94f46-2024-02-22T00-42-06.607Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "9bc7ea",
+      "textColor1": "0c0d17",
+      "textColor2": "361c1b",
+      "textColor3": "293241",
+      "textColor4": "4a3e44"
+    },
+    "url": "https://music.apple.com/us/artist/kings-of-leon/1883403"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1883403/albums",
+      "data": [
+        {
+          "id": "290302885",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/290302885"
+        },
+        {
+          "id": "1547474568",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1547474568"
+        },
+        {
+          "id": "457503067",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/457503067"
+        },
+        {
+          "id": "1435640185",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1435640185"
+        },
+        {
+          "id": "1436364863",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436364863"
+        },
+        {
+          "id": "1487726834",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1487726834"
+        },
+        {
+          "id": "1482424654",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1482424654"
+        },
+        {
+          "id": "1435820262",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1435820262"
+        },
+        {
+          "id": "255388734",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/255388734"
+        },
+        {
+          "id": "871241452",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/871241452"
+        },
+        {
+          "id": "261941806",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/261941806"
+        },
+        {
+          "id": "307744606",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/307744606"
+        },
+        {
+          "id": "303099933",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/303099933"
+        },
+        {
+          "id": "299912905",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/299912905"
+        },
+        {
+          "id": "324524361",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/324524361"
+        },
+        {
+          "id": "320506561",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/320506561"
+        },
+        {
+          "id": "1068518378",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1068518378"
+        },
+        {
+          "id": "468217324",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/468217324"
+        },
+        {
+          "id": "271369563",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271369563"
+        },
+        {
+          "id": "1286896201",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1286896201"
+        },
+        {
+          "id": "271369663",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271369663"
+        },
+        {
+          "id": "266229562",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/266229562"
+        },
+        {
+          "id": "1730816783",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1730816783"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+query Posts {
+	posts(first: 20, status: PUBLISH) {
+		edges {
+			node {
+				featuredMedia {
+					destination
+					id
+					... on ImageUpload {
+						crops {
+							fileName
+							width
+						}
+					}
+				}
+				id
+				slug
+				summary
+				title
+			}
+		}
+	}
+}

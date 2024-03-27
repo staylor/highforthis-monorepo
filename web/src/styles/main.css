@@ -1,0 +1,55 @@
+@config "./main-config.js";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #fff;
+    background-image: repeating-linear-gradient(
+      -55deg,
+      transparent,
+      transparent 20px,
+      #d1d5db 20px,
+      #d1d5db 23px
+    );
+    font-family: proxima-nova, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    text-rendering: optimizeLegibility;
+    transition: background-color 300ms linear;
+  }
+
+  html.dark body {
+    color: #fff;
+    background-color: #000;
+    background-image: repeating-linear-gradient(
+      -55deg,
+      transparent,
+      transparent 20px,
+      #333 20px,
+      #333 23px
+    );
+  }
+
+  iframe {
+    max-width: 100%;
+  }
+
+  a {
+    color: #262626;
+    transition: color 300ms linear;
+  }
+
+  html.dark a {
+    @apply text-white;
+  }
+
+  a:active,
+  a:hover {
+    @apply text-pink;
+  }
+
+  blockquote {
+    @apply mx-6;
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "id": "393068687",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/393068687",
+  "attributes": {
+    "name": "Lord Huron",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1672,
+      "height": 1672,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/b2/f6/ae/b2f6aef3-18fa-cb94-10d3-7ea0fd96c628/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "2c1800",
+      "textColor1": "d6be52",
+      "textColor2": "e88200",
+      "textColor3": "b49d41",
+      "textColor4": "c26d00"
+    },
+    "url": "https://music.apple.com/us/artist/lord-huron/393068687"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/393068687/albums",
+      "data": [
+        {
+          "id": "962688212",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/962688212"
+        },
+        {
+          "id": "1557584746",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1557584746"
+        },
+        {
+          "id": "1440909604",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440909604"
+        },
+        {
+          "id": "1624916941",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1624916941"
+        },
+        {
+          "id": "1661048523",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1661048523"
+        },
+        {
+          "id": "402225899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/402225899"
+        },
+        {
+          "id": "393068685",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/393068685"
+        },
+        {
+          "id": "1696229773",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1696229773"
+        },
+        {
+          "id": "1624916683",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1624916683"
+        },
+        {
+          "id": "1509995251",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509995251"
+        },
+        {
+          "id": "1552308607",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1552308607"
+        },
+        {
+          "id": "1445728871",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445728871"
+        },
+        {
+          "id": "1686518383",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1686518383"
+        }
+      ]
+    }
+  }
+}

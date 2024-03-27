@@ -1,0 +1,28 @@
+{
+  "schemaNamespace" : "HighForThisAPI",
+  "input" : {
+    "operationSearchPaths" : [
+      "./HighForThis/graphql/operations/*.graphql"
+    ],
+    "schemaSearchPaths" : [
+      "./HighForThis/graphql/schema/schema.graphql"
+    ]
+  },
+  "output" : {
+    "testMocks" : {
+      "none" : {
+      }
+    },
+    "schemaTypes" : {
+      "path" : "./HighForThisAPI",
+      "moduleType" : {
+        "swiftPackageManager" : {
+        }
+      }
+    },
+    "operations" : {
+      "inSchemaModule" : {
+      }
+    }
+  }
+}

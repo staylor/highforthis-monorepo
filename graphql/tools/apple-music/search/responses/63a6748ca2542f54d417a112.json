@@ -1,0 +1,158 @@
+{
+  "id": "3996865",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/3996865",
+  "attributes": {
+    "name": "Metallica",
+    "genreNames": [
+      "Metal"
+    ],
+    "editorialNotes": {
+      "short": "Hardest. Darkest. Heaviest. Obey your master."
+    },
+    "artwork": {
+      "width": 2907,
+      "height": 2907,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages112/v4/7c/ec/2d/7cec2d74-d50a-445e-eea6-f6097a01cea7/00e0f5e1-2dd6-4f71-bbdf-d2cbdd7560eb_ami-identity-7650ac390e73210afeaf26aae0ec7e10-2022-11-28T21-57-07.638Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "020005",
+      "textColor1": "e8b000",
+      "textColor2": "d78603",
+      "textColor3": "ba8d01",
+      "textColor4": "ac6b04"
+    },
+    "url": "https://music.apple.com/us/artist/metallica/3996865"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/3996865/albums",
+      "next": "/v1/catalog/us/artists/3996865/albums?offset=25",
+      "data": [
+        {
+          "id": "579372950",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579372950"
+        },
+        {
+          "id": "579148345",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579148345"
+        },
+        {
+          "id": "1275600311",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1275600311"
+        },
+        {
+          "id": "1655432387",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1655432387"
+        },
+        {
+          "id": "1434424163",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1434424163"
+        },
+        {
+          "id": "579146130",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579146130"
+        },
+        {
+          "id": "1145498274",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1145498274"
+        },
+        {
+          "id": "579371716",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579371716"
+        },
+        {
+          "id": "579374216",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579374216"
+        },
+        {
+          "id": "579367503",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579367503"
+        },
+        {
+          "id": "1572046434",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1572046434"
+        },
+        {
+          "id": "1433827883",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1433827883"
+        },
+        {
+          "id": "1145497823",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1145497823"
+        },
+        {
+          "id": "1275819392",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1275819392"
+        },
+        {
+          "id": "579370472",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579370472"
+        },
+        {
+          "id": "579378997",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579378997"
+        },
+        {
+          "id": "579377398",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579377398"
+        },
+        {
+          "id": "1103055744",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1103055744"
+        },
+        {
+          "id": "1515553520",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515553520"
+        },
+        {
+          "id": "687785110",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/687785110"
+        },
+        {
+          "id": "679166887",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/679166887"
+        },
+        {
+          "id": "1102908633",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1102908633"
+        },
+        {
+          "id": "1572050303",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1572050303"
+        },
+        {
+          "id": "1339451124",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1339451124"
+        },
+        {
+          "id": "579145015",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/579145015"
+        }
+      ]
+    }
+  }
+}

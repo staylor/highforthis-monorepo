@@ -1,0 +1,64 @@
+{
+  "id": "485111",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/485111",
+  "attributes": {
+    "name": "Jimmie Vaughan",
+    "genreNames": [
+      "Blues"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/31/d2/fd/31d2fd34-ab5f-0b2f-d986-cb3cfddbb4b2/mzl.qkxzhkxc.png/{w}x{h}bb.jpg",
+      "bgColor": "e1cac4",
+      "textColor1": "120a07",
+      "textColor2": "3c1e15",
+      "textColor3": "3b312d",
+      "textColor4": "5d4038"
+    },
+    "url": "https://music.apple.com/us/artist/jimmie-vaughan/485111"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/485111/albums",
+      "data": [
+        {
+          "id": "365220507",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/365220507"
+        },
+        {
+          "id": "1621122646",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1621122646"
+        },
+        {
+          "id": "181450705",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/181450705"
+        },
+        {
+          "id": "266215144",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/266215144"
+        },
+        {
+          "id": "1617798431",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1617798431"
+        },
+        {
+          "id": "158607524",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/158607524"
+        },
+        {
+          "id": "1544423656",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1544423656"
+        }
+      ]
+    }
+  }
+}

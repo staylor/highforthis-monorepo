@@ -1,0 +1,74 @@
+{
+  "id": "368290849",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/368290849",
+  "attributes": {
+    "name": "Sky Ferreira",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/e8/dd/e1/e8dde1a1-ebe1-53be-def1-e04476e30822/mzl.nkcsnrrh.jpg/{w}x{h}bb.jpg",
+      "bgColor": "101010",
+      "textColor1": "ce9e78",
+      "textColor2": "dd947e",
+      "textColor3": "a88263",
+      "textColor4": "b47a68"
+    },
+    "url": "https://music.apple.com/us/artist/sky-ferreira/368290849"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/368290849/albums",
+      "data": [
+        {
+          "id": "1443133185",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443133185"
+        },
+        {
+          "id": "1492392642",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492392642"
+        },
+        {
+          "id": "1445292365",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445292365"
+        },
+        {
+          "id": "720138255",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/720138255"
+        },
+        {
+          "id": "1021618963",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1021618963"
+        },
+        {
+          "id": "1457079053",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1457079053"
+        },
+        {
+          "id": "716601671",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716601671"
+        },
+        {
+          "id": "716396165",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716396165"
+        },
+        {
+          "id": "1623275820",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1623275820"
+        }
+      ]
+    }
+  }
+}

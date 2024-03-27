@@ -1,0 +1,843 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+directive @cache(key: String = "") on FIELD
+
+type APIKeys {
+  googleMaps: String
+}
+
+type AppleMusicArtwork {
+  bgColor: String
+  height: Int
+  textColor1: String
+  textColor2: String
+  textColor3: String
+  textColor4: String
+  url: String
+  width: Int
+}
+
+input AppleMusicArtworkInput {
+  bgColor: String
+  height: Int
+  textColor1: String
+  textColor2: String
+  textColor3: String
+  textColor4: String
+  url: String
+  width: Int
+}
+
+type AppleMusicData {
+  artwork: AppleMusicArtwork
+  genreNames: [String!]
+  id: String
+  url: String
+}
+
+input AppleMusicDataInput {
+  artwork: AppleMusicArtworkInput
+  genreNames: [String!]
+  id: String
+  url: String
+}
+
+type Artist implements Term {
+  appleMusic: AppleMusicData
+  description: String
+  featuredMedia: [MediaUpload!]
+  id: ObjID!
+  name: String!
+  slug: String!
+  taxonomy: Taxonomy!
+}
+
+type AudioUpload implements MediaUpload {
+  album: String
+  albumArtist: [String]
+  artist: [String]
+  description: String
+  destination: String!
+  duration: Float
+  fileName: String!
+  fileSize: Int!
+  genre: [String]
+  id: ObjID!
+  images: [ImageUploadCrop]
+  mimeType: String!
+  originalName: String!
+  title: String
+  type: String!
+  year: Int
+}
+
+type Category implements Term {
+  description: String
+  featuredMedia: [MediaUpload!]
+  id: ObjID!
+  name: String!
+  slug: String!
+  taxonomy: Taxonomy!
+}
+
+type CodeNode implements ElementNodeType & LexicalNode {
+  children: [EditorNode]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  language: String
+  type: String
+  version: Int
+}
+
+input CreatePodcastInput {
+  audio: ObjID
+  date: Float
+  description: String
+  image: ObjID
+  title: String!
+}
+
+input CreatePostInput {
+  artists: [String]
+  date: Float
+  editorState: EditorStateInput
+  featuredMedia: [String]
+  status: PostStatus
+  summary: String
+  title: String!
+}
+
+input CreateShowInput {
+  artist: ObjID!
+  date: Float!
+  notes: String
+  title: String
+  url: String
+  venue: ObjID!
+}
+
+input CreateTaxonomyInput {
+  description: String
+  name: String!
+  plural: String
+  slug: String
+}
+
+input CreateTermInput {
+  address: String
+  capacity: String
+  categories: [String]
+  crossStreets: [String]
+  description: String
+  featuredMedia: [String]
+  name: String!
+  neighborhood: ObjID
+  slug: String
+  taxonomy: ObjID!
+}
+
+input CreateUserInput {
+  bio: String
+  email: String
+  name: String
+  password: String
+  roles: [String]
+}
+
+input CreateVideoInput {
+  dataId: String
+  dataPlaylistIds: [String]
+  dataType: String
+  position: Int
+  publishedAt: Float!
+  publishedISO: String
+  slug: String!
+  title: String!
+  year: Int!
+}
+
+type CrossStreet implements Term {
+  description: String
+  featuredMedia: [MediaUpload!]
+  id: ObjID!
+  name: String!
+  slug: String!
+  taxonomy: Taxonomy!
+}
+
+type DashboardSettings {
+  googleClientId: String
+  googleTrackingId: String
+  id: String!
+}
+
+input DashboardSettingsInput {
+  googleClientId: String
+  googleTrackingId: String
+}
+
+union EditorNode = CodeNode | ElementNode | HeadingNode | ImageNode | LinebreakNode | QuoteNode | TextNode | VideoNode
+
+input EditorNodeInput {
+  children: [EditorNodeInput]
+  detail: Int
+  direction: ElementDirection
+  format: Int
+  imageId: String
+  indent: Int
+  language: String
+  mode: TextModeType
+  size: String
+  style: String
+  tag: HeadingTag
+  text: String
+  type: String
+  version: Int
+  videoId: String
+}
+
+type EditorState {
+  root: ElementNode
+}
+
+input EditorStateInput {
+  root: RootNodeInput
+}
+
+enum ElementDirection {
+  ltr
+  rtl
+}
+
+type ElementNode implements ElementNodeType & LexicalNode {
+  children: [EditorNode]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  type: String
+  version: Int
+}
+
+input ElementNodeInput {
+  children: [EditorNodeInput]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  type: String
+  version: Int
+}
+
+interface ElementNodeType implements LexicalNode {
+  children: [EditorNode]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  type: String
+  version: Int
+}
+
+type FileUpload implements MediaUpload {
+  description: String
+  destination: String!
+  fileName: String!
+  fileSize: Int!
+  id: ObjID!
+  mimeType: String!
+  originalName: String!
+  title: String
+  type: String!
+}
+
+type HeadingNode implements ElementNodeType & LexicalNode {
+  children: [EditorNode]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  tag: HeadingTag
+  type: String
+  version: Int
+}
+
+enum HeadingTag {
+  h1
+  h2
+  h3
+  h4
+  h5
+  h6
+}
+
+type ImageNode implements ElementNodeType & LexicalNode {
+  children: [EditorNode]
+  direction: ElementDirection
+  format: Int
+  image: ImageUpload
+  indent: Int
+  size: String
+  type: String
+  version: Int
+}
+
+type ImageUpload implements MediaUpload {
+  altText: String
+  caption: String
+  crops: [ImageUploadCrop!]!
+  destination: String!
+  fileName: String!
+  fileSize: Int!
+  height: Int
+  id: ObjID!
+  mimeType: String!
+  originalName: String!
+  title: String
+  type: String!
+  width: Int
+}
+
+type ImageUploadCrop {
+  fileName: String!
+  fileSize: Int!
+  height: Int!
+  width: Int!
+}
+
+input ImageUploadCropInput {
+  fileName: String
+  fileSize: Int
+  height: Int
+  width: Int
+}
+
+interface LexicalNode {
+  type: String
+  version: Int
+}
+
+type LinebreakNode implements LexicalNode {
+  type: String
+  version: Int
+}
+
+type MediaCropSetting {
+  height: Int
+  name: String!
+  width: Int
+}
+
+input MediaCropSettingInput {
+  height: Int
+  name: String
+  width: Int
+}
+
+type MediaSettings {
+  crops: [MediaCropSetting!]!
+  id: String!
+}
+
+input MediaSettingsInput {
+  crops: [MediaCropSettingInput]
+}
+
+interface MediaUpload {
+  destination: String!
+  fileName: String!
+  fileSize: Int!
+  id: ObjID!
+  mimeType: String!
+  originalName: String!
+  title: String
+  type: String!
+}
+
+type MediaUploadConnection {
+  count: Int!
+  edges: [MediaUploadEdge!]!
+  mimeTypes: [String!]
+  pageInfo: PageInfo!
+  types: [String!]
+}
+
+type MediaUploadEdge {
+  cursor: String!
+  node: MediaUpload!
+}
+
+type Mutation {
+  createPodcast(input: CreatePodcastInput!): Podcast
+  createPost(input: CreatePostInput!): Post
+  createShow(input: CreateShowInput!): Show
+  createTaxonomy(input: CreateTaxonomyInput!): Taxonomy
+  createTerm(input: CreateTermInput!): Term
+  createUser(input: CreateUserInput!): User
+  createVideo(input: CreateVideoInput!): Video
+  removeMediaUpload(ids: [ObjID]!): Boolean
+  removePodcast(ids: [ObjID]!): Boolean
+  removePost(ids: [ObjID]!): Boolean
+  removeShow(ids: [ObjID]!): Boolean
+  removeTaxonomy(ids: [ObjID]!): Boolean
+  removeTerm(ids: [ObjID]!): Boolean
+  removeUser(ids: [ObjID]!): Boolean
+  removeVideo(ids: [ObjID]!): Boolean
+  updateDashboardSettings(id: String!, input: DashboardSettingsInput!): DashboardSettings
+  updateMediaSettings(id: String!, input: MediaSettingsInput!): MediaSettings
+  updateMediaUpload(id: ObjID!, input: UpdateMediaUploadInput!): MediaUpload
+  updatePodcast(id: ObjID!, input: UpdatePodcastInput!): Podcast
+  updatePodcastSettings(id: String!, input: PodcastSettingsInput!): PodcastSettings
+  updatePost(id: ObjID!, input: UpdatePostInput!): Post
+  updateShow(id: ObjID!, input: UpdateShowInput!): Show
+  updateSiteSettings(id: String!, input: SiteSettingsInput!): SiteSettings
+  updateTaxonomy(id: ObjID!, input: UpdateTaxonomyInput!): Taxonomy
+  updateTerm(id: ObjID!, input: UpdateTermInput!): Term
+  updateUser(id: ObjID!, input: UpdateUserInput!): User
+  updateVideo(id: ObjID!, input: UpdateVideoInput!): Video
+}
+
+type Neighborhood implements Term {
+  description: String
+  featuredMedia: [MediaUpload!]
+  id: ObjID!
+  name: String!
+  slug: String!
+  taxonomy: Taxonomy!
+}
+
+"""Id representation, based on Mongo Object Ids"""
+scalar ObjID
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+}
+
+type Place implements Term {
+  address: String
+  categories: [Category!]!
+  crossStreets: [CrossStreet!]!
+  description: String
+  featuredMedia: [MediaUpload!]
+  id: ObjID!
+  name: String!
+  neighborhood: Neighborhood
+  slug: String!
+  taxonomy: Taxonomy!
+}
+
+enum PlaceOrder {
+  A_TO_Z
+  UPDATED_ASC
+  UPDATED_DESC
+  Z_TO_A
+}
+
+type Podcast {
+  audio: AudioUpload
+  date: Float
+  description: String!
+  id: ObjID!
+  image: ImageUpload
+  title: String!
+}
+
+type PodcastConnection {
+  count: Int!
+  edges: [PodcastEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PodcastEdge {
+  cursor: String!
+  node: Podcast!
+}
+
+enum PodcastOrder {
+  ASC
+  DESC
+}
+
+type PodcastSettings {
+  category: String
+  copyrightText: String
+  description: String
+  explicit: String
+  feedLink: String
+  generator: String
+  id: String!
+  image: ImageUpload
+  itunesEmail: String
+  itunesName: String
+  language: String
+  managingEditor: String
+  title: String
+  websiteLink: String
+}
+
+input PodcastSettingsInput {
+  category: String
+  copyrightText: String
+  description: String
+  explicit: String
+  feedLink: String
+  generator: String
+  image: ObjID
+  itunesEmail: String
+  itunesName: String
+  language: String
+  managingEditor: String
+  title: String
+  websiteLink: String
+}
+
+type Post {
+  artists: [Term]
+  date: Float
+  editorState: EditorState
+  featuredMedia: [MediaUpload!]
+  id: ObjID!
+  slug: String!
+  status: PostStatus
+  summary: String
+  title: String!
+}
+
+type PostConnection {
+  count: Int!
+  edges: [PostEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PostEdge {
+  cursor: String!
+  node: Post!
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISH
+}
+
+type Query {
+  apiKeys: APIKeys
+  dashboardSettings: DashboardSettings!
+  media(id: ObjID): MediaUpload
+  mediaSettings: MediaSettings!
+  places(after: String, before: String, categories: [String], crossStreets: [String], first: Int, last: Int, neighborhoods: [String], order: PlaceOrder, search: String): TermConnection
+  podcast(id: ObjID, slug: String): Podcast
+  podcastSettings: PodcastSettings!
+  podcasts(after: String, before: String, first: Int, last: Int, order: PodcastOrder, search: String): PodcastConnection
+  post(id: ObjID, slug: String): Post
+  posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus, year: Int): PostConnection
+  show(id: ObjID, slug: String): Show
+  shows(after: String, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, taxonomy: String, term: String): ShowConnection
+  siteSettings: SiteSettings!
+  taxonomies(after: String, before: String, first: Int, last: Int): TaxonomyConnection
+  taxonomy(id: ObjID, slug: String): Taxonomy
+  term(id: ObjID, slug: String, taxonomy: String): Term
+  terms(after: String, before: String, first: Int, last: Int, search: String, taxonomy: String, taxonomyId: ObjID): TermConnection
+  uploads(after: String, before: String, first: Int, last: Int, mimeType: String, search: String, type: String): MediaUploadConnection
+  user(id: ObjID!): User
+  users(after: String, before: String, first: Int, last: Int, search: String): UserConnection
+  video(id: ObjID, slug: String): Video
+  videos(after: String, before: String, first: Int, last: Int, search: String, year: Int): VideoConnection
+}
+
+type QuoteNode implements ElementNodeType & LexicalNode {
+  children: [EditorNode]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  type: String
+  version: Int
+}
+
+input RootNodeInput {
+  children: [EditorNodeInput]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  type: String
+  version: Int
+}
+
+type Show {
+  artist: Term!
+  date: Float!
+  id: ObjID!
+  notes: String
+  title: String
+  url: String
+  venue: Term!
+}
+
+type ShowConnection {
+  count: Int
+  edges: [ShowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ShowEdge {
+  cursor: String!
+  node: Show!
+}
+
+enum ShowOrder {
+  ASC
+  DESC
+}
+
+type SiteSettings {
+  copyrightText: String
+  emailAddress: String
+  id: String!
+  language: String
+  siteTitle: String
+  siteUrl: String
+  tagline: String
+}
+
+input SiteSettingsInput {
+  copyrightText: String
+  emailAddress: String
+  language: String
+  siteTitle: String
+  siteUrl: String
+  tagline: String
+}
+
+type Taxonomy {
+  description: String
+  id: ObjID!
+  name: String!
+  plural: String
+  slug: String!
+}
+
+type TaxonomyConnection {
+  count: Int!
+  edges: [TaxonomyEdge!]!
+  pageInfo: PageInfo!
+}
+
+type TaxonomyEdge {
+  cursor: String!
+  node: Taxonomy!
+}
+
+interface Term {
+  description: String
+  featuredMedia: [MediaUpload!]
+  id: ObjID!
+  name: String!
+  slug: String!
+  taxonomy: Taxonomy!
+}
+
+type TermConnection {
+  count: Int!
+  edges: [TermEdge!]!
+  pageInfo: PageInfo!
+  taxonomy: Taxonomy!
+}
+
+type TermEdge {
+  cursor: String!
+  node: Term!
+}
+
+enum TextModeType {
+  normal
+  segmented
+  token
+}
+
+type TextNode implements LexicalNode {
+  detail: Int
+  format: Int
+  mode: TextModeType
+  style: String
+  text: String
+  type: String
+  version: Int
+}
+
+input UpdateMediaUploadInput {
+  altText: String
+  caption: String
+  description: String
+  title: String
+}
+
+input UpdatePodcastInput {
+  audio: ObjID
+  date: Float
+  description: String
+  image: ObjID
+  title: String!
+}
+
+input UpdatePostInput {
+  artists: [String]
+  date: Float
+  editorState: EditorStateInput
+  featuredMedia: [String]
+  status: PostStatus
+  summary: String
+  title: String
+}
+
+input UpdateShowInput {
+  artist: ObjID
+  date: Float
+  notes: String
+  title: String
+  url: String
+  venue: ObjID
+}
+
+input UpdateTaxonomyInput {
+  description: String
+  name: String
+  plural: String
+  slug: String
+}
+
+input UpdateTermInput {
+  address: String
+  appleMusic: AppleMusicDataInput
+  capacity: String
+  categories: [String]
+  coordinates: VenueCoordinatesInput
+  crossStreets: [String]
+  description: String
+  featuredMedia: [String]
+  name: String
+  neighborhood: ObjID
+  slug: String
+  taxonomy: ObjID
+}
+
+input UpdateUserInput {
+  bio: String
+  email: String
+  name: String
+  password: String
+  roles: [String]
+}
+
+input UpdateVideoInput {
+  dataId: String
+  dataPlaylistIds: [String]
+  dataType: String
+  position: Int
+  publishedAt: Float
+  publishedISO: String
+  slug: String
+  title: String
+  year: Int
+}
+
+type User {
+  bio: String
+  email: String!
+  id: ObjID!
+  name: String
+  roles: [String]
+}
+
+type UserConnection {
+  count: Int!
+  edges: [UserEdge!]!
+  pageInfo: PageInfo!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User!
+}
+
+type Venue implements Term {
+  address: String
+  capacity: String
+  coordinates: VenueCoordinates
+  description: String
+  featuredMedia: [MediaUpload!]
+  id: ObjID!
+  name: String!
+  slug: String!
+  taxonomy: Taxonomy!
+}
+
+type VenueCoordinates {
+  latitude: Float
+  longitude: Float
+}
+
+input VenueCoordinatesInput {
+  latitude: Float!
+  longitude: Float!
+}
+
+type Video {
+  createdAt: Float!
+  dataId: String!
+  dataPlaylistIds: [String!]!
+  dataType: String!
+  id: ObjID!
+  position: Int!
+  publishedAt: Float!
+  publishedISO: String!
+  slug: String!
+  thumbnails: [VideoThumbnail!]!
+  title: String!
+  updatedAt: Float!
+  year: Int!
+}
+
+type VideoConnection {
+  count: Int!
+  edges: [VideoEdge!]!
+  pageInfo: PageInfo!
+  years: [Int!]
+}
+
+type VideoEdge {
+  cursor: String!
+  node: Video!
+}
+
+type VideoNode implements ElementNodeType & LexicalNode {
+  children: [EditorNode]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  type: String
+  version: Int
+  video: Video
+}
+
+type VideoThumbnail {
+  height: Int!
+  url: String!
+  width: Int!
+}
+
+type VideoUpload implements MediaUpload {
+  description: String
+  destination: String!
+  duration: Float
+  fileName: String!
+  fileSize: Int!
+  height: Int
+  id: ObjID!
+  mimeType: String!
+  originalName: String!
+  title: String
+  type: String!
+  width: Int
+}

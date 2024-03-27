@@ -1,0 +1,104 @@
+{
+  "id": "273428126",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/273428126",
+  "attributes": {
+    "name": "Bon Iver",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2605,
+      "height": 2605,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/ec/45/e5/ec45e585-8573-99be-bca4-192ec43989fb/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "e8dae7",
+      "textColor1": "161414",
+      "textColor2": "3a2219",
+      "textColor3": "403b3e",
+      "textColor4": "5c4742"
+    },
+    "url": "https://music.apple.com/us/artist/bon-iver/273428126"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/273428126/albums",
+      "data": [
+        {
+          "id": "947059824",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/947059824"
+        },
+        {
+          "id": "1141107722",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1141107722"
+        },
+        {
+          "id": "438685974",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/438685974"
+        },
+        {
+          "id": "1470962625",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470962625"
+        },
+        {
+          "id": "789755317",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/789755317"
+        },
+        {
+          "id": "482817464",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/482817464"
+        },
+        {
+          "id": "1492123051",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492123051"
+        },
+        {
+          "id": "1577978449",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1577978449"
+        },
+        {
+          "id": "1524714262",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1524714262"
+        },
+        {
+          "id": "1141132748",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1141132748"
+        },
+        {
+          "id": "1549089052",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1549089052"
+        },
+        {
+          "id": "1507971421",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1507971421"
+        },
+        {
+          "id": "1132271841",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1132271841"
+        },
+        {
+          "id": "1638851329",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1638851329"
+        },
+        {
+          "id": "1609128882",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1609128882"
+        }
+      ]
+    }
+  }
+}

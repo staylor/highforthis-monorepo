@@ -1,0 +1,10 @@
+query Podcasts {
+    podcasts(first: 200) {
+        edges {
+            node {
+                id
+                title
+            }
+        }
+    }
+}

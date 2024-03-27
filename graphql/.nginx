@@ -1,0 +1,58 @@
+server {
+	if ($host = graphql.highforthis.com) {
+		return 301 https://$host$request_uri;
+	} # managed by Certbot
+
+	location ~ /\.git {
+		deny all;
+	}
+
+	location ~ /dump {
+		deny all;
+	}
+
+	listen       80;
+	server_name  graphql.highforthis.com;
+	root         /var/www/highforthis.com/public_html;
+	access_log   /var/www/highforthis.com/logs/access.log;
+	error_log    /var/www/highforthis.com/logs/error.log;
+
+	location /.well-known/acme-challenge/ {
+		try_files $uri /dev/null =404;
+	}
+
+	location / {
+		rewrite ^ https://graphql.highforthis.com$request_uri permanent;
+	}
+}
+
+server {
+	listen 443;
+	ssl on;
+	ssl_certificate /etc/letsencrypt/live/goodbyepicasso.com-0005/fullchain.pem; # managed by Certbot
+	ssl_certificate_key /etc/letsencrypt/live/goodbyepicasso.com-0005/privkey.pem; # managed by Certbot
+	server_name  graphql.highforthis.com;
+	root         /var/www/highforthis.com/reformation-graphql;
+	access_log   /var/www/highforthis.com/logs/graphql/ssl.access.log;
+	error_log    /var/www/highforthis.com/logs/graphql/ssl.error.log;
+
+	client_body_buffer_size 1M;
+	client_max_body_size 100M;
+
+	location ~ /\.git {
+		deny all;
+	}
+
+	location ~ /dump {
+		deny all;
+	}
+
+	location /graphql {
+		try_files $uri @graphql;
+	}
+
+	location @graphql {
+		proxy_pass http://localhost:8084;
+		proxy_set_header Host $host;
+	}
+}

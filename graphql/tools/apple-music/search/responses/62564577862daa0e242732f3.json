@@ -1,0 +1,139 @@
+{
+  "id": "444298537",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/444298537",
+  "attributes": {
+    "name": "S. Carey",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 5464,
+      "height": 5464,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/e7/ff/65/e7ff65cd-0701-bbc4-af94-247f664a39c2/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "000508",
+      "textColor1": "feb885",
+      "textColor2": "e69966",
+      "textColor3": "cb946c",
+      "textColor4": "b87c53"
+    },
+    "url": "https://music.apple.com/us/artist/s-carey/444298537"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/444298537/albums",
+      "data": [
+        {
+          "id": "1312887488",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1312887488"
+        },
+        {
+          "id": "794531890",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/794531890"
+        },
+        {
+          "id": "1601838096",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1601838096"
+        },
+        {
+          "id": "444298490",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/444298490"
+        },
+        {
+          "id": "1696824664",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1696824664"
+        },
+        {
+          "id": "947062340",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/947062340"
+        },
+        {
+          "id": "519773629",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/519773629"
+        },
+        {
+          "id": "789858819",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/789858819"
+        },
+        {
+          "id": "1534235614",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1534235614"
+        },
+        {
+          "id": "1697530100",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697530100"
+        },
+        {
+          "id": "1556685441",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1556685441"
+        },
+        {
+          "id": "1697044233",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697044233"
+        },
+        {
+          "id": "1534551334",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1534551334"
+        },
+        {
+          "id": "1490040045",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1490040045"
+        },
+        {
+          "id": "1608439432",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1608439432"
+        },
+        {
+          "id": "1271760185",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1271760185"
+        },
+        {
+          "id": "1565964312",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1565964312"
+        },
+        {
+          "id": "1677179181",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1677179181"
+        },
+        {
+          "id": "1667007408",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667007408"
+        },
+        {
+          "id": "1404410777",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1404410777"
+        },
+        {
+          "id": "1677103033",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1677103033"
+        },
+        {
+          "id": "1528837344",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528837344"
+        }
+      ]
+    }
+  }
+}

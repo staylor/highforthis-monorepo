@@ -1,0 +1,104 @@
+{
+  "id": "200823564",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/200823564",
+  "attributes": {
+    "name": "Beach House",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 5400,
+      "height": 5400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/9b/50/af/9b50afcf-1263-fd13-1870-c35c2bed0731/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "0d0d0d",
+      "textColor1": "fbfbfb",
+      "textColor2": "d8d8d8",
+      "textColor3": "cbcbcb",
+      "textColor4": "afafaf"
+    },
+    "url": "https://music.apple.com/us/artist/beach-house/200823564"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/200823564/albums",
+      "data": [
+        {
+          "id": "997913392",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/997913392"
+        },
+        {
+          "id": "509665145",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/509665145"
+        },
+        {
+          "id": "349535407",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/349535407"
+        },
+        {
+          "id": "1353635536",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1353635536"
+        },
+        {
+          "id": "1583866197",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1583866197"
+        },
+        {
+          "id": "1047853068",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1047853068"
+        },
+        {
+          "id": "1248058009",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1248058009"
+        },
+        {
+          "id": "1247691975",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1247691975"
+        },
+        {
+          "id": "1677217316",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1677217316"
+        },
+        {
+          "id": "1229842226",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1229842226"
+        },
+        {
+          "id": "387799992",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/387799992"
+        },
+        {
+          "id": "1247675137",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1247675137"
+        },
+        {
+          "id": "1247719362",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1247719362"
+        },
+        {
+          "id": "1437935506",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437935506"
+        },
+        {
+          "id": "1247697082",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1247697082"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "id": "140870416",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/140870416",
+  "attributes": {
+    "name": "TOOL",
+    "genreNames": [
+      "Metal"
+    ],
+    "artwork": {
+      "width": 3840,
+      "height": 3840,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/ff/5e/01/ff5e01ec-7f22-b9c7-3935-dcddeee06334/mza_2880414082109595232.png/{w}x{h}bb.jpg",
+      "bgColor": "000000",
+      "textColor1": "edd185",
+      "textColor2": "f1c472",
+      "textColor3": "bea76b",
+      "textColor4": "c09d5b"
+    },
+    "editorialNotes": {
+      "short": "It’s really here. Listen to TOOL’s first new song in 13 years."
+    },
+    "url": "https://music.apple.com/us/artist/tool/140870416"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/140870416/albums",
+      "data": [
+        {
+          "id": "1475686696",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1475686696"
+        },
+        {
+          "id": "1474250650",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474250650"
+        },
+        {
+          "id": "1474185412",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474185412"
+        },
+        {
+          "id": "1474185335",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474185335"
+        },
+        {
+          "id": "1474185287",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474185287"
+        },
+        {
+          "id": "1474180609",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474180609"
+        },
+        {
+          "id": "1611206659",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1611206659"
+        }
+      ]
+    }
+  }
+}

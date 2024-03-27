@@ -1,0 +1,14 @@
+.cache
+.env
+.env-cmdrc
+.nyc_output
+
+node_modules
+
+graphql/lib
+graphql/public/uploads
+web/build
+web/public/build
+
+*.log
+*.p8

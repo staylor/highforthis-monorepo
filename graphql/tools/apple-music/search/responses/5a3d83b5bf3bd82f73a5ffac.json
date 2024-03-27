@@ -1,0 +1,119 @@
+{
+  "id": "602767352",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/602767352",
+  "attributes": {
+    "name": "Lorde",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2254,
+      "height": 2254,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a6/05/b1/a605b185-1921-aef6-46be-f036f0518c3e/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "dfdbdc",
+      "textColor1": "0c0c0f",
+      "textColor2": "20201f",
+      "textColor3": "363538",
+      "textColor4": "464545"
+    },
+    "url": "https://music.apple.com/us/artist/lorde/602767352"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/602767352/albums",
+      "data": [
+        {
+          "id": "1444276097",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444276097"
+        },
+        {
+          "id": "1440818584",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440818584"
+        },
+        {
+          "id": "1429662346",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1429662346"
+        },
+        {
+          "id": "1572940891",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1572940891"
+        },
+        {
+          "id": "1444274049",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444274049"
+        },
+        {
+          "id": "1592682009",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1592682009"
+        },
+        {
+          "id": "1594982748",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1594982748"
+        },
+        {
+          "id": "1428764777",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1428764777"
+        },
+        {
+          "id": "1584592142",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1584592142"
+        },
+        {
+          "id": "1444625681",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444625681"
+        },
+        {
+          "id": "1444857196",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444857196"
+        },
+        {
+          "id": "1673631989",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1673631989"
+        },
+        {
+          "id": "1571611279",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1571611279"
+        },
+        {
+          "id": "1595672619",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1595672619"
+        },
+        {
+          "id": "1444273459",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444273459"
+        },
+        {
+          "id": "1353739730",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1353739730"
+        },
+        {
+          "id": "1037738650",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1037738650"
+        },
+        {
+          "id": "1595517458",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1595517458"
+        }
+      ]
+    }
+  }
+}

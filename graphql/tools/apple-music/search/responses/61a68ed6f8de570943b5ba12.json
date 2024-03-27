@@ -1,0 +1,124 @@
+{
+  "id": "81899300",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/81899300",
+  "attributes": {
+    "name": "Clap Your Hands Say Yeah",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2267,
+      "height": 2267,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/ae/78/20/ae7820f1-763e-394d-7259-354c455ffaaa/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "436070",
+      "textColor1": "f8dfd7",
+      "textColor2": "fdd5e5",
+      "textColor3": "d3c5c2",
+      "textColor4": "d8bdcd"
+    },
+    "url": "https://music.apple.com/us/artist/clap-your-hands-say-yeah/81899300"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/81899300/albums",
+      "data": [
+        {
+          "id": "1526628766",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1526628766"
+        },
+        {
+          "id": "1526625769",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1526625769"
+        },
+        {
+          "id": "1532830643",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1532830643"
+        },
+        {
+          "id": "1526625262",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1526625262"
+        },
+        {
+          "id": "843452386",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/843452386"
+        },
+        {
+          "id": "1526626481",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1526626481"
+        },
+        {
+          "id": "1604673750",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1604673750"
+        },
+        {
+          "id": "1720396773",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1720396773"
+        },
+        {
+          "id": "1562559146",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1562559146"
+        },
+        {
+          "id": "1614716986",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1614716986"
+        },
+        {
+          "id": "1526625508",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1526625508"
+        },
+        {
+          "id": "1566711606",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1566711606"
+        },
+        {
+          "id": "1528212279",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528212279"
+        },
+        {
+          "id": "1528887168",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528887168"
+        },
+        {
+          "id": "1440917822",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440917822"
+        },
+        {
+          "id": "1567074487",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1567074487"
+        },
+        {
+          "id": "1532990900",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1532990900"
+        },
+        {
+          "id": "1526625247",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1526625247"
+        },
+        {
+          "id": "1635193234",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1635193234"
+        }
+      ]
+    }
+  }
+}

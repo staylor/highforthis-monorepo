@@ -1,0 +1,155 @@
+{
+  "id": "22677",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/22677",
+  "attributes": {
+    "name": "Bonnie Raitt",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1500,
+      "height": 1500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/28/1e/c7/281ec784-82b7-fe11-4377-9a0277d7fcd6/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "a7b0b7",
+      "textColor1": "170404",
+      "textColor2": "32190a",
+      "textColor3": "342727",
+      "textColor4": "49372c"
+    },
+    "url": "https://music.apple.com/us/artist/bonnie-raitt/22677"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/22677/albums",
+      "next": "/v1/catalog/us/artists/22677/albums?offset=25",
+      "data": [
+        {
+          "id": "715830026",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/715830026"
+        },
+        {
+          "id": "1603517564",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1603517564"
+        },
+        {
+          "id": "715516713",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/715516713"
+        },
+        {
+          "id": "721215494",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/721215494"
+        },
+        {
+          "id": "1052697636",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1052697636"
+        },
+        {
+          "id": "287366514",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287366514"
+        },
+        {
+          "id": "287368899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287368899"
+        },
+        {
+          "id": "287368476",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287368476"
+        },
+        {
+          "id": "1043453376",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1043453376"
+        },
+        {
+          "id": "287514998",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287514998"
+        },
+        {
+          "id": "724485549",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/724485549"
+        },
+        {
+          "id": "287366186",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287366186"
+        },
+        {
+          "id": "287366439",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287366439"
+        },
+        {
+          "id": "716387073",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716387073"
+        },
+        {
+          "id": "724581935",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/724581935"
+        },
+        {
+          "id": "715738625",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/715738625"
+        },
+        {
+          "id": "719003217",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/719003217"
+        },
+        {
+          "id": "287368381",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287368381"
+        },
+        {
+          "id": "1121331361",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1121331361"
+        },
+        {
+          "id": "723542327",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/723542327"
+        },
+        {
+          "id": "287366203",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287366203"
+        },
+        {
+          "id": "287368398",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287368398"
+        },
+        {
+          "id": "287368378",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/287368378"
+        },
+        {
+          "id": "719001783",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/719001783"
+        },
+        {
+          "id": "1043452359",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1043452359"
+        }
+      ]
+    }
+  }
+}

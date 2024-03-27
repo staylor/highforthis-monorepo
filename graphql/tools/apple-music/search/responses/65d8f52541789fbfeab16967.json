@@ -1,0 +1,144 @@
+{
+  "id": "1350245112",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1350245112",
+  "attributes": {
+    "name": "Lizzy McAlpine",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3735,
+      "height": 3735,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/84/99/bd/8499bde8-315e-996f-f567-f67de220d5f3/7786975d-7585-4b50-8d32-d5863312be0e_ami-identity-7037cb47528e9cf085a7d70b317eaf6a-2024-02-16T17-01-20.670Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "dcd4c0",
+      "textColor1": "07080a",
+      "textColor2": "482824",
+      "textColor3": "31312f",
+      "textColor4": "654b43"
+    },
+    "url": "https://music.apple.com/us/artist/lizzy-mcalpine/1350245112"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1350245112/albums",
+      "data": [
+        {
+          "id": "1604657567",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1604657567"
+        },
+        {
+          "id": "1525265220",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1525265220"
+        },
+        {
+          "id": "1596494490",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596494490"
+        },
+        {
+          "id": "1660596416",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1660596416"
+        },
+        {
+          "id": "1581632393",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1581632393"
+        },
+        {
+          "id": "1649972578",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1649972578"
+        },
+        {
+          "id": "1531439763",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1531439763"
+        },
+        {
+          "id": "1494964997",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1494964997"
+        },
+        {
+          "id": "1706433317",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1706433317"
+        },
+        {
+          "id": "1536634938",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536634938"
+        },
+        {
+          "id": "1729662067",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1729662067"
+        },
+        {
+          "id": "1621834033",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1621834033"
+        },
+        {
+          "id": "1582904568",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1582904568"
+        },
+        {
+          "id": "1487256446",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1487256446"
+        },
+        {
+          "id": "1556889455",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1556889455"
+        },
+        {
+          "id": "1470880942",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470880942"
+        },
+        {
+          "id": "1519317910",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1519317910"
+        },
+        {
+          "id": "1511242757",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1511242757"
+        },
+        {
+          "id": "1677675223",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1677675223"
+        },
+        {
+          "id": "1628128302",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1628128302"
+        },
+        {
+          "id": "1691085524",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1691085524"
+        },
+        {
+          "id": "1682091798",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1682091798"
+        },
+        {
+          "id": "1682084732",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1682084732"
+        }
+      ]
+    }
+  }
+}

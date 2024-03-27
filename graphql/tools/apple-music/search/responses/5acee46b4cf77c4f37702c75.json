@@ -1,0 +1,129 @@
+{
+  "id": "129649188",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/129649188",
+  "attributes": {
+    "name": "Band of Horses",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2607,
+      "height": 2607,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/50/6c/32/506c326e-ff4f-f1e1-5272-2e85285b6b5d/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "080a09",
+      "textColor1": "ea9183",
+      "textColor2": "d88683",
+      "textColor3": "bd766a",
+      "textColor4": "ae6d6b"
+    },
+    "url": "https://music.apple.com/us/artist/band-of-horses/129649188"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/129649188/albums",
+      "data": [
+        {
+          "id": "263615298",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/263615298"
+        },
+        {
+          "id": "129649178",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/129649178"
+        },
+        {
+          "id": "371190956",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/371190956"
+        },
+        {
+          "id": "775150059",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/775150059"
+        },
+        {
+          "id": "1440843604",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440843604"
+        },
+        {
+          "id": "557359760",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/557359760"
+        },
+        {
+          "id": "1589433585",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589433585"
+        },
+        {
+          "id": "564894821",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/564894821"
+        },
+        {
+          "id": "1725206804",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1725206804"
+        },
+        {
+          "id": "1711467302",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1711467302"
+        },
+        {
+          "id": "541702040",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/541702040"
+        },
+        {
+          "id": "365970522",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/365970522"
+        },
+        {
+          "id": "1507047474",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1507047474"
+        },
+        {
+          "id": "1367278480",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1367278480"
+        },
+        {
+          "id": "1716744440",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1716744440"
+        },
+        {
+          "id": "1371013802",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1371013802"
+        },
+        {
+          "id": "545898590",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/545898590"
+        },
+        {
+          "id": "1033311692",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1033311692"
+        },
+        {
+          "id": "402806397",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/402806397"
+        },
+        {
+          "id": "1367279379",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1367279379"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "id": "278712416",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/278712416",
+  "attributes": {
+    "name": "Titus Andronicus",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3195,
+      "height": 3195,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features112/v4/68/02/58/680258fc-51ff-d61e-3f4b-f965254a24d9/mzl.umtikthd.jpg/{w}x{h}bb.jpg",
+      "bgColor": "1c2127",
+      "textColor1": "e6ddda",
+      "textColor2": "c9c0c3",
+      "textColor3": "beb7b6",
+      "textColor4": "a6a0a4"
+    },
+    "url": "https://music.apple.com/us/artist/titus-andronicus/278712416"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/278712416/albums",
+      "data": [
+        {
+          "id": "355708784",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/355708784"
+        },
+        {
+          "id": "1324712005",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1324712005"
+        },
+        {
+          "id": "1456379899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1456379899"
+        },
+        {
+          "id": "988561829",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/988561829"
+        },
+        {
+          "id": "564755669",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/564755669"
+        },
+        {
+          "id": "1629988220",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1629988220"
+        },
+        {
+          "id": "1109078649",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1109078649"
+        },
+        {
+          "id": "293921958",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/293921958"
+        },
+        {
+          "id": "1578851105",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1578851105"
+        },
+        {
+          "id": "1436192368",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436192368"
+        },
+        {
+          "id": "1509344511",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509344511"
+        },
+        {
+          "id": "1652385950",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1652385950"
+        },
+        {
+          "id": "1624967028",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1624967028"
+        }
+      ]
+    }
+  }
+}

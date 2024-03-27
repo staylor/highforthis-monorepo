@@ -1,0 +1,104 @@
+{
+  "id": "1752134",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1752134",
+  "attributes": {
+    "name": "Chris Stapleton",
+    "genreNames": [
+      "Country"
+    ],
+    "artwork": {
+      "width": 1041,
+      "height": 1041,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/4b/4f/b0/4b4fb07e-8690-16cf-06fe-b3f259a077e8/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "f1f1f1",
+      "textColor1": "131313",
+      "textColor2": "292929",
+      "textColor3": "404040",
+      "textColor4": "515151"
+    },
+    "url": "https://music.apple.com/us/artist/chris-stapleton/1752134"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1752134/albums",
+      "data": [
+        {
+          "id": "1528423147",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528423147"
+        },
+        {
+          "id": "1440827477",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440827477"
+        },
+        {
+          "id": "1440901944",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440901944"
+        },
+        {
+          "id": "1697401120",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697401120"
+        },
+        {
+          "id": "1440900873",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440900873"
+        },
+        {
+          "id": "1708466937",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1708466937"
+        },
+        {
+          "id": "1444319894",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444319894"
+        },
+        {
+          "id": "1581633734",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1581633734"
+        },
+        {
+          "id": "1688663123",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1688663123"
+        },
+        {
+          "id": "1561276950",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1561276950"
+        },
+        {
+          "id": "1363301658",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1363301658"
+        },
+        {
+          "id": "1349366374",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1349366374"
+        },
+        {
+          "id": "1651960127",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651960127"
+        },
+        {
+          "id": "1644240339",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1644240339"
+        },
+        {
+          "id": "1675600414",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1675600414"
+        }
+      ]
+    }
+  }
+}

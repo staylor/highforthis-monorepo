@@ -1,0 +1,134 @@
+{
+  "id": "1380757",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1380757",
+  "attributes": {
+    "name": "Soulive",
+    "genreNames": [
+      "Jazz"
+    ],
+    "artwork": {
+      "width": 1435,
+      "height": 1425,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/c3/00/c5/c300c5af-b756-9d33-07ca-2018f9749377/s05.hhjvughl.jpg/{w}x{h}ac.jpg",
+      "bgColor": "ea7821",
+      "textColor1": "080906",
+      "textColor2": "0d0f0c",
+      "textColor3": "351f0c",
+      "textColor4": "392410"
+    },
+    "url": "https://music.apple.com/us/artist/soulive/1380757"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1380757/albums",
+      "data": [
+        {
+          "id": "388320559",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/388320559"
+        },
+        {
+          "id": "3567008",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/3567008"
+        },
+        {
+          "id": "1333420740",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1333420740"
+        },
+        {
+          "id": "351472875",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/351472875"
+        },
+        {
+          "id": "724931758",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/724931758"
+        },
+        {
+          "id": "310077943",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/310077943"
+        },
+        {
+          "id": "715835363",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/715835363"
+        },
+        {
+          "id": "427368398",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/427368398"
+        },
+        {
+          "id": "738336081",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/738336081"
+        },
+        {
+          "id": "3567156",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/3567156"
+        },
+        {
+          "id": "1728195125",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1728195125"
+        },
+        {
+          "id": "1728195125",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1728195125"
+        },
+        {
+          "id": "715570635",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/715570635"
+        },
+        {
+          "id": "1444098721",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444098721"
+        },
+        {
+          "id": "334724795",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/334724795"
+        },
+        {
+          "id": "1587371600",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1587371600"
+        },
+        {
+          "id": "39972717",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/39972717"
+        },
+        {
+          "id": "55425871",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/55425871"
+        },
+        {
+          "id": "23207196",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/23207196"
+        },
+        {
+          "id": "1442211458",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442211458"
+        },
+        {
+          "id": "1332796802",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1332796802"
+        }
+      ]
+    }
+  }
+}

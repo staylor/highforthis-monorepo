@@ -1,0 +1,129 @@
+{
+  "id": "367322286",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/367322286",
+  "attributes": {
+    "name": "Thundercat",
+    "genreNames": [
+      "R&B/Soul"
+    ],
+    "artwork": {
+      "width": 3840,
+      "height": 3840,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/a6/c2/83/a6c283d3-36a0-7821-dbc3-de2822c021d1/mza_10694723099921157601.png/{w}x{h}bb.jpg",
+      "bgColor": "fbf8f7",
+      "textColor1": "150506",
+      "textColor2": "4c1817",
+      "textColor3": "433536",
+      "textColor4": "6f4544"
+    },
+    "url": "https://music.apple.com/us/artist/thundercat/367322286"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/367322286/albums",
+      "data": [
+        {
+          "id": "1494467036",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1494467036"
+        },
+        {
+          "id": "1197789099",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1197789099"
+        },
+        {
+          "id": "641465562",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/641465562"
+        },
+        {
+          "id": "453767128",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/453767128"
+        },
+        {
+          "id": "1346721630",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1346721630"
+        },
+        {
+          "id": "1008895946",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1008895946"
+        },
+        {
+          "id": "1728862139",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1728862139"
+        },
+        {
+          "id": "1527274941",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1527274941"
+        },
+        {
+          "id": "1492266377",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492266377"
+        },
+        {
+          "id": "1528976581",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528976581"
+        },
+        {
+          "id": "1146445408",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1146445408"
+        },
+        {
+          "id": "1444619750",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444619750"
+        },
+        {
+          "id": "1444887305",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444887305"
+        },
+        {
+          "id": "1537094582",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1537094582"
+        },
+        {
+          "id": "1662288889",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1662288889"
+        },
+        {
+          "id": "1161393241",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1161393241"
+        },
+        {
+          "id": "1648828877",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1648828877"
+        },
+        {
+          "id": "1370989617",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1370989617"
+        },
+        {
+          "id": "1679528051",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1679528051"
+        },
+        {
+          "id": "1662290260",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1662290260"
+        }
+      ]
+    }
+  }
+}

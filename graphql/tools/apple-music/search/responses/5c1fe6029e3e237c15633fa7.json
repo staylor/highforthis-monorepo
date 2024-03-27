@@ -1,0 +1,89 @@
+{
+  "id": "282243559",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/282243559",
+  "attributes": {
+    "name": "Craig Finn",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1776,
+      "height": 1776,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/6b/2b/2a/6b2b2a70-cde6-f098-f51b-694be996d546/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "191313",
+      "textColor1": "dfb996",
+      "textColor2": "cfb894",
+      "textColor3": "b7987c",
+      "textColor4": "ab977a"
+    },
+    "url": "https://music.apple.com/us/artist/craig-finn/282243559"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/282243559/albums",
+      "data": [
+        {
+          "id": "1450057946",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1450057946"
+        },
+        {
+          "id": "1610784598",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1610784598"
+        },
+        {
+          "id": "1193210825",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1193210825"
+        },
+        {
+          "id": "1092098907",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1092098907"
+        },
+        {
+          "id": "1549045118",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1549045118"
+        },
+        {
+          "id": "1008095971",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1008095971"
+        },
+        {
+          "id": "1716088954",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1716088954"
+        },
+        {
+          "id": "1480299787",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1480299787"
+        },
+        {
+          "id": "1553552879",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1553552879"
+        },
+        {
+          "id": "1502559978",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1502559978"
+        },
+        {
+          "id": "1713850458",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1713850458"
+        },
+        {
+          "id": "1311598637",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1311598637"
+        }
+      ]
+    }
+  }
+}

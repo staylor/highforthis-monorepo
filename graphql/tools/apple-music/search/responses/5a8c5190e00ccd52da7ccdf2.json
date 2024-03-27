@@ -1,0 +1,89 @@
+{
+  "id": "1033453223",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1033453223",
+  "attributes": {
+    "name": "Julien Baker",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 500,
+      "height": 500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/29/b8/dc/29b8dcc8-55b7-3e30-6ae5-903331701ef6/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "5f5f5f",
+      "textColor1": "f1f1f1",
+      "textColor2": "eaeaea",
+      "textColor3": "d4d4d4",
+      "textColor4": "cecece"
+    },
+    "url": "https://music.apple.com/us/artist/julien-baker/1033453223"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1033453223/albums",
+      "data": [
+        {
+          "id": "1586464816",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586464816"
+        },
+        {
+          "id": "1586490468",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586490468"
+        },
+        {
+          "id": "1667458706",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667458706"
+        },
+        {
+          "id": "1509257490",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1509257490"
+        },
+        {
+          "id": "1629841878",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1629841878"
+        },
+        {
+          "id": "1589229391",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589229391"
+        },
+        {
+          "id": "1639192128",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1639192128"
+        },
+        {
+          "id": "1589252439",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589252439"
+        },
+        {
+          "id": "1589292593",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589292593"
+        },
+        {
+          "id": "1445289575",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445289575"
+        },
+        {
+          "id": "1597506150",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1597506150"
+        },
+        {
+          "id": "1479895649",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1479895649"
+        }
+      ]
+    }
+  }
+}

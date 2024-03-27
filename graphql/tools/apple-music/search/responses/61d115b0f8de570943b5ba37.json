@@ -1,0 +1,64 @@
+{
+  "id": "266417787",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/266417787",
+  "attributes": {
+    "name": "Bowerbirds",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2509,
+      "height": 2509,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/c9/ff/e6/c9ffe6c0-2933-db13-4688-b9f95f44cc24/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "f1e9dc",
+      "textColor1": "140701",
+      "textColor2": "33251d",
+      "textColor3": "40342d",
+      "textColor4": "594c43"
+    },
+    "url": "https://music.apple.com/us/artist/bowerbirds/266417787"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/266417787/albums",
+      "data": [
+        {
+          "id": "502138679",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/502138679"
+        },
+        {
+          "id": "537765354",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/537765354"
+        },
+        {
+          "id": "1551410174",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1551410174"
+        },
+        {
+          "id": "448790557",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/448790557"
+        },
+        {
+          "id": "1555404150",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1555404150"
+        },
+        {
+          "id": "1555405416",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1555405416"
+        },
+        {
+          "id": "1528210574",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528210574"
+        }
+      ]
+    }
+  }
+}

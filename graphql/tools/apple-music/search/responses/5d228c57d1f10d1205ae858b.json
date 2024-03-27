@@ -1,0 +1,104 @@
+{
+  "id": "1083255351",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1083255351",
+  "attributes": {
+    "name": "Big Thief",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2108,
+      "height": 2108,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/ba/df/79/badf797a-27b6-4f42-9c69-622ce6b9f20a/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "c7b8b5",
+      "textColor1": "080401",
+      "textColor2": "2c2724",
+      "textColor3": "2e2825",
+      "textColor4": "4b4441"
+    },
+    "url": "https://music.apple.com/us/artist/big-thief/1083255351"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1083255351/albums",
+      "data": [
+        {
+          "id": "1591284600",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1591284600"
+        },
+        {
+          "id": "1220996768",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1220996768"
+        },
+        {
+          "id": "1473012904",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1473012904"
+        },
+        {
+          "id": "1452026004",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1452026004"
+        },
+        {
+          "id": "1689673584",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1689673584"
+        },
+        {
+          "id": "1562721745",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1562721745"
+        },
+        {
+          "id": "1716860719",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1716860719"
+        },
+        {
+          "id": "1503557682",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1503557682"
+        },
+        {
+          "id": "1144707891",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1144707891"
+        },
+        {
+          "id": "1693813366",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1693813366"
+        },
+        {
+          "id": "1132675870",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1132675870"
+        },
+        {
+          "id": "1557431941",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1557431941"
+        },
+        {
+          "id": "1473937677",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1473937677"
+        },
+        {
+          "id": "1220604487",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1220604487"
+        },
+        {
+          "id": "1230563340",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1230563340"
+        }
+      ]
+    }
+  }
+}

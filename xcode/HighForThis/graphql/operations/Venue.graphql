@@ -1,0 +1,32 @@
+query Venue($slug: String!) {
+    venue: term(slug: $slug, taxonomy: "venue") {
+        id
+        name
+        slug
+        ... on Venue {
+            address
+            capacity
+            coordinates {
+                latitude
+                longitude
+            }
+        }
+    }
+    shows(latest: true, first: 200, term: $slug, taxonomy: "venue") {
+        edges {
+            node {
+                id
+                title
+                date
+                artist {
+                    id
+                    name
+                }
+                venue {
+                    id
+                    name
+                }
+            }
+        }
+    }
+}

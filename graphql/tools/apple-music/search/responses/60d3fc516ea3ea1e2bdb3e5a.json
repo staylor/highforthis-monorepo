@@ -1,0 +1,94 @@
+{
+  "id": "561740721",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/561740721",
+  "attributes": {
+    "name": "Flock of Dimes",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 4193,
+      "height": 4193,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/c7/96/20/c796202a-84f5-0e47-f427-bfce734bb294/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "b6baa9",
+      "textColor1": "24130c",
+      "textColor2": "2d180b",
+      "textColor3": "41352b",
+      "textColor4": "48392b"
+    },
+    "url": "https://music.apple.com/us/artist/flock-of-dimes/561740721"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/561740721/albums",
+      "data": [
+        {
+          "id": "1576189955",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1576189955"
+        },
+        {
+          "id": "1548380115",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1548380115"
+        },
+        {
+          "id": "1611903461",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1611903461"
+        },
+        {
+          "id": "1513484053",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1513484053"
+        },
+        {
+          "id": "1603711299",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1603711299"
+        },
+        {
+          "id": "1584401390",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1584401390"
+        },
+        {
+          "id": "1133188600",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1133188600"
+        },
+        {
+          "id": "1583500495",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1583500495"
+        },
+        {
+          "id": "561740720",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/561740720"
+        },
+        {
+          "id": "1258758879",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1258758879"
+        },
+        {
+          "id": "1569367082",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569367082"
+        },
+        {
+          "id": "1536612250",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536612250"
+        },
+        {
+          "id": "568065121",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/568065121"
+        }
+      ]
+    }
+  }
+}

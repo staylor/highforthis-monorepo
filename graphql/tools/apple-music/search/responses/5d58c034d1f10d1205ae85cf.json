@@ -1,0 +1,114 @@
+{
+  "id": "560289",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/560289",
+  "attributes": {
+    "name": "The Strokes",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 5110,
+      "height": 5110,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/9a/de/94/9ade94be-3ab2-93c8-f70b-cdfaf4cecc21/b5873a19-6bca-4fce-a703-b3fb2f3b4951_ami-identity-d31a7440413bd74cc4f8deaa85535d15-2024-01-26T20-09-12.951Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "181818",
+      "textColor1": "f5b891",
+      "textColor2": "31c9d8",
+      "textColor3": "c89878",
+      "textColor4": "2ca5b2"
+    },
+    "url": "https://music.apple.com/us/artist/the-strokes/560289"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/560289/albums",
+      "data": [
+        {
+          "id": "266376953",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/266376953"
+        },
+        {
+          "id": "1498121188",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498121188"
+        },
+        {
+          "id": "302987557",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/302987557"
+        },
+        {
+          "id": "601140186",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/601140186"
+        },
+        {
+          "id": "299740383",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/299740383"
+        },
+        {
+          "id": "581797918",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/581797918"
+        },
+        {
+          "id": "1478663898",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1478663898"
+        },
+        {
+          "id": "1663032714",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1663032714"
+        },
+        {
+          "id": "533714249",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/533714249"
+        },
+        {
+          "id": "271370918",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271370918"
+        },
+        {
+          "id": "271360328",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271360328"
+        },
+        {
+          "id": "271361240",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271361240"
+        },
+        {
+          "id": "298583827",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/298583827"
+        },
+        {
+          "id": "271361573",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271361573"
+        },
+        {
+          "id": "623103932",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/623103932"
+        },
+        {
+          "id": "445129179",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/445129179"
+        },
+        {
+          "id": "271371022",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271371022"
+        }
+      ]
+    }
+  }
+}

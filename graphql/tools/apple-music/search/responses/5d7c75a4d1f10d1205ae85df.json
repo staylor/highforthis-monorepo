@@ -1,0 +1,89 @@
+{
+  "id": "41824629",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/41824629",
+  "attributes": {
+    "name": "Black Mountain",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/34/c3/35/34c33554-baf6-257e-3ebd-cc5e278ad816/mzl.slbwqwxt.jpg/{w}x{h}bb.jpg",
+      "bgColor": "eeeeee",
+      "textColor1": "130a07",
+      "textColor2": "422d24",
+      "textColor3": "3f3835",
+      "textColor4": "64544d"
+    },
+    "url": "https://music.apple.com/us/artist/black-mountain/41824629"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/41824629/albums",
+      "data": [
+        {
+          "id": "1068619890",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1068619890"
+        },
+        {
+          "id": "841018949",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/841018949"
+        },
+        {
+          "id": "1452864359",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1452864359"
+        },
+        {
+          "id": "538807674",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/538807674"
+        },
+        {
+          "id": "977348446",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/977348446"
+        },
+        {
+          "id": "789756763",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/789756763"
+        },
+        {
+          "id": "1593696716",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593696716"
+        },
+        {
+          "id": "509545905",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/509545905"
+        },
+        {
+          "id": "453240471",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/453240471"
+        },
+        {
+          "id": "453811448",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/453811448"
+        },
+        {
+          "id": "1480286493",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1480286493"
+        },
+        {
+          "id": "430024207",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/430024207"
+        }
+      ]
+    }
+  }
+}

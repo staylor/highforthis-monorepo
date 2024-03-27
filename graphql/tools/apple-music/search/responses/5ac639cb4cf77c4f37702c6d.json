@@ -1,0 +1,144 @@
+{
+  "id": "164483115",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/164483115",
+  "attributes": {
+    "name": "HAIM",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/dd/11/72/dd1172ac-7a1a-68ba-21af-c1bec28476fe/mzl.ppypeevv.jpg/{w}x{h}bb.jpg",
+      "bgColor": "020507",
+      "textColor1": "f4dccf",
+      "textColor2": "eec6a9",
+      "textColor3": "c3b1a7",
+      "textColor4": "bf9f88"
+    },
+    "url": "https://music.apple.com/us/artist/haim/164483115"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/164483115/albums",
+      "data": [
+        {
+          "id": "681237313",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/681237313"
+        },
+        {
+          "id": "1234314555",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1234314555"
+        },
+        {
+          "id": "1500345235",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1500345235"
+        },
+        {
+          "id": "1550175828",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1550175828"
+        },
+        {
+          "id": "630865830",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/630865830"
+        },
+        {
+          "id": "1037426564",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1037426564"
+        },
+        {
+          "id": "1708496813",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1708496813"
+        },
+        {
+          "id": "725084638",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/725084638"
+        },
+        {
+          "id": "1275097433",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1275097433"
+        },
+        {
+          "id": "766822729",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/766822729"
+        },
+        {
+          "id": "909353983",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/909353983"
+        },
+        {
+          "id": "577249975",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/577249975"
+        },
+        {
+          "id": "1529358644",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1529358644"
+        },
+        {
+          "id": "576494267",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/576494267"
+        },
+        {
+          "id": "1574362530",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1574362530"
+        },
+        {
+          "id": "1611644627",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1611644627"
+        },
+        {
+          "id": "568081284",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/568081284"
+        },
+        {
+          "id": "1293841968",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1293841968"
+        },
+        {
+          "id": "1318951107",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1318951107"
+        },
+        {
+          "id": "1266317876",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1266317876"
+        },
+        {
+          "id": "1545060589",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1545060589"
+        },
+        {
+          "id": "1538239666",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1538239666"
+        },
+        {
+          "id": "994969487",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/994969487"
+        }
+      ]
+    }
+  }
+}

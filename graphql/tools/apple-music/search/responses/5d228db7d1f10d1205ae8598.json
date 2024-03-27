@@ -1,0 +1,64 @@
+{
+  "id": "1155296326",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1155296326",
+  "attributes": {
+    "name": "Crumb",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1400,
+      "height": 1400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/dd/5c/5e/dd5c5e83-fb15-b288-7f72-4e1d236ffa1e/67c5e7ba-e050-47ec-8c9d-382f063a2a0f_ami-identity-22c19e3640bf26a6970200b0491cea11-2023-09-07T19-45-09.679Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "311d1e",
+      "textColor1": "e6e4f0",
+      "textColor2": "bac4dc",
+      "textColor3": "c2bcc6",
+      "textColor4": "9ea2b6"
+    },
+    "url": "https://music.apple.com/us/artist/crumb/1155296326"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1155296326/albums",
+      "data": [
+        {
+          "id": "1456789832",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1456789832"
+        },
+        {
+          "id": "1465125802",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1465125802"
+        },
+        {
+          "id": "1463574997",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1463574997"
+        },
+        {
+          "id": "1557579913",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1557579913"
+        },
+        {
+          "id": "1703580629",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1703580629"
+        },
+        {
+          "id": "1680044408",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1680044408"
+        },
+        {
+          "id": "1677554798",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1677554798"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "id": "6562624",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/6562624",
+  "attributes": {
+    "name": "TV on the Radio",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/43/79/42/437942d3-e0c4-c3ca-b234-47234baf1070/mzl.kcscecpl.jpg/{w}x{h}bb.jpg",
+      "bgColor": "fdfae5",
+      "textColor1": "00030a",
+      "textColor2": "0d1218",
+      "textColor3": "323436",
+      "textColor4": "3d4041"
+    },
+    "url": "https://music.apple.com/us/artist/tv-on-the-radio/6562624"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/6562624/albums",
+      "data": [
+        {
+          "id": "1440850001",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440850001"
+        },
+        {
+          "id": "17804473",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/17804473"
+        },
+        {
+          "id": "1443094891",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443094891"
+        },
+        {
+          "id": "1120037739",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1120037739"
+        },
+        {
+          "id": "1442943275",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442943275"
+        },
+        {
+          "id": "1437098983",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437098983"
+        },
+        {
+          "id": "1437099502",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437099502"
+        },
+        {
+          "id": "1120061018",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1120061018"
+        },
+        {
+          "id": "1444898376",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444898376"
+        },
+        {
+          "id": "1445864789",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445864789"
+        },
+        {
+          "id": "1437099110",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437099110"
+        },
+        {
+          "id": "1437099341",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437099341"
+        },
+        {
+          "id": "1445285543",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445285543"
+        },
+        {
+          "id": "1445286337",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445286337"
+        },
+        {
+          "id": "1445183449",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445183449"
+        }
+      ]
+    }
+  }
+}

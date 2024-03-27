@@ -1,0 +1,155 @@
+{
+  "id": "732932144",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/732932144",
+  "attributes": {
+    "name": "Run The Jewels",
+    "genreNames": [
+      "Hip-Hop/Rap"
+    ],
+    "artwork": {
+      "width": 2336,
+      "height": 2336,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/4f/ec/e4/4fece4f5-f48b-cec7-957a-82cd439910d2/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "07141a",
+      "textColor1": "f2f3ea",
+      "textColor2": "b6c0d9",
+      "textColor3": "c3c6c1",
+      "textColor4": "939db3"
+    },
+    "url": "https://music.apple.com/us/artist/run-the-jewels/732932144"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/732932144/albums",
+      "next": "/v1/catalog/us/artists/732932144/albums?offset=25",
+      "data": [
+        {
+          "id": "1569903245",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569903245"
+        },
+        {
+          "id": "1598920855",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598920855"
+        },
+        {
+          "id": "1598945321",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598945321"
+        },
+        {
+          "id": "1569899938",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569899938"
+        },
+        {
+          "id": "1517913904",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1517913904"
+        },
+        {
+          "id": "1585790221",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1585790221"
+        },
+        {
+          "id": "1569900610",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569900610"
+        },
+        {
+          "id": "1598940624",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598940624"
+        },
+        {
+          "id": "1518054890",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1518054890"
+        },
+        {
+          "id": "1647637939",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1647637939"
+        },
+        {
+          "id": "1510823522",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1510823522"
+        },
+        {
+          "id": "1598922288",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598922288"
+        },
+        {
+          "id": "1656435778",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1656435778"
+        },
+        {
+          "id": "1642681699",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1642681699"
+        },
+        {
+          "id": "1504554324",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1504554324"
+        },
+        {
+          "id": "1541591939",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1541591939"
+        },
+        {
+          "id": "1510613238",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1510613238"
+        },
+        {
+          "id": "1657027171",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1657027171"
+        },
+        {
+          "id": "1547229083",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1547229083"
+        },
+        {
+          "id": "1538044166",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1538044166"
+        },
+        {
+          "id": "1579304942",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1579304942"
+        },
+        {
+          "id": "1510611883",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1510611883"
+        },
+        {
+          "id": "1598922851",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598922851"
+        },
+        {
+          "id": "1547306177",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1547306177"
+        },
+        {
+          "id": "1585789101",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1585789101"
+        }
+      ]
+    }
+  }
+}

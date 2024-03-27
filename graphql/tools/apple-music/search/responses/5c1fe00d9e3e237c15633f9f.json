@@ -1,0 +1,104 @@
+{
+  "id": "610120875",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/610120875",
+  "attributes": {
+    "name": "TORRES",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2493,
+      "height": 2493,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/e2/38/3f/e2383f13-a60d-08ad-ba72-9782e7b4f6de/mzl.wqkekikf.jpg/{w}x{h}bb.jpg",
+      "bgColor": "101010",
+      "textColor1": "edc3a3",
+      "textColor2": "e7a77f",
+      "textColor3": "c19f85",
+      "textColor4": "bc8969"
+    },
+    "url": "https://music.apple.com/us/artist/torres/610120875"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/610120875/albums",
+      "data": [
+        {
+          "id": "961040022",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/961040022"
+        },
+        {
+          "id": "1254465509",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1254465509"
+        },
+        {
+          "id": "1564152909",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1564152909"
+        },
+        {
+          "id": "1482205055",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1482205055"
+        },
+        {
+          "id": "1706403951",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1706403951"
+        },
+        {
+          "id": "583378090",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/583378090"
+        },
+        {
+          "id": "1520405928",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1520405928"
+        },
+        {
+          "id": "1480246007",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1480246007"
+        },
+        {
+          "id": "1521591684",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1521591684"
+        },
+        {
+          "id": "1606792786",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1606792786"
+        },
+        {
+          "id": "885775773",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/885775773"
+        },
+        {
+          "id": "1504592579",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1504592579"
+        },
+        {
+          "id": "1512254024",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1512254024"
+        },
+        {
+          "id": "1601563126",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1601563126"
+        },
+        {
+          "id": "1712640483",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1712640483"
+        }
+      ]
+    }
+  }
+}

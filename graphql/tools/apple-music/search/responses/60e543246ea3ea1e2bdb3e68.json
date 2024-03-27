@@ -1,0 +1,79 @@
+{
+  "id": "39969876",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/39969876",
+  "attributes": {
+    "name": "Heartless Bastards",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 500,
+      "height": 500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/df/b6/05/dfb60552-e239-e84e-a378-dc415c0d3e7e/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "020107",
+      "textColor1": "fff8f2",
+      "textColor2": "f4ebeb",
+      "textColor3": "ccc6c2",
+      "textColor4": "c3bcbd"
+    },
+    "url": "https://music.apple.com/us/artist/heartless-bastards/39969876"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/39969876/albums",
+      "data": [
+        {
+          "id": "1566243164",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1566243164"
+        },
+        {
+          "id": "913787734",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/913787734"
+        },
+        {
+          "id": "913796272",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/913796272"
+        },
+        {
+          "id": "913788965",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/913788965"
+        },
+        {
+          "id": "1632220392",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1632220392"
+        },
+        {
+          "id": "913791003",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/913791003"
+        },
+        {
+          "id": "286963733",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/286963733"
+        },
+        {
+          "id": "985134174",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/985134174"
+        },
+        {
+          "id": "563363994",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/563363994"
+        },
+        {
+          "id": "1705778750",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1705778750"
+        }
+      ]
+    }
+  }
+}

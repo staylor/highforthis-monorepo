@@ -1,0 +1,158 @@
+{
+  "id": "156488786",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/156488786",
+  "attributes": {
+    "name": "Sam Smith",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 1500,
+      "height": 1500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/de/0c/5f/de0c5f88-722a-32d8-ff95-51ea2d98cd33/9fd6e963-6b85-446e-aeb9-871641d96659_ami-identity-a9d9c72c23307ab2a64018246fe99b36-2022-11-11T11-06-33.418Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "36311c",
+      "textColor1": "e5c4a1",
+      "textColor2": "e4b88a",
+      "textColor3": "c2a686",
+      "textColor4": "c19d74"
+    },
+    "editorialNotes": {
+      "short": "“When I look back at this album, it reminds me of the courage it took.”"
+    },
+    "url": "https://music.apple.com/us/artist/sam-smith/156488786"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/156488786/albums",
+      "next": "/v1/catalog/us/artists/156488786/albums?offset=25",
+      "data": [
+        {
+          "id": "1531499128",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1531499128"
+        },
+        {
+          "id": "1442684447",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442684447"
+        },
+        {
+          "id": "1536993568",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536993568"
+        },
+        {
+          "id": "1440837455",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440837455"
+        },
+        {
+          "id": "1536646939",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536646939"
+        },
+        {
+          "id": "1659905064",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1659905064"
+        },
+        {
+          "id": "1536646529",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536646529"
+        },
+        {
+          "id": "1649325651",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1649325651"
+        },
+        {
+          "id": "1444896308",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444896308"
+        },
+        {
+          "id": "1531509367",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1531509367"
+        },
+        {
+          "id": "1440814069",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440814069"
+        },
+        {
+          "id": "1555680902",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1555680902"
+        },
+        {
+          "id": "1680907429",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1680907429"
+        },
+        {
+          "id": "1654902404",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1654902404"
+        },
+        {
+          "id": "1708067022",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1708067022"
+        },
+        {
+          "id": "1717675391",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1717675391"
+        },
+        {
+          "id": "1540377794",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1540377794"
+        },
+        {
+          "id": "1709505578",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1709505578"
+        },
+        {
+          "id": "1523573604",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523573604"
+        },
+        {
+          "id": "1500790822",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1500790822"
+        },
+        {
+          "id": "1525762407",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1525762407"
+        },
+        {
+          "id": "1527839615",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1527839615"
+        },
+        {
+          "id": "1653598361",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1653598361"
+        },
+        {
+          "id": "1523366825",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523366825"
+        },
+        {
+          "id": "1540890510",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1540890510"
+        }
+      ]
+    }
+  }
+}

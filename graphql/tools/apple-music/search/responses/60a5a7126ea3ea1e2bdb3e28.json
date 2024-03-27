@@ -1,0 +1,134 @@
+{
+  "id": "824434533",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/824434533",
+  "attributes": {
+    "name": "Bleachers",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1497,
+      "height": 1497,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/1e/f5/a5/1ef5a574-de06-df84-0905-9ced78cc5ad5/c92585db-b41d-4408-b06f-a8754b519ae8_ami-identity-58f286a4e08782e78ea0398e4dce4159-2023-11-15T16-25-50.926Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "181818",
+      "textColor1": "e2e2e2",
+      "textColor2": "cacaca",
+      "textColor3": "b9b9b9",
+      "textColor4": "a7a7a7"
+    },
+    "url": "https://music.apple.com/us/artist/bleachers/824434533"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/824434533/albums",
+      "data": [
+        {
+          "id": "1225759934",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1225759934"
+        },
+        {
+          "id": "884282118",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/884282118"
+        },
+        {
+          "id": "1567285157",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1567285157"
+        },
+        {
+          "id": "1712730224",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1712730224"
+        },
+        {
+          "id": "1297412679",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1297412679"
+        },
+        {
+          "id": "1042007428",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1042007428"
+        },
+        {
+          "id": "1595208883",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1595208883"
+        },
+        {
+          "id": "1701860953",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1701860953"
+        },
+        {
+          "id": "999489273",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/999489273"
+        },
+        {
+          "id": "1539464920",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1539464920"
+        },
+        {
+          "id": "1653490033",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1653490033"
+        },
+        {
+          "id": "1653491121",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1653491121"
+        },
+        {
+          "id": "1219503440",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1219503440"
+        },
+        {
+          "id": "1628658549",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1628658549"
+        },
+        {
+          "id": "976391124",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/976391124"
+        },
+        {
+          "id": "1297049321",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1297049321"
+        },
+        {
+          "id": "1539464474",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1539464474"
+        },
+        {
+          "id": "1285732203",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1285732203"
+        },
+        {
+          "id": "1702583446",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1702583446"
+        },
+        {
+          "id": "1044348346",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1044348346"
+        },
+        {
+          "id": "973287583",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/973287583"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "id": "13453308",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/13453308",
+  "attributes": {
+    "name": "Feist",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2457,
+      "height": 2457,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/b4/bb/7c/b4bb7cf4-8cec-06bb-27ef-269aa829d0ba/7fac965f-1c16-40ce-9070-ad1df1ddf5ed_ami-identity-f8eea3fcd9dc55e458c1393d9bc2a92a-2023-02-14T16-27-46.531Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "010101",
+      "textColor1": "e3ac8e",
+      "textColor2": "d9987d",
+      "textColor3": "b58a72",
+      "textColor4": "ad7a64"
+    },
+    "url": "https://music.apple.com/us/artist/feist/13453308"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/13453308/albums",
+      "data": [
+        {
+          "id": "1440837029",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440837029"
+        },
+        {
+          "id": "1440737213",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440737213"
+        },
+        {
+          "id": "1667826684",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667826684"
+        },
+        {
+          "id": "1440772917",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440772917"
+        },
+        {
+          "id": "1440891038",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440891038"
+        },
+        {
+          "id": "1444107540",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444107540"
+        },
+        {
+          "id": "1443264615",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443264615"
+        },
+        {
+          "id": "1445747697",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445747697"
+        },
+        {
+          "id": "1446013344",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1446013344"
+        },
+        {
+          "id": "1444877899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444877899"
+        },
+        {
+          "id": "1445144061",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445144061"
+        },
+        {
+          "id": "1445281972",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445281972"
+        },
+        {
+          "id": "1663624899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1663624899"
+        },
+        {
+          "id": "1445297121",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445297121"
+        },
+        {
+          "id": "1445281976",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445281976"
+        }
+      ]
+    }
+  }
+}

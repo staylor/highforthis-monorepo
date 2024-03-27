@@ -1,0 +1,129 @@
+{
+  "id": "74752665",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/74752665",
+  "attributes": {
+    "name": "Silversun Pickups",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3814,
+      "height": 3814,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/9c/02/e8/9c02e8c9-bdd5-ff51-18c8-026930509d55/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "0c1f2d",
+      "textColor1": "d2a966",
+      "textColor2": "ee7402",
+      "textColor3": "aa8e5b",
+      "textColor4": "c1630a"
+    },
+    "url": "https://music.apple.com/us/artist/silversun-pickups/74752665"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/74752665/albums",
+      "data": [
+        {
+          "id": "952842269",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/952842269"
+        },
+        {
+          "id": "1457912926",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1457912926"
+        },
+        {
+          "id": "952837622",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/952837622"
+        },
+        {
+          "id": "1018026467",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1018026467"
+        },
+        {
+          "id": "1628493426",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1628493426"
+        },
+        {
+          "id": "952846052",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/952846052"
+        },
+        {
+          "id": "952835376",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/952835376"
+        },
+        {
+          "id": "952841640",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/952841640"
+        },
+        {
+          "id": "1099409554",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1099409554"
+        },
+        {
+          "id": "1025112209",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1025112209"
+        },
+        {
+          "id": "1290916886",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1290916886"
+        },
+        {
+          "id": "1688750518",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1688750518"
+        },
+        {
+          "id": "952831925",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/952831925"
+        },
+        {
+          "id": "1631312767",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631312767"
+        },
+        {
+          "id": "1697977705",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697977705"
+        },
+        {
+          "id": "1692787619",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1692787619"
+        },
+        {
+          "id": "1513051223",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1513051223"
+        },
+        {
+          "id": "1658522834",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1658522834"
+        },
+        {
+          "id": "1658777824",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1658777824"
+        },
+        {
+          "id": "1470818496",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470818496"
+        }
+      ]
+    }
+  }
+}
