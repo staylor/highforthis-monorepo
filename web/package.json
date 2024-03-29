@@ -39,7 +39,7 @@
     "prod": "run-s prod:*",
     "prod:clean": "rimraf build node_modules/.vite",
     "prod:build": "NODE_ENV=production remix vite:build",
-    "prod:upload": "gsutil -m rsync -r public gs://static.highforthis.com",
+    "prod:upload": "gsutil -m rsync -r build/client gs://static.highforthis.com/build",
     "prod:metadata": "gsutil -m setmeta -r -h 'Cache-control:public, max-age=259200' gs://static.highforthis.com/build",
     "prod:stop": "pm2 stop highforthis-remix",
     "prod:start": "pm2 start pm2.config.cjs",
