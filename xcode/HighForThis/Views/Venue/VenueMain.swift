@@ -49,7 +49,9 @@ struct VenueMain: View {
                 }
             }
         }
+        #if os(iOS)
         .toolbarBackground(.hidden, for: .navigationBar)
+        #endif
         .onAppear() {
             getVenue(slug: slug) { data in
                 self.venue = data.venue!.asVenue!

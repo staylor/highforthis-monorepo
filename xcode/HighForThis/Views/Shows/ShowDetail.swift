@@ -6,7 +6,7 @@ struct ShowDetail: View {
     @State private var show: ShowData?
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             if (show == nil) {
                 // Required to make the spinner align in the center
                 Spacer()
@@ -23,24 +23,36 @@ struct ShowDetail: View {
                 TextBlock {
                     Text(parseDate(show.date)).foregroundColor(.black).font(.title3).fontWeight(.bold)
                     
-                    NavigationLink(show.artist.name) {
+                    NavigationLink(destination: {
                         ArtistMain(name: show.artist.name, slug: show.artist.slug)
-                    }.foregroundColor(.pink).font(.title).padding(.bottom)
+                    }) {
+                        Text(show.artist.name).foregroundColor(.pink).font(.title)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.bottom)
                     
-                    NavigationLink(show.venue.name) {
+                    NavigationLink(destination: {
                         VenueMain(name: show.venue.name, slug: show.venue.slug)
-                    }.foregroundColor(.black).font(.title2)
-                    
+                    }) {
+                        Text(show.venue.name).foregroundColor(.black).font(.title2)
+                    }
+                    .buttonStyle(.plain)
+
                     if let address = show.venue.asVenue?.address {
                         Text(address).foregroundColor(.gray)
                     }
+                    Spacer()
                 }
             }
             // Required to make the full bleed image stay at the top
             Spacer()
         }
+        #if os(iOS)
         .toolbarBackground(.hidden, for: .navigationBar)
         .ignoresSafeArea()
+        #elseif os(macOS)
+        .padding(.all, 8)
+        #endif
         .onAppear() {
             getShow(id: id) { show in
                 self.show = show

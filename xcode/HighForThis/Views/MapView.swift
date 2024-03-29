@@ -5,6 +5,7 @@ struct MapView: View {
     var name: String
     var latitude: Double
     var longitude: Double
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
         let coords = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -22,7 +23,7 @@ struct MapView: View {
             let location = name.addingPercentEncoding(withAllowedCharacters: .alphanumerics)
             let mapsUrl = "maps://?q=\(location!)&center=\(latitude),\(longitude)&z=18"
             let url = URL(string: mapsUrl)
-            UIApplication.shared.open(url!)
+            openURL(url!)
         }
     }
 }

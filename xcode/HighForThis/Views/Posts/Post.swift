@@ -41,7 +41,7 @@ struct Post: View {
                                 EmptyView()
                             }
                         }
-                    }
+                    }.frame(maxWidth: min(screenWidth, 640))
                 }
 
             }
@@ -56,5 +56,5 @@ struct Post: View {
 }
 
 #Preview {
-    Post(slug: "best-albums-of-2013")
+    Post(slug: "best-albums-of-2016")
 }

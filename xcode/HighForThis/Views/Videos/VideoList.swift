@@ -6,6 +6,7 @@ struct VideoList: View {
     @Namespace var topID
     @State private var year: Int = 0
     @StateObject var model = VideoListModel()
+    @Environment(\.openURL) private var openURL
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -22,16 +23,20 @@ struct VideoList: View {
                                 withAnimation {
                                     proxy.scrollTo(topID)
                                 }
-                            }, label: {
+                            }) {
                                 Text("Videos")
                                     .font(.title)
                                     .foregroundColor(.black)
                                     .fontWeight(.black)
-                            })
+                            }.buttonStyle(.plain)
                             Spacer()
 
                             Picker("Filter by year", selection: $year) {
+                                #if os(macOS)
+                                Text("--").tag(0)
+                                #elseif os(iOS)
                                 Text("Filter by year").tag(0)
+                                #endif
                                 ForEach(model.connection!.years!, id: \.self) {
                                     Text(String($0)).tag($0)
                                 }
@@ -40,6 +45,9 @@ struct VideoList: View {
                             .onChange(of: year) {
                                 model.fetchYear(year)
                             }
+                            #if os(macOS)
+                            .frame(maxWidth: 160)
+                            #endif
                         }
                     }
                     List {
@@ -47,7 +55,7 @@ struct VideoList: View {
                         ForEach(model.videos!, id: \.self) { video in
                             Button(action: {
                                 let url = URL(string: "youtube://v/\(video.dataId)")
-                                UIApplication.shared.open(url!)
+                                openURL(url!)
                             }, label: {
                                 HStack {
                                     Paragraph(video.title).padding(.trailing).font(.caption)
@@ -57,20 +65,28 @@ struct VideoList: View {
                                         CachedAsyncImage(url: url) { image in
                                             image.resizable()
                                                 .aspectRatio(contentMode: .fit)
-                                                .frame(height: 100)
+                                                .frame(height: 90)
                                         }  placeholder: {
-                                            ImageLoading().frame(height: 100)
+                                            ImageLoading(width: 120, height: 90)
                                         }
                                     }
                                 }
-                            })
+                            }).buttonStyle(.plain)
                         }
                         if model.connection!.pageInfo.hasNextPage!  {
                             Button(action: {
                                 model.fetchCursor()
                             }, label: {
                                 Text("Load More")
-                            }).foregroundColor(.pink)
+                                    .font(.title3)
+                                    .foregroundColor(.pink)
+                                    #if os(macOS)
+                                    .padding(8)
+                                    #endif
+                            })
+                            #if os(macOS)
+                            .padding(.vertical)
+                            #endif
                         }
                     }.listStyle(.plain)
                 }

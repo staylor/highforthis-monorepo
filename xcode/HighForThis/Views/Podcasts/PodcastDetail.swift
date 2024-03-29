@@ -30,7 +30,7 @@ struct PodcastDetail: View {
                                 .foregroundColor(.pink)
                                 .frame(width: 50, height: 50)
                                 .aspectRatio(contentMode: .fit)
-                        }
+                        }.buttonStyle(.plain)
                     }.padding(.trailing)
                 }
             }
@@ -45,7 +45,9 @@ struct PodcastDetail: View {
 }
 
 #Preview {
-    PodcastDetail(id: PREVIEW_PODCAST_ID)
+    AppWrapper {
+        PodcastDetail(id: PREVIEW_PODCAST_ID)
+    }
 }
 
 let PREVIEW_PODCAST_ID = ObjID("5cc94450a331ab4fcdcd8cd7")

@@ -32,7 +32,7 @@ struct PostList: View {
                                             .frame(width: 120, height: 90, alignment: .center)
                                             .clipped()
                                     }  placeholder: {
-                                        ImageLoading().frame(width: 120, height: 90)
+                                        ImageLoading(width: 120, height: 90)
                                     }
                                 }
                             }

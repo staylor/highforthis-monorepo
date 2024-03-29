@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ImageLoading: View {
+    var width: CGFloat?
+    var height: CGFloat?
     @State private var blinking: Bool = false
     
     var body: some View {
@@ -13,9 +15,12 @@ struct ImageLoading: View {
             .onAppear {
                 blinking.toggle()
             }
+            .frame(width: width, height: height)
     }
 }
 
 #Preview {
-    ImageLoading()
+    AppWrapper {
+        ImageLoading(width: 300, height: 300)
+    }
 }

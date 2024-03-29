@@ -22,7 +22,7 @@ struct HeadingNode: View {
                 Group {
                     heading.children!.map {
                         let node = $0!.asTextNode!
-                        let v = Text(node.text!).font(.title3).bold()
+                        let v = Text(node.text!.uppercased()).font(.title3).fontWeight(.black)
                         return formatText(view: v, format: node.format!)
                     }.reduce(Text(""), +)
                 }

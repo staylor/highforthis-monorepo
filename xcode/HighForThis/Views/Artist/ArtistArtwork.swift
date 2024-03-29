@@ -31,21 +31,19 @@ struct ArtistArtwork: View {
             .replacingOccurrences(of: "{w}", with: "\(fullWidth)")
             .replacingOccurrences(of: "{h}", with: "\(resizedHeight)")
     }
-    
-    private(set) var screenWidth: CGFloat = {
-        return UIScreen.main.bounds.width.rounded(.up)
-    }()
 }
 
 #Preview {
-    VStack(alignment: .leading) {
-        ArtistArtwork(
-            url: PREVIEW_ARTWORK_URL,
-            width: PREVIEW_ARTWORK_WIDTH,
-            height: PREVIEW_ARTWORK_HEIGHT
-        )
-        Spacer()
-    }.ignoresSafeArea()
+    AppWrapper {
+        VStack(alignment: .leading) {
+            ArtistArtwork(
+                url: PREVIEW_ARTWORK_URL,
+                width: PREVIEW_ARTWORK_WIDTH,
+                height: PREVIEW_ARTWORK_HEIGHT
+            )
+            Spacer()
+        }.ignoresSafeArea()
+    }
 }
 
 let PREVIEW_ARTWORK_URL = "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/34/dd/36/34dd3678-40c6-9d8b-fa0f-cb6d82d3103b/6c46071d-e4d2-4671-a110-6ad83a63b89b_ami-identity-5b05d351a6e3c7256ef7680c8aef2894-2023-06-30T03-58-10.754Z_cropped.png/{w}x{h}bb.jpg"

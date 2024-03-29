@@ -11,8 +11,8 @@ struct ImageNode: View {
             let url = URL(string: imageUrl)
             let width = CGFloat(crop.width)
             let height = CGFloat(crop.height)
-            
-            let ratio = (UIScreen.main.bounds.width / width) * width
+            let maxWidth = min(screenWidth, 640)
+            let ratio = (maxWidth / width) * width
             let resizedHeight = height == width ? ratio : (height / width) * ratio
             
             CachedAsyncImage(url: url) { image in

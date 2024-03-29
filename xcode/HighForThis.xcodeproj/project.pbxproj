@@ -17,7 +17,6 @@
 		D2A116822B84020B00CA5EFD /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A116812B84020B00CA5EFD /* Loading.swift */; };
 		D2A1168D2B89365900CA5EFD /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = D2A1168C2B89365900CA5EFD /* Apollo */; };
 		D2A116912B89365900CA5EFD /* ApolloAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D2A116902B89365900CA5EFD /* ApolloAPI */; };
-		D2A116952B89365900CA5EFD /* ApolloTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D2A116942B89365900CA5EFD /* ApolloTestSupport */; };
 		D2A116972B89365900CA5EFD /* ApolloWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = D2A116962B89365900CA5EFD /* ApolloWebSocket */; };
 		D2A9291C2B6B3ED700480408 /* ShowDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A9291B2B6B3ED700480408 /* ShowDetail.swift */; };
 		D2A9291E2B6B403800480408 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A9291D2B6B403800480408 /* Helpers.swift */; };
@@ -91,7 +90,6 @@
 				D2CBDD1A2B894B5E00F4437D /* HighForThisAPI in Frameworks */,
 				D2A116972B89365900CA5EFD /* ApolloWebSocket in Frameworks */,
 				D2E644222BAC8C0D001B5DC2 /* CachedAsyncImage in Frameworks */,
-				D2A116952B89365900CA5EFD /* ApolloTestSupport in Frameworks */,
 				D2A1168D2B89365900CA5EFD /* Apollo in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -245,7 +243,6 @@
 			packageProductDependencies = (
 				D2A1168C2B89365900CA5EFD /* Apollo */,
 				D2A116902B89365900CA5EFD /* ApolloAPI */,
-				D2A116942B89365900CA5EFD /* ApolloTestSupport */,
 				D2A116962B89365900CA5EFD /* ApolloWebSocket */,
 				D2CBDD192B894B5E00F4437D /* HighForThisAPI */,
 				D2E644212BAC8C0D001B5DC2 /* CachedAsyncImage */,
@@ -398,6 +395,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -455,6 +453,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -469,7 +468,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = HighForThis/HighForThis.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -498,7 +497,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -512,7 +512,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = HighForThis/HighForThis.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -520,6 +520,7 @@
 				DEVELOPMENT_TEAM = LQR2VDPY65;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HighForThis/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -542,7 +543,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -608,11 +610,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D2A1168B2B89365900CA5EFD /* XCRemoteSwiftPackageReference "apollo-ios" */;
 			productName = ApolloAPI;
-		};
-		D2A116942B89365900CA5EFD /* ApolloTestSupport */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D2A1168B2B89365900CA5EFD /* XCRemoteSwiftPackageReference "apollo-ios" */;
-			productName = ApolloTestSupport;
 		};
 		D2A116962B89365900CA5EFD /* ApolloWebSocket */ = {
 			isa = XCSwiftPackageProductDependency;

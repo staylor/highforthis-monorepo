@@ -4,11 +4,12 @@ import AVFoundation
 class AudioPlayerViewModel: ObservableObject {
     private var lastUrl: String = ""
     private var audioPlayer: AVPlayer?
-    private var session = AVAudioSession.sharedInstance()
     private var cancellable: AnyCancellable?
-
     @Published var isPlaying = false
 
+    #if os(iOS)
+    private var session = AVAudioSession.sharedInstance()
+    
     deinit {
         cancellable?.cancel()
     }
@@ -45,12 +46,15 @@ class AudioPlayerViewModel: ObservableObject {
             print("Failed to deactivate audio session: \(error.localizedDescription)")
         }
     }
+    #endif
     
     func toggle(url: String) {
         print("Toggling audio: \(url)")
         
         if (audioPlayer == nil) {
+            #if os(iOS)
             activateSession()
+            #endif
         } else if isPlaying {
             pause()
             return

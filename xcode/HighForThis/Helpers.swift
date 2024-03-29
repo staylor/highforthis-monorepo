@@ -10,6 +10,14 @@ var staticAssetsHost: String {
     return ProcessInfo.processInfo.environment["STATIC_ASSETS_HOST"]!
 }
 
+var screenWidth: CGFloat {
+    #if os(iOS)
+    return UIScreen.main.bounds.size.width.rounded(.up)
+    #elseif os(macOS)
+    return NSScreen.main!.visibleFrame.size.width.rounded(.up)
+    #endif
+}
+
 func parseDate(_ unixTime: Double) -> String {
     let date = Date(timeIntervalSince1970: TimeInterval(unixTime / 1000))
     let writer = DateFormatter()
