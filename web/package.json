@@ -38,11 +38,11 @@
     "dev": "env-cmd -e dev node --no-warnings=WARN_JSON_IMPORT_EXPERIMENTAL server.mjs",
     "prod": "run-s prod:*",
     "prod:clean": "rimraf build node_modules/.vite",
-    "prod:build": "env-cmd -e prod remix vite:build",
+    "prod:build": "NODE_ENV=production remix vite:build",
     "prod:upload": "gsutil -m rsync -r public gs://static.highforthis.com",
     "prod:metadata": "gsutil -m setmeta -r -h 'Cache-control:public, max-age=259200' gs://static.highforthis.com/build",
     "prod:stop": "pm2 stop highforthis-remix",
-    "prod:start": "pm2 start pm2.config.js",
+    "prod:start": "pm2 start pm2.config.cjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:update": "vitest -u run"
