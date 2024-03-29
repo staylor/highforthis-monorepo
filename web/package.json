@@ -42,7 +42,7 @@
     "prod:upload": "gsutil -m rsync -r public gs://static.highforthis.com",
     "prod:metadata": "gsutil -m setmeta -r -h 'Cache-control:public, max-age=259200' gs://static.highforthis.com/build",
     "prod:stop": "pm2 stop highforthis-remix",
-    "prod:start": "env-cmd -e prod pm2 start server.mjs --name highforthis-remix",
+    "prod:start": "env-cmd -e prod -f .env-cmdrc pm2 start server.mjs --name highforthis-remix",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:update": "vitest -u run"
