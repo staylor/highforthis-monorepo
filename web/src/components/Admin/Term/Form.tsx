@@ -85,7 +85,7 @@ export default function TermForm({ data = {}, heading, buttonLabel }: TermFormPr
     <>
       <Heading>{heading}</Heading>
       {data.term?.taxonomy.slug === 'venue' && (
-        <HeaderAdd label="All Venues" to={`/admin/venue/${data.term.taxonomy.id}`} />
+        <HeaderAdd label="All Venues" to={`/admin/term/${data.term.taxonomy.id}`} />
       )}
       <Message text="Term updated." />
       <Form data={data} fields={termFields} buttonLabel={buttonLabel} />
