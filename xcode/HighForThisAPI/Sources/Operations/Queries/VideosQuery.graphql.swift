@@ -7,7 +7,7 @@ public class VideosQuery: GraphQLQuery {
   public static let operationName: String = "Videos"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Videos($after: String, $first: Int, $year: Int) { videos(after: $after, first: $first, year: $year) { __typename years edges { __typename cursor node { __typename ...Video_video } } pageInfo { __typename hasNextPage hasPreviousPage } } }"#,
+      #"query Videos($after: String, $first: Int, $year: Int) { videos(after: $after, first: $first, year: $year) { __typename edges { __typename cursor node { __typename ...Video_video } } pageInfo { __typename hasNextPage hasPreviousPage } years } }"#,
       fragments: [Video_video.self]
     ))
 
@@ -56,14 +56,14 @@ public class VideosQuery: GraphQLQuery {
       public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.VideoConnection }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("years", [Int]?.self),
         .field("edges", [Edge].self),
         .field("pageInfo", PageInfo.self),
+        .field("years", [Int]?.self),
       ] }
 
-      public var years: [Int]? { __data["years"] }
       public var edges: [Edge] { __data["edges"] }
       public var pageInfo: PageInfo { __data["pageInfo"] }
+      public var years: [Int]? { __data["years"] }
 
       /// Videos.Edge
       ///

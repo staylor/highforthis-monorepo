@@ -7,7 +7,7 @@ public class ArtistQuery: GraphQLQuery {
   public static let operationName: String = "Artist"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Artist($slug: String!) { artist: term(slug: $slug, taxonomy: "artist") { __typename id name slug website ... on Artist { appleMusic { __typename artwork { __typename url width height } id url } } } shows(latest: true, first: 200, term: $slug, taxonomy: "artist") { __typename edges { __typename node { __typename id title date artist { __typename id name } venue { __typename id name } } } } }"#
+      #"query Artist($slug: String!) { artist: term(slug: $slug, taxonomy: "artist") { __typename id name slug website ... on Artist { appleMusic { __typename artwork { __typename height url width } id url } } } shows(first: 200, latest: true, taxonomy: "artist", term: $slug) { __typename edges { __typename node { __typename artist { __typename id name } date id title venue { __typename id name } } } } }"#
     ))
 
   public var slug: String
@@ -29,10 +29,10 @@ public class ArtistQuery: GraphQLQuery {
         "taxonomy": "artist"
       ]),
       .field("shows", Shows?.self, arguments: [
-        "latest": true,
         "first": 200,
-        "term": .variable("slug"),
-        "taxonomy": "artist"
+        "latest": true,
+        "taxonomy": "artist",
+        "term": .variable("slug")
       ]),
     ] }
 
@@ -111,14 +111,14 @@ public class ArtistQuery: GraphQLQuery {
             public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.AppleMusicArtwork }
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
+              .field("height", Int?.self),
               .field("url", String?.self),
               .field("width", Int?.self),
-              .field("height", Int?.self),
             ] }
 
+            public var height: Int? { __data["height"] }
             public var url: String? { __data["url"] }
             public var width: Int? { __data["width"] }
-            public var height: Int? { __data["height"] }
           }
         }
       }
@@ -164,17 +164,17 @@ public class ArtistQuery: GraphQLQuery {
           public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
+            .field("artist", Artist.self),
+            .field("date", Double.self),
             .field("id", HighForThisAPI.ObjID.self),
             .field("title", String?.self),
-            .field("date", Double.self),
-            .field("artist", Artist.self),
             .field("venue", Venue.self),
           ] }
 
+          public var artist: Artist { __data["artist"] }
+          public var date: Double { __data["date"] }
           public var id: HighForThisAPI.ObjID { __data["id"] }
           public var title: String? { __data["title"] }
-          public var date: Double { __data["date"] }
-          public var artist: Artist { __data["artist"] }
           public var venue: Venue { __data["venue"] }
 
           /// Shows.Edge.Node.Artist

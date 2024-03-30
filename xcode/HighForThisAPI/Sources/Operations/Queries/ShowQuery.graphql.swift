@@ -7,7 +7,7 @@ public class ShowQuery: GraphQLQuery {
   public static let operationName: String = "Show"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Show($id: ObjID!) { show(id: $id) { __typename id title date artist { __typename id name slug ... on Artist { appleMusic { __typename id url artwork { __typename url height width } } } } venue { __typename id name slug ... on Venue { address capacity coordinates { __typename latitude longitude } } } } }"#
+      #"query Show($id: ObjID!) { show(id: $id) { __typename artist { __typename id name slug ... on Artist { appleMusic { __typename artwork { __typename height url width } id url } } } date id title venue { __typename id name slug ... on Venue { address capacity coordinates { __typename latitude longitude } } } } }"#
     ))
 
   public var id: ObjID
@@ -39,17 +39,17 @@ public class ShowQuery: GraphQLQuery {
       public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
+        .field("artist", Artist.self),
+        .field("date", Double.self),
         .field("id", HighForThisAPI.ObjID.self),
         .field("title", String?.self),
-        .field("date", Double.self),
-        .field("artist", Artist.self),
         .field("venue", Venue.self),
       ] }
 
+      public var artist: Artist { __data["artist"] }
+      public var date: Double { __data["date"] }
       public var id: HighForThisAPI.ObjID { __data["id"] }
       public var title: String? { __data["title"] }
-      public var date: Double { __data["date"] }
-      public var artist: Artist { __data["artist"] }
       public var venue: Venue { __data["venue"] }
 
       /// Show.Artist
@@ -102,14 +102,14 @@ public class ShowQuery: GraphQLQuery {
             public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.AppleMusicData }
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
+              .field("artwork", Artwork?.self),
               .field("id", String?.self),
               .field("url", String?.self),
-              .field("artwork", Artwork?.self),
             ] }
 
+            public var artwork: Artwork? { __data["artwork"] }
             public var id: String? { __data["id"] }
             public var url: String? { __data["url"] }
-            public var artwork: Artwork? { __data["artwork"] }
 
             /// Show.Artist.AsArtist.AppleMusic.Artwork
             ///
@@ -121,13 +121,13 @@ public class ShowQuery: GraphQLQuery {
               public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.AppleMusicArtwork }
               public static var __selections: [ApolloAPI.Selection] { [
                 .field("__typename", String.self),
-                .field("url", String?.self),
                 .field("height", Int?.self),
+                .field("url", String?.self),
                 .field("width", Int?.self),
               ] }
 
-              public var url: String? { __data["url"] }
               public var height: Int? { __data["height"] }
+              public var url: String? { __data["url"] }
               public var width: Int? { __data["width"] }
             }
           }

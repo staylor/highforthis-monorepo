@@ -7,7 +7,7 @@ public class PostQuery: GraphQLQuery {
   public static let operationName: String = "Post"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Post($slug: String!) { post(slug: $slug) { __typename editorState { __typename root { __typename children { __typename ... on ElementNodeType { direction format indent type version } ... on HeadingNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } tag } ... on ImageNode { image { __typename crops { __typename fileName width height } destination id } } ... on VideoNode { video { __typename ...Video_video } } ... on ElementNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } } direction format indent type version } } featuredMedia { __typename destination id ... on ImageUpload { crops { __typename fileName width } } } id slug summary title } }"#,
+      #"query Post($slug: String!) { post(slug: $slug) { __typename editorState { __typename root { __typename children { __typename ... on ElementNodeType { direction format indent type version } ... on HeadingNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } tag } ... on ImageNode { image { __typename crops { __typename fileName height width } destination id } } ... on VideoNode { video { __typename ...Video_video } } ... on ElementNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } } direction format indent type version } } featuredMedia { __typename destination id ... on ImageUpload { crops { __typename fileName width } } } id slug summary title } }"#,
       fragments: [TextNodes_linebreakNode.self, TextNodes_textNode.self, Video_video.self]
     ))
 
@@ -284,13 +284,13 @@ public class PostQuery: GraphQLQuery {
                   public static var __selections: [ApolloAPI.Selection] { [
                     .field("__typename", String.self),
                     .field("fileName", String.self),
-                    .field("width", Int.self),
                     .field("height", Int.self),
+                    .field("width", Int.self),
                   ] }
 
                   public var fileName: String { __data["fileName"] }
-                  public var width: Int { __data["width"] }
                   public var height: Int { __data["height"] }
+                  public var width: Int { __data["width"] }
                 }
               }
             }

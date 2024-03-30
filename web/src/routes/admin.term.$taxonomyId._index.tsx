@@ -128,6 +128,7 @@ const termsQuery = gql`
           taxonomy {
             id
           }
+          website
           ... on Venue {
             address
             capacity

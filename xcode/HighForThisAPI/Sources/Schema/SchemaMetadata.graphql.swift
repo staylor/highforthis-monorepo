@@ -33,12 +33,12 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "FileUpload": return HighForThisAPI.Objects.FileUpload
     case "ImageUpload": return HighForThisAPI.Objects.ImageUpload
     case "VideoUpload": return HighForThisAPI.Objects.VideoUpload
-    case "Artist": return HighForThisAPI.Objects.Artist
-    case "Venue": return HighForThisAPI.Objects.Venue
-    case "VenueCoordinates": return HighForThisAPI.Objects.VenueCoordinates
     case "ShowConnection": return HighForThisAPI.Objects.ShowConnection
     case "ShowEdge": return HighForThisAPI.Objects.ShowEdge
     case "Show": return HighForThisAPI.Objects.Show
+    case "Artist": return HighForThisAPI.Objects.Artist
+    case "Venue": return HighForThisAPI.Objects.Venue
+    case "VenueCoordinates": return HighForThisAPI.Objects.VenueCoordinates
     case "AppleMusicData": return HighForThisAPI.Objects.AppleMusicData
     case "AppleMusicArtwork": return HighForThisAPI.Objects.AppleMusicArtwork
     case "Post": return HighForThisAPI.Objects.Post

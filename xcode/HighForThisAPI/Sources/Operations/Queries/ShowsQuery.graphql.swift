@@ -7,7 +7,7 @@ public class ShowsQuery: GraphQLQuery {
   public static let operationName: String = "Shows"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Shows { shows(latest: true, first: 200) { __typename edges { __typename node { __typename id title date artist { __typename id name } venue { __typename id name } } } } }"#
+      #"query Shows { shows(first: 200, latest: true) { __typename edges { __typename node { __typename artist { __typename id name } date id title venue { __typename id name } } } } }"#
     ))
 
   public init() {}
@@ -19,8 +19,8 @@ public class ShowsQuery: GraphQLQuery {
     public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
     public static var __selections: [ApolloAPI.Selection] { [
       .field("shows", Shows?.self, arguments: [
-        "latest": true,
-        "first": 200
+        "first": 200,
+        "latest": true
       ]),
     ] }
 
@@ -66,17 +66,17 @@ public class ShowsQuery: GraphQLQuery {
           public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
+            .field("artist", Artist.self),
+            .field("date", Double.self),
             .field("id", HighForThisAPI.ObjID.self),
             .field("title", String?.self),
-            .field("date", Double.self),
-            .field("artist", Artist.self),
             .field("venue", Venue.self),
           ] }
 
+          public var artist: Artist { __data["artist"] }
+          public var date: Double { __data["date"] }
           public var id: HighForThisAPI.ObjID { __data["id"] }
           public var title: String? { __data["title"] }
-          public var date: Double { __data["date"] }
-          public var artist: Artist { __data["artist"] }
           public var venue: Venue { __data["venue"] }
 
           /// Shows.Edge.Node.Artist
