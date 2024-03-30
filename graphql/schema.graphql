@@ -725,8 +725,8 @@ type VenueCoordinates {
 }
 
 input VenueCoordinatesInput {
-  latitude: Float!
-  longitude: Float!
+  latitude: Float
+  longitude: Float
 }
 
 type Video {

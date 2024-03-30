@@ -1055,8 +1055,8 @@ export type VenueCoordinates = {
 };
 
 export type VenueCoordinatesInput = {
-  latitude: Scalars['Float']['input'];
-  longitude: Scalars['Float']['input'];
+  latitude?: InputMaybe<Scalars['Float']['input']>;
+  longitude?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type Video = {

@@ -1,10 +1,10 @@
 import qs from 'qs';
-import { parseObject } from 'query-types';
 import type { DataFunctionArgs } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/server-runtime';
 import type { DocumentNode } from 'graphql';
 import type { OperationVariables } from '@apollo/client';
 
+import parseObject from './parseObject';
 import mutate from './mutate';
 
 export const post = async (url: string, data: AppData) =>

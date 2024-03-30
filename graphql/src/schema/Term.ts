@@ -59,8 +59,8 @@ const Term = `#graphql
   }
 
   input VenueCoordinatesInput {
-    latitude: Float!
-    longitude: Float!
+    latitude: Float
+    longitude: Float
   }
 
   input UpdateTermInput {

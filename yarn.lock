@@ -10988,11 +10988,6 @@ qs@6.11.2:
   dependencies:
     side-channel "^1.0.4"
 
-query-types@0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/query-types/-/query-types-0.1.4.tgz#e95e28cd730d856dbbeb493205384850cc8ea8ea"
-  integrity sha512-DvOCeSGI+RJeZ8+13NYTZUGbGva3P85GmATpY2ojj0mIsNfw70xeTpQW51JaYDZyQ2Li/svGT+FUdd4CBUoDcQ==
-
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
