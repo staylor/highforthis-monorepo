@@ -61,6 +61,7 @@
     "graphql:prod": "yarn workspace @highforthis/graphql prod",
     "web:dev": "yarn workspace @highforthis/web dev",
     "web:prod": "yarn workspace @highforthis/web prod",
+    "prod": "yarn workspaces run prod",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint --report-unused-disable-directives .",
     "lint-fix": "yarn lint --fix",
     "test:web": "yarn workspace @highforthis/web test",
