@@ -45,7 +45,7 @@ export default function Taxonomies() {
   return (
     <>
       <Heading>Taxonomies</Heading>
-      <HeaderAdd label="Taxonomy" />
+      <HeaderAdd label="Add Taxonomy" />
       <Message param="deleted" text="Deleted %s taxonomies." />
       <ListTable columns={columns} data={taxonomies} />
     </>

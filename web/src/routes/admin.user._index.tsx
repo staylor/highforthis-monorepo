@@ -45,7 +45,7 @@ export default function Users() {
   return (
     <>
       <Heading>Users</Heading>
-      <HeaderAdd label="User" />
+      <HeaderAdd label="Add User" />
       <Message param="deleted" text="Deleted %s users." />
       <ListTable columns={columns} data={users} />
     </>

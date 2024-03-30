@@ -62,7 +62,7 @@ export default function Posts() {
   return (
     <>
       <Heading>Posts</Heading>
-      <HeaderAdd label="Post" />
+      <HeaderAdd label="Add Post" />
       <Message param="deleted" text="Deleted %s posts." />
       <ListTable columns={columns} data={posts} />
     </>

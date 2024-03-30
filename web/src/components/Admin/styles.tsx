@@ -30,7 +30,7 @@ export const HeaderAdd = ({
       to={to || `${path}/add`}
       {...props}
     >
-      Add {label}
+      {label}
     </Link>
   );
 };

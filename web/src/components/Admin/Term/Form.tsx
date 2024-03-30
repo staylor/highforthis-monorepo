@@ -1,6 +1,6 @@
 import { gql } from 'graphql-tag';
 
-import { Heading } from '@/components/Admin/styles';
+import { HeaderAdd, Heading } from '@/components/Admin/styles';
 import Form from '@/components/Admin/Form';
 import Input from '@/components/Form/Input';
 import Message from '@/components/Form/Message';
@@ -84,6 +84,9 @@ export default function TermForm({ data = {}, heading, buttonLabel }: TermFormPr
   return (
     <>
       <Heading>{heading}</Heading>
+      {data.term?.taxonomy.slug === 'venue' && (
+        <HeaderAdd label="All Venues" to={`/admin/venue/${data.term.taxonomy.id}`} />
+      )}
       <Message text="Term updated." />
       <Form data={data} fields={termFields} buttonLabel={buttonLabel} />
     </>

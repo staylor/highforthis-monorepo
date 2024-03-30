@@ -72,7 +72,7 @@ export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormPr
   return (
     <>
       <Heading>{heading}</Heading>
-      {data.show && <HeaderAdd label="Show" to="/admin/show/add" />}
+      {data.show && <HeaderAdd label="Add Show" to="/admin/show/add" />}
       <Message text="Show updated." />
       <Form data={data} fields={showFields} buttonLabel={buttonLabel} />
     </>

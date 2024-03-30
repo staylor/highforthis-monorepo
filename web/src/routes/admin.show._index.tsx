@@ -89,7 +89,7 @@ export default function Shows() {
   return (
     <>
       <Heading>Shows</Heading>
-      <HeaderAdd label="Show" />
+      <HeaderAdd label="Add Show" />
       <Message param="deleted" text="Deleted %s shows." />
       <ListTable columns={columns} data={shows} />
     </>

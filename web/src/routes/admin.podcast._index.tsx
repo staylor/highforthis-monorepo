@@ -50,7 +50,7 @@ export default function Podcasts() {
   return (
     <>
       <Heading>Podcasts</Heading>
-      <HeaderAdd label="Podcast" />
+      <HeaderAdd label="Add Podcast" />
       <Message param="deleted" text="Deleted %s podcasts." />
       <ListTable columns={columns} data={podcasts} />
     </>

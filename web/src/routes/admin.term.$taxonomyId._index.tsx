@@ -63,24 +63,30 @@ export default function Terms() {
     },
   ];
 
-  if (terms.taxonomy.slug === 'venue') {
+  if (['artist', 'venue'].includes(terms.taxonomy.slug)) {
     columns.push({
-      label: 'Capacity',
-      prop: 'capacity',
+      label: 'Website',
+      prop: 'website',
     });
   }
 
   if (['venue'].includes(terms.taxonomy.slug)) {
-    columns.push({
-      label: 'Address',
-      prop: 'address',
-    });
+    columns.push(
+      {
+        label: 'Capacity',
+        prop: 'capacity',
+      },
+      {
+        label: 'Address',
+        prop: 'address',
+      }
+    );
   }
 
   return (
     <>
       <Heading>{terms.taxonomy.plural}</Heading>
-      <HeaderAdd label={terms.taxonomy.name} />
+      <HeaderAdd label={`Add ${terms.taxonomy.name}`} />
       <Message param="deleted" text={`Deleted %s ${terms.taxonomy.plural}}.`} />
       <ListTable columns={columns} data={terms} />
     </>
