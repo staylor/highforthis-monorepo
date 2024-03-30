@@ -35,6 +35,12 @@ export default function TermForm({ data = {}, heading, buttonLabel }: TermFormPr
       render: ({ term }) => term?.description,
     },
     {
+      label: 'Website',
+      prop: 'website',
+      condition: ({ term }) => ['artist', 'venue'].includes(term?.taxonomy?.slug),
+      render: ({ term }) => term?.website,
+    },
+    {
       label: 'Capacity',
       prop: 'capacity',
       condition: ({ term }) => term?.taxonomy?.slug === 'venue',
@@ -100,6 +106,7 @@ TermForm.fragments = {
         plural
         slug
       }
+      website
       ... on Venue {
         address
         capacity

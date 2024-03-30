@@ -7,7 +7,7 @@ public class VenueQuery: GraphQLQuery {
   public static let operationName: String = "Venue"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Venue($slug: String!) { venue: term(slug: $slug, taxonomy: "venue") { __typename id name slug ... on Venue { address capacity coordinates { __typename latitude longitude } } } shows(latest: true, first: 200, term: $slug, taxonomy: "venue") { __typename edges { __typename node { __typename id title date artist { __typename id name } venue { __typename id name } } } } }"#
+      #"query Venue($slug: String!) { venue: term(slug: $slug, taxonomy: "venue") { __typename id name slug website ... on Venue { address capacity coordinates { __typename latitude longitude } } } shows(latest: true, first: 200, term: $slug, taxonomy: "venue") { __typename edges { __typename node { __typename id title date artist { __typename id name } venue { __typename id name } } } } }"#
     ))
 
   public var slug: String
@@ -52,12 +52,14 @@ public class VenueQuery: GraphQLQuery {
         .field("id", HighForThisAPI.ObjID.self),
         .field("name", String.self),
         .field("slug", String.self),
+        .field("website", String?.self),
         .inlineFragment(AsVenue.self),
       ] }
 
       public var id: HighForThisAPI.ObjID { __data["id"] }
       public var name: String { __data["name"] }
       public var slug: String { __data["slug"] }
+      public var website: String? { __data["website"] }
 
       public var asVenue: AsVenue? { _asInlineFragment() }
 
@@ -82,6 +84,7 @@ public class VenueQuery: GraphQLQuery {
         public var id: HighForThisAPI.ObjID { __data["id"] }
         public var name: String { __data["name"] }
         public var slug: String { __data["slug"] }
+        public var website: String? { __data["website"] }
 
         /// Venue.AsVenue.Coordinates
         ///

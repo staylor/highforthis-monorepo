@@ -53,6 +53,7 @@ type Artist implements Term {
   name: String!
   slug: String!
   taxonomy: Taxonomy!
+  website: String
 }
 
 type AudioUpload implements MediaUpload {
@@ -126,6 +127,7 @@ input CreateTermInput {
   name: String!
   slug: String
   taxonomy: ObjID!
+  website: String
 }
 
 input CreateUserInput {
@@ -585,6 +587,7 @@ interface Term {
   name: String!
   slug: String!
   taxonomy: Taxonomy!
+  website: String
 }
 
 type TermConnection {
@@ -666,6 +669,7 @@ input UpdateTermInput {
   name: String
   slug: String
   taxonomy: ObjID
+  website: String
 }
 
 input UpdateUserInput {
@@ -717,6 +721,7 @@ type Venue implements Term {
   name: String!
   slug: String!
   taxonomy: Taxonomy!
+  website: String
 }
 
 type VenueCoordinates {

@@ -3,6 +3,7 @@ query Artist($slug: String!) {
         id
         name
         slug
+        website
         ... on Artist {
             appleMusic {
                 artwork {

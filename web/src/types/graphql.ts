@@ -67,6 +67,7 @@ export type Artist = Term & {
   name: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   taxonomy: Taxonomy;
+  website?: Maybe<Scalars['String']['output']>;
 };
 
 export type AudioUpload = MediaUpload & {
@@ -142,6 +143,7 @@ export type CreateTermInput = {
   name: Scalars['String']['input'];
   slug?: InputMaybe<Scalars['String']['input']>;
   taxonomy: Scalars['ObjID']['input'];
+  website?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateUserInput = {
@@ -907,6 +909,7 @@ export type Term = {
   name: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   taxonomy: Taxonomy;
+  website?: Maybe<Scalars['String']['output']>;
 };
 
 export type TermConnection = {
@@ -991,6 +994,7 @@ export type UpdateTermInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   taxonomy?: InputMaybe<Scalars['ObjID']['input']>;
+  website?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -1046,6 +1050,7 @@ export type Venue = Term & {
   name: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   taxonomy: Taxonomy;
+  website?: Maybe<Scalars['String']['output']>;
 };
 
 export type VenueCoordinates = {
@@ -1154,9 +1159,9 @@ export type ShowForm_TermsFragment = { __typename?: 'Query', artists?: { __typen
 
 export type TaxonomyForm_TaxonomyFragment = { __typename?: 'Taxonomy', description?: string | null, id: any, name: string, plural?: string | null, slug: string };
 
-type TermForm_Term_Artist_Fragment = { __typename?: 'Artist', description?: string | null, id: any, name: string, slug: string, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } };
+type TermForm_Term_Artist_Fragment = { __typename?: 'Artist', description?: string | null, id: any, name: string, slug: string, website?: string | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } };
 
-type TermForm_Term_Venue_Fragment = { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } };
+type TermForm_Term_Venue_Fragment = { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } };
 
 export type TermForm_TermFragment = TermForm_Term_Artist_Fragment | TermForm_Term_Venue_Fragment;
 
@@ -1434,7 +1439,7 @@ export type TermEditQueryVariables = Exact<{
 }>;
 
 
-export type TermEditQuery = { __typename?: 'Query', term?: { __typename?: 'Artist', description?: string | null, id: any, name: string, slug: string, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | null };
+export type TermEditQuery = { __typename?: 'Query', term?: { __typename?: 'Artist', description?: string | null, id: any, name: string, slug: string, website?: string | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | null };
 
 export type UpdateTermMutationVariables = Exact<{
   id: Scalars['ObjID']['input'];
@@ -1442,7 +1447,7 @@ export type UpdateTermMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTermMutation = { __typename?: 'Mutation', updateTerm?: { __typename?: 'Artist', description?: string | null, id: any, name: string, slug: string, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | null };
+export type UpdateTermMutation = { __typename?: 'Mutation', updateTerm?: { __typename?: 'Artist', description?: string | null, id: any, name: string, slug: string, website?: string | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | null };
 
 export type TermsAdminQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1474,7 +1479,7 @@ export type CreateTermMutationVariables = Exact<{
 }>;
 
 
-export type CreateTermMutation = { __typename?: 'Mutation', createTerm?: { __typename?: 'Artist', description?: string | null, id: any, name: string, slug: string, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | null };
+export type CreateTermMutation = { __typename?: 'Mutation', createTerm?: { __typename?: 'Artist', description?: string | null, id: any, name: string, slug: string, website?: string | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null, taxonomy: { __typename?: 'Taxonomy', id: any, name: string, plural?: string | null, slug: string } } | null };
 
 export type AdminQueryVariables = Exact<{ [key: string]: never; }>;
 

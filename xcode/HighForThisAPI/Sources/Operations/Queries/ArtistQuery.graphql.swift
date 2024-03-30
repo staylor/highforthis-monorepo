@@ -7,7 +7,7 @@ public class ArtistQuery: GraphQLQuery {
   public static let operationName: String = "Artist"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Artist($slug: String!) { artist: term(slug: $slug, taxonomy: "artist") { __typename id name slug ... on Artist { appleMusic { __typename artwork { __typename url width height } id url } } } shows(latest: true, first: 200, term: $slug, taxonomy: "artist") { __typename edges { __typename node { __typename id title date artist { __typename id name } venue { __typename id name } } } } }"#
+      #"query Artist($slug: String!) { artist: term(slug: $slug, taxonomy: "artist") { __typename id name slug website ... on Artist { appleMusic { __typename artwork { __typename url width height } id url } } } shows(latest: true, first: 200, term: $slug, taxonomy: "artist") { __typename edges { __typename node { __typename id title date artist { __typename id name } venue { __typename id name } } } } }"#
     ))
 
   public var slug: String
@@ -52,12 +52,14 @@ public class ArtistQuery: GraphQLQuery {
         .field("id", HighForThisAPI.ObjID.self),
         .field("name", String.self),
         .field("slug", String.self),
+        .field("website", String?.self),
         .inlineFragment(AsArtist.self),
       ] }
 
       public var id: HighForThisAPI.ObjID { __data["id"] }
       public var name: String { __data["name"] }
       public var slug: String { __data["slug"] }
+      public var website: String? { __data["website"] }
 
       public var asArtist: AsArtist? { _asInlineFragment() }
 
@@ -78,6 +80,7 @@ public class ArtistQuery: GraphQLQuery {
         public var id: HighForThisAPI.ObjID { __data["id"] }
         public var name: String { __data["name"] }
         public var slug: String { __data["slug"] }
+        public var website: String? { __data["website"] }
 
         /// Artist.AsArtist.AppleMusic
         ///

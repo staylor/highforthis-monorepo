@@ -6,6 +6,7 @@ const Term = `#graphql
     description: String
     taxonomy: Taxonomy!
     featuredMedia: [MediaUpload!]
+    website: String
   }
 
   type Artist implements Term {
@@ -16,6 +17,7 @@ const Term = `#graphql
     appleMusic: AppleMusicData
     taxonomy: Taxonomy!
     featuredMedia: [MediaUpload!]
+    website: String
   }
 
   type VenueCoordinates {
@@ -33,6 +35,7 @@ const Term = `#graphql
     address: String
     coordinates: VenueCoordinates
     featuredMedia: [MediaUpload!]
+    website: String
   }
 
   type TermEdge {
@@ -53,6 +56,7 @@ const Term = `#graphql
     description: String
     taxonomy: ObjID!
     featuredMedia: [String]
+    website: String
     # Venue
     address: String
     capacity: String
@@ -69,6 +73,7 @@ const Term = `#graphql
     description: String
     taxonomy: ObjID
     featuredMedia: [String]
+    website: String
     # Artist
     appleMusic: AppleMusicDataInput
     # Venue

@@ -3,6 +3,7 @@ query Venue($slug: String!) {
         id
         name
         slug
+        website
         ... on Venue {
             address
             capacity
