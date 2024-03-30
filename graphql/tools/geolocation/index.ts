@@ -5,9 +5,6 @@ import database from '../../src/database';
 import Term from '../../src/models/Term';
 
 const API_KEY = process.env.GOOGLE_MAPS_GEOLOCATION_API_KEY as string;
-if (!API_KEY) {
-  throw new Error('GOOGLE_MAPS_GEOLOCATION_API_KEY must be set');
-}
 
 const apiUrl = (address: string) =>
   `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
@@ -30,15 +27,21 @@ for (const venue of venues) {
 
   const id = String(venue._id);
   if (fileExists(id)) {
-    if (!venue.coordinates) {
+    if (venue.coordinates?.latitude && venue.coordinates?.longitude) {
+      // console.log('Coordinates already set for: ', venue.name);
+    } else {
       const coordinates = await import(filename(id));
 
-      console.log('Setting coordinates for: ', id);
+      console.log('Setting coordinates for: ', venue.name);
       await term.updateById(id, {
         coordinates: coordinates.default,
       });
     }
     continue;
+  }
+
+  if (!API_KEY) {
+    throw new Error('GOOGLE_MAPS_GEOLOCATION_API_KEY must be set');
   }
 
   const geolocation = await fetch(apiUrl(venue.address))
