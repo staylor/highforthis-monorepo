@@ -1,9 +1,9 @@
 module.exports = {
   apps: [
     {
-      name: 'highforthis-remix',
+      name: 'highforthis-graphql',
       interpreter: 'dotenvx run --env-file=.env.production -- node',
-      script: 'server.mjs',
+      script: 'lib/index.js',
     },
   ],
 };

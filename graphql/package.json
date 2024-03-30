@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@apollo/server": "4.10.0",
+    "@dotenvx/dotenvx": "0.27.1",
     "@google-cloud/storage": "7.7.0",
     "bcrypt": "5.1.1",
     "body-parser": "1.20.2",
@@ -12,7 +13,6 @@
     "cors": "2.8.5",
     "cron": "3.1.6",
     "dataloader": "2.2.2",
-    "env-cmd": "10.1.0",
     "express": "4.18.2",
     "ffprobe": "1.1.2",
     "ffprobe-static": "3.1.0",
@@ -31,17 +31,17 @@
     "slugify": "1.6.6"
   },
   "scripts": {
-    "dev": "env-cmd -e dev tsx watch src/index.ts",
+    "dev": "dotenvx run -- tsx watch src/index.ts",
     "prod": "run-s prod:*",
-    "prod:stop": "pm2 stop highforthis-graphql",
+    "prod:stop": "pm2 stop pm2.config.cjs",
     "prod:clean": "rimraf lib",
-    "prod:build": "env-cmd -e prod esbuild src/index.ts --packages=external --bundle --platform=node --target=node18.17.1 --format=esm --outfile=lib/index.js",
-    "prod:start": "env-cmd -e prod pm2 start lib/index.js --name highforthis-graphql",
-    "tools:database:dump": "env-cmd -e prod sh ./tools/database/dump",
-    "tools:database:restore": "env-cmd -e prod sh ./tools/database/restore",
-    "tools:artists:apple-music:search:dev": "env-cmd -e dev tsx tools/apple-music/search/index.ts",
-    "tools:artists:apple-music:search:prod": "env-cmd -e prod tsx tools/apple-music/search/index.ts",
-    "tools:venues:geolocation:dev": "env-cmd -e dev tsx tools/geolocation/index.ts",
-    "tools:venues:geolocation:prod": "env-cmd -e prod tsx tools/geolocation/index.ts"
+    "prod:build": "esbuild src/index.ts --packages=external --bundle --platform=node --target=node18.17.1 --format=esm --outfile=lib/index.js",
+    "prod:start": "pm2 start pm2.config.cjs",
+    "tools:database:dump": "dotenvx run --env-file=.env.production -- sh ./tools/database/dump",
+    "tools:database:restore": "dotenvx run --env-file=.env.production -- sh ./tools/database/restore",
+    "tools:artists:apple-music:search:dev": "dotenvx run -- tsx tools/apple-music/search/index.ts",
+    "tools:artists:apple-music:search:prod": "dotenvx run --env-file=.env.production -- tsx tools/apple-music/search/index.ts",
+    "tools:venues:geolocation:dev": "dotenvx run -- tsx tools/geolocation/index.ts",
+    "tools:venues:geolocation:prod": "dotenvx run --env-file=.env.production -- tsx tools/geolocation/index.ts"
   }
 }

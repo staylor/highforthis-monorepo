@@ -1,6 +1,6 @@
 .cache
 .env
-.env-cmdrc
+.env.*
 .nyc_output
 
 node_modules
