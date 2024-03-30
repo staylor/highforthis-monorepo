@@ -56,7 +56,7 @@ for (const venue of venues) {
   if (fs.existsSync(websiteFilename)) {
     if (!venue.website) {
       console.log('Saving website to:', venueId);
-      const website = await import(websiteFilename);
+      const { default: website } = await import(websiteFilename);
       await term.updateById(venueId, {
         website,
       });
