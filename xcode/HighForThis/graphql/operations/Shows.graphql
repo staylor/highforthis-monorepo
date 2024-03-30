@@ -1,19 +1,19 @@
 query Shows {
-	shows(latest: true, first: 200) {
-		edges {
-			node {
-				id
-				title
-				date
-				artist {
-					id
-					name
-				}
-				venue {
-					id
-					name
-				}
-			}
-		}
-	}
+  shows(first: 200, latest: true) {
+    edges {
+      node {
+        artist {
+          id
+          name
+        }
+        date
+        id
+        title
+        venue {
+          id
+          name
+        }
+      }
+    }
+  }
 }

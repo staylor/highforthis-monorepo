@@ -1,36 +1,36 @@
 query Artist($slug: String!) {
-    artist: term(slug: $slug, taxonomy: "artist") {
+  artist: term(slug: $slug, taxonomy: "artist") {
+    id
+    name
+    slug
+    website
+    ... on Artist {
+      appleMusic {
+        artwork {
+          height
+          url
+          width
+        }
         id
-        name
-        slug
-        website
-        ... on Artist {
-            appleMusic {
-                artwork {
-                    url
-                    width
-                    height
-                }
-                id
-                url
-            }
-        }
+        url
+      }
     }
-    shows(latest: true, first: 200, term: $slug, taxonomy: "artist") {
-        edges {
-            node {
-                id
-                title
-                date
-                artist {
-                    id
-                    name
-                }
-                venue {
-                    id
-                    name
-                }
-            }
+  }
+  shows(first: 200, latest: true, taxonomy: "artist", term: $slug) {
+    edges {
+      node {
+        artist {
+          id
+          name
         }
+        date
+        id
+        title
+        venue {
+          id
+          name
+        }
+      }
     }
+  }
 }

@@ -1,19 +1,15 @@
-query Videos(
-  $after: String
-  $first: Int
-  $year: Int
-) {
-	videos(after: $after, first: $first, year: $year) {
-		years
-		edges {
-			cursor
-			node {
-				...Video_video
-			}
-		}
-		pageInfo {
-			hasNextPage
-			hasPreviousPage
-		}
-	}
+query Videos($after: String, $first: Int, $year: Int) {
+  videos(after: $after, first: $first, year: $year) {
+    edges {
+      cursor
+      node {
+        ...Video_video
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+    years
+  }
 }

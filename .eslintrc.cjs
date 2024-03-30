@@ -1,20 +1,18 @@
-const namingRules = {
-  '@graphql-eslint/naming-convention': [
-    'error',
-    {
-      VariableDefinition: 'camelCase',
-      OperationDefinition: {
-        style: 'PascalCase',
-        forbiddenPrefixes: ['Query', 'Mutation', 'Subscription', 'Get'],
-        forbiddenSuffixes: ['Query', 'Mutation', 'Subscription'],
-      },
-      FragmentDefinition: {
-        forbiddenPrefixes: ['Fragment'],
-        forbiddenSuffixes: ['Fragment'],
-      },
+const namingConvention = [
+  'error',
+  {
+    VariableDefinition: 'camelCase',
+    OperationDefinition: {
+      style: 'PascalCase',
+      forbiddenPrefixes: ['Query', 'Mutation', 'Subscription', 'Get'],
+      forbiddenSuffixes: ['Query', 'Mutation', 'Subscription'],
     },
-  ],
-};
+    FragmentDefinition: {
+      forbiddenPrefixes: ['Fragment'],
+      forbiddenSuffixes: ['Fragment'],
+    },
+  },
+];
 
 /**
  * @type {import('@types/eslint').Linter.BaseConfig}
@@ -73,16 +71,21 @@ module.exports = {
         operations: './web/src/**/*.{ts,tsx}',
         schema: './graphql/schema.graphql',
       },
-      rules: namingRules,
+      rules: {
+        '@graphql-eslint/naming-convention': namingConvention,
+      },
     },
     {
-      files: ['./xcode/HighForThis/operations/*.graphql'],
+      files: ['./xcode/HighForThis/graphql/operations/*.graphql'],
       extends: ['plugin:@graphql-eslint/operations-all', 'plugin:@graphql-eslint/relay'],
       parserOptions: {
-        operations: './xcode/HighForThis/operations/*.graphql',
+        operations: './xcode/HighForThis/graphql/operations/*.graphql',
         schema: './graphql/schema.graphql',
       },
-      rules: namingRules,
+      rules: {
+        '@graphql-eslint/match-document-filename': 'off',
+        '@graphql-eslint/naming-convention': namingConvention,
+      },
     },
   ],
   // we're using vitest which has a very similar API to jest
