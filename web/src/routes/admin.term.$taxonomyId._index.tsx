@@ -67,6 +67,12 @@ export default function Terms() {
     columns.push({
       label: 'Website',
       prop: 'website',
+      render: (term: Term) =>
+        term?.website && (
+          <a className="text-pink underline" href={term.website} target="_blank" rel="noreferrer">
+            {term.website}
+          </a>
+        ),
     });
   }
 
