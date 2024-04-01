@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import type { PropsWithChildren } from 'react';
 
 import { HeaderAdd, Heading } from '@/components/Admin/styles';
 import Form from '@/components/Admin/Form';
@@ -11,6 +12,19 @@ interface TermFormProps {
   data?: any;
   heading: string;
   buttonLabel: string;
+}
+
+function PageLink({ url, children }: PropsWithChildren<{ url: string }>) {
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer"
+      className="mx-4 inline-block text-sm text-pink underline"
+    >
+      {children}
+    </a>
+  );
 }
 
 export default function TermForm({ data = {}, heading, buttonLabel }: TermFormProps) {
@@ -85,9 +99,19 @@ export default function TermForm({ data = {}, heading, buttonLabel }: TermFormPr
     <>
       <Heading>{heading}</Heading>
       {data.term?.taxonomy.slug === 'venue' && (
-        <HeaderAdd label="All Venues" to={`/admin/term/${data.term.taxonomy.id}`} />
+        <>
+          <HeaderAdd label="All Venues" to={`/admin/term/${data.term.taxonomy.id}`} />
+          <PageLink url={`/venue/${data.term.slug}`}>View Venue</PageLink>
+          <Message text="Venue updated." />
+        </>
       )}
-      <Message text="Term updated." />
+      {data.term?.taxonomy.slug === 'artist' && (
+        <>
+          <HeaderAdd label="All Artists" to={`/admin/term/${data.term.taxonomy.id}`} />
+          <PageLink url={`/artist/${data.term.slug}`}>View Artist</PageLink>
+          <Message text="Artist updated." />
+        </>
+      )}
       <Form data={data} fields={termFields} buttonLabel={buttonLabel} />
     </>
   );

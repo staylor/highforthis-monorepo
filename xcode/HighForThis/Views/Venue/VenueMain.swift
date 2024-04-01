@@ -6,6 +6,7 @@ struct VenueMain: View {
     var slug: String
     @State private var venue: VenueData.Venue.AsVenue?
     @State private var nodes: [VenueData.Shows.Edge.Node]?
+    @Environment(\.openURL) private var openURL
     
     var body: some View {
         ZStack {
@@ -24,12 +25,33 @@ struct VenueMain: View {
                     TextBlock {
                         Text("\(name)").font(.title).bold().padding(.bottom, 2)
                         if let address = venue.address {
-                            Text(address).foregroundColor(.gray).padding(.bottom, 2)
+                            Text(address)
+                                .foregroundColor(.gray)
+                                .padding(.bottom, 2)
                         }
                         if let capacity = venue.capacity {
-                            Text("Capacity: \(capacity)").foregroundColor(.gray)
+                            Text("Capacity: \(capacity)")
+                                .foregroundColor(.gray)
+                                .padding(.bottom, 2)
+                        }
+                        if let website = venue.website {
+                            Button(action: {
+                                let url = URL(string: website)
+                                openURL(url!)
+                            }, label: {
+                                Text("Website →")
+                                    .font(.system(size: 18))
+                                    .underline()
+                                    .foregroundColor(.pink)
+                            })
+                            .buttonStyle(.plain)
                         }
                     }
+                    Text("Recommended Shows")
+                        .font(.title3)
+                        .bold()
+                        .padding(.horizontal)
+                        .padding(.top, 20)
                     List {
                         ForEach(nodes!, id: \.self) { node in
                             NavigationLink {
@@ -37,7 +59,7 @@ struct VenueMain: View {
                             } label: {
                                 HStack {
                                     VStack(alignment: .leading) {
-                                        Text(parseDate(node.date))
+                                        Text(parseDate(node.date)).foregroundColor(.gray)
                                         Text(node.artist.name).foregroundColor(.pink)
                                     }
                                     

@@ -33,7 +33,21 @@ export default function Venue() {
               dangerouslySetInnerHTML={{ __html: venue.address.replace(/\n/g, '<br />') }}
             />
           )}
-          {venue.capacity && <p className="mb-5">Capacity: {venue.capacity}</p>}
+          {venue.capacity && (
+            <p className="mb-5">
+              <strong>Capacity:</strong> {venue.capacity}
+            </p>
+          )}
+          {venue.website && (
+            <a
+              href={venue.website}
+              target="_blank"
+              rel="noreferrer"
+              className="text-pink underline"
+            >
+              Venue Website &rarr;
+            </a>
+          )}
         </div>
         {venue.coordinates && (
           <Map className="rounded-md" name={venue.name} coordinates={venue.coordinates} />
@@ -64,6 +78,7 @@ const venueQuery = gql`
       }
       id
       name
+      website
       ... on Venue {
         address
         capacity
