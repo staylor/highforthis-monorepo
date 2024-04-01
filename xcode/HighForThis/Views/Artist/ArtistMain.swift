@@ -28,7 +28,7 @@ struct ArtistMain: View {
                                 let url = URL(string: url)
                                 openURL(url!)
                             }) {
-                                Text("Listen on Apple Music →").foregroundColor(.pink)
+                                Text("Listen on Apple Music →").foregroundColor(.accentColor)
                             }
                             .buttonStyle(.plain)
                             .font(.title3)

@@ -28,7 +28,7 @@ struct HeadingNode: View {
                 }
                 Line()
                     .stroke(style: .init(lineWidth: 2, dash: [4]))
-                    .foregroundStyle(.pink)
+                    .foregroundStyle(.accent)
                     .frame(height: 4)
                     .containerRelativeFrame(.horizontal) { length, axis in
                         length * 0.92

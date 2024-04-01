@@ -14,7 +14,7 @@ struct MapView: View {
             span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
         )
         Map(initialPosition: .region(region)) {
-            Marker(name, systemImage: "music.note.house.fill", coordinate: coords).tint(Color.pink)
+            Marker(name, systemImage: "music.note.house.fill", coordinate: coords).tint(Color.accentColor)
         }
         .frame(height: 300)
         .mapStyle(.standard(elevation: .automatic))

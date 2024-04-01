@@ -25,7 +25,7 @@ struct ShowList: View {
                                     } label: {
                                         HStack {
                                             VStack(alignment: .leading) {
-                                                Text(show.artist.name).foregroundColor(.pink)
+                                                Text(show.artist.name).foregroundColor(.accentColor)
                                                 Text(show.venue.name).foregroundColor(.gray)
                                             }
                                             

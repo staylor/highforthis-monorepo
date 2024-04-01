@@ -42,7 +42,7 @@ struct VenueMain: View {
                                 Text("Website →")
                                     .font(.system(size: 18))
                                     .underline()
-                                    .foregroundColor(.pink)
+                                    .foregroundColor(.accentColor)
                             })
                             .buttonStyle(.plain)
                         }
@@ -60,7 +60,7 @@ struct VenueMain: View {
                                 HStack {
                                     VStack(alignment: .leading) {
                                         Text(parseDate(node.date)).foregroundColor(.gray)
-                                        Text(node.artist.name).foregroundColor(.pink)
+                                        Text(node.artist.name).foregroundColor(.accentColor)
                                     }
                                     
                                     Spacer()

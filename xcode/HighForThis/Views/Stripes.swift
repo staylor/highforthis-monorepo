@@ -8,8 +8,8 @@ struct StripesConfig {
     var barSpacing: CGFloat
 
     init(
-        background: Color = Color.pink.opacity(0.5), 
-        foreground: Color = Color.pink.opacity(0.8),
+        background: Color = Color.accentColor.opacity(0.5),
+        foreground: Color = Color.accentColor.opacity(0.8),
         degrees: Double = 30,
         barWidth: CGFloat = 20,
         barSpacing: CGFloat = 20

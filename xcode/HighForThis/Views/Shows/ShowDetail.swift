@@ -26,7 +26,7 @@ struct ShowDetail: View {
                     NavigationLink(destination: {
                         ArtistMain(name: show.artist.name, slug: show.artist.slug)
                     }) {
-                        Text(show.artist.name).foregroundColor(.pink).font(.title)
+                        Text(show.artist.name).foregroundColor(.accentColor).font(.title)
                     }
                     .buttonStyle(.plain)
                     .padding(.bottom)

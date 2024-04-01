@@ -27,7 +27,7 @@ struct PodcastDetail: View {
                             viewModel.toggle(url: cdnUrl("\(podcast.audio!.destination)/\(podcast.audio!.fileName)"))
                         }) {
                             Image(systemName: viewModel.isPlaying ? "pause.circle.fill" : "play.circle.fill").resizable()
-                                .foregroundColor(.pink)
+                                .foregroundColor(.accentColor)
                                 .frame(width: 50, height: 50)
                                 .aspectRatio(contentMode: .fit)
                         }.buttonStyle(.plain)

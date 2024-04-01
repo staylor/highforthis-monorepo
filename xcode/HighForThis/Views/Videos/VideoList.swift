@@ -79,7 +79,7 @@ struct VideoList: View {
                             }, label: {
                                 Text("Load More")
                                     .font(.title3)
-                                    .foregroundColor(.pink)
+                                    .foregroundColor(.accentColor)
                                     #if os(macOS)
                                     .padding(8)
                                     #endif

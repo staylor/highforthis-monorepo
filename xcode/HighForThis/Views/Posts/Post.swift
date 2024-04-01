@@ -23,7 +23,7 @@ struct Post: View {
                         }.overlay(
                             Rectangle()
                                 .frame(width: 8, height: nil, alignment: .leading)
-                                .foregroundColor(Color.pink),
+                                .foregroundColor(.accentColor),
                             alignment: .leading
                         ).padding(.leading, 16)
                         ForEach(post.editorState!.root!.children!, id: \.self) { child in
