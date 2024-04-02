@@ -4,9 +4,9 @@ import HighForThisAPI
 struct ArtistMain: View {
     var name: String
     var slug: String
+    @State private var website: String?
     @State private var appleMusic: ArtistData.Artist.AsArtist.AppleMusic?
     @State private var nodes: [ArtistData.Shows.Edge.Node]?
-    @Environment(\.openURL) private var openURL
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -23,15 +23,12 @@ struct ArtistMain: View {
                 VStack(alignment: .leading) {
                     TextBlock {
                         Text("\(name)").font(.title).bold()
+                        if let website = website {
+                            ExternalLink(url: website, label: "Artist Website")
+                                .padding(.vertical, 1)
+                        }
                         if let url = appleMusic?.url! {
-                            Button(action: {
-                                let url = URL(string: url)
-                                openURL(url!)
-                            }) {
-                                Text("Listen on Apple Music →").foregroundColor(.accentColor)
-                            }
-                            .buttonStyle(.plain)
-                            .font(.title3)
+                            ExternalLink(url: url, label: "Listen on Apple Music")
                         }
                     }
                     if nodes?.count == 0 {
@@ -41,6 +38,11 @@ struct ArtistMain: View {
                         }.padding()
                         Spacer()
                     } else {
+                        Text("Recommended Shows")
+                            .font(.title3)
+                            .bold()
+                            .padding(.horizontal)
+                            .padding(.top, 20)
                         List {
                             ForEach(nodes!, id: \.self) { node in
                                 NavigationLink {
@@ -70,6 +72,7 @@ struct ArtistMain: View {
         #endif
         .onAppear() {
             getArtist(slug: slug) { data in
+                self.website = data.artist!.website
                 self.appleMusic = data.artist!.asArtist!.appleMusic!
                 
                 var nodes = [ArtistData.Shows.Edge.Node]()
@@ -84,6 +87,6 @@ struct ArtistMain: View {
 
 #Preview {
     AppWrapper {
-        ArtistMain(name: "Olivia Rodrigo", slug: "olivia-rodrigo")
+        ArtistMain(name: "Caroline Rose", slug: "caroline-rose")
     }
 }

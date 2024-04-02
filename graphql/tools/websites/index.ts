@@ -2,19 +2,16 @@ import fs from 'fs';
 import path from 'path';
 
 import { JSDOM } from 'jsdom';
+import type { WithId } from 'mongodb';
 
 import database from '../../src/database';
 import Term from '../../src/models/Term';
 
-const venuesHost = 'https://www.ohmyrockness.com';
-const allVenuesURL = `${venuesHost}/venues/all`;
-const allFilename = path.join(process.cwd(), 'tools', 'websites', 'responses', 'all.html');
-
+const omrHost = 'https://www.ohmyrockness.com';
 const filename = (name: string) => path.join(process.cwd(), 'tools', 'websites', 'responses', name);
 
 const { db } = await database();
 const term = new Term({ db });
-const venues = await term.all({ taxonomy: 'venue', limit: 200 });
 
 async function readOrFetch(url: string, filename: string) {
   let html: string;
@@ -29,65 +26,97 @@ async function readOrFetch(url: string, filename: string) {
   return html;
 }
 
-const allVenuesHTML = await readOrFetch(allVenuesURL, allFilename);
-const dom = new JSDOM(allVenuesHTML);
-const index = new Map();
-const venueLinks = [...dom.window.document.querySelectorAll('.omrlink')];
-if (venueLinks.length === 0) {
-  console.log('No venue links found.');
-} else {
-  console.log('Found', venueLinks.length, 'venues in HTML.');
+function getIndex(dom: JSDOM) {
+  const index = new Map();
+  const links = [...dom.window.document.querySelectorAll('.omrlink')];
+  if (links.length === 0) {
+    console.log('No links found.');
+  } else {
+    console.log('Found', links.length, 'venues in HTML.');
+  }
+
+  (links as HTMLAnchorElement[]).forEach(({ href, textContent }) => {
+    const search = textContent?.trim().toLowerCase();
+    if (!search) {
+      return;
+    }
+    index.set(search, {
+      path: href,
+      name: textContent,
+    });
+  });
+  return index;
 }
 
-(venueLinks as HTMLAnchorElement[]).forEach(({ href, textContent }) => {
-  const search = textContent?.trim().toLowerCase();
-  if (!search) {
-    return;
-  }
-  index.set(search, {
-    path: href,
-    name: textContent,
-  });
-});
+interface Match {
+  path: string;
+  name: string;
+}
 
-for (const venue of venues) {
-  const venueId = String(venue._id);
-  const websiteFilename = filename(`${venueId}-website.json`);
-  if (fs.existsSync(websiteFilename)) {
-    if (!venue.website) {
-      console.log('Saving website to:', venueId);
-      const { default: website } = await import(websiteFilename);
-      await term.updateById(venueId, {
+async function parseTerms(terms: WithId<any>[], index: Map<string, Match>, selector: string) {
+  for (const item of terms) {
+    const id = String(item._id);
+    const websiteFilename = filename(`${id}-website.json`);
+    if (fs.existsSync(websiteFilename)) {
+      if (!item.website) {
+        console.log('Saving website to:', id);
+        const { default: website } = await import(websiteFilename);
+        await term.updateById(id, {
+          website,
+        });
+      }
+      continue;
+    }
+
+    const search = item.name.trim().toLowerCase();
+    if (!index.has(search)) {
+      continue;
+    }
+
+    const matched = index.get(search) as Match;
+    const html = await readOrFetch(`${omrHost}${matched.path}`, filename(`${id}-output.html`));
+    const itemDOM = new JSDOM(html);
+    const link = itemDOM.window.document.querySelector(selector);
+    if (!link) {
+      continue;
+    }
+
+    const website = (link as HTMLAnchorElement).href;
+    if (website) {
+      console.log(`Found match for ${item.name}:`, website);
+      fs.writeFileSync(websiteFilename, JSON.stringify(website) + '\n');
+      console.log('Saving website to:', id);
+      await term.updateById(id, {
         website,
       });
     }
-    continue;
-  }
-
-  const search = venue.name.trim().toLowerCase();
-  if (!index.has(search)) {
-    continue;
-  }
-
-  const matched = index.get(search);
-  const html = await readOrFetch(
-    `${venuesHost}${matched.path}`,
-    filename(`${venueId}-output.html`)
-  );
-  const venueDOM = new JSDOM(html);
-  const venueLink = venueDOM.window.document.querySelector('.venue-link');
-  if (!venueLink) {
-    continue;
-  }
-
-  const website = (venueLink as HTMLAnchorElement).href;
-  if (website) {
-    console.log(`Found match for ${venue.name}:`, website);
-    fs.writeFileSync(websiteFilename, JSON.stringify(website) + '\n');
-    console.log('Saving website to:', venueId);
-    await term.updateById(venueId, {
-      website,
-    });
   }
 }
+
+async function fetchArtists() {
+  const allArtistsURL = `${omrHost}/bands/all`;
+  const allFilename = path.join(process.cwd(), 'tools', 'websites', 'responses', 'artists.html');
+
+  const allArtistsHTML = await readOrFetch(allArtistsURL, allFilename);
+  const dom = new JSDOM(allArtistsHTML);
+  const index = getIndex(dom);
+  const terms = await term.all({ taxonomy: 'artist', limit: 200 });
+
+  await parseTerms(terms, index, '#url .omrlink');
+}
+
+async function fetchVenues() {
+  const allVenuesURL = `${omrHost}/venues/all`;
+  const allFilename = path.join(process.cwd(), 'tools', 'websites', 'responses', 'venues.html');
+
+  const allVenuesHTML = await readOrFetch(allVenuesURL, allFilename);
+  const dom = new JSDOM(allVenuesHTML);
+  const index = getIndex(dom);
+  const terms = await term.all({ taxonomy: 'venue', limit: 200 });
+
+  await parseTerms(terms, index, '.venue-link');
+}
+
+await Promise.all([fetchArtists(), fetchVenues()]);
+
 process.exit(0);

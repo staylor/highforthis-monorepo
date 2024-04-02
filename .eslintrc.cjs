@@ -85,6 +85,8 @@ module.exports = {
       rules: {
         '@graphql-eslint/match-document-filename': 'off',
         '@graphql-eslint/naming-convention': namingConvention,
+        '@graphql-eslint/unique-fragment-name': 'off',
+        '@graphql-eslint/unique-operation-name': 'off',
       },
     },
   ],

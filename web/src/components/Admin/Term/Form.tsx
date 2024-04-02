@@ -110,6 +110,13 @@ export default function TermForm({ data = {}, heading, buttonLabel }: TermFormPr
           <HeaderAdd label="All Artists" to={`/admin/term/${data.term.taxonomy.id}`} />
           <PageLink url={`/artist/${data.term.slug}`}>View Artist</PageLink>
           <Message text="Artist updated." />
+          {data.term.appleMusic?.artwork?.url && (
+            <img
+              src={data.term.appleMusic.artwork.url.replace(/\{[wh]\}/g, '300')}
+              alt={data.term.name}
+              className="my-4 rounded"
+            />
+          )}
         </>
       )}
       <Form data={data} fields={termFields} buttonLabel={buttonLabel} />
@@ -134,6 +141,13 @@ TermForm.fragments = {
         slug
       }
       website
+      ... on Artist {
+        appleMusic {
+          artwork {
+            url
+          }
+        }
+      }
       ... on Venue {
         address
         capacity

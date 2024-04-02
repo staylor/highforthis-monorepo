@@ -7,7 +7,7 @@ import Shows from '@/components/Shows';
 import query from '@/utils/query';
 import type { Artist, ArtistQuery, ShowConnection } from '@/types/graphql';
 import { createClientCache } from '@/utils/cache';
-import AppleMusic from '@/components/Artist/AppleMusic';
+import Metadata from '@/components/Artist/Metadata';
 
 export const loader: LoaderFunction = async ({ params, context }) => {
   return query({ context, query: artistQuery, variables: { first: 100, slug: params.slug } });
@@ -23,7 +23,7 @@ export default function Artist() {
   return (
     <>
       <Heading1>{artist.name}</Heading1>
-      <AppleMusic name={artist.name} data={artist.appleMusic || {}} />
+      <Metadata name={artist.name} website={artist.website} data={artist.appleMusic || {}} />
       <Shows shows={shows} />
     </>
   );
@@ -34,6 +34,7 @@ const artistQuery = gql`
     artist: term(slug: $slug, taxonomy: "artist") {
       id
       name
+      website
       ... on Artist {
         appleMusic {
           artwork {

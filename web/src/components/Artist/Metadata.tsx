@@ -1,29 +1,46 @@
+import type { PropsWithChildren } from 'react';
+
 import type { AppleMusicData } from '@/types/graphql';
 import Image from '@/components/Image';
 
 interface AppleMusicProps {
   name: string;
+  website?: string;
   imageSize?: number;
   data: AppleMusicData;
 }
 
 const DEFAULT_IMAGE_SIZE = 300;
 
-export default function AppleMusic({
+function ArtistLink({ url, children }: PropsWithChildren<{ url: string }>) {
+  return (
+    <a
+      href={url}
+      className="mb-2 block text-lg text-pink underline"
+      target="_blank"
+      rel="noreferrer"
+    >
+      {children} &rarr;
+    </a>
+  );
+}
+
+export default function Metadata({
   name,
+  website,
   imageSize = DEFAULT_IMAGE_SIZE,
   data,
 }: AppleMusicProps) {
   const { url, artwork } = data;
 
+  let site;
   let listen;
   let image;
+  if (website) {
+    site = <ArtistLink url={website}>Artist Website</ArtistLink>;
+  }
   if (url) {
-    listen = (
-      <a href={url} className="text-lg underline md:mt-4" target="_blank" rel="noreferrer">
-        Listen on Apple Music &raquo;
-      </a>
-    );
+    listen = <ArtistLink url={url}>Listen on Apple Music</ArtistLink>;
   }
   if (artwork?.url) {
     image = (
@@ -51,14 +68,17 @@ export default function AppleMusic({
     }
   }
 
-  if (!(image || listen)) {
+  if (!(image || listen || site)) {
     return null;
   }
 
   return (
     <div className="mb-8 mt-4 md:mb-12 md:mt-8 md:flex">
       {image}
-      {listen}
+      <div className="md:mt-4">
+        {site}
+        {listen}
+      </div>
     </div>
   );
 }

@@ -43,7 +43,7 @@
     "tools:artists:apple-music:search:prod": "dotenvx run --env-file=.env.production -- tsx tools/apple-music/search/index.ts",
     "tools:venues:geolocation:dev": "dotenvx run -- tsx tools/geolocation/index.ts",
     "tools:venues:geolocation:prod": "dotenvx run --env-file=.env.production -- tsx tools/geolocation/index.ts",
-    "tools:venues:websites:dev": "dotenvx run -- tsx tools/websites/index.ts",
-    "tools:venues:websites:prod": "dotenvx run --env-file=.env.production -- tsx tools/websites/index.ts"
+    "tools:websites:dev": "dotenvx run -- tsx tools/websites/index.ts",
+    "tools:websites:prod": "dotenvx run --env-file=.env.production -- tsx tools/websites/index.ts"
   }
 }
