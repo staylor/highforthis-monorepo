@@ -63,7 +63,13 @@ export default class Term extends Model {
       criteria.$text = { $search: search };
     }
 
-    return this.collection.find(criteria).sort({ name: 1 }).skip(offset).limit(limit).toArray();
+    return this.collection
+      .find(criteria)
+      .collation({ locale: 'en' })
+      .sort({ name: 1 })
+      .skip(offset)
+      .limit(limit)
+      .toArray();
   }
 
   public async insert(doc: any): Promise<ObjectId> {

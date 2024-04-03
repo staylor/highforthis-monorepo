@@ -12,7 +12,7 @@ export default class Taxonomy extends Model {
   }
 
   public all(): Promise<any[]> {
-    return this.collection.find({}).sort({ name: 1 }).toArray();
+    return this.collection.find({}).collation({ locale: 'en' }).sort({ name: 1 }).toArray();
   }
 
   public async insert(doc: any): Promise<ObjectId> {

@@ -25,6 +25,7 @@ export default class User extends Model {
 
     return this.collection
       .find(criteria, { hash: 0 } as any)
+      .collation({ locale: 'en' })
       .sort({ name: 1 })
       .skip(offset)
       .limit(limit)
