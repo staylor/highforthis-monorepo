@@ -87,6 +87,6 @@ struct ArtistMain: View {
 
 #Preview {
     AppWrapper {
-        ArtistMain(name: "Caroline Rose", slug: "caroline-rose")
+        ArtistMain(name: "Olivia Rodrigo", slug: "olivia-rodrigo")
     }
 }

@@ -15,13 +15,11 @@ struct PodcastDetail: View {
             } else {
                 let podcast = podcast!
                 TextBlock {
-                    Image(systemName: "waveform")
-                        .resizable()
-                        .frame(width: 80, height: 80)
                     VStack(alignment: .leading) {
-                        Text(podcast.title).foregroundColor(.black).font(.title2).fontWeight(.bold).padding(.vertical)
-                        Text(podcast.description).padding(.bottom)
-                    }
+                        Text(podcast.title).foregroundColor(.black).font(.title).fontWeight(.bold)
+                        Text("Posted: \(parseDate(podcast.date!))").foregroundColor(.gray).padding(.bottom)
+                        Text(podcast.description)
+                    }.padding(.vertical, 24)
                     HStack {
                         Button(action: {
                             viewModel.toggle(url: cdnUrl("\(podcast.audio!.destination)/\(podcast.audio!.fileName)"))
@@ -31,6 +29,10 @@ struct PodcastDetail: View {
                                 .frame(width: 50, height: 50)
                                 .aspectRatio(contentMode: .fit)
                         }.buttonStyle(.plain)
+                        Spacer()
+                        Image(systemName: "waveform")
+                            .resizable()
+                            .frame(width: 80, height: 80)
                     }.padding(.trailing)
                 }
             }

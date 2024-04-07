@@ -58,7 +58,7 @@ struct VideoList: View {
                                 openURL(url!)
                             }, label: {
                                 HStack {
-                                    Paragraph(video.title).padding(.trailing).font(.caption)
+                                    Paragraph(video.title).padding(.trailing).font(.subheadline)
                                     if let thumb = video.thumbnails.first(where: {$0.width != 0}) {
                                         let url = URL(string: thumb.url)
                                         Spacer()

@@ -11,7 +11,6 @@
 		D22BA11A2B6B37D60037E129 /* ShowGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22BA1192B6B37D60037E129 /* ShowGroup.swift */; };
 		D24492ED2B6D8A5A00DBCC13 /* PodcastList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24492EC2B6D8A5A00DBCC13 /* PodcastList.swift */; };
 		D25099C92BBBBC06003904A8 /* ExternalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25099C82BBBBC06003904A8 /* ExternalLink.swift */; };
-		D25099CC2BC24DDC003904A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D25099CB2BC24DDC003904A8 /* LaunchScreen.storyboard */; };
 		D278176D2B6BAC8900D44B4D /* VideoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278176C2B6BAC8900D44B4D /* VideoList.swift */; };
 		D27817732B810BB900D44B4D /* PodcastDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27817722B810BB900D44B4D /* PodcastDetail.swift */; };
 		D27C2DD82B6C145E0036F4A9 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27C2DD72B6C145E0036F4A9 /* MapView.swift */; };
@@ -300,7 +299,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D25099CC2BC24DDC003904A8 /* LaunchScreen.storyboard in Resources */,
 				D2CBDD0F2B8944E000F4437D /* operations in Resources */,
 				D2D50F822B6AB474007F335C /* Assets.xcassets in Resources */,
 			);

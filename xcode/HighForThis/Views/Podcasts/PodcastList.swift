@@ -19,11 +19,9 @@ struct PodcastList: View {
                         NavigationLink {
                             PodcastDetail(id: podcast.id)
                         } label: {
-                            HStack {
-                                Image(systemName: "waveform")
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                Text(podcast.title)
+                            VStack(alignment: .leading) {
+                                Text("Posted: \(parseDate(podcast.date!))").foregroundColor(.gray).padding(.bottom, 1)
+                                Text(podcast.title).font(.title3).foregroundColor(.pink)
                             }
                         }
                     }

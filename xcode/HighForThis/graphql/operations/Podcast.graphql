@@ -6,6 +6,7 @@ query Podcast($id: ObjID!) {
       fileName
       id
     }
+    date
     description
     id
     title

@@ -2,6 +2,7 @@ query Podcasts {
   podcasts(first: 200) {
     edges {
       node {
+        date
         id
         title
       }

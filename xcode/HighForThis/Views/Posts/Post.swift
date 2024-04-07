@@ -18,8 +18,7 @@ struct Post: View {
                             Text(post.title.uppercased())
                                 .font(.title)
                                 .fontWeight(.black)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
+                                .padding(16)
                         }.overlay(
                             Rectangle()
                                 .frame(width: 8, height: nil, alignment: .leading)
@@ -48,9 +47,7 @@ struct Post: View {
                         }
                     }.frame(maxWidth: min(screenWidth, 640))
                 }
-                #if os(macOS)
                 .padding(.top, 16)
-                #endif
             }
             Spacer()
         }
