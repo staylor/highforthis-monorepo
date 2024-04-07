@@ -9,11 +9,7 @@ const API_HOST = 'https://www.googleapis.com';
 const API_PATH = '/youtube/v3/playlistItems';
 const PER_PAGE = '50';
 
-interface PlainObj {
-  [key: string]: any;
-}
-
-const PLAYLISTS: PlainObj = {
+const PLAYLISTS: Record<number, string> = {
   2011: 'PLzPoW8nNb67yHiQ4kJMDA9yK8Z0rqY9Cb',
   2013: 'PLzPoW8nNb67yg4XZNav7DPtvM10jtJ2ZV',
   2014: 'PLzPoW8nNb67yZ7pyqjBp3k2bVq3GNcprV',
@@ -42,9 +38,9 @@ function getPlaylistUrl(playlistId: string, pageToken?: string): string {
   return requestURL.href;
 }
 
-async function fetchPlaylistItems(playlistId: string): Promise<PlainObj[]> {
+async function fetchPlaylistItems(playlistId: string): Promise<any[]> {
   return new Promise((resolve, reject) => {
-    let items: PlainObj[] = [];
+    let items: any[] = [];
 
     const fetchPage = (pageToken?: string): void => {
       const playlistUrl = getPlaylistUrl(playlistId, pageToken);
@@ -57,13 +53,15 @@ async function fetchPlaylistItems(playlistId: string): Promise<PlainObj[]> {
             reject(e);
           }
         })
-        .then((response: any) => response.json())
-        .then((result: PlainObj) => {
-          items = items.concat(result.items);
-          if (result.nextPageToken) {
-            fetchPage(result.nextPageToken);
-          } else {
-            resolve(items);
+        .then(async (response) => {
+          if (response) {
+            const result: any = await response.json();
+            items = items.concat(result.items);
+            if (result.nextPageToken) {
+              fetchPage(result.nextPageToken);
+            } else {
+              resolve(items);
+            }
           }
         });
     };
@@ -74,7 +72,7 @@ async function fetchPlaylistItems(playlistId: string): Promise<PlainObj[]> {
 
 async function updateVideo(
   db: Db,
-  { contentDetails, snippet }: PlainObj,
+  { contentDetails, snippet }: Record<string, any>,
   year: string,
   playlistId: string
 ) {
@@ -124,7 +122,7 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
   const cursor = db.collection('video').find({ dataPlaylistIds: playlistId }, { dataId: 1 } as any);
   return cursor
     .toArray()
-    .then((ids: PlainObj[]) => ids.map(({ dataId }) => dataId))
+    .then((ids: Record<string, any>[]) => ids.map(({ dataId }) => dataId))
     .then((ids: string[]) =>
       Promise.all(
         items.map((item) => {

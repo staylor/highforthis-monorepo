@@ -146,6 +146,7 @@ TermForm.fragments = {
           artwork {
             url
           }
+          id
         }
       }
       ... on Venue {
