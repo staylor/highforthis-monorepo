@@ -25,7 +25,12 @@ struct Post: View {
                                 .frame(width: 8, height: nil, alignment: .leading)
                                 .foregroundColor(.accentColor),
                             alignment: .leading
-                        ).padding(.leading, 16)
+                        )
+                        #if os(iOS)
+                        .padding(.leading, 16)
+                        #elseif os(macOS)
+                        .padding(.leading, 8)
+                        #endif
                         ForEach(post.editorState!.root!.children!, id: \.self) { child in
                             switch child!.__typename! {
                             case "HeadingNode":
@@ -43,7 +48,9 @@ struct Post: View {
                         }
                     }.frame(maxWidth: min(screenWidth, 640))
                 }
-
+                #if os(macOS)
+                .padding(.top, 16)
+                #endif
             }
             Spacer()
         }
@@ -56,5 +63,7 @@ struct Post: View {
 }
 
 #Preview {
-    Post(slug: "best-albums-of-2016")
+    AppWrapper {
+        Post(slug: "best-albums-of-2016")
+    }
 }

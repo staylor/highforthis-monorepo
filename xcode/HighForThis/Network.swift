@@ -5,7 +5,7 @@ struct Network {
     static var shared = Network()
     
     private(set) lazy var apollo: ApolloClient = {
-        let endpoint = ProcessInfo.processInfo.environment["GRAPHQL_ENDPOINT"]!
+        let endpoint = graphqlEndpoint
         let client = URLSessionClient()
         let cache = InMemoryNormalizedCache()
         let url = URL(string: endpoint)

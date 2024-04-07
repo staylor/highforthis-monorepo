@@ -6,8 +6,14 @@ var isPreview: Bool {
     return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
 }
 
+var graphqlEndpoint: String {
+    return "https://graphql.highforthis.com/graphql"
+    // return ProcessInfo.processInfo.environment["GRAPHQL_ENDPOINT"]
+}
+
 var staticAssetsHost: String {
-    return ProcessInfo.processInfo.environment["STATIC_ASSETS_HOST"]!
+    return "https://static.highforthis.com"
+    // return ProcessInfo.processInfo.environment["STATIC_ASSETS_HOST"]!
 }
 
 var screenWidth: CGFloat {

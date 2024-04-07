@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  HighForThis
-//
-//  Created by Scott Taylor on 1/31/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
@@ -28,6 +21,9 @@ struct ContentView: View {
                         Label("Posts", systemImage: "note.text")
                     }
             }
+            #if os(macOS)
+            .padding(.vertical, 18)
+            #endif
         }
     }
 }

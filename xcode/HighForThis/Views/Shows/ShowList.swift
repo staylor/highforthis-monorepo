@@ -44,6 +44,7 @@ struct ShowList: View {
                 }
             }
         }
+        .background(.white)
         .onAppear() {
             getShowList() { nodes in
                 self.groups = showGroups(nodes)
