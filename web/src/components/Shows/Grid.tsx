@@ -29,13 +29,27 @@ export default function ShowsGrid({
   const years = {} as { [key: number]: number };
   const months = {} as { [key: string]: number };
   const date = formatDate(new Date());
+  const sorted = shows.edges.sort(({ node: showA }, { node: showB }) => {
+    const dateA = showA.date;
+    const dateB = showB.date;
+    if (dateA === dateB) {
+      const artistA = showA.artist.name;
+      const artistB = showB.artist.name;
+
+      if (artistA === artistB) {
+        return 0;
+      }
+      return artistA < artistB ? -1 : 1;
+    }
+    return -1;
+  });
 
   return (
     <article className={className}>
       <p className="mb-2 font-stylized">{`Today's date is: ${date.formatted}`}</p>
       <table className="w-full border-collapse">
         <tbody>
-          {shows.edges.map(({ node }) => {
+          {sorted.map(({ node }) => {
             const d = formatDate(new Date(node.date));
             const showRow = (
               <tr key={node.id}>
