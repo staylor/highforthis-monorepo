@@ -9,23 +9,23 @@ struct PodcastList: View {
                 Spacer()
                 Loading()
             } else if podcasts!.count == 0 {
-                Text("No podcast episodes.")
+                Text(L10N("noPodcastEpisodes"))
             } else {
-                TextBlock {
-                    Text("Podcast Episodes").font(.title).fontWeight(.black)
-                }
                 List {
                     ForEach(podcasts!, id: \.self) { podcast in
+                        let posted = L10N("posted \(parseDate(podcast.date!))")
                         NavigationLink {
                             PodcastDetail(id: podcast.id)
                         } label: {
                             VStack(alignment: .leading) {
-                                Text("Posted: \(parseDate(podcast.date!))").foregroundColor(.gray).padding(.bottom, 1)
+                                Text(posted).foregroundColor(.gray).padding(.bottom, 1)
                                 Text(podcast.title).font(.title3).foregroundColor(.pink)
                             }
                         }
                     }
-                }.listStyle(.plain)
+                }
+                .listStyle(.plain)
+                .navigationTitle(L10N("podcastEpisodes"))
             }
             Spacer()
         }.onAppear() {

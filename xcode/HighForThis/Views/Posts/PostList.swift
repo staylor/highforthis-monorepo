@@ -10,11 +10,8 @@ struct PostList: View {
                 Spacer()
                 Loading()
             } else if posts!.count == 0 {
-                Text("No posts.")
+                Text(L10N("noPosts"))
             } else {
-                TextBlock {
-                    Text("Posts").font(.title).fontWeight(.black)
-                }
                 List {
                     ForEach(posts!, id: \.self) { post in
                         NavigationLink {
@@ -40,7 +37,9 @@ struct PostList: View {
                             }
                         }
                     }
-                }.listStyle(.plain)
+                }
+                .listStyle(.plain)
+                .navigationTitle(L10N("posts"))
             }
             Spacer()
         }.onAppear() {

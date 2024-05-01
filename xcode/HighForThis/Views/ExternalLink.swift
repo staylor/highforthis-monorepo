@@ -10,7 +10,7 @@ struct ExternalLink: View {
             let url = URL(string: url)
             openURL(url!)
         }) {
-            Text("\(label) →").foregroundColor(.accentColor)
+            Text(verbatim: "\(label) →").foregroundColor(.accentColor)
         }
         .buttonStyle(.plain)
         .font(.title3)

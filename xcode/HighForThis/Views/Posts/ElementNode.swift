@@ -10,12 +10,12 @@ struct ElementNode: View {
             TextBlock {
                 node.children!.map {
                     if $0!.__typename == "LinebreakNode" {
-                        return Text("\n")
+                        return Text(verbatim: "\n")
                     }
                     let node = $0!.asTextNode!
                     let v = Text(node.text!)
                     return formatText(view: v, format: node.format!)
-                }.reduce(Text(""), +)
+                }.reduce(Text(verbatim: ""), +)
             }
         default:
             EmptyView()

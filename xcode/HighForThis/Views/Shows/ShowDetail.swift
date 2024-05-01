@@ -13,6 +13,7 @@ struct ShowDetail: View {
                 Loading()
             } else {
                 let show = show!
+                let date = parseDate(show.date)
                 if let artwork = show.artist.asArtist?.appleMusic?.artwork {
                     ArtistArtwork(
                         url: artwork.url!,
@@ -21,7 +22,7 @@ struct ShowDetail: View {
                     )
                 }
                 TextBlock {
-                    Text(parseDate(show.date)).foregroundColor(.black).font(.title3).fontWeight(.bold)
+                    Text(date).foregroundColor(.black).font(.title3).fontWeight(.bold)
                     
                     NavigationLink(destination: {
                         ArtistMain(name: show.artist.name, slug: show.artist.slug)

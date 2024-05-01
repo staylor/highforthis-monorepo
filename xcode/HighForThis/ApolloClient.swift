@@ -50,9 +50,9 @@ func getShow(id: ObjID, completion: @escaping ((ShowData) -> ())) {
     }
 }
 
-func getShowList(completion: @escaping (([ShowListNode]) -> ())) {
+func getShowList(refresh: Bool = false, completion: @escaping (([ShowListNode]) -> ())) {
     let query = HighForThisAPI.ShowsQuery()
-    getData(query) { data in
+    getData(query, cachePolicy: refresh ? .fetchIgnoringCacheData : cachePolicy) { data in
         var nodes = [ShowListNode]()
         for edge in data.shows!.edges {
             nodes.append(edge.node)

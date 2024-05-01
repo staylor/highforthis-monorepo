@@ -22,22 +22,22 @@ struct VenueMain: View {
                         )
                     }
                     TextBlock {
-                        Text("\(name)").font(.title).bold().padding(.bottom, 2)
+                        Text(name).font(.title).bold().padding(.bottom, 2)
                         if let address = venue.address {
                             Text(address)
                                 .foregroundColor(.gray)
                                 .padding(.bottom, 2)
                         }
                         if let capacity = venue.capacity {
-                            Text("Capacity: \(capacity)")
+                            Text(L10N("capacity \(capacity)"))
                                 .foregroundColor(.gray)
                                 .padding(.bottom, 2)
                         }
                         if let website = venue.website {
-                            ExternalLink(url: website, label: "Venue Website")
+                            ExternalLink(url: website, label: L10N("venueWebsite"))
                         }
                     }
-                    Text("Recommended Shows")
+                    Text(L10N("recommendedShows"))
                         .font(.title3)
                         .bold()
                         .padding(.horizontal)

@@ -22,23 +22,23 @@ struct ArtistMain: View {
                 }
                 VStack(alignment: .leading) {
                     TextBlock {
-                        Text("\(name)").font(.title).bold()
+                        Text(name).font(.title).bold()
                         if let website = website {
-                            ExternalLink(url: website, label: "Artist Website")
+                            ExternalLink(url: website, label: L10N("artistWebsite"))
                                 .padding(.vertical, 1)
                         }
                         if let url = appleMusic?.url! {
-                            ExternalLink(url: url, label: "Listen on Apple Music")
+                            ExternalLink(url: url, label: L10N("listenOnAppleMusic"))
                         }
                     }
                     if nodes?.count == 0 {
                         HStack {
-                            Text("There are no shows to recommend right now.")
+                            Text(L10N("noRecommendedShows"))
                             Spacer()
                         }.padding()
                         Spacer()
                     } else {
-                        Text("Recommended Shows")
+                        Text(L10N("recommendedShows"))
                             .font(.title3)
                             .bold()
                             .padding(.horizontal)
@@ -85,7 +85,13 @@ struct ArtistMain: View {
     }
 }
 
-#Preview {
+#Preview("With shows") {
+    AppWrapper {
+        ArtistMain(name: "Julia Jacklin", slug: "julia-jacklin")
+    }
+}
+
+#Preview("No shows") {
     AppWrapper {
         ArtistMain(name: "Olivia Rodrigo", slug: "olivia-rodrigo")
     }

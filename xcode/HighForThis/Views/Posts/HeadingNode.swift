@@ -17,14 +17,14 @@ struct HeadingNode: View {
         TextBlock {
             switch heading.tag!.rawValue {
             case "h2":
-                Text("\(heading.tag!.rawValue)").font(.headline)
+                Text(heading.tag!.rawValue).font(.headline)
             case "h3":
                 Group {
                     heading.children!.map {
                         let node = $0!.asTextNode!
                         let v = Text(node.text!.uppercased()).font(.title3).fontWeight(.black)
                         return formatText(view: v, format: node.format!)
-                    }.reduce(Text(""), +)
+                    }.reduce(Text(verbatim: ""), +)
                 }
                 Line()
                     .stroke(style: .init(lineWidth: 2, dash: [4]))
@@ -34,7 +34,7 @@ struct HeadingNode: View {
                         length * 0.92
                     }
             case "h4":
-                Text("\(heading.tag!.rawValue)").font(.headline)
+                Text(heading.tag!.rawValue).font(.headline)
             default:
                 EmptyView()
             }

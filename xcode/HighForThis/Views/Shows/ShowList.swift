@@ -6,49 +6,53 @@ struct ShowList: View {
     @State private var groups: [ShowGroup]?
 
     var body: some View {
-        ZStack {
+        VStack(alignment: .leading) {
             if (groups == nil) {
+                Spacer()
                 Loading()
             } else if groups!.count == 0 {
-                Text("No recommended shows.")
+                Text(L10N("noRecommendedShows"))
             } else {
-                VStack(alignment: .leading) {
-                    TextBlock {
-                        Text(title).font(.title).fontWeight(.black)
-                    }
-                    List {
-                        ForEach(groups!) { group in
-                            Section {
-                                ForEach(group.shows, id: \.self) { show in
-                                    NavigationLink {
-                                        ShowDetail(id: show.id)
-                                    } label: {
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text(show.artist.name).foregroundColor(.accentColor)
-                                                Text(show.venue.name).foregroundColor(.gray)
-                                            }
-                                            
-                                            Spacer()
+                List {
+                    ForEach(groups!) { group in
+                        Section {
+                            ForEach(group.shows, id: \.self) { show in
+                                NavigationLink {
+                                    ShowDetail(id: show.id)
+                                } label: {
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(show.artist.name).foregroundColor(.accentColor)
+                                            Text(show.venue.name).foregroundColor(.gray)
                                         }
+                                        
+                                        Spacer()
                                     }
                                 }
-                            } header: {
-                                Text(group.dateFormatted())
-                                    .foregroundColor(.black)
-                                    .fontWeight(.bold)
                             }
+                        } header: {
+                            Text(group.dateFormatted())
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
                         }
-                    }.listStyle(.plain)
-                    Spacer()
+                    }
                 }
+                .refreshable {
+                    fetchShows(refresh: true)
+                }
+                .listStyle(.plain)
+                .navigationTitle(title)
             }
+            Spacer()
         }
-        .background(.white)
         .onAppear() {
-            getShowList() { nodes in
-                self.groups = showGroups(nodes)
-            }
+            fetchShows()
+        }
+    }
+    
+    func fetchShows(refresh: Bool = false) {
+        getShowList(refresh: refresh) { nodes in
+            self.groups = showGroups(nodes)
         }
     }
     
@@ -71,6 +75,6 @@ struct ShowList: View {
 
 #Preview {
     AppWrapper {
-        ShowList(title: "Recommended Shows")
+        ShowList(title: L10N("recommendedShows"))
     }
 }

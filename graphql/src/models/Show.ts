@@ -57,7 +57,7 @@ export default class Show extends Model {
 
     return this.collection
       .find(criteria)
-      .sort({ date: order === 'ASC' ? 1 : -1 })
+      .sort({ date: order === 'ASC' ? 1 : -1, 'artist.name': 1 })
       .skip(offset)
       .limit(limit)
       .toArray();
