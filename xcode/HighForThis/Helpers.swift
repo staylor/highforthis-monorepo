@@ -28,10 +28,10 @@ var screenWidth: CGFloat {
     #endif
 }
 
-func parseDate(_ unixTime: Double) -> String {
+func parseDate(_ unixTime: Double, format: String = "MM/dd/yyyy") -> String {
     let date = Date(timeIntervalSince1970: TimeInterval(unixTime / 1000))
     let writer = DateFormatter()
-    writer.dateFormat = "MM/dd/yyyy"
+    writer.dateFormat = format
     
     return writer.string(from: date)
 }

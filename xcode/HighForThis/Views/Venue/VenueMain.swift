@@ -24,7 +24,7 @@ struct VenueMain: View {
                     TextBlock {
                         Text(name).font(.title).bold().padding(.bottom, 2)
                         if let address = venue.address {
-                            Text(address)
+                            Paragraph(address)
                                 .foregroundColor(.gray)
                                 .padding(.bottom, 2)
                         }

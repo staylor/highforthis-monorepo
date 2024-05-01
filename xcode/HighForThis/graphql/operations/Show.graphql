@@ -23,14 +23,6 @@ query Show($id: ObjID!) {
       id
       name
       slug
-      ... on Venue {
-        address
-        capacity
-        coordinates {
-          latitude
-          longitude
-        }
-      }
     }
   }
 }

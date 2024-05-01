@@ -13,7 +13,6 @@ struct ShowDetail: View {
                 Loading()
             } else {
                 let show = show!
-                let date = parseDate(show.date)
                 if let artwork = show.artist.asArtist?.appleMusic?.artwork {
                     ArtistArtwork(
                         url: artwork.url!,
@@ -22,26 +21,26 @@ struct ShowDetail: View {
                     )
                 }
                 TextBlock {
-                    Text(date).foregroundColor(.black).font(.title3).fontWeight(.bold)
-                    
-                    NavigationLink(destination: {
-                        ArtistMain(name: show.artist.name, slug: show.artist.slug)
-                    }) {
-                        Text(show.artist.name).foregroundColor(.accentColor).font(.title)
+                    Group {
+                        Text(parseDate(show.date, format: "EEEE, MM/dd/yyyy")) +
+                        Text(verbatim: " - ") +
+                        Text(parseDate(show.date, format: "h:mma"))
                     }
-                    .buttonStyle(.plain)
-                    .padding(.bottom)
+                    .foregroundColor(.black)
+                    .font(.subheadline)
+                    .padding(.bottom, 8)
                     
-                    NavigationLink(destination: {
-                        VenueMain(name: show.venue.name, slug: show.venue.slug)
-                    }) {
-                        Text(show.venue.name).foregroundColor(.black).font(.title2)
-                    }
-                    .buttonStyle(.plain)
+                    VStack(alignment: .leading) {
+                        InternalLink(show.artist.name, color: .accentColor) {
+                            ArtistMain(name: show.artist.name, slug: show.artist.slug)
+                        }
+                        InternalLink(show.venue.name) {
+                            VenueMain(name: show.venue.name, slug: show.venue.slug)
+                        }
+                    }.padding(.bottom, 32)
+                    
+                    // ExternalLink(url: "", label: "Tickets")
 
-                    if let address = show.venue.asVenue?.address {
-                        Text(address).foregroundColor(.gray)
-                    }
                     Spacer()
                 }
             }
