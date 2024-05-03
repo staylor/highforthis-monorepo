@@ -1,32 +1,30 @@
 import APIKeys from '@/schema/APIKeys';
 import AppleMusic from '@/schema/AppleMusic';
+import Artist from '@/schema/Artist';
 import EditorState from '@/schema/EditorState';
 import Media from '@/schema/Media';
 import Podcast from '@/schema/Podcast';
 import Post from '@/schema/Post';
 import Settings from '@/schema/Settings';
 import Show from '@/schema/Show';
-import Taxonomy from '@/schema/Taxonomy';
-import Term from '@/schema/Term';
 import User from '@/schema/User';
+import Venue from '@/schema/Venue';
 import Video from '@/schema/Video';
 
 const modules = {
   APIKeys,
   AppleMusic,
+  Artist,
   EditorState,
   Media,
   Podcast,
   Post,
   Settings,
   Show,
-  Taxonomy,
-  Term,
   User,
+  Venue,
   Video,
-} as {
-  [key: string]: string;
-};
+} as Record<string, string>;
 
 const typeDefs = `#graphql
   scalar ObjID

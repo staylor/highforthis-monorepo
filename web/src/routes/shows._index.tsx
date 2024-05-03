@@ -20,23 +20,17 @@ export const meta: MetaFunction = ({ matches }) => {
   ];
 };
 
-export const loader: LoaderFunction = async ({ params, context }) => {
-  const variables = { first: 200 } as any;
-  if (params.taxonomy && params.term) {
-    variables.taxonomy = params.taxonomy;
-    variables.term = params.term;
-  }
-
+export const loader: LoaderFunction = async ({ context }) => {
   return query({
     context,
     query: showsQuery,
-    variables,
+    variables: { first: 200 },
   });
 };
 
 export const showsQuery = gql`
-  query Shows($after: String, $first: Int, $taxonomy: String, $term: String) {
-    shows(after: $after, first: $first, latest: true, taxonomy: $taxonomy, term: $term) {
+  query Shows($after: String, $first: Int) {
+    shows(after: $after, first: $first, latest: true) {
       ...ShowsGrid_shows
     }
   }

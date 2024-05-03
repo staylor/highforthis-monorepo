@@ -44,8 +44,6 @@
     "tools:venues:geolocation:dev": "dotenvx run -- tsx tools/geolocation/index.ts",
     "tools:venues:geolocation:prod": "dotenvx run --env-file=.env.production -- tsx tools/geolocation/index.ts",
     "tools:websites:dev": "dotenvx run -- tsx tools/websites/index.ts",
-    "tools:websites:prod": "dotenvx run --env-file=.env.production -- tsx tools/websites/index.ts",
-    "tools:terms:dev": "dotenvx run -- tsx tools/terms/index.ts",
-    "tools:terms:prod": "dotenvx run --env-file=.env.production -- tsx tools/terms/index.ts"
+    "tools:websites:prod": "dotenvx run --env-file=.env.production -- tsx tools/websites/index.ts"
   }
 }

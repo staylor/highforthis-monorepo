@@ -6,6 +6,6 @@ import ApolloAPI
 public extension Objects {
   static let Venue = ApolloAPI.Object(
     typename: "Venue",
-    implementedInterfaces: [Interfaces.Term.self]
+    implementedInterfaces: []
   )
 }

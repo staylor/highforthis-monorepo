@@ -1,28 +1,6 @@
-import { useMatches } from '@remix-run/react';
-
-import type { AdminRouteGroup, AdminTopLevelRoute } from '@/types';
-import type { AdminQuery } from '@/types/graphql';
+import type { AdminRouteGroup } from '@/types';
 
 const useRouteConfig = () => {
-  const matches = useMatches();
-  const admin = matches.find((match) => (match.handle as RouteHandle)?.layout === 'admin');
-  const taxonomies = (admin?.data as AdminQuery).taxonomies?.edges.map(({ node }) => node) || [];
-  const taxRoutes = taxonomies.map((taxonomy) => ({
-    path: `/term/${taxonomy.id}`,
-    label: taxonomy.plural,
-    dashicon: 'tag',
-    routes: [
-      {
-        path: `/term/${taxonomy.id}`,
-        label: `All ${taxonomy.plural}`,
-      },
-      {
-        path: `/term/${taxonomy.id}/add`,
-        label: 'Add New',
-      },
-    ],
-  }));
-
   const routeConfig: AdminRouteGroup[] = [
     [
       {
@@ -102,21 +80,35 @@ const useRouteConfig = () => {
     ],
     [
       {
-        path: '/taxonomy',
-        label: 'Taxonomies',
-        dashicon: 'category',
+        path: '/artist',
+        label: 'Artists',
+        dashicon: 'tag',
         routes: [
           {
-            path: '/taxonomy',
-            label: 'All Taxonomies',
+            path: '/artist',
+            label: 'All Artists',
           },
           {
-            path: '/taxonomy/add',
+            path: '/artist/add',
             label: 'Add New',
           },
         ],
       },
-      ...(taxRoutes as AdminTopLevelRoute[]),
+      {
+        path: '/venue',
+        label: 'Venues',
+        dashicon: 'tag',
+        routes: [
+          {
+            path: '/venue',
+            label: 'All Venues',
+          },
+          {
+            path: '/venue/add',
+            label: 'Add New',
+          },
+        ],
+      },
     ],
     [
       {

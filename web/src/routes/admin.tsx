@@ -3,12 +3,10 @@ import cn from 'classnames';
 import type { LinksFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/server-runtime';
 import { Outlet } from '@remix-run/react';
-import { gql } from 'graphql-tag';
 import type { MetaFunction } from '@remix-run/node';
 
 import NavMenu from '@/components/Admin/NavMenu';
 import titleTemplate from '@/utils/title';
-import query from '@/utils/query';
 import { authenticator } from '@/auth';
 import adminCss from '@/styles/admin.css?url';
 import { rootData } from '@/utils/rootData';
@@ -32,12 +30,12 @@ export const meta: MetaFunction = ({ matches }) => {
   ];
 };
 
-export const loader: LoaderFunction = async ({ request, context }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const user = await authenticator.isAuthenticated(request);
-  if (user) {
-    return query({ query: adminQuery, request, context });
+  if (!user) {
+    return redirect('/login/unauthorized');
   }
-  return redirect('/login/unauthorized');
+  return {};
 };
 
 export default function Admin() {
@@ -60,18 +58,3 @@ export default function Admin() {
     </div>
   );
 }
-
-const adminQuery = gql`
-  query Admin {
-    taxonomies @cache(key: "admin") {
-      edges {
-        node {
-          id
-          name
-          plural
-          slug
-        }
-      }
-    }
-  }
-`;

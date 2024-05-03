@@ -7,7 +7,7 @@ public class VenueQuery: GraphQLQuery {
   public static let operationName: String = "Venue"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Venue($slug: String!) { shows(first: 200, latest: true, taxonomy: "venue", term: $slug) { __typename edges { __typename node { __typename artist { __typename id name } date id title venue { __typename id name } } } } venue: term(slug: $slug, taxonomy: "venue") { __typename id name slug website ... on Venue { address capacity coordinates { __typename latitude longitude } } } }"#
+      #"query Venue($slug: String!) { shows(first: 200, latest: true, venueSlug: $slug) { __typename edges { __typename node { __typename artist { __typename id name } date id title venue { __typename id name } } } } venue(slug: $slug) { __typename address capacity coordinates { __typename latitude longitude } id name slug website } }"#
     ))
 
   public var slug: String
@@ -27,13 +27,9 @@ public class VenueQuery: GraphQLQuery {
       .field("shows", Shows?.self, arguments: [
         "first": 200,
         "latest": true,
-        "taxonomy": "venue",
-        "term": .variable("slug")
+        "venueSlug": .variable("slug")
       ]),
-      .field("term", alias: "venue", Venue?.self, arguments: [
-        "slug": .variable("slug"),
-        "taxonomy": "venue"
-      ]),
+      .field("venue", Venue?.self, arguments: ["slug": .variable("slug")]),
     ] }
 
     public var shows: Shows? { __data["shows"] }
@@ -94,12 +90,12 @@ public class VenueQuery: GraphQLQuery {
 
           /// Shows.Edge.Node.Artist
           ///
-          /// Parent Type: `Term`
+          /// Parent Type: `Artist`
           public struct Artist: HighForThisAPI.SelectionSet {
             public let __data: DataDict
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Interfaces.Term }
+            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Artist }
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
               .field("id", HighForThisAPI.ObjID.self),
@@ -112,12 +108,12 @@ public class VenueQuery: GraphQLQuery {
 
           /// Shows.Edge.Node.Venue
           ///
-          /// Parent Type: `Term`
+          /// Parent Type: `Venue`
           public struct Venue: HighForThisAPI.SelectionSet {
             public let __data: DataDict
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Interfaces.Term }
+            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
               .field("id", HighForThisAPI.ObjID.self),
@@ -133,68 +129,47 @@ public class VenueQuery: GraphQLQuery {
 
     /// Venue
     ///
-    /// Parent Type: `Term`
+    /// Parent Type: `Venue`
     public struct Venue: HighForThisAPI.SelectionSet {
       public let __data: DataDict
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Interfaces.Term }
+      public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
+        .field("address", String?.self),
+        .field("capacity", String?.self),
+        .field("coordinates", Coordinates?.self),
         .field("id", HighForThisAPI.ObjID.self),
         .field("name", String.self),
         .field("slug", String.self),
         .field("website", String?.self),
-        .inlineFragment(AsVenue.self),
       ] }
 
+      public var address: String? { __data["address"] }
+      public var capacity: String? { __data["capacity"] }
+      public var coordinates: Coordinates? { __data["coordinates"] }
       public var id: HighForThisAPI.ObjID { __data["id"] }
       public var name: String { __data["name"] }
       public var slug: String { __data["slug"] }
       public var website: String? { __data["website"] }
 
-      public var asVenue: AsVenue? { _asInlineFragment() }
-
-      /// Venue.AsVenue
+      /// Venue.Coordinates
       ///
-      /// Parent Type: `Venue`
-      public struct AsVenue: HighForThisAPI.InlineFragment {
+      /// Parent Type: `VenueCoordinates`
+      public struct Coordinates: HighForThisAPI.SelectionSet {
         public let __data: DataDict
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public typealias RootEntityType = VenueQuery.Data.Venue
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
+        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.VenueCoordinates }
         public static var __selections: [ApolloAPI.Selection] { [
-          .field("address", String?.self),
-          .field("capacity", String?.self),
-          .field("coordinates", Coordinates?.self),
+          .field("__typename", String.self),
+          .field("latitude", Double?.self),
+          .field("longitude", Double?.self),
         ] }
 
-        public var address: String? { __data["address"] }
-        public var capacity: String? { __data["capacity"] }
-        public var coordinates: Coordinates? { __data["coordinates"] }
-        public var id: HighForThisAPI.ObjID { __data["id"] }
-        public var name: String { __data["name"] }
-        public var slug: String { __data["slug"] }
-        public var website: String? { __data["website"] }
-
-        /// Venue.AsVenue.Coordinates
-        ///
-        /// Parent Type: `VenueCoordinates`
-        public struct Coordinates: HighForThisAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
-
-          public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.VenueCoordinates }
-          public static var __selections: [ApolloAPI.Selection] { [
-            .field("__typename", String.self),
-            .field("latitude", Double?.self),
-            .field("longitude", Double?.self),
-          ] }
-
-          public var latitude: Double? { __data["latitude"] }
-          public var longitude: Double? { __data["longitude"] }
-        }
+        public var latitude: Double? { __data["latitude"] }
+        public var longitude: Double? { __data["longitude"] }
       }
     }
   }

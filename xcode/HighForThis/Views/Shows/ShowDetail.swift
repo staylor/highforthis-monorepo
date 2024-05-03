@@ -13,7 +13,7 @@ struct ShowDetail: View {
                 Loading()
             } else {
                 let show = show!
-                if let artwork = show.artist.asArtist?.appleMusic?.artwork {
+                if let artwork = show.artist.appleMusic?.artwork {
                     ArtistArtwork(
                         url: artwork.url!,
                         width: artwork.width!,

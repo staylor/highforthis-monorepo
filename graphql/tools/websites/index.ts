@@ -5,13 +5,15 @@ import { JSDOM } from 'jsdom';
 import type { WithId } from 'mongodb';
 
 import database from '../../src/database';
-import Term from '../../src/models/Term';
+import Artist from '../../src/models/Artist';
+import Venue from '../../src/models/Venue';
 
 const omrHost = 'https://www.ohmyrockness.com';
 const filename = (name: string) => path.join(process.cwd(), 'tools', 'websites', 'responses', name);
 
 const { db } = await database();
-const term = new Term({ db });
+const artist = new Artist({ db });
+const venue = new Venue({ db });
 
 async function readOrFetch(url: string, filename: string) {
   let html: string;
@@ -53,7 +55,12 @@ interface Match {
   name: string;
 }
 
-async function parseTerms(terms: WithId<any>[], index: Map<string, Match>, selector: string) {
+async function parseTerms(
+  model: any,
+  terms: WithId<any>[],
+  index: Map<string, Match>,
+  selector: string
+) {
   for (const item of terms) {
     const id = String(item._id);
     const websiteFilename = filename(`${id}-website.json`);
@@ -61,7 +68,7 @@ async function parseTerms(terms: WithId<any>[], index: Map<string, Match>, selec
       if (!item.website) {
         console.log('Saving website to:', id);
         const { default: website } = await import(websiteFilename);
-        await term.updateById(id, {
+        await model.updateById(id, {
           website,
         });
       }
@@ -86,7 +93,7 @@ async function parseTerms(terms: WithId<any>[], index: Map<string, Match>, selec
       console.log(`Found match for ${item.name}:`, website);
       fs.writeFileSync(websiteFilename, JSON.stringify(website) + '\n');
       console.log('Saving website to:', id);
-      await term.updateById(id, {
+      await model.updateById(id, {
         website,
       });
     }
@@ -100,9 +107,9 @@ async function fetchArtists() {
   const allArtistsHTML = await readOrFetch(allArtistsURL, allFilename);
   const dom = new JSDOM(allArtistsHTML);
   const index = getIndex(dom);
-  const terms = await term.all({ taxonomy: 'artist', limit: 200 });
+  const terms = await artist.all({ limit: 200 });
 
-  await parseTerms(terms, index, '#url .omrlink');
+  await parseTerms(artist, terms, index, '#url .omrlink');
 }
 
 async function fetchVenues() {
@@ -112,9 +119,9 @@ async function fetchVenues() {
   const allVenuesHTML = await readOrFetch(allVenuesURL, allFilename);
   const dom = new JSDOM(allVenuesHTML);
   const index = getIndex(dom);
-  const terms = await term.all({ taxonomy: 'venue', limit: 200 });
+  const terms = await venue.all({ limit: 200 });
 
-  await parseTerms(terms, index, '.venue-link');
+  await parseTerms(venue, terms, index, '.venue-link');
 }
 
 await Promise.all([fetchArtists(), fetchVenues()]);

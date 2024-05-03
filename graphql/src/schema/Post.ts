@@ -12,7 +12,7 @@ const Post = `#graphql
     summary: String
     status: PostStatus
     featuredMedia: [MediaUpload!]
-    artists: [Term]
+    artists: [Artist]
     date: Float
   }
 

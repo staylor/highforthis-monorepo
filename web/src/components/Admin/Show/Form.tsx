@@ -42,7 +42,7 @@ export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormPr
     {
       type: 'custom',
       render: () => (
-        <Link className="underline" to={`/admin/term/${artists.taxonomy.id}/add`}>
+        <Link className="underline" to={`/admin/artist/add`}>
           Add Artist
         </Link>
       ),
@@ -62,7 +62,7 @@ export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormPr
     {
       type: 'custom',
       render: () => (
-        <Link className="underline" to={`/admin/term/${venues.taxonomy.id}/add`}>
+        <Link className="underline" to={`/admin/venue/add`}>
           Add Venue
         </Link>
       ),
@@ -102,28 +102,22 @@ ShowForm.fragments = {
       }
     }
   `,
-  terms: gql`
-    fragment ShowForm_terms on Query {
-      artists: terms(first: 500, taxonomy: "artist") @cache(key: "admin") {
+  entities: gql`
+    fragment ShowForm_entities on Query {
+      artists(first: 500) @cache(key: "admin") {
         edges {
           node {
             id
             name
           }
-        }
-        taxonomy {
-          id
         }
       }
-      venues: terms(first: 500, taxonomy: "venue") @cache(key: "admin") {
+      venues(first: 500) @cache(key: "admin") {
         edges {
           node {
             id
             name
           }
-        }
-        taxonomy {
-          id
         }
       }
     }

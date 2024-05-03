@@ -50,7 +50,7 @@ export default function Shows() {
     {
       label: 'Artist',
       render: ({ artist }: Show) => {
-        const editUrl = `/admin/term/${artist.taxonomy.id}/${artist.id}`;
+        const editUrl = `/admin/artist/${artist.id}`;
         return (
           <>
             <RowTitle url={editUrl} title={artist.name} />
@@ -67,7 +67,7 @@ export default function Shows() {
     {
       label: 'Venue',
       render: ({ venue }: Show) => {
-        const editUrl = `/admin/term/${venue.taxonomy.id}/${venue.id}`;
+        const editUrl = `/admin/venue/${venue.id}`;
         return (
           <>
             <RowTitle url={editUrl} title={venue.name} />
@@ -102,21 +102,25 @@ export default function Shows() {
 const showsQuery = gql`
   query ShowsAdmin(
     $after: String
+    $artistId: ObjID
+    $artistSlug: String
     $date: Float
     $first: Int
     $order: ShowOrder
     $search: String
-    $taxonomy: String
-    $term: String
+    $venueId: ObjID
+    $venueSlug: String
   ) {
     shows(
       after: $after
+      artistId: $artistId
+      artistSlug: $artistSlug
       date: $date
       first: $first
       order: $order
       search: $search
-      taxonomy: $taxonomy
-      term: $term
+      venueId: $venueId
+      venueSlug: $venueSlug
     ) @cache(key: "admin") {
       count
       edges {
@@ -125,9 +129,6 @@ const showsQuery = gql`
             id
             name
             slug
-            taxonomy {
-              id
-            }
           }
           date
           id
@@ -136,9 +137,6 @@ const showsQuery = gql`
             id
             name
             slug
-            taxonomy {
-              id
-            }
           }
         }
       }

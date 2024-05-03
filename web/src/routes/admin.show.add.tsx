@@ -5,7 +5,7 @@ import { useLoaderData } from '@remix-run/react';
 import ShowForm from '@/components/Admin/Show/Form';
 import { handleSubmission } from '@/utils/action';
 import query from '@/utils/query';
-import type { ShowTermsQuery } from '@/types/graphql';
+import type { ShowEntitiesQuery } from '@/types/graphql';
 
 export const loader: LoaderFunction = ({ request, context }) => {
   return query({ request, context, query: showQuery });
@@ -22,15 +22,15 @@ export const action: ActionFunction = ({ request, context }) => {
 };
 
 export default function ShowAdd() {
-  const data = useLoaderData<ShowTermsQuery>();
+  const data = useLoaderData<ShowEntitiesQuery>();
   return <ShowForm data={data} heading="Add Show" buttonLabel="Add Show" />;
 }
 
 const showQuery = gql`
-  query ShowTerms {
-    ...ShowForm_terms
+  query ShowEntities {
+    ...ShowForm_entities
   }
-  ${ShowForm.fragments.terms}
+  ${ShowForm.fragments.entities}
 `;
 
 const showMutation = gql`

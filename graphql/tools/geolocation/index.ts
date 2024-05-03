@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import database from '../../src/database';
-import Term from '../../src/models/Term';
+import Venue from '../../src/models/Venue';
 
 const API_KEY = process.env.GOOGLE_MAPS_GEOLOCATION_API_KEY as string;
 
@@ -17,8 +17,8 @@ const filename = (id: string) =>
 const fileExists = (id: string) => fs.existsSync(filename(id));
 
 const { db } = await database();
-const term = new Term({ db });
-const venues = await term.all({ taxonomy: 'venue', limit: 200 });
+const term = new Venue({ db });
+const venues = await term.all({ limit: 200 });
 
 for (const venue of venues) {
   if (!venue.address) {

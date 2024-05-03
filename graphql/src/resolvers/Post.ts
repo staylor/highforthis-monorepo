@@ -14,8 +14,8 @@ const resolvers = {
     featuredMedia(post: any, args: any, { Media }: AugmentedContext) {
       return Media.findByIds(post.featuredMedia || []);
     },
-    artists(post: any, args: any, { Term }: AugmentedContext) {
-      return Term.findByIds(post.artists || []);
+    artists(post: any, args: any, { Artist }: AugmentedContext) {
+      return Artist.findByIds(post.artists || []);
     },
   },
   Query: {
@@ -45,12 +45,11 @@ const resolvers = {
     },
   },
   Mutation: {
-    async createPost(root: any, { input }: any, { Post, Taxonomy, Term }: AugmentedContext) {
+    async createPost(root: any, { input }: any, { Post, Artist }: AugmentedContext) {
       const data = { ...input };
       if (input.artists && input.artists.length > 0) {
-        data.artists = await resolveTags('Artist', input.artists, {
-          Taxonomy,
-          Term,
+        data.artists = await resolveTags(input.artists, {
+          Artist,
         });
       } else {
         data.artists = [];
@@ -60,12 +59,11 @@ const resolvers = {
       return Post.findOneById(id);
     },
 
-    async updatePost(root: any, { id, input }: any, { Post, Taxonomy, Term }: AugmentedContext) {
+    async updatePost(root: any, { id, input }: any, { Post, Artist }: AugmentedContext) {
       const data = { ...input };
       if (input.artists && input.artists.length > 0) {
-        data.artists = await resolveTags('Artist', input.artists, {
-          Taxonomy,
-          Term,
+        data.artists = await resolveTags(input.artists, {
+          Artist,
         });
       } else {
         data.artists = [];

@@ -7,7 +7,7 @@ public class ShowQuery: GraphQLQuery {
   public static let operationName: String = "Show"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Show($id: ObjID!) { show(id: $id) { __typename artist { __typename id name slug ... on Artist { appleMusic { __typename artwork { __typename height url width } id url } } } date id title venue { __typename id name slug } } }"#
+      #"query Show($id: ObjID!) { show(id: $id) { __typename artist { __typename appleMusic { __typename artwork { __typename height url width } id url } id name slug } date id title venue { __typename id name slug } } }"#
     ))
 
   public var id: ObjID
@@ -54,94 +54,74 @@ public class ShowQuery: GraphQLQuery {
 
       /// Show.Artist
       ///
-      /// Parent Type: `Term`
+      /// Parent Type: `Artist`
       public struct Artist: HighForThisAPI.SelectionSet {
         public let __data: DataDict
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Interfaces.Term }
+        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Artist }
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
+          .field("appleMusic", AppleMusic?.self),
           .field("id", HighForThisAPI.ObjID.self),
           .field("name", String.self),
           .field("slug", String.self),
-          .inlineFragment(AsArtist.self),
         ] }
 
+        public var appleMusic: AppleMusic? { __data["appleMusic"] }
         public var id: HighForThisAPI.ObjID { __data["id"] }
         public var name: String { __data["name"] }
         public var slug: String { __data["slug"] }
 
-        public var asArtist: AsArtist? { _asInlineFragment() }
-
-        /// Show.Artist.AsArtist
+        /// Show.Artist.AppleMusic
         ///
-        /// Parent Type: `Artist`
-        public struct AsArtist: HighForThisAPI.InlineFragment {
+        /// Parent Type: `AppleMusicData`
+        public struct AppleMusic: HighForThisAPI.SelectionSet {
           public let __data: DataDict
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public typealias RootEntityType = ShowQuery.Data.Show.Artist
-          public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Artist }
+          public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.AppleMusicData }
           public static var __selections: [ApolloAPI.Selection] { [
-            .field("appleMusic", AppleMusic?.self),
+            .field("__typename", String.self),
+            .field("artwork", Artwork?.self),
+            .field("id", String?.self),
+            .field("url", String?.self),
           ] }
 
-          public var appleMusic: AppleMusic? { __data["appleMusic"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
-          public var name: String { __data["name"] }
-          public var slug: String { __data["slug"] }
+          public var artwork: Artwork? { __data["artwork"] }
+          public var id: String? { __data["id"] }
+          public var url: String? { __data["url"] }
 
-          /// Show.Artist.AsArtist.AppleMusic
+          /// Show.Artist.AppleMusic.Artwork
           ///
-          /// Parent Type: `AppleMusicData`
-          public struct AppleMusic: HighForThisAPI.SelectionSet {
+          /// Parent Type: `AppleMusicArtwork`
+          public struct Artwork: HighForThisAPI.SelectionSet {
             public let __data: DataDict
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.AppleMusicData }
+            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.AppleMusicArtwork }
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
-              .field("artwork", Artwork?.self),
-              .field("id", String?.self),
+              .field("height", Int?.self),
               .field("url", String?.self),
+              .field("width", Int?.self),
             ] }
 
-            public var artwork: Artwork? { __data["artwork"] }
-            public var id: String? { __data["id"] }
+            public var height: Int? { __data["height"] }
             public var url: String? { __data["url"] }
-
-            /// Show.Artist.AsArtist.AppleMusic.Artwork
-            ///
-            /// Parent Type: `AppleMusicArtwork`
-            public struct Artwork: HighForThisAPI.SelectionSet {
-              public let __data: DataDict
-              public init(_dataDict: DataDict) { __data = _dataDict }
-
-              public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.AppleMusicArtwork }
-              public static var __selections: [ApolloAPI.Selection] { [
-                .field("__typename", String.self),
-                .field("height", Int?.self),
-                .field("url", String?.self),
-                .field("width", Int?.self),
-              ] }
-
-              public var height: Int? { __data["height"] }
-              public var url: String? { __data["url"] }
-              public var width: Int? { __data["width"] }
-            }
+            public var width: Int? { __data["width"] }
           }
         }
       }
 
       /// Show.Venue
       ///
-      /// Parent Type: `Term`
+      /// Parent Type: `Venue`
       public struct Venue: HighForThisAPI.SelectionSet {
         public let __data: DataDict
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Interfaces.Term }
+        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("id", HighForThisAPI.ObjID.self),

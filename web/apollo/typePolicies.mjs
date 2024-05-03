@@ -57,16 +57,13 @@ const makeCacheAware = (typePolicy, paginationKey) => ({
 const typePolicies = {
   Query: {
     fields: {
+      artists: makeCacheAware(relayStylePagination(['search']), 'admin'),
       podcasts: makeCacheAware(relayStylePagination(['search', 'order']), 'admin'),
       posts: makeCacheAware(relayStylePagination(['year', 'status', 'search']), 'admin'),
-      shows: makeCacheAware(
-        relayStylePagination(['latest', 'taxonomy', 'term', 'date', 'search', 'order']),
-        'admin'
-      ),
-      taxonomies: makeCacheAware(relayStylePagination(), 'admin'),
-      terms: makeCacheAware(relayStylePagination(['taxonomyId', 'taxonomy', 'search']), 'admin'),
+      shows: makeCacheAware(relayStylePagination(['latest', 'date', 'search', 'order']), 'admin'),
       uploads: makeCacheAware(relayStylePagination(['type', 'mimeType', 'search']), 'admin'),
       users: makeCacheAware(relayStylePagination(['search']), 'admin'),
+      venues: makeCacheAware(relayStylePagination(['search']), 'admin'),
       videos: makeCacheAware(relayStylePagination(['year', 'search']), 'admin'),
     },
   },

@@ -9,29 +9,33 @@ const resolvers = {
     id(show: any) {
       return show._id;
     },
-    artist(show: any, args: any, { Term }: AugmentedContext) {
-      return Term.findOneById(show.artist);
+    artist(show: any, args: any, { Artist }: AugmentedContext) {
+      return Artist.findOneById(show.artist);
     },
-    venue(show: any, args: any, { Term }: AugmentedContext) {
-      return Term.findOneById(show.venue);
+    venue(show: any, args: any, { Venue }: AugmentedContext) {
+      return Venue.findOneById(show.venue);
     },
   },
   Query: {
-    async shows(root: any, args: any, { Show, Term, Taxonomy }: AugmentedContext) {
-      const { taxonomy, term, taxonomyId, termId, ...rest } = args;
+    async shows(root: any, args: any, { Show, Artist, Venue }: AugmentedContext) {
+      const { artistId, artistSlug, venueId, venueSlug, ...rest } = args;
       const connectionArgs = rest;
 
-      if (taxonomy && term) {
-        const taxId = (await Taxonomy.findOneBySlug(taxonomy))._id;
-        const t = await Term.findOneByTermTaxonomy(term, taxId);
-        if (t) {
-          connectionArgs[taxonomy] = t._id;
+      if (artistId) {
+        connectionArgs.artist = new ObjectId(String(artistId));
+      } else if (venueId) {
+        connectionArgs.venue = new ObjectId(String(venueId));
+      } else if (artistSlug) {
+        const artist = await Artist.findOneBySlug(artistSlug);
+        if (artist) {
+          connectionArgs.artist = artist._id;
         }
-      } else if (taxonomyId && termId) {
-        const slug = (await Taxonomy.findOneById(taxonomyId)).slug;
-        connectionArgs[slug] = new ObjectId(String(termId));
+      } else if (venueSlug) {
+        const venue = await Venue.findOneBySlug(venueSlug);
+        if (venue) {
+          connectionArgs.venue = venue._id;
+        }
       }
-
       return parseConnection(Show, connectionArgs);
     },
 

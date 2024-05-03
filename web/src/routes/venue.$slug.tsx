@@ -63,13 +63,19 @@ export default function Venue() {
 
 const venueQuery = gql`
   query Venue($first: Int, $slug: String!) {
-    attended: shows(attended: true, first: $first, taxonomy: "venue", term: $slug) {
+    attended: shows(attended: true, first: $first, venueSlug: $slug) {
       ...ShowsGrid_shows
     }
-    shows(first: $first, latest: true, taxonomy: "venue", term: $slug) {
+    shows(first: $first, latest: true, venueSlug: $slug) {
       ...ShowsGrid_shows
     }
-    venue: term(slug: $slug, taxonomy: "venue") {
+    venue(slug: $slug) {
+      address
+      capacity
+      coordinates {
+        latitude
+        longitude
+      }
       featuredMedia {
         destination
         fileName
@@ -85,14 +91,6 @@ const venueQuery = gql`
       id
       name
       website
-      ... on Venue {
-        address
-        capacity
-        coordinates {
-          latitude
-          longitude
-        }
-      }
     }
   }
   ${Shows.fragments.shows}

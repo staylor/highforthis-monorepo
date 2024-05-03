@@ -6,6 +6,6 @@ import ApolloAPI
 public extension Objects {
   static let Artist = ApolloAPI.Object(
     typename: "Artist",
-    implementedInterfaces: [Interfaces.Term.self]
+    implementedInterfaces: []
   )
 }

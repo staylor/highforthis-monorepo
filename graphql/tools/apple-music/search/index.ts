@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import database from '../../../src/database';
-import Term from '../../../src/models/Term';
+import Artist from '../../../src/models/Artist';
 import jwtToken from '../jwt';
 
 const searchUrl = (term: string) =>
@@ -31,8 +31,8 @@ const fileExists = (id: string) => fs.existsSync(filename(id));
 
 async function main() {
   const { db } = await database();
-  const term = new Term({ db });
-  const artists = await term.all({ taxonomy: 'artist', limit: 1000 });
+  const term = new Artist({ db });
+  const artists = await term.all({ limit: 1000 });
 
   for (const artist of artists) {
     const id = String(artist._id);

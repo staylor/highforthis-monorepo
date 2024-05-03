@@ -1,19 +1,12 @@
 import type { AugmentedContext } from '@/models/types';
 
-export default async function resolveTags(
-  taxonomyName: string,
-  inputTerms: string[],
-  { Taxonomy, Term }: AugmentedContext
-) {
-  const record = await Taxonomy.collection.findOne({ name: taxonomyName });
-  const taxonomy = record._id;
+export default async function resolveTags(inputTerms: string[], { Artist }: AugmentedContext) {
   let ids: string[] = [];
   if (inputTerms && inputTerms.length > 0) {
     const terms = [...inputTerms];
-    const found = await Term.collection
+    const found = await Artist.collection
       .find(
         {
-          taxonomy,
           name: { $in: terms },
         },
         { name: 1 } as any
@@ -27,7 +20,7 @@ export default async function resolveTags(
     });
 
     if (terms.length > 0) {
-      const termIds = await Promise.all(terms.map((name) => Term.insert({ name, taxonomy })));
+      const termIds = await Promise.all(terms.map((name) => Artist.insert({ name })));
       ids = ids.concat(termIds);
     }
   }

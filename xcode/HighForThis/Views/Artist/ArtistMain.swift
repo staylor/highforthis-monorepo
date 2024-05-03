@@ -5,7 +5,7 @@ struct ArtistMain: View {
     var name: String
     var slug: String
     @State private var website: String?
-    @State private var appleMusic: ArtistData.Artist.AsArtist.AppleMusic?
+    @State private var appleMusic: ArtistData.Artist.AppleMusic?
     @State private var nodes: [ArtistData.Shows.Edge.Node]?
     
     var body: some View {
@@ -73,7 +73,7 @@ struct ArtistMain: View {
         .onAppear() {
             getArtist(slug: slug) { data in
                 self.website = data.artist!.website
-                self.appleMusic = data.artist!.asArtist!.appleMusic!
+                self.appleMusic = data.artist!.appleMusic!
                 
                 var nodes = [ArtistData.Shows.Edge.Node]()
                 for edge in data.shows!.edges {

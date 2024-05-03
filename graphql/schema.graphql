@@ -45,15 +45,25 @@ input AppleMusicDataInput {
   url: String
 }
 
-type Artist implements Term {
+type Artist {
   appleMusic: AppleMusicData
   description: String
   featuredMedia: [MediaUpload!]
   id: ObjID!
   name: String!
   slug: String!
-  taxonomy: Taxonomy!
   website: String
+}
+
+type ArtistConnection {
+  count: Int!
+  edges: [ArtistEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ArtistEdge {
+  cursor: String!
+  node: Artist!
 }
 
 type AudioUpload implements MediaUpload {
@@ -85,6 +95,14 @@ type CodeNode implements ElementNodeType & LexicalNode {
   version: Int
 }
 
+input CreateArtistInput {
+  description: String
+  featuredMedia: [String]
+  name: String!
+  slug: String
+  website: String
+}
+
 input CreatePodcastInput {
   audio: ObjID
   date: Float
@@ -113,30 +131,22 @@ input CreateShowInput {
   venue: ObjID!
 }
 
-input CreateTaxonomyInput {
-  description: String
-  name: String!
-  plural: String
-  slug: String
-}
-
-input CreateTermInput {
-  address: String
-  capacity: String
-  description: String
-  featuredMedia: [String]
-  name: String!
-  slug: String
-  taxonomy: ObjID!
-  website: String
-}
-
 input CreateUserInput {
   bio: String
   email: String
   name: String
   password: String
   roles: [String]
+}
+
+input CreateVenueInput {
+  address: String
+  capacity: String
+  description: String
+  featuredMedia: [String]
+  name: String!
+  slug: String
+  website: String
 }
 
 input CreateVideoInput {
@@ -350,21 +360,22 @@ type MediaUploadEdge {
 }
 
 type Mutation {
+  createArtist(input: CreateArtistInput!): Artist
   createPodcast(input: CreatePodcastInput!): Podcast
   createPost(input: CreatePostInput!): Post
   createShow(input: CreateShowInput!): Show
-  createTaxonomy(input: CreateTaxonomyInput!): Taxonomy
-  createTerm(input: CreateTermInput!): Term
   createUser(input: CreateUserInput!): User
+  createVenue(input: CreateVenueInput!): Venue
   createVideo(input: CreateVideoInput!): Video
+  removeArtist(ids: [ObjID]!): Boolean
   removeMediaUpload(ids: [ObjID]!): Boolean
   removePodcast(ids: [ObjID]!): Boolean
   removePost(ids: [ObjID]!): Boolean
   removeShow(ids: [ObjID]!): Boolean
-  removeTaxonomy(ids: [ObjID]!): Boolean
-  removeTerm(ids: [ObjID]!): Boolean
   removeUser(ids: [ObjID]!): Boolean
+  removeVenue(ids: [ObjID]!): Boolean
   removeVideo(ids: [ObjID]!): Boolean
+  updateArtist(id: ObjID!, input: UpdateArtistInput!): Artist
   updateDashboardSettings(id: String!, input: DashboardSettingsInput!): DashboardSettings
   updateMediaSettings(id: String!, input: MediaSettingsInput!): MediaSettings
   updateMediaUpload(id: ObjID!, input: UpdateMediaUploadInput!): MediaUpload
@@ -373,9 +384,8 @@ type Mutation {
   updatePost(id: ObjID!, input: UpdatePostInput!): Post
   updateShow(id: ObjID!, input: UpdateShowInput!): Show
   updateSiteSettings(id: String!, input: SiteSettingsInput!): SiteSettings
-  updateTaxonomy(id: ObjID!, input: UpdateTaxonomyInput!): Taxonomy
-  updateTerm(id: ObjID!, input: UpdateTermInput!): Term
   updateUser(id: ObjID!, input: UpdateUserInput!): User
+  updateVenue(id: ObjID!, input: UpdateVenueInput!): Venue
   updateVideo(id: ObjID!, input: UpdateVideoInput!): Video
 }
 
@@ -448,7 +458,7 @@ input PodcastSettingsInput {
 }
 
 type Post {
-  artists: [Term]
+  artists: [Artist]
   date: Float
   editorState: EditorState
   featuredMedia: [MediaUpload!]
@@ -477,6 +487,8 @@ enum PostStatus {
 
 type Query {
   apiKeys: APIKeys
+  artist(id: ObjID, slug: String): Artist
+  artists(after: String, before: String, first: Int, last: Int, search: String): ArtistConnection
   dashboardSettings: DashboardSettings!
   media(id: ObjID): MediaUpload
   mediaSettings: MediaSettings!
@@ -486,15 +498,13 @@ type Query {
   post(id: ObjID, slug: String): Post
   posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus, year: Int): PostConnection
   show(id: ObjID, slug: String): Show
-  shows(after: String, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, taxonomy: String, taxonomyId: ObjID, term: String, termId: ObjID): ShowConnection
+  shows(after: String, artistId: ObjID, artistSlug: String, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, venueId: ObjID, venueSlug: String): ShowConnection
   siteSettings: SiteSettings!
-  taxonomies(after: String, before: String, first: Int, last: Int): TaxonomyConnection
-  taxonomy(id: ObjID, slug: String): Taxonomy
-  term(id: ObjID, slug: String, taxonomy: String): Term
-  terms(after: String, before: String, first: Int, last: Int, search: String, taxonomy: String, taxonomyId: ObjID): TermConnection
   uploads(after: String, before: String, first: Int, last: Int, mimeType: String, search: String, type: String): MediaUploadConnection
   user(id: ObjID!): User
   users(after: String, before: String, first: Int, last: Int, search: String): UserConnection
+  venue(id: ObjID, slug: String): Venue
+  venues(after: String, before: String, first: Int, last: Int, search: String): VenueConnection
   video(id: ObjID, slug: String): Video
   videos(after: String, before: String, first: Int, last: Int, search: String, year: Int): VideoConnection
 }
@@ -518,14 +528,14 @@ input RootNodeInput {
 }
 
 type Show {
-  artist: Term!
+  artist: Artist!
   attended: Boolean
   date: Float!
   id: ObjID!
   notes: String
   title: String
   url: String
-  venue: Term!
+  venue: Venue!
 }
 
 type ShowConnection {
@@ -563,47 +573,6 @@ input SiteSettingsInput {
   tagline: String
 }
 
-type Taxonomy {
-  description: String
-  id: ObjID!
-  name: String!
-  plural: String
-  slug: String!
-}
-
-type TaxonomyConnection {
-  count: Int!
-  edges: [TaxonomyEdge!]!
-  pageInfo: PageInfo!
-}
-
-type TaxonomyEdge {
-  cursor: String!
-  node: Taxonomy!
-}
-
-interface Term {
-  description: String
-  featuredMedia: [MediaUpload!]
-  id: ObjID!
-  name: String!
-  slug: String!
-  taxonomy: Taxonomy!
-  website: String
-}
-
-type TermConnection {
-  count: Int!
-  edges: [TermEdge!]!
-  pageInfo: PageInfo!
-  taxonomy: Taxonomy!
-}
-
-type TermEdge {
-  cursor: String!
-  node: Term!
-}
-
 enum TextModeType {
   normal
   segmented
@@ -618,6 +587,15 @@ type TextNode implements LexicalNode {
   text: String
   type: String
   version: Int
+}
+
+input UpdateArtistInput {
+  appleMusic: AppleMusicDataInput
+  description: String
+  featuredMedia: [String]
+  name: String
+  slug: String
+  website: String
 }
 
 input UpdateMediaUploadInput {
@@ -655,32 +633,23 @@ input UpdateShowInput {
   venue: ObjID
 }
 
-input UpdateTaxonomyInput {
-  description: String
-  name: String
-  plural: String
-  slug: String
-}
-
-input UpdateTermInput {
-  address: String
-  appleMusic: AppleMusicDataInput
-  capacity: String
-  coordinates: VenueCoordinatesInput
-  description: String
-  featuredMedia: [String]
-  name: String
-  slug: String
-  taxonomy: ObjID
-  website: String
-}
-
 input UpdateUserInput {
   bio: String
   email: String
   name: String
   password: String
   roles: [String]
+}
+
+input UpdateVenueInput {
+  address: String
+  capacity: String
+  coordinates: VenueCoordinatesInput
+  description: String
+  featuredMedia: [String]
+  name: String
+  slug: String
+  website: String
 }
 
 input UpdateVideoInput {
@@ -714,7 +683,7 @@ type UserEdge {
   node: User!
 }
 
-type Venue implements Term {
+type Venue {
   address: String
   capacity: String
   coordinates: VenueCoordinates
@@ -723,8 +692,13 @@ type Venue implements Term {
   id: ObjID!
   name: String!
   slug: String!
-  taxonomy: Taxonomy!
   website: String
+}
+
+type VenueConnection {
+  count: Int!
+  edges: [VenueEdge!]!
+  pageInfo: PageInfo!
 }
 
 type VenueCoordinates {
@@ -735,6 +709,11 @@ type VenueCoordinates {
 input VenueCoordinatesInput {
   latitude: Float
   longitude: Float
+}
+
+type VenueEdge {
+  cursor: String!
+  node: Venue!
 }
 
 type Video {

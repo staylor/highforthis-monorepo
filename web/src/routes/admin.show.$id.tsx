@@ -30,10 +30,10 @@ const showQuery = gql`
     show(id: $id) {
       ...ShowForm_show
     }
-    ...ShowForm_terms
+    ...ShowForm_entities
   }
   ${ShowForm.fragments.show}
-  ${ShowForm.fragments.terms}
+  ${ShowForm.fragments.entities}
 `;
 
 const showMutation = gql`

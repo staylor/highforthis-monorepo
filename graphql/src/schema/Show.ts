@@ -6,8 +6,8 @@ const Show = `#graphql
     date: Float!
     url: String
     attended: Boolean
-    artist: Term!
-    venue: Term!
+    artist: Artist!
+    venue: Venue!
   }
 
   type ShowEdge {
@@ -55,10 +55,10 @@ const Show = `#graphql
       latest: Boolean
       attended: Boolean
       date: Float
-      taxonomy: String
-      taxonomyId: ObjID
-      term: String
-      termId: ObjID
+      artistId: ObjID
+      artistSlug: String
+      venueId: ObjID
+      venueSlug: String
       search: String
       order: ShowOrder
     ): ShowConnection

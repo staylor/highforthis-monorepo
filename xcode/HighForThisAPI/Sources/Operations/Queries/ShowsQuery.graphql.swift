@@ -81,12 +81,12 @@ public class ShowsQuery: GraphQLQuery {
 
           /// Shows.Edge.Node.Artist
           ///
-          /// Parent Type: `Term`
+          /// Parent Type: `Artist`
           public struct Artist: HighForThisAPI.SelectionSet {
             public let __data: DataDict
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Interfaces.Term }
+            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Artist }
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
               .field("id", HighForThisAPI.ObjID.self),
@@ -99,12 +99,12 @@ public class ShowsQuery: GraphQLQuery {
 
           /// Shows.Edge.Node.Venue
           ///
-          /// Parent Type: `Term`
+          /// Parent Type: `Venue`
           public struct Venue: HighForThisAPI.SelectionSet {
             public let __data: DataDict
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Interfaces.Term }
+            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
               .field("id", HighForThisAPI.ObjID.self),

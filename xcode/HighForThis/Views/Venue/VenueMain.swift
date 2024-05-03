@@ -4,7 +4,7 @@ import HighForThisAPI
 struct VenueMain: View {
     var name: String
     var slug: String
-    @State private var venue: VenueData.Venue.AsVenue?
+    @State private var venue: VenueData.Venue?
     @State private var nodes: [VenueData.Shows.Edge.Node]?
     
     var body: some View {
@@ -67,7 +67,7 @@ struct VenueMain: View {
         #endif
         .onAppear() {
             getVenue(slug: slug) { data in
-                self.venue = data.venue!.asVenue!
+                self.venue = data.venue!
                 
                 var nodes = [VenueData.Shows.Edge.Node]()
                 for edge in data.shows!.edges {
