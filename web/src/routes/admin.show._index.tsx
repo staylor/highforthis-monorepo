@@ -8,14 +8,16 @@ import Message from '@/components/Form/Message';
 import query, { addPageOffset } from '@/utils/query';
 import { handleDelete } from '@/utils/action';
 import type { Show, ShowConnection, ShowsAdminQuery } from '@/types/graphql';
+import Search from '@/components/Admin/ListTable/Search';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
-  return query({
-    request,
-    context,
-    query: showsQuery,
-    variables: addPageOffset(params, { order: 'DESC' }),
-  });
+  const url = new URL(request.url);
+  const variables = addPageOffset(params, { order: 'DESC' });
+  const value = url.searchParams.get('search');
+  if (value) {
+    variables.search = value;
+  }
+  return query({ request, context, query: showsQuery, variables });
 };
 
 export const action: ActionFunction = async ({ request, context }) => {
@@ -91,6 +93,7 @@ export default function Shows() {
       <Heading>Shows</Heading>
       <HeaderAdd label="Add Show" />
       <Message param="deleted" text="Deleted %s shows." />
+      <Search placeholder="Search shows" />
       <ListTable columns={columns} data={shows} />
     </>
   );

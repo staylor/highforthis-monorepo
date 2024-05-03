@@ -1,4 +1,5 @@
-export const formatDate = (d: Date) => {
+export const formatDate = (date?: number) => {
+  const d = date ? new Date(date) : new Date();
   const month = d.getMonth() + 1;
   const day = d.getDate();
   const year = d.getFullYear();

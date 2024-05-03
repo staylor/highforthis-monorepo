@@ -1,19 +1,11 @@
-import type { TdHTMLAttributes } from 'react';
 import { Fragment } from 'react';
-import cn from 'classnames';
 import { gql } from 'graphql-tag';
 
 import Link from '@/components/Link';
 import type { ShowConnection } from '@/types/graphql';
 
 import { formatDate } from './utils';
-
-const Cell = ({ className, ...props }: TdHTMLAttributes<HTMLTableCellElement>) => (
-  <td
-    className={cn('border-detail dark:border-detail-dark border py-1 px-2', className)}
-    {...props}
-  />
-);
+import { Cell } from './Cell';
 
 export default function ShowsGrid({
   shows,
@@ -28,7 +20,7 @@ export default function ShowsGrid({
 
   const years = {} as { [key: number]: number };
   const months = {} as { [key: string]: number };
-  const date = formatDate(new Date());
+  const date = formatDate();
   const sorted = shows.edges.sort(({ node: showA }, { node: showB }) => {
     const dateA = showA.date;
     const dateB = showB.date;
@@ -50,7 +42,7 @@ export default function ShowsGrid({
       <table className="w-full border-collapse">
         <tbody>
           {sorted.map(({ node }) => {
-            const d = formatDate(new Date(node.date));
+            const d = formatDate(node.date);
             const showRow = (
               <tr key={node.id}>
                 <Cell className="text-right font-stylized text-sm">{d.formatted}</Cell>

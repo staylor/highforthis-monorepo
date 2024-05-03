@@ -15,7 +15,7 @@ export default function ShowsList({
   return (
     <article className={className}>
       {shows.edges.map(({ node }, i: number) => {
-        const d = formatDate(new Date(node.date));
+        const d = formatDate(node.date);
 
         const showRow = (
           <p className="mb-2">

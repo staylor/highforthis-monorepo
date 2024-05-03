@@ -4,7 +4,7 @@ import type { InputHTMLAttributes } from 'react';
 
 export default function Checkbox({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   const [checked, setChecked] = useState(props.checked);
-  const [value, setValue] = useState(props.value);
+  const [value, setValue] = useState(props.value || 'false');
   const onChange = (e: any) => {
     setValue(e.target.checked);
     setChecked(e.target.checked);

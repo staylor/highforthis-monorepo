@@ -4,6 +4,7 @@ import type { LoaderFunction } from '@remix-run/server-runtime';
 
 import { Heading1 } from '@/components/Heading';
 import Shows from '@/components/Shows';
+import Attended from '@/components/Shows/Attended';
 import query from '@/utils/query';
 import type { Artist, ArtistQuery, ShowConnection } from '@/types/graphql';
 import { createClientCache } from '@/utils/cache';
@@ -19,12 +20,14 @@ export default function Artist() {
   const data = useLoaderData<ArtistQuery>();
   const artist = data.artist as Artist;
   const shows = data.shows as ShowConnection;
+  const attended = data.attended as ShowConnection;
 
   return (
     <>
       <Heading1>{artist.name}</Heading1>
-      <Metadata name={artist.name} website={artist.website} data={artist.appleMusic || {}} />
+      <Metadata name={artist.name} website={artist.website || ''} data={artist.appleMusic || {}} />
       <Shows shows={shows} />
+      <Attended shows={attended} relation="artist" />
     </>
   );
 }
@@ -44,6 +47,9 @@ const artistQuery = gql`
           url
         }
       }
+    }
+    attended: shows(attended: true, first: $first, taxonomy: "artist", term: $slug) {
+      ...ShowsGrid_shows
     }
     shows(first: $first, latest: true, taxonomy: "artist", term: $slug) {
       ...ShowsGrid_shows

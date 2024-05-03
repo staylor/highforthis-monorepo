@@ -22,7 +22,7 @@ interface ShowFilters {
   attended?: boolean;
   artist?: string;
   venue?: string;
-  $text?: any;
+  title?: any;
 }
 
 export default class Show extends Model {
@@ -73,7 +73,9 @@ export default class Show extends Model {
       criteria.venue = venue;
     }
     if (search) {
-      criteria.$text = { $search: search };
+      // TODO: can't search relations right now since artists
+      //   and venues are references, not text
+      criteria.title = { $regex: new RegExp(search, 'i') };
     }
     return criteria;
   }

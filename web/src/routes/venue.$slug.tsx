@@ -9,6 +9,7 @@ import query from '@/utils/query';
 import type { ImageUpload, ShowConnection, Venue, VenueQuery } from '@/types/graphql';
 import Map from '@/components/Map';
 import { createClientCache } from '@/utils/cache';
+import Attended from '@/components/Shows/Attended';
 
 export const loader: LoaderFunction = async ({ params, context }) => {
   return query({ context, query: venueQuery, variables: { first: 100, slug: params.slug } });
@@ -20,6 +21,7 @@ export default function Venue() {
   const data = useLoaderData<VenueQuery>();
   const venue = data.venue as Venue;
   const shows = data.shows as ShowConnection;
+  const attended = data.attended as ShowConnection;
 
   return (
     <>
@@ -54,12 +56,16 @@ export default function Venue() {
         )}
       </div>
       <Shows shows={shows} />
+      <Attended shows={attended} relation="venue" />
     </>
   );
 }
 
 const venueQuery = gql`
   query Venue($first: Int, $slug: String!) {
+    attended: shows(attended: true, first: $first, taxonomy: "venue", term: $slug) {
+      ...ShowsGrid_shows
+    }
     shows(first: $first, latest: true, taxonomy: "venue", term: $slug) {
       ...ShowsGrid_shows
     }
