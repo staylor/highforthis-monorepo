@@ -1,12 +1,13 @@
-import context from '@lexical/react/LexicalComposerContext.js';
-import * as utils from '@lexical/utils';
-import * as lexical from 'lexical';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
+import { mergeRegister } from '@lexical/utils';
+import {
+  CAN_REDO_COMMAND,
+  CAN_UNDO_COMMAND,
+  FORMAT_ELEMENT_COMMAND,
+  REDO_COMMAND,
+  UNDO_COMMAND,
+} from 'lexical';
 import { useEffect, useRef, useState } from 'react';
-
-const { CAN_REDO_COMMAND, CAN_UNDO_COMMAND, FORMAT_ELEMENT_COMMAND, REDO_COMMAND, UNDO_COMMAND } =
-  lexical;
-const { useLexicalComposerContext } = context;
-const { mergeRegister } = utils;
 
 const LowPriority = 1;
 

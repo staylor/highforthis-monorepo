@@ -1,11 +1,9 @@
-import lexical from 'lexical';
+import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import type { LexicalNode, NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 import type { ReactNode } from 'react';
 
 import VideoComponent from '@/components/Videos/Video';
 import type { Video } from '@/types/graphql';
-
-const { $applyNodeReplacement, DecoratorNode } = lexical;
 
 // this data gets saved
 export type SerializedVideoNode = Spread<{ videoId: string }, SerializedLexicalNode>;

@@ -1,15 +1,21 @@
 import type { SyntheticEvent } from 'react';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import type { LexicalNode, RangeSelection } from 'lexical';
-import lexical from 'lexical';
+import {
+  $createParagraphNode,
+  $getSelection,
+  $getNearestNodeFromDOMNode,
+  $isRangeSelection,
+  $setSelection,
+  SELECTION_CHANGE_COMMAND,
+} from 'lexical';
 import type { HeadingTagType } from '@lexical/rich-text';
-import lexicalCode from '@lexical/code';
-import type { ListType } from '@lexical/list';
-import lexicalList from '@lexical/list';
-import lexicalRichText from '@lexical/rich-text';
-import lexicalSelection from '@lexical/selection';
-import context from '@lexical/react/LexicalComposerContext.js';
-import * as utils from '@lexical/utils';
+import { $createCodeNode } from '@lexical/code';
+import { $createListNode, type ListType } from '@lexical/list';
+import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
+import { $setBlocksType } from '@lexical/selection';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
+import { mergeRegister, $insertNodeToNearestRoot } from '@lexical/utils';
 
 import Toolbar from '@/components/Editor/Toolbar';
 import Controls from '@/components/Editor/Controls';
@@ -22,21 +28,6 @@ import type { ImageUpload, Video } from '@/types/graphql';
 import { getNodeFromSelection, getStyleFromNode, setStyle } from './utils';
 import { $createVideoNode } from './VideoNode';
 import { $createImageNode } from './ImageNode';
-
-const { useLexicalComposerContext } = context;
-const {
-  $createParagraphNode,
-  $getSelection,
-  $getNearestNodeFromDOMNode,
-  $isRangeSelection,
-  $setSelection,
-  SELECTION_CHANGE_COMMAND,
-} = lexical;
-const { $createCodeNode } = lexicalCode;
-const { $createListNode } = lexicalList;
-const { $createHeadingNode, $createQuoteNode } = lexicalRichText;
-const { $setBlocksType } = lexicalSelection;
-const { mergeRegister, $insertNodeToNearestRoot } = utils;
 
 interface BlockType {
   label: string;

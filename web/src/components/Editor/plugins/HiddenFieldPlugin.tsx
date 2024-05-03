@@ -1,7 +1,5 @@
-import context from '@lexical/react/LexicalComposerContext.js';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
 import { useEffect, useState } from 'react';
-
-const { useLexicalComposerContext } = context;
 
 export default function HiddenFieldPlugin() {
   const [fieldValue, setFieldValue] = useState('');
