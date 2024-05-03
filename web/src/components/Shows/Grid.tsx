@@ -41,7 +41,7 @@ export default function ShowsGrid({
       }
       return artistA < artistB ? -1 : 1;
     }
-    return -1;
+    return showA.date < showB.date ? -1 : 1;
   });
 
   return (
