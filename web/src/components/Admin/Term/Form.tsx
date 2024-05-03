@@ -1,12 +1,15 @@
 import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 
+import Link from '@/components/Link';
 import { HeaderAdd, Heading } from '@/components/Admin/styles';
 import Form from '@/components/Admin/Form';
 import Input from '@/components/Form/Input';
 import Message from '@/components/Form/Message';
 import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
 import type { Fields } from '@/types';
+import type { ShowEdge } from '@/types/graphql';
+import { formatDate } from '@/components/Shows/utils';
 
 interface TermFormProps {
   data?: any;
@@ -29,6 +32,18 @@ function PageLink({ url, children }: PropsWithChildren<{ url: string }>) {
 
 export default function TermForm({ data = {}, heading, buttonLabel }: TermFormProps) {
   const termFields: Fields = [
+    {
+      type: 'custom',
+      condition: ({ term }) => term?.taxonomy?.slug === 'artist',
+      render: ({ term }) =>
+        term?.appleMusic?.artwork?.url && (
+          <img
+            src={data.term.appleMusic.artwork.url.replace(/\{[wh]\}/g, '300')}
+            alt={data.term.name}
+            className="my-4 rounded"
+          />
+        ),
+    },
     {
       prop: 'taxonomy',
       type: 'hidden',
@@ -94,6 +109,38 @@ export default function TermForm({ data = {}, heading, buttonLabel }: TermFormPr
       render: ({ term }) => (term ? <FeaturedMedia media={term.featuredMedia || []} /> : null),
       condition: ({ term }) => ['artist', 'venue'].includes(term?.taxonomy?.slug),
     },
+    {
+      label: 'Shows',
+      type: 'custom',
+      render: ({ term, shows }) => {
+        if (!term) {
+          return null;
+        }
+
+        if (!shows?.edges || shows.edges.length === 0) {
+          return 'No associated shows.';
+        }
+
+        const isArtist = term?.taxonomy?.slug === 'artist';
+
+        return (
+          <ul>
+            {shows?.edges?.map(({ node }: ShowEdge, idx: number) => {
+              const d = formatDate(node.date);
+              return (
+                <li key={idx.toString()} className="my-1">
+                  <Link to={`/admin/show/${node.id}`} className="text-pink underline">
+                    {d.formatted}/{d.year} {isArtist ? node.venue.name : node.artist.name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        );
+      },
+      position: 'meta',
+      condition: ({ term }) => ['artist', 'venue'].includes(term?.taxonomy?.slug),
+    },
   ];
   return (
     <>
@@ -110,13 +157,6 @@ export default function TermForm({ data = {}, heading, buttonLabel }: TermFormPr
           <HeaderAdd label="All Artists" to={`/admin/term/${data.term.taxonomy.id}`} />
           <PageLink url={`/artist/${data.term.slug}`}>View Artist</PageLink>
           <Message text="Artist updated." />
-          {data.term.appleMusic?.artwork?.url && (
-            <img
-              src={data.term.appleMusic.artwork.url.replace(/\{[wh]\}/g, '300')}
-              alt={data.term.name}
-              className="my-4 rounded"
-            />
-          )}
         </>
       )}
       <Form data={data} fields={termFields} buttonLabel={buttonLabel} />

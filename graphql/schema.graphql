@@ -486,7 +486,7 @@ type Query {
   post(id: ObjID, slug: String): Post
   posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus, year: Int): PostConnection
   show(id: ObjID, slug: String): Show
-  shows(after: String, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, taxonomy: String, term: String): ShowConnection
+  shows(after: String, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, taxonomy: String, taxonomyId: ObjID, term: String, termId: ObjID): ShowConnection
   siteSettings: SiteSettings!
   taxonomies(after: String, before: String, first: Int, last: Int): TaxonomyConnection
   taxonomy(id: ObjID, slug: String): Taxonomy

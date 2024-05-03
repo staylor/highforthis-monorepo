@@ -56,7 +56,9 @@ const Show = `#graphql
       attended: Boolean
       date: Float
       taxonomy: String
+      taxonomyId: ObjID
       term: String
+      termId: ObjID
       search: String
       order: ShowOrder
     ): ShowConnection

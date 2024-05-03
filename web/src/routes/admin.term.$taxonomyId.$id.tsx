@@ -8,7 +8,12 @@ import { handleSubmission } from '@/utils/action';
 import type { TermEditQuery } from '@/types/graphql';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
-  return query({ request, context, query: termQuery, variables: { id: params.id } });
+  return query({
+    request,
+    context,
+    query: termQuery,
+    variables: { id: params.id, taxonomyId: params.taxonomyId },
+  });
 };
 
 export const action: ActionFunction = ({ request, context, params }) => {
@@ -27,7 +32,23 @@ export default function TermEdit() {
 }
 
 const termQuery = gql`
-  query TermEdit($id: ObjID) {
+  query TermEdit($id: ObjID, $taxonomyId: ObjID) {
+    shows(taxonomyId: $taxonomyId, termId: $id) {
+      edges {
+        node {
+          artist {
+            id
+            name
+          }
+          date
+          id
+          venue {
+            id
+            name
+          }
+        }
+      }
+    }
     term(id: $id) {
       ...TermForm_term
     }

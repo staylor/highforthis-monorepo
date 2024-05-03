@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 import type { AugmentedContext } from '../models/types';
 
 import { parseConnection } from './utils/collection';
@@ -16,7 +18,7 @@ const resolvers = {
   },
   Query: {
     async shows(root: any, args: any, { Show, Term, Taxonomy }: AugmentedContext) {
-      const { taxonomy, term, ...rest } = args;
+      const { taxonomy, term, taxonomyId, termId, ...rest } = args;
       const connectionArgs = rest;
 
       if (taxonomy && term) {
@@ -25,6 +27,9 @@ const resolvers = {
         if (t) {
           connectionArgs[taxonomy] = t._id;
         }
+      } else if (taxonomyId && termId) {
+        const slug = (await Taxonomy.findOneById(taxonomyId)).slug;
+        connectionArgs[slug] = new ObjectId(String(termId));
       }
 
       return parseConnection(Show, connectionArgs);
