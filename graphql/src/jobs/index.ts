@@ -5,7 +5,7 @@ import youtubeData from './youtube';
 
 function jobs(db: Db): void {
   CronJob.from({
-    cronTime: '*/15 * * * *',
+    cronTime: '*/45 * * * *',
     onTick: async () => {
       await youtubeData(db);
     },

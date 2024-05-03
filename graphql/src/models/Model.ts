@@ -53,8 +53,11 @@ export default class Model {
     });
   }
 
-  public all({ limit = 10, offset = 0 }: any) {
-    const criteria = {};
+  public all({ limit = 10, offset = 0, search = '' }: any) {
+    const criteria: any = {};
+    if (search) {
+      criteria.$text = { $search: search };
+    }
 
     return this.collection.find(criteria).skip(offset).limit(limit).toArray();
   }
