@@ -17,6 +17,7 @@ export const action: ActionFunction = ({ request, context }) => {
     context,
     mutation: showMutation,
     createMutation: 'createShow',
+    variables: { input: { attended: false } },
   });
 };
 

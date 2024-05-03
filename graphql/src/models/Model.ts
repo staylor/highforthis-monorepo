@@ -53,7 +53,7 @@ export default class Model {
     });
   }
 
-  public all({ limit = 10, offset = 0 }) {
+  public all({ limit = 10, offset = 0 }: any) {
     const criteria = {};
 
     return this.collection.find(criteria).skip(offset).limit(limit).toArray();

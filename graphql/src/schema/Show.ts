@@ -5,6 +5,7 @@ const Show = `#graphql
     notes: String
     date: Float!
     url: String
+    attended: Boolean
     artist: Term!
     venue: Term!
   }
@@ -25,6 +26,7 @@ const Show = `#graphql
     notes: String
     date: Float!
     url: String
+    attended: Boolean
     artist: ObjID!
     venue: ObjID!
   }
@@ -34,6 +36,7 @@ const Show = `#graphql
     notes: String
     date: Float
     url: String
+    attended: Boolean
     artist: ObjID
     venue: ObjID
   }
@@ -50,6 +53,7 @@ const Show = `#graphql
       last: Int
       before: String
       latest: Boolean
+      attended: Boolean
       date: Float
       taxonomy: String
       term: String

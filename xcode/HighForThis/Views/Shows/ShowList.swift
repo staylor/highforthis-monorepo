@@ -67,7 +67,9 @@ struct ShowList: View {
         let sortedKeys = dict.keys.sorted()
         var byDate: [ShowGroup] = []
         for key in sortedKeys {
-            byDate.append(dict[key]!)
+            var group = dict[key]!
+            group.shows.sort { $0.artist.name < $1.artist.name }
+            byDate.append(group)
         }
         return byDate
     }

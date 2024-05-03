@@ -3,6 +3,7 @@ import { gql } from 'graphql-tag';
 import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import Form from '@/components/Admin/Form';
 import Message from '@/components/Form/Message';
+import Checkbox from '@/components/Form/Checkbox';
 import Link from '@/components/Link';
 import type { Fields } from '@/types';
 import type { Artist, Venue } from '@/types/graphql';
@@ -68,6 +69,11 @@ export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormPr
     },
     { label: 'URL', prop: 'url', inputType: 'url', render: ({ show }) => show?.url },
     { label: 'Notes', prop: 'notes', type: 'textarea', render: ({ show }) => show?.notes },
+    {
+      label: 'Attended',
+      type: 'custom',
+      render: ({ show }) => <Checkbox name="attended" checked={show?.attended} />,
+    },
   ];
   return (
     <>
@@ -85,6 +91,7 @@ ShowForm.fragments = {
       artist {
         id
       }
+      attended
       date
       id
       notes

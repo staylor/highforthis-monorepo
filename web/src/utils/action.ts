@@ -1,5 +1,5 @@
 import qs from 'qs';
-import type { DataFunctionArgs } from '@remix-run/server-runtime';
+import type { ActionFunctionArgs } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/server-runtime';
 import type { DocumentNode } from 'graphql';
 import type { OperationVariables } from '@apollo/client';
@@ -27,7 +27,7 @@ export const handleSubmission = async ({
   mutation,
   variables,
   createMutation,
-}: Pick<DataFunctionArgs, 'request' | 'context'> & {
+}: Pick<ActionFunctionArgs, 'request' | 'context'> & {
   mutation: DocumentNode;
   variables?: OperationVariables;
   createMutation?: string;
@@ -49,7 +49,16 @@ export const handleSubmission = async ({
     });
   }
 
-  const result: AppData = await mutate({ context, mutation, variables: { ...variables, input } });
+  const mergedVariables = { ...variables };
+  if (mergedVariables.input) {
+    mergedVariables.input = {
+      ...mergedVariables.input,
+      ...input,
+    };
+  } else {
+    mergedVariables.input = input;
+  }
+  const result: AppData = await mutate({ context, mutation, variables: mergedVariables });
   let editUrl = request.url;
   if (createMutation) {
     editUrl = request.url.replace('/add', `/${result[createMutation].id}`);
@@ -65,7 +74,7 @@ export const handleDelete = async ({
   request,
   context,
   mutation,
-}: Pick<DataFunctionArgs, 'request' | 'context'> & { mutation: DocumentNode }) => {
+}: Pick<ActionFunctionArgs, 'request' | 'context'> & { mutation: DocumentNode }) => {
   const url = new URL(request.url);
   if (request.method === 'DELETE') {
     const formData = await request.formData();

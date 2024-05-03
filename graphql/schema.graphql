@@ -105,6 +105,7 @@ input CreatePostInput {
 
 input CreateShowInput {
   artist: ObjID!
+  attended: Boolean
   date: Float!
   notes: String
   title: String
@@ -485,7 +486,7 @@ type Query {
   post(id: ObjID, slug: String): Post
   posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus, year: Int): PostConnection
   show(id: ObjID, slug: String): Show
-  shows(after: String, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, taxonomy: String, term: String): ShowConnection
+  shows(after: String, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, taxonomy: String, term: String): ShowConnection
   siteSettings: SiteSettings!
   taxonomies(after: String, before: String, first: Int, last: Int): TaxonomyConnection
   taxonomy(id: ObjID, slug: String): Taxonomy
@@ -518,6 +519,7 @@ input RootNodeInput {
 
 type Show {
   artist: Term!
+  attended: Boolean
   date: Float!
   id: ObjID!
   notes: String
@@ -645,6 +647,7 @@ input UpdatePostInput {
 
 input UpdateShowInput {
   artist: ObjID
+  attended: Boolean
   date: Float
   notes: String
   title: String

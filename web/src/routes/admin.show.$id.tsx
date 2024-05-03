@@ -16,7 +16,7 @@ export const action: ActionFunction = ({ request, context, params }) => {
     request,
     context,
     mutation: showMutation,
-    variables: { id: params.id },
+    variables: { id: params.id, input: { attended: false } },
   });
 };
 
