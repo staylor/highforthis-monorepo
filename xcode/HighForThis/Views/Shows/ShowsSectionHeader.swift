@@ -12,6 +12,18 @@ struct ShowsSectionHeader: View {
         Text(label)
             .font(.title3)
             .bold()
-            .padding()
+            .padding(.horizontal)
+            .padding(.top, 20)
+            .padding(.bottom, 8)
+    }
+}
+
+#Preview {
+    AppWrapper {
+        VStack(alignment: .leading) {
+            ShowsSectionHeader(L10N("recommendedShows"))
+            ShowSectionItem(id: "foo", name: "Arcade Fire", date: 1519434000000)
+            Spacer()
+        }
     }
 }

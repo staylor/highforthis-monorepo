@@ -95,3 +95,15 @@ struct VenueMain: View {
         VenueMain(name: "Hammerstein Ballroom", slug: "hammerstein-ballroom")
     }
 }
+
+#Preview("Forest Hills Stadium") {
+    AppWrapper {
+        VenueMain(name: "Forest Hills Stadium", slug: "forest-hills-stadium")
+    }
+}
+
+#Preview("Barclays Center") {
+    AppWrapper {
+        VenueMain(name: "Barclays Center", slug: "barclays-center")
+    }
+}

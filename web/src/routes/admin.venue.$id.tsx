@@ -42,6 +42,7 @@ const venueQuery = gql`
           }
           date
           id
+          title
           venue {
             id
             name

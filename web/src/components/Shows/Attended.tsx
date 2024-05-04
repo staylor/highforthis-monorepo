@@ -41,7 +41,7 @@ export default function Attended({
                         : `/artist/${node.artist.slug}`
                     }
                   >
-                    {relation === 'artist' ? node.venue.name : node.artist.name}
+                    {relation === 'artist' ? node.venue.name : node.title || node.artist.name}
                   </Link>
                 </Cell>
               </tr>

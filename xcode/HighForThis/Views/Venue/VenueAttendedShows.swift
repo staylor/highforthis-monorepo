@@ -7,7 +7,8 @@ struct VenueAttendedShows: View {
     var body: some View {
         ShowsSectionHeader(L10N("weWereThere"))
         ForEach(attended, id: \.self) { node in
-            ShowSectionItem(id: node.id, name: node.artist.name, date: node.date)
+            let title = node.title ?? ""
+            ShowSectionItem(id: node.id, name: title.isEmpty ? node.artist.name : title, date: node.date)
         }
     }
 }

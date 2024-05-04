@@ -1,15 +1,14 @@
 import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 
-import Link from '@/components/Link';
 import { HeaderAdd, Heading } from '@/components/Admin/styles';
 import Form from '@/components/Admin/Form';
 import Input from '@/components/Form/Input';
 import Message from '@/components/Form/Message';
 import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
 import type { Fields } from '@/types';
-import type { ShowEdge } from '@/types/graphql';
-import { formatDate } from '@/components/Shows/utils';
+
+import Shows from '../Entity/Shows';
 
 interface VenueFormProps {
   data?: any;
@@ -90,30 +89,7 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
     {
       label: 'Shows',
       type: 'custom',
-      render: ({ venue, shows }) => {
-        if (!venue) {
-          return null;
-        }
-
-        if (!shows?.edges || shows.edges.length === 0) {
-          return 'No associated shows.';
-        }
-
-        return (
-          <ul>
-            {shows?.edges?.map(({ node }: ShowEdge, idx: number) => {
-              const d = formatDate(node.date);
-              return (
-                <li key={idx.toString()} className="my-1">
-                  <Link to={`/admin/show/${node.id}`} className="text-pink underline">
-                    {d.formatted}/{d.year} {node.artist.name}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        );
-      },
+      render: ({ shows }) => <Shows shows={shows} dataKey="artist" />,
       condition: ({ shows }) => shows?.edges?.length > 0,
       position: 'meta',
     },
