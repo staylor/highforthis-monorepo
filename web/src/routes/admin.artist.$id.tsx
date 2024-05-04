@@ -36,7 +36,7 @@ const artistQuery = gql`
     artist(id: $id) {
       ...ArtistForm_artist
     }
-    shows(artistId: $id) {
+    shows(artistId: $id, first: 200) {
       edges {
         node {
           artist {
