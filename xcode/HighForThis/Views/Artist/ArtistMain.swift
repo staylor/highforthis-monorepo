@@ -16,14 +16,7 @@ struct ArtistMain: View {
             } else {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        if let artwork = appleMusic?.artwork {
-                            ArtistArtwork(
-                                url: artwork.url!,
-                                width: artwork.width!,
-                                height: artwork.height!
-                            )
-                        }
-                        TextBlock {
+                        let block = TextBlock {
                             Text(name).font(.title).bold()
                             if let website = website {
                                 ExternalLink(url: website, label: L10N("artistWebsite"))
@@ -32,6 +25,16 @@ struct ArtistMain: View {
                             if let url = appleMusic?.url! {
                                 ExternalLink(url: url, label: L10N("listenOnAppleMusic"))
                             }
+                        }
+                        if let artwork = appleMusic?.artwork {
+                            ArtistArtwork(
+                                url: artwork.url!,
+                                width: artwork.width!,
+                                height: artwork.height!
+                            )
+                            block
+                        } else {
+                            block.padding(.top, 64)
                         }
                         if shows?.count == 0 {
                             HStack {
@@ -59,8 +62,9 @@ struct ArtistMain: View {
         .onAppear() {
             getArtist(slug: slug) { data in
                 self.website = data.artist!.website
-                self.appleMusic = data.artist!.appleMusic!
-                
+                if data.artist?.appleMusic != nil {
+                    self.appleMusic = data.artist!.appleMusic!
+                }
                 var shows = [ArtistData.Shows.Edge.Node]()
                 for edge in data.shows!.edges {
                     shows.append(edge.node)
@@ -86,5 +90,11 @@ struct ArtistMain: View {
 #Preview("No shows") {
     AppWrapper {
         ArtistMain(name: "Olivia Rodrigo", slug: "olivia-rodrigo")
+    }
+}
+
+#Preview("No artwork") {
+    AppWrapper {
+        ArtistMain(name: "Mac DeMarco", slug: "mac-demarco")
     }
 }

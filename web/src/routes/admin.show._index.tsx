@@ -5,18 +5,13 @@ import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import ListTable, { RowTitle, RowActions, usePath } from '@/components/Admin/ListTable';
 import Message from '@/components/Form/Message';
-import query, { addPageOffset } from '@/utils/query';
+import query, { addPageOffset, addSearchParam } from '@/utils/query';
 import { handleDelete } from '@/utils/action';
 import type { Show, ShowConnection, ShowsAdminQuery } from '@/types/graphql';
 import Search from '@/components/Admin/ListTable/Search';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
-  const url = new URL(request.url);
-  const variables = addPageOffset(params, { order: 'DESC' });
-  const value = url.searchParams.get('search');
-  if (value) {
-    variables.search = value;
-  }
+  const variables = addSearchParam(request, addPageOffset(params, { order: 'DESC' }));
   return query({ request, context, query: showsQuery, variables });
 };
 

@@ -5,17 +5,19 @@ import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import ListTable, { RowTitle, RowActions, Thumbnail, usePath } from '@/components/Admin/ListTable';
 import Message from '@/components/Form/Message';
-import query, { addPageOffset } from '@/utils/query';
+import Search from '@/components/Admin/ListTable/Search';
+import query, { addPageOffset, addSearchParam } from '@/utils/query';
 import { handleDelete } from '@/utils/action';
 import type { Venue, VenueConnection, VenuesAdminQuery } from '@/types/graphql';
 import type { Columns } from '@/types';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
+  const variables = addSearchParam(request, addPageOffset(params));
   return query({
     request,
     context,
     query: venuesQuery,
-    variables: addPageOffset(params),
+    variables,
   });
 };
 
@@ -86,6 +88,7 @@ export default function Venues() {
       <Heading>Venues</Heading>
       <HeaderAdd label="Add Venue" />
       <Message param="deleted" text="Deleted %s Venues." />
+      <Search placeholder="Search Venues" />
       <ListTable columns={columns} data={venues} />
     </>
   );

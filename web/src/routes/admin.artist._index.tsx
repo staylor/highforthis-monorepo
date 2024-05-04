@@ -5,17 +5,20 @@ import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import ListTable, { RowTitle, RowActions, Thumbnail, usePath } from '@/components/Admin/ListTable';
 import Message from '@/components/Form/Message';
-import query, { addPageOffset } from '@/utils/query';
+import Search from '@/components/Admin/ListTable/Search';
+import query, { addPageOffset, addSearchParam } from '@/utils/query';
 import { handleDelete } from '@/utils/action';
 import type { Artist, ArtistConnection, ArtistsAdminQuery } from '@/types/graphql';
 import type { Columns } from '@/types';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
+  const variables = addSearchParam(request, addPageOffset(params));
+
   return query({
     request,
     context,
     query: artistsQuery,
-    variables: addPageOffset(params),
+    variables,
   });
 };
 
@@ -78,6 +81,7 @@ export default function Artists() {
       <Heading>Artists</Heading>
       <HeaderAdd label="Add Artist" />
       <Message param="deleted" text="Deleted %s Artists." />
+      <Search placeholder="Search Artists" />
       <ListTable columns={columns} data={artists} />
     </>
   );

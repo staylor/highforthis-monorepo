@@ -45,7 +45,7 @@ struct VenueMain: View {
                         if attended!.count > 0 {
                             VenueAttendedShows(attended: attended!)
                         }
-                    }
+                    }.padding(.bottom, 32)
                 }.ignoresSafeArea()
             }
         }
@@ -72,8 +72,26 @@ struct VenueMain: View {
     }
 }
 
-#Preview {
+#Preview("MHOW") {
     AppWrapper {
         VenueMain(name: "Music Hall of Williamsburg", slug: "music-hall-of-williamsburg")
+    }
+}
+
+#Preview("Warsaw") {
+    AppWrapper {
+        VenueMain(name: "Warsaw", slug: "warsaw")
+    }
+}
+
+#Preview("United Palace") {
+    AppWrapper {
+        VenueMain(name: "United Palace", slug: "united-palace-theatre")
+    }
+}
+
+#Preview("Hammerstein Ballroom") {
+    AppWrapper {
+        VenueMain(name: "Hammerstein Ballroom", slug: "hammerstein-ballroom")
     }
 }

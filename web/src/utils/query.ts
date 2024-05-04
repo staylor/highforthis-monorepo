@@ -58,3 +58,13 @@ export const addPageOffset = (params: Params, listVariables?: OperationVariables
   }
   return variables;
 };
+
+export const addSearchParam = (request: Request, listVariables?: OperationVariables) => {
+  const url = new URL(request.url);
+  const variables = listVariables || {};
+  const value = url.searchParams.get('search');
+  if (value) {
+    variables.search = value;
+  }
+  return variables;
+};
