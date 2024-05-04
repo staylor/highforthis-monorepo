@@ -187,6 +187,17 @@
           }
         }
       }
+    },
+    "weWereThere" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We Were There"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

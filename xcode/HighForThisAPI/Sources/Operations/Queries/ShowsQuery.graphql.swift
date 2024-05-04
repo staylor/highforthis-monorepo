@@ -7,7 +7,8 @@ public class ShowsQuery: GraphQLQuery {
   public static let operationName: String = "Shows"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Shows { shows(first: 200, latest: true) { __typename edges { __typename node { __typename artist { __typename id name } date id title venue { __typename id name } } } } }"#
+      #"query Shows { shows(first: 200, latest: true) { __typename edges { __typename node { __typename ...ShowList_show } } } }"#,
+      fragments: [ShowList_show.self]
     ))
 
   public init() {}
@@ -66,11 +67,7 @@ public class ShowsQuery: GraphQLQuery {
           public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
-            .field("artist", Artist.self),
-            .field("date", Double.self),
-            .field("id", HighForThisAPI.ObjID.self),
-            .field("title", String?.self),
-            .field("venue", Venue.self),
+            .fragment(ShowList_show.self),
           ] }
 
           public var artist: Artist { __data["artist"] }
@@ -79,41 +76,16 @@ public class ShowsQuery: GraphQLQuery {
           public var title: String? { __data["title"] }
           public var venue: Venue { __data["venue"] }
 
-          /// Shows.Edge.Node.Artist
-          ///
-          /// Parent Type: `Artist`
-          public struct Artist: HighForThisAPI.SelectionSet {
+          public struct Fragments: FragmentContainer {
             public let __data: DataDict
             public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Artist }
-            public static var __selections: [ApolloAPI.Selection] { [
-              .field("__typename", String.self),
-              .field("id", HighForThisAPI.ObjID.self),
-              .field("name", String.self),
-            ] }
-
-            public var id: HighForThisAPI.ObjID { __data["id"] }
-            public var name: String { __data["name"] }
+            public var showList_show: ShowList_show { _toFragment() }
           }
 
-          /// Shows.Edge.Node.Venue
-          ///
-          /// Parent Type: `Venue`
-          public struct Venue: HighForThisAPI.SelectionSet {
-            public let __data: DataDict
-            public init(_dataDict: DataDict) { __data = _dataDict }
+          public typealias Artist = ShowList_show.Artist
 
-            public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
-            public static var __selections: [ApolloAPI.Selection] { [
-              .field("__typename", String.self),
-              .field("id", HighForThisAPI.ObjID.self),
-              .field("name", String.self),
-            ] }
-
-            public var id: HighForThisAPI.ObjID { __data["id"] }
-            public var name: String { __data["name"] }
-          }
+          public typealias Venue = ShowList_show.Venue
         }
       }
     }

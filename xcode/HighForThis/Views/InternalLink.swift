@@ -16,7 +16,7 @@ struct InternalLink <Content: View>: View {
             content()
         }) {
             Group {
-                Text(verbatim: "\(label)").font(.title) + Text(" →").font(.title2)
+                Text(label).font(.title) + Text(verbatim: " →").font(.title2)
             }.foregroundColor(color)
         }
         .buttonStyle(.plain)

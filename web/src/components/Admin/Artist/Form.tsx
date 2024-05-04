@@ -65,8 +65,7 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
       label: 'Featured Media',
       prop: 'featuredMedia',
       type: 'custom',
-      render: ({ artist }) =>
-        artist ? <FeaturedMedia media={artist.featuredMedia || []} /> : null,
+      render: ({ artist }) => <FeaturedMedia media={artist?.featuredMedia || []} />,
     },
     {
       label: 'Shows',
@@ -95,6 +94,7 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
           </ul>
         );
       },
+      condition: ({ shows }) => shows?.length > 0,
       position: 'meta',
     },
   ];
@@ -102,7 +102,7 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
     <>
       <Heading>{heading}</Heading>
       <HeaderAdd label="All Artists" to="/admin/artist" />
-      <PageLink url={`/artist/${data.artist.slug}`}>View Artist</PageLink>
+      {data.artist && <PageLink url={`/artist/${data.artist.slug}`}>View Artist</PageLink>}
       <Message text="Artist updated." />
       <Form data={data} fields={fields} buttonLabel={buttonLabel} />
     </>

@@ -85,7 +85,7 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
       label: 'Featured Media',
       prop: 'featuredMedia',
       type: 'custom',
-      render: ({ venue }) => (venue ? <FeaturedMedia media={venue.featuredMedia || []} /> : null),
+      render: ({ venue }) => <FeaturedMedia media={venue?.featuredMedia || []} />,
     },
     {
       label: 'Shows',
@@ -114,6 +114,7 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
           </ul>
         );
       },
+      condition: ({ shows }) => shows?.length > 0,
       position: 'meta',
     },
   ];
@@ -121,7 +122,7 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
     <>
       <Heading>{heading}</Heading>
       <HeaderAdd label="All Venues" to="/admin/venue" />
-      <PageLink url={`/venue/${data.venue.slug}`}>View Venue</PageLink>
+      {data.venue && <PageLink url={`/venue/${data.venue.slug}`}>View Venue</PageLink>}
       <Message text="Venue updated." />
       <Form data={data} fields={fields} buttonLabel={buttonLabel} />
     </>

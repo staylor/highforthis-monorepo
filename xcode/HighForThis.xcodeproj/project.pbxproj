@@ -14,6 +14,12 @@
 		D25099CF2BE18D9B003904A8 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D25099CE2BE18D9B003904A8 /* Localizable.xcstrings */; };
 		D25099D02BE1F252003904A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D25099CB2BC24DDC003904A8 /* LaunchScreen.storyboard */; };
 		D25099D22BE2BFB8003904A8 /* InternalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25099D12BE2BFB8003904A8 /* InternalLink.swift */; };
+		D273C91B2BE58B79005E0D9A /* VenueRecommendedShows.swift in Sources */ = {isa = PBXBuildFile; fileRef = D273C91A2BE58B79005E0D9A /* VenueRecommendedShows.swift */; };
+		D273C91D2BE58BBD005E0D9A /* VenueAttendedShows.swift in Sources */ = {isa = PBXBuildFile; fileRef = D273C91C2BE58BBD005E0D9A /* VenueAttendedShows.swift */; };
+		D273C9212BE5C256005E0D9A /* ShowsSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D273C9202BE5C256005E0D9A /* ShowsSectionHeader.swift */; };
+		D273C9232BE5C2CA005E0D9A /* ShowSectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D273C9222BE5C2CA005E0D9A /* ShowSectionItem.swift */; };
+		D273C9252BE5C44E005E0D9A /* ArtistRecommendedShows.swift in Sources */ = {isa = PBXBuildFile; fileRef = D273C9242BE5C44E005E0D9A /* ArtistRecommendedShows.swift */; };
+		D273C9272BE5C45E005E0D9A /* ArtistAttendedShows.swift in Sources */ = {isa = PBXBuildFile; fileRef = D273C9262BE5C45E005E0D9A /* ArtistAttendedShows.swift */; };
 		D278176D2B6BAC8900D44B4D /* VideoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278176C2B6BAC8900D44B4D /* VideoList.swift */; };
 		D27817732B810BB900D44B4D /* PodcastDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27817722B810BB900D44B4D /* PodcastDetail.swift */; };
 		D27C2DD82B6C145E0036F4A9 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27C2DD72B6C145E0036F4A9 /* MapView.swift */; };
@@ -58,6 +64,12 @@
 		D25099CB2BC24DDC003904A8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D25099CE2BE18D9B003904A8 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		D25099D12BE2BFB8003904A8 /* InternalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalLink.swift; sourceTree = "<group>"; };
+		D273C91A2BE58B79005E0D9A /* VenueRecommendedShows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueRecommendedShows.swift; sourceTree = "<group>"; };
+		D273C91C2BE58BBD005E0D9A /* VenueAttendedShows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueAttendedShows.swift; sourceTree = "<group>"; };
+		D273C9202BE5C256005E0D9A /* ShowsSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsSectionHeader.swift; sourceTree = "<group>"; };
+		D273C9222BE5C2CA005E0D9A /* ShowSectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSectionItem.swift; sourceTree = "<group>"; };
+		D273C9242BE5C44E005E0D9A /* ArtistRecommendedShows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistRecommendedShows.swift; sourceTree = "<group>"; };
+		D273C9262BE5C45E005E0D9A /* ArtistAttendedShows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistAttendedShows.swift; sourceTree = "<group>"; };
 		D278176C2B6BAC8900D44B4D /* VideoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoList.swift; sourceTree = "<group>"; };
 		D27817722B810BB900D44B4D /* PodcastDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetail.swift; sourceTree = "<group>"; };
 		D27C2DD72B6C145E0036F4A9 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
@@ -142,6 +154,8 @@
 			children = (
 				D22BA1132B6B36E20037E129 /* ShowList.swift */,
 				D2A9291B2B6B3ED700480408 /* ShowDetail.swift */,
+				D273C9202BE5C256005E0D9A /* ShowsSectionHeader.swift */,
+				D273C9222BE5C2CA005E0D9A /* ShowSectionItem.swift */,
 			);
 			path = Shows;
 			sourceTree = "<group>";
@@ -195,6 +209,8 @@
 			children = (
 				D2FCA4DE2BA97196007A6EFC /* ArtistMain.swift */,
 				D2E644102BAB6E20001B5DC2 /* ArtistArtwork.swift */,
+				D273C9242BE5C44E005E0D9A /* ArtistRecommendedShows.swift */,
+				D273C9262BE5C45E005E0D9A /* ArtistAttendedShows.swift */,
 			);
 			path = Artist;
 			sourceTree = "<group>";
@@ -202,6 +218,8 @@
 		D2E644122BAB6F11001B5DC2 /* Venue */ = {
 			isa = PBXGroup;
 			children = (
+				D273C91A2BE58B79005E0D9A /* VenueRecommendedShows.swift */,
+				D273C91C2BE58BBD005E0D9A /* VenueAttendedShows.swift */,
 				D2FCA4E02BA975C3007A6EFC /* VenueMain.swift */,
 			);
 			path = Venue;
@@ -321,28 +339,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2D50F802B6AB472007F335C /* ContentView.swift in Sources */,
+				D273C9272BE5C45E005E0D9A /* ArtistAttendedShows.swift in Sources */,
 				D2E644112BAB6E20001B5DC2 /* ArtistArtwork.swift in Sources */,
 				D2E644162BABC872001B5DC2 /* Network.swift in Sources */,
 				D2FCA4E12BA975C3007A6EFC /* VenueMain.swift in Sources */,
 				D2E6440E2BAB6CEF001B5DC2 /* AppWrapper.swift in Sources */,
 				D2CBDD082B89438500F4437D /* ApolloClient.swift in Sources */,
+				D273C91D2BE58BBD005E0D9A /* VenueAttendedShows.swift in Sources */,
 				D2E6442E2BAE6BFD001B5DC2 /* HeadingNode.swift in Sources */,
 				D2FCA4DF2BA97196007A6EFC /* ArtistMain.swift in Sources */,
+				D273C91B2BE58B79005E0D9A /* VenueRecommendedShows.swift in Sources */,
 				D2E6442A2BAE5A1E001B5DC2 /* PostList.swift in Sources */,
 				D22BA11A2B6B37D60037E129 /* ShowGroup.swift in Sources */,
 				D2E6442C2BAE5A32001B5DC2 /* Post.swift in Sources */,
 				D2E644142BAB7D1A001B5DC2 /* TextBlock.swift in Sources */,
+				D273C9232BE5C2CA005E0D9A /* ShowSectionItem.swift in Sources */,
 				D2E644322BAE716C001B5DC2 /* ElementNode.swift in Sources */,
 				D24492ED2B6D8A5A00DBCC13 /* PodcastList.swift in Sources */,
 				D2D50F7E2B6AB472007F335C /* HighForThisApp.swift in Sources */,
 				D2E644342BAE71F4001B5DC2 /* ImageNode.swift in Sources */,
 				D27C2DD82B6C145E0036F4A9 /* MapView.swift in Sources */,
 				D27817732B810BB900D44B4D /* PodcastDetail.swift in Sources */,
+				D273C9252BE5C44E005E0D9A /* ArtistRecommendedShows.swift in Sources */,
 				D2A9291E2B6B403800480408 /* Helpers.swift in Sources */,
 				D2A116822B84020B00CA5EFD /* Loading.swift in Sources */,
 				D25099D22BE2BFB8003904A8 /* InternalLink.swift in Sources */,
 				D22BA1142B6B36E20037E129 /* ShowList.swift in Sources */,
 				D2E644252BAD3ADB001B5DC2 /* ImageLoading.swift in Sources */,
+				D273C9212BE5C256005E0D9A /* ShowsSectionHeader.swift in Sources */,
 				D25099C92BBBBC06003904A8 /* ExternalLink.swift in Sources */,
 				D2E6441D2BABE478001B5DC2 /* Stripes.swift in Sources */,
 				D2A116792B814C5800CA5EFD /* AudioPlayerViewModel.swift in Sources */,

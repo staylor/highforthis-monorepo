@@ -5,7 +5,8 @@ struct VenueMain: View {
     var name: String
     var slug: String
     @State private var venue: VenueData.Venue?
-    @State private var nodes: [VenueData.Shows.Edge.Node]?
+    @State private var shows: [VenueData.Shows.Edge.Node]?
+    @State private var attended: [VenueData.Attended.Edge.Node]?
     
     var body: some View {
         ZStack {
@@ -13,53 +14,39 @@ struct VenueMain: View {
                 Loading()
             } else {
                 let venue = venue!
-                VStack(alignment: .leading) {
-                    if let coordinates = venue.coordinates {
-                        MapView(
-                            name: name,
-                            latitude: coordinates.latitude!,
-                            longitude: coordinates.longitude!
-                        )
-                    }
-                    TextBlock {
-                        Text(name).font(.title).bold().padding(.bottom, 2)
-                        if let address = venue.address {
-                            Paragraph(address)
-                                .foregroundColor(.gray)
-                                .padding(.bottom, 2)
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        if let coordinates = venue.coordinates {
+                            MapView(
+                                name: name,
+                                latitude: coordinates.latitude!,
+                                longitude: coordinates.longitude!
+                            )
                         }
-                        if let capacity = venue.capacity {
-                            Text(L10N("capacity \(capacity)"))
-                                .foregroundColor(.gray)
-                                .padding(.bottom, 2)
-                        }
-                        if let website = venue.website {
-                            ExternalLink(url: website, label: L10N("venueWebsite"))
-                        }
-                    }
-                    Text(L10N("recommendedShows"))
-                        .font(.title3)
-                        .bold()
-                        .padding(.horizontal)
-                        .padding(.top, 12)
-                    List {
-                        ForEach(nodes!, id: \.self) { node in
-                            NavigationLink {
-                                ShowDetail(id: node.id)
-                            } label: {
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text(parseDate(node.date)).foregroundColor(.gray)
-                                        Text(node.artist.name).foregroundColor(.accentColor)
-                                    }
-                                    
-                                    Spacer()
-                                }
+                        TextBlock {
+                            Text(name).font(.title).bold().padding(.bottom, 2)
+                            if let address = venue.address {
+                                Paragraph(address)
+                                    .foregroundColor(.gray)
+                                    .padding(.bottom, 2)
+                            }
+                            if let capacity = venue.capacity {
+                                Text(L10N("capacity \(capacity)"))
+                                    .foregroundColor(.gray)
+                                    .padding(.bottom, 2)
+                            }
+                            if let website = venue.website {
+                                ExternalLink(url: website, label: L10N("venueWebsite"))
                             }
                         }
+                        if shows!.count > 0 {
+                            VenueRecommendedShows(shows: shows!)
+                        }
+                        if attended!.count > 0 {
+                            VenueAttendedShows(attended: attended!)
+                        }
                     }
-                    .listStyle(.plain)
-                }
+                }.ignoresSafeArea()
             }
         }
         #if os(iOS)
@@ -69,11 +56,17 @@ struct VenueMain: View {
             getVenue(slug: slug) { data in
                 self.venue = data.venue!
                 
-                var nodes = [VenueData.Shows.Edge.Node]()
+                var shows = [VenueData.Shows.Edge.Node]()
                 for edge in data.shows!.edges {
-                    nodes.append(edge.node)
+                    shows.append(edge.node)
                 }
-                self.nodes = nodes
+                self.shows = shows
+                
+                var attended = [VenueData.Attended.Edge.Node]()
+                for edge in data.attended!.edges {
+                    attended.append(edge.node)
+                }
+                self.attended = attended
             }
         }
     }

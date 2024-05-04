@@ -2,17 +2,7 @@ query Shows {
   shows(first: 200, latest: true) {
     edges {
       node {
-        artist {
-          id
-          name
-        }
-        date
-        id
-        title
-        venue {
-          id
-          name
-        }
+        ...ShowList_show
       }
     }
   }

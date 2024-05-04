@@ -1,0 +1,15 @@
+fragment ShowList_show on Show {
+  artist {
+    id
+    name
+    slug
+  }
+  date
+  id
+  title
+  venue {
+    id
+    name
+    slug
+  }
+}

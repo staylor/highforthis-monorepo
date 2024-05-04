@@ -6,63 +6,49 @@ struct ArtistMain: View {
     var slug: String
     @State private var website: String?
     @State private var appleMusic: ArtistData.Artist.AppleMusic?
-    @State private var nodes: [ArtistData.Shows.Edge.Node]?
+    @State private var shows: [ArtistData.Shows.Edge.Node]?
+    @State private var attended: [ArtistData.Attended.Edge.Node]?
     
     var body: some View {
-        VStack(alignment: .leading) {
-            if nodes == nil {
+        ZStack {
+            if shows == nil {
                 Loading()
             } else {
-                if let artwork = appleMusic?.artwork {
-                    ArtistArtwork(
-                        url: artwork.url!,
-                        width: artwork.width!,
-                        height: artwork.height!
-                    )
-                }
-                VStack(alignment: .leading) {
-                    TextBlock {
-                        Text(name).font(.title).bold()
-                        if let website = website {
-                            ExternalLink(url: website, label: L10N("artistWebsite"))
-                                .padding(.vertical, 1)
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        if let artwork = appleMusic?.artwork {
+                            ArtistArtwork(
+                                url: artwork.url!,
+                                width: artwork.width!,
+                                height: artwork.height!
+                            )
                         }
-                        if let url = appleMusic?.url! {
-                            ExternalLink(url: url, label: L10N("listenOnAppleMusic"))
-                        }
-                    }
-                    if nodes?.count == 0 {
-                        HStack {
-                            Text(L10N("noRecommendedShows"))
-                            Spacer()
-                        }.padding()
-                        Spacer()
-                    } else {
-                        Text(L10N("recommendedShows"))
-                            .font(.title3)
-                            .bold()
-                            .padding(.horizontal)
-                            .padding(.top, 20)
-                        List {
-                            ForEach(nodes!, id: \.self) { node in
-                                NavigationLink {
-                                    ShowDetail(id: node.id)
-                                } label: {
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(parseDate(node.date)).foregroundColor(.gray)
-                                            Text(node.venue.name)
-                                        }
-                                        Spacer()
-                                    }
-                                }
+                        TextBlock {
+                            Text(name).font(.title).bold()
+                            if let website = website {
+                                ExternalLink(url: website, label: L10N("artistWebsite"))
+                                    .padding(.vertical, 1)
+                            }
+                            if let url = appleMusic?.url! {
+                                ExternalLink(url: url, label: L10N("listenOnAppleMusic"))
                             }
                         }
-                        .listStyle(.plain)
-                    }
+                        if shows?.count == 0 {
+                            HStack {
+                                Text(L10N("noRecommendedShows"))
+                                Spacer()
+                            }.padding()
+                            Spacer()
+                        } else {
+                            ArtistRecommendedShows(shows: shows!)
+                        }
+                        if attended!.count > 0 {
+                            ArtistAttendedShows(attended: attended!)
+                        }
+                        Spacer()
+                    }.padding(.bottom, 32)
                 }
             }
-            Spacer()
         }
         #if os(iOS)
         .ignoresSafeArea()
@@ -75,11 +61,17 @@ struct ArtistMain: View {
                 self.website = data.artist!.website
                 self.appleMusic = data.artist!.appleMusic!
                 
-                var nodes = [ArtistData.Shows.Edge.Node]()
+                var shows = [ArtistData.Shows.Edge.Node]()
                 for edge in data.shows!.edges {
-                    nodes.append(edge.node)
+                    shows.append(edge.node)
                 }
-                self.nodes = nodes
+                self.shows = shows
+                
+                var attended = [ArtistData.Attended.Edge.Node]()
+                for edge in data.attended!.edges {
+                    attended.append(edge.node)
+                }
+                self.attended = attended
             }
         }
     }

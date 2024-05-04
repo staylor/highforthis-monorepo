@@ -1,18 +1,15 @@
 query Venue($slug: String!) {
+  attended: shows(attended: true, first: 200, venueSlug: $slug) {
+    edges {
+      node {
+        ...ShowList_show
+      }
+    }
+  }
   shows(first: 200, latest: true, venueSlug: $slug) {
     edges {
       node {
-        artist {
-          id
-          name
-        }
-        date
-        id
-        title
-        venue {
-          id
-          name
-        }
+        ...ShowList_show
       }
     }
   }
