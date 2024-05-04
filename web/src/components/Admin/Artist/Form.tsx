@@ -94,7 +94,7 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
           </ul>
         );
       },
-      condition: ({ shows }) => shows?.length > 0,
+      condition: ({ shows }) => shows?.edges?.length > 0,
       position: 'meta',
     },
   ];
