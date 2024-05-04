@@ -4,6 +4,21 @@ import Model from './Model';
 import { getUniqueSlug } from './utils';
 
 export default class Entity extends Model {
+  public all({ limit = 10, offset = 0, search = '' }: any) {
+    const criteria: any = {};
+    if (search) {
+      criteria.$text = { $search: search };
+    }
+
+    return this.collection
+      .find(criteria)
+      .collation({ locale: 'en' })
+      .sort({ name: 1 })
+      .skip(offset)
+      .limit(limit)
+      .toArray();
+  }
+
   public async insert(doc: any): Promise<ObjectId> {
     const slug = await getUniqueSlug(this.collection, doc.name);
     const featuredMedia = (doc.featuredMedia || []).map((id: string) => new ObjectId(id));
