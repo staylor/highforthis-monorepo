@@ -4,9 +4,9 @@ import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import Form from '@/components/Admin/Form';
 import Message from '@/components/Form/Message';
 import Checkbox from '@/components/Form/Checkbox';
-import Link from '@/components/Link';
 import type { Fields } from '@/types';
-import type { Artist, Venue } from '@/types/graphql';
+
+import SelectEntity from './SelectEntity';
 
 interface ShowFormProps {
   data?: any;
@@ -15,7 +15,6 @@ interface ShowFormProps {
 }
 
 export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormProps) {
-  const { artists, venues } = data;
   const date = new Date();
   date.setHours(20);
   date.setMinutes(0);
@@ -30,41 +29,16 @@ export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormPr
     },
     {
       label: 'Artist',
-      prop: 'artist',
-      type: 'select',
-      placeholder: '---',
-      choices: artists.edges.map(({ node }: { node: Artist }) => ({
-        label: node.name,
-        value: node.id,
-      })),
-      render: ({ show }) => show?.artist?.id,
-    },
-    {
       type: 'custom',
-      render: () => (
-        <Link className="underline" to={`/admin/artist/add`}>
-          Add Artist
-        </Link>
+      render: ({ show, artists }) => (
+        <SelectEntity label="Artist" name="artist" edges={artists.edges} value={show?.artist?.id} />
       ),
     },
     {
       label: 'Venue',
-      prop: 'venue',
-      editable: true,
-      type: 'select',
-      placeholder: '---',
-      choices: venues.edges.map(({ node }: { node: Venue }) => ({
-        label: node.name,
-        value: node.id,
-      })),
-      render: ({ show }) => show?.venue?.id,
-    },
-    {
       type: 'custom',
-      render: () => (
-        <Link className="underline" to={`/admin/venue/add`}>
-          Add Venue
-        </Link>
+      render: ({ show, venues }) => (
+        <SelectEntity label="Venue" name="venue" edges={venues.edges} value={show?.venue?.id} />
       ),
     },
     { label: 'URL', prop: 'url', inputType: 'url', render: ({ show }) => show?.url },
