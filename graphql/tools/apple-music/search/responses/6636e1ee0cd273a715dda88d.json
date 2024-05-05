@@ -1,0 +1,149 @@
+{
+  "id": "1450554836",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1450554836",
+  "attributes": {
+    "name": "Gracie Abrams",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 4000,
+      "height": 4000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/55/08/06/5508068d-791c-4d2c-2142-98552b37a6ac/7bc7e05c-eefb-43bd-ad24-3e5f11b610db_ami-identity-d38fed2c45e9286f6f86194eca60e265-2024-05-02T04-15-23.789Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "495970",
+      "textColor1": "fbe2c0",
+      "textColor2": "facea5",
+      "textColor3": "d7c7b0",
+      "textColor4": "d6b79a"
+    },
+    "url": "https://music.apple.com/us/artist/gracie-abrams/1450554836"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1450554836/albums",
+      "data": [
+        {
+          "id": "1521724990",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1521724990"
+        },
+        {
+          "id": "1664288624",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1664288624"
+        },
+        {
+          "id": "1593913699",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593913699"
+        },
+        {
+          "id": "1691828042",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1691828042"
+        },
+        {
+          "id": "1691834976",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1691834976"
+        },
+        {
+          "id": "1598000280",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598000280"
+        },
+        {
+          "id": "1672699984",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1672699984"
+        },
+        {
+          "id": "1543048682",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543048682"
+        },
+        {
+          "id": "1505434788",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505434788"
+        },
+        {
+          "id": "1587196064",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1587196064"
+        },
+        {
+          "id": "1483238114",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1483238114"
+        },
+        {
+          "id": "1617159448",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1617159448"
+        },
+        {
+          "id": "1743054543",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1743054543"
+        },
+        {
+          "id": "1558726412",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1558726412"
+        },
+        {
+          "id": "1565850759",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1565850759"
+        },
+        {
+          "id": "1487858512",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1487858512"
+        },
+        {
+          "id": "1512870253",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1512870253"
+        },
+        {
+          "id": "1717493428",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1717493428"
+        },
+        {
+          "id": "1498687830",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498687830"
+        },
+        {
+          "id": "1590384817",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1590384817"
+        },
+        {
+          "id": "1647081126",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1647081126"
+        },
+        {
+          "id": "1558726480",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1558726480"
+        },
+        {
+          "id": "1563057992",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1563057992"
+        },
+        {
+          "id": "1680069566",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1680069566"
+        }
+      ]
+    }
+  }
+}

@@ -54,14 +54,14 @@
           "href": "/v1/catalog/us/albums/1641253831"
         },
         {
-          "id": "443233211",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/443233211"
-        },
-        {
           "id": "547626738",
           "type": "albums",
           "href": "/v1/catalog/us/albums/547626738"
+        },
+        {
+          "id": "443233211",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/443233211"
         },
         {
           "id": "447171183",

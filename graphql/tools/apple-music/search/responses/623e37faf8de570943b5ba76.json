@@ -1,18 +1,99 @@
 {
-  "id": "1593745921",
+  "id": "6563017",
   "type": "artists",
-  "href": "/v1/catalog/us/artists/1593745921",
+  "href": "/v1/catalog/us/artists/6563017",
   "attributes": {
-    "name": "Bobby Weir & Wolf Bros",
+    "name": "Bob Weir",
     "genreNames": [
       "Rock"
     ],
-    "url": "https://music.apple.com/us/artist/bobby-weir-wolf-bros/1593745921"
+    "artwork": {
+      "width": 803,
+      "height": 803,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/63/24/3a/63243a0b-c047-2858-432d-bcf181617993/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "f0eef0",
+      "textColor1": "1c1b1c",
+      "textColor2": "313031",
+      "textColor3": "464546",
+      "textColor4": "575657"
+    },
+    "url": "https://music.apple.com/us/artist/bob-weir/6563017"
   },
   "relationships": {
     "albums": {
-      "href": "/v1/catalog/us/artists/1593745921/albums",
-      "data": []
+      "href": "/v1/catalog/us/artists/6563017/albums",
+      "data": [
+        {
+          "id": "1138932272",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1138932272"
+        },
+        {
+          "id": "308700898",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/308700898"
+        },
+        {
+          "id": "1593794533",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593794533"
+        },
+        {
+          "id": "308704595",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/308704595"
+        },
+        {
+          "id": "1635389920",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1635389920"
+        },
+        {
+          "id": "1647459819",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1647459819"
+        },
+        {
+          "id": "1572001071",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1572001071"
+        },
+        {
+          "id": "1593745915",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593745915"
+        },
+        {
+          "id": "1712565607",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1712565607"
+        },
+        {
+          "id": "1526395420",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1526395420"
+        },
+        {
+          "id": "1496119005",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1496119005"
+        },
+        {
+          "id": "1536605156",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536605156"
+        },
+        {
+          "id": "1643324582",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1643324582"
+        },
+        {
+          "id": "1599816751",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1599816751"
+        }
+      ]
     }
   }
 }

@@ -7,9 +7,6 @@
     "genreNames": [
       "Urbano latino"
     ],
-    "editorialNotes": {
-      "short": "Bad Bunny is Apple Music's Artist of the Year for 2022."
-    },
     "artwork": {
       "width": 1080,
       "height": 1080,
@@ -19,6 +16,9 @@
       "textColor2": "5ea0dc",
       "textColor3": "4e8ca7",
       "textColor4": "4b80b0"
+    },
+    "editorialNotes": {
+      "short": "Bad Bunny is Apple Music's Artist of the Year for 2022."
     },
     "url": "https://music.apple.com/us/artist/bad-bunny/1126808565"
   },
@@ -73,19 +73,19 @@
           "href": "/v1/catalog/us/albums/1478181719"
         },
         {
-          "id": "1575007987",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1575007987"
-        },
-        {
-          "id": "1707057969",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1707057969"
-        },
-        {
           "id": "1470490517",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1470490517"
+        },
+        {
+          "id": "1470498166",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470498166"
+        },
+        {
+          "id": "1575007987",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1575007987"
         },
         {
           "id": "1470490415",
@@ -93,19 +93,9 @@
           "href": "/v1/catalog/us/albums/1470490415"
         },
         {
-          "id": "1470492098",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1470492098"
-        },
-        {
           "id": "1465503234",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1465503234"
-        },
-        {
-          "id": "1570323047",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1570323047"
         },
         {
           "id": "1573431826",
@@ -113,24 +103,9 @@
           "href": "/v1/catalog/us/albums/1573431826"
         },
         {
-          "id": "1698529514",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1698529514"
-        },
-        {
-          "id": "1650911779",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1650911779"
-        },
-        {
           "id": "1329018770",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1329018770"
-        },
-        {
-          "id": "1336752444",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1336752444"
         },
         {
           "id": "1445040003",
@@ -138,19 +113,44 @@
           "href": "/v1/catalog/us/albums/1445040003"
         },
         {
-          "id": "1470493817",
+          "id": "1336752444",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1470493817"
+          "href": "/v1/catalog/us/albums/1336752444"
         },
         {
-          "id": "1496945599",
+          "id": "1332922196",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1496945599"
+          "href": "/v1/catalog/us/albums/1332922196"
         },
         {
-          "id": "1488271433",
+          "id": "1470493809",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1488271433"
+          "href": "/v1/catalog/us/albums/1470493809"
+        },
+        {
+          "id": "1741891083",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1741891083"
+        },
+        {
+          "id": "1376379475",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1376379475"
+        },
+        {
+          "id": "1445168884",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445168884"
+        },
+        {
+          "id": "1252802259",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1252802259"
+        },
+        {
+          "id": "1537661339",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1537661339"
         }
       ]
     }

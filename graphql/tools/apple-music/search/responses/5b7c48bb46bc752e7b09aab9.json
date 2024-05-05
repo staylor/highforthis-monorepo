@@ -8,14 +8,14 @@
       "Alternative"
     ],
     "artwork": {
-      "width": 1787,
-      "height": 1787,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/5e/ae/42/5eae42db-2586-4970-db19-c2c7fc013aae/e33b04d5-69b3-4c42-804c-41f6672bd66d_ami-identity-2504370ccad2fab66d5b36b69071bb7a-2023-03-11T02-44-32.369Z_cropped.png/{w}x{h}bb.jpg",
-      "bgColor": "f1e5cd",
-      "textColor1": "100f04",
-      "textColor2": "151804",
-      "textColor3": "3d3a2c",
-      "textColor4": "41412c"
+      "width": 2730,
+      "height": 2730,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/63/01/7a/63017a91-256e-feea-339f-3f0862cfbb52/87bfba9f-f862-40ad-bd70-fb8c748f865d_ami-identity-2504370ccad2fab66d5b36b69071bb7a-2024-04-25T18-50-48.619Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "d8d8d8",
+      "textColor1": "121212",
+      "textColor2": "232323",
+      "textColor3": "393939",
+      "textColor4": "474747"
     },
     "url": "https://music.apple.com/us/artist/manchester-orchestra/80919241"
   },
@@ -55,14 +55,14 @@
           "href": "/v1/catalog/us/albums/1460724383"
         },
         {
-          "id": "1440815175",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1440815175"
-        },
-        {
           "id": "1440954211",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1440954211"
+        },
+        {
+          "id": "1440815175",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440815175"
         },
         {
           "id": "1594412230",
@@ -70,9 +70,19 @@
           "href": "/v1/catalog/us/albums/1594412230"
         },
         {
+          "id": "1735248666",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1735248666"
+        },
+        {
           "id": "1401504162",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1401504162"
+        },
+        {
+          "id": "1583868704",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1583868704"
         },
         {
           "id": "1413925086",
@@ -80,19 +90,14 @@
           "href": "/v1/catalog/us/albums/1413925086"
         },
         {
-          "id": "266711503",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/266711503"
-        },
-        {
-          "id": "1489213187",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1489213187"
-        },
-        {
           "id": "300009636",
           "type": "albums",
           "href": "/v1/catalog/us/albums/300009636"
+        },
+        {
+          "id": "266711503",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/266711503"
         },
         {
           "id": "1443411817",
@@ -115,14 +120,9 @@
           "href": "/v1/catalog/us/albums/1487250801"
         },
         {
-          "id": "1714486566",
+          "id": "1489213187",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1714486566"
-        },
-        {
-          "id": "1618788236",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1618788236"
+          "href": "/v1/catalog/us/albums/1489213187"
         },
         {
           "id": "1567337066",
@@ -135,11 +135,6 @@
           "href": "/v1/catalog/us/albums/1622485344"
         },
         {
-          "id": "1532833207",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1532833207"
-        },
-        {
           "id": "1442729670",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1442729670"
@@ -148,6 +143,11 @@
           "id": "1572433570",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1572433570"
+        },
+        {
+          "id": "1569465353",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569465353"
         }
       ]
     }

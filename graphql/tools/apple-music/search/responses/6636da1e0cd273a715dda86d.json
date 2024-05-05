@@ -1,0 +1,74 @@
+{
+  "id": "138226712",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/138226712",
+  "attributes": {
+    "name": "Fun.",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1200,
+      "height": 1200,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/af/ec/d5/afecd5d8-e84b-b95c-57f4-2ddc17a789d7/mzl.lkhroljc.jpg/{w}x{h}bb.jpg",
+      "bgColor": "2f100c",
+      "textColor1": "f2d1a4",
+      "textColor2": "e3a78a",
+      "textColor3": "cbab85",
+      "textColor4": "bf8971"
+    },
+    "url": "https://music.apple.com/us/artist/fun/138226712"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/138226712/albums",
+      "data": [
+        {
+          "id": "486040153",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/486040153"
+        },
+        {
+          "id": "601186059",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/601186059"
+        },
+        {
+          "id": "1601873706",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1601873706"
+        },
+        {
+          "id": "581761955",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/581761955"
+        },
+        {
+          "id": "435861781",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/435861781"
+        },
+        {
+          "id": "508232948",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/508232948"
+        },
+        {
+          "id": "828941867",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/828941867"
+        },
+        {
+          "id": "1601869638",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1601869638"
+        },
+        {
+          "id": "523491904",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/523491904"
+        }
+      ]
+    }
+  }
+}

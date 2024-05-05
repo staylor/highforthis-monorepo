@@ -7,18 +7,18 @@
     "genreNames": [
       "Pop"
     ],
-    "artwork": {
-      "width": 4000,
-      "height": 4000,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/49/02/c0/4902c03e-916b-542b-1579-b77d94d0134b/bf4e6e03-3339-4a5c-89cd-bee88f31bd28_ami-identity-6a4cdfcea5ca482d082ae1239048d924-2024-01-25T20-22-37.098Z_cropped.png/{w}x{h}bb.jpg",
-      "bgColor": "f0efed",
-      "textColor1": "0e0e0b",
-      "textColor2": "130e0f",
-      "textColor3": "3b3b38",
-      "textColor4": "3f3b3b"
-    },
     "editorialNotes": {
       "short": "The mezzo-soprano has garnered pop, disco and R&B fans worldwide."
+    },
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/fc/05/ea/fc05eaef-da77-d1a1-cccd-058d2668beaf/1fbd4b36-578b-4bad-be97-d4910f004da8_ami-identity-6a4cdfcea5ca482d082ae1239048d924-2024-03-13T19-39-37.988Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "6f5929",
+      "textColor1": "f7f6f2",
+      "textColor2": "e2cec5",
+      "textColor3": "dcd7ca",
+      "textColor4": "cbb6a6"
     },
     "url": "https://music.apple.com/us/artist/dua-lipa/1031397873"
   },
@@ -36,6 +36,11 @@
           "id": "1538003494",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1538003494"
+        },
+        {
+          "id": "1734980417",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1734980417"
         },
         {
           "id": "1551178998",
@@ -73,24 +78,9 @@
           "href": "/v1/catalog/us/albums/1528380270"
         },
         {
-          "id": "1730814928",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1730814928"
-        },
-        {
           "id": "1409683826",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1409683826"
-        },
-        {
-          "id": "1216817190",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1216817190"
-        },
-        {
-          "id": "1300184712",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1300184712"
         },
         {
           "id": "1376572320",
@@ -98,14 +88,24 @@
           "href": "/v1/catalog/us/albums/1376572320"
         },
         {
-          "id": "1135443173",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1135443173"
-        },
-        {
           "id": "1493419265",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1493419265"
+        },
+        {
+          "id": "1300184712",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1300184712"
+        },
+        {
+          "id": "1484636581",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484636581"
+        },
+        {
+          "id": "1730814928",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1730814928"
         },
         {
           "id": "1214946117",
@@ -118,14 +118,19 @@
           "href": "/v1/catalog/us/albums/1618836102"
         },
         {
-          "id": "1347923442",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1347923442"
-        },
-        {
           "id": "1508549125",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1508549125"
+        },
+        {
+          "id": "1740405647",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1740405647"
+        },
+        {
+          "id": "1347923442",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1347923442"
         },
         {
           "id": "1444897105",
@@ -133,24 +138,19 @@
           "href": "/v1/catalog/us/albums/1444897105"
         },
         {
-          "id": "1458355352",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1458355352"
-        },
-        {
           "id": "1163768992",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1163768992"
         },
         {
-          "id": "1727526670",
+          "id": "1135443173",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1727526670"
+          "href": "/v1/catalog/us/albums/1135443173"
         },
         {
-          "id": "1268039201",
+          "id": "1216817190",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1268039201"
+          "href": "/v1/catalog/us/albums/1216817190"
         }
       ]
     }

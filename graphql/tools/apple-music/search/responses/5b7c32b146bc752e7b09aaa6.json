@@ -44,9 +44,9 @@
           "href": "/v1/catalog/us/albums/1432203897"
         },
         {
-          "id": "1359514429",
+          "id": "1739085957",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1359514429"
+          "href": "/v1/catalog/us/albums/1739085957"
         },
         {
           "id": "1359323269",
@@ -54,14 +54,19 @@
           "href": "/v1/catalog/us/albums/1359323269"
         },
         {
-          "id": "1473038290",
+          "id": "1359514429",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1473038290"
+          "href": "/v1/catalog/us/albums/1359514429"
         },
         {
           "id": "1450893351",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1450893351"
+        },
+        {
+          "id": "1473038290",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1473038290"
         },
         {
           "id": "1500803901",
@@ -94,6 +99,11 @@
           "href": "/v1/catalog/us/albums/1611262677"
         },
         {
+          "id": "1611250715",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1611250715"
+        },
+        {
           "id": "1315250174",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1315250174"
@@ -114,19 +124,24 @@
           "href": "/v1/catalog/us/albums/1141338877"
         },
         {
+          "id": "1726653479",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1726653479"
+        },
+        {
           "id": "1491639343",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1491639343"
         },
         {
-          "id": "1611250715",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1611250715"
-        },
-        {
           "id": "1543063860",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1543063860"
+        },
+        {
+          "id": "1454352744",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1454352744"
         }
       ]
     }

@@ -7,6 +7,9 @@
     "genreNames": [
       "Metal"
     ],
+    "editorialNotes": {
+      "short": "It’s really here. Listen to TOOL’s first new song in 13 years."
+    },
     "artwork": {
       "width": 3840,
       "height": 3840,
@@ -16,9 +19,6 @@
       "textColor2": "f1c472",
       "textColor3": "bea76b",
       "textColor4": "c09d5b"
-    },
-    "editorialNotes": {
-      "short": "It’s really here. Listen to TOOL’s first new song in 13 years."
     },
     "url": "https://music.apple.com/us/artist/tool/140870416"
   },

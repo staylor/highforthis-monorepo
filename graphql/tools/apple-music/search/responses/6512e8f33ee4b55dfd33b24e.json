@@ -22,21 +22,17 @@
   "relationships": {
     "albums": {
       "href": "/v1/catalog/us/artists/338172312/albums",
+      "next": "/v1/catalog/us/artists/338172312/albums?offset=25",
       "data": [
-        {
-          "id": "1529625639",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1529625639"
-        },
         {
           "id": "673970570",
           "type": "albums",
           "href": "/v1/catalog/us/albums/673970570"
         },
         {
-          "id": "1714487173",
+          "id": "1529625639",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1714487173"
+          "href": "/v1/catalog/us/albums/1529625639"
         },
         {
           "id": "1035616150",
@@ -54,6 +50,11 @@
           "href": "/v1/catalog/us/albums/1701849976"
         },
         {
+          "id": "1714487173",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714487173"
+        },
+        {
           "id": "1240346102",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1240346102"
@@ -64,14 +65,14 @@
           "href": "/v1/catalog/us/albums/1439467532"
         },
         {
-          "id": "1714480852",
+          "id": "1714479641",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1714480852"
+          "href": "/v1/catalog/us/albums/1714479641"
         },
         {
-          "id": "1714489961",
+          "id": "1589489446",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1714489961"
+          "href": "/v1/catalog/us/albums/1589489446"
         },
         {
           "id": "1714484140",
@@ -79,19 +80,14 @@
           "href": "/v1/catalog/us/albums/1714484140"
         },
         {
-          "id": "1714484737",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1714484737"
-        },
-        {
           "id": "1714482360",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1714482360"
         },
         {
-          "id": "1479582107",
+          "id": "1714480852",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1479582107"
+          "href": "/v1/catalog/us/albums/1714480852"
         },
         {
           "id": "1407885264",
@@ -99,9 +95,39 @@
           "href": "/v1/catalog/us/albums/1407885264"
         },
         {
+          "id": "1714484737",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714484737"
+        },
+        {
+          "id": "1479582107",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1479582107"
+        },
+        {
           "id": "1714485786",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1714485786"
+        },
+        {
+          "id": "1714489961",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714489961"
+        },
+        {
+          "id": "1731387699",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1731387699"
+        },
+        {
+          "id": "1735726399",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1735726399"
+        },
+        {
+          "id": "1731378491",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1731378491"
         },
         {
           "id": "1727764728",
@@ -114,39 +140,14 @@
           "href": "/v1/catalog/us/albums/992209669"
         },
         {
-          "id": "1714479641",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1714479641"
-        },
-        {
           "id": "1715736980",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1715736980"
         },
         {
-          "id": "1589489446",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1589489446"
-        },
-        {
           "id": "1564267087",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1564267087"
-        },
-        {
-          "id": "1583244602",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1583244602"
-        },
-        {
-          "id": "1633522406",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1633522406"
-        },
-        {
-          "id": "1186695192",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1186695192"
         }
       ]
     }

@@ -8,14 +8,14 @@
       "Rock"
     ],
     "artwork": {
-      "width": 2276,
-      "height": 2276,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/5b/5a/7f/5b5a7f27-5c7d-dbb7-1a14-448f8d4044e7/pr_source.png/{w}x{h}bb.jpg",
-      "bgColor": "ffdb86",
-      "textColor1": "06212b",
-      "textColor2": "581d0f",
-      "textColor3": "38463d",
-      "textColor4": "794327"
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features221/v4/1b/f2/ea/1bf2ea78-aa2d-3346-6a18-af75f232a486/mzl.nusooruc.jpg/{w}x{h}bb.jpg",
+      "bgColor": "150b12",
+      "textColor1": "eaa789",
+      "textColor2": "dd9a7d",
+      "textColor3": "bf8772",
+      "textColor4": "b57e68"
     },
     "url": "https://music.apple.com/us/artist/dead-company/1142412475"
   },
@@ -40,9 +40,9 @@
           "href": "/v1/catalog/us/albums/1452006735"
         },
         {
-          "id": "1682886891",
+          "id": "1474609137",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1682886891"
+          "href": "/v1/catalog/us/albums/1474609137"
         },
         {
           "id": "1645459731",
@@ -50,14 +50,19 @@
           "href": "/v1/catalog/us/albums/1645459731"
         },
         {
+          "id": "1682886891",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1682886891"
+        },
+        {
           "id": "1513663969",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1513663969"
         },
         {
-          "id": "1474609137",
+          "id": "1448741122",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1474609137"
+          "href": "/v1/catalog/us/albums/1448741122"
         },
         {
           "id": "1680979895",
@@ -65,19 +70,14 @@
           "href": "/v1/catalog/us/albums/1680979895"
         },
         {
-          "id": "1547424376",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1547424376"
-        },
-        {
           "id": "1534705939",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1534705939"
         },
         {
-          "id": "1502718317",
+          "id": "1722350499",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1502718317"
+          "href": "/v1/catalog/us/albums/1722350499"
         },
         {
           "id": "1504447636",
@@ -90,14 +90,14 @@
           "href": "/v1/catalog/us/albums/1469321752"
         },
         {
-          "id": "1481598673",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1481598673"
-        },
-        {
           "id": "1534707709",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1534707709"
+        },
+        {
+          "id": "1481598673",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1481598673"
         },
         {
           "id": "1448731406",
@@ -110,29 +110,19 @@
           "href": "/v1/catalog/us/albums/1513664786"
         },
         {
-          "id": "1722350499",
+          "id": "1645606135",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1722350499"
+          "href": "/v1/catalog/us/albums/1645606135"
         },
         {
-          "id": "1477259940",
+          "id": "1502718317",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1477259940"
+          "href": "/v1/catalog/us/albums/1502718317"
         },
         {
-          "id": "1682883982",
+          "id": "1645459242",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1682883982"
-        },
-        {
-          "id": "1476842761",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1476842761"
-        },
-        {
-          "id": "1447384246",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1447384246"
+          "href": "/v1/catalog/us/albums/1645459242"
         },
         {
           "id": "1506578377",
@@ -140,14 +130,24 @@
           "href": "/v1/catalog/us/albums/1506578377"
         },
         {
-          "id": "1721999625",
+          "id": "1547424376",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1721999625"
+          "href": "/v1/catalog/us/albums/1547424376"
         },
         {
-          "id": "1542013645",
+          "id": "1453220154",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1542013645"
+          "href": "/v1/catalog/us/albums/1453220154"
+        },
+        {
+          "id": "1476842761",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1476842761"
+        },
+        {
+          "id": "1452003719",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1452003719"
         }
       ]
     }

@@ -1,0 +1,59 @@
+{
+  "id": "2522312",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/2522312",
+  "attributes": {
+    "name": "The Postal Service",
+    "genreNames": [
+      "Electronic"
+    ],
+    "artwork": {
+      "width": 1000,
+      "height": 1000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/3a/99/25/3a992567-b6ad-ac3c-864a-7f020c9dc7ab/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "182116",
+      "textColor1": "b5cae2",
+      "textColor2": "a8bfd8",
+      "textColor3": "95a8b9",
+      "textColor4": "8b9fb1"
+    },
+    "url": "https://music.apple.com/us/artist/the-postal-service/2522312"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/2522312/albums",
+      "data": [
+        {
+          "id": "597936899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/597936899"
+        },
+        {
+          "id": "20922902",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/20922902"
+        },
+        {
+          "id": "1538680371",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1538680371"
+        },
+        {
+          "id": "41441546",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/41441546"
+        },
+        {
+          "id": "20920002",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/20920002"
+        },
+        {
+          "id": "22552146",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/22552146"
+        }
+      ]
+    }
+  }
+}

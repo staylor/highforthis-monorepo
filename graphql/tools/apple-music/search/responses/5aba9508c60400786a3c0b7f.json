@@ -22,6 +22,7 @@
   "relationships": {
     "albums": {
       "href": "/v1/catalog/us/artists/75950796/albums",
+      "next": "/v1/catalog/us/artists/75950796/albums?offset=25",
       "data": [
         {
           "id": "1227049864",
@@ -74,6 +75,11 @@
           "href": "/v1/catalog/us/albums/942088604"
         },
         {
+          "id": "1709212896",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1709212896"
+        },
+        {
           "id": "1254579675",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1254579675"
@@ -84,14 +90,14 @@
           "href": "/v1/catalog/us/albums/1293370729"
         },
         {
-          "id": "1709212896",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1709212896"
-        },
-        {
           "id": "1728543210",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1728543210"
+        },
+        {
+          "id": "888561114",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/888561114"
         },
         {
           "id": "1021725522",
@@ -99,9 +105,9 @@
           "href": "/v1/catalog/us/albums/1021725522"
         },
         {
-          "id": "888561114",
+          "id": "1739497245",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/888561114"
+          "href": "/v1/catalog/us/albums/1739497245"
         },
         {
           "id": "393066798",
@@ -112,11 +118,6 @@
           "id": "1241502841",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1241502841"
-        },
-        {
-          "id": "1697205546",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1697205546"
         },
         {
           "id": "440880917",
@@ -137,6 +138,11 @@
           "id": "1573643019",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1573643019"
+        },
+        {
+          "id": "1738542052",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1738542052"
         },
         {
           "id": "1724205028",

@@ -5,7 +5,7 @@
   "attributes": {
     "name": "Lil Nas X",
     "genreNames": [
-      "Hip-Hop/Rap"
+      "Pop"
     ],
     "artwork": {
       "width": 1550,
@@ -55,6 +55,11 @@
           "href": "/v1/catalog/us/albums/1559318717"
         },
         {
+          "id": "1743532185",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1743532185"
+        },
+        {
           "id": "1539565272",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1539565272"
@@ -63,6 +68,11 @@
           "id": "1589534928",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1589534928"
+        },
+        {
+          "id": "1735843713",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1735843713"
         },
         {
           "id": "1589534783",
@@ -75,14 +85,14 @@
           "href": "/v1/catalog/us/albums/1539569479"
         },
         {
-          "id": "1474182253",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1474182253"
-        },
-        {
           "id": "1472630241",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1472630241"
+        },
+        {
+          "id": "1474182253",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474182253"
         },
         {
           "id": "1567410554",
@@ -105,19 +115,9 @@
           "href": "/v1/catalog/us/albums/1727005484"
         },
         {
-          "id": "1576552540",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1576552540"
-        },
-        {
           "id": "1495107244",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1495107244"
-        },
-        {
-          "id": "1631209981",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1631209981"
         },
         {
           "id": "1577414584",
@@ -125,14 +125,14 @@
           "href": "/v1/catalog/us/albums/1577414584"
         },
         {
+          "id": "1576552540",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1576552540"
+        },
+        {
           "id": "1725032062",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1725032062"
-        },
-        {
-          "id": "1724507120",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1724507120"
         },
         {
           "id": "1645947561",
@@ -145,9 +145,9 @@
           "href": "/v1/catalog/us/albums/1642613175"
         },
         {
-          "id": "1629545449",
+          "id": "1724507120",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1629545449"
+          "href": "/v1/catalog/us/albums/1724507120"
         }
       ]
     }

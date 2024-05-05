@@ -39,11 +39,6 @@
           "href": "/v1/catalog/us/albums/1518680087"
         },
         {
-          "id": "1619140676",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1619140676"
-        },
-        {
           "id": "1479655459",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1479655459"
@@ -52,6 +47,11 @@
           "id": "1653680057",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1653680057"
+        },
+        {
+          "id": "1619140676",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1619140676"
         },
         {
           "id": "1653685937",

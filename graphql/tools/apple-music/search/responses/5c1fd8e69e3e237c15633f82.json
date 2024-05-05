@@ -8,14 +8,14 @@
       "Alternative"
     ],
     "artwork": {
-      "width": 844,
-      "height": 844,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/63/14/7a/63147ae5-ad60-85a1-4b6b-3bd596ba92c2/b431d4c7-363b-4b07-9bc1-78d7f82624eb_ami-identity-bba226cdaf89fd55ae08ee2f98fc926c-2024-02-09T00-13-12.000Z_cropped.png/{w}x{h}bb.jpg",
-      "bgColor": "b49e91",
-      "textColor1": "0d0d14",
-      "textColor2": "0f1116",
-      "textColor3": "2e2a2d",
-      "textColor4": "302d2e"
+      "width": 1674,
+      "height": 1674,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages211/v4/02/2e/3c/022e3cbf-692c-8a0c-2652-751690133b36/902c48bb-3112-4bd4-b783-b773ed5a9429_ami-identity-bba226cdaf89fd55ae08ee2f98fc926c-2024-04-11T22-59-47.843Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "06102d",
+      "textColor1": "dce1cf",
+      "textColor2": "dcd4bd",
+      "textColor3": "b1b7af",
+      "textColor4": "b1ada0"
     },
     "url": "https://music.apple.com/us/artist/maggie-rogers/536790978"
   },
@@ -34,6 +34,11 @@
           "href": "/v1/catalog/us/albums/1616063370"
         },
         {
+          "id": "1727422029",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1727422029"
+        },
+        {
           "id": "1440897454",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1440897454"
@@ -49,11 +54,6 @@
           "href": "/v1/catalog/us/albums/1540693796"
         },
         {
-          "id": "1610579928",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1610579928"
-        },
-        {
           "id": "1540682645",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1540682645"
@@ -64,14 +64,19 @@
           "href": "/v1/catalog/us/albums/1624951261"
         },
         {
-          "id": "1611476270",
+          "id": "1610579928",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1611476270"
+          "href": "/v1/catalog/us/albums/1610579928"
         },
         {
           "id": "1610579554",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1610579554"
+        },
+        {
+          "id": "1611476270",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1611476270"
         },
         {
           "id": "1543296419",
@@ -104,6 +109,11 @@
           "href": "/v1/catalog/us/albums/1487510071"
         },
         {
+          "id": "1667025291",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667025291"
+        },
+        {
           "id": "1444270630",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1444270630"
@@ -122,16 +132,6 @@
           "id": "1444858575",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1444858575"
-        },
-        {
-          "id": "1727422029",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1727422029"
-        },
-        {
-          "id": "1667025291",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1667025291"
         }
       ]
     }

@@ -60,14 +60,14 @@
           "href": "/v1/catalog/us/albums/1513201189"
         },
         {
-          "id": "1443205414",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1443205414"
-        },
-        {
           "id": "1440903369",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1440903369"
+        },
+        {
+          "id": "1362338374",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1362338374"
         },
         {
           "id": "1711626078",
@@ -85,19 +85,9 @@
           "href": "/v1/catalog/us/albums/1362347512"
         },
         {
-          "id": "1720033160",
+          "id": "1566292867",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1720033160"
-        },
-        {
-          "id": "1362338374",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1362338374"
-        },
-        {
-          "id": "1362319254",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1362319254"
+          "href": "/v1/catalog/us/albums/1566292867"
         },
         {
           "id": "1702703910",
@@ -105,14 +95,19 @@
           "href": "/v1/catalog/us/albums/1702703910"
         },
         {
+          "id": "1362319254",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1362319254"
+        },
+        {
           "id": "1362346805",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1362346805"
         },
         {
-          "id": "1566292867",
+          "id": "1443205414",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1566292867"
+          "href": "/v1/catalog/us/albums/1443205414"
         },
         {
           "id": "1442359518",
@@ -148,6 +143,11 @@
           "id": "1444870474",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1444870474"
+        },
+        {
+          "id": "1445175267",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445175267"
         }
       ]
     }

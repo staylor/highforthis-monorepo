@@ -5,17 +5,17 @@
   "attributes": {
     "name": "Crumb",
     "genreNames": [
-      "Rock"
+      "Alternative"
     ],
     "artwork": {
-      "width": 1400,
-      "height": 1400,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/dd/5c/5e/dd5c5e83-fb15-b288-7f72-4e1d236ffa1e/67c5e7ba-e050-47ec-8c9d-382f063a2a0f_ami-identity-22c19e3640bf26a6970200b0491cea11-2023-09-07T19-45-09.679Z_cropped.png/{w}x{h}bb.jpg",
-      "bgColor": "311d1e",
-      "textColor1": "e6e4f0",
-      "textColor2": "bac4dc",
-      "textColor3": "c2bcc6",
-      "textColor4": "9ea2b6"
+      "width": 1277,
+      "height": 1277,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/6f/5d/0f/6f5d0fa5-06f5-4be9-fa81-35345c6e33d3/4811f88c-2fc7-40f9-8f55-4c1ed70ed938_ami-identity-22c19e3640bf26a6970200b0491cea11-2024-03-26T03-54-53.324Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "e4d9d5",
+      "textColor1": "15080b",
+      "textColor2": "331810",
+      "textColor3": "3e3233",
+      "textColor4": "573f37"
     },
     "url": "https://music.apple.com/us/artist/crumb/1155296326"
   },
@@ -34,14 +34,19 @@
           "href": "/v1/catalog/us/albums/1465125802"
         },
         {
+          "id": "1557579913",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1557579913"
+        },
+        {
           "id": "1463574997",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1463574997"
         },
         {
-          "id": "1557579913",
+          "id": "1732581971",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1557579913"
+          "href": "/v1/catalog/us/albums/1732581971"
         },
         {
           "id": "1703580629",

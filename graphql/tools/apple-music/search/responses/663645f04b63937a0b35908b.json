@@ -1,0 +1,158 @@
+{
+  "id": "2715720",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/2715720",
+  "attributes": {
+    "name": "Kanye West",
+    "genreNames": [
+      "Hip-Hop/Rap"
+    ],
+    "artwork": {
+      "width": 1158,
+      "height": 1158,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/6b/ca/47/6bca47fd-8a58-0652-8de8-475394e8159d/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "000000",
+      "textColor1": "f2f2f2",
+      "textColor2": "e5e5e5",
+      "textColor3": "c1c1c1",
+      "textColor4": "b7b7b7"
+    },
+    "editorialNotes": {
+      "short": "Watch a clip of Zane Lowe's upcoming exclusive interview with Kanye West"
+    },
+    "url": "https://music.apple.com/us/artist/kanye-west/2715720"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/2715720/albums",
+      "next": "/v1/catalog/us/artists/2715720/albums?offset=25",
+      "data": [
+        {
+          "id": "1484936940",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484936940"
+        },
+        {
+          "id": "1396710872",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1396710872"
+        },
+        {
+          "id": "1396710872",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1396710872"
+        },
+        {
+          "id": "1441456689",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441456689"
+        },
+        {
+          "id": "1443063578",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443063578"
+        },
+        {
+          "id": "1451901307",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1451901307"
+        },
+        {
+          "id": "1440742903",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440742903"
+        },
+        {
+          "id": "1412872568",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1412872568"
+        },
+        {
+          "id": "1731230943",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1731230943"
+        },
+        {
+          "id": "1440668749",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440668749"
+        },
+        {
+          "id": "1440873068",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440873068"
+        },
+        {
+          "id": "1595496182",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1595496182"
+        },
+        {
+          "id": "1441410287",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441410287"
+        },
+        {
+          "id": "1492874574",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492874574"
+        },
+        {
+          "id": "1492874574",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492874574"
+        },
+        {
+          "id": "1440845249",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440845249"
+        },
+        {
+          "id": "1440848092",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440848092"
+        },
+        {
+          "id": "1587795158",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1587795158"
+        },
+        {
+          "id": "1445169359",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445169359"
+        },
+        {
+          "id": "1445279978",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445279978"
+        },
+        {
+          "id": "1441460375",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441460375"
+        },
+        {
+          "id": "1609149054",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1609149054"
+        },
+        {
+          "id": "1442845779",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442845779"
+        },
+        {
+          "id": "1397651890",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1397651890"
+        },
+        {
+          "id": "1397651890",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1397651890"
+        }
+      ]
+    }
+  }
+}

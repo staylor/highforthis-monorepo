@@ -24,14 +24,14 @@
       "href": "/v1/catalog/us/artists/1084999797/albums",
       "data": [
         {
-          "id": "1505812157",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1505812157"
-        },
-        {
           "id": "1505802262",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1505802262"
+        },
+        {
+          "id": "1505812157",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505812157"
         },
         {
           "id": "1084999795",

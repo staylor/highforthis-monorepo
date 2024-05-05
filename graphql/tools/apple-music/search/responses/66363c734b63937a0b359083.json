@@ -1,0 +1,94 @@
+{
+  "id": "640286",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/640286",
+  "attributes": {
+    "name": "D'Angelo",
+    "genreNames": [
+      "R&B/Soul"
+    ],
+    "artwork": {
+      "width": 3840,
+      "height": 3840,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/7d/71/c5/7d71c5d6-c73d-75cd-7d96-3180723f386f/mza_7300933506351380236.png/{w}x{h}bb.jpg",
+      "bgColor": "5f5c5a",
+      "textColor1": "f3f2ed",
+      "textColor2": "e9e9e9",
+      "textColor3": "d5d4cf",
+      "textColor4": "cdcdcc"
+    },
+    "url": "https://music.apple.com/us/artist/dangelo/640286"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/640286/albums",
+      "data": [
+        {
+          "id": "1440842296",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440842296"
+        },
+        {
+          "id": "950764300",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/950764300"
+        },
+        {
+          "id": "1440841365",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440841365"
+        },
+        {
+          "id": "1444220326",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444220326"
+        },
+        {
+          "id": "1443124407",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443124407"
+        },
+        {
+          "id": "1444063061",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444063061"
+        },
+        {
+          "id": "1443829916",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443829916"
+        },
+        {
+          "id": "1442844056",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442844056"
+        },
+        {
+          "id": "291970548",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/291970548"
+        },
+        {
+          "id": "1447432465",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1447432465"
+        },
+        {
+          "id": "1473051360",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1473051360"
+        },
+        {
+          "id": "1634717607",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1634717607"
+        },
+        {
+          "id": "1473049116",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1473049116"
+        }
+      ]
+    }
+  }
+}

@@ -8,14 +8,14 @@
       "Alternative"
     ],
     "artwork": {
-      "width": 2460,
-      "height": 2460,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages123/v4/12/fd/3b/12fd3bc1-855e-e55f-5a77-5dca72cd2b70/85f49182-c886-4c88-926a-cfa2ead74a3a_ami-identity-7dd23bb0cb3a6d83af68d2c7ba069df8-2022-12-21T16-12-02.634Z_cropped.png/{w}x{h}bb.jpg",
-      "bgColor": "0a1215",
-      "textColor1": "c9d6d8",
-      "textColor2": "adbec7",
-      "textColor3": "a3aeb1",
-      "textColor4": "8c9ba3"
+      "width": 1140,
+      "height": 1140,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/b7/1f/77/b71f77a0-6aa6-acd8-1081-cb5b7ca03498/8d6ff3fa-70d6-4ac3-a42f-076f4d2c52a1_ami-identity-7dd23bb0cb3a6d83af68d2c7ba069df8-2024-03-11T18-10-52.426Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "0497d4",
+      "textColor1": "0a090c",
+      "textColor2": "231510",
+      "textColor3": "092634",
+      "textColor4": "1c2f37"
     },
     "url": "https://music.apple.com/us/artist/weezer/115234"
   },
@@ -55,14 +55,19 @@
           "href": "/v1/catalog/us/albums/1479227321"
         },
         {
+          "id": "1100739016",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1100739016"
+        },
+        {
           "id": "1442329821",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1442329821"
         },
         {
-          "id": "1100739016",
+          "id": "1251573484",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1100739016"
+          "href": "/v1/catalog/us/albums/1251573484"
         },
         {
           "id": "1440869641",
@@ -75,14 +80,14 @@
           "href": "/v1/catalog/us/albums/1440868131"
         },
         {
-          "id": "1613839414",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1613839414"
-        },
-        {
           "id": "1160756134",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1160756134"
+        },
+        {
+          "id": "1613839414",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1613839414"
         },
         {
           "id": "1440865387",
@@ -90,19 +95,14 @@
           "href": "/v1/catalog/us/albums/1440865387"
         },
         {
-          "id": "1628433682",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1628433682"
-        },
-        {
           "id": "1645304165",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1645304165"
         },
         {
-          "id": "1440865423",
+          "id": "1445286982",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1440865423"
+          "href": "/v1/catalog/us/albums/1445286982"
         },
         {
           "id": "1440869116",
@@ -115,6 +115,16 @@
           "href": "/v1/catalog/us/albums/1440889647"
         },
         {
+          "id": "1628433682",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1628433682"
+        },
+        {
+          "id": "1440865423",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440865423"
+        },
+        {
           "id": "1659144177",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1659144177"
@@ -125,29 +135,19 @@
           "href": "/v1/catalog/us/albums/1440852447"
         },
         {
-          "id": "1445286982",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1445286982"
-        },
-        {
           "id": "1440892329",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1440892329"
         },
         {
-          "id": "1444026224",
+          "id": "1587071979",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1444026224"
+          "href": "/v1/catalog/us/albums/1587071979"
         },
         {
           "id": "1440797971",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1440797971"
-        },
-        {
-          "id": "1587071979",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1587071979"
         }
       ]
     }

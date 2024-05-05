@@ -8,14 +8,14 @@
       "Pop"
     ],
     "artwork": {
-      "width": 4353,
-      "height": 4353,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/75/c4/95/75c495c5-b5e9-403d-09bb-6ce5ec6f9527/599f912e-0ca3-4096-9f7f-86e3bdb17296_ami-identity-c3a28aa5d157b353a2a86dce8256d5cb-2023-08-23T17-38-09.831Z_cropped.png/{w}x{h}bb.jpg",
-      "bgColor": "252726",
-      "textColor1": "efeff1",
-      "textColor2": "bed2ce",
-      "textColor3": "c7c7c9",
-      "textColor4": "a0b0ad"
+      "width": 1417,
+      "height": 1417,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/65/ca/b6/65cab660-2c27-55ff-1191-a29369e28dbf/d5bdc703-d014-4e4c-9d28-58f79397aa8d_ami-identity-c3a28aa5d157b353a2a86dce8256d5cb-2024-04-03T17-41-46.028Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "7d9cb2",
+      "textColor1": "050507",
+      "textColor2": "2f1713",
+      "textColor3": "1d2429",
+      "textColor4": "3f3233"
     },
     "url": "https://music.apple.com/us/artist/omar-apollo/1258165134"
   },
@@ -55,19 +55,14 @@
           "href": "/v1/catalog/us/albums/1702966460"
         },
         {
-          "id": "1650907298",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1650907298"
-        },
-        {
-          "id": "1702964017",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1702964017"
-        },
-        {
           "id": "1533868022",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1533868022"
+        },
+        {
+          "id": "1650907298",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650907298"
         },
         {
           "id": "1475510311",
@@ -80,9 +75,9 @@
           "href": "/v1/catalog/us/albums/1445548268"
         },
         {
-          "id": "1654555320",
+          "id": "1702964017",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1654555320"
+          "href": "/v1/catalog/us/albums/1702964017"
         },
         {
           "id": "1451974062",
@@ -115,11 +110,6 @@
           "href": "/v1/catalog/us/albums/1378993932"
         },
         {
-          "id": "1712344760",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1712344760"
-        },
-        {
           "id": "1445547941",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1445547941"
@@ -135,11 +125,6 @@
           "href": "/v1/catalog/us/albums/1504052113"
         },
         {
-          "id": "1445547925",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1445547925"
-        },
-        {
           "id": "1484691676",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1484691676"
@@ -148,6 +133,21 @@
           "id": "1303994066",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1303994066"
+        },
+        {
+          "id": "1445547925",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445547925"
+        },
+        {
+          "id": "1378991834",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1378991834"
+        },
+        {
+          "id": "1435638739",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1435638739"
         }
       ]
     }

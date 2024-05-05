@@ -8,14 +8,14 @@
       "Alternative"
     ],
     "artwork": {
-      "width": 1000,
-      "height": 1000,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/3b/3a/8b/3b3a8b81-1145-ea65-b432-abbefb45e3e8/pr_source.png/{w}x{h}bb.jpg",
-      "bgColor": "e17d35",
-      "textColor1": "000001",
-      "textColor2": "001f1f",
-      "textColor3": "2d190c",
-      "textColor4": "2d3123"
+      "width": 2477,
+      "height": 2477,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages211/v4/67/7d/9c/677d9c2b-5cec-e938-8b57-ed1aba95ace6/4793ed89-c52a-40d5-b082-f4a4c09ed4a0_ami-identity-aa0c7b6cf52da6db8f87027511452158-2024-04-16T15-50-44.460Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "091016",
+      "textColor1": "b0c8da",
+      "textColor2": "9abaca",
+      "textColor3": "8ea3b2",
+      "textColor4": "7d98a6"
     },
     "url": "https://music.apple.com/us/artist/pixies/2730151"
   },
@@ -55,6 +55,11 @@
           "href": "/v1/catalog/us/albums/1025318588"
         },
         {
+          "id": "1496620934",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1496620934"
+        },
+        {
           "id": "1027467344",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1027467344"
@@ -75,11 +80,6 @@
           "href": "/v1/catalog/us/albums/1390857232"
         },
         {
-          "id": "310995689",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/310995689"
-        },
-        {
           "id": "1589760454",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1589760454"
@@ -90,9 +90,9 @@
           "href": "/v1/catalog/us/albums/291382063"
         },
         {
-          "id": "291381759",
+          "id": "1545592824",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/291381759"
+          "href": "/v1/catalog/us/albums/1545592824"
         },
         {
           "id": "7060104",
@@ -100,14 +100,24 @@
           "href": "/v1/catalog/us/albums/7060104"
         },
         {
+          "id": "1623592008",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1623592008"
+        },
+        {
+          "id": "291381759",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/291381759"
+        },
+        {
           "id": "291381554",
           "type": "albums",
           "href": "/v1/catalog/us/albums/291381554"
         },
         {
-          "id": "1623592008",
+          "id": "1540673055",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1623592008"
+          "href": "/v1/catalog/us/albums/1540673055"
         },
         {
           "id": "175976483",
@@ -115,14 +125,9 @@
           "href": "/v1/catalog/us/albums/175976483"
         },
         {
-          "id": "1545592824",
+          "id": "310995689",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1545592824"
-        },
-        {
-          "id": "1540673055",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1540673055"
+          "href": "/v1/catalog/us/albums/310995689"
         },
         {
           "id": "135230409",
@@ -135,14 +140,9 @@
           "href": "/v1/catalog/us/albums/1106852752"
         },
         {
-          "id": "1541823922",
+          "id": "1539768518",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1541823922"
-        },
-        {
-          "id": "1565969474",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1565969474"
+          "href": "/v1/catalog/us/albums/1539768518"
         },
         {
           "id": "1574539372",

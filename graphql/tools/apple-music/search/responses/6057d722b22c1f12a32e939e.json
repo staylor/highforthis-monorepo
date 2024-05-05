@@ -8,14 +8,14 @@
       "Pop"
     ],
     "artwork": {
-      "width": 3840,
-      "height": 3840,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features126/v4/19/c1/e7/19c1e79d-17d7-d345-0859-1f571baf4b35/mza_17588248318350205547.png/{w}x{h}bb.jpg",
-      "bgColor": "9fbecc",
-      "textColor1": "180903",
-      "textColor2": "391f12",
-      "textColor3": "332d2b",
-      "textColor4": "4d3f37"
+      "width": 1000,
+      "height": 1000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages112/v4/1d/39/4e/1d394ed5-279c-3186-4b30-e139a3f93adc/8e1d4c20-f1b8-48de-becd-8be82c903060_ami-identity-994af5c375f4c3aa96cd6ced4a700799-2024-03-28T12-56-11.536Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "2d2523",
+      "textColor1": "eeebe6",
+      "textColor2": "d8cfc5",
+      "textColor3": "c8c3bf",
+      "textColor4": "b6ada4"
     },
     "editorialNotes": {
       "short": "From country sweetheart to pop supernova, Swift is unstoppable."
@@ -27,6 +27,11 @@
       "href": "/v1/catalog/us/artists/159260351/albums",
       "next": "/v1/catalog/us/artists/159260351/albums?offset=25",
       "data": [
+        {
+          "id": "1742057774",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1742057774"
+        },
         {
           "id": "1468058165",
           "type": "albums",
@@ -63,14 +68,19 @@
           "href": "/v1/catalog/us/albums/1547315522"
         },
         {
-          "id": "1649434004",
+          "id": "1736268193",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1649434004"
+          "href": "/v1/catalog/us/albums/1736268193"
         },
         {
           "id": "1552791073",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1552791073"
+        },
+        {
+          "id": "1649434004",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1649434004"
         },
         {
           "id": "1690839749",
@@ -88,39 +98,14 @@
           "href": "/v1/catalog/us/albums/1440935467"
         },
         {
-          "id": "1713845538",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1713845538"
-        },
-        {
           "id": "1689131527",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1689131527"
         },
         {
-          "id": "1708308989",
+          "id": "1713845538",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1708308989"
-        },
-        {
-          "id": "1440935340",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1440935340"
-        },
-        {
-          "id": "1440920310",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1440920310"
-        },
-        {
-          "id": "1440913923",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1440913923"
-        },
-        {
-          "id": "1440933512",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1440933512"
+          "href": "/v1/catalog/us/albums/1713845538"
         },
         {
           "id": "1524793738",
@@ -128,9 +113,29 @@
           "href": "/v1/catalog/us/albums/1524793738"
         },
         {
-          "id": "1440935756",
+          "id": "1440935340",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1440935756"
+          "href": "/v1/catalog/us/albums/1440935340"
+        },
+        {
+          "id": "1440913923",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440913923"
+        },
+        {
+          "id": "1708308989",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1708308989"
+        },
+        {
+          "id": "1440920310",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440920310"
+        },
+        {
+          "id": "1440933512",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440933512"
         },
         {
           "id": "1440924803",
@@ -138,19 +143,14 @@
           "href": "/v1/catalog/us/albums/1440924803"
         },
         {
-          "id": "1651516410",
+          "id": "1440935756",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1651516410"
+          "href": "/v1/catalog/us/albums/1440935756"
         },
         {
-          "id": "1650859878",
+          "id": "1742073690",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1650859878"
-        },
-        {
-          "id": "1541904688",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1541904688"
+          "href": "/v1/catalog/us/albums/1742073690"
         }
       ]
     }

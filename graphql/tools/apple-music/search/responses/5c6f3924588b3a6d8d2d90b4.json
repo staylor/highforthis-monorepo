@@ -39,14 +39,14 @@
           "href": "/v1/catalog/us/albums/41757310"
         },
         {
-          "id": "1615695956",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1615695956"
-        },
-        {
           "id": "140208918",
           "type": "albums",
           "href": "/v1/catalog/us/albums/140208918"
+        },
+        {
+          "id": "1615695956",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1615695956"
         },
         {
           "id": "967409661",
@@ -64,24 +64,24 @@
           "href": "/v1/catalog/us/albums/296194043"
         },
         {
-          "id": "310538272",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/310538272"
-        },
-        {
-          "id": "259708570",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/259708570"
-        },
-        {
           "id": "1496076187",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1496076187"
         },
         {
+          "id": "310538272",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/310538272"
+        },
+        {
           "id": "60293415",
           "type": "albums",
           "href": "/v1/catalog/us/albums/60293415"
+        },
+        {
+          "id": "259708570",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/259708570"
         },
         {
           "id": "41825205",
@@ -99,11 +99,6 @@
           "href": "/v1/catalog/us/albums/120992114"
         },
         {
-          "id": "1656191048",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1656191048"
-        },
-        {
           "id": "259321845",
           "type": "albums",
           "href": "/v1/catalog/us/albums/259321845"
@@ -112,6 +107,11 @@
           "id": "259321618",
           "type": "albums",
           "href": "/v1/catalog/us/albums/259321618"
+        },
+        {
+          "id": "1656191048",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1656191048"
         }
       ]
     }

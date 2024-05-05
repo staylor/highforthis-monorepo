@@ -7,6 +7,9 @@
     "genreNames": [
       "R&B/Soul"
     ],
+    "editorialNotes": {
+      "short": "A subversive vocalist who emerged from the underground to define millennial R&B."
+    },
     "artwork": {
       "width": 1437,
       "height": 1437,
@@ -16,9 +19,6 @@
       "textColor2": "e5e5e5",
       "textColor3": "d2d8da",
       "textColor4": "bfc3c8"
-    },
-    "editorialNotes": {
-      "short": "A subversive vocalist who emerged from the underground to define millennial R&B."
     },
     "url": "https://music.apple.com/us/artist/the-weeknd/479756766"
   },
@@ -78,19 +78,14 @@
           "href": "/v1/catalog/us/albums/1558941834"
         },
         {
-          "id": "1445056812",
+          "id": "1714908584",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1445056812"
+          "href": "/v1/catalog/us/albums/1714908584"
         },
         {
           "id": "1440849138",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1440849138"
-        },
-        {
-          "id": "1714908584",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1714908584"
         },
         {
           "id": "1603164027",
@@ -108,14 +103,19 @@
           "href": "/v1/catalog/us/albums/1505682596"
         },
         {
+          "id": "1618519111",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1618519111"
+        },
+        {
           "id": "1674298155",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1674298155"
         },
         {
-          "id": "1618519111",
+          "id": "1440870373",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1618519111"
+          "href": "/v1/catalog/us/albums/1440870373"
         },
         {
           "id": "1579255902",
@@ -123,14 +123,9 @@
           "href": "/v1/catalog/us/albums/1579255902"
         },
         {
-          "id": "1550875218",
+          "id": "1615127777",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1550875218"
-        },
-        {
-          "id": "1440870373",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1440870373"
+          "href": "/v1/catalog/us/albums/1615127777"
         },
         {
           "id": "1598758840",
@@ -143,9 +138,14 @@
           "href": "/v1/catalog/us/albums/1659775403"
         },
         {
-          "id": "1505683624",
+          "id": "1550875218",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1505683624"
+          "href": "/v1/catalog/us/albums/1550875218"
+        },
+        {
+          "id": "1729918970",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1729918970"
         },
         {
           "id": "1444617461",

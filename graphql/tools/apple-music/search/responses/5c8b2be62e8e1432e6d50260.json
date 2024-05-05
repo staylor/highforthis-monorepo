@@ -49,9 +49,9 @@
           "href": "/v1/catalog/us/albums/1440900873"
         },
         {
-          "id": "1708466937",
+          "id": "1740356196",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1708466937"
+          "href": "/v1/catalog/us/albums/1740356196"
         },
         {
           "id": "1444319894",
@@ -97,6 +97,11 @@
           "id": "1675600414",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1675600414"
+        },
+        {
+          "id": "1708466937",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1708466937"
         }
       ]
     }

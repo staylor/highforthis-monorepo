@@ -30,14 +30,14 @@
           "href": "/v1/catalog/us/albums/1396106377"
         },
         {
+          "id": "966377290",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/966377290"
+        },
+        {
           "id": "718938040",
           "type": "albums",
           "href": "/v1/catalog/us/albums/718938040"
-        },
-        {
-          "id": "958998203",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/958998203"
         },
         {
           "id": "966379289",
@@ -45,9 +45,9 @@
           "href": "/v1/catalog/us/albums/966379289"
         },
         {
-          "id": "966377290",
+          "id": "958998203",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/966377290"
+          "href": "/v1/catalog/us/albums/958998203"
         },
         {
           "id": "1621735243",
@@ -65,14 +65,14 @@
           "href": "/v1/catalog/us/albums/967478425"
         },
         {
-          "id": "967446215",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/967446215"
-        },
-        {
           "id": "1473409295",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1473409295"
+        },
+        {
+          "id": "967446215",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/967446215"
         },
         {
           "id": "719016006",
@@ -80,14 +80,14 @@
           "href": "/v1/catalog/us/albums/719016006"
         },
         {
-          "id": "718599824",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/718599824"
-        },
-        {
           "id": "966388650",
           "type": "albums",
           "href": "/v1/catalog/us/albums/966388650"
+        },
+        {
+          "id": "1668869582",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1668869582"
         },
         {
           "id": "1547871262",
@@ -95,9 +95,9 @@
           "href": "/v1/catalog/us/albums/1547871262"
         },
         {
-          "id": "1668869582",
+          "id": "718599824",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1668869582"
+          "href": "/v1/catalog/us/albums/718599824"
         },
         {
           "id": "966378506",
@@ -115,11 +115,6 @@
           "href": "/v1/catalog/us/albums/309020532"
         },
         {
-          "id": "718595359",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/718595359"
-        },
-        {
           "id": "718782598",
           "type": "albums",
           "href": "/v1/catalog/us/albums/718782598"
@@ -135,9 +130,14 @@
           "href": "/v1/catalog/us/albums/721866557"
         },
         {
-          "id": "290072785",
+          "id": "718595359",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/290072785"
+          "href": "/v1/catalog/us/albums/718595359"
+        },
+        {
+          "id": "128034041",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/128034041"
         },
         {
           "id": "718831257",
@@ -145,9 +145,9 @@
           "href": "/v1/catalog/us/albums/718831257"
         },
         {
-          "id": "162902310",
+          "id": "290072785",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/162902310"
+          "href": "/v1/catalog/us/albums/290072785"
         }
       ]
     }

@@ -25,11 +25,6 @@
       "next": "/v1/catalog/us/artists/472054/albums?offset=25",
       "data": [
         {
-          "id": "1421952733",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1421952733"
-        },
-        {
           "id": "184335550",
           "type": "albums",
           "href": "/v1/catalog/us/albums/184335550"
@@ -110,11 +105,6 @@
           "href": "/v1/catalog/us/albums/254102591"
         },
         {
-          "id": "157914424",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/157914424"
-        },
-        {
           "id": "322697981",
           "type": "albums",
           "href": "/v1/catalog/us/albums/322697981"
@@ -130,14 +120,19 @@
           "href": "/v1/catalog/us/albums/1660596416"
         },
         {
+          "id": "157907156",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/157907156"
+        },
+        {
           "id": "214500265",
           "type": "albums",
           "href": "/v1/catalog/us/albums/214500265"
         },
         {
-          "id": "157907156",
+          "id": "157914424",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/157907156"
+          "href": "/v1/catalog/us/albums/157914424"
         },
         {
           "id": "267890998",
@@ -148,6 +143,11 @@
           "id": "197627635",
           "type": "albums",
           "href": "/v1/catalog/us/albums/197627635"
+        },
+        {
+          "id": "1421952733",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1421952733"
         }
       ]
     }

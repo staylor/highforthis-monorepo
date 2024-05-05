@@ -8,14 +8,14 @@
       "Alternative"
     ],
     "artwork": {
-      "width": 3840,
-      "height": 3840,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/17/e2/01/17e2010e-1ace-7927-90e5-0304d9dcc4ba/pr_source.png/{w}x{h}bb.jpg",
-      "bgColor": "c8cfd7",
-      "textColor1": "0d0d0f",
-      "textColor2": "272320",
-      "textColor3": "333337",
-      "textColor4": "474544"
+      "width": 1529,
+      "height": 1529,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages112/v4/50/cc/57/50cc578c-425c-9ec4-383d-468350622f45/19d8a8ba-1bb8-4867-94ad-0bb94d0b72f5_ami-identity-43d647c7370967b01265535febfaffe0-2024-03-19T01-37-04.360Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "232a30",
+      "textColor1": "e3d3d2",
+      "textColor2": "dac8c7",
+      "textColor3": "bdb1b1",
+      "textColor4": "b5a9a9"
     },
     "url": "https://music.apple.com/us/artist/mt-joy/1156713197"
   },
@@ -64,11 +64,6 @@
           "href": "/v1/catalog/us/albums/1484717379"
         },
         {
-          "id": "1698382677",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1698382677"
-        },
-        {
           "id": "1536047646",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1536047646"
@@ -102,6 +97,16 @@
           "id": "1688485411",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1688485411"
+        },
+        {
+          "id": "1732269666",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1732269666"
+        },
+        {
+          "id": "1698382677",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1698382677"
         }
       ]
     }

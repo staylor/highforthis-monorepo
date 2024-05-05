@@ -1,0 +1,49 @@
+{
+  "id": "129692168",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/129692168",
+  "attributes": {
+    "name": "Tapes 'n Tapes",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1800,
+      "height": 1800,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/6e/4c/ad/6e4cada9-b979-1f63-bffa-6b516bccc43c/mzl.cgjebfuf.jpg/{w}x{h}bb.jpg",
+      "bgColor": "f7f5fb",
+      "textColor1": "0a0e09",
+      "textColor2": "1b221e",
+      "textColor3": "393c39",
+      "textColor4": "474c4a"
+    },
+    "url": "https://music.apple.com/us/artist/tapes-n-tapes/129692168"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/129692168/albums",
+      "data": [
+        {
+          "id": "1440173759",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440173759"
+        },
+        {
+          "id": "1292651033",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1292651033"
+        },
+        {
+          "id": "1440172765",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440172765"
+        },
+        {
+          "id": "1188879658",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1188879658"
+        }
+      ]
+    }
+  }
+}

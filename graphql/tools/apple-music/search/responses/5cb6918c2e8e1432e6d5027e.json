@@ -8,14 +8,14 @@
       "R&B/Soul"
     ],
     "artwork": {
-      "width": 3650,
-      "height": 3650,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/37/7f/82/377f82b2-d145-5ce4-db4f-2bc434d4d6ee/pr_source.png/{w}x{h}bb.jpg",
-      "bgColor": "8fbdcd",
-      "textColor1": "120a08",
-      "textColor2": "321b11",
-      "textColor3": "2b2e30",
-      "textColor4": "443b36"
+      "width": 4641,
+      "height": 4641,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/fe/a2/72/fea2725d-0390-1798-b461-1b7f4e2b6176/269ba5b1-cdf8-408b-99a5-2073ff322fb3_ami-identity-19aec74056de095bcdd2d625f42128c4-2024-04-03T17-33-04.688Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "0c110a",
+      "textColor1": "eedade",
+      "textColor2": "e8c1bc",
+      "textColor3": "c1b1b3",
+      "textColor4": "bc9e99"
     },
     "url": "https://music.apple.com/us/artist/khalid/82842423"
   },
@@ -55,11 +55,6 @@
           "href": "/v1/catalog/us/albums/1438904068"
         },
         {
-          "id": "1444274049",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1444274049"
-        },
-        {
           "id": "1249417900",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1249417900"
@@ -70,19 +65,14 @@
           "href": "/v1/catalog/us/albums/1261528575"
         },
         {
-          "id": "1596811890",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1596811890"
-        },
-        {
-          "id": "1590025786",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1590025786"
-        },
-        {
           "id": "1478756834",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1478756834"
+        },
+        {
+          "id": "1596811890",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596811890"
         },
         {
           "id": "1412728177",
@@ -90,14 +80,19 @@
           "href": "/v1/catalog/us/albums/1412728177"
         },
         {
-          "id": "1688655254",
+          "id": "1590025786",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1688655254"
+          "href": "/v1/catalog/us/albums/1590025786"
         },
         {
           "id": "1597146541",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1597146541"
+        },
+        {
+          "id": "1688655254",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1688655254"
         },
         {
           "id": "1420024406",
@@ -110,19 +105,14 @@
           "href": "/v1/catalog/us/albums/1482414033"
         },
         {
-          "id": "1636957314",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1636957314"
-        },
-        {
           "id": "1493830302",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1493830302"
         },
         {
-          "id": "1502604785",
+          "id": "1422001761",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1502604785"
+          "href": "/v1/catalog/us/albums/1422001761"
         },
         {
           "id": "1662160614",
@@ -130,24 +120,34 @@
           "href": "/v1/catalog/us/albums/1662160614"
         },
         {
+          "id": "1444274049",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444274049"
+        },
+        {
           "id": "1268152497",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1268152497"
         },
         {
-          "id": "1719856196",
+          "id": "1194635219",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1719856196"
+          "href": "/v1/catalog/us/albums/1194635219"
         },
         {
-          "id": "1575795384",
+          "id": "1502604785",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1575795384"
+          "href": "/v1/catalog/us/albums/1502604785"
         },
         {
-          "id": "1640106339",
+          "id": "1397556679",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1640106339"
+          "href": "/v1/catalog/us/albums/1397556679"
+        },
+        {
+          "id": "1181070446",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1181070446"
         }
       ]
     }

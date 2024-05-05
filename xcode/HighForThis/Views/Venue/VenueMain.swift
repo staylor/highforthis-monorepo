@@ -78,9 +78,9 @@ struct VenueMain: View {
     }
 }
 
-#Preview("Warsaw") {
+#Preview("Radio City Music Hall") {
     AppWrapper {
-        VenueMain(name: "Warsaw", slug: "warsaw")
+        VenueMain(name: "Radio City Music Hall", slug: "radio-city-music-hall")
     }
 }
 
@@ -105,5 +105,11 @@ struct VenueMain: View {
 #Preview("Barclays Center") {
     AppWrapper {
         VenueMain(name: "Barclays Center", slug: "barclays-center")
+    }
+}
+
+#Preview("Knockdown Center") {
+    AppWrapper {
+        VenueMain(name: "Knockdown Center", slug: "knockdown-center")
     }
 }

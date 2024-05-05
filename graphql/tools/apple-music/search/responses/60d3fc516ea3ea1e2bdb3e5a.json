@@ -24,9 +24,9 @@
       "href": "/v1/catalog/us/artists/561740721/albums",
       "data": [
         {
-          "id": "1576189955",
+          "id": "1133188600",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1576189955"
+          "href": "/v1/catalog/us/albums/1133188600"
         },
         {
           "id": "1548380115",
@@ -44,24 +44,14 @@
           "href": "/v1/catalog/us/albums/1513484053"
         },
         {
-          "id": "1603711299",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1603711299"
-        },
-        {
-          "id": "1584401390",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1584401390"
-        },
-        {
-          "id": "1133188600",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1133188600"
-        },
-        {
           "id": "1583500495",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1583500495"
+        },
+        {
+          "id": "1576189955",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1576189955"
         },
         {
           "id": "561740720",
@@ -74,11 +64,6 @@
           "href": "/v1/catalog/us/albums/1258758879"
         },
         {
-          "id": "1569367082",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1569367082"
-        },
-        {
           "id": "1536612250",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1536612250"
@@ -87,6 +72,21 @@
           "id": "568065121",
           "type": "albums",
           "href": "/v1/catalog/us/albums/568065121"
+        },
+        {
+          "id": "1603711299",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1603711299"
+        },
+        {
+          "id": "1584401390",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1584401390"
+        },
+        {
+          "id": "1569367082",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1569367082"
         }
       ]
     }

@@ -8,14 +8,14 @@
       "Alternative"
     ],
     "artwork": {
-      "width": 2400,
-      "height": 2400,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features112/v4/95/39/53/953953ea-7793-3b50-7209-7bde68590cf3/mzl.uhmsgmqg.jpg/{w}x{h}bb.jpg",
-      "bgColor": "161c3e",
-      "textColor1": "e1d5e0",
-      "textColor2": "cbc8cf",
-      "textColor3": "b8b0c0",
-      "textColor4": "a7a6b2"
+      "width": 2310,
+      "height": 2310,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages112/v4/2d/72/9c/2d729c2e-0f09-a9bd-6795-ebfcf3a45479/4766d563-aa0a-43a4-ade2-c4516af4c560_ami-identity-65a7598fd9c348bac58f89b5449d9316-2024-03-11T14-45-04.859Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "180c0c",
+      "textColor1": "cdccd3",
+      "textColor2": "e6a64e",
+      "textColor3": "a9a6ab",
+      "textColor4": "bd8740"
     },
     "url": "https://music.apple.com/us/artist/panda-bear/24281998"
   },
@@ -25,24 +25,24 @@
       "next": "/v1/catalog/us/artists/24281998/albums?offset=25",
       "data": [
         {
-          "id": "1630013836",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1630013836"
-        },
-        {
           "id": "1484070816",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1484070816"
         },
         {
-          "id": "1440275157",
+          "id": "1630013836",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1440275157"
+          "href": "/v1/catalog/us/albums/1630013836"
         },
         {
           "id": "924130521",
           "type": "albums",
           "href": "/v1/catalog/us/albums/924130521"
+        },
+        {
+          "id": "1440275157",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440275157"
         },
         {
           "id": "1484071288",
@@ -55,14 +55,14 @@
           "href": "/v1/catalog/us/albums/952873212"
         },
         {
-          "id": "1651460106",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1651460106"
-        },
-        {
           "id": "1028339547",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1028339547"
+        },
+        {
+          "id": "1651460106",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651460106"
         },
         {
           "id": "1483756331",
@@ -75,14 +75,19 @@
           "href": "/v1/catalog/us/albums/1696999988"
         },
         {
-          "id": "1484070483",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1484070483"
-        },
-        {
           "id": "1636952572",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1636952572"
+        },
+        {
+          "id": "932180287",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/932180287"
+        },
+        {
+          "id": "1484070483",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484070483"
         },
         {
           "id": "1008446010",
@@ -90,19 +95,14 @@
           "href": "/v1/catalog/us/albums/1008446010"
         },
         {
-          "id": "1565032473",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1565032473"
-        },
-        {
           "id": "1525081549",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1525081549"
         },
         {
-          "id": "932180287",
+          "id": "1565032473",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/932180287"
+          "href": "/v1/catalog/us/albums/1565032473"
         },
         {
           "id": "1662893265",
@@ -125,14 +125,19 @@
           "href": "/v1/catalog/us/albums/1649207399"
         },
         {
+          "id": "1565032736",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1565032736"
+        },
+        {
           "id": "1711798271",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1711798271"
         },
         {
-          "id": "1679888904",
+          "id": "1479679561",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1679888904"
+          "href": "/v1/catalog/us/albums/1479679561"
         },
         {
           "id": "1695583805",
@@ -140,14 +145,9 @@
           "href": "/v1/catalog/us/albums/1695583805"
         },
         {
-          "id": "1565032736",
+          "id": "1679888904",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1565032736"
-        },
-        {
-          "id": "1479679561",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1479679561"
+          "href": "/v1/catalog/us/albums/1679888904"
         }
       ]
     }

@@ -39,9 +39,9 @@
           "href": "/v1/catalog/us/albums/826751934"
         },
         {
-          "id": "826646368",
+          "id": "1042033123",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/826646368"
+          "href": "/v1/catalog/us/albums/1042033123"
         },
         {
           "id": "1640381156",
@@ -49,19 +49,14 @@
           "href": "/v1/catalog/us/albums/1640381156"
         },
         {
-          "id": "1042033123",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1042033123"
-        },
-        {
           "id": "1622154639",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1622154639"
         },
         {
-          "id": "1586380873",
+          "id": "826646368",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1586380873"
+          "href": "/v1/catalog/us/albums/826646368"
         },
         {
           "id": "1647989400",
@@ -87,6 +82,11 @@
           "id": "943562889",
           "type": "albums",
           "href": "/v1/catalog/us/albums/943562889"
+        },
+        {
+          "id": "1586380873",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586380873"
         }
       ]
     }

@@ -1,0 +1,54 @@
+{
+  "id": "273436052",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/273436052",
+  "attributes": {
+    "name": "Megafaun",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1400,
+      "height": 1400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/1d/6e/ed/1d6eed35-65f1-5490-b7da-f4f3189cb5a7/081159199050.jpg/{w}x{h}ac.jpg",
+      "bgColor": "4c4a4b",
+      "textColor1": "f6f1f0",
+      "textColor2": "dad8d6",
+      "textColor3": "d3d0cf",
+      "textColor4": "bdbcba"
+    },
+    "url": "https://music.apple.com/us/artist/megafaun/273436052"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/273436052/albums",
+      "data": [
+        {
+          "id": "1529645907",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1529645907"
+        },
+        {
+          "id": "1527528681",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1527528681"
+        },
+        {
+          "id": "1527524998",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1527524998"
+        },
+        {
+          "id": "1538660420",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1538660420"
+        },
+        {
+          "id": "681979862",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/681979862"
+        }
+      ]
+    }
+  }
+}

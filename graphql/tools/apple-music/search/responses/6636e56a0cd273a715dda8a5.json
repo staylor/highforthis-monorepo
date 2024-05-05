@@ -1,0 +1,89 @@
+{
+  "id": "329243469",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/329243469",
+  "attributes": {
+    "name": "Blake Mills",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2749,
+      "height": 2749,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/77/a0/9e/77a09e89-9866-5789-c423-f8d7a8dff412/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "b7bdaf",
+      "textColor1": "0b0b0a",
+      "textColor2": "2a2719",
+      "textColor3": "2d2f2b",
+      "textColor4": "464537"
+    },
+    "url": "https://music.apple.com/us/artist/blake-mills/329243469"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/329243469/albums",
+      "data": [
+        {
+          "id": "476483129",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/476483129"
+        },
+        {
+          "id": "1548394424",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1548394424"
+        },
+        {
+          "id": "1502191284",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1502191284"
+        },
+        {
+          "id": "1688231694",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1688231694"
+        },
+        {
+          "id": "1444145447",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444145447"
+        },
+        {
+          "id": "1438468939",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438468939"
+        },
+        {
+          "id": "1505365761",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505365761"
+        },
+        {
+          "id": "1528244002",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528244002"
+        },
+        {
+          "id": "1274524367",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1274524367"
+        },
+        {
+          "id": "1575895486",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1575895486"
+        },
+        {
+          "id": "1528244273",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528244273"
+        },
+        {
+          "id": "1528244203",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1528244203"
+        }
+      ]
+    }
+  }
+}

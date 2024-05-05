@@ -24,6 +24,11 @@
       "href": "/v1/catalog/us/artists/485111/albums",
       "data": [
         {
+          "id": "266215144",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/266215144"
+        },
+        {
           "id": "365220507",
           "type": "albums",
           "href": "/v1/catalog/us/albums/365220507"
@@ -39,11 +44,6 @@
           "href": "/v1/catalog/us/albums/181450705"
         },
         {
-          "id": "266215144",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/266215144"
-        },
-        {
           "id": "1617798431",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1617798431"
@@ -57,6 +57,26 @@
           "id": "1544423656",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1544423656"
+        },
+        {
+          "id": "1742040516",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1742040516"
+        },
+        {
+          "id": "1741441174",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1741441174"
+        },
+        {
+          "id": "1741441031",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1741441031"
+        },
+        {
+          "id": "1741440646",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1741440646"
         }
       ]
     }

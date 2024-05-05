@@ -8,14 +8,14 @@
       "Alternative"
     ],
     "artwork": {
-      "width": 1500,
-      "height": 1500,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/50/25/15/502515cb-e66d-9d38-4b92-72911390f3b6/pr_source.png/{w}x{h}bb.jpg",
-      "bgColor": "54422e",
-      "textColor1": "d8ddcb",
-      "textColor2": "e3dace",
-      "textColor3": "bebeab",
-      "textColor4": "c6bbae"
+      "width": 3840,
+      "height": 3840,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages211/v4/5d/e4/55/5de45570-ff28-9879-c384-597a2d055f18/feae6765-81f3-4ae2-8342-c14dc94f4c6d_ami-identity-9812f3b8f681542d614e8222b68ade77-2024-03-28T22-18-50.052Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "1f1e00",
+      "textColor1": "e7e7cc",
+      "textColor2": "d8d4ad",
+      "textColor3": "bfbfa3",
+      "textColor4": "b3b08a"
     },
     "url": "https://music.apple.com/us/artist/local-natives/321144825"
   },
@@ -45,14 +45,19 @@
           "href": "/v1/catalog/us/albums/1440955310"
         },
         {
-          "id": "1531539887",
+          "id": "1732106457",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1531539887"
+          "href": "/v1/catalog/us/albums/1732106457"
         },
         {
           "id": "1681159037",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1681159037"
+        },
+        {
+          "id": "1531539887",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1531539887"
         },
         {
           "id": "1592214583",
@@ -70,19 +75,14 @@
           "href": "/v1/catalog/us/albums/1620063919"
         },
         {
-          "id": "1691233157",
+          "id": "1469580404",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1691233157"
+          "href": "/v1/catalog/us/albums/1469580404"
         },
         {
           "id": "1508421022",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1508421022"
-        },
-        {
-          "id": "1469580404",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1469580404"
         },
         {
           "id": "1503415656",
@@ -100,11 +100,6 @@
           "href": "/v1/catalog/us/albums/1477683176"
         },
         {
-          "id": "570903124",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/570903124"
-        },
-        {
           "id": "1707614499",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1707614499"
@@ -115,24 +110,14 @@
           "href": "/v1/catalog/us/albums/1512833118"
         },
         {
-          "id": "1647310221",
+          "id": "570903124",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1647310221"
-        },
-        {
-          "id": "1699252704",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1699252704"
+          "href": "/v1/catalog/us/albums/570903124"
         },
         {
           "id": "1469120773",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1469120773"
-        },
-        {
-          "id": "1655059580",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1655059580"
         },
         {
           "id": "1445303348",
@@ -148,6 +133,21 @@
           "id": "1440676689",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1440676689"
+        },
+        {
+          "id": "1171605744",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1171605744"
+        },
+        {
+          "id": "1521934158",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1521934158"
+        },
+        {
+          "id": "1445313492",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445313492"
         }
       ]
     }

@@ -8,14 +8,14 @@
       "Alternative"
     ],
     "artwork": {
-      "width": 3539,
-      "height": 3539,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/dd/4c/7c/dd4c7cb9-e0be-0765-7c36-f49b1dbc3dd5/pr_source.png/{w}x{h}bb.jpg",
-      "bgColor": "121212",
-      "textColor1": "e3a791",
-      "textColor2": "d29a82",
-      "textColor3": "b98977",
-      "textColor4": "ab7f6b"
+      "width": 1416,
+      "height": 1416,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/70/11/c6/7011c6f8-5e79-2e0a-3e92-c9cd57439f39/6c028a9c-4395-4494-adc9-d9275d2e4f7d_ami-identity-5f3c8456bb9fdb6b1a54b329cba8ae46-2024-03-20T16-45-54.864Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "f5f7f6",
+      "textColor1": "130d0c",
+      "textColor2": "1f1f29",
+      "textColor3": "403b3b",
+      "textColor4": "4a4a52"
     },
     "url": "https://music.apple.com/us/artist/travis/475835"
   },
@@ -25,14 +25,14 @@
       "next": "/v1/catalog/us/artists/475835/albums?offset=25",
       "data": [
         {
-          "id": "1458137859",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1458137859"
-        },
-        {
           "id": "1458138725",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1458138725"
+        },
+        {
+          "id": "1458137859",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1458137859"
         },
         {
           "id": "1587029365",
@@ -65,9 +65,9 @@
           "href": "/v1/catalog/us/albums/659533822"
         },
         {
-          "id": "1443225990",
+          "id": "1596000685",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1443225990"
+          "href": "/v1/catalog/us/albums/1596000685"
         },
         {
           "id": "1462122082",
@@ -75,24 +75,14 @@
           "href": "/v1/catalog/us/albums/1462122082"
         },
         {
+          "id": "1443225990",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443225990"
+        },
+        {
           "id": "705389775",
           "type": "albums",
           "href": "/v1/catalog/us/albums/705389775"
-        },
-        {
-          "id": "1596000685",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1596000685"
-        },
-        {
-          "id": "1460293483",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1460293483"
-        },
-        {
-          "id": "260667806",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/260667806"
         },
         {
           "id": "671918737",
@@ -100,44 +90,19 @@
           "href": "/v1/catalog/us/albums/671918737"
         },
         {
+          "id": "1460293483",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1460293483"
+        },
+        {
           "id": "1458134875",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1458134875"
         },
         {
-          "id": "1711427081",
+          "id": "260667806",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1711427081"
-        },
-        {
-          "id": "1592567411",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1592567411"
-        },
-        {
-          "id": "1458139602",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1458139602"
-        },
-        {
-          "id": "1458138512",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1458138512"
-        },
-        {
-          "id": "1704390713",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1704390713"
-        },
-        {
-          "id": "1669382223",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1669382223"
-        },
-        {
-          "id": "1726963427",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1726963427"
+          "href": "/v1/catalog/us/albums/260667806"
         },
         {
           "id": "1511928789",
@@ -145,9 +110,44 @@
           "href": "/v1/catalog/us/albums/1511928789"
         },
         {
-          "id": "1718584135",
+          "id": "1704390713",
           "type": "albums",
-          "href": "/v1/catalog/us/albums/1718584135"
+          "href": "/v1/catalog/us/albums/1704390713"
+        },
+        {
+          "id": "1711427081",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1711427081"
+        },
+        {
+          "id": "1458139602",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1458139602"
+        },
+        {
+          "id": "1669382223",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1669382223"
+        },
+        {
+          "id": "1458135326",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1458135326"
+        },
+        {
+          "id": "1458138512",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1458138512"
+        },
+        {
+          "id": "1592567411",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1592567411"
+        },
+        {
+          "id": "1726963427",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1726963427"
         }
       ]
     }

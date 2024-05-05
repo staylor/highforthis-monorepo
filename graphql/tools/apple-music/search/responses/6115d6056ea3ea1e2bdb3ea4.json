@@ -10,12 +10,12 @@
     "artwork": {
       "width": 2400,
       "height": 2400,
-      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/a0/c7/66/a0c76696-161a-2f8d-9bf1-c770677bc6ea/mzl.soaxdbxt.jpg/{w}x{h}bb.jpg",
-      "bgColor": "a69b87",
-      "textColor1": "060e0e",
-      "textColor2": "231f18",
-      "textColor3": "262a26",
-      "textColor4": "3d372e"
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features221/v4/a9/fe/e9/a9fee940-56f2-ed24-1196-759925a7dfb2/mzl.rdprrkdl.jpg/{w}x{h}bb.jpg",
+      "bgColor": "faf9ff",
+      "textColor1": "150908",
+      "textColor2": "0b1f45",
+      "textColor3": "433939",
+      "textColor4": "3b4b6a"
     },
     "url": "https://music.apple.com/us/artist/porches/374950113"
   },
@@ -64,16 +64,6 @@
           "href": "/v1/catalog/us/albums/1663582082"
         },
         {
-          "id": "1715660101",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1715660101"
-        },
-        {
-          "id": "1683425346",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1683425346"
-        },
-        {
           "id": "1533657136",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1533657136"
@@ -94,11 +84,6 @@
           "href": "/v1/catalog/us/albums/1596761240"
         },
         {
-          "id": "1584260926",
-          "type": "albums",
-          "href": "/v1/catalog/us/albums/1584260926"
-        },
-        {
           "id": "1482248419",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1482248419"
@@ -107,6 +92,26 @@
           "id": "1514801152",
           "type": "albums",
           "href": "/v1/catalog/us/albums/1514801152"
+        },
+        {
+          "id": "1735911882",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1735911882"
+        },
+        {
+          "id": "1715660101",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715660101"
+        },
+        {
+          "id": "1683425346",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1683425346"
+        },
+        {
+          "id": "1584260926",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1584260926"
         }
       ]
     }
