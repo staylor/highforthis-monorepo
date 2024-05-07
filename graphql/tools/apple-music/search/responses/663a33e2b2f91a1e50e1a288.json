@@ -1,0 +1,99 @@
+{
+  "id": "258003534",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/258003534",
+  "attributes": {
+    "name": "Real Estate",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/47/0f/b1/470fb194-544a-032d-c7c6-0e5d05006df1/a1e2503e-a76f-4f3e-88be-b1e14d900f67_ami-identity-dde24d7f3c152e313570c2ccb7a635e5-2023-11-30T18-10-44.374Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "24181a",
+      "textColor1": "f2f5fa",
+      "textColor2": "e1d1cf",
+      "textColor3": "c9c9cd",
+      "textColor4": "bbacab"
+    },
+    "url": "https://music.apple.com/us/artist/real-estate/258003534"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/258003534/albums",
+      "data": [
+        {
+          "id": "784925483",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/784925483"
+        },
+        {
+          "id": "1195946303",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1195946303"
+        },
+        {
+          "id": "1491472845",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1491472845"
+        },
+        {
+          "id": "1713723916",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1713723916"
+        },
+        {
+          "id": "808285572",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/808285572"
+        },
+        {
+          "id": "1550790869",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1550790869"
+        },
+        {
+          "id": "464319325",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/464319325"
+        },
+        {
+          "id": "1492042064",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492042064"
+        },
+        {
+          "id": "465339268",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/465339268"
+        },
+        {
+          "id": "503271601",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/503271601"
+        },
+        {
+          "id": "1590232666",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1590232666"
+        },
+        {
+          "id": "819661091",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/819661091"
+        },
+        {
+          "id": "1523329273",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523329273"
+        },
+        {
+          "id": "906532687",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/906532687"
+        }
+      ]
+    }
+  }
+}

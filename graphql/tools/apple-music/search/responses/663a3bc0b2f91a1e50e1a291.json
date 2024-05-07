@@ -1,0 +1,149 @@
+{
+  "id": "29836830",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/29836830",
+  "attributes": {
+    "name": "Grizzly Bear",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1400,
+      "height": 1400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/8f/e9/0d/8fe90d0c-e083-9aa2-c32a-e1650517894d/mzl.xcuvdoxi.jpg/{w}x{h}bb.jpg",
+      "bgColor": "bbbbbb",
+      "textColor1": "070707",
+      "textColor2": "202020",
+      "textColor3": "2b2b2b",
+      "textColor4": "3f3f3f"
+    },
+    "url": "https://music.apple.com/us/artist/grizzly-bear/29836830"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/29836830/albums",
+      "data": [
+        {
+          "id": "1235159880",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1235159880"
+        },
+        {
+          "id": "314837656",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/314837656"
+        },
+        {
+          "id": "167622312",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/167622312"
+        },
+        {
+          "id": "557858458",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/557858458"
+        },
+        {
+          "id": "267326671",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/267326671"
+        },
+        {
+          "id": "705342861",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/705342861"
+        },
+        {
+          "id": "336895732",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/336895732"
+        },
+        {
+          "id": "705316059",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/705316059"
+        },
+        {
+          "id": "159088872",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/159088872"
+        },
+        {
+          "id": "1481802587",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1481802587"
+        },
+        {
+          "id": "533163728",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/533163728"
+        },
+        {
+          "id": "1554001579",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1554001579"
+        },
+        {
+          "id": "1465127492",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1465127492"
+        },
+        {
+          "id": "553435273",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/553435273"
+        },
+        {
+          "id": "316363119",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/316363119"
+        },
+        {
+          "id": "314971682",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/314971682"
+        },
+        {
+          "id": "709154154",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/709154154"
+        },
+        {
+          "id": "644388911",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/644388911"
+        },
+        {
+          "id": "1232093950",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1232093950"
+        },
+        {
+          "id": "314966747",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/314966747"
+        },
+        {
+          "id": "252952496",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/252952496"
+        },
+        {
+          "id": "168188441",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/168188441"
+        },
+        {
+          "id": "315497336",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/315497336"
+        },
+        {
+          "id": "328826616",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/328826616"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "id": "1081664291",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1081664291",
+  "attributes": {
+    "name": "Goose",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 7410,
+      "height": 7410,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/28/fa/23/28fa23ec-f6f1-6a18-5b0a-8bf852f658cb/db84b20b-d216-40d1-aa35-53127e185a9e_ami-identity-410c3b58368e09d0c1047d1d080c435c-2024-02-08T03-34-38.811Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "a8a999",
+      "textColor1": "090d0f",
+      "textColor2": "25231e",
+      "textColor3": "282c2a",
+      "textColor4": "3f3e36"
+    },
+    "url": "https://music.apple.com/us/artist/goose/1081664291"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1081664291/albums",
+      "data": [
+        {
+          "id": "1607520847",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1607520847"
+        },
+        {
+          "id": "1557224623",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1557224623"
+        },
+        {
+          "id": "1568373252",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568373252"
+        },
+        {
+          "id": "1637505953",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1637505953"
+        },
+        {
+          "id": "1568360832",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568360832"
+        },
+        {
+          "id": "1602188795",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1602188795"
+        },
+        {
+          "id": "1568377996",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568377996"
+        },
+        {
+          "id": "1687683000",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1687683000"
+        },
+        {
+          "id": "1647302013",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1647302013"
+        },
+        {
+          "id": "1683612035",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1683612035"
+        },
+        {
+          "id": "1687734187",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1687734187"
+        },
+        {
+          "id": "1568367475",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568367475"
+        },
+        {
+          "id": "1568357321",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568357321"
+        },
+        {
+          "id": "1568368640",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568368640"
+        },
+        {
+          "id": "1568359947",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1568359947"
+        },
+        {
+          "id": "1729682509",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1729682509"
+        },
+        {
+          "id": "1668310062",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1668310062"
+        },
+        {
+          "id": "1650684429",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650684429"
+        },
+        {
+          "id": "1667827844",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667827844"
+        },
+        {
+          "id": "1699258016",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1699258016"
+        },
+        {
+          "id": "1591266132",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1591266132"
+        }
+      ]
+    }
+  }
+}
