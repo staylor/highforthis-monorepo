@@ -22,7 +22,7 @@ struct ShowList: View {
                                 } label: {
                                     HStack {
                                         VStack(alignment: .leading) {
-                                            Text(show.artist.name).foregroundColor(.accentColor)
+                                            Text(show.artists[0].name).foregroundColor(.accentColor)
                                             Text(show.venue.name).foregroundColor(.gray)
                                         }
                                         
@@ -68,7 +68,7 @@ struct ShowList: View {
         var byDate: [ShowGroup] = []
         for key in sortedKeys {
             var group = dict[key]!
-            group.shows.sort { $0.artist.name < $1.artist.name }
+            group.shows.sort { $0.artists[0].name < $1.artists[0].name }
             byDate.append(group)
         }
         return byDate

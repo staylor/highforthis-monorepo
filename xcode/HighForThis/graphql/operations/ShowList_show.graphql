@@ -1,5 +1,5 @@
 fragment ShowList_show on Show {
-  artist {
+  artists {
     id
     name
     slug

@@ -39,6 +39,8 @@
     "prod:start": "pm2 start pm2.config.cjs",
     "tools:database:dump": "dotenvx run --env-file=.env.production -- sh ./tools/database/dump",
     "tools:database:restore": "sh ./tools/database/restore",
+    "tools:database:artists:dev": "dotenvx run -- tsx tools/database/artists.ts",
+    "tools:database:artists:prod": "dotenvx run --env-file=.env.production -- tsx tools/database/artists.ts",
     "tools:artists:apple-music:search:dev": "dotenvx run -- tsx tools/apple-music/search/index.ts",
     "tools:artists:apple-music:search:prod": "dotenvx run --env-file=.env.production -- tsx tools/apple-music/search/index.ts",
     "tools:venues:geolocation:dev": "dotenvx run -- tsx tools/geolocation/index.ts",

@@ -2,11 +2,11 @@ import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
 import Link from '@/components/Link';
-import { formatDate } from '@/components/Shows/utils';
+import { formatArtists, formatDate } from '@/components/Shows/utils';
 import type { ShowConnection } from '@/types/graphql';
 import Button from '@/components/Button';
 
-function Shows({ shows, dataKey }: { shows: ShowConnection; dataKey: 'artist' | 'venue' }) {
+function Shows({ shows, dataKey }: { shows: ShowConnection; dataKey: 'artists' | 'venue' }) {
   const limit = 10;
 
   const [showAll, setShowAll] = useState(false);
@@ -27,10 +27,16 @@ function Shows({ shows, dataKey }: { shows: ShowConnection; dataKey: 'artist' | 
       <ul>
         {edges.map(({ node }, idx: number) => {
           const d = formatDate(node.date);
+          let name;
+          if (dataKey === 'artists') {
+            name = formatArtists(node);
+          } else {
+            name = node[dataKey].name;
+          }
           return (
             <li key={idx.toString()} className="my-3">
               <Link to={`/admin/show/${node.id}`} className="text-pink underline">
-                {d.formatted}/{d.year} {node.title || node[dataKey].name}
+                {d.formatted}/{d.year} {name}
               </Link>
             </li>
           );

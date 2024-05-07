@@ -9,6 +9,7 @@ import query, { addPageOffset, addSearchParam } from '@/utils/query';
 import { handleDelete } from '@/utils/action';
 import type { Show, ShowConnection, ShowsAdminQuery } from '@/types/graphql';
 import Search from '@/components/Admin/ListTable/Search';
+import { formatShowLink } from '@/components/Shows/utils';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const variables = addSearchParam(request, addPageOffset(params, { order: 'DESC' }));
@@ -43,16 +44,17 @@ export default function Shows() {
       },
     },
     {
-      label: 'Artist',
-      render: ({ artist }: Show) => {
-        const editUrl = `/admin/artist/${artist.id}`;
+      label: 'Artists',
+      render: (show: Show) => {
+        const { artists } = show;
+        const editUrl = `/admin/artist/${artists[0].id}`;
         return (
           <>
-            <RowTitle url={editUrl} title={artist.name} />
+            <RowTitle url={editUrl} title={artists[0].name} />
             <RowActions
               actions={[
                 { type: 'edit', url: editUrl },
-                { type: 'view', url: `/artist/${artist.slug}` },
+                { type: 'view', url: formatShowLink(show) },
               ]}
             />
           </>
@@ -120,7 +122,7 @@ const showsQuery = gql`
       count
       edges {
         node {
-          artist {
+          artists {
             id
             name
             slug

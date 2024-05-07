@@ -2,6 +2,8 @@ import { Heading2 } from '@/components/Heading';
 import Link from '@/components/Link';
 import type { ShowConnection } from '@/types/graphql';
 
+import { formatArtists, formatDate, formatShowLink } from '../Shows/utils';
+
 function Sidebar({ shows }: { shows: ShowConnection }) {
   if (!shows) {
     return null;
@@ -17,15 +19,11 @@ function Sidebar({ shows }: { shows: ShowConnection }) {
           </div>
         )}
         {shows.edges.map(({ node }) => {
-          const d = new Date(node.date);
-          const m = d.getMonth() + 1;
-          const day = d.getDate();
+          const d = formatDate(node.date);
           return (
             <div className="mb-3 ml-3 text-base" key={node.id}>
-              <time className="block font-bold">{`${m < 10 ? `0${m}` : m}/${
-                day < 10 ? `0${day}` : day
-              }/${d.getFullYear()}`}</time>
-              <Link to={`/artist/${node.artist.slug}`}>{node.title || node.artist.name}</Link>
+              <time className="block font-bold">{`${d.formatted}/${d.year}`}</time>
+              <Link to={formatShowLink(node)}>{formatArtists(node)}</Link>
               <br />
               <Link to={`/venue/${node.venue.slug}`}>{node.venue.name}</Link>
             </div>

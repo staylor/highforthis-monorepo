@@ -149,7 +149,7 @@ public class ArtistQuery: GraphQLQuery {
             .fragment(ShowList_show.self),
           ] }
 
-          public var artist: Artist { __data["artist"] }
+          public var artists: [Artist] { __data["artists"] }
           public var date: Double { __data["date"] }
           public var id: HighForThisAPI.ObjID { __data["id"] }
           public var title: String? { __data["title"] }
@@ -212,7 +212,7 @@ public class ArtistQuery: GraphQLQuery {
             .fragment(ShowList_show.self),
           ] }
 
-          public var artist: Artist { __data["artist"] }
+          public var artists: [Artist] { __data["artists"] }
           public var date: Double { __data["date"] }
           public var id: HighForThisAPI.ObjID { __data["id"] }
           public var title: String? { __data["title"] }

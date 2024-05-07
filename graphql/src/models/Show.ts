@@ -20,7 +20,7 @@ interface ShowParams {
 interface ShowFilters {
   date?: any;
   attended?: boolean;
-  artist?: string;
+  artists?: string;
   venue?: string;
   title?: any;
 }
@@ -59,7 +59,7 @@ export default class Show extends Model {
     artist = '',
     venue = '',
     search = '',
-  }) {
+  }: ShowParams) {
     const criteria: ShowFilters = {};
     if (attended) {
       criteria.attended = true;
@@ -67,7 +67,7 @@ export default class Show extends Model {
       criteria.date = { $gte: Date.now() };
     }
     if (artist) {
-      criteria.artist = artist;
+      criteria.artists = artist;
     }
     if (venue) {
       criteria.venue = venue;

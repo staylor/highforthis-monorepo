@@ -122,7 +122,7 @@ input CreatePostInput {
 }
 
 input CreateShowInput {
-  artist: ObjID!
+  artists: [ObjID!]!
   attended: Boolean
   date: Float!
   notes: String
@@ -528,7 +528,7 @@ input RootNodeInput {
 }
 
 type Show {
-  artist: Artist!
+  artists: [Artist!]!
   attended: Boolean
   date: Float!
   id: ObjID!
@@ -624,7 +624,7 @@ input UpdatePostInput {
 }
 
 input UpdateShowInput {
-  artist: ObjID
+  artists: [ObjID]
   attended: Boolean
   date: Float
   notes: String

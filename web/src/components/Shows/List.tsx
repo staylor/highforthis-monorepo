@@ -1,6 +1,6 @@
 import type { ShowConnection } from '@/types/graphql';
 
-import { formatDate } from './utils';
+import { formatArtists, formatDate } from './utils';
 
 export default function ShowsList({
   shows,
@@ -14,14 +14,14 @@ export default function ShowsList({
 
   return (
     <article className={className}>
-      {shows.edges.map(({ node }, i: number) => {
+      {shows.edges.map(({ node }) => {
         const d = formatDate(node.date);
 
         const showRow = (
           <p className="mb-2">
             <strong>{d.formatted}</strong>
             <br />
-            {node.title || node.artist.name}
+            {formatArtists(node)}
             <br />
             {node.venue.name}
           </p>
@@ -31,7 +31,7 @@ export default function ShowsList({
           years[d.year] = 1;
           months[`${d.year}${d.month}`] = 1;
           return (
-            <div key={`${i.toString()}`}>
+            <div key={node.id}>
               <p className="mb-2.5">
                 <strong className="text-xl">{d.year}</strong>
               </p>
@@ -45,7 +45,7 @@ export default function ShowsList({
         if (!months[`${d.year}${d.month}`]) {
           months[`${d.year}${d.month}`] = 1;
           return (
-            <div key={`${i.toString()}`}>
+            <div key={node.id}>
               <p className="mb-1">
                 <strong>{d.monthName}</strong>
               </p>
@@ -53,7 +53,7 @@ export default function ShowsList({
             </div>
           );
         }
-        return <div key={`${i.toString()}`}>{showRow}</div>;
+        return <div key={node.id}>{showRow}</div>;
       })}
     </article>
   );

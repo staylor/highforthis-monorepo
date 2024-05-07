@@ -6,7 +6,7 @@ const Show = `#graphql
     date: Float!
     url: String
     attended: Boolean
-    artist: Artist!
+    artists: [Artist!]!
     venue: Venue!
   }
 
@@ -27,7 +27,7 @@ const Show = `#graphql
     date: Float!
     url: String
     attended: Boolean
-    artist: ObjID!
+    artists: [ObjID!]!
     venue: ObjID!
   }
 
@@ -37,7 +37,7 @@ const Show = `#graphql
     date: Float
     url: String
     attended: Boolean
-    artist: ObjID
+    artists: [ObjID]
     venue: ObjID
   }
 

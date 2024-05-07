@@ -8,7 +8,7 @@ struct VenueRecommendedShows: View {
         ShowsSectionHeader(L10N("recommendedShows"))
         ForEach(shows, id: \.self) { node in
             let title = node.title ?? ""
-            ShowSectionItem(id: node.id, name: title.isEmpty ? node.artist.name : title, date: node.date)
+            ShowSectionItem(id: node.id, name: title.isEmpty ? node.artists[0].name : title, date: node.date)
         }
     }
 }

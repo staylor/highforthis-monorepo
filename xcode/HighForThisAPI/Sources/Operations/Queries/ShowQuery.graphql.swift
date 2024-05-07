@@ -7,7 +7,7 @@ public class ShowQuery: GraphQLQuery {
   public static let operationName: String = "Show"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Show($id: ObjID!) { show(id: $id) { __typename artist { __typename appleMusic { __typename artwork { __typename height url width } id url } id name slug } date id title venue { __typename id name slug } } }"#
+      #"query Show($id: ObjID!) { show(id: $id) { __typename artists { __typename appleMusic { __typename artwork { __typename height url width } id url } id name slug } date id title venue { __typename id name slug } } }"#
     ))
 
   public var id: ObjID
@@ -39,14 +39,14 @@ public class ShowQuery: GraphQLQuery {
       public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("artist", Artist.self),
+        .field("artists", [Artist].self),
         .field("date", Double.self),
         .field("id", HighForThisAPI.ObjID.self),
         .field("title", String?.self),
         .field("venue", Venue.self),
       ] }
 
-      public var artist: Artist { __data["artist"] }
+      public var artists: [Artist] { __data["artists"] }
       public var date: Double { __data["date"] }
       public var id: HighForThisAPI.ObjID { __data["id"] }
       public var title: String? { __data["title"] }

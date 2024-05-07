@@ -1,6 +1,6 @@
 query Show($id: ObjID!) {
   show(id: $id) {
-    artist {
+    artists {
       appleMusic {
         artwork {
           height

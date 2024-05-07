@@ -89,7 +89,7 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
     {
       label: 'Shows',
       type: 'custom',
-      render: ({ shows }) => <Shows shows={shows} dataKey="artist" />,
+      render: ({ shows }) => <Shows shows={shows} dataKey="artists" />,
       condition: ({ shows }) => shows?.edges?.length > 0,
       position: 'meta',
     },

@@ -7,6 +7,7 @@ import Checkbox from '@/components/Form/Checkbox';
 import type { Fields } from '@/types';
 
 import SelectEntity from './SelectEntity';
+import SelectEntities from './SelectEntities';
 
 interface ShowFormProps {
   data?: any;
@@ -28,10 +29,14 @@ export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormPr
       render: ({ show }) => show?.date || date.getTime(),
     },
     {
-      label: 'Artist',
+      label: 'Artists',
       type: 'custom',
       render: ({ show, artists }) => (
-        <SelectEntity label="Artist" name="artist" edges={artists.edges} value={show?.artist?.id} />
+        <SelectEntities
+          name="artists"
+          edges={artists.edges}
+          values={show?.artists?.map(({ id }: { id: string }) => id)}
+        />
       ),
     },
     {
@@ -62,7 +67,7 @@ export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormPr
 ShowForm.fragments = {
   show: gql`
     fragment ShowForm_show on Show {
-      artist {
+      artists {
         id
       }
       attended

@@ -39,10 +39,11 @@ const artistQuery = gql`
     shows(artistId: $id, first: 200) {
       edges {
         node {
-          artist {
+          artists {
             id
             name
           }
+          attended
           date
           id
           venue {

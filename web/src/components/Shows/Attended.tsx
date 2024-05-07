@@ -1,7 +1,7 @@
 import Link from '@/components/Link';
 import type { ShowConnection } from '@/types/graphql';
 
-import { formatDate } from './utils';
+import { formatArtists, formatDate, formatShowLink } from './utils';
 import { Cell } from './Cell';
 
 export default function Attended({
@@ -35,13 +35,9 @@ export default function Attended({
                 <Cell className="text-base font-medium uppercase">
                   <Link
                     className="hover:text-neutral-800 hover:underline dark:hover:text-pink"
-                    to={
-                      relation === 'artist'
-                        ? `/venue/${node.venue.slug}`
-                        : `/artist/${node.artist.slug}`
-                    }
+                    to={relation === 'artist' ? `/venue/${node.venue.slug}` : formatShowLink(node)}
                   >
-                    {relation === 'artist' ? node.venue.name : node.title || node.artist.name}
+                    {relation === 'artist' ? node.venue.name : formatArtists(node)}
                   </Link>
                 </Cell>
               </tr>

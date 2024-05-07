@@ -36,7 +36,7 @@ const venueQuery = gql`
     shows(first: 200, venueId: $id) {
       edges {
         node {
-          artist {
+          artists {
             id
             name
           }

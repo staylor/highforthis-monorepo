@@ -4,7 +4,7 @@ import { gql } from 'graphql-tag';
 import Link from '@/components/Link';
 import type { ShowConnection } from '@/types/graphql';
 
-import { formatDate } from './utils';
+import { formatArtists, formatDate, formatShowLink } from './utils';
 import { Cell } from './Cell';
 
 export default function ShowsGrid({
@@ -25,8 +25,8 @@ export default function ShowsGrid({
     const dateA = showA.date;
     const dateB = showB.date;
     if (dateA === dateB) {
-      const artistA = showA.artist.name;
-      const artistB = showB.artist.name;
+      const artistA = showA.artists[0].name;
+      const artistB = showB.artists[0].name;
 
       if (artistA === artistB) {
         return 0;
@@ -47,8 +47,8 @@ export default function ShowsGrid({
               <tr key={node.id}>
                 <Cell className="text-right font-stylized text-sm">{d.formatted}</Cell>
                 <Cell className="text-base">
-                  <Link className="text-pink underline" to={`/artist/${node.artist.slug}`}>
-                    {node.title || node.artist.name}
+                  <Link className="text-pink underline" to={formatShowLink(node)}>
+                    {formatArtists(node)}
                   </Link>
                 </Cell>
                 <Cell className="text-base font-medium uppercase">
@@ -108,7 +108,7 @@ ShowsGrid.fragments = {
       edges {
         cursor
         node {
-          artist {
+          artists {
             id
             name
             slug

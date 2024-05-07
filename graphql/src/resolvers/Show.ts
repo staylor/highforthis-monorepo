@@ -9,15 +9,15 @@ const resolvers = {
     id(show: any) {
       return show._id;
     },
-    artist(show: any, args: any, { Artist }: AugmentedContext) {
-      return Artist.findOneById(show.artist);
+    artists(show: any, _: any, { Artist }: AugmentedContext) {
+      return Artist.findByIds(show.artists);
     },
-    venue(show: any, args: any, { Venue }: AugmentedContext) {
+    venue(show: any, _: any, { Venue }: AugmentedContext) {
       return Venue.findOneById(show.venue);
     },
   },
   Query: {
-    async shows(root: any, args: any, { Show, Artist, Venue }: AugmentedContext) {
+    async shows(_: any, args: any, { Show, Artist, Venue }: AugmentedContext) {
       const { artistId, artistSlug, venueId, venueSlug, ...rest } = args;
       const connectionArgs = rest;
 
@@ -39,7 +39,7 @@ const resolvers = {
       return parseConnection(Show, connectionArgs);
     },
 
-    async show(root: any, { id, slug }: any, { Show }: AugmentedContext) {
+    async show(_: any, { id, slug }: any, { Show }: AugmentedContext) {
       if (id) {
         return Show.findOneById(id);
       }
@@ -47,17 +47,23 @@ const resolvers = {
     },
   },
   Mutation: {
-    async createShow(root: any, { input }: any, { Show }: AugmentedContext) {
+    async createShow(_: any, { input }: any, { Show }: AugmentedContext) {
       const id = await Show.insert(input);
       return Show.findOneById(id);
     },
 
-    async updateShow(root: any, { id, input }: any, { Show }: AugmentedContext) {
-      await Show.updateById(id, input);
+    async updateShow(_: any, { id, input }: any, { Show }: AugmentedContext) {
+      const values = { ...input };
+      for (const key of ['title', 'notes', 'url']) {
+        if (!input[key]) {
+          values[key] = null;
+        }
+      }
+      await Show.updateById(id, values);
       return Show.findOneById(id);
     },
 
-    async removeShow(root: any, { ids }: any, { Show }: AugmentedContext) {
+    async removeShow(_: any, { ids }: any, { Show }: AugmentedContext) {
       return Promise.all(ids.map((id: string) => Show.removeById(id)))
         .then(() => true)
         .catch(() => false);

@@ -13,7 +13,7 @@ struct ShowDetail: View {
                 Loading()
             } else {
                 let show = show!
-                if let artwork = show.artist.appleMusic?.artwork {
+                if let artwork = show.artists[0].appleMusic?.artwork {
                     ArtistArtwork(
                         url: artwork.url!,
                         width: artwork.width!,
@@ -31,8 +31,8 @@ struct ShowDetail: View {
                     .padding(.bottom, 8)
                     
                     VStack(alignment: .leading) {
-                        InternalLink(show.artist.name, color: .accentColor) {
-                            ArtistMain(name: show.artist.name, slug: show.artist.slug)
+                        InternalLink(show.artists[0].name, color: .accentColor) {
+                            ArtistMain(name: show.artists[0].name, slug: show.artists[0].slug)
                         }
                         InternalLink(show.venue.name) {
                             VenueMain(name: show.venue.name, slug: show.venue.slug)

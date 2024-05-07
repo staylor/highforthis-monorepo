@@ -25,7 +25,7 @@ export const appQuery = gql`
     shows(first: 15, latest: true) @cache(key: "sidebar") {
       edges {
         node {
-          artist {
+          artists {
             id
             name
             slug

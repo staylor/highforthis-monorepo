@@ -1,7 +1,8 @@
 import type { PropsWithChildren } from 'react';
 
 import type { AppleMusicData } from '@/types/graphql';
-import Image from '@/components/Image';
+
+import Artwork, { DEFAULT_IMAGE_SIZE } from './Artwork';
 
 interface AppleMusicProps {
   name: string;
@@ -9,8 +10,6 @@ interface AppleMusicProps {
   imageSize?: number;
   data: AppleMusicData;
 }
-
-const DEFAULT_IMAGE_SIZE = 300;
 
 function ArtistLink({ url, children }: PropsWithChildren<{ url: string }>) {
   return (
@@ -31,41 +30,16 @@ export default function Metadata({
   imageSize = DEFAULT_IMAGE_SIZE,
   data,
 }: AppleMusicProps) {
-  const { url, artwork } = data;
+  const { url } = data;
 
   let site;
   let listen;
-  let image;
+  let image = <Artwork name={name} imageSize={imageSize} data={data} />;
   if (website) {
     site = <ArtistLink url={website}>Artist Website</ArtistLink>;
   }
   if (url) {
     listen = <ArtistLink url={url}>Listen on Apple Music</ArtistLink>;
-  }
-  if (artwork?.url) {
-    image = (
-      <Image
-        className="block rounded-lg"
-        src={artwork.url?.replace(/\{[wh]\}/g, String(imageSize))}
-        alt={name}
-        width={imageSize}
-        height={imageSize}
-      />
-    );
-
-    if (url) {
-      image = (
-        <a
-          href={url}
-          className="mb-4 block rounded-lg md:mb-0 md:mr-8"
-          style={{ width: imageSize, height: imageSize }}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {image}
-        </a>
-      );
-    }
   }
 
   if (!(image || listen || site)) {
