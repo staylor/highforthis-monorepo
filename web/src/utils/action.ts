@@ -1,11 +1,9 @@
-import qs from 'qs';
 import type { ActionFunctionArgs } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/server-runtime';
 import type { DocumentNode } from 'graphql';
 import type { OperationVariables } from '@apollo/client';
 
-import parseObject from './parseObject';
-import mutate from './mutate';
+import mutate, { parseFormData } from './mutate';
 
 export const post = async (url: string, data: AppData) =>
   fetch(url, {
@@ -32,14 +30,7 @@ export const handleSubmission = async ({
   variables?: OperationVariables;
   createMutation?: string;
 }) => {
-  // FormData returns multi-dimensional keys as: foo[0][bar][baz]
-  // - we would have to write our own parser, so:
-  // text() returns the POST data as an x-www-form-urlencoded string
-  const formData = await request.text();
-  // qs parses the string into an object
-  // parseObject corces the values into their proper types (numbers, booleans, etc)
-  // GraphQL will throw an error if `Int`s are passed as strings.
-  const input = parseObject(qs.parse(formData));
+  const input = await parseFormData(request);
   if (input.editorState) {
     input.editorState = JSON.parse(input.editorState);
     // this seems like a bug in Lexical

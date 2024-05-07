@@ -1,5 +1,5 @@
 import { gql } from 'graphql-tag';
-import { useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 
 import { Heading, HeaderAdd } from '@/components/Admin/styles';
@@ -10,6 +10,8 @@ import { handleDelete } from '@/utils/action';
 import type { Show, ShowConnection, ShowsAdminQuery } from '@/types/graphql';
 import Search from '@/components/Admin/ListTable/Search';
 import { formatShowLink } from '@/components/Shows/utils';
+import Checkbox from '@/components/Form/Checkbox';
+import mutate, { parseFormData } from '@/utils/mutate';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const variables = addSearchParam(request, addPageOffset(params, { order: 'DESC' }));
@@ -17,10 +19,24 @@ export const loader: LoaderFunction = ({ request, context, params }) => {
 };
 
 export const action: ActionFunction = async ({ request, context }) => {
-  return handleDelete({ request, context, mutation: showsMutation });
+  if (request.method === 'POST') {
+    const { id, attended } = await parseFormData(request);
+    return mutate({
+      context,
+      mutation: updateMutation,
+      variables: {
+        id,
+        input: {
+          attended,
+        },
+      },
+    });
+  }
+  return handleDelete({ request, context, mutation: deleteMutation });
 };
 
 export default function Shows() {
+  const fetcher = useFetcher();
   const path = usePath();
   const data = useLoaderData<ShowsAdminQuery>();
   const shows = data.shows as ShowConnection;
@@ -79,6 +95,28 @@ export default function Shows() {
       },
     },
     {
+      label: 'Attended',
+      className: 'text-center',
+      render: ({ id, attended }: Show) => {
+        return (
+          <Checkbox
+            checked={Boolean(attended)}
+            onChange={(e) => {
+              fetcher.submit(
+                {
+                  id,
+                  attended: e.target.checked,
+                },
+                {
+                  method: 'POST',
+                }
+              );
+            }}
+          />
+        );
+      },
+    },
+    {
       label: 'Date',
       prop: 'date',
       type: 'date',
@@ -127,6 +165,7 @@ const showsQuery = gql`
             name
             slug
           }
+          attended
           date
           id
           title
@@ -144,7 +183,15 @@ const showsQuery = gql`
   }
 `;
 
-const showsMutation = gql`
+const updateMutation = gql`
+  mutation UpdateShowAttended($id: ObjID!, $input: UpdateShowInput!) {
+    updateShow(id: $id, input: $input) {
+      id
+    }
+  }
+`;
+
+const deleteMutation = gql`
   mutation DeleteShow($ids: [ObjID]!) {
     removeShow(ids: $ids)
   }
