@@ -10,7 +10,8 @@ export default function Checkbox({
   ...props
 }: InputHTMLAttributes<HTMLInputElement>) {
   const [checked, setChecked] = useState(checkedProp);
-  const [value, setValue] = useState(valueProp || 'false');
+  const initial = typeof valueProp === 'undefined' ? String(checked) : valueProp;
+  const [value, setValue] = useState(initial);
   const onChange = (e: any) => {
     setValue(e.target.checked);
     setChecked(e.target.checked);
