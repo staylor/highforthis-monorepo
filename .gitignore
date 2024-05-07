@@ -9,6 +9,7 @@ node_modules
 graphql/lib
 graphql/public/uploads
 web/build
+xcode/HighForThis.xcodeproj/project.xcworkspace/xcuserdata/
 
 *.log
 *.p8
