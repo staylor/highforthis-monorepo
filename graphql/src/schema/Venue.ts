@@ -35,6 +35,7 @@ const Venue = `#graphql
     website: String
     address: String
     capacity: String
+    coordinates: VenueCoordinatesInput
   }
 
   input VenueCoordinatesInput {
