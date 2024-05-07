@@ -31,9 +31,12 @@ struct ShowDetail: View {
                     .padding(.bottom, 8)
                     
                     VStack(alignment: .leading) {
-                        InternalLink(show.artists[0].name, color: .accentColor) {
-                            ArtistMain(name: show.artists[0].name, slug: show.artists[0].slug)
+                        ForEach(show.artists, id: \.self) { artist in
+                            InternalLink(artist.name, color: .accentColor) {
+                                ArtistMain(name: artist.name, slug: artist.slug)
+                            }
                         }
+
                         InternalLink(show.venue.name) {
                             VenueMain(name: show.venue.name, slug: show.venue.slug)
                         }

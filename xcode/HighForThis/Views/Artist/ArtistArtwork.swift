@@ -20,7 +20,7 @@ struct ArtistArtwork: View {
                     }
                 }
         } placeholder: {
-            ImageLoading().frame(maxHeight: screenWidth)
+            ImageLoading().frame(height: screenWidth)
         }
     }
     

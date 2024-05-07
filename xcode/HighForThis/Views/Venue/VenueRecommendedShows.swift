@@ -8,7 +8,8 @@ struct VenueRecommendedShows: View {
         ShowsSectionHeader(L10N("recommendedShows"))
         ForEach(shows, id: \.self) { node in
             let title = node.title ?? ""
-            ShowSectionItem(id: node.id, name: title.isEmpty ? node.artists[0].name : title, date: node.date)
+            let label = title.isEmpty ? node.artists.map { $0.name }.joined(separator: " / ") : title
+            ShowSectionItem(id: node.id, name: label, date: node.date)
         }
     }
 }

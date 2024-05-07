@@ -17,12 +17,14 @@ struct ShowList: View {
                     ForEach(groups!) { group in
                         Section {
                             ForEach(group.shows, id: \.self) { show in
+                                let title = show.title ?? ""
+                                let label = title.isEmpty ? show.artists.map { $0.name }.joined(separator: " / ") : title
                                 NavigationLink {
                                     ShowDetail(id: show.id)
                                 } label: {
                                     HStack {
                                         VStack(alignment: .leading) {
-                                            Text(show.artists[0].name).foregroundColor(.accentColor)
+                                            Text(label).foregroundColor(.accentColor)
                                             Text(show.venue.name).foregroundColor(.gray)
                                         }
                                         
