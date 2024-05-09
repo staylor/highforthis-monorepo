@@ -29,5 +29,6 @@ export default {
       'VideoNode',
     ],
     MediaUpload: ['AudioUpload', 'FileUpload', 'ImageUpload', 'VideoUpload'],
+    ShowEntity: ['Artist', 'Venue'],
   },
 };

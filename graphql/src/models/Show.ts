@@ -1,3 +1,5 @@
+import type { Document } from 'mongodb';
+
 import Model from './Model';
 import type { ModelContext } from './types';
 
@@ -78,5 +80,65 @@ export default class Show extends Model {
       criteria.title = { $regex: new RegExp(search, 'i') };
     }
     return criteria;
+  }
+
+  public async stats(entityType: string) {
+    const lookupTable = `${entityType}_info`;
+    const pipeline: Document[] = [
+      // shows with attended: true
+      {
+        $match: {
+          attended: true,
+        },
+      },
+    ];
+    if (entityType === 'artist') {
+      // artists is an array
+      pipeline.push({
+        $unwind: '$artists',
+      });
+    }
+    pipeline.push(
+      // group by _id
+      {
+        $group: {
+          _id: entityType === 'artist' ? '$artists' : '$venue',
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      // lookup entity in foreign table
+      {
+        $lookup: {
+          from: entityType,
+          localField: '_id',
+          foreignField: '_id',
+          as: lookupTable,
+        },
+      },
+      // return entity with result
+      {
+        $project: {
+          entity: {
+            $arrayElemAt: [`$${lookupTable}`, 0],
+          },
+          count: 1,
+        },
+      },
+      // reverse sort
+      {
+        $sort: {
+          count: -1,
+          'entity.name': 1,
+        },
+      }
+    );
+    const docs = await this.collection.aggregate(pipeline).toArray();
+    // add type to entity to resolve GraphQL union properly
+    return docs.map(({ entity, ...data }) => ({
+      ...data,
+      entity: { ...entity, type: entityType },
+    }));
   }
 }

@@ -160,6 +160,7 @@ export type CreateUserInput = {
 export type CreateVenueInput = {
   address?: InputMaybe<Scalars['String']['input']>;
   capacity?: InputMaybe<Scalars['String']['input']>;
+  coordinates?: InputMaybe<VenueCoordinatesInput>;
   description?: InputMaybe<Scalars['String']['input']>;
   featuredMedia?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   name: Scalars['String']['input'];
@@ -683,6 +684,7 @@ export type Query = {
   post?: Maybe<Post>;
   posts?: Maybe<PostConnection>;
   show?: Maybe<Show>;
+  showStats: Array<ShowStat>;
   shows?: Maybe<ShowConnection>;
   siteSettings: SiteSettings;
   uploads?: Maybe<MediaUploadConnection>;
@@ -751,6 +753,11 @@ export type QueryPostsArgs = {
 export type QueryShowArgs = {
   id?: InputMaybe<Scalars['ObjID']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryShowStatsArgs = {
+  entity: ShowEntityType;
 };
 
 
@@ -870,10 +877,23 @@ export type ShowEdge = {
   node: Show;
 };
 
+export type ShowEntity = Artist | Venue;
+
+export enum ShowEntityType {
+  Artist = 'ARTIST',
+  Venue = 'VENUE'
+}
+
 export enum ShowOrder {
   Asc = 'ASC',
   Desc = 'DESC'
 }
+
+export type ShowStat = {
+  __typename?: 'ShowStat';
+  count: Scalars['Int']['output'];
+  entity: ShowEntity;
+};
 
 export type SiteSettings = {
   __typename?: 'SiteSettings';
@@ -1397,7 +1417,15 @@ export type ShowsAdminQueryVariables = Exact<{
 }>;
 
 
-export type ShowsAdminQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', count?: number | null, edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: any, title?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+export type ShowsAdminQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', count?: number | null, edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', attended?: boolean | null, date: number, id: any, title?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type UpdateShowAttendedMutationVariables = Exact<{
+  id: Scalars['ObjID']['input'];
+  input: UpdateShowInput;
+}>;
+
+
+export type UpdateShowAttendedMutation = { __typename?: 'Mutation', updateShow?: { __typename?: 'Show', id: any } | null };
 
 export type DeleteShowMutationVariables = Exact<{
   ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
@@ -1587,6 +1615,13 @@ export type ShowsQueryVariables = Exact<{
 
 
 export type ShowsQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: any, title?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type ShowStatsQueryVariables = Exact<{
+  entity: ShowEntityType;
+}>;
+
+
+export type ShowStatsQuery = { __typename?: 'Query', showStats: Array<{ __typename?: 'ShowStat', count: number, entity: { __typename?: 'Artist', id: any, name: string } | { __typename?: 'Venue', id: any, name: string } }> };
 
 export type VenueQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;

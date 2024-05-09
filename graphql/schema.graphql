@@ -142,6 +142,7 @@ input CreateUserInput {
 input CreateVenueInput {
   address: String
   capacity: String
+  coordinates: VenueCoordinatesInput
   description: String
   featuredMedia: [String]
   name: String!
@@ -498,6 +499,7 @@ type Query {
   post(id: ObjID, slug: String): Post
   posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus, year: Int): PostConnection
   show(id: ObjID, slug: String): Show
+  showStats(entity: ShowEntityType!): [ShowStat!]!
   shows(after: String, artistId: ObjID, artistSlug: String, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, venueId: ObjID, venueSlug: String): ShowConnection
   siteSettings: SiteSettings!
   uploads(after: String, before: String, first: Int, last: Int, mimeType: String, search: String, type: String): MediaUploadConnection
@@ -549,9 +551,21 @@ type ShowEdge {
   node: Show!
 }
 
+union ShowEntity = Artist | Venue
+
+enum ShowEntityType {
+  ARTIST
+  VENUE
+}
+
 enum ShowOrder {
   ASC
   DESC
+}
+
+type ShowStat {
+  count: Int!
+  entity: ShowEntity!
 }
 
 type SiteSettings {

@@ -16,6 +16,16 @@ const resolvers = {
       return Venue.findOneById(show.venue);
     },
   },
+  ShowEntity: {
+    __resolveType(entity: any) {
+      if (entity.type === 'artist') {
+        return 'Artist';
+      }
+      if (entity.type === 'venue') {
+        return 'Venue';
+      }
+    },
+  },
   Query: {
     async shows(_: any, args: any, { Show, Artist, Venue }: AugmentedContext) {
       const { artistId, artistSlug, venueId, venueSlug, ...rest } = args;
@@ -44,6 +54,10 @@ const resolvers = {
         return Show.findOneById(id);
       }
       return Show.findOneBySlug(slug);
+    },
+
+    async showStats(_: any, { entity }: any, { Show }: AugmentedContext) {
+      return Show.stats(entity.toLowerCase());
     },
   },
   Mutation: {

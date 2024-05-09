@@ -46,6 +46,18 @@ const Show = `#graphql
     DESC
   }
 
+  enum ShowEntityType {
+    ARTIST
+    VENUE
+  }
+
+  union ShowEntity = Artist | Venue
+
+  type ShowStat {
+    count: Int!
+    entity: ShowEntity!
+  }
+
   extend type Query {
     shows(
       first: Int
@@ -63,6 +75,7 @@ const Show = `#graphql
       order: ShowOrder
     ): ShowConnection
     show(id: ObjID, slug: String): Show
+    showStats(entity: ShowEntityType!): [ShowStat!]! 
   }
 
   extend type Mutation {
