@@ -1,6 +1,7 @@
 import type { LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 import { useLoaderData, useParams } from '@remix-run/react';
+import cn from 'classnames';
 
 import query from '@/utils/query';
 import type { ShowStat, ShowStatsQuery } from '@/types/graphql';
@@ -15,6 +16,24 @@ export const loader: LoaderFunction = async ({ params, context }) => {
   });
 };
 
+const sizes = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl'];
+
+function parseClasses(total: number, size: number) {
+  const count = sizes.length;
+  const className: Record<string, boolean> = {};
+  const edge = count - 1;
+  for (let i = edge; i >= 0; i -= 1) {
+    if (i === edge) {
+      className[sizes[i]] = total >= i * size;
+    } else if (i === 0) {
+      className[sizes[i]] = total < size;
+    } else {
+      className[sizes[i]] = total >= i * size && total < (i + 1) * size;
+    }
+  }
+  return className;
+}
+
 export default function ShowStatsRoute() {
   const params = useParams();
   const data = useLoaderData<ShowStatsQuery>();
@@ -26,6 +45,9 @@ export default function ShowStatsRoute() {
     buckets[key].push(stat);
   });
   const other = params.entity === 'artist' ? 'venue' : 'artist';
+  const count = sizes.length;
+  const total = stats[0].count;
+  const size = (total - (total % count)) / count;
 
   return (
     <article className="w-160 max-w-full">
@@ -38,7 +60,7 @@ export default function ShowStatsRoute() {
       {Object.entries(buckets).map(([key, stats]) => (
         <ul key={key} className="mb-4">
           {stats.map((stat) => (
-            <li key={stat.entity.id} className="text-lg">
+            <li key={stat.entity.id} className={cn(parseClasses(stat.count, size))}>
               <Link to={`/${params.entity}/${stat.entity.slug}`} className="hover:underline">
                 {stat.entity.name}
               </Link>

@@ -21,7 +21,7 @@ export const action: ActionFunction = ({ request, context, params }) => {
     request,
     context,
     mutation: artistMutation,
-    variables: { id: params.id },
+    variables: { id: params.id, input: { excludeFromSearch: false } },
   });
 };
 
