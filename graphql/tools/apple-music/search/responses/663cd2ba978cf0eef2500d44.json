@@ -1,0 +1,89 @@
+{
+  "id": "5602901",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/5602901",
+  "attributes": {
+    "name": "Rilo Kiley",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 791,
+      "height": 791,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/c2/a6/37/c2a63791-db21-b8ae-fe1c-e61871d67c15/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "201616",
+      "textColor1": "edeef2",
+      "textColor2": "ebbbaa",
+      "textColor3": "c4c2c6",
+      "textColor4": "c29a8c"
+    },
+    "url": "https://music.apple.com/us/artist/rilo-kiley/5602901"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/5602901/albums",
+      "data": [
+        {
+          "id": "6951046",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/6951046"
+        },
+        {
+          "id": "261661212",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/261661212"
+        },
+        {
+          "id": "19046899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/19046899"
+        },
+        {
+          "id": "718985959",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/718985959"
+        },
+        {
+          "id": "1515299273",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515299273"
+        },
+        {
+          "id": "599008619",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/599008619"
+        },
+        {
+          "id": "119219054",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/119219054"
+        },
+        {
+          "id": "280142029",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/280142029"
+        },
+        {
+          "id": "76150173",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/76150173"
+        },
+        {
+          "id": "18234863",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/18234863"
+        },
+        {
+          "id": "609131003",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/609131003"
+        },
+        {
+          "id": "258411752",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/258411752"
+        }
+      ]
+    }
+  }
+}

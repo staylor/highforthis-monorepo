@@ -1,0 +1,54 @@
+{
+  "id": "253166059",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/253166059",
+  "attributes": {
+    "name": "White Rabbits",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1413,
+      "height": 1402,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/98/7c/5a/mzi.ysddzfrt.tif/{w}x{h}ac.jpg",
+      "bgColor": "030001",
+      "textColor1": "eceae9",
+      "textColor2": "e1d4d1",
+      "textColor3": "bdbbba",
+      "textColor4": "b4a9a8"
+    },
+    "url": "https://music.apple.com/us/artist/white-rabbits/253166059"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/253166059/albums",
+      "data": [
+        {
+          "id": "253166050",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/253166050"
+        },
+        {
+          "id": "1206642871",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1206642871"
+        },
+        {
+          "id": "1498853185",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498853185"
+        },
+        {
+          "id": "270720522",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/270720522"
+        },
+        {
+          "id": "272280788",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/272280788"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "id": "5116593",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/5116593",
+  "attributes": {
+    "name": "North Mississippi Allstars",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1000,
+      "height": 1000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/d8/ca/1b/d8ca1b8a-10a1-f1cb-902d-ed00ebda56c4/mzl.spddfxnx.jpg/{w}x{h}bb.jpg",
+      "bgColor": "0b161c",
+      "textColor1": "9cc7de",
+      "textColor2": "8cbcd4",
+      "textColor3": "7fa3b7",
+      "textColor4": "729baf"
+    },
+    "url": "https://music.apple.com/us/artist/north-mississippi-allstars/5116593"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/5116593/albums",
+      "data": [
+        {
+          "id": "1467842093",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1467842093"
+        },
+        {
+          "id": "1213136768",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1213136768"
+        },
+        {
+          "id": "695423831",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/695423831"
+        },
+        {
+          "id": "1590431914",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1590431914"
+        },
+        {
+          "id": "258067595",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/258067595"
+        },
+        {
+          "id": "203107542",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/203107542"
+        },
+        {
+          "id": "1307244524",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1307244524"
+        },
+        {
+          "id": "7229121",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/7229121"
+        },
+        {
+          "id": "203084939",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/203084939"
+        },
+        {
+          "id": "1307246799",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1307246799"
+        },
+        {
+          "id": "1307258951",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1307258951"
+        },
+        {
+          "id": "203120371",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/203120371"
+        },
+        {
+          "id": "1353570912",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1353570912"
+        },
+        {
+          "id": "1129861825",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1129861825"
+        },
+        {
+          "id": "1307246463",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1307246463"
+        },
+        {
+          "id": "1056818039",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1056818039"
+        },
+        {
+          "id": "213990149",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/213990149"
+        },
+        {
+          "id": "692163605",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/692163605"
+        },
+        {
+          "id": "1374177581",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1374177581"
+        },
+        {
+          "id": "1213623704",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1213623704"
+        },
+        {
+          "id": "1523128239",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523128239"
+        },
+        {
+          "id": "1653810769",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1653810769"
+        },
+        {
+          "id": "1525574049",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1525574049"
+        },
+        {
+          "id": "1516728658",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1516728658"
+        },
+        {
+          "id": "1584868545",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1584868545"
+        }
+      ]
+    }
+  }
+}

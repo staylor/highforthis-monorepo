@@ -7,6 +7,7 @@ const Artist = `#graphql
     appleMusic: AppleMusicData
     featuredMedia: [MediaUpload!]
     website: String
+    excludeFromSearch: Boolean
   }
 
   type ArtistEdge {
@@ -26,6 +27,7 @@ const Artist = `#graphql
     description: String
     featuredMedia: [String]
     website: String
+    excludeFromSearch: Boolean
   }
 
   input UpdateArtistInput {
@@ -35,6 +37,7 @@ const Artist = `#graphql
     featuredMedia: [String]
     website: String
     appleMusic: AppleMusicDataInput
+    excludeFromSearch: Boolean
   }
 
   extend type Query {
@@ -44,6 +47,7 @@ const Artist = `#graphql
       last: Int
       before: String
       search: String
+      filtered: Boolean
     ): ArtistConnection
     artist(id: ObjID, slug: String): Artist
   }

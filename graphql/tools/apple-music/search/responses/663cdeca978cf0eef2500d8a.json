@@ -1,0 +1,149 @@
+{
+  "id": "4190726",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/4190726",
+  "attributes": {
+    "name": "Lucero",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2700,
+      "height": 2700,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/e8/72/c0/e872c082-e0de-174b-43e5-9a547f42923f/8e7f91aa-b255-4051-bce5-484e73fc835c_ami-identity-dac3ae8eec4341a59503caec6e26831d-2022-10-06T20-20-00.016Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "010101",
+      "textColor1": "e7e7d9",
+      "textColor2": "c9c9ba",
+      "textColor3": "b9b9ae",
+      "textColor4": "a1a195"
+    },
+    "url": "https://music.apple.com/us/artist/lucero/4190726"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/4190726/albums",
+      "data": [
+        {
+          "id": "1375746049",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1375746049"
+        },
+        {
+          "id": "3876317",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/3876317"
+        },
+        {
+          "id": "1532969361",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1532969361"
+        },
+        {
+          "id": "1643972871",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1643972871"
+        },
+        {
+          "id": "1056988354",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1056988354"
+        },
+        {
+          "id": "1515403339",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515403339"
+        },
+        {
+          "id": "635476711",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/635476711"
+        },
+        {
+          "id": "1515406113",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515406113"
+        },
+        {
+          "id": "1418569444",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1418569444"
+        },
+        {
+          "id": "1480390476",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1480390476"
+        },
+        {
+          "id": "1443494297",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443494297"
+        },
+        {
+          "id": "1515404053",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515404053"
+        },
+        {
+          "id": "1515406126",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515406126"
+        },
+        {
+          "id": "1515066808",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515066808"
+        },
+        {
+          "id": "1593202716",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593202716"
+        },
+        {
+          "id": "1587126757",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1587126757"
+        },
+        {
+          "id": "1515404990",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515404990"
+        },
+        {
+          "id": "286952459",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/286952459"
+        },
+        {
+          "id": "1738680361",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1738680361"
+        },
+        {
+          "id": "1648968349",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1648968349"
+        },
+        {
+          "id": "1530761750",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1530761750"
+        },
+        {
+          "id": "1451915767",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1451915767"
+        },
+        {
+          "id": "1445307948",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445307948"
+        },
+        {
+          "id": "1445148810",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445148810"
+        }
+      ]
+    }
+  }
+}

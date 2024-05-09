@@ -1,0 +1,114 @@
+{
+  "id": "5305574",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/5305574",
+  "attributes": {
+    "name": "Secret Machines",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1425,
+      "height": 1425,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/8f/74/df/mzi.rwkgnefb.jpg/{w}x{h}ac.jpg",
+      "bgColor": "3bb300",
+      "textColor1": "0f1111",
+      "textColor2": "0f1210",
+      "textColor3": "18310e",
+      "textColor4": "18320d"
+    },
+    "url": "https://music.apple.com/us/artist/secret-machines/5305574"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/5305574/albums",
+      "data": [
+        {
+          "id": "135131815",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/135131815"
+        },
+        {
+          "id": "1518641679",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1518641679"
+        },
+        {
+          "id": "125004652",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/125004652"
+        },
+        {
+          "id": "1454833997",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1454833997"
+        },
+        {
+          "id": "1650312176",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650312176"
+        },
+        {
+          "id": "65621308",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/65621308"
+        },
+        {
+          "id": "1450151785",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1450151785"
+        },
+        {
+          "id": "1635221920",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1635221920"
+        },
+        {
+          "id": "1629136668",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1629136668"
+        },
+        {
+          "id": "77903771",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/77903771"
+        },
+        {
+          "id": "1629135893",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1629135893"
+        },
+        {
+          "id": "203880944",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/203880944"
+        },
+        {
+          "id": "111167372",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/111167372"
+        },
+        {
+          "id": "1667391884",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667391884"
+        },
+        {
+          "id": "120121164",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/120121164"
+        },
+        {
+          "id": "351515639",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/351515639"
+        },
+        {
+          "id": "1635426495",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1635426495"
+        }
+      ]
+    }
+  }
+}

@@ -6,6 +6,7 @@ import Form from '@/components/Admin/Form';
 import Message from '@/components/Form/Message';
 import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
 import type { Fields } from '@/types';
+import Checkbox from '@/components/Form/Checkbox';
 
 import Shows from '../Entity/Shows';
 
@@ -73,6 +74,13 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
       condition: ({ shows }) => shows?.edges?.length > 0,
       position: 'meta',
     },
+    {
+      label: 'Exclude from search',
+      type: 'custom',
+      render: ({ artist }) => (
+        <Checkbox name="excludeFromSearch" checked={artist?.excludeFromSearch} />
+      ),
+    },
   ];
   return (
     <>
@@ -95,6 +103,7 @@ ArtistForm.fragments = {
         id
       }
       description
+      excludeFromSearch
       featuredMedia {
         ...FeaturedMedia_media
       }

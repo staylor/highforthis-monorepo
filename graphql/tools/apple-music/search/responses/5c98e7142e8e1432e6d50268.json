@@ -1,0 +1,134 @@
+{
+  "id": "1150152340",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1150152340",
+  "attributes": {
+    "name": "Nick Murphy",
+    "genreNames": [
+      "Electronic"
+    ],
+    "artwork": {
+      "width": 2586,
+      "height": 2586,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2b/1d/6a/2b1d6af5-3eaa-ab0a-3a37-b869dcc6f29e/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "75b4df",
+      "textColor1": "120900",
+      "textColor2": "1c1e19",
+      "textColor3": "262b2c",
+      "textColor4": "2e3c40"
+    },
+    "url": "https://music.apple.com/us/artist/nick-murphy/1150152340"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1150152340/albums",
+      "data": [
+        {
+          "id": "1501249318",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1501249318"
+        },
+        {
+          "id": "1445302237",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445302237"
+        },
+        {
+          "id": "1710568078",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710568078"
+        },
+        {
+          "id": "1444855396",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444855396"
+        },
+        {
+          "id": "1600021660",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1600021660"
+        },
+        {
+          "id": "1650415868",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650415868"
+        },
+        {
+          "id": "1710568104",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710568104"
+        },
+        {
+          "id": "1650417388",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650417388"
+        },
+        {
+          "id": "1650410115",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650410115"
+        },
+        {
+          "id": "1655983778",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1655983778"
+        },
+        {
+          "id": "1678207898",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1678207898"
+        },
+        {
+          "id": "1710228730",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1710228730"
+        },
+        {
+          "id": "1650410880",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650410880"
+        },
+        {
+          "id": "1679355833",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1679355833"
+        },
+        {
+          "id": "1444894978",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444894978"
+        },
+        {
+          "id": "1498704854",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498704854"
+        },
+        {
+          "id": "646532974",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/646532974"
+        },
+        {
+          "id": "646532974",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/646532974"
+        },
+        {
+          "id": "1498475531",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498475531"
+        },
+        {
+          "id": "1180429482",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1180429482"
+        },
+        {
+          "id": "1180429482",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1180429482"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "id": "344967240",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/344967240",
+  "attributes": {
+    "name": "Yacht Rock Revue",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1040,
+      "height": 1040,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/c2/73/25/c273258e-0a99-dc1a-58a3-84f72af1b49e/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "f9f2e8",
+      "textColor1": "231e11",
+      "textColor2": "352d18",
+      "textColor3": "4e483c",
+      "textColor4": "5c5442"
+    },
+    "url": "https://music.apple.com/us/artist/yacht-rock-revue/344967240"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/344967240/albums",
+      "data": [
+        {
+          "id": "1480056517",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1480056517"
+        },
+        {
+          "id": "1483158535",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1483158535"
+        },
+        {
+          "id": "1712741348",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1712741348"
+        },
+        {
+          "id": "1725438542",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1725438542"
+        },
+        {
+          "id": "1623462512",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1623462512"
+        },
+        {
+          "id": "1481145757",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1481145757"
+        },
+        {
+          "id": "1518875008",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1518875008"
+        },
+        {
+          "id": "1483282571",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1483282571"
+        },
+        {
+          "id": "1654900127",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1654900127"
+        }
+      ]
+    }
+  }
+}

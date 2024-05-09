@@ -1,0 +1,54 @@
+{
+  "id": "4479354",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/4479354",
+  "attributes": {
+    "name": "Robert Randolph",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 613,
+      "height": 613,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages116/v4/00/c8/86/00c886d2-fd85-9b0a-4b8e-9168b0adf119/a8c76095-1a17-43f0-985d-1f3c5f81bdd1_ami-identity-16532f57703991c8771cba2d3c8bde13-2023-09-14T16-42-41.131Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "c6cccd",
+      "textColor1": "00051b",
+      "textColor2": "163149",
+      "textColor3": "272d3e",
+      "textColor4": "395064"
+    },
+    "url": "https://music.apple.com/us/artist/robert-randolph/4479354"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/4479354/albums",
+      "data": [
+        {
+          "id": "1612849043",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1612849043"
+        },
+        {
+          "id": "1577646480",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1577646480"
+        },
+        {
+          "id": "251013826",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/251013826"
+        },
+        {
+          "id": "1707204153",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1707204153"
+        },
+        {
+          "id": "1600451840",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1600451840"
+        }
+      ]
+    }
+  }
+}

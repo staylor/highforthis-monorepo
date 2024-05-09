@@ -1,0 +1,94 @@
+{
+  "id": "407832872",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/407832872",
+  "attributes": {
+    "name": "Yellow Ostrich",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1400,
+      "height": 1400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/7d/1c/4c/7d1c4c55-ea7c-9cf4-3d2f-b12c1ed0ed89/655173114322.jpg/{w}x{h}ac.jpg",
+      "bgColor": "dadcce",
+      "textColor1": "1e1008",
+      "textColor2": "2c1f0d",
+      "textColor3": "443930",
+      "textColor4": "4f4534"
+    },
+    "url": "https://music.apple.com/us/artist/yellow-ostrich/407832872"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/407832872/albums",
+      "data": [
+        {
+          "id": "718747564",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/718747564"
+        },
+        {
+          "id": "1554890414",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1554890414"
+        },
+        {
+          "id": "797819988",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/797819988"
+        },
+        {
+          "id": "718660980",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/718660980"
+        },
+        {
+          "id": "719139831",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/719139831"
+        },
+        {
+          "id": "1548305298",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1548305298"
+        },
+        {
+          "id": "1546658497",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546658497"
+        },
+        {
+          "id": "1667611633",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1667611633"
+        },
+        {
+          "id": "1547537335",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1547537335"
+        },
+        {
+          "id": "1440052846",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440052846"
+        },
+        {
+          "id": "1552113672",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1552113672"
+        },
+        {
+          "id": "1548304682",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1548304682"
+        },
+        {
+          "id": "1636429668",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1636429668"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "id": "5140074",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/5140074",
+  "attributes": {
+    "name": "Railroad Earth",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 2204,
+      "height": 2204,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/52/b0/23/52b023b5-a8e6-489c-dc75-ec3e6c434dc4/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "091624",
+      "textColor1": "d9e3ed",
+      "textColor2": "c0d5e3",
+      "textColor3": "afbac4",
+      "textColor4": "9bafbd"
+    },
+    "url": "https://music.apple.com/us/artist/railroad-earth/5140074"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/5140074/albums",
+      "data": [
+        {
+          "id": "104711490",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/104711490"
+        },
+        {
+          "id": "1440945397",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440945397"
+        },
+        {
+          "id": "1256597345",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1256597345"
+        },
+        {
+          "id": "280952454",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/280952454"
+        },
+        {
+          "id": "712293978",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/712293978"
+        },
+        {
+          "id": "387271434",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/387271434"
+        },
+        {
+          "id": "5140108",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/5140108"
+        },
+        {
+          "id": "712211080",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/712211080"
+        },
+        {
+          "id": "511906477",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/511906477"
+        },
+        {
+          "id": "1613016427",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1613016427"
+        },
+        {
+          "id": "757344310",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/757344310"
+        },
+        {
+          "id": "1540998743",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1540998743"
+        },
+        {
+          "id": "1443214602",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443214602"
+        },
+        {
+          "id": "1183436425",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1183436425"
+        },
+        {
+          "id": "1601548187",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1601548187"
+        },
+        {
+          "id": "1479207110",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1479207110"
+        },
+        {
+          "id": "1236917627",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1236917627"
+        },
+        {
+          "id": "610241366",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/610241366"
+        },
+        {
+          "id": "1484767758",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484767758"
+        },
+        {
+          "id": "1216842755",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1216842755"
+        },
+        {
+          "id": "1600646167",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1600646167"
+        },
+        {
+          "id": "1458381086",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1458381086"
+        },
+        {
+          "id": "1491316935",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1491316935"
+        }
+      ]
+    }
+  }
+}

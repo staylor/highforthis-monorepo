@@ -1,0 +1,139 @@
+{
+  "id": "302202865",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/302202865",
+  "attributes": {
+    "name": "Wavves",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3835,
+      "height": 3835,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/4b/04/f7/4b04f79f-b56a-0c82-97be-bdebdca83ee0/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "a4c9db",
+      "textColor1": "070d14",
+      "textColor2": "001114",
+      "textColor3": "26333c",
+      "textColor4": "20353c"
+    },
+    "url": "https://music.apple.com/us/artist/wavves/302202865"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/302202865/albums",
+      "data": [
+        {
+          "id": "1013224525",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1013224525"
+        },
+        {
+          "id": "1073245438",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1073245438"
+        },
+        {
+          "id": "596122320",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/596122320"
+        },
+        {
+          "id": "1208171279",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1208171279"
+        },
+        {
+          "id": "1553396566",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1553396566"
+        },
+        {
+          "id": "460128621",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/460128621"
+        },
+        {
+          "id": "1070146213",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1070146213"
+        },
+        {
+          "id": "1013161712",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1013161712"
+        },
+        {
+          "id": "1185726074",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1185726074"
+        },
+        {
+          "id": "413126652",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/413126652"
+        },
+        {
+          "id": "1233411983",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1233411983"
+        },
+        {
+          "id": "1554008693",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1554008693"
+        },
+        {
+          "id": "1485071681",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485071681"
+        },
+        {
+          "id": "1376218702",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1376218702"
+        },
+        {
+          "id": "1281115889",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1281115889"
+        },
+        {
+          "id": "325576963",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/325576963"
+        },
+        {
+          "id": "1441350318",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441350318"
+        },
+        {
+          "id": "302202859",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/302202859"
+        },
+        {
+          "id": "460128720",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/460128720"
+        },
+        {
+          "id": "1562893980",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1562893980"
+        },
+        {
+          "id": "1485070706",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1485070706"
+        },
+        {
+          "id": "424289618",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/424289618"
+        }
+      ]
+    }
+  }
+}

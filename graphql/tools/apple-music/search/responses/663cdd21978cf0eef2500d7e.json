@@ -1,0 +1,89 @@
+{
+  "id": "46939145",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/46939145",
+  "attributes": {
+    "name": "Akron/Family",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1400,
+      "height": 1400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ef/36/aa/ef36aa34-a807-0556-355c-c8507963b6c1/cover.jpg/{w}x{h}ac.jpg",
+      "bgColor": "ffffff",
+      "textColor1": "430b0d",
+      "textColor2": "4f0d10",
+      "textColor3": "683c3d",
+      "textColor4": "723e3f"
+    },
+    "url": "https://music.apple.com/us/artist/akron-family/46939145"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/46939145/albums",
+      "data": [
+        {
+          "id": "895627134",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/895627134"
+        },
+        {
+          "id": "886246240",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/886246240"
+        },
+        {
+          "id": "537754883",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/537754883"
+        },
+        {
+          "id": "446202275",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/446202275"
+        },
+        {
+          "id": "895634038",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/895634038"
+        },
+        {
+          "id": "895629405",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/895629405"
+        },
+        {
+          "id": "600187262",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/600187262"
+        },
+        {
+          "id": "450271983",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/450271983"
+        },
+        {
+          "id": "609727425",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/609727425"
+        },
+        {
+          "id": "440278060",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/440278060"
+        },
+        {
+          "id": "448757723",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/448757723"
+        },
+        {
+          "id": "269425446",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/269425446"
+        }
+      ]
+    }
+  }
+}

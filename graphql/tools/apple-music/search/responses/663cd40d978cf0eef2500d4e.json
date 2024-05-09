@@ -1,0 +1,84 @@
+{
+  "id": "560395",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/560395",
+  "attributes": {
+    "name": "Julian Casablancas",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 600,
+      "height": 610,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/7b/56/ea/7b56ea38-c04c-722e-36f9-37c26576ffc6/mzi.ldksrmnn.jpg/{w}x{h}ac.jpg",
+      "bgColor": "000905",
+      "textColor1": "f6edc4",
+      "textColor2": "ded8d3",
+      "textColor3": "c4bf9e",
+      "textColor4": "b1aeaa"
+    },
+    "url": "https://music.apple.com/us/artist/julian-casablancas/560395"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/560395/albums",
+      "data": [
+        {
+          "id": "335804043",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/335804043"
+        },
+        {
+          "id": "362944107",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/362944107"
+        },
+        {
+          "id": "345287544",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/345287544"
+        },
+        {
+          "id": "524532454",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/524532454"
+        },
+        {
+          "id": "524532733",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/524532733"
+        },
+        {
+          "id": "332637002",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/332637002"
+        },
+        {
+          "id": "350189097",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/350189097"
+        },
+        {
+          "id": "1481999910",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1481999910"
+        },
+        {
+          "id": "1481997282",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1481997282"
+        },
+        {
+          "id": "1706883494",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1706883494"
+        },
+        {
+          "id": "1063835535",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1063835535"
+        }
+      ]
+    }
+  }
+}

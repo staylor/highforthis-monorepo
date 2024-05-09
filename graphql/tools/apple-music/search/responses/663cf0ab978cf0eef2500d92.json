@@ -1,0 +1,39 @@
+{
+  "id": "79154708",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/79154708",
+  "attributes": {
+    "name": "Karl Denson's Tiny Universe",
+    "genreNames": [
+      "Jazz"
+    ],
+    "artwork": {
+      "width": 826,
+      "height": 826,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/78/a1/77/78a1775c-e3fb-2a6d-3b98-3ea00e266072/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "222011",
+      "textColor1": "f6ecca",
+      "textColor2": "dbb163",
+      "textColor3": "cbc3a5",
+      "textColor4": "b69452"
+    },
+    "url": "https://music.apple.com/us/artist/karl-densons-tiny-universe/79154708"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/79154708/albums",
+      "data": [
+        {
+          "id": "1558406256",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1558406256"
+        },
+        {
+          "id": "1565904497",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1565904497"
+        }
+      ]
+    }
+  }
+}

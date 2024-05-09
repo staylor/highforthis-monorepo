@@ -1,0 +1,39 @@
+{
+  "id": "445959577",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/445959577",
+  "attributes": {
+    "name": "Volcano Choir",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1200,
+      "height": 1200,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/f4/f8/86/f4f88675-1c21-91fd-7229-098b66059179/mzl.xznyxdcu.jpg/{w}x{h}bb.jpg",
+      "bgColor": "2a1708",
+      "textColor1": "e7f1fd",
+      "textColor2": "e3d26b",
+      "textColor3": "c1c5cc",
+      "textColor4": "bead57"
+    },
+    "url": "https://music.apple.com/us/artist/volcano-choir/445959577"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/445959577/albums",
+      "data": [
+        {
+          "id": "657543493",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/657543493"
+        },
+        {
+          "id": "445959542",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/445959542"
+        }
+      ]
+    }
+  }
+}

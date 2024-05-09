@@ -1,0 +1,144 @@
+{
+  "id": "284549025",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/284549025",
+  "attributes": {
+    "name": "Sinkane",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 4000,
+      "height": 4000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/c8/33/f5/c833f50f-348c-2138-a031-18f22b02c179/462d828e-28dd-4064-9288-a58457ce969e_file_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "000017",
+      "textColor1": "ffffff",
+      "textColor2": "f6a3ff",
+      "textColor3": "cbcbd0",
+      "textColor4": "c482d0"
+    },
+    "url": "https://music.apple.com/us/artist/sinkane/284549025"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/284549025/albums",
+      "data": [
+        {
+          "id": "905083384",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/905083384"
+        },
+        {
+          "id": "1721067065",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1721067065"
+        },
+        {
+          "id": "950871456",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/950871456"
+        },
+        {
+          "id": "1721165969",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1721165969"
+        },
+        {
+          "id": "950815949",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/950815949"
+        },
+        {
+          "id": "1010909055",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1010909055"
+        },
+        {
+          "id": "1305497754",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1305497754"
+        },
+        {
+          "id": "1546655018",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546655018"
+        },
+        {
+          "id": "1721056121",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1721056121"
+        },
+        {
+          "id": "1726007143",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1726007143"
+        },
+        {
+          "id": "1587890230",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1587890230"
+        },
+        {
+          "id": "1545978070",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1545978070"
+        },
+        {
+          "id": "1728495242",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1728495242"
+        },
+        {
+          "id": "950821594",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/950821594"
+        },
+        {
+          "id": "997379770",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/997379770"
+        },
+        {
+          "id": "1546327575",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546327575"
+        },
+        {
+          "id": "950850538",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/950850538"
+        },
+        {
+          "id": "1497801755",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1497801755"
+        },
+        {
+          "id": "1721038766",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1721038766"
+        },
+        {
+          "id": "1561978176",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1561978176"
+        },
+        {
+          "id": "950803271",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/950803271"
+        },
+        {
+          "id": "950877564",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/950877564"
+        },
+        {
+          "id": "972682850",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/972682850"
+        }
+      ]
+    }
+  }
+}

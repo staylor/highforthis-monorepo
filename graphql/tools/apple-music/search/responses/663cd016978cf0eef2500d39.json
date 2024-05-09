@@ -1,0 +1,114 @@
+{
+  "id": "287215196",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/287215196",
+  "attributes": {
+    "name": "Francis and the Lights",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/26/86/67/26866759-07db-d20d-7ae0-30b26311dcd1/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "0093c7",
+      "textColor1": "01090e",
+      "textColor2": "00131b",
+      "textColor3": "012433",
+      "textColor4": "002d3d"
+    },
+    "url": "https://music.apple.com/us/artist/francis-and-the-lights/287215196"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/287215196/albums",
+      "data": [
+        {
+          "id": "1159162831",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1159162831"
+        },
+        {
+          "id": "1330186919",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1330186919"
+        },
+        {
+          "id": "1659532281",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1659532281"
+        },
+        {
+          "id": "1250728907",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1250728907"
+        },
+        {
+          "id": "350528402",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/350528402"
+        },
+        {
+          "id": "303585369",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/303585369"
+        },
+        {
+          "id": "1132271841",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1132271841"
+        },
+        {
+          "id": "1467505775",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1467505775"
+        },
+        {
+          "id": "1237799498",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1237799498"
+        },
+        {
+          "id": "1532201886",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1532201886"
+        },
+        {
+          "id": "467810820",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/467810820"
+        },
+        {
+          "id": "1500479899",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1500479899"
+        },
+        {
+          "id": "1406634119",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1406634119"
+        },
+        {
+          "id": "1153715728",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1153715728"
+        },
+        {
+          "id": "1581304130",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1581304130"
+        },
+        {
+          "id": "1576722234",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1576722234"
+        },
+        {
+          "id": "1479786630",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1479786630"
+        }
+      ]
+    }
+  }
+}

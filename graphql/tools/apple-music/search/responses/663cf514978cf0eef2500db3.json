@@ -1,0 +1,54 @@
+{
+  "id": "2663445",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/2663445",
+  "attributes": {
+    "name": "Jay Farrar",
+    "genreNames": [
+      "Singer/Songwriter"
+    ],
+    "artwork": {
+      "width": 1425,
+      "height": 1425,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/86/7a/b0/867ab007-21a9-fea4-c11d-16d35577d808/mzi.lweeufvf.jpg/{w}x{h}ac.jpg",
+      "bgColor": "ffffff",
+      "textColor1": "120304",
+      "textColor2": "5b1114",
+      "textColor3": "413536",
+      "textColor4": "7c4043"
+    },
+    "url": "https://music.apple.com/us/artist/jay-farrar/2663445"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/2663445/albums",
+      "data": [
+        {
+          "id": "334816915",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/334816915"
+        },
+        {
+          "id": "334974509",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/334974509"
+        },
+        {
+          "id": "6184603",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/6184603"
+        },
+        {
+          "id": "1444179532",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444179532"
+        },
+        {
+          "id": "1442253213",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442253213"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "id": "41523454",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/41523454",
+  "attributes": {
+    "name": "Perpetual Groove",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1940,
+      "height": 1940,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/01/ef/7b/01ef7bf5-53b0-3238-195d-860be342b151/31e26f37-99d7-4193-b185-a3e5019ac7f7_ami-identity-f2d5d831191e4c29e471809181721628-2024-02-02T16-28-20.578Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "230c02",
+      "textColor1": "ffffff",
+      "textColor2": "d4d7d6",
+      "textColor3": "d2cecc",
+      "textColor4": "b1aeab"
+    },
+    "url": "https://music.apple.com/us/artist/perpetual-groove/41523454"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/41523454/albums",
+      "data": [
+        {
+          "id": "58706052",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/58706052"
+        },
+        {
+          "id": "1134795497",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1134795497"
+        },
+        {
+          "id": "41523663",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/41523663"
+        },
+        {
+          "id": "1140283875",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1140283875"
+        },
+        {
+          "id": "1455904907",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1455904907"
+        },
+        {
+          "id": "355275000",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/355275000"
+        },
+        {
+          "id": "217626999",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/217626999"
+        },
+        {
+          "id": "1661206681",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1661206681"
+        },
+        {
+          "id": "1084383729",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1084383729"
+        },
+        {
+          "id": "1217994803",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1217994803"
+        },
+        {
+          "id": "1582834987",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1582834987"
+        },
+        {
+          "id": "401044190",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/401044190"
+        },
+        {
+          "id": "1215379245",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1215379245"
+        },
+        {
+          "id": "1733081456",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1733081456"
+        },
+        {
+          "id": "1715045278",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715045278"
+        },
+        {
+          "id": "1655742447",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1655742447"
+        },
+        {
+          "id": "1047410002",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1047410002"
+        },
+        {
+          "id": "1640143826",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1640143826"
+        }
+      ]
+    }
+  }
+}

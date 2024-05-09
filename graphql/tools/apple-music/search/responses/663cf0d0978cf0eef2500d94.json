@@ -1,0 +1,89 @@
+{
+  "id": "340050411",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/340050411",
+  "attributes": {
+    "name": "Dum Dum Girls",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1500,
+      "height": 1500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/eb/0a/b8/eb0ab81e-5516-4747-e526-350497504a07/mzl.wxfqhigj.jpg/{w}x{h}bb.jpg",
+      "bgColor": "a9d3f7",
+      "textColor1": "020002",
+      "textColor2": "1e2124",
+      "textColor3": "232b33",
+      "textColor4": "39454e"
+    },
+    "url": "https://music.apple.com/us/artist/dum-dum-girls/340050411"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/340050411/albums",
+      "data": [
+        {
+          "id": "742639128",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/742639128"
+        },
+        {
+          "id": "542504555",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/542504555"
+        },
+        {
+          "id": "669296492",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/669296492"
+        },
+        {
+          "id": "361459878",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/361459878"
+        },
+        {
+          "id": "417314167",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/417314167"
+        },
+        {
+          "id": "1709548887",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1709548887"
+        },
+        {
+          "id": "1020411504",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1020411504"
+        },
+        {
+          "id": "355165984",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/355165984"
+        },
+        {
+          "id": "386773629",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/386773629"
+        },
+        {
+          "id": "586441321",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/586441321"
+        },
+        {
+          "id": "1055402508",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1055402508"
+        },
+        {
+          "id": "1046143500",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1046143500"
+        }
+      ]
+    }
+  }
+}

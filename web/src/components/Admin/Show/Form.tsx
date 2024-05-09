@@ -83,7 +83,7 @@ ShowForm.fragments = {
   `,
   entities: gql`
     fragment ShowForm_entities on Query {
-      artists(first: 500) @cache(key: "admin") {
+      artists(filtered: true, first: 500) @cache(key: "admin") {
         edges {
           node {
             id

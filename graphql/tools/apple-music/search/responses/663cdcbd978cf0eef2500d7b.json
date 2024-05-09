@@ -1,0 +1,104 @@
+{
+  "id": "192531718",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/192531718",
+  "attributes": {
+    "name": "Plants and Animals",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3489,
+      "height": 3489,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/0d/09/00/0d0900f7-6357-3d0e-66bb-fc3a5dd56895/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "233537",
+      "textColor1": "91d2dc",
+      "textColor2": "ff8270",
+      "textColor3": "7bb3bb",
+      "textColor4": "d27264"
+    },
+    "url": "https://music.apple.com/us/artist/plants-and-animals/192531718"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/192531718/albums",
+      "data": [
+        {
+          "id": "1074924026",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1074924026"
+        },
+        {
+          "id": "765781091",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/765781091"
+        },
+        {
+          "id": "1516668652",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1516668652"
+        },
+        {
+          "id": "859788319",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/859788319"
+        },
+        {
+          "id": "1180112446",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1180112446"
+        },
+        {
+          "id": "1348478505",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1348478505"
+        },
+        {
+          "id": "859338953",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/859338953"
+        },
+        {
+          "id": "859963879",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/859963879"
+        },
+        {
+          "id": "885008035",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/885008035"
+        },
+        {
+          "id": "1084366788",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1084366788"
+        },
+        {
+          "id": "1514243947",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1514243947"
+        },
+        {
+          "id": "202384463",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/202384463"
+        },
+        {
+          "id": "885009028",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/885009028"
+        },
+        {
+          "id": "1158939919",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1158939919"
+        },
+        {
+          "id": "1074917527",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1074917527"
+        }
+      ]
+    }
+  }
+}

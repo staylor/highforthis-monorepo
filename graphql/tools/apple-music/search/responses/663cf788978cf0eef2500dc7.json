@@ -1,0 +1,104 @@
+{
+  "id": "536229815",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/536229815",
+  "attributes": {
+    "name": "ASTR",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1500,
+      "height": 1500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features7/v4/1f/77/83/1f7783e5-fe1b-adcc-400a-e830c4b76b0e/mzl.rsrtxhgw.jpg/{w}x{h}bb.jpg",
+      "bgColor": "ffffff",
+      "textColor1": "120000",
+      "textColor2": "2f2925",
+      "textColor3": "413333",
+      "textColor4": "595451"
+    },
+    "url": "https://music.apple.com/us/artist/astr/536229815"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/536229815/albums",
+      "data": [
+        {
+          "id": "794865886",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/794865886"
+        },
+        {
+          "id": "1054555201",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1054555201"
+        },
+        {
+          "id": "1513485780",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1513485780"
+        },
+        {
+          "id": "1735692007",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1735692007"
+        },
+        {
+          "id": "984692693",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/984692693"
+        },
+        {
+          "id": "1069132114",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1069132114"
+        },
+        {
+          "id": "1728873222",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1728873222"
+        },
+        {
+          "id": "1342733552",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1342733552"
+        },
+        {
+          "id": "833975627",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/833975627"
+        },
+        {
+          "id": "1742828454",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1742828454"
+        },
+        {
+          "id": "911240611",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/911240611"
+        },
+        {
+          "id": "1342732655",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1342732655"
+        },
+        {
+          "id": "1400495253",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1400495253"
+        },
+        {
+          "id": "1598085143",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598085143"
+        },
+        {
+          "id": "833516226",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/833516226"
+        }
+      ]
+    }
+  }
+}

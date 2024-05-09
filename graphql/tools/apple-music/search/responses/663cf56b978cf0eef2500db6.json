@@ -1,0 +1,114 @@
+{
+  "id": "338552024",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/338552024",
+  "attributes": {
+    "name": "Best Coast",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1194,
+      "height": 1194,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/1e/e3/74/1ee374ee-7da8-e291-9c2a-16b607233b7d/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "d6d2e0",
+      "textColor1": "2a1915",
+      "textColor2": "35241a",
+      "textColor3": "4c3e3d",
+      "textColor4": "554741"
+    },
+    "url": "https://music.apple.com/us/artist/best-coast/338552024"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/338552024/albums",
+      "data": [
+        {
+          "id": "1492196382",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492196382"
+        },
+        {
+          "id": "1632384438",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1632384438"
+        },
+        {
+          "id": "1630518565",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1630518565"
+        },
+        {
+          "id": "698140942",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/698140942"
+        },
+        {
+          "id": "1440850238",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440850238"
+        },
+        {
+          "id": "351152658",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/351152658"
+        },
+        {
+          "id": "353998373",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/353998373"
+        },
+        {
+          "id": "413126652",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/413126652"
+        },
+        {
+          "id": "1600163209",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1600163209"
+        },
+        {
+          "id": "1529525649",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1529525649"
+        },
+        {
+          "id": "1602628341",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1602628341"
+        },
+        {
+          "id": "1571847375",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1571847375"
+        },
+        {
+          "id": "345593106",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/345593106"
+        },
+        {
+          "id": "491352810",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/491352810"
+        },
+        {
+          "id": "1484706721",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484706721"
+        },
+        {
+          "id": "1599396076",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1599396076"
+        },
+        {
+          "id": "1490169529",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1490169529"
+        }
+      ]
+    }
+  }
+}

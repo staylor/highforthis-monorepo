@@ -1,0 +1,99 @@
+{
+  "id": "206699235",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/206699235",
+  "attributes": {
+    "name": "The Gaslight Anthem",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 4024,
+      "height": 4024,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/65/d2/51/65d25115-b2ea-44e7-4e9b-fce220694549/ce83ce6d-3a6f-4af8-a60e-4a68a2749327_ami-identity-b5b7b11a0f5cdca475061608dc705924-2024-03-19T18-31-27.584Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "141823",
+      "textColor1": "c4c5be",
+      "textColor2": "cac3ba",
+      "textColor3": "a1a39f",
+      "textColor4": "a6a19c"
+    },
+    "url": "https://music.apple.com/us/artist/the-gaslight-anthem/206699235"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/206699235/albums",
+      "data": [
+        {
+          "id": "1631014742",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631014742"
+        },
+        {
+          "id": "1694394095",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1694394095"
+        },
+        {
+          "id": "932606126",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/932606126"
+        },
+        {
+          "id": "1440810498",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440810498"
+        },
+        {
+          "id": "1440859508",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440859508"
+        },
+        {
+          "id": "1631014162",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631014162"
+        },
+        {
+          "id": "273759343",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/273759343"
+        },
+        {
+          "id": "1735605569",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1735605569"
+        },
+        {
+          "id": "1631014805",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631014805"
+        },
+        {
+          "id": "1442909660",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442909660"
+        },
+        {
+          "id": "1631008360",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631008360"
+        },
+        {
+          "id": "1631013930",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631013930"
+        },
+        {
+          "id": "1442950115",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442950115"
+        },
+        {
+          "id": "1678782125",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1678782125"
+        }
+      ]
+    }
+  }
+}

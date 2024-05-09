@@ -1,0 +1,99 @@
+{
+  "id": "263615108",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/263615108",
+  "attributes": {
+    "name": "Benjamin Gibbard",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1200,
+      "height": 1200,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/b9/95/c0/b995c0ba-e281-207e-7fb9-dfb4f5d8ebf0/mzl.lbzqrmra.jpg/{w}x{h}bb.jpg",
+      "bgColor": "3b3b3b",
+      "textColor1": "eaeaea",
+      "textColor2": "cbcbcb",
+      "textColor3": "c7c7c7",
+      "textColor4": "aeaeae"
+    },
+    "url": "https://music.apple.com/us/artist/benjamin-gibbard/263615108"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/263615108/albums",
+      "data": [
+        {
+          "id": "1262026247",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1262026247"
+        },
+        {
+          "id": "718819758",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/718819758"
+        },
+        {
+          "id": "334816915",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/334816915"
+        },
+        {
+          "id": "1715333527",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715333527"
+        },
+        {
+          "id": "334974509",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/334974509"
+        },
+        {
+          "id": "718877857",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/718877857"
+        },
+        {
+          "id": "934922931",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/934922931"
+        },
+        {
+          "id": "1504477848",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1504477848"
+        },
+        {
+          "id": "1592026850",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1592026850"
+        },
+        {
+          "id": "1573655087",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1573655087"
+        },
+        {
+          "id": "1513467250",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1513467250"
+        },
+        {
+          "id": "1660858362",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1660858362"
+        },
+        {
+          "id": "1590558100",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1590558100"
+        },
+        {
+          "id": "1437312706",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437312706"
+        }
+      ]
+    }
+  }
+}

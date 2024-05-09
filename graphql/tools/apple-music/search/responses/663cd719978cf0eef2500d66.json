@@ -1,0 +1,119 @@
+{
+  "id": "165285861",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/165285861",
+  "attributes": {
+    "name": "Trampled By Turtles",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 4437,
+      "height": 4437,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages122/v4/4d/ed/d0/4dedd038-4968-5043-a264-3044695cea9f/e7966503-def7-4aad-8a39-c64203aee185_file_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "f2dfd9",
+      "textColor1": "0e0a04",
+      "textColor2": "2f1c09",
+      "textColor3": "3c352e",
+      "textColor4": "564332"
+    },
+    "url": "https://music.apple.com/us/artist/trampled-by-turtles/165285861"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/165285861/albums",
+      "data": [
+        {
+          "id": "1338938334",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1338938334"
+        },
+        {
+          "id": "370090822",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/370090822"
+        },
+        {
+          "id": "505237551",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/505237551"
+        },
+        {
+          "id": "1624593635",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1624593635"
+        },
+        {
+          "id": "572535128",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/572535128"
+        },
+        {
+          "id": "878427334",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/878427334"
+        },
+        {
+          "id": "1482993757",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1482993757"
+        },
+        {
+          "id": "370083496",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/370083496"
+        },
+        {
+          "id": "572535733",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/572535733"
+        },
+        {
+          "id": "730485445",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/730485445"
+        },
+        {
+          "id": "572535694",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/572535694"
+        },
+        {
+          "id": "1075931672",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1075931672"
+        },
+        {
+          "id": "495589739",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/495589739"
+        },
+        {
+          "id": "1392751853",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1392751853"
+        },
+        {
+          "id": "1593745585",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593745585"
+        },
+        {
+          "id": "470998335",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/470998335"
+        },
+        {
+          "id": "482773585",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/482773585"
+        },
+        {
+          "id": "1272212213",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1272212213"
+        }
+      ]
+    }
+  }
+}

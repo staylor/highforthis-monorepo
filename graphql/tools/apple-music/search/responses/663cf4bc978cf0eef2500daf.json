@@ -1,0 +1,134 @@
+{
+  "id": "110799",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/110799",
+  "attributes": {
+    "name": "...And You Will Know Us By the Trail of Dead",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1867,
+      "height": 1867,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/87/99/7d/87997d36-468e-de15-5d50-565ef173a5a5/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "0f0402",
+      "textColor1": "e8d5c4",
+      "textColor2": "e0ce9d",
+      "textColor3": "bcab9d",
+      "textColor4": "b6a57e"
+    },
+    "url": "https://music.apple.com/us/artist/and-you-will-know-us-by-the-trail-of-dead/110799"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/110799/albums",
+      "data": [
+        {
+          "id": "1444065808",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444065808"
+        },
+        {
+          "id": "1470300929",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470300929"
+        },
+        {
+          "id": "1444084634",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444084634"
+        },
+        {
+          "id": "1615452625",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1615452625"
+        },
+        {
+          "id": "1443910408",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443910408"
+        },
+        {
+          "id": "1045224071",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1045224071"
+        },
+        {
+          "id": "1047146946",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1047146946"
+        },
+        {
+          "id": "1045214937",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1045214937"
+        },
+        {
+          "id": "1045204265",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1045204265"
+        },
+        {
+          "id": "1045211507",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1045211507"
+        },
+        {
+          "id": "566741502",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/566741502"
+        },
+        {
+          "id": "1445879156",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445879156"
+        },
+        {
+          "id": "1443619606",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443619606"
+        },
+        {
+          "id": "711830773",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/711830773"
+        },
+        {
+          "id": "858491993",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/858491993"
+        },
+        {
+          "id": "1445318229",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445318229"
+        },
+        {
+          "id": "1512509335",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1512509335"
+        },
+        {
+          "id": "1124005565",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1124005565"
+        },
+        {
+          "id": "566734693",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/566734693"
+        },
+        {
+          "id": "1636048642",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1636048642"
+        },
+        {
+          "id": "1045530719",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1045530719"
+        }
+      ]
+    }
+  }
+}

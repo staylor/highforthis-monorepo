@@ -1,0 +1,49 @@
+{
+  "id": "259495540",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/259495540",
+  "attributes": {
+    "name": "Kevin Drew",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2818,
+      "height": 2818,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/10/87/8a/10878a1c-43d3-005b-f0b1-2b566633d390/4dc049a7-5381-4bf5-be04-abb85f591683_ami-identity-a32474be17e239efbb47a289a3391538-2023-07-12T15-16-00.777Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "5d5d5d",
+      "textColor1": "fcfcfc",
+      "textColor2": "f8f8f8",
+      "textColor3": "dcdcdc",
+      "textColor4": "d9d9d9"
+    },
+    "url": "https://music.apple.com/us/artist/kevin-drew/259495540"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/259495540/albums",
+      "data": [
+        {
+          "id": "1699668110",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1699668110"
+        },
+        {
+          "id": "1443285390",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443285390"
+        },
+        {
+          "id": "1443925365",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443925365"
+        },
+        {
+          "id": "1567448352",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1567448352"
+        }
+      ]
+    }
+  }
+}

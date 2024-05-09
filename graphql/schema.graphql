@@ -48,6 +48,7 @@ input AppleMusicDataInput {
 type Artist {
   appleMusic: AppleMusicData
   description: String
+  excludeFromSearch: Boolean
   featuredMedia: [MediaUpload!]
   id: ObjID!
   name: String!
@@ -97,6 +98,7 @@ type CodeNode implements ElementNodeType & LexicalNode {
 
 input CreateArtistInput {
   description: String
+  excludeFromSearch: Boolean
   featuredMedia: [String]
   name: String!
   slug: String
@@ -489,7 +491,7 @@ enum PostStatus {
 type Query {
   apiKeys: APIKeys
   artist(id: ObjID, slug: String): Artist
-  artists(after: String, before: String, first: Int, last: Int, search: String): ArtistConnection
+  artists(after: String, before: String, filtered: Boolean, first: Int, last: Int, search: String): ArtistConnection
   dashboardSettings: DashboardSettings!
   media(id: ObjID): MediaUpload
   mediaSettings: MediaSettings!
@@ -606,6 +608,7 @@ type TextNode implements LexicalNode {
 input UpdateArtistInput {
   appleMusic: AppleMusicDataInput
   description: String
+  excludeFromSearch: Boolean
   featuredMedia: [String]
   name: String
   slug: String
