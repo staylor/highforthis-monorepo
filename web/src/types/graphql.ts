@@ -164,6 +164,7 @@ export type CreateVenueInput = {
   capacity?: InputMaybe<Scalars['String']['input']>;
   coordinates?: InputMaybe<VenueCoordinatesInput>;
   description?: InputMaybe<Scalars['String']['input']>;
+  excludeFromSearch?: InputMaybe<Scalars['Boolean']['input']>;
   featuredMedia?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   name: Scalars['String']['input'];
   slug?: InputMaybe<Scalars['String']['input']>;
@@ -815,6 +816,7 @@ export type QueryVenueArgs = {
 export type QueryVenuesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
+  filtered?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
@@ -993,6 +995,7 @@ export type UpdateVenueInput = {
   capacity?: InputMaybe<Scalars['String']['input']>;
   coordinates?: InputMaybe<VenueCoordinatesInput>;
   description?: InputMaybe<Scalars['String']['input']>;
+  excludeFromSearch?: InputMaybe<Scalars['Boolean']['input']>;
   featuredMedia?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   name?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
@@ -1039,6 +1042,7 @@ export type Venue = {
   capacity?: Maybe<Scalars['String']['output']>;
   coordinates?: Maybe<VenueCoordinates>;
   description?: Maybe<Scalars['String']['output']>;
+  excludeFromSearch?: Maybe<Scalars['Boolean']['output']>;
   featuredMedia?: Maybe<Array<MediaUpload>>;
   id: Scalars['ObjID']['output'];
   name: Scalars['String']['output'];
@@ -1167,7 +1171,7 @@ export type ShowForm_EntitiesFragment = { __typename?: 'Query', artists?: { __ty
 
 export type UserForm_UserFragment = { __typename?: 'User', bio?: string | null, email: string, id: any, name?: string | null, roles?: Array<string | null> | null };
 
-export type VenueForm_VenueFragment = { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null };
+export type VenueForm_VenueFragment = { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null };
 
 export type VideoForm_VideoFragment = { __typename?: 'Video', dataPlaylistIds: Array<string>, dataType: string, id: any, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> };
 
@@ -1220,7 +1224,7 @@ export type ArtistsAdminQueryVariables = Exact<{
 }>;
 
 
-export type ArtistsAdminQuery = { __typename?: 'Query', artists?: { __typename?: 'ArtistConnection', count: number, edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: any, name: string, slug: string, website?: string | null, featuredMedia?: Array<{ __typename?: 'AudioUpload' } | { __typename?: 'FileUpload' } | { __typename?: 'ImageUpload', destination: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload' }> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+export type ArtistsAdminQuery = { __typename?: 'Query', artists?: { __typename?: 'ArtistConnection', count: number, edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, featuredMedia?: Array<{ __typename?: 'AudioUpload' } | { __typename?: 'FileUpload' } | { __typename?: 'ImageUpload', destination: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload' }> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type UpdateArtistExcludeMutationVariables = Exact<{
   id: Scalars['ObjID']['input'];
@@ -1497,7 +1501,7 @@ export type VenueEditQueryVariables = Exact<{
 }>;
 
 
-export type VenueEditQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: any, title?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string }>, venue: { __typename?: 'Venue', id: any, name: string } } }> } | null, venue?: { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
+export type VenueEditQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: any, title?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string }>, venue: { __typename?: 'Venue', id: any, name: string } } }> } | null, venue?: { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type UpdateVenueMutationVariables = Exact<{
   id: Scalars['ObjID']['input'];
@@ -1505,7 +1509,7 @@ export type UpdateVenueMutationVariables = Exact<{
 }>;
 
 
-export type UpdateVenueMutation = { __typename?: 'Mutation', updateVenue?: { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
+export type UpdateVenueMutation = { __typename?: 'Mutation', updateVenue?: { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type VenuesAdminQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1514,7 +1518,15 @@ export type VenuesAdminQueryVariables = Exact<{
 }>;
 
 
-export type VenuesAdminQuery = { __typename?: 'Query', venues?: { __typename?: 'VenueConnection', count: number, edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', address?: string | null, capacity?: string | null, id: any, name: string, slug: string, website?: string | null, featuredMedia?: Array<{ __typename?: 'AudioUpload' } | { __typename?: 'FileUpload' } | { __typename?: 'ImageUpload', destination: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload' }> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+export type VenuesAdminQuery = { __typename?: 'Query', venues?: { __typename?: 'VenueConnection', count: number, edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', address?: string | null, capacity?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, featuredMedia?: Array<{ __typename?: 'AudioUpload' } | { __typename?: 'FileUpload' } | { __typename?: 'ImageUpload', destination: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload' }> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type UpdateVenueExcludeMutationVariables = Exact<{
+  id: Scalars['ObjID']['input'];
+  input: UpdateVenueInput;
+}>;
+
+
+export type UpdateVenueExcludeMutation = { __typename?: 'Mutation', updateVenue?: { __typename?: 'Venue', id: any } | null };
 
 export type DeleteVenueMutationVariables = Exact<{
   ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
@@ -1528,7 +1540,7 @@ export type CreateVenueMutationVariables = Exact<{
 }>;
 
 
-export type CreateVenueMutation = { __typename?: 'Mutation', createVenue?: { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
+export type CreateVenueMutation = { __typename?: 'Mutation', createVenue?: { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type VideoEditQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ObjID']['input']>;

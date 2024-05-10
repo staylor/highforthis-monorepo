@@ -8,7 +8,15 @@ import Message from '@/components/Form/Message';
 import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
 import type { Fields } from '@/types';
 
-import Shows from '../Entity/Shows';
+import {
+  name,
+  slug,
+  description,
+  website,
+  featuredMedia,
+  shows,
+  excludeFromSearch,
+} from '../Entity/Form';
 
 interface VenueFormProps {
   data?: any;
@@ -31,25 +39,10 @@ function PageLink({ url, children }: PropsWithChildren<{ url: string }>) {
 
 export default function VenueForm({ data = {}, heading, buttonLabel }: VenueFormProps) {
   const fields: Fields = [
-    { label: 'Name', prop: 'name', render: ({ venue }) => venue?.name },
-    {
-      label: 'Slug',
-      prop: 'slug',
-      render: ({ venue }) => venue?.slug,
-      condition: ({ venue }) => venue?.slug,
-      editable: false,
-    },
-    {
-      label: 'Description',
-      prop: 'description',
-      type: 'textarea',
-      render: ({ venue }) => venue?.description,
-    },
-    {
-      label: 'Website',
-      prop: 'website',
-      render: ({ venue }) => venue?.website,
-    },
+    name('venue'),
+    slug('venue'),
+    description('venue'),
+    website('venue'),
     {
       label: 'Capacity',
       prop: 'capacity',
@@ -80,19 +73,9 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
         </>
       ),
     },
-    {
-      label: 'Featured Media',
-      prop: 'featuredMedia',
-      type: 'custom',
-      render: ({ venue }) => <FeaturedMedia media={venue?.featuredMedia || []} />,
-    },
-    {
-      label: 'Shows',
-      type: 'custom',
-      render: ({ shows }) => <Shows shows={shows} dataKey="artists" />,
-      condition: ({ shows }) => shows?.edges?.length > 0,
-      position: 'meta',
-    },
+    featuredMedia('venue'),
+    shows('artists'),
+    excludeFromSearch('venue'),
   ];
   return (
     <>
@@ -115,6 +98,7 @@ VenueForm.fragments = {
         longitude
       }
       description
+      excludeFromSearch
       featuredMedia {
         ...FeaturedMedia_media
       }

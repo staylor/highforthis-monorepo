@@ -3,13 +3,21 @@ import { useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 
 import { Heading, HeaderAdd } from '@/components/Admin/styles';
-import ListTable, { RowTitle, RowActions, Thumbnail, usePath } from '@/components/Admin/ListTable';
+import ListTable from '@/components/Admin/ListTable';
 import Message from '@/components/Form/Message';
 import Search from '@/components/Admin/ListTable/Search';
 import query, { addPageOffset, addSearchParam } from '@/utils/query';
 import { handleDelete } from '@/utils/action';
-import type { Venue, VenueConnection, VenuesAdminQuery } from '@/types/graphql';
+import type { VenueConnection, VenuesAdminQuery } from '@/types/graphql';
 import type { Columns } from '@/types';
+import {
+  featuredMedia,
+  name,
+  slug,
+  excludeFromSearch,
+  website,
+} from '@/components/Admin/Entity/ListTable';
+import mutate, { parseFormData } from '@/utils/mutate';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const variables = addSearchParam(request, addPageOffset(params));
@@ -22,57 +30,31 @@ export const loader: LoaderFunction = ({ request, context, params }) => {
 };
 
 export const action: ActionFunction = async ({ request, context }) => {
-  return handleDelete({ request, context, mutation: venuesMutation });
+  if (request.method === 'POST') {
+    const { id, excludeFromSearch } = await parseFormData(request);
+    return mutate({
+      context,
+      mutation: updateMutation,
+      variables: {
+        id,
+        input: {
+          excludeFromSearch,
+        },
+      },
+    });
+  }
+  return handleDelete({ request, context, mutation: deleteMutation });
 };
 
 export default function Venues() {
-  const path = usePath();
   const data = useLoaderData<VenuesAdminQuery>();
   const venues = data.venues as VenueConnection;
 
   let columns: Columns = [
-    {
-      className: 'w-16',
-      render: (venue: Venue) => {
-        if (venue.featuredMedia?.[0] && venue.featuredMedia[0].type === 'image') {
-          return <Thumbnail media={venue.featuredMedia[0]} />;
-        }
-
-        return null;
-      },
-    },
-    {
-      label: 'Name',
-      render: (venue: Venue) => {
-        const urlPath = `${path}/${venue.id}`;
-
-        return (
-          <>
-            <RowTitle url={urlPath} title={venue.name} />
-            <RowActions
-              actions={[
-                { type: 'edit', url: urlPath },
-                { type: 'delete', url: urlPath, ids: [venue.id] },
-              ]}
-            />
-          </>
-        );
-      },
-    },
-    {
-      label: 'Slug',
-      prop: 'slug',
-    },
-    {
-      label: 'Website',
-      prop: 'website',
-      render: (venue: Venue) =>
-        venue?.website && (
-          <a className="text-pink underline" href={venue.website} target="_blank" rel="noreferrer">
-            {venue.website}
-          </a>
-        ),
-    },
+    featuredMedia,
+    name,
+    slug,
+    website,
     {
       label: 'Capacity',
       prop: 'capacity',
@@ -81,6 +63,7 @@ export default function Venues() {
       label: 'Address',
       prop: 'address',
     },
+    excludeFromSearch,
   ];
 
   return (
@@ -102,6 +85,7 @@ const venuesQuery = gql`
         node {
           address
           capacity
+          excludeFromSearch
           featuredMedia {
             ... on ImageUpload {
               crops {
@@ -126,7 +110,15 @@ const venuesQuery = gql`
   }
 `;
 
-const venuesMutation = gql`
+const updateMutation = gql`
+  mutation UpdateVenueExclude($id: ObjID!, $input: UpdateVenueInput!) {
+    updateVenue(id: $id, input: $input) {
+      id
+    }
+  }
+`;
+
+const deleteMutation = gql`
   mutation DeleteVenue($ids: [ObjID]!) {
     removeVenue(ids: $ids)
   }

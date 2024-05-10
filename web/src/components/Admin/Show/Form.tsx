@@ -91,7 +91,7 @@ ShowForm.fragments = {
           }
         }
       }
-      venues(first: 500) @cache(key: "admin") {
+      venues(filtered: true, first: 500) @cache(key: "admin") {
         edges {
           node {
             id

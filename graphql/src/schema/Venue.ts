@@ -14,6 +14,7 @@ const Venue = `#graphql
     coordinates: VenueCoordinates
     featuredMedia: [MediaUpload!]
     website: String
+    excludeFromSearch: Boolean
   }
 
   type VenueEdge {
@@ -36,6 +37,7 @@ const Venue = `#graphql
     address: String
     capacity: String
     coordinates: VenueCoordinatesInput
+    excludeFromSearch: Boolean
   }
 
   input VenueCoordinatesInput {
@@ -52,6 +54,7 @@ const Venue = `#graphql
     address: String
     capacity: String
     coordinates: VenueCoordinatesInput
+    excludeFromSearch: Boolean
   }
 
   extend type Query {
@@ -61,6 +64,7 @@ const Venue = `#graphql
       last: Int
       before: String
       search: String
+      filtered: Boolean
     ): VenueConnection
     venue(id: ObjID, slug: String): Venue
   }

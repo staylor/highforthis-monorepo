@@ -1,17 +1,23 @@
 import { gql } from 'graphql-tag';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 
 import { Heading, HeaderAdd } from '@/components/Admin/styles';
-import ListTable, { RowTitle, RowActions, Thumbnail, usePath } from '@/components/Admin/ListTable';
+import ListTable from '@/components/Admin/ListTable';
 import Message from '@/components/Form/Message';
 import Search from '@/components/Admin/ListTable/Search';
 import query, { addPageOffset, addSearchParam } from '@/utils/query';
 import { handleDelete } from '@/utils/action';
-import type { Artist, ArtistConnection, ArtistsAdminQuery } from '@/types/graphql';
+import type { ArtistConnection, ArtistsAdminQuery } from '@/types/graphql';
 import type { Columns } from '@/types';
-import Checkbox from '@/components/Form/Checkbox';
 import mutate, { parseFormData } from '@/utils/mutate';
+import {
+  featuredMedia,
+  name,
+  slug,
+  excludeFromSearch,
+  website,
+} from '@/components/Admin/Entity/ListTable';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const variables = addSearchParam(request, addPageOffset(params));
@@ -42,77 +48,10 @@ export const action: ActionFunction = async ({ request, context }) => {
 };
 
 export default function Artists() {
-  const fetcher = useFetcher();
-  const path = usePath();
   const data = useLoaderData<ArtistsAdminQuery>();
   const artists = data.artists as ArtistConnection;
 
-  let columns: Columns = [
-    {
-      className: 'w-16',
-      render: (artist: Artist) => {
-        if (artist.featuredMedia?.[0] && artist.featuredMedia[0].type === 'image') {
-          return <Thumbnail media={artist.featuredMedia[0]} />;
-        }
-
-        return null;
-      },
-    },
-    {
-      label: 'Name',
-      render: (artist: Artist) => {
-        const urlPath = `${path}/${artist.id}`;
-
-        return (
-          <>
-            <RowTitle url={urlPath} title={artist.name} />
-            <RowActions
-              actions={[
-                { type: 'edit', url: urlPath },
-                { type: 'delete', url: urlPath, ids: [artist.id] },
-              ]}
-            />
-          </>
-        );
-      },
-    },
-    {
-      label: 'Slug',
-      prop: 'slug',
-    },
-    {
-      label: 'Exclude from search',
-      className: 'text-center',
-      render: ({ id, excludeFromSearch }: Artist) => {
-        return (
-          <Checkbox
-            checked={Boolean(excludeFromSearch)}
-            onChange={(e) => {
-              fetcher.submit(
-                {
-                  id,
-                  excludeFromSearch: e.target.checked,
-                },
-                {
-                  method: 'POST',
-                }
-              );
-            }}
-          />
-        );
-      },
-    },
-    {
-      label: 'Website',
-      prop: 'website',
-      render: (artist: Artist) =>
-        artist?.website && (
-          <a className="text-pink underline" href={artist.website} target="_blank" rel="noreferrer">
-            {artist.website}
-          </a>
-        ),
-    },
-  ];
+  let columns: Columns = [featuredMedia, name, slug, excludeFromSearch, website];
 
   return (
     <>

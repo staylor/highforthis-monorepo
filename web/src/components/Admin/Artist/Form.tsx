@@ -6,9 +6,16 @@ import Form from '@/components/Admin/Form';
 import Message from '@/components/Form/Message';
 import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
 import type { Fields } from '@/types';
-import Checkbox from '@/components/Form/Checkbox';
 
-import Shows from '../Entity/Shows';
+import {
+  name,
+  slug,
+  description,
+  website,
+  featuredMedia,
+  shows,
+  excludeFromSearch,
+} from '../Entity/Form';
 
 interface ArtistFormProps {
   data?: any;
@@ -42,45 +49,13 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
           />
         ),
     },
-    { label: 'Name', prop: 'name', render: ({ artist }) => artist?.name },
-    {
-      label: 'Slug',
-      prop: 'slug',
-      render: ({ artist }) => artist?.slug,
-      condition: ({ artist }) => artist?.slug,
-      editable: false,
-    },
-    {
-      label: 'Description',
-      prop: 'description',
-      type: 'textarea',
-      render: ({ artist }) => artist?.description,
-    },
-    {
-      label: 'Website',
-      prop: 'website',
-      render: ({ artist }) => artist?.website,
-    },
-    {
-      label: 'Featured Media',
-      prop: 'featuredMedia',
-      type: 'custom',
-      render: ({ artist }) => <FeaturedMedia media={artist?.featuredMedia || []} />,
-    },
-    {
-      label: 'Shows',
-      type: 'custom',
-      render: ({ shows }) => <Shows shows={shows} dataKey="venue" />,
-      condition: ({ shows }) => shows?.edges?.length > 0,
-      position: 'meta',
-    },
-    {
-      label: 'Exclude from search',
-      type: 'custom',
-      render: ({ artist }) => (
-        <Checkbox name="excludeFromSearch" checked={artist?.excludeFromSearch} />
-      ),
-    },
+    name('artist'),
+    slug('artist'),
+    description('artist'),
+    website('artist'),
+    featuredMedia('artist'),
+    shows('venue'),
+    excludeFromSearch('artist'),
   ];
   return (
     <>

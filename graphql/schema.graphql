@@ -146,6 +146,7 @@ input CreateVenueInput {
   capacity: String
   coordinates: VenueCoordinatesInput
   description: String
+  excludeFromSearch: Boolean
   featuredMedia: [String]
   name: String!
   slug: String
@@ -508,7 +509,7 @@ type Query {
   user(id: ObjID!): User
   users(after: String, before: String, first: Int, last: Int, search: String): UserConnection
   venue(id: ObjID, slug: String): Venue
-  venues(after: String, before: String, first: Int, last: Int, search: String): VenueConnection
+  venues(after: String, before: String, filtered: Boolean, first: Int, last: Int, search: String): VenueConnection
   video(id: ObjID, slug: String): Video
   videos(after: String, before: String, first: Int, last: Int, search: String, year: Int): VideoConnection
 }
@@ -663,6 +664,7 @@ input UpdateVenueInput {
   capacity: String
   coordinates: VenueCoordinatesInput
   description: String
+  excludeFromSearch: Boolean
   featuredMedia: [String]
   name: String
   slug: String
@@ -705,6 +707,7 @@ type Venue {
   capacity: String
   coordinates: VenueCoordinates
   description: String
+  excludeFromSearch: Boolean
   featuredMedia: [MediaUpload!]
   id: ObjID!
   name: String!
