@@ -1,34 +1,19 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import cn from 'classnames';
 
 import Select from '@/components/Form/Select';
 
-interface EntityEdge {
-  node: EntityNode;
-}
-
-interface EntityNode {
-  id: string;
-  name: string;
-}
+import { sortNodes, type EntityNode } from './utils';
 
 interface SelectEntityProps {
   name: string;
-  edges: EntityEdge[];
-  values?: string[];
+  nodes: EntityNode[];
+  filtered: EntityNode[];
 }
 
-export default function SelectEntities({ name, edges, values }: SelectEntityProps) {
-  const [ids, setIds] = useState(values || []);
-  const entityMap = useMemo(() => {
-    return edges.reduce(
-      (carry, { node }) => {
-        carry[node.id] = node.name;
-        return carry;
-      },
-      {} as Record<string, string>
-    );
-  }, [edges]);
+export default function SelectEntities({ name, nodes, filtered }: SelectEntityProps) {
+  const [ids, setIds] = useState(nodes.map(({ id }) => id));
+  const { sorted, entityMap } = sortNodes(nodes, filtered);
 
   const removeId = (id: string) => () => {
     const existing = [...ids];
@@ -40,7 +25,7 @@ export default function SelectEntities({ name, edges, values }: SelectEntityProp
     <>
       <Select
         placeholder="---"
-        choices={edges.map(({ node }) => ({
+        choices={sorted.map((node) => ({
           label: node.name,
           value: node.id,
         }))}
@@ -54,7 +39,7 @@ export default function SelectEntities({ name, edges, values }: SelectEntityProp
         <p className="mb-8 mt-2">
           {ids.map((id: string, i: number) => (
             <span className="ml-2" key={`span-${id}`}>
-              {entityMap[id]}
+              {entityMap[id].name}
               <button
                 onClick={removeId(id)}
                 className={cn(

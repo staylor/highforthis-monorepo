@@ -1,0 +1,129 @@
+{
+  "id": "1263317",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1263317",
+  "attributes": {
+    "name": "Fischerspooner",
+    "genreNames": [
+      "Electronic"
+    ],
+    "artwork": {
+      "width": 590,
+      "height": 590,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/e8/fd/94/e8fd94c4-4c4a-f5e2-82f4-d48f07d97084/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "d4cfcc",
+      "textColor1": "0b0a0a",
+      "textColor2": "1d1c1d",
+      "textColor3": "333131",
+      "textColor4": "414040"
+    },
+    "url": "https://music.apple.com/us/artist/fischerspooner/1263317"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1263317/albums",
+      "data": [
+        {
+          "id": "716123493",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716123493"
+        },
+        {
+          "id": "715785591",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/715785591"
+        },
+        {
+          "id": "1513667738",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1513667738"
+        },
+        {
+          "id": "1292060167",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1292060167"
+        },
+        {
+          "id": "1439639093",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1439639093"
+        },
+        {
+          "id": "1714502583",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714502583"
+        },
+        {
+          "id": "1284007037",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1284007037"
+        },
+        {
+          "id": "309821361",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/309821361"
+        },
+        {
+          "id": "962479198",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/962479198"
+        },
+        {
+          "id": "1714503186",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1714503186"
+        },
+        {
+          "id": "1439635335",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1439635335"
+        },
+        {
+          "id": "1268214682",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1268214682"
+        },
+        {
+          "id": "716444211",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716444211"
+        },
+        {
+          "id": "968837948",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/968837948"
+        },
+        {
+          "id": "716548756",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716548756"
+        },
+        {
+          "id": "716353535",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716353535"
+        },
+        {
+          "id": "725843017",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/725843017"
+        },
+        {
+          "id": "716240367",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716240367"
+        },
+        {
+          "id": "716240374",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716240374"
+        },
+        {
+          "id": "715802626",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/715802626"
+        }
+      ]
+    }
+  }
+}

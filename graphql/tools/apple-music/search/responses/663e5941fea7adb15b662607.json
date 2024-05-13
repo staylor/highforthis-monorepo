@@ -1,0 +1,74 @@
+{
+  "id": "169616925",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/169616925",
+  "attributes": {
+    "name": "Junip",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3543,
+      "height": 3543,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/f8/88/fd/f888fdd8-3ba8-8a2a-1e76-87a1d1d47cdc/mzl.opmoahkq.jpg/{w}x{h}bb.jpg",
+      "bgColor": "0a0305",
+      "textColor1": "f0f2ec",
+      "textColor2": "ecc697",
+      "textColor3": "c2c2be",
+      "textColor4": "bf9f7a"
+    },
+    "url": "https://music.apple.com/us/artist/junip/169616925"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/169616925/albums",
+      "data": [
+        {
+          "id": "828115171",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/828115171"
+        },
+        {
+          "id": "828137994",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/828137994"
+        },
+        {
+          "id": "827898444",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/827898444"
+        },
+        {
+          "id": "317514809",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/317514809"
+        },
+        {
+          "id": "828945788",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/828945788"
+        },
+        {
+          "id": "1181200072",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1181200072"
+        },
+        {
+          "id": "827832135",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/827832135"
+        },
+        {
+          "id": "828941699",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/828941699"
+        },
+        {
+          "id": "1686956860",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1686956860"
+        }
+      ]
+    }
+  }
+}

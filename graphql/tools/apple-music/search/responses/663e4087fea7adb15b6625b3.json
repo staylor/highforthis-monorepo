@@ -1,0 +1,84 @@
+{
+  "id": "1016785140",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1016785140",
+  "attributes": {
+    "name": "POWERS",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1200,
+      "height": 1200,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/5d/17/30/5d173062-db20-2cfd-71b3-d7018555a580/mzl.ffrnrfyh.jpg/{w}x{h}bb.jpg",
+      "bgColor": "2d0045",
+      "textColor1": "ffc300",
+      "textColor2": "f88943",
+      "textColor3": "d49b0d",
+      "textColor4": "cf6e43"
+    },
+    "url": "https://music.apple.com/us/artist/powers/1016785140"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1016785140/albums",
+      "data": [
+        {
+          "id": "1443485321",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443485321"
+        },
+        {
+          "id": "1107584966",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1107584966"
+        },
+        {
+          "id": "1443536183",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443536183"
+        },
+        {
+          "id": "1445055590",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445055590"
+        },
+        {
+          "id": "1445034267",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445034267"
+        },
+        {
+          "id": "1445292741",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445292741"
+        },
+        {
+          "id": "1444870233",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444870233"
+        },
+        {
+          "id": "1445291376",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445291376"
+        },
+        {
+          "id": "1445022806",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445022806"
+        },
+        {
+          "id": "1445163163",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445163163"
+        },
+        {
+          "id": "1444282578",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444282578"
+        }
+      ]
+    }
+  }
+}

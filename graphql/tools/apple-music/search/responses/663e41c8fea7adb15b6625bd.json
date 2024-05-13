@@ -1,0 +1,114 @@
+{
+  "id": "214526280",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/214526280",
+  "attributes": {
+    "name": "The Horrors",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2937,
+      "height": 2937,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/a6/f0/a8/a6f0a88a-74e7-098f-468c-5b83e0f583f0/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "060500",
+      "textColor1": "fefffa",
+      "textColor2": "c9bea0",
+      "textColor3": "ccccc7",
+      "textColor4": "a19980"
+    },
+    "url": "https://music.apple.com/us/artist/the-horrors/214526280"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/214526280/albums",
+      "data": [
+        {
+          "id": "821031640",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/821031640"
+        },
+        {
+          "id": "448985073",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/448985073"
+        },
+        {
+          "id": "338247532",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/338247532"
+        },
+        {
+          "id": "1440884984",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440884984"
+        },
+        {
+          "id": "1548951652",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1548951652"
+        },
+        {
+          "id": "1586664873",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586664873"
+        },
+        {
+          "id": "577971375",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/577971375"
+        },
+        {
+          "id": "1472726958",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1472726958"
+        },
+        {
+          "id": "293138881",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/293138881"
+        },
+        {
+          "id": "1540685565",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1540685565"
+        },
+        {
+          "id": "1473977333",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1473977333"
+        },
+        {
+          "id": "1474308960",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474308960"
+        },
+        {
+          "id": "1474308653",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474308653"
+        },
+        {
+          "id": "306501212",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/306501212"
+        },
+        {
+          "id": "1445022915",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445022915"
+        },
+        {
+          "id": "1360081485",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1360081485"
+        },
+        {
+          "id": "1473976627",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1473976627"
+        }
+      ]
+    }
+  }
+}

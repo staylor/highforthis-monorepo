@@ -1,0 +1,84 @@
+{
+  "id": "316093026",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/316093026",
+  "attributes": {
+    "name": "Allo Darlin'",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 620,
+      "height": 620,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/01/c4/e2/01c4e2fd-0dac-b3e2-4dc9-d1c0a3f6939c/mzi.vwqmedcw.jpg/{w}x{h}ac.jpg",
+      "bgColor": "e8eceb",
+      "textColor1": "18090c",
+      "textColor2": "271515",
+      "textColor3": "413639",
+      "textColor4": "4d403f"
+    },
+    "url": "https://music.apple.com/us/artist/allo-darlin/316093026"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/316093026/albums",
+      "data": [
+        {
+          "id": "373894856",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/373894856"
+        },
+        {
+          "id": "1321249077",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1321249077"
+        },
+        {
+          "id": "1321291274",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1321291274"
+        },
+        {
+          "id": "389017064",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/389017064"
+        },
+        {
+          "id": "1321222810",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1321222810"
+        },
+        {
+          "id": "1321236789",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1321236789"
+        },
+        {
+          "id": "357810809",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/357810809"
+        },
+        {
+          "id": "1321074830",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1321074830"
+        },
+        {
+          "id": "338326133",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/338326133"
+        },
+        {
+          "id": "560166432",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/560166432"
+        },
+        {
+          "id": "402248666",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/402248666"
+        }
+      ]
+    }
+  }
+}

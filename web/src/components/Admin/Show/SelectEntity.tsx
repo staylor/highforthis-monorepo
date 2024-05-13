@@ -1,26 +1,24 @@
 import Select from '@/components/Form/Select';
 import Link from '@/components/Link';
 
+import { sortNodes, type EntityNode } from './utils';
+
 interface SelectEntityProps {
   label: string;
   name: string;
-  edges: {
-    node: {
-      id: string;
-      name: string;
-    };
-  }[];
-  value?: string;
+  node: EntityNode;
+  filtered: EntityNode[];
 }
 
-export default function SelectEntity({ label, name, edges, value }: SelectEntityProps) {
+export default function SelectEntity({ label, name, node, filtered }: SelectEntityProps) {
+  const { sorted } = sortNodes([node], filtered);
   return (
     <>
       <Select
         name={name}
         placeholder="---"
-        value={value}
-        choices={edges.map(({ node }) => ({
+        value={node.id}
+        choices={sorted.map((node) => ({
           label: node.name,
           value: node.id,
         }))}
@@ -29,8 +27,8 @@ export default function SelectEntity({ label, name, edges, value }: SelectEntity
         <Link className="ml-2 text-pink underline" to={`/admin/${name}/add`}>
           Add {label}
         </Link>
-        {value && (
-          <Link className="ml-4 text-pink underline" to={`/admin/${name}/${value}`}>
+        {node.id && (
+          <Link className="ml-4 text-pink underline" to={`/admin/${name}/${node.id}`}>
             Edit {label}
           </Link>
         )}

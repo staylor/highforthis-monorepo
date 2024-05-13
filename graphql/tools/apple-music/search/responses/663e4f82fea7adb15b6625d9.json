@@ -1,0 +1,155 @@
+{
+  "id": "31550370",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/31550370",
+  "attributes": {
+    "name": "The Boxer Rebellion",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3840,
+      "height": 3840,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/0d/30/00/0d30004e-16cb-9edb-3ee4-e10468b51e2c/mza_3767690397905118252.png/{w}x{h}bb.jpg",
+      "bgColor": "0e0f11",
+      "textColor1": "e6bc82",
+      "textColor2": "d8bc77",
+      "textColor3": "bb996c",
+      "textColor4": "af9962"
+    },
+    "url": "https://music.apple.com/us/artist/the-boxer-rebellion/31550370"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/31550370/albums",
+      "next": "/v1/catalog/us/artists/31550370/albums?offset=25",
+      "data": [
+        {
+          "id": "1082765923",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1082765923"
+        },
+        {
+          "id": "627170839",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/627170839"
+        },
+        {
+          "id": "1169418387",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1169418387"
+        },
+        {
+          "id": "392017381",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/392017381"
+        },
+        {
+          "id": "1567013227",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1567013227"
+        },
+        {
+          "id": "1718276618",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1718276618"
+        },
+        {
+          "id": "1715827258",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715827258"
+        },
+        {
+          "id": "576002946",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/576002946"
+        },
+        {
+          "id": "1718273768",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1718273768"
+        },
+        {
+          "id": "1566921942",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1566921942"
+        },
+        {
+          "id": "1169416323",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1169416323"
+        },
+        {
+          "id": "576002179",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/576002179"
+        },
+        {
+          "id": "1718248867",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1718248867"
+        },
+        {
+          "id": "913697788",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/913697788"
+        },
+        {
+          "id": "445858135",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/445858135"
+        },
+        {
+          "id": "1715823870",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715823870"
+        },
+        {
+          "id": "1567012819",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1567012819"
+        },
+        {
+          "id": "1718286647",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1718286647"
+        },
+        {
+          "id": "1019202248",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1019202248"
+        },
+        {
+          "id": "1567009600",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1567009600"
+        },
+        {
+          "id": "1715823113",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715823113"
+        },
+        {
+          "id": "408483097",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/408483097"
+        },
+        {
+          "id": "1566917776",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1566917776"
+        },
+        {
+          "id": "1566918685",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1566918685"
+        },
+        {
+          "id": "1486632328",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1486632328"
+        }
+      ]
+    }
+  }
+}

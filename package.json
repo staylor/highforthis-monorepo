@@ -7,7 +7,7 @@
   "license": "private",
   "private": true,
   "engines": {
-    "node": ">=18.17.1"
+    "node": ">=20"
   },
   "sideEffects": false,
   "type": "module",

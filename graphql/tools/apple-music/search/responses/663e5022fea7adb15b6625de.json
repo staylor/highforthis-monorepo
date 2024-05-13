@@ -1,0 +1,89 @@
+{
+  "id": "418201796",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/418201796",
+  "attributes": {
+    "name": "Porcelain Raft",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1300,
+      "height": 1300,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/b0/c5/c2/b0c5c241-b6f3-d1c9-a471-cccc46fbb82d/mzl.ydfyajxb.jpg/{w}x{h}bb.jpg",
+      "bgColor": "bad8bc",
+      "textColor1": "0f0600",
+      "textColor2": "1b1c0d",
+      "textColor3": "313025",
+      "textColor4": "3b4130"
+    },
+    "url": "https://music.apple.com/us/artist/porcelain-raft/418201796"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/418201796/albums",
+      "data": [
+        {
+          "id": "491066556",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/491066556"
+        },
+        {
+          "id": "1170131332",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1170131332"
+        },
+        {
+          "id": "418201795",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/418201795"
+        },
+        {
+          "id": "1507981353",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1507981353"
+        },
+        {
+          "id": "789833140",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/789833140"
+        },
+        {
+          "id": "667547885",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/667547885"
+        },
+        {
+          "id": "986108967",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/986108967"
+        },
+        {
+          "id": "533205434",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/533205434"
+        },
+        {
+          "id": "1651321266",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1651321266"
+        },
+        {
+          "id": "1715657756",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715657756"
+        },
+        {
+          "id": "1717623508",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1717623508"
+        },
+        {
+          "id": "498569158",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/498569158"
+        }
+      ]
+    }
+  }
+}

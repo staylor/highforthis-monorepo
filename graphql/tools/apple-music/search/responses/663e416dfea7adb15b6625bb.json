@@ -1,0 +1,39 @@
+{
+  "id": "1566128943",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1566128943",
+  "attributes": {
+    "name": "Gratefulfloyd",
+    "genreNames": [
+      "Hip-Hop/Rap"
+    ],
+    "artwork": {
+      "width": 3000,
+      "height": 3000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/cf/68/ec/cf68ec2d-b014-8b0a-e8e1-3db054ff4308/198000436100.jpg/{w}x{h}ac.jpg",
+      "bgColor": "2b5778",
+      "textColor1": "fcd974",
+      "textColor2": "66b1fa",
+      "textColor3": "d2bf75",
+      "textColor4": "5a9fe0"
+    },
+    "url": "https://music.apple.com/us/artist/gratefulfloyd/1566128943"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1566128943/albums",
+      "data": [
+        {
+          "id": "1570741591",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1570741591"
+        },
+        {
+          "id": "1566129571",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1566129571"
+        }
+      ]
+    }
+  }
+}

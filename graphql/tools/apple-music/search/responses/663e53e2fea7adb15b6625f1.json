@@ -1,0 +1,139 @@
+{
+  "id": "544165",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/544165",
+  "attributes": {
+    "name": "Southside Johnny",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 717,
+      "height": 717,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/ba/6d/99/ba6d9946-4c87-5c65-c811-31e95d85ebd3/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "545454",
+      "textColor1": "f6f6f6",
+      "textColor2": "e8e8e8",
+      "textColor3": "d5d5d5",
+      "textColor4": "cacaca"
+    },
+    "url": "https://music.apple.com/us/artist/southside-johnny/544165"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/544165/albums",
+      "data": [
+        {
+          "id": "186038434",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/186038434"
+        },
+        {
+          "id": "1264733991",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1264733991"
+        },
+        {
+          "id": "642642463",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/642642463"
+        },
+        {
+          "id": "1443903160",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443903160"
+        },
+        {
+          "id": "1286624101",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1286624101"
+        },
+        {
+          "id": "1264732539",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1264732539"
+        },
+        {
+          "id": "1641567837",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1641567837"
+        },
+        {
+          "id": "1031937360",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1031937360"
+        },
+        {
+          "id": "916260914",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/916260914"
+        },
+        {
+          "id": "191052382",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/191052382"
+        },
+        {
+          "id": "288095980",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/288095980"
+        },
+        {
+          "id": "916324769",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/916324769"
+        },
+        {
+          "id": "458064474",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/458064474"
+        },
+        {
+          "id": "1589521098",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589521098"
+        },
+        {
+          "id": "381228541",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/381228541"
+        },
+        {
+          "id": "191051770",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/191051770"
+        },
+        {
+          "id": "1549037841",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1549037841"
+        },
+        {
+          "id": "1347409787",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1347409787"
+        },
+        {
+          "id": "916316734",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/916316734"
+        },
+        {
+          "id": "282773144",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/282773144"
+        },
+        {
+          "id": "200607001",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/200607001"
+        },
+        {
+          "id": "1589497502",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589497502"
+        }
+      ]
+    }
+  }
+}

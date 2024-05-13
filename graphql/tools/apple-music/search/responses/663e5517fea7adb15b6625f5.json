@@ -1,0 +1,54 @@
+{
+  "id": "265226629",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/265226629",
+  "attributes": {
+    "name": "Noah & The Whale",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1200,
+      "height": 1200,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/fd/f9/c9/fdf9c9ca-6543-4738-6f24-2c07c179d428/mzl.ktwargdz.jpg/{w}x{h}bb.jpg",
+      "bgColor": "20110c",
+      "textColor1": "dde4eb",
+      "textColor2": "dedde4",
+      "textColor3": "b7babe",
+      "textColor4": "b8b4b9"
+    },
+    "url": "https://music.apple.com/us/artist/noah-the-whale/265226629"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/265226629/albums",
+      "data": [
+        {
+          "id": "1443419734",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443419734"
+        },
+        {
+          "id": "1443232324",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443232324"
+        },
+        {
+          "id": "1445867468",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445867468"
+        },
+        {
+          "id": "1443860392",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443860392"
+        },
+        {
+          "id": "1442862934",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442862934"
+        }
+      ]
+    }
+  }
+}

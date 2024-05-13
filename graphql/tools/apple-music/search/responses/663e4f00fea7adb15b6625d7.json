@@ -1,0 +1,114 @@
+{
+  "id": "170878",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/170878",
+  "attributes": {
+    "name": "Alison Krauss",
+    "genreNames": [
+      "Country"
+    ],
+    "artwork": {
+      "width": 3000,
+      "height": 3000,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/7b/79/b0/7b79b0f2-8974-344a-3239-d9b30add5eb3/mzl.ujfqfdnp.jpg/{w}x{h}bb.jpg",
+      "bgColor": "1d1708",
+      "textColor1": "ffdbc1",
+      "textColor2": "f3b592",
+      "textColor3": "d1b39b",
+      "textColor4": "c89576"
+    },
+    "url": "https://music.apple.com/us/artist/alison-krauss/170878"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/170878/albums",
+      "data": [
+        {
+          "id": "1578783072",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1578783072"
+        },
+        {
+          "id": "1597018505",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1597018505"
+        },
+        {
+          "id": "1440776684",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440776684"
+        },
+        {
+          "id": "1440955573",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440955573"
+        },
+        {
+          "id": "1445663182",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445663182"
+        },
+        {
+          "id": "1440863615",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440863615"
+        },
+        {
+          "id": "1478022737",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1478022737"
+        },
+        {
+          "id": "1462955005",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462955005"
+        },
+        {
+          "id": "1440866016",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440866016"
+        },
+        {
+          "id": "1443747247",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443747247"
+        },
+        {
+          "id": "834367591",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/834367591"
+        },
+        {
+          "id": "1444614274",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444614274"
+        },
+        {
+          "id": "1445146568",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445146568"
+        },
+        {
+          "id": "1437457470",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437457470"
+        },
+        {
+          "id": "1659521926",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1659521926"
+        },
+        {
+          "id": "1593634719",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593634719"
+        },
+        {
+          "id": "1437062953",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437062953"
+        }
+      ]
+    }
+  }
+}

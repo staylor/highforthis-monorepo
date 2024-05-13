@@ -1,8 +1,7 @@
-import { useFetcher } from 'react-router-dom';
+import { Thumbnail } from '../ListTable';
 
-import Checkbox from '@/components/Form/Checkbox';
-
-import { RowActions, RowTitle, Thumbnail, usePath } from '../ListTable';
+import Name from './Name';
+import ExcludeFromSearch from './ExcludeFromSearch';
 
 export const featuredMedia = {
   className: 'w-16',
@@ -15,23 +14,6 @@ export const featuredMedia = {
   },
 };
 
-function Name({ data }: { data: any }) {
-  const path = usePath();
-  const urlPath = `${path}/${data.id}`;
-
-  return (
-    <>
-      <RowTitle url={urlPath} title={data.name} />
-      <RowActions
-        actions={[
-          { type: 'edit', url: urlPath },
-          { type: 'delete', url: urlPath, ids: [data.id] },
-        ]}
-      />
-    </>
-  );
-}
-
 export const name = {
   label: 'Name',
   render: (data: any) => <Name data={data} />,
@@ -41,27 +23,6 @@ export const slug = {
   label: 'Slug',
   prop: 'slug',
 };
-
-function ExcludeFromSearch({ data }: any) {
-  const fetcher = useFetcher();
-  const { id, excludeFromSearch } = data;
-  return (
-    <Checkbox
-      checked={Boolean(excludeFromSearch)}
-      onChange={(e) => {
-        fetcher.submit(
-          {
-            id,
-            excludeFromSearch: e.target.checked,
-          },
-          {
-            method: 'POST',
-          }
-        );
-      }}
-    />
-  );
-}
 
 export const excludeFromSearch = {
   label: 'Exclude from search',

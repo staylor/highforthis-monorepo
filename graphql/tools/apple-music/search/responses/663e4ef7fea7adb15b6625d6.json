@@ -1,0 +1,109 @@
+{
+  "id": "288062",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/288062",
+  "attributes": {
+    "name": "Robert Plant",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 3840,
+      "height": 3840,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/51/f9/81/51f981e1-c7ad-159e-5f71-8e559b4c8bdb/mza_4319169753883975533.png/{w}x{h}bb.jpg",
+      "bgColor": "606060",
+      "textColor1": "fefefe",
+      "textColor2": "f8f8f8",
+      "textColor3": "dedede",
+      "textColor4": "dadada"
+    },
+    "url": "https://music.apple.com/us/artist/robert-plant/288062"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/288062/albums",
+      "data": [
+        {
+          "id": "1578783072",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1578783072"
+        },
+        {
+          "id": "1597018505",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1597018505"
+        },
+        {
+          "id": "254187383",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/254187383"
+        },
+        {
+          "id": "1271375912",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1271375912"
+        },
+        {
+          "id": "254162739",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/254162739"
+        },
+        {
+          "id": "254111395",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/254111395"
+        },
+        {
+          "id": "263528037",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/263528037"
+        },
+        {
+          "id": "889441283",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/889441283"
+        },
+        {
+          "id": "254185249",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/254185249"
+        },
+        {
+          "id": "254185309",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/254185309"
+        },
+        {
+          "id": "1443470674",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443470674"
+        },
+        {
+          "id": "263528403",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/263528403"
+        },
+        {
+          "id": "1524935375",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1524935375"
+        },
+        {
+          "id": "1440723369",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440723369"
+        },
+        {
+          "id": "1445146568",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445146568"
+        },
+        {
+          "id": "1523754865",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523754865"
+        }
+      ]
+    }
+  }
+}

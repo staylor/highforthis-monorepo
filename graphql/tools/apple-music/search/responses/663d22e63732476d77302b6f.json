@@ -1,0 +1,139 @@
+{
+  "id": "310532354",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/310532354",
+  "attributes": {
+    "name": "MUTEMATH",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1734,
+      "height": 1734,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/2f/e2/ca/2fe2caa7-af08-c984-fabf-094522f7c0ef/mzl.zuxtdovz.jpg/{w}x{h}bb.jpg",
+      "bgColor": "36d3c1",
+      "textColor1": "030a09",
+      "textColor2": "0b2b23",
+      "textColor3": "0d322e",
+      "textColor4": "134c43"
+    },
+    "url": "https://music.apple.com/us/artist/mutemath/310532354"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/310532354/albums",
+      "data": [
+        {
+          "id": "1186097497",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1186097497"
+        },
+        {
+          "id": "191851028",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/191851028"
+        },
+        {
+          "id": "325073061",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/325073061"
+        },
+        {
+          "id": "192049600",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/192049600"
+        },
+        {
+          "id": "1440767094",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440767094"
+        },
+        {
+          "id": "460486723",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/460486723"
+        },
+        {
+          "id": "1440757872",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440757872"
+        },
+        {
+          "id": "1440668346",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440668346"
+        },
+        {
+          "id": "395308663",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/395308663"
+        },
+        {
+          "id": "460487207",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/460487207"
+        },
+        {
+          "id": "271941450",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/271941450"
+        },
+        {
+          "id": "1490998397",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1490998397"
+        },
+        {
+          "id": "303734648",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/303734648"
+        },
+        {
+          "id": "547117539",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/547117539"
+        },
+        {
+          "id": "1661827916",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1661827916"
+        },
+        {
+          "id": "1445170043",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445170043"
+        },
+        {
+          "id": "1445045910",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445045910"
+        },
+        {
+          "id": "1441992148",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441992148"
+        },
+        {
+          "id": "250399988",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/250399988"
+        },
+        {
+          "id": "1445151032",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445151032"
+        },
+        {
+          "id": "1600560150",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1600560150"
+        },
+        {
+          "id": "1445165102",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445165102"
+        }
+      ]
+    }
+  }
+}

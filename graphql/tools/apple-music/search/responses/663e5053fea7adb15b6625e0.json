@@ -1,0 +1,99 @@
+{
+  "id": "549415482",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/549415482",
+  "attributes": {
+    "name": "Matthew E. White",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 4397,
+      "height": 4397,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/45/55/c8/4555c8fc-11c1-1604-f239-dbcb11557836/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "3c3e3d",
+      "textColor1": "e9f9ec",
+      "textColor2": "e99786",
+      "textColor3": "c6d4c9",
+      "textColor4": "c68577"
+    },
+    "url": "https://music.apple.com/us/artist/matthew-e-white/549415482"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/549415482/albums",
+      "data": [
+        {
+          "id": "1450999000",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1450999000"
+        },
+        {
+          "id": "943582772",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/943582772"
+        },
+        {
+          "id": "588359647",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/588359647"
+        },
+        {
+          "id": "1565042226",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1565042226"
+        },
+        {
+          "id": "943642044",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/943642044"
+        },
+        {
+          "id": "703855267",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/703855267"
+        },
+        {
+          "id": "1545270132",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1545270132"
+        },
+        {
+          "id": "697207469",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/697207469"
+        },
+        {
+          "id": "672883974",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/672883974"
+        },
+        {
+          "id": "1636724850",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1636724850"
+        },
+        {
+          "id": "1555168694",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1555168694"
+        },
+        {
+          "id": "1546457398",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546457398"
+        },
+        {
+          "id": "1072355812",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1072355812"
+        },
+        {
+          "id": "1438820100",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1438820100"
+        }
+      ]
+    }
+  }
+}

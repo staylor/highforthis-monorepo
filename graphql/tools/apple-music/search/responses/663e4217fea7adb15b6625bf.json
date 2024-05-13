@@ -1,0 +1,114 @@
+{
+  "id": "524529368",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/524529368",
+  "attributes": {
+    "name": "Shovels & Rope",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3085,
+      "height": 3085,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/a0/0f/85/a00f8566-4171-a525-dfde-f1590d182c22/05a303e7-51cc-471d-b4a6-bf3866b737c6_ami-identity-8f5afb8f197de636837ead0c70a4d410-2024-01-12T18-22-47.324Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "333621",
+      "textColor1": "f0caa8",
+      "textColor2": "eeb16e",
+      "textColor3": "caad8d",
+      "textColor4": "c8985e"
+    },
+    "url": "https://music.apple.com/us/artist/shovels-rope/524529368"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/524529368/albums",
+      "data": [
+        {
+          "id": "1448543683",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1448543683"
+        },
+        {
+          "id": "926432911",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/926432911"
+        },
+        {
+          "id": "935972106",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/935972106"
+        },
+        {
+          "id": "1051945290",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1051945290"
+        },
+        {
+          "id": "935971207",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/935971207"
+        },
+        {
+          "id": "1436937074",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436937074"
+        },
+        {
+          "id": "1587048210",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1587048210"
+        },
+        {
+          "id": "1515609989",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1515609989"
+        },
+        {
+          "id": "1436939203",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436939203"
+        },
+        {
+          "id": "927438269",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/927438269"
+        },
+        {
+          "id": "1547667429",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1547667429"
+        },
+        {
+          "id": "1629761151",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1629761151"
+        },
+        {
+          "id": "630244628",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/630244628"
+        },
+        {
+          "id": "1360630189",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1360630189"
+        },
+        {
+          "id": "1470654957",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1470654957"
+        },
+        {
+          "id": "1725259806",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1725259806"
+        },
+        {
+          "id": "1596365027",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1596365027"
+        }
+      ]
+    }
+  }
+}

@@ -64,9 +64,14 @@ export default function Shows() {
       render: (show: Show) => {
         const { artists } = show;
         const editUrl = `/admin/artist/${artists[0].id}`;
+        let title = artists[0].name;
+        if (artists.length > 1) {
+          title += ` + ${artists.length - 1}`;
+        }
+
         return (
           <>
-            <RowTitle url={editUrl} title={artists[0].name} />
+            <RowTitle url={editUrl} title={title} />
             <RowActions
               actions={[
                 { type: 'edit', url: editUrl },

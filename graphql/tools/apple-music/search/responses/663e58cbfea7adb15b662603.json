@@ -1,0 +1,104 @@
+{
+  "id": "190267921",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/190267921",
+  "attributes": {
+    "name": "Andy McKee",
+    "genreNames": [
+      "Singer/Songwriter"
+    ],
+    "artwork": {
+      "width": 2222,
+      "height": 2222,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/ac/a3/80/aca38062-6b4b-d6bd-4ac7-bac584b0af52/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "8b92ae",
+      "textColor1": "0f0c12",
+      "textColor2": "191019",
+      "textColor3": "282731",
+      "textColor4": "2f2a37"
+    },
+    "url": "https://music.apple.com/us/artist/andy-mckee/190267921"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/190267921/albums",
+      "data": [
+        {
+          "id": "190267918",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/190267918"
+        },
+        {
+          "id": "264176255",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/264176255"
+        },
+        {
+          "id": "1443492053",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443492053"
+        },
+        {
+          "id": "1443517202",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443517202"
+        },
+        {
+          "id": "1575826047",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1575826047"
+        },
+        {
+          "id": "1469577064",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1469577064"
+        },
+        {
+          "id": "1631607683",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631607683"
+        },
+        {
+          "id": "1619175501",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1619175501"
+        },
+        {
+          "id": "981851150",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/981851150"
+        },
+        {
+          "id": "1727830228",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1727830228"
+        },
+        {
+          "id": "1729373753",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1729373753"
+        },
+        {
+          "id": "1725832886",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1725832886"
+        },
+        {
+          "id": "1741272359",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1741272359"
+        },
+        {
+          "id": "1741247809",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1741247809"
+        },
+        {
+          "id": "1670385522",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1670385522"
+        }
+      ]
+    }
+  }
+}

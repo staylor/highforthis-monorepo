@@ -1,0 +1,129 @@
+{
+  "id": "59606",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/59606",
+  "attributes": {
+    "name": "Steely Dan",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/21/2f/f8/212ff872-069a-95d0-f5a3-72c7fd5205eb/mzl.ohwmwoty.jpg/{w}x{h}bb.jpg",
+      "bgColor": "14100d",
+      "textColor1": "ffe3bc",
+      "textColor2": "dfa673",
+      "textColor3": "cfb898",
+      "textColor4": "b6885e"
+    },
+    "url": "https://music.apple.com/us/artist/steely-dan/59606"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/59606/albums",
+      "data": [
+        {
+          "id": "1440794243",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440794243"
+        },
+        {
+          "id": "1440724756",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440724756"
+        },
+        {
+          "id": "1440504355",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440504355"
+        },
+        {
+          "id": "1706428459",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1706428459"
+        },
+        {
+          "id": "1650885288",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1650885288"
+        },
+        {
+          "id": "297597608",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/297597608"
+        },
+        {
+          "id": "1586479",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1586479"
+        },
+        {
+          "id": "1576926251",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1576926251"
+        },
+        {
+          "id": "1696215205",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1696215205"
+        },
+        {
+          "id": "1446019239",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1446019239"
+        },
+        {
+          "id": "302130873",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/302130873"
+        },
+        {
+          "id": "1687587548",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1687587548"
+        },
+        {
+          "id": "1715946508",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1715946508"
+        },
+        {
+          "id": "1452870774",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1452870774"
+        },
+        {
+          "id": "1444176011",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444176011"
+        },
+        {
+          "id": "736829624",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/736829624"
+        },
+        {
+          "id": "1543804132",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543804132"
+        },
+        {
+          "id": "535579135",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/535579135"
+        },
+        {
+          "id": "1418558",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1418558"
+        },
+        {
+          "id": "1530289",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1530289"
+        }
+      ]
+    }
+  }
+}

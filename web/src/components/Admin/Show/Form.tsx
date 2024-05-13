@@ -5,6 +5,7 @@ import Form from '@/components/Admin/Form';
 import Message from '@/components/Form/Message';
 import Checkbox from '@/components/Form/Checkbox';
 import type { Fields } from '@/types';
+import type { ArtistConnection, Show, VenueConnection } from '@/types/graphql';
 
 import SelectEntity from './SelectEntity';
 import SelectEntities from './SelectEntities';
@@ -31,19 +32,24 @@ export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormPr
     {
       label: 'Artists',
       type: 'custom',
-      render: ({ show, artists }) => (
+      render: ({ show, artists }: { show: Show; artists: ArtistConnection }) => (
         <SelectEntities
           name="artists"
-          edges={artists.edges}
-          values={show?.artists?.map(({ id }: { id: string }) => id)}
+          nodes={show?.artists || []}
+          filtered={artists.edges.map(({ node }) => node)}
         />
       ),
     },
     {
       label: 'Venue',
       type: 'custom',
-      render: ({ show, venues }) => (
-        <SelectEntity label="Venue" name="venue" edges={venues.edges} value={show?.venue?.id} />
+      render: ({ show, venues }: { show: Show; venues: VenueConnection }) => (
+        <SelectEntity
+          label="Venue"
+          name="venue"
+          node={show?.venue || {}}
+          filtered={venues.edges.map(({ node }) => node)}
+        />
       ),
     },
     { label: 'URL', prop: 'url', inputType: 'url', render: ({ show }) => show?.url },
@@ -69,6 +75,7 @@ ShowForm.fragments = {
     fragment ShowForm_show on Show {
       artists {
         id
+        name
       }
       attended
       date
@@ -78,6 +85,7 @@ ShowForm.fragments = {
       url
       venue {
         id
+        name
       }
     }
   `,

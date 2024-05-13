@@ -1,0 +1,134 @@
+{
+  "id": "118161",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/118161",
+  "attributes": {
+    "name": "The Mighty Mighty Bosstones",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 2048,
+      "height": 2048,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/86/c9/a5/86c9a52e-c612-39ff-3972-ba89e9afd6a6/mzl.psdjhtyn.jpeg/{w}x{h}bb.jpg",
+      "bgColor": "ffffff",
+      "textColor1": "000000",
+      "textColor2": "313131",
+      "textColor3": "333333",
+      "textColor4": "5a5a5a"
+    },
+    "url": "https://music.apple.com/us/artist/the-mighty-mighty-bosstones/118161"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/118161/albums",
+      "data": [
+        {
+          "id": "1553943817",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1553943817"
+        },
+        {
+          "id": "1443722411",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443722411"
+        },
+        {
+          "id": "1374601030",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1374601030"
+        },
+        {
+          "id": "485091468",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/485091468"
+        },
+        {
+          "id": "1443070575",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443070575"
+        },
+        {
+          "id": "1440723917",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440723917"
+        },
+        {
+          "id": "321176085",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/321176085"
+        },
+        {
+          "id": "321147421",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/321147421"
+        },
+        {
+          "id": "1708975440",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1708975440"
+        },
+        {
+          "id": "1443739943",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443739943"
+        },
+        {
+          "id": "1631010761",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1631010761"
+        },
+        {
+          "id": "1143484783",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1143484783"
+        },
+        {
+          "id": "1443762934",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443762934"
+        },
+        {
+          "id": "1444004311",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444004311"
+        },
+        {
+          "id": "321136667",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/321136667"
+        },
+        {
+          "id": "270187592",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/270187592"
+        },
+        {
+          "id": "1443762292",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443762292"
+        },
+        {
+          "id": "1681811235",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1681811235"
+        },
+        {
+          "id": "1545564200",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1545564200"
+        },
+        {
+          "id": "1699695298",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1699695298"
+        },
+        {
+          "id": "1189302835",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1189302835"
+        }
+      ]
+    }
+  }
+}

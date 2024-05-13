@@ -1,0 +1,69 @@
+{
+  "id": "203224868",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/203224868",
+  "attributes": {
+    "name": "Ghostland Observatory",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1500,
+      "height": 1500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/8d/34/43/8d344344-43a8-4985-c03e-ba01e595eb4d/884977737776.tif/{w}x{h}ac.jpg",
+      "bgColor": "000000",
+      "textColor1": "ead1b7",
+      "textColor2": "adc3cf",
+      "textColor3": "bba793",
+      "textColor4": "8a9ca6"
+    },
+    "url": "https://music.apple.com/us/artist/ghostland-observatory/203224868"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/203224868/albums",
+      "data": [
+        {
+          "id": "941463818",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/941463818"
+        },
+        {
+          "id": "1399080586",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1399080586"
+        },
+        {
+          "id": "941248531",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/941248531"
+        },
+        {
+          "id": "941463385",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/941463385"
+        },
+        {
+          "id": "1558007835",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1558007835"
+        },
+        {
+          "id": "1484732893",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484732893"
+        },
+        {
+          "id": "1049154645",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1049154645"
+        },
+        {
+          "id": "394481883",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/394481883"
+        }
+      ]
+    }
+  }
+}

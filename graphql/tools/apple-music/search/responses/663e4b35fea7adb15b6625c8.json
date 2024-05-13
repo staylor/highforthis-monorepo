@@ -1,0 +1,74 @@
+{
+  "id": "321775453",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/321775453",
+  "attributes": {
+    "name": "Natalie Prass",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 3898,
+      "height": 3898,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/e1/e8/b2/e1e8b2f1-0f57-d655-d88e-bbf993cae149/mzl.fansobjb.jpg/{w}x{h}bb.jpg",
+      "bgColor": "8f4247",
+      "textColor1": "f7fae9",
+      "textColor2": "ebfaed",
+      "textColor3": "e2d5c9",
+      "textColor4": "d8d5cc"
+    },
+    "url": "https://music.apple.com/us/artist/natalie-prass/321775453"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/321775453/albums",
+      "data": [
+        {
+          "id": "1428716178",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1428716178"
+        },
+        {
+          "id": "958344368",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/958344368"
+        },
+        {
+          "id": "1050721485",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1050721485"
+        },
+        {
+          "id": "1349429860",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1349429860"
+        },
+        {
+          "id": "1497164006",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1497164006"
+        },
+        {
+          "id": "1546631961",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1546631961"
+        },
+        {
+          "id": "1072355812",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1072355812"
+        },
+        {
+          "id": "1512471792",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1512471792"
+        },
+        {
+          "id": "1439354349",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1439354349"
+        }
+      ]
+    }
+  }
+}

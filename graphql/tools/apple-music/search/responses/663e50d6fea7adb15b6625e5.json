@@ -1,0 +1,149 @@
+{
+  "id": "278182972",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/278182972",
+  "attributes": {
+    "name": "Sierra Hull",
+    "genreNames": [
+      "Bluegrass"
+    ],
+    "artwork": {
+      "width": 1200,
+      "height": 1200,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/23/0c/3b/230c3b7c-b76e-4307-010a-3553d627c192/mzl.ouhbgbsy.jpg/{w}x{h}bb.jpg",
+      "bgColor": "241a18",
+      "textColor1": "f7c8b2",
+      "textColor2": "ecad8d",
+      "textColor3": "cda593",
+      "textColor4": "c49075"
+    },
+    "url": "https://music.apple.com/us/artist/sierra-hull/278182972"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/278182972/albums",
+      "data": [
+        {
+          "id": "1495100635",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1495100635"
+        },
+        {
+          "id": "1440951884",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440951884"
+        },
+        {
+          "id": "1474993173",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1474993173"
+        },
+        {
+          "id": "1440792724",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440792724"
+        },
+        {
+          "id": "1734872876",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1734872876"
+        },
+        {
+          "id": "1443829865",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1443829865"
+        },
+        {
+          "id": "1548779403",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1548779403"
+        },
+        {
+          "id": "1523179847",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523179847"
+        },
+        {
+          "id": "1735053520",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1735053520"
+        },
+        {
+          "id": "1672555731",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1672555731"
+        },
+        {
+          "id": "1548218042",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1548218042"
+        },
+        {
+          "id": "1552781324",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1552781324"
+        },
+        {
+          "id": "1693012106",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1693012106"
+        },
+        {
+          "id": "1677413672",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1677413672"
+        },
+        {
+          "id": "1630195276",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1630195276"
+        },
+        {
+          "id": "1627441331",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1627441331"
+        },
+        {
+          "id": "1593248385",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593248385"
+        },
+        {
+          "id": "1559102727",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1559102727"
+        },
+        {
+          "id": "1535822890",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1535822890"
+        },
+        {
+          "id": "1534657155",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1534657155"
+        },
+        {
+          "id": "1469970279",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1469970279"
+        },
+        {
+          "id": "1458171388",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1458171388"
+        },
+        {
+          "id": "1361811921",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1361811921"
+        },
+        {
+          "id": "436823386",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/436823386"
+        }
+      ]
+    }
+  }
+}
