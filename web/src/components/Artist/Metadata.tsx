@@ -34,7 +34,7 @@ export default function Metadata({
 
   let site;
   let listen;
-  let image = <Artwork name={name} imageSize={imageSize} data={data} />;
+  let image = <Artwork name={name} imageSize={imageSize} data={data} rounded />;
   if (website) {
     site = <ArtistLink url={website}>Artist Website</ArtistLink>;
   }

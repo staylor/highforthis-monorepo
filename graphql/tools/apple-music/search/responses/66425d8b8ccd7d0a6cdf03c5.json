@@ -1,0 +1,104 @@
+{
+  "id": "336837",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/336837",
+  "attributes": {
+    "name": "Har Mar Superstar",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 1691,
+      "height": 1691,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/ab/b1/30/abb1307d-3e36-713a-2c73-f2df85fb0b91/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "026c60",
+      "textColor1": "fadbd3",
+      "textColor2": "7cf3e6",
+      "textColor3": "c8c5bc",
+      "textColor4": "63d8cb"
+    },
+    "url": "https://music.apple.com/us/artist/har-mar-superstar/336837"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/336837/albums",
+      "data": [
+        {
+          "id": "1478799141",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1478799141"
+        },
+        {
+          "id": "1478644334",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1478644334"
+        },
+        {
+          "id": "1551702749",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1551702749"
+        },
+        {
+          "id": "383550640",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/383550640"
+        },
+        {
+          "id": "932563135",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/932563135"
+        },
+        {
+          "id": "383547183",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/383547183"
+        },
+        {
+          "id": "1253139149",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1253139149"
+        },
+        {
+          "id": "1497850317",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1497850317"
+        },
+        {
+          "id": "1447982749",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1447982749"
+        },
+        {
+          "id": "1278482485",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1278482485"
+        },
+        {
+          "id": "1437201108",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1437201108"
+        },
+        {
+          "id": "487938480",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/487938480"
+        },
+        {
+          "id": "1462439837",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1462439837"
+        },
+        {
+          "id": "1605167372",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1605167372"
+        },
+        {
+          "id": "1479231183",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1479231183"
+        }
+      ]
+    }
+  }
+}

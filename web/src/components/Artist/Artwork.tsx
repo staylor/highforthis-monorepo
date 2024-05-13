@@ -1,3 +1,5 @@
+import cn from 'classnames';
+
 import type { AppleMusicData } from '@/types/graphql';
 import Image from '@/components/Image';
 
@@ -5,11 +7,17 @@ interface ArtworkProps {
   name: string;
   imageSize?: number;
   data: AppleMusicData;
+  rounded?: boolean;
 }
 
 export const DEFAULT_IMAGE_SIZE = 300;
 
-export default function Artwork({ name, imageSize = DEFAULT_IMAGE_SIZE, data }: ArtworkProps) {
+export default function Artwork({
+  name,
+  imageSize = DEFAULT_IMAGE_SIZE,
+  data,
+  rounded = false,
+}: ArtworkProps) {
   const { url, artwork } = data;
   if (!artwork?.url) {
     return null;
@@ -17,7 +25,7 @@ export default function Artwork({ name, imageSize = DEFAULT_IMAGE_SIZE, data }: 
 
   let image = (
     <Image
-      className="block rounded-lg"
+      className={cn('block', { 'rounded-lg': rounded })}
       src={artwork.url?.replace(/\{[wh]\}/g, String(imageSize))}
       alt={name}
       width={imageSize}
@@ -29,7 +37,7 @@ export default function Artwork({ name, imageSize = DEFAULT_IMAGE_SIZE, data }: 
     image = (
       <a
         href={url}
-        className="mb-4 block rounded-lg md:mb-0 md:mr-8"
+        className="mb-4 block md:mb-0 md:mr-8"
         style={{ width: imageSize, height: imageSize }}
         target="_blank"
         rel="noreferrer"

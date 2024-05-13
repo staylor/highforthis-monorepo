@@ -11,13 +11,8 @@ import { handleDelete } from '@/utils/action';
 import type { ArtistConnection, ArtistsAdminQuery } from '@/types/graphql';
 import type { Columns } from '@/types';
 import mutate, { parseFormData } from '@/utils/mutate';
-import {
-  featuredMedia,
-  name,
-  slug,
-  excludeFromSearch,
-  website,
-} from '@/components/Admin/Entity/ListTable';
+import { name, slug, excludeFromSearch, website } from '@/components/Admin/Entity/ListTable';
+import Artwork from '@/components/Artist/Artwork';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const variables = addSearchParam(request, addPageOffset(params));
@@ -51,7 +46,22 @@ export default function Artists() {
   const data = useLoaderData<ArtistsAdminQuery>();
   const artists = data.artists as ArtistConnection;
 
-  let columns: Columns = [featuredMedia, name, slug, excludeFromSearch, website];
+  let columns: Columns = [
+    {
+      className: 'w-16',
+      render: (data: any) => {
+        if (data.appleMusic?.artwork) {
+          return <Artwork name={data.name} data={data.appleMusic} imageSize={44} />;
+        }
+
+        return null;
+      },
+    },
+    name,
+    slug,
+    excludeFromSearch,
+    website,
+  ];
 
   return (
     <>
@@ -70,18 +80,14 @@ const artistsQuery = gql`
       count
       edges {
         node {
-          excludeFromSearch
-          featuredMedia {
-            ... on ImageUpload {
-              crops {
-                fileName
-                width
-              }
-              destination
-              id
-              type
+          appleMusic {
+            artwork {
+              url
             }
+            id
+            url
           }
+          excludeFromSearch
           id
           name
           slug

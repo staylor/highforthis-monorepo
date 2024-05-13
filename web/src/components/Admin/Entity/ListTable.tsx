@@ -1,18 +1,5 @@
-import { Thumbnail } from '../ListTable';
-
 import Name from './Name';
 import ExcludeFromSearch from './ExcludeFromSearch';
-
-export const featuredMedia = {
-  className: 'w-16',
-  render: (data: any) => {
-    if (data.featuredMedia?.[0] && data.featuredMedia[0].type === 'image') {
-      return <Thumbnail media={data.featuredMedia[0]} />;
-    }
-
-    return null;
-  },
-};
 
 export const name = {
   label: 'Name',

@@ -1,0 +1,122 @@
+{
+  "id": "5072272",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/5072272",
+  "attributes": {
+    "name": "Tom Petty",
+    "genreNames": [
+      "Rock"
+    ],
+    "editorialNotes": {
+      "short": "Benmont Tench and Mike Campbell unpack the history behind Wildflowers & All the Rest."
+    },
+    "artwork": {
+      "width": 592,
+      "height": 592,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/a6/3f/a5/a63fa533-bf6b-1d36-0419-b6157f589c4b/12b85a54-a213-4160-90c3-e38b6e4280de_ami-identity-8d03112285cee7e3e61464ab934a0411-2024-04-11T02-23-51.059Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "100900",
+      "textColor1": "e5dac7",
+      "textColor2": "cebfa4",
+      "textColor3": "bab09f",
+      "textColor4": "a89a83"
+    },
+    "url": "https://music.apple.com/us/artist/tom-petty/5072272"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/5072272/albums",
+      "data": [
+        {
+          "id": "1440825367",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440825367"
+        },
+        {
+          "id": "892018539",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/892018539"
+        },
+        {
+          "id": "1527821823",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1527821823"
+        },
+        {
+          "id": "1440941073",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440941073"
+        },
+        {
+          "id": "897792951",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/897792951"
+        },
+        {
+          "id": "897792951",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/897792951"
+        },
+        {
+          "id": "891205919",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/891205919"
+        },
+        {
+          "id": "1441458969",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441458969"
+        },
+        {
+          "id": "1092361983",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1092361983"
+        },
+        {
+          "id": "1440853363",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440853363"
+        },
+        {
+          "id": "1440853363",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440853363"
+        },
+        {
+          "id": "1553513915",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1553513915"
+        },
+        {
+          "id": "278762949",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/278762949"
+        },
+        {
+          "id": "1440942391",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440942391"
+        },
+        {
+          "id": "278674336",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/278674336"
+        },
+        {
+          "id": "294971503",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/294971503"
+        },
+        {
+          "id": "999212755",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/999212755"
+        },
+        {
+          "id": "1518675516",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1518675516"
+        }
+      ]
+    }
+  }
+}

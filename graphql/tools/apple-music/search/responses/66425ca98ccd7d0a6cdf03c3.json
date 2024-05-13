@@ -1,0 +1,114 @@
+{
+  "id": "206554064",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/206554064",
+  "attributes": {
+    "name": "She Keeps Bees",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1793,
+      "height": 1793,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages126/v4/b5/36/e8/b536e801-bf4b-bc71-3b89-cf8f34641f4e/aa4a45b1-a1d5-41cc-aea9-e024e1b3d0da_file_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "11221a",
+      "textColor1": "ffffff",
+      "textColor2": "f0f5fd",
+      "textColor3": "cfd2d1",
+      "textColor4": "c3cacf"
+    },
+    "url": "https://music.apple.com/us/artist/she-keeps-bees/206554064"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/206554064/albums",
+      "data": [
+        {
+          "id": "1548843032",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1548843032"
+        },
+        {
+          "id": "1453375879",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1453375879"
+        },
+        {
+          "id": "305544692",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/305544692"
+        },
+        {
+          "id": "305646214",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/305646214"
+        },
+        {
+          "id": "448781245",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/448781245"
+        },
+        {
+          "id": "1242631012",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1242631012"
+        },
+        {
+          "id": "1520513255",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1520513255"
+        },
+        {
+          "id": "1510961463",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1510961463"
+        },
+        {
+          "id": "305580288",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/305580288"
+        },
+        {
+          "id": "1510961174",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1510961174"
+        },
+        {
+          "id": "1346086910",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1346086910"
+        },
+        {
+          "id": "543198762",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/543198762"
+        },
+        {
+          "id": "1250676499",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1250676499"
+        },
+        {
+          "id": "1346093625",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1346093625"
+        },
+        {
+          "id": "1500625263",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1500625263"
+        },
+        {
+          "id": "1517843236",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1517843236"
+        },
+        {
+          "id": "1500625249",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1500625249"
+        }
+      ]
+    }
+  }
+}

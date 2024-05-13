@@ -3,20 +3,14 @@ import { useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 
 import { Heading, HeaderAdd } from '@/components/Admin/styles';
-import ListTable from '@/components/Admin/ListTable';
+import ListTable, { Thumbnail } from '@/components/Admin/ListTable';
 import Message from '@/components/Form/Message';
 import Search from '@/components/Admin/ListTable/Search';
 import query, { addPageOffset, addSearchParam } from '@/utils/query';
 import { handleDelete } from '@/utils/action';
 import type { VenueConnection, VenuesAdminQuery } from '@/types/graphql';
 import type { Columns } from '@/types';
-import {
-  featuredMedia,
-  name,
-  slug,
-  excludeFromSearch,
-  website,
-} from '@/components/Admin/Entity/ListTable';
+import { name, slug, excludeFromSearch, website } from '@/components/Admin/Entity/ListTable';
 import mutate, { parseFormData } from '@/utils/mutate';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
@@ -51,7 +45,16 @@ export default function Venues() {
   const venues = data.venues as VenueConnection;
 
   let columns: Columns = [
-    featuredMedia,
+    {
+      className: 'w-16',
+      render: (data: any) => {
+        if (data.featuredMedia?.[0] && data.featuredMedia[0].type === 'image') {
+          return <Thumbnail media={data.featuredMedia[0]} />;
+        }
+
+        return null;
+      },
+    },
     name,
     slug,
     website,

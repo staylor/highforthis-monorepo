@@ -1,0 +1,44 @@
+{
+  "id": "694682161",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/694682161",
+  "attributes": {
+    "name": "Augustines",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 1500,
+      "height": 1500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0b/9d/33/0b9d33d2-fb06-0a59-33e8-8c784ebe5186/00811790020020.rgb.jpg/{w}x{h}ac.jpg",
+      "bgColor": "141414",
+      "textColor1": "e1e2dc",
+      "textColor2": "e4e0d8",
+      "textColor3": "b8b8b4",
+      "textColor4": "bab7b1"
+    },
+    "url": "https://music.apple.com/us/artist/augustines/694682161"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/694682161/albums",
+      "data": [
+        {
+          "id": "1538914729",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1538914729"
+        },
+        {
+          "id": "1442999711",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1442999711"
+        },
+        {
+          "id": "1538320236",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1538320236"
+        }
+      ]
+    }
+  }
+}

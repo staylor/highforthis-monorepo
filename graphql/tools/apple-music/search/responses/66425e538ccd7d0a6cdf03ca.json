@@ -1,0 +1,74 @@
+{
+  "id": "307311742",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/307311742",
+  "attributes": {
+    "name": "Deradoorian",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/b8/1a/53/b81a5348-5d37-2bc4-cbed-230f0bbed703/pr_source.png/{w}x{h}bb.jpg",
+      "bgColor": "ac3618",
+      "textColor1": "fcdb99",
+      "textColor2": "fdc67f",
+      "textColor3": "ecba7f",
+      "textColor4": "eda96a"
+    },
+    "url": "https://music.apple.com/us/artist/deradoorian/307311742"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/307311742/albums",
+      "data": [
+        {
+          "id": "1498624046",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498624046"
+        },
+        {
+          "id": "1505864367",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505864367"
+        },
+        {
+          "id": "1505862421",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505862421"
+        },
+        {
+          "id": "1505857212",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1505857212"
+        },
+        {
+          "id": "1570335247",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1570335247"
+        },
+        {
+          "id": "1570345535",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1570345535"
+        },
+        {
+          "id": "415713919",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/415713919"
+        },
+        {
+          "id": "1498816909",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498816909"
+        },
+        {
+          "id": "1032404452",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1032404452"
+        }
+      ]
+    }
+  }
+}
