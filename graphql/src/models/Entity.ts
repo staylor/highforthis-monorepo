@@ -4,7 +4,7 @@ import Model from './Model';
 import { getUniqueSlug } from './utils';
 
 export default class Entity extends Model {
-  private parseCriteria(params: any) {
+  protected parseCriteria(params: any) {
     const criteria: any = {};
     const { filtered = false, search = '' } = params;
     if (search) {
@@ -14,11 +14,6 @@ export default class Entity extends Model {
       criteria.excludeFromSearch = { $in: [null, false] };
     }
     return criteria;
-  }
-
-  public count(args: any = {}): Promise<number> {
-    const criteria = this.parseCriteria(args);
-    return this.collection.countDocuments(criteria);
   }
 
   public all(args: any) {

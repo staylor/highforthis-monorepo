@@ -21,7 +21,7 @@ export const action: ActionFunction = ({ request, context, params }) => {
     request,
     context,
     mutation: venueMutation,
-    variables: { id: params.id, input: { excludeFromSearch: false } },
+    variables: { id: params.id, input: { excludeFromSearch: false, permanentlyClosed: false } },
   });
 };
 

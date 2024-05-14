@@ -11,6 +11,7 @@ import { handleDelete } from '@/utils/action';
 import type { VenueConnection, VenuesAdminQuery } from '@/types/graphql';
 import type { Columns } from '@/types';
 import { name, slug, excludeFromSearch, website } from '@/components/Admin/Entity/ListTable';
+import PermanentlyClosed from '@/components/Admin/Venue/PermanentlyClosed';
 import mutate, { parseFormData } from '@/utils/mutate';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
@@ -25,15 +26,20 @@ export const loader: LoaderFunction = ({ request, context, params }) => {
 
 export const action: ActionFunction = async ({ request, context }) => {
   if (request.method === 'POST') {
-    const { id, excludeFromSearch } = await parseFormData(request);
+    const { id, excludeFromSearch, permanentlyClosed, formAction } = await parseFormData(request);
+    let input;
+    if (formAction === 'excludeFromSearch') {
+      input = { excludeFromSearch };
+    } else if (formAction === 'permanentlyClosed') {
+      input = { permanentlyClosed };
+    }
+
     return mutate({
       context,
       mutation: updateMutation,
       variables: {
         id,
-        input: {
-          excludeFromSearch,
-        },
+        input,
       },
     });
   }
@@ -67,6 +73,11 @@ export default function Venues() {
       prop: 'address',
     },
     excludeFromSearch,
+    {
+      label: 'Permanently Closed',
+      className: 'text-center',
+      render: (data: any) => <PermanentlyClosed data={data} />,
+    },
   ];
 
   return (
@@ -102,6 +113,7 @@ const venuesQuery = gql`
           }
           id
           name
+          permanentlyClosed
           slug
           website
         }

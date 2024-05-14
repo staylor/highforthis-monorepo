@@ -17,11 +17,9 @@ export default class User extends Model {
     this.collection = context.db.collection('user');
   }
 
-  public all({ limit = 10, offset = 0, search = null }): Promise<any> {
-    const criteria: UserFilters = {};
-    if (search) {
-      criteria.$text = { $search: search };
-    }
+  public all(args: any): Promise<any> {
+    const { limit = 10, offset = 0 } = args;
+    const criteria: UserFilters = this.parseCriteria(args);
 
     return this.collection
       .find(criteria, { hash: 0 } as any)

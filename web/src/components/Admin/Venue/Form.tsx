@@ -7,6 +7,7 @@ import Input from '@/components/Form/Input';
 import Message from '@/components/Form/Message';
 import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
 import type { Fields } from '@/types';
+import Checkbox from '@/components/Form/Checkbox';
 
 import {
   name,
@@ -76,6 +77,13 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
     featuredMedia('venue'),
     shows('artists'),
     excludeFromSearch('venue'),
+    {
+      label: 'Permanently closed',
+      type: 'custom',
+      render: ({ venue }) => (
+        <Checkbox name="permanentlyClosed" checked={venue?.permanentlyClosed} />
+      ),
+    },
   ];
   return (
     <>
@@ -104,6 +112,7 @@ VenueForm.fragments = {
       }
       id
       name
+      permanentlyClosed
       slug
       website
     }

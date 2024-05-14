@@ -149,6 +149,7 @@ input CreateVenueInput {
   excludeFromSearch: Boolean
   featuredMedia: [String]
   name: String!
+  permanentlyClosed: Boolean
   slug: String
   website: String
 }
@@ -667,6 +668,7 @@ input UpdateVenueInput {
   excludeFromSearch: Boolean
   featuredMedia: [String]
   name: String
+  permanentlyClosed: Boolean
   slug: String
   website: String
 }
@@ -711,6 +713,7 @@ type Venue {
   featuredMedia: [MediaUpload!]
   id: ObjID!
   name: String!
+  permanentlyClosed: Boolean
   slug: String!
   website: String
 }

@@ -53,21 +53,23 @@ export default class Model {
     });
   }
 
-  public all({ limit = 10, offset = 0, search = '' }: any) {
+  protected parseCriteria({ search = '' }: any) {
     const criteria: any = {};
     if (search) {
       criteria.$text = { $search: search };
     }
+    return criteria;
+  }
+
+  public async all(args: any) {
+    const { limit = 10, offset = 0 } = args;
+    const criteria: any = this.parseCriteria(args);
 
     return this.collection.find(criteria).skip(offset).limit(limit).toArray();
   }
 
-  public count(args: any = {}): Promise<number> {
-    const criteria = { ...args };
-    delete criteria.search;
-    if (args.search) {
-      criteria.$text = { $search: args.search };
-    }
+  public async count(args: any = {}): Promise<number> {
+    const criteria: any = this.parseCriteria(args);
     return this.collection.countDocuments(criteria);
   }
 

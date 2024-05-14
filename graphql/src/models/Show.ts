@@ -34,11 +34,6 @@ export default class Show extends Model {
     this.collection = context.db.collection('show');
   }
 
-  public count(params: ShowParams): Promise<number> {
-    const criteria = this.parseCriteria(params);
-    return this.collection.countDocuments(criteria);
-  }
-
   public async all({
     order = ShowOrder.ASC,
     offset = 0,
@@ -55,7 +50,7 @@ export default class Show extends Model {
       .toArray();
   }
 
-  private parseCriteria({
+  protected parseCriteria({
     latest = false,
     attended = false,
     artist = '',

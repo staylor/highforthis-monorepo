@@ -11,7 +11,7 @@ export default class Post extends Model {
     this.collection = context.db.collection('post');
   }
 
-  public all({ limit = 10, offset = 0, status = null, search = null }) {
+  protected parseCriteria({ status = null, search = null }) {
     const criteria: any = {};
     if (status) {
       criteria.status = status;
@@ -19,6 +19,12 @@ export default class Post extends Model {
     if (search) {
       criteria.$text = { $search: search };
     }
+    return criteria;
+  }
+
+  public all(args: any) {
+    const { limit = 10, offset = 0 } = args;
+    const criteria = this.parseCriteria(args);
 
     return this.collection.find(criteria).sort({ date: -1 }).skip(offset).limit(limit).toArray();
   }

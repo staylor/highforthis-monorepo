@@ -50,6 +50,9 @@ export default function Venue() {
               Venue Website &rarr;
             </a>
           )}
+          {venue.permanentlyClosed && (
+            <p className="rounded-lg bg-pink p-2 font-bold text-white">Permanently Closed.</p>
+          )}
         </div>
         {venue.coordinates && (
           <Map className="rounded-md" name={venue.name} coordinates={venue.coordinates} />
@@ -90,6 +93,7 @@ const venueQuery = gql`
       }
       id
       name
+      permanentlyClosed
       website
     }
   }

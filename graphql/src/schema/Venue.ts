@@ -15,6 +15,7 @@ const Venue = `#graphql
     featuredMedia: [MediaUpload!]
     website: String
     excludeFromSearch: Boolean
+    permanentlyClosed: Boolean
   }
 
   type VenueEdge {
@@ -38,6 +39,7 @@ const Venue = `#graphql
     capacity: String
     coordinates: VenueCoordinatesInput
     excludeFromSearch: Boolean
+    permanentlyClosed: Boolean
   }
 
   input VenueCoordinatesInput {
@@ -55,6 +57,7 @@ const Venue = `#graphql
     capacity: String
     coordinates: VenueCoordinatesInput
     excludeFromSearch: Boolean
+    permanentlyClosed: Boolean
   }
 
   extend type Query {

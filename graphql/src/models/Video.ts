@@ -14,7 +14,6 @@ interface AllOptions {
 interface VideoFilters {
   year?: number;
   title?: any;
-  $text?: any;
 }
 
 export default class Video extends Model {
@@ -24,7 +23,7 @@ export default class Video extends Model {
     this.collection = context.db.collection('video');
   }
 
-  public all({ limit = 10, offset = 0, year = '', search = '' }: AllOptions): Promise<any> {
+  protected parseCriteria({ year = '', search = '' }: AllOptions) {
     const criteria: VideoFilters = {};
     if (year) {
       criteria.year = parseInt(year, 10);
@@ -32,6 +31,12 @@ export default class Video extends Model {
     if (search) {
       criteria.title = { $regex: new RegExp(search, 'i') };
     }
+    return criteria;
+  }
+
+  public all(args: AllOptions): Promise<any> {
+    const { limit = 10, offset = 0 } = args;
+    const criteria = this.parseCriteria(args);
 
     return this.collection
       .find(criteria)

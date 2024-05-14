@@ -2,18 +2,18 @@ import { useFetcher } from 'react-router-dom';
 
 import Checkbox from '@/components/Form/Checkbox';
 
-export default function ExcludeFromSearch({ data }: any) {
+export default function PermanentlyClosed({ data }: any) {
   const fetcher = useFetcher();
-  const { id, excludeFromSearch } = data;
+  const { id, permanentlyClosed } = data;
   return (
     <Checkbox
-      checked={Boolean(excludeFromSearch)}
+      checked={Boolean(permanentlyClosed)}
       onChange={(e) => {
         fetcher.submit(
           {
             id,
-            excludeFromSearch: e.target.checked,
-            formAction: 'excludeFromSearch',
+            permanentlyClosed: e.target.checked,
+            formAction: 'permanentlyClosed',
           },
           {
             method: 'POST',
