@@ -43,11 +43,13 @@
     "tools:database:restore": "sh ./tools/database/restore",
     "tools:artists:apple-music:search:dev": "dotenvx run -- tsx tools/apple-music/search/index.ts",
     "tools:artists:apple-music:search:prod": "dotenvx run --env-file=.env.production -- tsx tools/apple-music/search/index.ts",
+    "tools:shows:dev": "dotenvx run -- tsx tools/shows.ts",
+    "tools:shows:prod": "dotenvx run --env-file=.env.production -- tsx tools/shows.ts",
     "tools:venues:geolocation:dev": "dotenvx run -- tsx tools/geolocation/index.ts",
     "tools:venues:geolocation:prod": "dotenvx run --env-file=.env.production -- tsx tools/geolocation/index.ts",
     "tools:websites:dev": "dotenvx run -- tsx tools/websites/index.ts",
     "tools:websites:prod": "dotenvx run --env-file=.env.production -- tsx tools/websites/index.ts",
-    "tools:youtube:dev": "dotenvx run -- tsx tools/index.ts",
-    "tools:youtube:prod": "dotenvx run --env-file=.env.production -- tsx tools/index.ts"
+    "tools:youtube:dev": "dotenvx run -- tsx tools/youtube.ts",
+    "tools:youtube:prod": "dotenvx run --env-file=.env.production -- tsx tools/youtube.ts"
   }
 }
