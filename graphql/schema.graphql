@@ -156,7 +156,7 @@ input CreateVenueInput {
 
 input CreateVideoInput {
   dataId: String
-  dataPlaylistIds: [String]
+  dataPlaylistId: String
   dataType: String
   position: Int
   publishedAt: Float!
@@ -680,7 +680,7 @@ input UpdateVenueInput {
 
 input UpdateVideoInput {
   dataId: String
-  dataPlaylistIds: [String]
+  dataPlaylistId: String
   dataType: String
   position: Int
   publishedAt: Float
@@ -747,7 +747,7 @@ type VenueEdge {
 type Video {
   createdAt: Float!
   dataId: String!
-  dataPlaylistIds: [String!]!
+  dataPlaylistId: String!
   dataType: String!
   id: ObjID!
   position: Int!

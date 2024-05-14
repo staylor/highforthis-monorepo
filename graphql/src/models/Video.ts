@@ -6,9 +6,9 @@ import type { ModelContext } from './types';
 
 interface AllOptions {
   limit: number;
-  offset: number;
-  year: string;
-  search: string;
+  offset?: number;
+  year?: string;
+  search?: string;
 }
 
 interface VideoFilters {

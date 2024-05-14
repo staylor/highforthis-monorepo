@@ -19,12 +19,12 @@ const videoFields: Fields = [
   { label: 'Type', prop: 'dataType' },
   {
     label: 'Playlist',
-    prop: 'dataPlaylistIds',
+    prop: 'dataPlaylistId',
     type: 'custom',
     render: (video: Video) => (
       <a
         className="underline"
-        href={`https://www.youtube.com/playlist?list=${video.dataPlaylistIds[0]}`}
+        href={`https://www.youtube.com/playlist?list=${video.dataPlaylistId}`}
       >
         View {video.year} Playlist
       </a>
@@ -46,7 +46,7 @@ function VideoForm({ data = {} as Video, heading, buttonLabel, children = null }
 VideoForm.fragments = {
   video: gql`
     fragment VideoForm_video on Video {
-      dataPlaylistIds
+      dataPlaylistId
       dataType
       id
       slug

@@ -174,7 +174,7 @@ export type CreateVenueInput = {
 
 export type CreateVideoInput = {
   dataId?: InputMaybe<Scalars['String']['input']>;
-  dataPlaylistIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  dataPlaylistId?: InputMaybe<Scalars['String']['input']>;
   dataType?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   publishedAt: Scalars['Float']['input'];
@@ -1009,7 +1009,7 @@ export type UpdateVenueInput = {
 
 export type UpdateVideoInput = {
   dataId?: InputMaybe<Scalars['String']['input']>;
-  dataPlaylistIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  dataPlaylistId?: InputMaybe<Scalars['String']['input']>;
   dataType?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   publishedAt?: InputMaybe<Scalars['Float']['input']>;
@@ -1084,7 +1084,7 @@ export type Video = {
   __typename?: 'Video';
   createdAt: Scalars['Float']['output'];
   dataId: Scalars['String']['output'];
-  dataPlaylistIds: Array<Scalars['String']['output']>;
+  dataPlaylistId: Scalars['String']['output'];
   dataType: Scalars['String']['output'];
   id: Scalars['ObjID']['output'];
   position: Scalars['Int']['output'];
@@ -1179,7 +1179,7 @@ export type UserForm_UserFragment = { __typename?: 'User', bio?: string | null, 
 
 export type VenueForm_VenueFragment = { __typename?: 'Venue', address?: string | null, capacity?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, permanentlyClosed?: boolean | null, slug: string, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null };
 
-export type VideoForm_VideoFragment = { __typename?: 'Video', dataPlaylistIds: Array<string>, dataType: string, id: any, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> };
+export type VideoForm_VideoFragment = { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: any, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> };
 
 export type TextNodes_LinebreakNodeFragment = { __typename?: 'LinebreakNode', type?: string | null, version?: number | null };
 
@@ -1551,7 +1551,7 @@ export type VideoEditQueryVariables = Exact<{
 }>;
 
 
-export type VideoEditQuery = { __typename?: 'Query', video?: { __typename?: 'Video', dataPlaylistIds: Array<string>, dataType: string, id: any, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
+export type VideoEditQuery = { __typename?: 'Query', video?: { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: any, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
 
 export type UpdateVideoMutationVariables = Exact<{
   id: Scalars['ObjID']['input'];
@@ -1559,7 +1559,7 @@ export type UpdateVideoMutationVariables = Exact<{
 }>;
 
 
-export type UpdateVideoMutation = { __typename?: 'Mutation', updateVideo?: { __typename?: 'Video', dataPlaylistIds: Array<string>, dataType: string, id: any, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
+export type UpdateVideoMutation = { __typename?: 'Mutation', updateVideo?: { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: any, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
 
 export type VideosAdminQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;

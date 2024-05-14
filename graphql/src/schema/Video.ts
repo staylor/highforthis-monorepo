@@ -4,7 +4,7 @@ const Video = `#graphql
     dataId: String!
     slug: String!
     dataType: String!
-    dataPlaylistIds: [String!]!
+    dataPlaylistId: String!
     year: Int!
     publishedAt: Float!
     publishedISO: String!
@@ -37,7 +37,7 @@ const Video = `#graphql
     dataId: String
     slug: String!
     dataType: String
-    dataPlaylistIds: [String]
+    dataPlaylistId: String
     year: Int!
     publishedAt: Float!
     publishedISO: String
@@ -49,7 +49,7 @@ const Video = `#graphql
     dataId: String
     slug: String
     dataType: String
-    dataPlaylistIds: [String]
+    dataPlaylistId: String
     year: Int
     publishedAt: Float
     publishedISO: String
