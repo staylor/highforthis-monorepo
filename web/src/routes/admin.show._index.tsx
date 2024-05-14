@@ -142,25 +142,21 @@ export default function Shows() {
 const showsQuery = gql`
   query ShowsAdmin(
     $after: String
-    $artistId: ObjID
-    $artistSlug: String
+    $artist: EntityArg
     $date: Float
     $first: Int
     $order: ShowOrder
     $search: String
-    $venueId: ObjID
-    $venueSlug: String
+    $venue: EntityArg
   ) {
     shows(
       after: $after
-      artistId: $artistId
-      artistSlug: $artistSlug
+      artist: $artist
       date: $date
       first: $first
       order: $order
       search: $search
-      venueId: $venueId
-      venueSlug: $venueSlug
+      venue: $venue
     ) @cache(key: "admin") {
       count
       edges {

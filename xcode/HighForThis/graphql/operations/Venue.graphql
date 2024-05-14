@@ -1,12 +1,12 @@
 query Venue($slug: String!) {
-  attended: shows(attended: true, first: 200, venueSlug: $slug) {
+  attended: shows(attended: true, first: 200, venue: { slug: $slug }) {
     edges {
       node {
         ...ShowList_show
       }
     }
   }
-  shows(first: 200, latest: true, venueSlug: $slug) {
+  shows(first: 200, latest: true, venue: { slug: $slug }) {
     edges {
       node {
         ...ShowList_show

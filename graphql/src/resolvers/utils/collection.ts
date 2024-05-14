@@ -71,3 +71,14 @@ export async function parseConnection(instance: ModelInterface, connectionArgs: 
     };
   });
 }
+
+export const emptyConnection = () => ({
+  count: 0,
+  edges: [],
+  pageInfo: {
+    startCursor: null,
+    endCursor: null,
+    hasPreviousPage: false,
+    hasNextPage: false,
+  },
+});

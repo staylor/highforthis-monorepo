@@ -66,10 +66,10 @@ export default function Venue() {
 
 const venueQuery = gql`
   query Venue($first: Int, $slug: String!) {
-    attended: shows(attended: true, first: $first, venueSlug: $slug) {
+    attended: shows(attended: true, first: $first, venue: { slug: $slug }) {
       ...ShowsGrid_shows
     }
-    shows(first: $first, latest: true, venueSlug: $slug) {
+    shows(first: $first, latest: true, venue: { slug: $slug }) {
       ...ShowsGrid_shows
     }
     venue(slug: $slug) {

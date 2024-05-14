@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 
 import type { AugmentedContext } from '../models/types';
 
-import { parseConnection } from './utils/collection';
+import { parseConnection, emptyConnection } from './utils/collection';
 
 const resolvers = {
   Show: {
@@ -28,22 +28,26 @@ const resolvers = {
   },
   Query: {
     async shows(_: any, args: any, { Show, Artist, Venue }: AugmentedContext) {
-      const { artistId, artistSlug, venueId, venueSlug, ...rest } = args;
+      const { artist, venue, ...rest } = args;
       const connectionArgs = rest;
 
-      if (artistId) {
-        connectionArgs.artist = new ObjectId(String(artistId));
-      } else if (venueId) {
-        connectionArgs.venue = new ObjectId(String(venueId));
-      } else if (artistSlug) {
-        const artist = await Artist.findOneBySlug(artistSlug);
-        if (artist) {
-          connectionArgs.artist = artist._id;
+      if (artist?.id) {
+        connectionArgs.artist = new ObjectId(String(artist.id));
+      } else if (venue?.id) {
+        connectionArgs.venue = new ObjectId(String(venue.id));
+      } else if (artist?.slug) {
+        const node = await Artist.findOneBySlug(artist.slug);
+        if (node) {
+          connectionArgs.artist = node._id;
+        } else {
+          return emptyConnection();
         }
-      } else if (venueSlug) {
-        const venue = await Venue.findOneBySlug(venueSlug);
-        if (venue) {
-          connectionArgs.venue = venue._id;
+      } else if (venue?.slug) {
+        const node = await Venue.findOneBySlug(venue.slug);
+        if (node) {
+          connectionArgs.venue = node._id;
+        } else {
+          return emptyConnection();
         }
       }
       return parseConnection(Show, connectionArgs);

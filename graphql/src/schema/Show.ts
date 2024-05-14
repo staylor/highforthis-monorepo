@@ -58,6 +58,11 @@ const Show = `#graphql
     entity: ShowEntity!
   }
 
+  input EntityArg {
+    id: ObjID
+    slug: String
+  }
+
   extend type Query {
     shows(
       first: Int
@@ -67,10 +72,8 @@ const Show = `#graphql
       latest: Boolean
       attended: Boolean
       date: Float
-      artistId: ObjID
-      artistSlug: String
-      venueId: ObjID
-      venueSlug: String
+      artist: EntityArg
+      venue: EntityArg
       search: String
       order: ShowOrder
     ): ShowConnection

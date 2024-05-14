@@ -258,6 +258,11 @@ export type ElementNodeType = {
   version?: Maybe<Scalars['Int']['output']>;
 };
 
+export type EntityArg = {
+  id?: InputMaybe<Scalars['ObjID']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type FileUpload = MediaUpload & {
   __typename?: 'FileUpload';
   description?: Maybe<Scalars['String']['output']>;
@@ -768,8 +773,7 @@ export type QueryShowStatsArgs = {
 
 export type QueryShowsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
-  artistId?: InputMaybe<Scalars['ObjID']['input']>;
-  artistSlug?: InputMaybe<Scalars['String']['input']>;
+  artist?: InputMaybe<EntityArg>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   date?: InputMaybe<Scalars['Float']['input']>;
@@ -778,8 +782,7 @@ export type QueryShowsArgs = {
   latest?: InputMaybe<Scalars['Boolean']['input']>;
   order?: InputMaybe<ShowOrder>;
   search?: InputMaybe<Scalars['String']['input']>;
-  venueId?: InputMaybe<Scalars['ObjID']['input']>;
-  venueSlug?: InputMaybe<Scalars['String']['input']>;
+  venue?: InputMaybe<EntityArg>;
 };
 
 
@@ -1425,14 +1428,12 @@ export type UpdateShowMutation = { __typename?: 'Mutation', updateShow?: { __typ
 
 export type ShowsAdminQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
-  artistId?: InputMaybe<Scalars['ObjID']['input']>;
-  artistSlug?: InputMaybe<Scalars['String']['input']>;
+  artist?: InputMaybe<EntityArg>;
   date?: InputMaybe<Scalars['Float']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<ShowOrder>;
   search?: InputMaybe<Scalars['String']['input']>;
-  venueId?: InputMaybe<Scalars['ObjID']['input']>;
-  venueSlug?: InputMaybe<Scalars['String']['input']>;
+  venue?: InputMaybe<EntityArg>;
 }>;
 
 

@@ -237,6 +237,11 @@ interface ElementNodeType implements LexicalNode {
   version: Int
 }
 
+input EntityArg {
+  id: ObjID
+  slug: String
+}
+
 type FileUpload implements MediaUpload {
   description: String
   destination: String!
@@ -504,7 +509,7 @@ type Query {
   posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus, year: Int): PostConnection
   show(id: ObjID, slug: String): Show
   showStats(entity: ShowEntityType!): [ShowStat!]!
-  shows(after: String, artistId: ObjID, artistSlug: String, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, venueId: ObjID, venueSlug: String): ShowConnection
+  shows(after: String, artist: EntityArg, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, venue: EntityArg): ShowConnection
   siteSettings: SiteSettings!
   uploads(after: String, before: String, first: Int, last: Int, mimeType: String, search: String, type: String): MediaUploadConnection
   user(id: ObjID!): User

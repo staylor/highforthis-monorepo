@@ -7,7 +7,7 @@ public class VenueQuery: GraphQLQuery {
   public static let operationName: String = "Venue"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Venue($slug: String!) { attended: shows(attended: true, first: 200, venueSlug: $slug) { __typename edges { __typename node { __typename ...ShowList_show } } } shows(first: 200, latest: true, venueSlug: $slug) { __typename edges { __typename node { __typename ...ShowList_show } } } venue(slug: $slug) { __typename address capacity coordinates { __typename latitude longitude } id name slug website } }"#,
+      #"query Venue($slug: String!) { attended: shows(attended: true, first: 200, venue: { slug: $slug }) { __typename edges { __typename node { __typename ...ShowList_show } } } shows(first: 200, latest: true, venue: { slug: $slug }) { __typename edges { __typename node { __typename ...ShowList_show } } } venue(slug: $slug) { __typename address capacity coordinates { __typename latitude longitude } id name slug website } }"#,
       fragments: [ShowList_show.self]
     ))
 
@@ -28,12 +28,12 @@ public class VenueQuery: GraphQLQuery {
       .field("shows", alias: "attended", Attended?.self, arguments: [
         "attended": true,
         "first": 200,
-        "venueSlug": .variable("slug")
+        "venue": ["slug": .variable("slug")]
       ]),
       .field("shows", Shows?.self, arguments: [
         "first": 200,
         "latest": true,
-        "venueSlug": .variable("slug")
+        "venue": ["slug": .variable("slug")]
       ]),
       .field("venue", Venue?.self, arguments: ["slug": .variable("slug")]),
     ] }

@@ -7,7 +7,7 @@ public class ArtistQuery: GraphQLQuery {
   public static let operationName: String = "Artist"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Artist($slug: String!) { artist(slug: $slug) { __typename appleMusic { __typename artwork { __typename height url width } id url } id name slug website } attended: shows(artistSlug: $slug, attended: true, first: 200) { __typename edges { __typename node { __typename ...ShowList_show } } } shows(artistSlug: $slug, first: 200, latest: true) { __typename edges { __typename node { __typename ...ShowList_show } } } }"#,
+      #"query Artist($slug: String!) { artist(slug: $slug) { __typename appleMusic { __typename artwork { __typename height url width } id url } id name slug website } attended: shows(artist: { slug: $slug }, attended: true, first: 200) { __typename edges { __typename node { __typename ...ShowList_show } } } shows(artist: { slug: $slug }, first: 200, latest: true) { __typename edges { __typename node { __typename ...ShowList_show } } } }"#,
       fragments: [ShowList_show.self]
     ))
 
@@ -27,12 +27,12 @@ public class ArtistQuery: GraphQLQuery {
     public static var __selections: [ApolloAPI.Selection] { [
       .field("artist", Artist?.self, arguments: ["slug": .variable("slug")]),
       .field("shows", alias: "attended", Attended?.self, arguments: [
-        "artistSlug": .variable("slug"),
+        "artist": ["slug": .variable("slug")],
         "attended": true,
         "first": 200
       ]),
       .field("shows", Shows?.self, arguments: [
-        "artistSlug": .variable("slug"),
+        "artist": ["slug": .variable("slug")],
         "first": 200,
         "latest": true
       ]),

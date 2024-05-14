@@ -46,10 +46,10 @@ const artistQuery = gql`
       name
       website
     }
-    attended: shows(artistSlug: $slug, attended: true, first: $first) {
+    attended: shows(artist: { slug: $slug }, attended: true, first: $first) {
       ...ShowsGrid_shows
     }
-    shows(artistSlug: $slug, first: $first, latest: true) {
+    shows(artist: { slug: $slug }, first: $first, latest: true) {
       ...ShowsGrid_shows
     }
   }

@@ -33,7 +33,7 @@ export default function VenueEdit() {
 
 const venueQuery = gql`
   query VenueEdit($id: ObjID) {
-    shows(first: 200, venueId: $id) {
+    shows(first: 200, venue: { id: $id }) {
       edges {
         node {
           artists {
