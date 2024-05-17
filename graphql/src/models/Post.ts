@@ -1,8 +1,20 @@
+import type { Document } from 'mongodb';
 import { ObjectId } from 'mongodb';
+import type { PostStatus } from 'types/graphql';
 
+import type { SearchCriteria } from './Model';
 import Model from './Model';
 import type { ModelContext } from './types';
 import { getUniqueSlug } from './utils';
+
+interface PostParams {
+  status?: PostStatus;
+  search?: string;
+}
+
+interface PostCriteria extends SearchCriteria {
+  status?: PostStatus;
+}
 
 export default class Post extends Model {
   public constructor(context: ModelContext) {
@@ -11,8 +23,9 @@ export default class Post extends Model {
     this.collection = context.db.collection('post');
   }
 
-  protected parseCriteria({ status = null, search = null }) {
-    const criteria: any = {};
+  protected parseCriteria(args: PostParams) {
+    const { status = null, search = null } = args;
+    const criteria: PostCriteria = {};
     if (status) {
       criteria.status = status;
     }
@@ -22,14 +35,14 @@ export default class Post extends Model {
     return criteria;
   }
 
-  public all(args: any) {
+  public async all(args: any) {
     const { limit = 10, offset = 0 } = args;
     const criteria = this.parseCriteria(args);
 
     return this.collection.find(criteria).sort({ date: -1 }).skip(offset).limit(limit).toArray();
   }
 
-  public async insert(doc: any): Promise<ObjectId> {
+  public async insert(doc: Document): Promise<ObjectId> {
     if (!doc.title) {
       throw new Error('Post requires a title.');
     }
@@ -52,7 +65,7 @@ export default class Post extends Model {
     return id;
   }
 
-  public async updateById(id: string, doc: any) {
+  public async updateById(id: string, doc: Document) {
     const docToUpdate = { ...doc };
     if (typeof docToUpdate.featuredMedia !== 'undefined') {
       docToUpdate.featuredMedia = (docToUpdate.featuredMedia || []).map(

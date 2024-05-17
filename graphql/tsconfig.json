@@ -19,5 +19,5 @@
     "allowJs": true,
     "outDir": "lib"
   },
-	"include": ["src/**/*.ts"],
+	"include": ["src/**/*.ts", "types/*.ts"],
 }

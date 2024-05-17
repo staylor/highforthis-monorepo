@@ -1,6 +1,6 @@
-import type { AugmentedContext } from '@/models/types';
+import type Artist from '@/models/Artist';
 
-export default async function resolveTags(inputTerms: string[], { Artist }: AugmentedContext) {
+export default async function resolveTags(inputTerms: string[], { Artist }: { Artist: Artist }) {
   let ids: string[] = [];
   if (inputTerms && inputTerms.length > 0) {
     const terms = [...inputTerms];
@@ -20,7 +20,12 @@ export default async function resolveTags(inputTerms: string[], { Artist }: Augm
     });
 
     if (terms.length > 0) {
-      const termIds = await Promise.all(terms.map((name) => Artist.insert({ name })));
+      const termIds = await Promise.all(
+        terms.map(async (name) => {
+          const id = await Artist.insert({ name });
+          return id.toString();
+        })
+      );
       ids = ids.concat(termIds);
     }
   }

@@ -1,42 +1,66 @@
-import type { AugmentedContext } from '../models/types';
+import type { Document } from 'mongodb';
+import type {
+  MutationCreateArtistArgs,
+  MutationRemoveArtistArgs,
+  MutationUpdateArtistArgs,
+  QueryArtistArgs,
+  QueryArtistsArgs,
+} from 'types/graphql';
+
+import type Media from '@/models/Media';
+import type Artist from '@/models/Artist';
 
 import { parseConnection } from './utils/collection';
 
 const resolvers = {
   Artist: {
-    id(artist: any) {
+    id(artist: Document) {
       return artist._id;
     },
-    featuredMedia(artist: any, args: any, { Media }: AugmentedContext) {
+    featuredMedia(artist: Document, _: unknown, { Media }: { Media: Media }) {
       return Media.findByIds(artist.featuredMedia || []);
     },
   },
   Query: {
-    async artists(root: any, args: any, { Artist }: AugmentedContext) {
+    async artists(_: unknown, args: QueryArtistsArgs, { Artist }: { Artist: Artist }) {
       return parseConnection(Artist, args);
     },
 
-    async artist(root: any, { id, slug }: any, { Artist }: AugmentedContext) {
+    async artist(_: unknown, { id, slug }: QueryArtistArgs, { Artist }: { Artist: Artist }) {
       if (id) {
         return Artist.findOneById(id);
       }
-      return Artist.findOneBySlug(slug);
+      if (slug) {
+        return Artist.findOneBySlug(slug);
+      }
     },
   },
   Mutation: {
-    async createArtist(root: any, { input }: any, { Artist }: AugmentedContext) {
+    async createArtist(
+      _: unknown,
+      { input }: MutationCreateArtistArgs,
+      { Artist }: { Artist: Artist }
+    ) {
       const data = { ...input };
       const id = await Artist.insert(data);
-      return Artist.findOneById(id);
+      return Artist.findOneById(String(id));
     },
 
-    async updateArtist(root: any, { id, input }: any, { Artist }: AugmentedContext) {
+    async updateArtist(
+      _: unknown,
+      { id, input }: MutationUpdateArtistArgs,
+      { Artist }: { Artist: Artist }
+    ) {
       const data = { ...input };
       await Artist.updateById(id, data);
       return Artist.findOneById(id);
     },
 
-    async removeArtist(root: any, { ids }: any, { Artist }: AugmentedContext) {
+    async removeArtist(
+      _: unknown,
+      { ids }: MutationRemoveArtistArgs,
+      { Artist }: { Artist: Artist }
+    ) {
       return Promise.all(ids.map((id: string) => Artist.removeById(id)))
         .then(() => true)
         .catch(() => false);

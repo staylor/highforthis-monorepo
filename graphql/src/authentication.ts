@@ -3,19 +3,24 @@ import type { VerifiedCallback } from 'passport-jwt';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import bcrypt from 'bcrypt';
 import jwt from 'jwt-simple';
-import { ObjectId } from 'mongodb';
 import type { Request, Response, NextFunction, Router } from 'express';
+import type { Document } from 'mongodb';
+
+import type User from './models/User';
 
 type JWTPayload = {
   userId: string;
 };
 
-async function userFromPayload({ context: { User } }: Request, jwtPayload: JWTPayload) {
+async function userFromPayload(
+  { context: { User } }: { context: { User: User } },
+  jwtPayload: JWTPayload
+) {
   if (!jwtPayload.userId) {
     throw new Error('No userId in JWT');
   }
 
-  const user = await User.findOneById(new ObjectId(jwtPayload.userId));
+  const user = await User.findOneById(jwtPayload.userId);
   return user;
 }
 
@@ -47,7 +52,7 @@ export function initialize(app: Router) {
 }
 
 export function jwtMiddleware(req: Request, res: Response, next: NextFunction) {
-  passport.authenticate('jwt', { session: false }, (_err: any, user: any) => {
+  passport.authenticate('jwt', { session: false }, (_err: any, user: Document) => {
     if (user) {
       req.context.authUser = user;
     }

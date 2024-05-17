@@ -1,35 +1,44 @@
-import type { AugmentedContext } from '../models/types';
+import type { Document } from 'mongodb';
+import type {
+  MutationCreateUserArgs,
+  MutationRemoveUserArgs,
+  MutationUpdateUserArgs,
+  QueryUserArgs,
+  QueryUsersArgs,
+} from 'types/graphql';
+
+import type User from '@/models/User';
 
 import { parseConnection } from './utils/collection';
 
 const resolvers = {
   User: {
-    id(user: any) {
+    id(user: Document) {
       return user._id;
     },
   },
   Query: {
-    async users(root: any, args: any, { User }: AugmentedContext) {
+    async users(_: unknown, args: QueryUsersArgs, { User }: { User: User }) {
       return parseConnection(User, args);
     },
 
-    user(root: any, { id }: any, { User }: AugmentedContext) {
+    user(_: unknown, { id }: QueryUserArgs, { User }: { User: User }) {
       return User.findOneById(id);
     },
   },
   Mutation: {
-    async createUser(root: any, { input }: any, { User }: AugmentedContext) {
+    async createUser(_: unknown, { input }: MutationCreateUserArgs, { User }: { User: User }) {
       const id = await User.insert(input);
-      return User.findOneById(id);
+      return User.findOneById(String(id));
     },
 
-    async updateUser(root: any, { id, input }: any, { User }: AugmentedContext) {
+    async updateUser(_: unknown, { id, input }: MutationUpdateUserArgs, { User }: { User: User }) {
       await User.updateById(id, input);
       return User.findOneById(id);
     },
 
-    async removeUser(root: any, { ids }: any, { User }: AugmentedContext) {
-      return Promise.all(ids.map((id: string) => User.removeById(id)))
+    async removeUser(_: unknown, { ids }: MutationRemoveUserArgs, { User }: { User: User }) {
+      return Promise.all(ids.map((id) => User.removeById(id)))
         .then(() => true)
         .catch(() => false);
     },

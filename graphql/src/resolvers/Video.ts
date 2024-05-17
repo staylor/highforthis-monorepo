@@ -1,45 +1,60 @@
-import type { AugmentedContext } from '../models/types';
+import type { Document } from 'mongodb';
+import type {
+  MutationCreateVideoArgs,
+  MutationRemoveVideoArgs,
+  MutationUpdateVideoArgs,
+  QueryVideoArgs,
+  QueryVideosArgs,
+} from 'types/graphql';
+
+import type Video from '@/models/Video';
 
 import { parseConnection } from './utils/collection';
 
 const resolvers = {
   Video: {
-    id(video: any) {
+    id(video: Document) {
       return video._id;
     },
   },
   VideoConnection: {
-    async years(connection: any, args: any, { Video }: AugmentedContext) {
+    async years(_0: unknown, _1: unknown, { Video }: { Video: Video }) {
       const years = (await Video.collection.distinct('year')).filter(Boolean);
       years.sort();
       return years.reverse();
     },
   },
   Query: {
-    async videos(root: any, args: any, { Video }: AugmentedContext) {
+    async videos(_: unknown, args: QueryVideosArgs, { Video }: { Video: Video }) {
       return parseConnection(Video, args);
     },
 
-    video(root: any, { id, slug }: any, { Video }: AugmentedContext) {
+    video(_: unknown, { id, slug }: QueryVideoArgs, { Video }: { Video: Video }) {
       if (id) {
         return Video.findOneById(id);
       }
-      return Video.findOneBySlug(slug);
+      if (slug) {
+        return Video.findOneBySlug(slug);
+      }
     },
   },
   Mutation: {
-    async createVideo(root: any, { input }: any, { Video }: AugmentedContext) {
+    async createVideo(_: unknown, { input }: MutationCreateVideoArgs, { Video }: { Video: Video }) {
       const id = await Video.insert(input);
-      return Video.findOneById(id);
+      return Video.findOneById(String(id));
     },
 
-    async updateVideo(root: any, { id, input }: any, { Video }: AugmentedContext) {
+    async updateVideo(
+      _: unknown,
+      { id, input }: MutationUpdateVideoArgs,
+      { Video }: { Video: Video }
+    ) {
       await Video.updateById(id, input);
       return Video.findOneById(id);
     },
 
-    async removeVideo(root: any, { ids }: any, { Video }: AugmentedContext) {
-      return Promise.all(ids.map((id: string) => Video.removeById(id)))
+    async removeVideo(_: unknown, { ids }: MutationRemoveVideoArgs, { Video }: { Video: Video }) {
+      return Promise.all(ids.map((id) => Video.removeById(id)))
         .then(() => true)
         .catch(() => false);
     },

@@ -12,9 +12,9 @@ type CacheEntries = Map<string, CacheWithExpiry>;
 export const createClientCache = (maxAge?: number) => {
   const expiry = maxAge || ONE_MINUTE;
   const cache: CacheEntries = new Map();
-  const clientLoader = async ({ serverLoader, params }: ClientLoaderFunctionArgs) => {
+  const clientLoader = async ({ serverLoader, params, request }: ClientLoaderFunctionArgs) => {
     const now = Date.now();
-    const key = JSON.stringify(params);
+    const key = `${request.url}${JSON.stringify(params)}`;
     const cached = cache.get(key);
     if (cached && now < cached.expiry) {
       return cached.data;

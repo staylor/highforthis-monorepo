@@ -19,12 +19,12 @@ interface ShowParams {
   limit?: number;
 }
 
-interface ShowFilters {
-  date?: any;
+interface ShowCriteria {
+  date?: { $gte: number };
   attended?: boolean;
   artists?: string;
   venue?: string;
-  title?: any;
+  title?: { $regex: RegExp };
 }
 
 export default class Show extends Model {
@@ -57,7 +57,7 @@ export default class Show extends Model {
     venue = '',
     search = '',
   }: ShowParams) {
-    const criteria: ShowFilters = {};
+    const criteria: ShowCriteria = {};
     if (attended) {
       criteria.attended = true;
     } else if (latest) {

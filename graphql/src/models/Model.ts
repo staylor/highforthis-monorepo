@@ -1,22 +1,23 @@
-import type { Collection } from 'mongodb';
+import type { Collection, Document } from 'mongodb';
 import { ObjectId } from 'mongodb';
 import DataLoader from 'dataloader';
 
 import type { ModelContext } from './types';
 
+export interface SearchCriteria {
+  $text?: { $search: string };
+}
+
 async function findByIds(collection: Collection, ids: readonly string[]): Promise<any> {
   return collection
     .find({
       _id: {
-        $in: ids.map((id: any) =>
-          // a result of settings not having a hexed ID - this is legacy garbage
-          id instanceof ObjectId ? id : id.match(/0-9/) ? new ObjectId(id) : id
-        ),
+        $in: ids.map((id) => new ObjectId(id)),
       },
     })
     .toArray()
     .then((docs) => {
-      const idMap: any = {};
+      const idMap: Record<string, Document> = {};
       // make a map of documents keyed by id (string)
       docs.forEach((d) => {
         idMap[d._id.toString()] = d;
@@ -30,7 +31,7 @@ export default class Model {
   // @ts-ignore
   public collection: Collection;
 
-  protected context: any;
+  protected context: ModelContext;
 
   protected loader: DataLoader<string, any>;
 
@@ -53,27 +54,28 @@ export default class Model {
     });
   }
 
-  protected parseCriteria({ search = '' }: any) {
-    const criteria: any = {};
+  protected parseCriteria(args: any) {
+    const { search = '' } = args;
+    const criteria: SearchCriteria = {};
     if (search) {
       criteria.$text = { $search: search };
     }
-    return criteria;
+    return criteria as any;
   }
 
   public async all(args: any) {
     const { limit = 10, offset = 0 } = args;
-    const criteria: any = this.parseCriteria(args);
+    const criteria = this.parseCriteria(args);
 
     return this.collection.find(criteria).skip(offset).limit(limit).toArray();
   }
 
   public async count(args: any = {}): Promise<number> {
-    const criteria: any = this.parseCriteria(args);
+    const criteria = this.parseCriteria(args);
     return this.collection.countDocuments(criteria);
   }
 
-  public async insert(doc: any): Promise<ObjectId> {
+  public async insert(doc: Document): Promise<ObjectId> {
     const now = Date.now();
     const docToInsert = {
       ...doc,
@@ -84,7 +86,7 @@ export default class Model {
     return id;
   }
 
-  public async updateById(id: string, doc: any) {
+  public async updateById(id: string, doc: Document) {
     const ret = await this.collection.updateOne(
       { _id: new ObjectId(id) },
       {

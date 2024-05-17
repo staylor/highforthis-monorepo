@@ -1,3 +1,5 @@
+import type { Document } from 'mongodb';
+
 import type { ModelInterface } from '../../models/types';
 
 function base64(i: string) {
@@ -35,7 +37,7 @@ export async function parseConnection(instance: ModelInterface, connectionArgs: 
 
   const count = await instance.count({ ...rest });
 
-  return instance.all(args).then((items: any[]) => {
+  return instance.all(args).then((items: Document[]) => {
     const arrayLength = count;
     const sliceEnd = args.offset + items.length;
     const beforeOffset = before ? cursorToOffset(before) : items.length;
@@ -49,7 +51,7 @@ export async function parseConnection(instance: ModelInterface, connectionArgs: 
       endOffset = startOffset + first;
     }
 
-    const edges = items.map((value: any, index: number) => ({
+    const edges = items.map((value, index) => ({
       cursor: offsetToCursor(startOffset + index),
       node: value,
     }));

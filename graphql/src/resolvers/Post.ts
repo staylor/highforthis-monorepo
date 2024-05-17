@@ -1,38 +1,58 @@
-import type { AugmentedContext } from '../models/types';
+import type { Document } from 'mongodb';
+import { PostStatus } from 'types/graphql';
+import type {
+  MutationRemovePostArgs,
+  MutationUpdatePostArgs,
+  MutationCreatePostArgs,
+  QueryPostArgs,
+  QueryPostsArgs,
+} from 'types/graphql';
+
+import type Media from '@/models/Media';
+import type Artist from '@/models/Artist';
+import type Post from '@/models/Post';
 
 import { parseConnection } from './utils/collection';
 import resolveTags from './utils/resolveTags';
 
 const resolvers = {
   Post: {
-    id(post: any) {
+    id(post: Document) {
       return post._id;
     },
-    date(post: any) {
+    date(post: Document) {
       return post.date || post.createdAt;
     },
-    featuredMedia(post: any, args: any, { Media }: AugmentedContext) {
+    featuredMedia(post: Document, _: unknown, { Media }: { Media: Media }) {
       return Media.findByIds(post.featuredMedia || []);
     },
-    artists(post: any, args: any, { Artist }: AugmentedContext) {
+    artists(post: Document, _: unknown, { Artist }: { Artist: Artist }) {
       return Artist.findByIds(post.artists || []);
     },
   },
   Query: {
-    async posts(root: any, args: any, { Post, authUser }: AugmentedContext) {
+    async posts(
+      _: unknown,
+      args: QueryPostsArgs,
+      { Post, authUser }: { Post: Post; authUser: Document }
+    ) {
       const connectionArgs = { ...args };
       const userCanSee = authUser && authUser.roles && authUser.roles.includes('admin');
       if (!userCanSee) {
-        connectionArgs.status = 'PUBLISH';
+        connectionArgs.status = PostStatus.Publish;
       }
       return parseConnection(Post, connectionArgs);
     },
 
-    async post(root: any, { id, slug }: any, { Post, authUser }: AugmentedContext) {
+    async post(
+      _: unknown,
+      { id, slug }: QueryPostArgs,
+      { Post, authUser }: { Post: Post; authUser: Document }
+    ) {
       let post;
       if (id) {
         post = await Post.findOneById(id);
-      } else {
+      } else if (slug) {
         post = await Post.findOneBySlug(slug);
       }
 
@@ -45,24 +65,32 @@ const resolvers = {
     },
   },
   Mutation: {
-    async createPost(root: any, { input }: any, { Post, Artist }: AugmentedContext) {
+    async createPost(
+      _: unknown,
+      { input }: MutationCreatePostArgs,
+      { Post, Artist }: { Post: Post; Artist: Artist }
+    ) {
       const data = { ...input };
       if (input.artists && input.artists.length > 0) {
-        data.artists = await resolveTags(input.artists, {
+        data.artists = await resolveTags(input.artists as string[], {
           Artist,
         });
       } else {
         data.artists = [];
       }
 
-      const id: any = await Post.insert(data);
-      return Post.findOneById(id);
+      const id = await Post.insert(data);
+      return Post.findOneById(String(id));
     },
 
-    async updatePost(root: any, { id, input }: any, { Post, Artist }: AugmentedContext) {
+    async updatePost(
+      _: unknown,
+      { id, input }: MutationUpdatePostArgs,
+      { Post, Artist }: { Post: Post; Artist: Artist }
+    ) {
       const data = { ...input };
       if (input.artists && input.artists.length > 0) {
-        data.artists = await resolveTags(input.artists, {
+        data.artists = await resolveTags(input.artists as string[], {
           Artist,
         });
       } else {
@@ -73,8 +101,8 @@ const resolvers = {
       return Post.findOneById(id);
     },
 
-    async removePost(root: any, { ids }: any, { Post }: AugmentedContext) {
-      return Promise.all(ids.map((id: any) => Post.removeById(id)))
+    async removePost(_: unknown, { ids }: MutationRemovePostArgs, { Post }: { Post: Post }) {
+      return Promise.all(ids.map((id) => Post.removeById(id)))
         .then(() => true)
         .catch(() => false);
     },

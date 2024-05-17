@@ -1,18 +1,13 @@
-import type { AugmentedContext } from '../models/types';
+import type { Document } from 'mongodb';
 
-interface Args {
-  [key: string]: any;
-}
+import type Media from '@/models/Media';
+import type Settings from '@/models/Settings';
 
-interface Result {
-  [key: string]: any;
-}
-
-interface Root {
-  [key: string]: any;
-}
-
-async function updateSettings(root: Root, { id, input }: Args, { Settings }: AugmentedContext) {
+async function updateSettings(
+  _: unknown,
+  { id, input }: { id: string; input: any },
+  { Settings }: { Settings: Settings }
+) {
   const exists = await Settings.findOneById(id);
   if (!exists) {
     const newSettings = input;
@@ -25,14 +20,14 @@ async function updateSettings(root: Root, { id, input }: Args, { Settings }: Aug
 }
 
 const resolveId = {
-  id(settings: Result) {
+  id(settings: Document) {
     return settings._id;
   },
 };
 
 const resolver =
   (id: string) =>
-  (root: Root, args: Args, { Settings }: AugmentedContext) =>
+  (_0: unknown, _1: unknown, { Settings }: { Settings: Settings }) =>
     Settings.findOneById(id);
 
 const resolvers = {
@@ -41,7 +36,7 @@ const resolvers = {
   MediaSettings: resolveId,
   PodcastSettings: {
     ...resolveId,
-    image(settings: Result, args: Args, { Media }: AugmentedContext) {
+    image(settings: Document, _: unknown, { Media }: { Media: Media }) {
       return settings.image ? Media.findOneById(settings.image) : null;
     },
   },

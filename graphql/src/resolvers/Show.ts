@@ -1,23 +1,35 @@
+import type { Document } from 'mongodb';
 import { ObjectId } from 'mongodb';
+import type {
+  MutationCreateShowArgs,
+  MutationRemoveShowArgs,
+  MutationUpdateShowArgs,
+  QueryShowArgs,
+  QueryShowStatsArgs,
+  QueryShowsArgs,
+  UpdateShowInput,
+} from 'types/graphql';
 
-import type { AugmentedContext } from '../models/types';
+import type Artist from '@/models/Artist';
+import type Venue from '@/models/Venue';
+import type Show from '@/models/Show';
 
 import { parseConnection, emptyConnection } from './utils/collection';
 
 const resolvers = {
   Show: {
-    id(show: any) {
+    id(show: Document) {
       return show._id;
     },
-    artists(show: any, _: any, { Artist }: AugmentedContext) {
+    artists(show: Document, _: unknown, { Artist }: { Artist: Artist }) {
       return Artist.findByIds(show.artists);
     },
-    venue(show: any, _: any, { Venue }: AugmentedContext) {
+    venue(show: Document, _: unknown, { Venue }: { Venue: Venue }) {
       return Venue.findOneById(show.venue);
     },
   },
   ShowEntity: {
-    __resolveType(entity: any) {
+    __resolveType(entity: Document) {
       if (entity.type === 'artist') {
         return 'Artist';
       }
@@ -27,9 +39,13 @@ const resolvers = {
     },
   },
   Query: {
-    async shows(_: any, args: any, { Show, Artist, Venue }: AugmentedContext) {
+    async shows(
+      _: unknown,
+      args: QueryShowsArgs,
+      { Show, Artist, Venue }: { Show: Show; Artist: Artist; Venue: Venue }
+    ) {
       const { artist, venue, ...rest } = args;
-      const connectionArgs = rest;
+      const connectionArgs: Document = rest;
 
       if (artist?.id) {
         connectionArgs.artist = new ObjectId(String(artist.id));
@@ -53,27 +69,29 @@ const resolvers = {
       return parseConnection(Show, connectionArgs);
     },
 
-    async show(_: any, { id, slug }: any, { Show }: AugmentedContext) {
+    async show(_: unknown, { id, slug }: QueryShowArgs, { Show }: { Show: Show }) {
       if (id) {
         return Show.findOneById(id);
       }
-      return Show.findOneBySlug(slug);
+      if (slug) {
+        return Show.findOneBySlug(slug);
+      }
     },
 
-    async showStats(_: any, { entity }: any, { Show }: AugmentedContext) {
+    async showStats(_: unknown, { entity }: QueryShowStatsArgs, { Show }: { Show: Show }) {
       return Show.stats(entity.toLowerCase());
     },
   },
   Mutation: {
-    async createShow(_: any, { input }: any, { Show }: AugmentedContext) {
+    async createShow(_: unknown, { input }: MutationCreateShowArgs, { Show }: { Show: Show }) {
       const id = await Show.insert(input);
-      return Show.findOneById(id);
+      return Show.findOneById(String(id));
     },
 
-    async updateShow(_: any, { id, input }: any, { Show }: AugmentedContext) {
-      const values = { ...input };
+    async updateShow(_: unknown, { id, input }: MutationUpdateShowArgs, { Show }: { Show: Show }) {
+      const values: Document = { ...input };
       for (const key of ['title', 'notes', 'url']) {
-        if (!input[key]) {
+        if (!input[key as keyof UpdateShowInput]) {
           values[key] = null;
         }
       }
@@ -81,7 +99,7 @@ const resolvers = {
       return Show.findOneById(id);
     },
 
-    async removeShow(_: any, { ids }: any, { Show }: AugmentedContext) {
+    async removeShow(_: unknown, { ids }: MutationRemoveShowArgs, { Show }: { Show: Show }) {
       return Promise.all(ids.map((id: string) => Show.removeById(id)))
         .then(() => true)
         .catch(() => false);

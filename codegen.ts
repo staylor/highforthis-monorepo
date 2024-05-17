@@ -18,6 +18,12 @@ const config: CodegenConfig = {
         minify: true,
       },
     },
+    './graphql/types/graphql.ts': {
+      plugins: ['typescript'],
+      config: {
+        useTypeImports: true,
+      },
+    },
     './web/apollo/fragmentMatcher.js': {
       plugins: ['fragment-matcher'],
     },

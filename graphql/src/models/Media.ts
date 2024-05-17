@@ -4,6 +4,7 @@ import path from 'node:path';
 import { ObjectId } from 'mongodb';
 
 import type { FileInfo, ModelContext } from './types';
+import type { SearchCriteria } from './Model';
 import Model from './Model';
 
 const deleteFile = (file: string): Promise<void> =>
@@ -16,10 +17,15 @@ const deleteFile = (file: string): Promise<void> =>
     });
   });
 
-interface MediaFilters {
+interface MediaParams {
+  mimeType?: string;
+  search?: string;
+  type?: string;
+}
+
+interface MediaCriteria extends SearchCriteria {
   type?: string;
   mimeType?: string;
-  $text?: { $search: string };
 }
 
 export default class Media extends Model {
@@ -29,14 +35,9 @@ export default class Media extends Model {
     this.collection = context.db.collection('media');
   }
 
-  public all({
-    limit = 10,
-    offset = 0,
-    type = null,
-    mimeType = null,
-    search = null,
-  }): Promise<any> {
-    const criteria: MediaFilters = {};
+  protected parseCriteria(args: MediaParams) {
+    const { type = null, mimeType = null, search = null } = args;
+    const criteria: MediaCriteria = {};
     if (type) {
       criteria.type = type;
     }
@@ -46,6 +47,12 @@ export default class Media extends Model {
     if (search) {
       criteria.$text = { $search: search };
     }
+    return criteria;
+  }
+
+  public async all(args: any) {
+    const { limit = 10, offset = 0 } = args;
+    const criteria = this.parseCriteria(args);
 
     return this.collection
       .find(criteria)

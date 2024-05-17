@@ -1,10 +1,11 @@
-import { ObjectId } from 'mongodb';
+import { type Document } from 'mongodb';
 
-import type { AugmentedContext } from '../models/types';
+import type Media from '@/models/Media';
+import type Video from '@/models/Video';
 
 const resolvers = {
   EditorNode: {
-    __resolveType(node: any) {
+    __resolveType(node: Document) {
       if (node.type === 'code') {
         return 'CodeNode';
       }
@@ -33,13 +34,13 @@ const resolvers = {
     },
   },
   ImageNode: {
-    image(data: any, args: any, { Media }: AugmentedContext) {
-      return Media.findOneById(new ObjectId(data.imageId));
+    image(data: Document, _: unknown, { Media }: { Media: Media }) {
+      return Media.findOneById(data.imageId);
     },
   },
   VideoNode: {
-    video(data: any, args: any, { Video }: AugmentedContext) {
-      return Video.findOneById(new ObjectId(data.videoId));
+    video(data: Document, _: unknown, { Video }: { Video: Video }) {
+      return Video.findOneById(data.videoId);
     },
   },
 };

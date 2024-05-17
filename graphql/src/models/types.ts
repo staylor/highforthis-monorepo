@@ -11,10 +11,6 @@ export interface ModelContext {
   db: Db;
 }
 
-export type AugmentedContext = {
-  [key: string]: any;
-};
-
 export interface FileInfo {
   fileName: string;
   destination: string;

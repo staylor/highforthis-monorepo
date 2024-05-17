@@ -1,3 +1,4 @@
+import type { EntityParams, EntityCriteria } from './Entity';
 import Entity from './Entity';
 import type { ModelContext } from './types';
 
@@ -8,8 +9,8 @@ export default class Venue extends Entity {
     this.collection = context.db.collection('venue');
   }
 
-  protected parseCriteria(params: any) {
-    const criteria: any = {};
+  protected parseCriteria(params: EntityParams) {
+    const criteria: EntityCriteria = {};
     const { filtered = false, search = '' } = params;
     if (search) {
       criteria.name = { $regex: new RegExp(search, 'i') };

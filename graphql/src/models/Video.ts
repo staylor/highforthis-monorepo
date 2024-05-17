@@ -1,19 +1,22 @@
-import type { ObjectId } from 'mongodb';
+import type { Document, ObjectId } from 'mongodb';
 
 import Model from './Model';
 import { getUniqueSlug } from './utils';
 import type { ModelContext } from './types';
 
-interface AllOptions {
-  limit: number;
-  offset?: number;
+interface VideoParams {
   year?: string;
   search?: string;
 }
 
-interface VideoFilters {
+interface AllOptions extends VideoParams {
+  limit?: number;
+  offset?: number;
+}
+
+interface VideoCriteria {
   year?: number;
-  title?: any;
+  title?: { $regex: RegExp };
 }
 
 export default class Video extends Model {
@@ -23,8 +26,9 @@ export default class Video extends Model {
     this.collection = context.db.collection('video');
   }
 
-  protected parseCriteria({ year = '', search = '' }: AllOptions) {
-    const criteria: VideoFilters = {};
+  protected parseCriteria(args: VideoParams) {
+    const { year = '', search = '' } = args;
+    const criteria: VideoCriteria = {};
     if (year) {
       criteria.year = parseInt(year, 10);
     }
@@ -46,8 +50,8 @@ export default class Video extends Model {
       .toArray();
   }
 
-  public async insert(doc: any): Promise<ObjectId> {
-    const docToInsert = {
+  public async insert(doc: Document): Promise<ObjectId> {
+    const docToInsert: Document = {
       ...doc,
       createdAt: Date.now(),
       updatedAt: Date.now(),

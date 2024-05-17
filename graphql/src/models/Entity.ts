@@ -1,12 +1,27 @@
+import type { Document } from 'mongodb';
 import { ObjectId } from 'mongodb';
 
 import Model from './Model';
 import { getUniqueSlug } from './utils';
 
+export interface EntityParams {
+  search?: string;
+  filtered?: boolean;
+}
+
+type RegEx = { $regex: RegExp };
+type Falsy = { $in: [null, false] };
+
+export interface EntityCriteria {
+  name?: RegEx;
+  excludeFromSearch?: Falsy;
+  permanentlyClosed?: Falsy;
+}
+
 export default class Entity extends Model {
-  protected parseCriteria(params: any) {
-    const criteria: any = {};
-    const { filtered = false, search = '' } = params;
+  protected parseCriteria(args: EntityParams) {
+    const criteria: EntityCriteria = {};
+    const { filtered = false, search = '' } = args;
     if (search) {
       criteria.name = { $regex: new RegExp(search, 'i') };
     }
@@ -16,7 +31,7 @@ export default class Entity extends Model {
     return criteria;
   }
 
-  public all(args: any) {
+  public async all(args: any) {
     const { limit = 10, offset = 0 } = args;
     const criteria = this.parseCriteria(args);
 
@@ -29,7 +44,7 @@ export default class Entity extends Model {
       .toArray();
   }
 
-  public async insert(doc: any): Promise<ObjectId> {
+  public async insert(doc: Document): Promise<ObjectId> {
     const slug = await getUniqueSlug(this.collection, doc.name);
     const featuredMedia = (doc.featuredMedia || []).map((id: string) => new ObjectId(id));
     const docToInsert = {
@@ -43,7 +58,7 @@ export default class Entity extends Model {
     return id;
   }
 
-  public async updateById(id: string, doc: any) {
+  public async updateById(id: string, doc: Document) {
     const docToUpdate = { ...doc };
     if (typeof docToUpdate.featuredMedia !== 'undefined') {
       docToUpdate.featuredMedia = (docToUpdate.featuredMedia || []).map(
