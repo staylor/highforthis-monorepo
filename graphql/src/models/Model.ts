@@ -12,7 +12,10 @@ async function findByIds(collection: Collection, ids: readonly string[]): Promis
   return collection
     .find({
       _id: {
-        $in: ids.map((id) => new ObjectId(id)),
+        $in: ids.map((id: any) =>
+          // a result of settings not having a hexed ID - this is legacy garbage
+          id instanceof ObjectId ? id : id.match(/0-9/) ? new ObjectId(id) : id
+        ),
       },
     })
     .toArray()
