@@ -142,15 +142,18 @@ input CreateUserInput {
 }
 
 input CreateVenueInput {
-  address: String
   capacity: String
+  city: String
   coordinates: VenueCoordinatesInput
   description: String
   excludeFromSearch: Boolean
   featuredMedia: [String]
   name: String!
   permanentlyClosed: Boolean
+  postalCode: String
   slug: String
+  state: String
+  streetAddress: String
   website: String
 }
 
@@ -666,15 +669,18 @@ input UpdateUserInput {
 }
 
 input UpdateVenueInput {
-  address: String
   capacity: String
+  city: String
   coordinates: VenueCoordinatesInput
   description: String
   excludeFromSearch: Boolean
   featuredMedia: [String]
   name: String
   permanentlyClosed: Boolean
+  postalCode: String
   slug: String
+  state: String
+  streetAddress: String
   website: String
 }
 
@@ -712,6 +718,7 @@ type UserEdge {
 type Venue {
   address: String
   capacity: String
+  city: String
   coordinates: VenueCoordinates
   description: String
   excludeFromSearch: Boolean
@@ -719,7 +726,10 @@ type Venue {
   id: ObjID!
   name: String!
   permanentlyClosed: Boolean
+  postalCode: String
   slug: String!
+  state: String
+  streetAddress: String
   website: String
 }
 

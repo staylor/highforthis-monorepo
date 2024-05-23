@@ -16,7 +16,6 @@ export const slug = (field: string) => ({
   prop: 'slug',
   render: (data: any) => data[field]?.slug,
   condition: (data: any) => data[field]?.slug,
-  editable: false,
 });
 
 export const description = (field: string): FieldUnion => ({

@@ -50,10 +50,25 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
       render: ({ venue }) => venue?.capacity,
     },
     {
-      label: 'Address',
-      prop: 'address',
+      label: 'Street Address',
+      prop: 'streetAddress',
       type: 'textarea',
-      render: ({ venue }) => venue?.address,
+      render: ({ venue }) => venue?.streetAddress,
+    },
+    {
+      label: 'City',
+      prop: 'city',
+      render: ({ venue }) => venue?.city,
+    },
+    {
+      label: 'State',
+      prop: 'state',
+      render: ({ venue }) => venue?.state,
+    },
+    {
+      label: 'Postal Code',
+      prop: 'postalCode',
+      render: ({ venue }) => venue?.postalCode,
     },
     {
       label: 'Coordinates',
@@ -99,8 +114,8 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
 VenueForm.fragments = {
   venue: gql`
     fragment VenueForm_venue on Venue {
-      address
       capacity
+      city
       coordinates {
         latitude
         longitude
@@ -113,7 +128,10 @@ VenueForm.fragments = {
       id
       name
       permanentlyClosed
+      postalCode
       slug
+      state
+      streetAddress
       website
     }
     ${FeaturedMedia.fragments.media}

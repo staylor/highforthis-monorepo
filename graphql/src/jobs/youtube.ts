@@ -119,7 +119,14 @@ async function updateVideo(
 }
 
 async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<string[]> {
-  const items = await fetchPlaylistItems(playlistId);
+  let items;
+  try {
+    items = await fetchPlaylistItems(playlistId);
+  } catch (e) {
+    console.log('Fetch playlist', playlistId, 'failed :(');
+    return [];
+  }
+
   const newIds = items.map((item) => item.contentDetails.videoId);
   const cursor = await db
     .collection('video')
@@ -164,7 +171,13 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
 }
 
 export default async (db: Db) => {
-  const response: any = await fetchPlaylists();
+  let response: any;
+  try {
+    response = await fetchPlaylists();
+  } catch (e) {
+    console.log('Fetch playlists failed :(');
+    return;
+  }
 
   await Promise.all(
     response?.items?.map((playlist: any) => {

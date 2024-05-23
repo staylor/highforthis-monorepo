@@ -11,6 +11,10 @@ const Venue = `#graphql
     description: String
     capacity: String
     address: String
+    streetAddress: String
+    city: String
+    state: String
+    postalCode: String
     coordinates: VenueCoordinates
     featuredMedia: [MediaUpload!]
     website: String
@@ -35,7 +39,10 @@ const Venue = `#graphql
     description: String
     featuredMedia: [String]
     website: String
-    address: String
+    streetAddress: String
+    city: String
+    state: String
+    postalCode: String
     capacity: String
     coordinates: VenueCoordinatesInput
     excludeFromSearch: Boolean
@@ -53,7 +60,10 @@ const Venue = `#graphql
     description: String
     featuredMedia: [String]
     website: String
-    address: String
+    streetAddress: String
+    city: String
+    state: String
+    postalCode: String
     capacity: String
     coordinates: VenueCoordinatesInput
     excludeFromSearch: Boolean

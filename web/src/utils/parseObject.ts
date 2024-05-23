@@ -46,14 +46,10 @@ function parseBoolean(val: any) {
   return val === 'true';
 }
 
-type AnyObj = Record<string, any>;
-
-const skipKeys = ['capacity'];
-
-export default function parseObject(obj: AnyObj) {
-  var result: AnyObj = {};
+export default function parseObject(obj: Record<string, any>, skipKeys?: string[]) {
+  var result: Record<string, any> = {};
   for (const key in obj) {
-    if (skipKeys.includes(key)) {
+    if (skipKeys?.includes(key)) {
       result[key] = obj[key];
       continue;
     }

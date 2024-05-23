@@ -22,6 +22,7 @@ export const action: ActionFunction = ({ request, context, params }) => {
     context,
     mutation: venueMutation,
     variables: { id: params.id, input: { excludeFromSearch: false, permanentlyClosed: false } },
+    parseFormDataArgs: { skipKeys: ['capacity', 'postalCode'] },
   });
 };
 

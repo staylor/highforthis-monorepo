@@ -3,6 +3,7 @@ import { redirect } from '@remix-run/server-runtime';
 import type { DocumentNode } from 'graphql';
 import type { OperationVariables } from '@apollo/client';
 
+import type { ParseFormDataArgs } from './mutate';
 import mutate, { parseFormData } from './mutate';
 
 export const post = async (url: string, data: AppData) =>
@@ -25,12 +26,14 @@ export const handleSubmission = async ({
   mutation,
   variables,
   createMutation,
+  parseFormDataArgs,
 }: Pick<ActionFunctionArgs, 'request' | 'context'> & {
   mutation: DocumentNode;
   variables?: OperationVariables;
   createMutation?: string;
+  parseFormDataArgs?: ParseFormDataArgs;
 }) => {
-  const input = await parseFormData(request);
+  const input = await parseFormData(request, parseFormDataArgs);
   if (input.editorState) {
     input.editorState = JSON.parse(input.editorState);
     // this seems like a bug in Lexical

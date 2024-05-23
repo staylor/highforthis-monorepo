@@ -17,6 +17,9 @@ const resolvers = {
     id(venue: Document) {
       return venue._id;
     },
+    address(venue: Document) {
+      return `${venue.streetAddress}\n${venue.city}, ${venue.state} ${venue.postalCode}`;
+    },
     featuredMedia(venue: Document, _: unknown, { Media }: { Media: Media }) {
       return Media.findByIds(venue.featuredMedia || []);
     },

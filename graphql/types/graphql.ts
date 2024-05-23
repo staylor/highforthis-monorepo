@@ -165,15 +165,18 @@ export type CreateUserInput = {
 };
 
 export type CreateVenueInput = {
-  address?: InputMaybe<Scalars['String']['input']>;
   capacity?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
   coordinates?: InputMaybe<VenueCoordinatesInput>;
   description?: InputMaybe<Scalars['String']['input']>;
   excludeFromSearch?: InputMaybe<Scalars['Boolean']['input']>;
   featuredMedia?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   name: Scalars['String']['input'];
   permanentlyClosed?: InputMaybe<Scalars['Boolean']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  streetAddress?: InputMaybe<Scalars['String']['input']>;
   website?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -968,15 +971,18 @@ export type UpdateUserInput = {
 };
 
 export type UpdateVenueInput = {
-  address?: InputMaybe<Scalars['String']['input']>;
   capacity?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
   coordinates?: InputMaybe<VenueCoordinatesInput>;
   description?: InputMaybe<Scalars['String']['input']>;
   excludeFromSearch?: InputMaybe<Scalars['Boolean']['input']>;
   featuredMedia?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   name?: InputMaybe<Scalars['String']['input']>;
   permanentlyClosed?: InputMaybe<Scalars['Boolean']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  streetAddress?: InputMaybe<Scalars['String']['input']>;
   website?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1018,6 +1024,7 @@ export type Venue = {
   __typename?: 'Venue';
   address?: Maybe<Scalars['String']['output']>;
   capacity?: Maybe<Scalars['String']['output']>;
+  city?: Maybe<Scalars['String']['output']>;
   coordinates?: Maybe<VenueCoordinates>;
   description?: Maybe<Scalars['String']['output']>;
   excludeFromSearch?: Maybe<Scalars['Boolean']['output']>;
@@ -1025,7 +1032,10 @@ export type Venue = {
   id: Scalars['ObjID']['output'];
   name: Scalars['String']['output'];
   permanentlyClosed?: Maybe<Scalars['Boolean']['output']>;
+  postalCode?: Maybe<Scalars['String']['output']>;
   slug: Scalars['String']['output'];
+  state?: Maybe<Scalars['String']['output']>;
+  streetAddress?: Maybe<Scalars['String']['output']>;
   website?: Maybe<Scalars['String']['output']>;
 };
 

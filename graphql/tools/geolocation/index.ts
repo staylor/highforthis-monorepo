@@ -21,7 +21,8 @@ const term = new Venue({ db });
 const venues = await term.all({ limit: 200 });
 
 for (const venue of venues) {
-  if (!venue.address) {
+  if (!venue.streetAddress) {
+    console.log('No addresss for: ', venue.name);
     continue;
   }
 
@@ -44,7 +45,9 @@ for (const venue of venues) {
     throw new Error('GOOGLE_MAPS_GEOLOCATION_API_KEY must be set');
   }
 
-  const geolocation = await fetch(apiUrl(venue.address))
+  const address = `${venue.streetAddress}, ${venue.city}, ${venue.state} ${venue.postalCode}`;
+
+  const geolocation = await fetch(apiUrl(address))
     .then((response) => response.json())
     .then(({ results }) => {
       if (results.length > 0) {
