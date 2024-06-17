@@ -8,7 +8,7 @@ export interface SearchCriteria {
   $text?: { $search: string };
 }
 
-async function findByIds(collection: Collection, ids: readonly string[]): Promise<any> {
+async function findByIds(collection: Collection, ids: readonly any[]): Promise<any> {
   return collection
     .find({
       _id: {

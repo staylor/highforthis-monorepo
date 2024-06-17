@@ -42,7 +42,7 @@ const resolvers = {
     async createVenue(_: unknown, { input }: MutationCreateVenueArgs, { Venue }: { Venue: Venue }) {
       const data = { ...input };
       const id = await Venue.insert(data);
-      return Venue.findOneById(String(id));
+      return Venue.findOneById(id);
     },
 
     async updateVenue(
