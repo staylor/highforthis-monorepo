@@ -43,7 +43,7 @@ export default class Model {
     this.loader = new DataLoader((ids) => findByIds(this.collection, ids));
   }
 
-  public findOneById(id: string) {
+  public findOneById(id: any) {
     return this.loader.load(id);
   }
 

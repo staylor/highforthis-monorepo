@@ -85,7 +85,7 @@ const resolvers = {
   Mutation: {
     async createShow(_: unknown, { input }: MutationCreateShowArgs, { Show }: { Show: Show }) {
       const id = await Show.insert(input);
-      return Show.findOneById(String(id));
+      return Show.findOneById(id);
     },
 
     async updateShow(_: unknown, { id, input }: MutationUpdateShowArgs, { Show }: { Show: Show }) {
