@@ -10,6 +10,7 @@ export const action: ActionFunction = ({ request, context }) => {
     context,
     mutation: venueMutation,
     createMutation: 'createVenue',
+    parseFormDataArgs: { skipKeys: ['capacity', 'postalCode'] },
   });
 };
 
