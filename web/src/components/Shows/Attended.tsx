@@ -1,3 +1,5 @@
+import { gql } from 'graphql-tag';
+
 import Link from '@/components/Link';
 import type { ShowConnection } from '@/types/graphql';
 
@@ -45,6 +47,11 @@ export default function Attended({
                     {relation === 'artist' ? node.venue.name : formatArtists(node)}
                   </Link>
                 </Cell>
+                {relation === 'artist' && (
+                  <Cell className="text-base font-medium uppercase">
+                    {node.venue.city}, {node.venue.state}
+                  </Cell>
+                )}
               </tr>
             );
           })}
@@ -53,3 +60,29 @@ export default function Attended({
     </article>
   );
 }
+
+Attended.fragments = {
+  shows: gql`
+    fragment Attended_shows on ShowConnection {
+      edges {
+        node {
+          artists {
+            id
+            name
+            slug
+          }
+          date
+          id
+          title
+          venue {
+            city
+            id
+            name
+            slug
+            state
+          }
+        }
+      }
+    }
+  `,
+};

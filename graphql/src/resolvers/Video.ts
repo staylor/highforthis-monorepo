@@ -41,7 +41,7 @@ const resolvers = {
   Mutation: {
     async createVideo(_: unknown, { input }: MutationCreateVideoArgs, { Video }: { Video: Video }) {
       const id = await Video.insert(input);
-      return Video.findOneById(String(id));
+      return Video.findOneById(id);
     },
 
     async updateVideo(

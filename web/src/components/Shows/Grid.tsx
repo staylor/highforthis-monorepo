@@ -38,7 +38,7 @@ export default function ShowsGrid({
 
   return (
     <article className={className}>
-      <p className="mb-2 font-stylized">{`Today's date is: ${date.formatted}`}</p>
+      <p className="mb-2 font-stylized">Upcoming Shows {`(Today's date is: ${date.formatted})`}</p>
       <table className="w-full border-collapse">
         <tbody>
           {sorted.map(({ node }) => {

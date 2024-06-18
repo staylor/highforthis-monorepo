@@ -80,7 +80,7 @@ const resolvers = {
       }
 
       const id = await Post.insert(data);
-      return Post.findOneById(String(id));
+      return Post.findOneById(id);
     },
 
     async updatePost(

@@ -70,9 +70,11 @@ export default function Content({ editorState }: { editorState: EditorState }) {
             );
           case 'image':
             const image = (elem as ImageNode).image as ImageUpload;
-            let crop = image.crops.find((c) => c.width === 640);
-            if (!crop) {
+            let crop = image?.crops.find((c) => c.width === 640);
+            if (!crop && image?.crops) {
               [crop] = image.crops;
+            } else {
+              return null;
             }
             return (
               <img

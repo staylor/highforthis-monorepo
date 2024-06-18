@@ -47,11 +47,12 @@ const artistQuery = gql`
       website
     }
     attended: shows(artist: { slug: $slug }, attended: true, first: $first) {
-      ...ShowsGrid_shows
+      ...Attended_shows
     }
     shows(artist: { slug: $slug }, first: $first, latest: true) {
       ...ShowsGrid_shows
     }
   }
+  ${Attended.fragments.shows}
   ${Shows.fragments.shows}
 `;

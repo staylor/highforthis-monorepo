@@ -43,7 +43,7 @@ const resolvers = {
     ) {
       const data = { ...input };
       const id = await Artist.insert(data);
-      return Artist.findOneById(String(id));
+      return Artist.findOneById(id);
     },
 
     async updateArtist(

@@ -1,4 +1,4 @@
-import { type Document } from 'mongodb';
+import { ObjectId, type Document } from 'mongodb';
 
 import type Media from '@/models/Media';
 import type Video from '@/models/Video';
@@ -35,7 +35,8 @@ const resolvers = {
   },
   ImageNode: {
     image(data: Document, _: unknown, { Media }: { Media: Media }) {
-      return Media.findOneById(data.imageId);
+      const id = new ObjectId(data.imageId);
+      return Media.findOneById(id);
     },
   },
   VideoNode: {

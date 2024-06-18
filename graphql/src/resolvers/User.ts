@@ -29,7 +29,7 @@ const resolvers = {
   Mutation: {
     async createUser(_: unknown, { input }: MutationCreateUserArgs, { User }: { User: User }) {
       const id = await User.insert(input);
-      return User.findOneById(String(id));
+      return User.findOneById(id);
     },
 
     async updateUser(_: unknown, { id, input }: MutationUpdateUserArgs, { User }: { User: User }) {

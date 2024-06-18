@@ -127,7 +127,7 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
     return [];
   }
 
-  const newIds = items.map((item) => item.contentDetails.videoId);
+  const newIds = items.filter(Boolean).map((item) => item.contentDetails.videoId);
   const cursor = await db
     .collection('video')
     .find({ dataPlaylistId: playlistId }, { dataId: 1 } as any)

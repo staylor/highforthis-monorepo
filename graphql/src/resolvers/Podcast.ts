@@ -43,7 +43,7 @@ const resolvers = {
       { Podcast }: { Podcast: Podcast }
     ) {
       const id = await Podcast.insert(input);
-      return Podcast.findOneById(String(id));
+      return Podcast.findOneById(id);
     },
 
     async updatePodcast(
