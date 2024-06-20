@@ -46,6 +46,8 @@ export default class Post extends Model {
     if (!doc.title) {
       throw new Error('Post requires a title.');
     }
+    this.castMedia(doc);
+
     const slug = await getUniqueSlug(this.collection, doc.title);
     const featuredMedia = (doc.featuredMedia || []).map((id: string) => new ObjectId(id));
     const artists = (doc.artists || []).map((id: string) => new ObjectId(id));
@@ -67,6 +69,8 @@ export default class Post extends Model {
 
   public async updateById(id: string, doc: Document) {
     const docToUpdate = { ...doc };
+    this.castMedia(docToUpdate);
+
     if (typeof docToUpdate.featuredMedia !== 'undefined') {
       docToUpdate.featuredMedia = (docToUpdate.featuredMedia || []).map(
         (mediaId: string) => new ObjectId(mediaId)
@@ -86,5 +90,15 @@ export default class Post extends Model {
     );
     this.loader.clear(id);
     return ret;
+  }
+
+  private castMedia(doc: Document) {
+    doc.editorState?.root?.children?.forEach((node: Document) => {
+      if (node.imageId) {
+        node.imageId = new ObjectId(node.imageId as string);
+      } else if (node.videoId) {
+        node.videoId = new ObjectId(node.videoId as string);
+      }
+    });
   }
 }
