@@ -17,7 +17,7 @@ class VideoListModel: ObservableObject {
     
     func fetchYear(_ year: Int) {
         currentYear = year > 0 ? year : nil
-        print("setting cursor to: \(year)")
+        print("setting year to: \(year)")
         fetchData()
     }
     

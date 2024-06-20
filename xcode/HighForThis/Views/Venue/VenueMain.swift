@@ -4,16 +4,14 @@ import HighForThisAPI
 struct VenueMain: View {
     var name: String
     var slug: String
-    @State private var venue: VenueData.Venue?
-    @State private var shows: [VenueData.Shows.Edge.Node]?
-    @State private var attended: [VenueData.Attended.Edge.Node]?
+    @StateObject var model = VenueModel()
     
     var body: some View {
         ZStack {
-            if venue == nil {
+            if model.venue == nil {
                 Loading()
             } else {
-                let venue = venue!
+                let venue = model.venue!
                 ScrollView {
                     VStack(alignment: .leading) {
                         if let coordinates = venue.coordinates {
@@ -39,35 +37,23 @@ struct VenueMain: View {
                                 ExternalLink(url: website, label: L10N("venueWebsite"))
                             }
                         }
-                        if shows!.count > 0 {
-                            VenueRecommendedShows(shows: shows!)
+                        if model.shows!.count > 0 {
+                            VenueRecommendedShows(shows: model.shows!)
                         }
-                        if attended!.count > 0 {
-                            VenueAttendedShows(attended: attended!)
+                        if model.attended!.count > 0 {
+                            VenueAttendedShows(attended: model.attended!)
                         }
                     }.padding(.bottom, 32)
                 }.ignoresSafeArea()
             }
         }
         #if os(iOS)
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .ignoresSafeArea()
+        #elseif os(macOS)
+        .padding(.all, 8)
         #endif
         .onAppear() {
-            getVenue(slug: slug) { data in
-                self.venue = data.venue!
-                
-                var shows = [VenueData.Shows.Edge.Node]()
-                for edge in data.shows!.edges {
-                    shows.append(edge.node)
-                }
-                self.shows = shows
-                
-                var attended = [VenueData.Attended.Edge.Node]()
-                for edge in data.attended!.edges {
-                    attended.append(edge.node)
-                }
-                self.attended = attended
-            }
+            model.fetchData(slug: slug)
         }
     }
 }

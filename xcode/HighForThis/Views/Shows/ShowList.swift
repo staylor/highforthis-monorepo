@@ -3,18 +3,18 @@ import HighForThisAPI
 
 struct ShowList: View {
     var title: String
-    @State private var groups: [ShowGroup]?
+    @StateObject var model = ShowListModel()
 
     var body: some View {
         VStack(alignment: .leading) {
-            if (groups == nil) {
+            if (model.groups == nil) {
                 Spacer()
                 Loading()
-            } else if groups!.count == 0 {
+            } else if model.groups!.count == 0 {
                 Text(L10N("noRecommendedShows"))
             } else {
                 List {
-                    ForEach(groups!) { group in
+                    ForEach(model.groups!) { group in
                         Section {
                             ForEach(group.shows, id: \.self) { show in
                                 let title = show.title ?? ""
@@ -40,7 +40,7 @@ struct ShowList: View {
                     }
                 }
                 .refreshable {
-                    fetchShows(refresh: true)
+                    model.fetchShows(refresh: true)
                 }
                 .listStyle(.plain)
                 .navigationTitle(title)
@@ -48,32 +48,8 @@ struct ShowList: View {
             Spacer()
         }
         .onAppear() {
-            fetchShows()
+            model.fetchShows()
         }
-    }
-    
-    func fetchShows(refresh: Bool = false) {
-        getShowList(refresh: refresh) { nodes in
-            self.groups = showGroups(nodes)
-        }
-    }
-    
-    func showGroups(_ nodes: [ShowListNode]) -> [ShowGroup] {
-        var dict: [Double:ShowGroup] = [:]
-        for show in nodes {
-            if dict[show.date] == nil {
-                dict[show.date] = ShowGroup(date: show.date, shows: []);
-            }
-            dict[show.date]!.shows.append(show)
-        }
-        let sortedKeys = dict.keys.sorted()
-        var byDate: [ShowGroup] = []
-        for key in sortedKeys {
-            var group = dict[key]!
-            group.shows.sort { $0.artists[0].name < $1.artists[0].name }
-            byDate.append(group)
-        }
-        return byDate
     }
 }
 

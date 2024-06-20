@@ -51,7 +51,6 @@ struct ShowDetail: View {
             Spacer()
         }
         #if os(iOS)
-        .toolbarBackground(.hidden, for: .navigationBar)
         .ignoresSafeArea()
         #elseif os(macOS)
         .padding(.all, 8)

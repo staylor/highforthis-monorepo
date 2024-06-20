@@ -12,6 +12,29 @@
         }
       }
     },
+    "artistWeWereThere %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld show we have attended by this artist:"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld shows we have attended by this artist:"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "capacity %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -177,6 +200,29 @@
         }
       }
     },
+    "venueWeWereThere %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld show we have attended at this venue:"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld shows we have attended at this venue:"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "videos" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -184,17 +230,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Videos"
-          }
-        }
-      }
-    },
-    "weWereThere" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "We Were There"
           }
         }
       }

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D22BA1142B6B36E20037E129 /* ShowList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22BA1132B6B36E20037E129 /* ShowList.swift */; };
-		D22BA11A2B6B37D60037E129 /* ShowGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22BA1192B6B37D60037E129 /* ShowGroup.swift */; };
 		D24492ED2B6D8A5A00DBCC13 /* PodcastList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24492EC2B6D8A5A00DBCC13 /* PodcastList.swift */; };
 		D25099C92BBBBC06003904A8 /* ExternalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25099C82BBBBC06003904A8 /* ExternalLink.swift */; };
 		D25099CF2BE18D9B003904A8 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D25099CE2BE18D9B003904A8 /* Localizable.xcstrings */; };
@@ -23,6 +22,9 @@
 		D278176D2B6BAC8900D44B4D /* VideoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278176C2B6BAC8900D44B4D /* VideoList.swift */; };
 		D27817732B810BB900D44B4D /* PodcastDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27817722B810BB900D44B4D /* PodcastDetail.swift */; };
 		D27C2DD82B6C145E0036F4A9 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27C2DD72B6C145E0036F4A9 /* MapView.swift */; };
+		D27CC07F2C24C6CE0075997D /* ArtistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27CC07E2C24C6CE0075997D /* ArtistModel.swift */; };
+		D27CC0812C24C88B0075997D /* ShowListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27CC0802C24C88B0075997D /* ShowListModel.swift */; };
+		D27CC0832C24C9B30075997D /* VenueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27CC0822C24C9B30075997D /* VenueModel.swift */; };
 		D2A116792B814C5800CA5EFD /* AudioPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A116782B814C5800CA5EFD /* AudioPlayerViewModel.swift */; };
 		D2A116822B84020B00CA5EFD /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A116812B84020B00CA5EFD /* Loading.swift */; };
 		D2A1168D2B89365900CA5EFD /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = D2A1168C2B89365900CA5EFD /* Apollo */; };
@@ -57,7 +59,6 @@
 
 /* Begin PBXFileReference section */
 		D22BA1132B6B36E20037E129 /* ShowList.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = ShowList.swift; sourceTree = "<group>"; tabWidth = 4; };
-		D22BA1192B6B37D60037E129 /* ShowGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowGroup.swift; sourceTree = "<group>"; };
 		D24492EC2B6D8A5A00DBCC13 /* PodcastList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastList.swift; sourceTree = "<group>"; };
 		D25099C72BB3E093003904A8 /* HighForThis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HighForThis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D25099C82BBBBC06003904A8 /* ExternalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLink.swift; sourceTree = "<group>"; };
@@ -73,6 +74,9 @@
 		D278176C2B6BAC8900D44B4D /* VideoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoList.swift; sourceTree = "<group>"; };
 		D27817722B810BB900D44B4D /* PodcastDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetail.swift; sourceTree = "<group>"; };
 		D27C2DD72B6C145E0036F4A9 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		D27CC07E2C24C6CE0075997D /* ArtistModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistModel.swift; sourceTree = "<group>"; };
+		D27CC0802C24C88B0075997D /* ShowListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowListModel.swift; sourceTree = "<group>"; };
+		D27CC0822C24C9B30075997D /* VenueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueModel.swift; sourceTree = "<group>"; };
 		D2A116782B814C5800CA5EFD /* AudioPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewModel.swift; sourceTree = "<group>"; };
 		D2A116812B84020B00CA5EFD /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		D2A9291B2B6B3ED700480408 /* ShowDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetail.swift; sourceTree = "<group>"; };
@@ -143,7 +147,6 @@
 		D22BA1182B6B37C20037E129 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				D22BA1192B6B37D60037E129 /* ShowGroup.swift */,
 				D2A116782B814C5800CA5EFD /* AudioPlayerViewModel.swift */,
 			);
 			path = Models;
@@ -152,10 +155,11 @@
 		D2A116892B84F2C200CA5EFD /* Shows */ = {
 			isa = PBXGroup;
 			children = (
-				D22BA1132B6B36E20037E129 /* ShowList.swift */,
 				D2A9291B2B6B3ED700480408 /* ShowDetail.swift */,
-				D273C9202BE5C256005E0D9A /* ShowsSectionHeader.swift */,
+				D22BA1132B6B36E20037E129 /* ShowList.swift */,
+				D27CC0802C24C88B0075997D /* ShowListModel.swift */,
 				D273C9222BE5C2CA005E0D9A /* ShowSectionItem.swift */,
+				D273C9202BE5C256005E0D9A /* ShowsSectionHeader.swift */,
 			);
 			path = Shows;
 			sourceTree = "<group>";
@@ -163,8 +167,8 @@
 		D2A1168A2B84F2D300CA5EFD /* Podcasts */ = {
 			isa = PBXGroup;
 			children = (
-				D24492EC2B6D8A5A00DBCC13 /* PodcastList.swift */,
 				D27817722B810BB900D44B4D /* PodcastDetail.swift */,
+				D24492EC2B6D8A5A00DBCC13 /* PodcastList.swift */,
 			);
 			path = Podcasts;
 			sourceTree = "<group>";
@@ -188,18 +192,18 @@
 		D2D50F7C2B6AB472007F335C /* HighForThis */ = {
 			isa = PBXGroup;
 			children = (
-				D25099CE2BE18D9B003904A8 /* Localizable.xcstrings */,
 				D2CBDD072B89438500F4437D /* ApolloClient.swift */,
 				D2D50F812B6AB474007F335C /* Assets.xcassets */,
 				D2CBDD112B8947BD00F4437D /* graphql */,
 				D2A9291D2B6B403800480408 /* Helpers.swift */,
 				D2D50F832B6AB474007F335C /* HighForThis.entitlements */,
 				D2D50F7D2B6AB472007F335C /* HighForThisApp.swift */,
+				D25099CB2BC24DDC003904A8 /* LaunchScreen.storyboard */,
+				D25099CE2BE18D9B003904A8 /* Localizable.xcstrings */,
 				D22BA1182B6B37C20037E129 /* Models */,
 				D2E644152BABC872001B5DC2 /* Network.swift */,
 				D2E644172BABCB3F001B5DC2 /* Preview Content */,
 				D22BA1152B6B37800037E129 /* Views */,
-				D25099CB2BC24DDC003904A8 /* LaunchScreen.storyboard */,
 			);
 			path = HighForThis;
 			sourceTree = "<group>";
@@ -207,10 +211,11 @@
 		D2E6440F2BAB6DA0001B5DC2 /* Artist */ = {
 			isa = PBXGroup;
 			children = (
-				D2FCA4DE2BA97196007A6EFC /* ArtistMain.swift */,
 				D2E644102BAB6E20001B5DC2 /* ArtistArtwork.swift */,
-				D273C9242BE5C44E005E0D9A /* ArtistRecommendedShows.swift */,
 				D273C9262BE5C45E005E0D9A /* ArtistAttendedShows.swift */,
+				D2FCA4DE2BA97196007A6EFC /* ArtistMain.swift */,
+				D27CC07E2C24C6CE0075997D /* ArtistModel.swift */,
+				D273C9242BE5C44E005E0D9A /* ArtistRecommendedShows.swift */,
 			);
 			path = Artist;
 			sourceTree = "<group>";
@@ -221,6 +226,7 @@
 				D273C91A2BE58B79005E0D9A /* VenueRecommendedShows.swift */,
 				D273C91C2BE58BBD005E0D9A /* VenueAttendedShows.swift */,
 				D2FCA4E02BA975C3007A6EFC /* VenueMain.swift */,
+				D27CC0822C24C9B30075997D /* VenueModel.swift */,
 			);
 			path = Venue;
 			sourceTree = "<group>";
@@ -350,12 +356,14 @@
 				D2FCA4DF2BA97196007A6EFC /* ArtistMain.swift in Sources */,
 				D273C91B2BE58B79005E0D9A /* VenueRecommendedShows.swift in Sources */,
 				D2E6442A2BAE5A1E001B5DC2 /* PostList.swift in Sources */,
-				D22BA11A2B6B37D60037E129 /* ShowGroup.swift in Sources */,
 				D2E6442C2BAE5A32001B5DC2 /* Post.swift in Sources */,
 				D2E644142BAB7D1A001B5DC2 /* TextBlock.swift in Sources */,
 				D273C9232BE5C2CA005E0D9A /* ShowSectionItem.swift in Sources */,
 				D2E644322BAE716C001B5DC2 /* ElementNode.swift in Sources */,
+				D27CC0812C24C88B0075997D /* ShowListModel.swift in Sources */,
 				D24492ED2B6D8A5A00DBCC13 /* PodcastList.swift in Sources */,
+				D27CC0832C24C9B30075997D /* VenueModel.swift in Sources */,
+				D27CC07F2C24C6CE0075997D /* ArtistModel.swift in Sources */,
 				D2D50F7E2B6AB472007F335C /* HighForThisApp.swift in Sources */,
 				D2E644342BAE71F4001B5DC2 /* ImageNode.swift in Sources */,
 				D27C2DD82B6C145E0036F4A9 /* MapView.swift in Sources */,
@@ -552,7 +560,7 @@
 				STATIC_ASSETS_HOST = "https://static.highforthis.com";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -602,7 +610,7 @@
 				STATIC_ASSETS_HOST = "https://static.highforthis.com";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

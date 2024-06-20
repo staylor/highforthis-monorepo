@@ -4,29 +4,26 @@ import HighForThisAPI
 struct ArtistMain: View {
     var name: String
     var slug: String
-    @State private var website: String?
-    @State private var appleMusic: ArtistData.Artist.AppleMusic?
-    @State private var shows: [ArtistData.Shows.Edge.Node]?
-    @State private var attended: [ArtistData.Attended.Edge.Node]?
+    @StateObject var model = ArtistModel()
     
     var body: some View {
         ZStack {
-            if shows == nil {
+            if model.shows == nil {
                 Loading()
             } else {
                 ScrollView {
                     VStack(alignment: .leading) {
                         let block = TextBlock {
                             Text(name).font(.title).bold()
-                            if let website = website {
+                            if let website = model.website {
                                 ExternalLink(url: website, label: L10N("artistWebsite"))
                                     .padding(.vertical, 1)
                             }
-                            if let url = appleMusic?.url! {
+                            if let url = model.appleMusic?.url! {
                                 ExternalLink(url: url, label: L10N("listenOnAppleMusic"))
                             }
                         }
-                        if let artwork = appleMusic?.artwork {
+                        if let artwork = model.appleMusic?.artwork {
                             ArtistArtwork(
                                 url: artwork.url!,
                                 width: artwork.width!,
@@ -36,17 +33,17 @@ struct ArtistMain: View {
                         } else {
                             block.padding(.top, 64)
                         }
-                        if shows?.count == 0 {
+                        if model.shows?.count == 0 {
                             HStack {
                                 Text(L10N("noRecommendedShows"))
                                 Spacer()
                             }.padding()
                             Spacer()
                         } else {
-                            ArtistRecommendedShows(shows: shows!)
+                            ArtistRecommendedShows(shows: model.shows!)
                         }
-                        if attended!.count > 0 {
-                            ArtistAttendedShows(attended: attended!)
+                        if model.attended!.count > 0 {
+                            ArtistAttendedShows(attended: model.attended!)
                         }
                         Spacer()
                     }.padding(.bottom, 32)
@@ -55,28 +52,11 @@ struct ArtistMain: View {
         }
         #if os(iOS)
         .ignoresSafeArea()
-        .toolbarBackground(.hidden, for: .navigationBar)
         #elseif os(macOS)
         .padding(.all, 8)
         #endif
         .onAppear() {
-            getArtist(slug: slug) { data in
-                self.website = data.artist!.website
-                if data.artist?.appleMusic != nil {
-                    self.appleMusic = data.artist!.appleMusic!
-                }
-                var shows = [ArtistData.Shows.Edge.Node]()
-                for edge in data.shows!.edges {
-                    shows.append(edge.node)
-                }
-                self.shows = shows
-                
-                var attended = [ArtistData.Attended.Edge.Node]()
-                for edge in data.attended!.edges {
-                    attended.append(edge.node)
-                }
-                self.attended = attended
-            }
+            model.fetchData(slug: slug)
         }
     }
 }

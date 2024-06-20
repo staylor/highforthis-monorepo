@@ -10,7 +10,7 @@ struct ShowsSectionHeader: View {
     
     var body: some View {
         Text(label)
-            .font(.title3)
+            .font(.headline)
             .bold()
             .padding(.horizontal)
             .padding(.top, 20)

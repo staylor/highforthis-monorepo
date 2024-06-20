@@ -9,9 +9,7 @@ struct AppWrapper <Content: View>: View {
         NavigationStack {
             content()
         }
-        #if os(iOS)
-        .toolbarBackground(.hidden, for: .navigationBar)
-        #elseif os(macOS)
+        #if os(macOS)
         .frame(minWidth: 640, minHeight: 640)
         .background(.white)
         #endif

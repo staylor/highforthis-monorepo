@@ -5,7 +5,7 @@ struct VenueAttendedShows: View {
     var attended: [VenueData.Attended.Edge.Node]
     
     var body: some View {
-        ShowsSectionHeader(L10N("weWereThere"))
+        ShowsSectionHeader(L10N("venueWeWereThere \(attended.count)"))
         ForEach(attended, id: \.self) { node in
             let title = node.title ?? ""
             let label = title.isEmpty ? node.artists.map { $0.name }.joined(separator: " / ") : title
