@@ -8,7 +8,7 @@ export interface SearchCriteria {
   $text?: { $search: string };
 }
 
-async function findByIds(collection: Collection, ids: readonly any[]): Promise<any> {
+async function findByIds(collection: Collection, ids: readonly any[]) {
   return collection
     .find({
       _id: {
@@ -41,6 +41,10 @@ export default class Model {
   public constructor(context: ModelContext) {
     this.context = context;
     this.loader = new DataLoader((ids) => findByIds(this.collection, ids));
+  }
+
+  public view(name: string) {
+    return this.context.db.collection(name);
   }
 
   public findOneById(id: any) {

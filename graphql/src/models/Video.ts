@@ -38,7 +38,7 @@ export default class Video extends Model {
     return criteria;
   }
 
-  public all(args: AllOptions): Promise<any> {
+  public all(args: AllOptions) {
     const { limit = 10, offset = 0 } = args;
     const criteria = this.parseCriteria(args);
 

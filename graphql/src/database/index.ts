@@ -2,6 +2,7 @@ import type { Db } from 'mongodb';
 import { MongoClient } from 'mongodb';
 
 import createIndexes from './indexes';
+import createViews from './views';
 
 async function database(): Promise<{ db: Db; client: MongoClient }> {
   if (!process.env.MONGO_URL) {
@@ -18,7 +19,8 @@ async function database(): Promise<{ db: Db; client: MongoClient }> {
     throw new Error('Cannot connect to database!');
   }
 
-  createIndexes(connection);
+  await createIndexes(connection);
+  await createViews(connection);
 
   return {
     db: connection,

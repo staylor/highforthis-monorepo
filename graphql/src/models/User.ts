@@ -15,7 +15,7 @@ export default class User extends Model {
     this.collection = context.db.collection('user');
   }
 
-  public async all(args: any): Promise<any> {
+  public async all(args: any) {
     const { limit = 10, offset = 0 } = args;
     const criteria = this.parseCriteria(args);
 
