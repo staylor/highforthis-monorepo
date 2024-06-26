@@ -74,6 +74,7 @@ Attended.fragments = {
           date
           id
           title
+          url
           venue {
             city
             id

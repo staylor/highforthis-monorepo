@@ -57,10 +57,12 @@ const AppLinks = ({ data }: { data: AppQuery }) => {
       {dashboardSettings.googleTrackingId && (
         <>
           <script
+            suppressHydrationWarning
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${dashboardSettings.googleTrackingId}`}
           />
           <script
+            suppressHydrationWarning
             dangerouslySetInnerHTML={{
               __html: `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${dashboardSettings.googleTrackingId}');`,
             }}

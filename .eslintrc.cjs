@@ -24,7 +24,7 @@ module.exports = {
     '@remix-run/eslint-config/jest-testing-library',
     'prettier',
   ],
-  plugins: ['prettier'],
+  plugins: ['json', 'prettier'],
   rules: {
     'import/order': [
       'error',
@@ -39,6 +39,7 @@ module.exports = {
         ],
       },
     ],
+    'json/*': 'error',
     'prettier/prettier': [
       'error',
       {

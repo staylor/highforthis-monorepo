@@ -33,6 +33,7 @@ export const appQuery = gql`
           date
           id
           title
+          url
           venue {
             id
             name

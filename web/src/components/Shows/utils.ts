@@ -28,7 +28,7 @@ export const formatArtists = (show: Show) => {
 
 export const formatShowLink = (show: Show) => {
   let link;
-  if (show.title || show.artists.length > 1) {
+  if (show.title || show.url || show.artists.length > 1) {
     link = `/show/${show.id}`;
   } else {
     link = `/artist/${show.artists[0].slug}`;

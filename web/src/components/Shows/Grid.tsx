@@ -116,6 +116,7 @@ ShowsGrid.fragments = {
           date
           id
           title
+          url
           venue {
             id
             name
