@@ -1,0 +1,17 @@
+{
+  "name": "react-forget-runtime",
+  "version": "0.0.1",
+  "description": "Runtime for React Forget",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "react": "^18.2.0"
+  },
+  "scripts": {
+    "build": "rimraf dist && rollup --config --bundleConfigAsCjs",
+    "test": "echo 'no tests'"
+  }
+}

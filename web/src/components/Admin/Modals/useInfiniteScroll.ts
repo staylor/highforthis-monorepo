@@ -50,8 +50,7 @@ export default function useInfiniteScroll<T>(ref: MutableRefObject<null>, basePa
         setConnection(data[key]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetcher.data]);
+  }, [fetcher.data, connection.edges]);
 
   useEffect(() => {
     if (!ref.current) {

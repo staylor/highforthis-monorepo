@@ -67,6 +67,13 @@ module.exports = {
       },
     },
     {
+      files: ['./web/src/**/*.tsx', './web/src/**/*.ts'],
+      plugins: ['react-compiler'],
+      rules: {
+        'react-compiler/react-compiler': 'error',
+      },
+    },
+    {
       files: ['./web/src/**/*.tsx', './web/src/**/*.graphql.ts', './web/src/**/graphql.ts'],
       processor: '@graphql-eslint/graphql',
     },

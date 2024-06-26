@@ -7,3 +7,4 @@ graphql/generated/
 node_modules
 
 web/build
+web/dist

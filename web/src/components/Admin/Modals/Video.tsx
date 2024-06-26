@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 import Loading from '@/components/Loading';
-import type { Video, VideoConnection, VideoThumbnail } from '@/types/graphql';
+import type { VideoConnection, VideoThumbnail } from '@/types/graphql';
 
 import CloseButton from './CloseButton';
 import useInfiniteScroll from './useInfiniteScroll';
@@ -29,7 +29,7 @@ interface VideoModalProps {
 function VideoModal({ selectVideo, onClose }: VideoModalProps) {
   const basePath = `/modals/video`;
   const frameRef = useRef(null);
-  const { fetcher, connection } = useInfiniteScroll<Video>(frameRef, basePath);
+  const { fetcher, connection } = useInfiniteScroll(frameRef, basePath);
   const videos = connection as VideoConnection;
 
   const portal = document.getElementById('portal');

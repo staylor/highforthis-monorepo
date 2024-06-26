@@ -13,6 +13,7 @@ export default function CustomLink({ onClick: onClickProp, children, ...props }:
     }
 
     if (!e.defaultPrevented) {
+      // eslint-disable-next-line react-compiler/react-compiler
       document.documentElement.scrollTop = 0;
     }
   };

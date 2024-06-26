@@ -2,7 +2,6 @@
   "eslint.validate": [
     "javascript",
     "javascriptreact",
-    "json",
     "typescript",
     "typescriptreact"
   ],

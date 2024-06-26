@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 import Loading from '@/components/Loading';
 import { uploadUrl } from '@/utils/media';
-import type { AudioUpload, ImageUpload, MediaUpload, MediaUploadConnection } from '@/types/graphql';
+import type { AudioUpload, ImageUpload, MediaUploadConnection } from '@/types/graphql';
 import type { SelectedImage, SelectedImageData } from '@/types/admin';
 
 import CloseButton from './CloseButton';
@@ -21,7 +21,7 @@ interface MediaModalProps {
 function MediaModal({ type = 'image', onClose, selectAudio, selectImage }: MediaModalProps) {
   const basePath = `/modals/media/${type}`;
   const frameRef = useRef(null);
-  const { fetcher, connection } = useInfiniteScroll<MediaUpload>(frameRef, basePath);
+  const { fetcher, connection } = useInfiniteScroll(frameRef, basePath);
   const uploads = connection as MediaUploadConnection;
 
   const portal = document.getElementById('portal');
