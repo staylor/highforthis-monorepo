@@ -14,6 +14,11 @@ const namingConvention = [
   },
 ];
 
+const parserOptions = {
+  operations: ['./web/src/**/*.{ts,tsx}', './xcode/HighForThis/graphql/operations/*.graphql'],
+  schema: './graphql/schema.graphql',
+};
+
 /**
  * @type {import('@types/eslint').Linter.BaseConfig}
  */
@@ -68,21 +73,17 @@ module.exports = {
     {
       files: ['./web/src/**/*.graphql'],
       extends: ['plugin:@graphql-eslint/operations-all', 'plugin:@graphql-eslint/relay'],
-      parserOptions: {
-        operations: './web/src/**/*.{ts,tsx}',
-        schema: './graphql/schema.graphql',
-      },
+      parserOptions,
       rules: {
         '@graphql-eslint/naming-convention': namingConvention,
+        '@graphql-eslint/unique-fragment-name': 'off',
+        '@graphql-eslint/unique-operation-name': 'off',
       },
     },
     {
       files: ['./xcode/HighForThis/graphql/operations/*.graphql'],
       extends: ['plugin:@graphql-eslint/operations-all', 'plugin:@graphql-eslint/relay'],
-      parserOptions: {
-        operations: './xcode/HighForThis/graphql/operations/*.graphql',
-        schema: './graphql/schema.graphql',
-      },
+      parserOptions,
       rules: {
         '@graphql-eslint/match-document-filename': 'off',
         '@graphql-eslint/naming-convention': namingConvention,
