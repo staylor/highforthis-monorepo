@@ -1,0 +1,3 @@
+web/dist/babel-plugin-react-forget/* linguist-generated=true
+web/dist/eslint-plugin-react-compiler/* linguist-generated=true
+web/dist/react-forget-runtime/* linguist-generated=true
