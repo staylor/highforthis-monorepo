@@ -2,7 +2,7 @@ import { vitePlugin as remix } from '@remix-run/dev';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import babel from 'vite-plugin-babel';
-import reactForget from 'babel-plugin-react-forget';
+import reactCompiler from 'babel-plugin-react-compiler';
 
 let publicPath = '/';
 if (process.env.NODE_ENV === 'production') {
@@ -22,7 +22,7 @@ export default defineConfig({
         presets: ['@babel/preset-typescript'],
         plugins: [
           [
-            reactForget,
+            reactCompiler,
             {
               compilationMode: 'infer',
               enableUseMemoCachePolyfill: true,
