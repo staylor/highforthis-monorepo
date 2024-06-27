@@ -25,6 +25,7 @@ export default defineConfig({
             reactForget,
             {
               compilationMode: 'infer',
+              enableUseMemoCachePolyfill: true,
               panicThreshold: 'NONE',
             },
           ],
