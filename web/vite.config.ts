@@ -25,7 +25,6 @@ export default defineConfig({
             reactCompiler,
             {
               compilationMode: 'infer',
-              enableUseMemoCachePolyfill: true,
               panicThreshold: 'NONE',
             },
           ],
