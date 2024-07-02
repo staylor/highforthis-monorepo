@@ -8,7 +8,8 @@ class ArtistModel: ObservableObject {
     @Published var attended: [ArtistData.Attended.Edge.Node]?
     
     func fetchData(slug: String) {
-        getArtist(slug: slug) { data in
+        let query = HighForThisAPI.ArtistQuery(slug: slug)
+        getData(query) { data in
             self.website = data.artist!.website
             if data.artist?.appleMusic != nil {
                 self.appleMusic = data.artist!.appleMusic!

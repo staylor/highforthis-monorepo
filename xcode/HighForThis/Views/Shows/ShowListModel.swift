@@ -1,6 +1,8 @@
 import SwiftUI
 import HighForThisAPI
 
+typealias ShowListNode = HighForThisAPI.ShowsQuery.Data.Shows.Edge.Node
+
 struct ShowGroup: Identifiable {
     var id = UUID()
     var date: Double
@@ -15,7 +17,12 @@ class ShowListModel: ObservableObject {
     @Published var groups: [ShowGroup]?
     
     func fetchShows(refresh: Bool = false) {
-        getShowList(refresh: refresh) { nodes in
+        let query = HighForThisAPI.ShowsQuery()
+        getData(query, cachePolicy: refresh ? .fetchIgnoringCacheData : cachePolicy) { data in
+            var nodes = [ShowListNode]()
+            for edge in data.shows!.edges {
+                nodes.append(edge.node)
+            }
             var dict: [Double:ShowGroup] = [:]
             for show in nodes {
                 if dict[show.date] == nil {

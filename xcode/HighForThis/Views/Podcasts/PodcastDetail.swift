@@ -4,7 +4,7 @@ import HighForThisAPI
 
 struct PodcastDetail: View {
     var id: ObjID
-    @State private var podcast: PodcastData?
+    @State private var podcast: HighForThisAPI.PodcastQuery.Data.Podcast?
     @StateObject private var viewModel = AudioPlayerViewModel()
 
     var body: some View {
@@ -40,8 +40,9 @@ struct PodcastDetail: View {
             Spacer()
         }
         .onAppear() {
-            getPodcast(id: id) { podcast in
-                self.podcast = podcast
+            let query = HighForThisAPI.PodcastQuery(id: id)
+            getData(query) { data in
+                self.podcast = data.podcast!
             }
         }
     }

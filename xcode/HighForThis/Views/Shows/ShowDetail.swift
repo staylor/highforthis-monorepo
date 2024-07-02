@@ -3,7 +3,7 @@ import HighForThisAPI
 
 struct ShowDetail: View {
     var id: ObjID
-    @State private var show: ShowData?
+    @State private var show: HighForThisAPI.ShowQuery.Data.Show?
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -56,8 +56,9 @@ struct ShowDetail: View {
         .padding(.all, 8)
         #endif
         .onAppear() {
-            getShow(id: id) { show in
-                self.show = show
+            let query = HighForThisAPI.ShowQuery(id: id)
+            getData(query) { data in
+                self.show = data.show!
             }
         }
     }

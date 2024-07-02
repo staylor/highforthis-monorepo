@@ -7,7 +7,8 @@ class VenueModel: ObservableObject {
     @Published var attended: [VenueData.Attended.Edge.Node]?
     
     func fetchData(slug: String) {
-        getVenue(slug: slug) { data in
+        let query = HighForThisAPI.VenueQuery(slug: slug)
+        getData(query) { data in
             self.venue = data.venue!
             
             var shows = [VenueData.Shows.Edge.Node]()

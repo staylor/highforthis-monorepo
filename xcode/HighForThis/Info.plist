@@ -4,5 +4,9 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>GRAPHQL_ENDPOINT</key>
+	<string>$(GRAPHQL_ENDPOINT)</string>
+	<key>STATIC_ASSETS_HOST</key>
+	<string>$(STATIC_ASSETS_HOST)</string>
 </dict>
 </plist>

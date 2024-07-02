@@ -1,5 +1,8 @@
 import SwiftUI
 import CachedAsyncImage
+import HighForThisAPI
+
+typealias PostListNode = HighForThisAPI.PostsQuery.Data.Posts.Edge.Node
 
 struct PostList: View {
     @State var posts: [PostListNode]?
@@ -43,11 +46,15 @@ struct PostList: View {
             }
             Spacer()
         }.onAppear() {
-            getPosts() { nodes in
+            let query = HighForThisAPI.PostsQuery()
+            getData(query) { data in
+                var nodes = [PostListNode]()
+                for edge in data.posts!.edges {
+                    nodes.append(edge.node)
+                }
                 self.posts = nodes
             }
         }
-        
     }
 }
 

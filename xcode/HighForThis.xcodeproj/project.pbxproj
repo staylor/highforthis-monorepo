@@ -53,6 +53,7 @@
 		D2E644302BAE6CD0001B5DC2 /* PostHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E6442F2BAE6CD0001B5DC2 /* PostHelpers.swift */; };
 		D2E644322BAE716C001B5DC2 /* ElementNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644312BAE716C001B5DC2 /* ElementNode.swift */; };
 		D2E644342BAE71F4001B5DC2 /* ImageNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644332BAE71F4001B5DC2 /* ImageNode.swift */; };
+		D2EB6E332C331CC000D8CC29 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2EB6E322C331CC000D8CC29 /* Environment.swift */; };
 		D2FCA4DF2BA97196007A6EFC /* ArtistMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCA4DE2BA97196007A6EFC /* ArtistMain.swift */; };
 		D2FCA4E12BA975C3007A6EFC /* VenueMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCA4E02BA975C3007A6EFC /* VenueMain.swift */; };
 /* End PBXBuildFile section */
@@ -101,6 +102,7 @@
 		D2E6442F2BAE6CD0001B5DC2 /* PostHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHelpers.swift; sourceTree = "<group>"; };
 		D2E644312BAE716C001B5DC2 /* ElementNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementNode.swift; sourceTree = "<group>"; };
 		D2E644332BAE71F4001B5DC2 /* ImageNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageNode.swift; sourceTree = "<group>"; };
+		D2EB6E322C331CC000D8CC29 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		D2FCA4DE2BA97196007A6EFC /* ArtistMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistMain.swift; sourceTree = "<group>"; };
 		D2FCA4E02BA975C3007A6EFC /* VenueMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueMain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -204,6 +206,7 @@
 				D2E644152BABC872001B5DC2 /* Network.swift */,
 				D2E644172BABCB3F001B5DC2 /* Preview Content */,
 				D22BA1152B6B37800037E129 /* Views */,
+				D2EB6E322C331CC000D8CC29 /* Environment.swift */,
 			);
 			path = HighForThis;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				D2CBDD082B89438500F4437D /* ApolloClient.swift in Sources */,
 				D273C91D2BE58BBD005E0D9A /* VenueAttendedShows.swift in Sources */,
 				D2E6442E2BAE6BFD001B5DC2 /* HeadingNode.swift in Sources */,
+				D2EB6E332C331CC000D8CC29 /* Environment.swift in Sources */,
 				D2FCA4DF2BA97196007A6EFC /* ArtistMain.swift in Sources */,
 				D273C91B2BE58B79005E0D9A /* VenueRecommendedShows.swift in Sources */,
 				D2E6442A2BAE5A1E001B5DC2 /* PostList.swift in Sources */,

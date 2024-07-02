@@ -1,6 +1,9 @@
 import SwiftUI
 import HighForThisAPI
 
+typealias VideosData = HighForThisAPI.VideosQuery.Data.Videos
+typealias VideoListNode = VideosData.Edge.Node
+
 class VideoListModel: ObservableObject {
     var cursor: String?
     var lastYear: Int?
@@ -39,7 +42,9 @@ class VideoListModel: ObservableObject {
             lastYear = nil
         }
         
-        getVideos(after: after, first: first, year: year) { videos in
+        let query = HighForThisAPI.VideosQuery(after: after, first: first, year: year)
+        getData(query) { data in
+            let videos = data.videos!
             var nodes = [VideoListNode]()
             for edge in videos.edges {
                 nodes.append(edge.node)

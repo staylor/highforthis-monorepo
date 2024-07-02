@@ -1,5 +1,6 @@
 import SwiftUI
 import CachedAsyncImage
+import HighForThisAPI
 
 struct Post: View {
     var slug: String
@@ -52,8 +53,9 @@ struct Post: View {
             Spacer()
         }
         .onAppear() {
-            getPost(slug: slug) { post in
-                self.post = post
+            let query = HighForThisAPI.PostQuery(slug: slug)
+            getData(query) { data in
+                self.post = data.post!
             }
         }
     }

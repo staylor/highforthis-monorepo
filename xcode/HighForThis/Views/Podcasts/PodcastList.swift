@@ -1,4 +1,7 @@
 import SwiftUI
+import HighForThisAPI
+
+typealias PodcastListNode = HighForThisAPI.PodcastsQuery.Data.Podcasts.Edge.Node
 
 struct PodcastList: View {
     @State var podcasts: [PodcastListNode]?
@@ -29,11 +32,15 @@ struct PodcastList: View {
             }
             Spacer()
         }.onAppear() {
-            getPodcasts() { nodes in
+            let query = HighForThisAPI.PodcastsQuery()
+            getData(query) { data in
+                var nodes = [PodcastListNode]()
+                for edge in data.podcasts!.edges {
+                    nodes.append(edge.node)
+                }
                 self.podcasts = nodes
             }
         }
-        
     }
 }
 
