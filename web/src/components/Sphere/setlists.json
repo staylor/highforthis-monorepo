@@ -483,5 +483,87 @@
       ],
       ["Not Fade Away"]
     ]
+  },
+  {
+    "date": "7/4/24",
+    "sets": [
+      [
+        "Liberty",
+        "Franklin's Tower",
+        "Jack Straw",
+        "Big River",
+        "Friend of the Devil",
+        "Feel Like a Stranger",
+        "Althea"
+      ],
+      [
+        "Scarlet Begonias",
+        "St. Stephen",
+        "Help on the Way",
+        "Slipknot!",
+        "Terrapin Station",
+        "Drums",
+        "Space",
+        "Wharf Rat",
+        "Going Down the Road Feeling Bad",
+        "U.S. Blues",
+        "Knockin' on Heaven's Door"
+      ],
+      ["Casey Jones"]
+    ]
+  },
+  {
+    "date": "7/5/24",
+    "sets": [
+      [
+        "Cold Rain and Snow",
+        "Truckin'",
+        "Bertha",
+        "Good Lovin'",
+        "Next Time You See Me",
+        "Cassidy",
+        "Deal"
+      ],
+      [
+        "China Cat Sunflower",
+        "I Know You Rider",
+        "Playing in the Band",
+        "Dark Star",
+        "Drums",
+        "Space",
+        "Looks Like Rain",
+        "Brown-Eyed Women",
+        "Fire on the Mountain",
+        "Throwing Stones"
+      ],
+      ["Not Fade Away"]
+    ]
+  },
+  {
+    "date": "7/6/24",
+    "sets": [
+      [
+        "Iko Iko",
+        "Shakedown Street",
+        "The Music Never Stopped",
+        "Big Railroad Blues",
+        "Row Jimmy",
+        "Sugaree",
+        "One More Saturday Night"
+      ],
+      [
+        "Greatest Story Ever Told",
+        "Mr. Charlie",
+        "Estimated Prophet",
+        "Eyes of the World",
+        "Drums",
+        "Space",
+        "Uncle John's Band",
+        "Cumberland Blues",
+        "Hell in a Bucket",
+        "Morning Dew"
+      ],
+      ["Sugar Magnolia"]
+    ]
   }
 ]
