@@ -17,8 +17,9 @@ import { Heading2, Heading3, Heading4 } from '@/components/Heading';
 import Paragraph from '@/components/Paragraph';
 import VideoComponent from '@/components/Videos/Video';
 
+import TextNodes from '../../components/Post/TextNodes';
+
 import PostTitle from './PostTitle';
-import TextNodes from './TextNodes';
 
 function isEmptyText(nodes: TextNode[]) {
   return nodes.length === 0 || nodes.filter(({ text }) => text?.trim()).length === 0;

@@ -1,16 +1,11 @@
 {
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "json",
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "json", "typescript", "typescriptreact"],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
   "files.associations": {
+    "*.css": "tailwindcss",
     "*.json": "jsonc"
   }
 }

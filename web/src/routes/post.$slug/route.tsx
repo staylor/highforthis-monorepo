@@ -3,8 +3,6 @@ import type { LoaderFunction } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
 import type { MetaFunction } from '@remix-run/node';
 
-import PostTitle from '@/components/Post/PostTitle';
-import Content from '@/components/Post/Content';
 import query from '@/utils/query';
 import titleTemplate from '@/utils/title';
 import { uploadUrl } from '@/utils/media';
@@ -12,6 +10,9 @@ import type { EditorState, ImageUpload, ImageUploadCrop, Post, PostQuery } from 
 import { rootData } from '@/utils/rootData';
 import Video from '@/components/Videos/Video';
 import TextNodes from '@/components/Post/TextNodes';
+
+import PostTitle from './PostTitle';
+import Content from './Content';
 
 export const meta: MetaFunction = ({ data, matches }) => {
   const { post } = data as PostQuery;

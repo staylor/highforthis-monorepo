@@ -2,9 +2,10 @@ import { useLoaderData } from '@remix-run/react';
 import { createContext, useContext, useState } from 'react';
 import cn from 'classnames';
 
-import setlists from '@/components/Sphere/setlists.json';
 import { Heading1 } from '@/components/Heading';
 import Button from '@/components/Button';
+
+import setlists from './setlists.json';
 
 type Stats = Record<string, number>;
 type SetlistSet = string[];

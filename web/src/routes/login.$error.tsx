@@ -1,1 +1,1 @@
-export { default, action, loader } from './login._index';
+export { default, action, loader } from './login._index/route';

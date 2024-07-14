@@ -565,5 +565,86 @@
       ],
       ["Sugar Magnolia"]
     ]
+  },
+  {
+    "date": "7/11/2024",
+    "sets": [
+      [
+        "I Need a Miracle",
+        "Eyes of the World",
+        "Ramble On Rose",
+        "They Love Each Other",
+        "Bird Song",
+        "Casey Jones"
+      ],
+      [
+        "China Cat Sunflower",
+        "I Know You Rider",
+        "Uncle John's Band",
+        "Dark Star",
+        "Drums",
+        "Space",
+        "Standing on the Moon",
+        "Dear Mr. Fantasy",
+        "Hey Jude",
+        "Truckin'",
+        "Knockin' on Heaven's Door"
+      ],
+      ["Turn On Your Love Light"]
+    ]
+  },
+  {
+    "date": "7/12/2024",
+    "sets": [
+      [
+        "Minglewood Blues",
+        "Franklin's Tower",
+        "Tennessee Jed",
+        "Crazy Fingers",
+        "Brown-Eyed Women",
+        "Ship of Fools",
+        "Deal"
+      ],
+      [
+        "Scarlet Begonias",
+        "Viola Lee Blues",
+        "Estimated Prophet",
+        "Terrapin Station",
+        "Drums",
+        "Space",
+        "A Hard Rain's A-Gonna Fall",
+        "Fire on the Mountain",
+        "U.S. Blues",
+        "Black Muddy River"
+      ],
+      ["Not Fade Away"]
+    ]
+  },
+  {
+    "date": "7/13/2024",
+    "sets": [
+      [
+        "In the Midnight Hour",
+        "Mississippi Half-Step Uptown Toodeloo",
+        "Shakedown Street",
+        "Cold Rain and Snow",
+        "Loser",
+        "Sugaree"
+      ],
+      [
+        "One More Saturday Night",
+        "Help on the Way",
+        "Slipknot!",
+        "Althea",
+        "St. Stephen",
+        "Drums",
+        "Space",
+        "It's All Over Now, Baby Blue",
+        "Bertha",
+        "Sugar Magnolia",
+        "Brokedown Palace"
+      ],
+      ["Good Lovin'"]
+    ]
   }
 ]

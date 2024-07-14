@@ -1,8 +1,9 @@
 import { Outlet, useParams } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/server-runtime';
 
-import Wrapper from '@/components/Login/Wrapper';
 import Message from '@/components/Form/Message';
+
+import Wrapper from './Wrapper';
 
 export const handle = {
   layout: 'login',
