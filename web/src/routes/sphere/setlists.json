@@ -646,5 +646,83 @@
       ],
       ["Good Lovin'"]
     ]
+  },
+  {
+    "date": "8/1/2024",
+    "sets": [
+      [
+        "Man Smart, Woman Smarter",
+        "Mississippi Half-Step Uptown Toodeloo",
+        "How Sweet It Is (To Be Loved by You)",
+        "Jack Straw",
+        "Me and My Uncle",
+        "Ramble On Rose",
+        "Althea"
+      ],
+      [
+        "Franklin's Tower",
+        "China Cat Sunflower",
+        "I Know You Rider",
+        "Playing in the Band",
+        "Drums",
+        "Space",
+        "Lazy River Road",
+        "All Along the Watchtower",
+        "He's Gone",
+        "Truckin'",
+        "Knockin' on Heaven's Door"
+      ],
+      ["Not Fade Away"]
+    ]
+  },
+  {
+    "date": "8/2/2024",
+    "sets": [
+      [
+        "Good Times",
+        "The Music Never Stopped",
+        "Bertha",
+        "Tennessee Jed",
+        "They Love Each Other",
+        "New Speedway Boogie",
+        "Deal"
+      ],
+      [
+        "Dark Star",
+        "Estimated Prophet",
+        "Eyes of the World",
+        "St. Stephen",
+        "Drums",
+        "Space",
+        "Stella Blue",
+        "Brokedown Palace"
+      ],
+      ["Turn On Your Love Light"]
+    ]
+  },
+  {
+    "date": "8/3/2024",
+    "sets": [
+      [
+        "Cold Rain and Snow",
+        "Shakedown Street",
+        "Uncle John's Band",
+        "Mr. Charlie",
+        "Samson and Delilah",
+        "Sugaree"
+      ],
+      [
+        "Scarlet Begonias",
+        "Fire on the Mountain",
+        "Terrapin Station",
+        "Drums",
+        "Space",
+        "Days Between",
+        "Brown-Eyed Women",
+        "U.S. Blues",
+        "Morning Dew"
+      ],
+      ["Ripple"]
+    ]
   }
 ]
