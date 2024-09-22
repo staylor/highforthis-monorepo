@@ -724,5 +724,74 @@
       ],
       ["Ripple"]
     ]
+  },
+  {
+    "date": "8/8/2024",
+    "sets": [
+      [
+        "Iko Iko",
+        "Eyes of the World",
+        "Mr. Charlie",
+        "Playing in the Band",
+        "Brown-Eyed Women",
+        "Let It Grow"
+      ],
+      [
+        "Passenger",
+        "St. Stephen",
+        "Uncle John's Band",
+        "Drums",
+        "Space",
+        "Black Peter",
+        "Going Down the Road Feeling Bad",
+        "Throwing Stones"
+      ],
+      ["Casey Jones"]
+    ]
+  },
+  {
+    "date": "8/9/2024",
+    "sets": [
+      ["Cassidy", "Truckin'", "They Love Each Other", "Jack Straw", "Cold Rain and Snow"],
+      [
+        "Dark Star",
+        "El Paso",
+        "Scarlet Begonias",
+        "Fire on the Mountain",
+        "Drums",
+        "Space",
+        "Dear Prudence",
+        "Sugaree",
+        "Morning Dew"
+      ],
+      ["Not Fade Away"]
+    ]
+  },
+  {
+    "date": "8/10/2024",
+    "sets": [
+      [
+        "Feel Like a Stranger",
+        "Franklin's Tower",
+        "Row Jimmy",
+        "Big River",
+        "Tennessee Jed",
+        "Althea"
+      ],
+      [
+        "China Cat Sunflower",
+        "I Know You Rider",
+        "Help on the Way",
+        "Slipknot!",
+        "Terrapin Station",
+        "Drums",
+        "Space",
+        "Standing on the Moon",
+        "Bertha",
+        "U.S. Blues",
+        "Brokedown Palace"
+      ],
+      ["One More Saturday Night", "Ripple"]
+    ]
   }
 ]
