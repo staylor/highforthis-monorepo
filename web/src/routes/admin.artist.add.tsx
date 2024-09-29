@@ -10,6 +10,10 @@ export const action: ActionFunction = ({ request, context }) => {
     context,
     mutation: artistMutation,
     createMutation: 'createArtist',
+    parseFormDataArgs: {
+      // allows "311" to be sent as string
+      skipKeys: ['name', 'slug'],
+    },
   });
 };
 
