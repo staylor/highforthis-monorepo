@@ -80,8 +80,9 @@ export default class Show extends Model {
     return criteria;
   }
 
-  public async years() {
-    const docs = await this.view('showYears').find().toArray();
+  public async years(history = false) {
+    const name = history ? 'historyYears' : 'showYears';
+    const docs = await this.view(name).find().toArray();
     return docs.map(({ year }) => year);
   }
 

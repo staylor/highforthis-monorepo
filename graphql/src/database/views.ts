@@ -55,6 +55,34 @@ function createPipeline(entityType: string) {
   return pipeline;
 }
 
+const yearsPipeline = [
+  {
+    $project: {
+      year: {
+        $year: {
+          $toDate: '$date',
+        },
+      },
+    },
+  },
+  {
+    $group: {
+      _id: '$year',
+    },
+  },
+  {
+    $project: {
+      _id: 0,
+      year: '$_id',
+    },
+  },
+  {
+    $sort: {
+      year: -1,
+    },
+  },
+];
+
 export default async function createViews(db: Db) {
   await db.createCollection('showArtistStats', {
     viewOn: 'show',
@@ -66,37 +94,17 @@ export default async function createViews(db: Db) {
   });
   await db.createCollection('showYears', {
     viewOn: 'show',
+    pipeline: [...yearsPipeline],
+  });
+  await db.createCollection('historyYears', {
+    viewOn: 'show',
     pipeline: [
       {
         $match: {
           attended: true,
         },
       },
-      {
-        $project: {
-          year: {
-            $year: {
-              $toDate: '$date',
-            },
-          },
-        },
-      },
-      {
-        $group: {
-          _id: '$year',
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          year: '$_id',
-        },
-      },
-      {
-        $sort: {
-          year: -1,
-        },
-      },
+      ...yearsPipeline,
     ],
   });
 }

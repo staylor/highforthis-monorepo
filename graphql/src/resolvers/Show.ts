@@ -39,8 +39,8 @@ const resolvers = {
     },
   },
   ShowConnection: {
-    async years(_0: unknown, _1: unknown, { Show }: { Show: Show }) {
-      return Show.years();
+    async years(_0: unknown, args: QueryShowsArgs, { Show }: { Show: Show }) {
+      return Show.years(!!args.attended);
     },
   },
   Query: {
