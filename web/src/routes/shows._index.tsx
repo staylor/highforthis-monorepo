@@ -10,6 +10,8 @@ import query from '@/utils/query';
 import titleTemplate from '@/utils/title';
 import ShowsGrid from '@/components/Shows/Grid';
 import { rootData } from '@/utils/rootData';
+import { Heading2 } from '@/components/Heading';
+import { formatDate } from '@/components/Shows/utils';
 
 export const meta: MetaFunction = ({ matches }) => {
   const { siteSettings } = rootData(matches);
@@ -42,7 +44,16 @@ export const clientLoader = createClientCache();
 function ShowsRoute() {
   const data = useLoaderData<ShowsQuery>();
   const shows = data.shows as ShowConnection;
-  return <Shows shows={shows} />;
+  const date = formatDate();
+  return (
+    <article>
+      <Heading2>Recommended Shows</Heading2>
+      <p className="mb-6 text-xl">
+        Today's date is: <strong>{date.formatted}</strong>
+      </p>
+      <Shows shows={shows} />
+    </article>
+  );
 }
 
 export default ShowsRoute;

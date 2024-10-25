@@ -72,6 +72,7 @@ const Show = `#graphql
       latest: Boolean
       attended: Boolean
       date: Float
+      year: Int
       artist: EntityArg
       venue: EntityArg
       search: String

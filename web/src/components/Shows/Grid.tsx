@@ -10,17 +10,16 @@ import { Cell } from './Cell';
 export default function ShowsGrid({
   shows,
   className,
+  showMonths = true,
+  showYears = true,
 }: {
   shows: ShowConnection;
   className?: string;
+  showMonths?: boolean;
+  showYears?: boolean;
 }) {
-  if (!shows || !shows.edges || shows.edges.length === 0) {
-    return <p>No recommended shows at this time.</p>;
-  }
-
   const years = {} as { [key: number]: number };
   const months = {} as { [key: string]: number };
-  const date = formatDate();
   const sorted = shows.edges.sort(({ node: showA }, { node: showB }) => {
     const dateA = showA.date;
     const dateB = showB.date;
@@ -37,8 +36,7 @@ export default function ShowsGrid({
   });
 
   return (
-    <article className={className}>
-      <p className="mb-2 font-stylized">Upcoming Shows {`(Today's date is: ${date.formatted})`}</p>
+    <div className={className}>
       <table className="w-full border-collapse">
         <tbody>
           {sorted.map(({ node }) => {
@@ -62,7 +60,7 @@ export default function ShowsGrid({
               </tr>
             );
 
-            if (!years[d.year]) {
+            if (showYears && !years[d.year]) {
               years[d.year] = 1;
               months[`${d.year}${d.month}`] = 1;
               return (
@@ -72,16 +70,18 @@ export default function ShowsGrid({
                       {d.year}
                     </Cell>
                   </tr>
-                  <tr>
-                    <Cell colSpan={3} className="font-stylized">
-                      {d.monthName}
-                    </Cell>
-                  </tr>
+                  {showMonths && (
+                    <tr>
+                      <Cell colSpan={3} className="font-stylized">
+                        {d.monthName}
+                      </Cell>
+                    </tr>
+                  )}
                   {showRow}
                 </Fragment>
               );
             }
-            if (!months[`${d.year}${d.month}`]) {
+            if (showMonths && !months[`${d.year}${d.month}`]) {
               months[`${d.year}${d.month}`] = 1;
               return (
                 <Fragment key={`${d.year}${d.month}`}>
@@ -98,7 +98,7 @@ export default function ShowsGrid({
           })}
         </tbody>
       </table>
-    </article>
+    </div>
   );
 }
 

@@ -786,6 +786,7 @@ export type QueryShowsArgs = {
   order?: InputMaybe<ShowOrder>;
   search?: InputMaybe<Scalars['String']['input']>;
   venue?: InputMaybe<EntityArg>;
+  year?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -1662,6 +1663,15 @@ export type ShowsQueryVariables = Exact<{
 
 
 export type ShowsQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type ShowsHistoryQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  year?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type ShowsHistoryQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type VenueQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;

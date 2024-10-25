@@ -765,6 +765,7 @@ export type QueryShowsArgs = {
   order?: InputMaybe<ShowOrder>;
   search?: InputMaybe<Scalars['String']['input']>;
   venue?: InputMaybe<EntityArg>;
+  year?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryUploadsArgs = {

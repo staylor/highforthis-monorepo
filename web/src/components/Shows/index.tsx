@@ -3,10 +3,27 @@ import type { ShowConnection } from '@/types/graphql';
 import ShowsList from './List';
 import ShowsGrid from './Grid';
 
-function Shows({ shows }: { shows: ShowConnection }) {
+function Shows({
+  shows,
+  showMonths = true,
+  showYears = true,
+}: {
+  shows: ShowConnection;
+  showMonths?: boolean;
+  showYears?: boolean;
+}) {
+  if (!shows || !shows.edges || shows.edges.length === 0) {
+    return null;
+  }
+
   return (
     <>
-      <ShowsGrid shows={shows} className="hidden xs:block" />
+      <ShowsGrid
+        shows={shows}
+        showMonths={showMonths}
+        showYears={showYears}
+        className="hidden xs:block"
+      />
       <ShowsList shows={shows} className="block xs:hidden" />
     </>
   );

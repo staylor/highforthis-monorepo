@@ -15,10 +15,11 @@ interface ShowParams {
   order?: ShowOrder;
   offset?: number;
   limit?: number;
+  year?: number;
 }
 
 interface ShowCriteria {
-  date?: { $gte: number };
+  date?: { $gte: number; $lte?: number };
   attended?: boolean;
   artists?: string;
   venue?: string;
@@ -49,6 +50,7 @@ export default class Show extends Model {
     artist = '',
     venue = '',
     search = '',
+    year = undefined,
   }: ShowParams) {
     const criteria: ShowCriteria = {};
     if (attended) {
@@ -61,6 +63,14 @@ export default class Show extends Model {
     }
     if (venue) {
       criteria.venue = venue;
+    }
+    if (year) {
+      const startDate = Date.parse(`${year}-01-01T00:00:00Z`);
+      const endDate = Date.parse(`${year + 1}-01-01T00:00:00Z`);
+      criteria.date = {
+        $gte: startDate,
+        $lte: endDate,
+      };
     }
     if (search) {
       // TODO: can't search relations right now since artists

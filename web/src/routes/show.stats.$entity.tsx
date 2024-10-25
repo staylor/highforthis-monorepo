@@ -53,8 +53,12 @@ export default function ShowStatsRoute() {
     <article className="w-160 max-w-full">
       <Heading1>Show Stats: {params.entity}s</Heading1>
       <p className="mb-8">
-        <Link to={`/show/stats/${other}`} className="text-lg text-pink underline">
+        <Link to={`/show/stats/${other}`} className="mr-2 text-lg text-pink underline">
           See {other} stats
+        </Link>
+        {' • '}
+        <Link to="/shows/history" className="ml-2 text-lg text-pink underline">
+          See all shows I have attended
         </Link>
       </p>
       {Object.entries(buckets).map(([key, stats]) => (
