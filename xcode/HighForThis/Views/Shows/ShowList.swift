@@ -6,7 +6,7 @@ struct ShowList: View {
     var first: Int = 200
     var latest: GraphQLNullable<Bool> = nil
     var attended: GraphQLNullable<Bool> = nil
-    @State private var year: GraphQLNullable<Int> = nil
+    @State private var year: Int = 0
     @StateObject var model = ShowListModel()
 
     var body: some View {
@@ -54,7 +54,8 @@ struct ShowList: View {
                 .listStyle(.plain)
                 .navigationTitle(title)
                 .toolbar {
-                    if attended == true {
+                    let _ = print("\(attended)")
+                    if attended == .some(true) {
                         let filterByYear = L10N("filterByYear")
                         ToolbarItem {
                             Picker(filterByYear, selection: $year) {
@@ -72,7 +73,7 @@ struct ShowList: View {
                                     first: first,
                                     latest: latest,
                                     attended: attended,
-                                    year: year
+                                    year: .some(year)
                                 )
                             }
                             #if os(macOS)
@@ -92,7 +93,7 @@ struct ShowList: View {
 
 #Preview("Shows") {
     AppWrapper {
-        ShowList(title: L10N("recommendedShows"), latest: true)
+        ShowList(title: L10N("recommendedShows"), latest: .some(true))
     }
 }
 

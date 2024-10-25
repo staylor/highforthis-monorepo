@@ -68,6 +68,11 @@ export default async function createViews(db: Db) {
     viewOn: 'show',
     pipeline: [
       {
+        $match: {
+          attended: true,
+        },
+      },
+      {
         $project: {
           year: {
             $year: {
