@@ -80,6 +80,11 @@ export default class Show extends Model {
     return criteria;
   }
 
+  public async years() {
+    const docs = await this.view('showYears').find().toArray();
+    return docs.map(({ year }) => year);
+  }
+
   public async stats(entityType: string) {
     let docs = [];
     if (entityType === 'artist') {

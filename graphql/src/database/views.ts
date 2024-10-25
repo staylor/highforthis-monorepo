@@ -64,4 +64,34 @@ export default async function createViews(db: Db) {
     viewOn: 'show',
     pipeline: createPipeline('venue'),
   });
+  await db.createCollection('showYears', {
+    viewOn: 'show',
+    pipeline: [
+      {
+        $project: {
+          year: {
+            $year: {
+              $toDate: '$date',
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$year',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          year: '$_id',
+        },
+      },
+      {
+        $sort: {
+          year: -1,
+        },
+      },
+    ],
+  });
 }

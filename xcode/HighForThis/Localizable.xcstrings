@@ -178,6 +178,17 @@
         }
       }
     },
+    "showHistory" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History"
+          }
+        }
+      }
+    },
     "shows" : {
       "extractionState" : "manual",
       "localizations" : {

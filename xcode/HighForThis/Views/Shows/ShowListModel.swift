@@ -1,7 +1,8 @@
 import SwiftUI
 import HighForThisAPI
 
-typealias ShowListNode = HighForThisAPI.ShowsQuery.Data.Shows.Edge.Node
+typealias ShowListData = HighForThisAPI.ShowsQuery.Data.Shows
+typealias ShowListNode = ShowListData.Edge.Node
 
 struct ShowGroup: Identifiable {
     var id = UUID()
@@ -14,13 +15,21 @@ struct ShowGroup: Identifiable {
 }
 
 class ShowListModel: ObservableObject {
+    @Published var connection: ShowListData?
     @Published var groups: [ShowGroup]?
     
-    func fetchShows(refresh: Bool = false) {
-        let query = HighForThisAPI.ShowsQuery()
+    func fetchShows(
+        first: Int = 200,
+        latest: GraphQLNullable<Bool> = false,
+        attended: GraphQLNullable<Bool> = false,
+        year: GraphQLNullable<Int> = nil,
+        refresh: Bool = false
+    ) {
+        let query = HighForThisAPI.ShowsQuery(attended: attended, first: first, latest: latest, year: year)
         getData(query, cachePolicy: refresh ? .fetchIgnoringCacheData : cachePolicy) { data in
+            let shows = data.shows!
             var nodes = [ShowListNode]()
-            for edge in data.shows!.edges {
+            for edge in shows.edges {
                 nodes.append(edge.node)
             }
             var dict: [Double:ShowGroup] = [:]
@@ -38,6 +47,7 @@ class ShowListModel: ObservableObject {
                 byDate.append(group)
             }
             self.groups = byDate
+            self.connection = shows
         }
     }
 }

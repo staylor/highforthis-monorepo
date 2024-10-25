@@ -5,7 +5,7 @@ struct ContentView: View {
         AppWrapper {
             TabView {
                 NavigationView {
-                    ShowList(title: L10N("recommendedShows"))
+                    ShowList(title: L10N("recommendedShows"), latest: true)
                 }.tabItem {
                     Label(L10N("shows"), systemImage: "calendar")
                 }
@@ -23,6 +23,11 @@ struct ContentView: View {
                     PostList()
                 }.tabItem {
                     Label(L10N("posts"), systemImage: "note.text")
+                }
+                NavigationView {
+                    ShowList(title: L10N("showHistory"), attended: true)
+                }.tabItem {
+                    Label(L10N("showHistory"), systemImage: "calendar")
                 }
             }
             #if os(macOS)

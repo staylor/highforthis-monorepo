@@ -1,9 +1,10 @@
-query Shows {
-  shows(first: 200, latest: true) {
+query Shows($attended: Boolean, $first: Int!, $latest: Boolean, $year: Int) {
+  shows(attended: $attended, first: $first, latest: $latest, year: $year) {
     edges {
       node {
         ...ShowList_show
       }
     }
+    years
   }
 }

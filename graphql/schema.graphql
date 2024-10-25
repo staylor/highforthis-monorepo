@@ -556,6 +556,7 @@ type ShowConnection {
   count: Int
   edges: [ShowEdge!]!
   pageInfo: PageInfo!
+  years: [Int!]
 }
 
 type ShowEdge {

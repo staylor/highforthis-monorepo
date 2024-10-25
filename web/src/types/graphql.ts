@@ -882,6 +882,7 @@ export type ShowConnection = {
   count?: Maybe<Scalars['Int']['output']>;
   edges: Array<ShowEdge>;
   pageInfo: PageInfo;
+  years?: Maybe<Array<Scalars['Int']['output']>>;
 };
 
 export type ShowEdge = {

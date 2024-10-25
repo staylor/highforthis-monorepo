@@ -16,6 +16,7 @@ const Show = `#graphql
   }
 
   type ShowConnection {
+    years: [Int!]
     count: Int
     edges: [ShowEdge!]!
     pageInfo: PageInfo!
