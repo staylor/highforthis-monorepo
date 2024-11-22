@@ -1,8 +1,15 @@
 { 
-  "include": ["env.d.ts", "types/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.mjs"],
+  "include": [
+    "env.d.ts",
+    "types/*.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mjs",
+    ".react-router/types/**/*"
+  ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "@react-router/node", "vite/client"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -13,13 +20,13 @@
     "target": "ES2022",
     "strict": true,
     "allowJs": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
+    "rootDirs": [".", "./.react-router/types"],
     "paths": {
       "~/*": ["./src/*"]
     },
-    "skipLibCheck": true,
-    // Remix takes care of building everything in `remix build`.
     "noEmit": true,
   }
 }

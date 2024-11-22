@@ -1,6 +1,6 @@
-import { useSearchParams } from '@remix-run/react';
 import cn from 'classnames';
 import type { SyntheticEvent } from 'react';
+import { useSearchParams } from 'react-router';
 
 interface MessageProps {
   dismissable?: boolean;

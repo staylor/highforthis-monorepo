@@ -7,10 +7,9 @@
     "@apollo/client": "3.11.8",
     "@dotenvx/dotenvx": "0.37.1",
     "@lexical/react": "0.14.5",
-    "@remix-run/express": "2.12.1",
-    "@remix-run/node": "2.12.1",
-    "@remix-run/react": "2.12.1",
-    "@remix-run/server-runtime": "2.12.1",
+    "@react-router/express": "7.0.1",
+    "@react-router/node": "7.0.1",
+    "@remix-run/server-runtime": "2.15.0",
     "classnames": "2.5.1",
     "compression": "1.7.4",
     "cookie-parser": "1.4.6",
@@ -26,12 +25,13 @@
     "qs": "6.13.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-router": "7.0.1",
     "remix-auth": "3.7.0",
     "remix-auth-form": "1.5.0",
     "tiny-invariant": "1.3.3"
   },
   "devDependencies": {
-    "@remix-run/dev": "2.12.1",
+    "@react-router/dev": "7.0.1",
     "@tailwindcss/forms": "0.5.9",
     "@testing-library/dom": "9.3.4",
     "@testing-library/jest-dom": "6.5.0",
@@ -52,12 +52,13 @@
     "dev": "dotenvx run -- node --no-warnings=WARN_JSON_IMPORT_EXPERIMENTAL server.mjs",
     "prod": "run-s prod:*",
     "prod:clean": "rimraf build node_modules/.vite",
-    "prod:build": "NODE_ENV=production remix vite:build",
+    "prod:build": "NODE_ENV=production react-router build",
     "prod:upload": "gsutil -m -h 'Cache-control:public, max-age=259200' rsync -r build/client gs://static.highforthis.com/build",
     "prod:stop": "pm2 stop pm2.config.cjs",
     "prod:start": "pm2 start pm2.config.cjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:update": "vitest -u run"
+    "test:update": "vitest -u run",
+    "typecheck": "react-router typegen && tsc"
   }
 }

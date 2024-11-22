@@ -1,8 +1,8 @@
 import { $createCodeNode } from '@lexical/code';
 import { $createListNode, type ListType } from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
-import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
 import type { HeadingTagType } from '@lexical/rich-text';
+import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
 import { mergeRegister, $insertNodeToNearestRoot } from '@lexical/utils';
 import {

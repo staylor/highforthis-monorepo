@@ -1,26 +1,34 @@
 import type { ApolloError, OperationVariables, QueryOptions, ServerError } from '@apollo/client';
-import type { Params } from '@remix-run/react';
+import type { AppLoadContext, Params } from 'react-router';
 
 import { authenticator } from '~/auth';
 import { PER_PAGE } from '~/constants';
 
 import { offsetToCursor } from './connection';
 
-type QueryData = Pick<QueryOptions, 'query' | 'variables'> & AppData;
+type QueryData = Pick<QueryOptions, 'query' | 'variables'> & {
+  request: Request;
+  context: AppLoadContext;
+};
 
-const query = async ({ query, variables, context, request }: QueryData) => {
+export default async function query<T = unknown>({
+  query,
+  variables,
+  context,
+  request,
+}: QueryData) {
   const { apolloClient } = context;
-  let data = {};
-  const headers: any = {};
+  let data = {} as T;
+  const headers: Record<string, string> = {};
   let authToken;
-  if (request && request.url.includes('/admin')) {
+  if (request.url.includes('/admin')) {
     authToken = await authenticator.isAuthenticated(request);
   }
   if (authToken) {
     headers.Authorization = `Bearer ${authToken.token}`;
   }
   try {
-    ({ data } = await apolloClient.query({
+    ({ data } = await apolloClient.query<T>({
       query,
       variables,
       context: {
@@ -41,9 +49,7 @@ const query = async ({ query, variables, context, request }: QueryData) => {
     }
   }
   return data;
-};
-
-export default query;
+}
 
 export const addPageOffset = (params: Params, listVariables?: OperationVariables) => {
   const variables = listVariables || {};
