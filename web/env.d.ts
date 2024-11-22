@@ -1,10 +1,7 @@
-/// <reference types="@remix-run/node" />
-/// <reference types="vite/client" />
+import type { ApolloClient } from '@apollo/client';
 
-declare interface AppData {
-  [key: string]: any;
-}
-
-declare interface RouteHandle {
-  layout?: string;
+declare module 'react-router' {
+  interface AppLoadContext {
+    apolloClient: ApolloClient;
+  }
 }

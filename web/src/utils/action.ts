@@ -1,12 +1,12 @@
 import type { OperationVariables } from '@apollo/client';
-import type { ActionFunctionArgs } from '@remix-run/server-runtime';
-import { redirect } from '@remix-run/server-runtime';
 import type { DocumentNode } from 'graphql';
+import type { ActionFunctionArgs } from 'react-router';
+import { redirect } from 'react-router';
 
 import type { ParseFormDataArgs } from './mutate';
 import mutate, { parseFormData } from './mutate';
 
-export const post = async (url: string, data: AppData) =>
+export const post = async (url: string, data: Record<string, any>) =>
   fetch(url, {
     method: 'POST',
     body: JSON.stringify(data),
@@ -52,7 +52,11 @@ export const handleSubmission = async ({
   } else {
     mergedVariables.input = input;
   }
-  const result: AppData = await mutate({ context, mutation, variables: mergedVariables });
+  const result: Record<string, any> = await mutate({
+    context,
+    mutation,
+    variables: mergedVariables,
+  });
   let editUrl = request.url;
   if (createMutation) {
     editUrl = request.url.replace('/add', `/${result[createMutation].id}`);

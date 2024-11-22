@@ -10,7 +10,7 @@ const Editor = lazy(() => import('~/components/Editor'));
 
 interface FieldProps {
   field: Field;
-  data: AppData;
+  data: Record<string, any>;
 }
 
 export default function EditableField({ field, data }: FieldProps) {

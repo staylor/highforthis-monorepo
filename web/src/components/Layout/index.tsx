@@ -1,6 +1,6 @@
-import { useMatches } from '@remix-run/react';
 import cn from 'classnames';
 import type { HtmlHTMLAttributes, HTMLAttributes, PropsWithChildren } from 'react';
+import { useMatches } from 'react-router';
 
 import Link from '~/components/Link';
 import Navigation from '~/components/Nav';
@@ -11,6 +11,10 @@ import { useRootData } from '~/utils/rootData';
 
 import DarkMode from './DarkMode';
 import SocialIcons from './SocialIcons';
+
+interface RouteHandle {
+  layout?: string;
+}
 
 // Find the deepest matched route that has 'layout' set on 'handle'
 export const useLayout = () => {

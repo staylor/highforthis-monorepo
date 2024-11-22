@@ -41,6 +41,7 @@
     "tools:database:dump": "dotenvx run --env-file=.env.production -- sh ./tools/database/dump",
     "tools:database:restore": "sh ./tools/database/restore",
     "tools:script:dev": "dotenvx run -- tsx",
-    "tools:script:prod": "dotenvx run --env-file=.env.production -- tsx"
+    "tools:script:prod": "dotenvx run --env-file=.env.production -- tsx",
+    "typecheck": "tsc"
   }
 }

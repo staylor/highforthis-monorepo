@@ -1,7 +1,6 @@
-import type { LoaderFunction } from '@remix-run/server-runtime';
-import { json } from '@remix-run/server-runtime';
+import type { Route } from './+types/oembed';
 
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ request }: Route.LoaderArgs) {
   const requested = new URL(request.url);
   if (!requested) {
     return null;
@@ -15,5 +14,5 @@ export const loader: LoaderFunction = async ({ request }) => {
   const oembedUrl = new URL(provider);
   oembedUrl.searchParams.set('url', url);
   const data = await fetch(oembedUrl.toString()).then((response) => response.json());
-  return json(data);
-};
+  return data;
+}

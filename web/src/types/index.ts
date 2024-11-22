@@ -16,7 +16,7 @@ export type Fields = FieldUnion[];
 
 export type FieldUnion = Field | FieldFactory;
 
-export type FieldFactory = (data: AppData) => Field;
+export type FieldFactory = (data: Record<string, any>) => Field;
 
 export interface Field {
   autoComplete?: boolean;

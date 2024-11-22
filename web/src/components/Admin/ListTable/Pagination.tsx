@@ -1,6 +1,6 @@
-import { useParams, useSearchParams } from '@remix-run/react';
 import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
+import { useParams, useSearchParams } from 'react-router';
 
 import Link from '~/components/Link';
 
@@ -14,7 +14,7 @@ const Count = ({ children }: PropsWithChildren) => (
 );
 
 interface PaginationProps {
-  data: AppData;
+  data: Record<string, any>;
   path: string;
   perPage: number;
   className: string;
