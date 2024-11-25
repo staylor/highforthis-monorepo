@@ -1,6 +1,6 @@
-import type { Location } from '@remix-run/react';
-import { useLocation, useNavigate } from '@remix-run/react';
 import cn from 'classnames';
+import type { Location } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import Select from '~/components/Form/Select';
 

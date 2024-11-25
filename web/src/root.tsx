@@ -1,4 +1,4 @@
-import type { MetaFunction } from '@remix-run/node';
+import type { LinksFunction, MetaFunction } from 'react-router';
 import {
   Links,
   Meta,
@@ -7,12 +7,11 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   useRouteError,
-  useLoaderData,
-} from '@remix-run/react';
-import type { LinksFunction, LoaderFunction } from '@remix-run/server-runtime';
+} from 'react-router';
 
 import mainStylesheetUrl from '~/styles/main.css?url';
 
+import type { Route } from './+types/root';
 import { Html, Body, Boundary, useLayout } from './components/Layout';
 import { TWITTER_USERNAME } from './constants';
 import { appQuery } from './root.graphql';
@@ -30,13 +29,14 @@ export const links: LinksFunction = () => {
     { rel: 'stylesheet', href: '/fonts/icons/icons.css' },
   ];
 };
+
 export const meta: MetaFunction = ({ data }) => {
   return [{ title: titleTemplate(data as TitleProps) }];
 };
 
-export const loader: LoaderFunction = async ({ request, context }) => {
-  return query({ request, context, query: appQuery });
-};
+export async function loader({ request, context }: Route.LoaderArgs) {
+  return query<AppQuery>({ request, context, query: appQuery });
+}
 
 export const clientLoader = createClientCache();
 
@@ -73,9 +73,8 @@ const AppLinks = ({ data }: { data: AppQuery }) => {
   );
 };
 
-export default function Root() {
+export default function Root({ loaderData }: Route.ComponentProps) {
   const layout = useLayout();
-  const data = useLoaderData<AppQuery>();
   return (
     <Html>
       <head>
@@ -86,7 +85,7 @@ export default function Root() {
         <Meta />
         <Links />
         {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
-        {layout === 'app' && <AppLinks data={data as AppQuery} />}
+        {layout === 'app' && <AppLinks data={loaderData} />}
       </head>
       <Body>
         <Boundary>

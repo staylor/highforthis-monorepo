@@ -1,14 +1,14 @@
 import type { TIncomingRelay } from '@apollo/client/utilities/policies/pagination';
-import { useFetcher } from '@remix-run/react';
 import debounce from 'lodash.debounce';
 import type { MutableRefObject } from 'react';
 import { useRef, useState, useEffect } from 'react';
+import { useFetcher } from 'react-router';
 
 type DebouncedFunction = () => void;
 
 export default function useInfiniteScroll<T>(ref: MutableRefObject<null>, basePath: string) {
   const firstFetch = useRef({ [basePath]: false });
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<T>();
   const [connection, setConnection] = useState({} as TIncomingRelay<T>);
 
   const scrollListener = debounce(() => {
@@ -35,7 +35,7 @@ export default function useInfiniteScroll<T>(ref: MutableRefObject<null>, basePa
   }, [fetcher, basePath]);
 
   useEffect(() => {
-    const data = fetcher.data as AppData;
+    const data = fetcher.data as Record<string, any>;
     if (data) {
       const [key] = Object.keys(data);
       if (connection.edges) {

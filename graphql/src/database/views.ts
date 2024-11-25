@@ -84,27 +84,29 @@ const yearsPipeline = [
 ];
 
 export default async function createViews(db: Db) {
-  await db.createCollection('showArtistStats', {
-    viewOn: 'show',
-    pipeline: createPipeline('artist'),
-  });
-  await db.createCollection('showVenueStats', {
-    viewOn: 'show',
-    pipeline: createPipeline('venue'),
-  });
-  await db.createCollection('showYears', {
-    viewOn: 'show',
-    pipeline: [...yearsPipeline],
-  });
-  await db.createCollection('historyYears', {
-    viewOn: 'show',
-    pipeline: [
-      {
-        $match: {
-          attended: true,
+  try {
+    await db.createCollection('showArtistStats', {
+      viewOn: 'show',
+      pipeline: createPipeline('artist'),
+    });
+    await db.createCollection('showVenueStats', {
+      viewOn: 'show',
+      pipeline: createPipeline('venue'),
+    });
+    await db.createCollection('showYears', {
+      viewOn: 'show',
+      pipeline: [...yearsPipeline],
+    });
+    await db.createCollection('historyYears', {
+      viewOn: 'show',
+      pipeline: [
+        {
+          $match: {
+            attended: true,
+          },
         },
-      },
-      ...yearsPipeline,
-    ],
-  });
+        ...yearsPipeline,
+      ],
+    });
+  } catch (_) {}
 }

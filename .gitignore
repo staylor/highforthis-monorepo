@@ -3,6 +3,7 @@
 .env
 .env.*
 .nyc_output
+.react-router/
 
 node_modules
 

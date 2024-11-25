@@ -1,8 +1,7 @@
 import cn from 'classnames';
-import type { LegacyRef } from 'react';
 import { forwardRef } from 'react';
 
-const Toolbar = forwardRef<LegacyRef<HTMLDivElement>, any>(({ className, ...props }, ref) => (
+const Toolbar = forwardRef<HTMLDivElement, any>(({ className, ...props }, ref) => (
   <div
     {...props}
     ref={ref}

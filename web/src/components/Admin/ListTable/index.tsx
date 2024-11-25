@@ -1,7 +1,7 @@
-import { useSubmit } from '@remix-run/react';
 import cn from 'classnames';
 import type { ReactNode, ChangeEvent } from 'react';
 import { useReducer } from 'react';
+import { useSubmit } from 'react-router';
 
 import Checkbox from '~/components/Form/Checkbox';
 import Select from '~/components/Form/Select';
@@ -39,7 +39,7 @@ const Headers = ({ className, checkClass, columns, checked, toggleAll }: Headers
 );
 
 interface ListTableProps {
-  data: AppData;
+  data: Record<string, any>;
   deletable?: boolean;
   columns: Columns;
   filters?: ReactNode;
@@ -79,7 +79,7 @@ function ListTable({
     const checkbox = e.target as HTMLInputElement;
     let ids;
     if (checkbox.checked) {
-      ids = data.edges.map(({ node }: AppData) => node.id);
+      ids = data.edges.map(({ node }: Record<string, any>) => node.id);
     } else {
       ids = [];
     }
@@ -145,7 +145,7 @@ function ListTable({
           />
         </thead>
         <tbody>
-          {data.edges.map(({ node }: AppData) => (
+          {data.edges.map(({ node }: Record<string, any>) => (
             <tr className="even:bg-neutral-50" key={node.id}>
               <th className={cn(cellHeading, 'py-1.5 px-2.5 align-top')}>
                 <Checkbox
