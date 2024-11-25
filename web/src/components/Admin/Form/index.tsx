@@ -1,12 +1,12 @@
 import type { PropsWithChildren } from 'react';
 import invariant from 'tiny-invariant';
 
+import { FormWrap } from '~/components/Admin/styles';
+import Button from '~/components/Button';
+import type { Fields, FieldUnion } from '~/types';
+
 import EditableField from './EditableField';
 import InfoColumn from './InfoColumn';
-
-import { FormWrap } from '@/components/Admin/styles';
-import Button from '@/components/Button';
-import type { Fields, FieldUnion } from '@/types';
 
 const Label = ({ children }: PropsWithChildren) => (
   <span className="mb-1 block text-sm tracking-wide text-gray-700">{children}</span>

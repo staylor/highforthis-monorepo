@@ -1,6 +1,6 @@
 import { useFetcher } from 'react-router-dom';
 
-import Checkbox from '@/components/Form/Checkbox';
+import Checkbox from '~/components/Form/Checkbox';
 
 export default function ExcludeFromSearch({ data }: any) {
   const fetcher = useFetcher();

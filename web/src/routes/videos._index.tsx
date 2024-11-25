@@ -3,12 +3,12 @@ import { useLoaderData } from '@remix-run/react';
 import type { LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 
-import Videos from '@/components/Videos';
-import { videosQuery as queryFragment } from '@/components/Videos/graphql';
-import type { VideoConnection, VideosQuery } from '@/types/graphql';
-import query from '@/utils/query';
-import { rootData } from '@/utils/rootData';
-import titleTemplate from '@/utils/title';
+import Videos from '~/components/Videos';
+import { videosQuery as queryFragment } from '~/components/Videos/graphql';
+import type { VideoConnection, VideosQuery } from '~/types/graphql';
+import query from '~/utils/query';
+import { rootData } from '~/utils/rootData';
+import titleTemplate from '~/utils/title';
 
 const videosQuery = gql`
   query Videos(

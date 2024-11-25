@@ -2,12 +2,12 @@ import { useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 
-import ListTable, { RowTitle, RowActions, usePath } from '@/components/Admin/ListTable';
-import { Heading, HeaderAdd } from '@/components/Admin/styles';
-import Message from '@/components/Form/Message';
-import type { User, UserConnection, UsersAdminQuery } from '@/types/graphql';
-import { handleDelete } from '@/utils/action';
-import query from '@/utils/query';
+import ListTable, { RowTitle, RowActions, usePath } from '~/components/Admin/ListTable';
+import { Heading, HeaderAdd } from '~/components/Admin/styles';
+import Message from '~/components/Form/Message';
+import type { User, UserConnection, UsersAdminQuery } from '~/types/graphql';
+import { handleDelete } from '~/utils/action';
+import query from '~/utils/query';
 
 export const loader: LoaderFunction = ({ request, context }) => {
   return query({ request, context, query: usersQuery });

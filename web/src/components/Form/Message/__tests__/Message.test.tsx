@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, it, expect } from 'vitest';
 
-import Message from '@/components/Form/Message';
+import Message from '~/components/Form/Message';
 
 describe('message', () => {
   it('empty', () => {

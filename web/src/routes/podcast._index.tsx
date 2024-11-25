@@ -3,13 +3,13 @@ import { useLoaderData } from '@remix-run/react';
 import type { LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 
-import Link from '@/components/Link';
-import Podcast from '@/components/Podcast';
-import { metaTags } from '@/components/Podcast/utils';
-import type { PodcastConnection, PodcastsQuery } from '@/types/graphql';
-import { createClientCache } from '@/utils/cache';
-import query from '@/utils/query';
-import { rootData, useRootData } from '@/utils/rootData';
+import Link from '~/components/Link';
+import Podcast from '~/components/Podcast';
+import { metaTags } from '~/components/Podcast/utils';
+import type { PodcastConnection, PodcastsQuery } from '~/types/graphql';
+import { createClientCache } from '~/utils/cache';
+import query from '~/utils/query';
+import { rootData, useRootData } from '~/utils/rootData';
 
 export const meta: MetaFunction = ({ matches }) => {
   const { siteSettings, podcastSettings } = rootData(matches);

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { Choice } from '@/components/Form/Select';
+import type { Choice } from '~/components/Form/Select';
 
 export interface Column {
   className?: string;

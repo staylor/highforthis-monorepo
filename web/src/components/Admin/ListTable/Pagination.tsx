@@ -2,7 +2,7 @@ import { useParams, useSearchParams } from '@remix-run/react';
 import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
 
-import Link from '@/components/Link';
+import Link from '~/components/Link';
 
 const textClass = cn(
   'border border-detail',

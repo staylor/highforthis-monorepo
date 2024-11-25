@@ -1,7 +1,7 @@
-import { sortNodes, type EntityNode } from './utils';
+import Select from '~/components/Form/Select';
+import Link from '~/components/Link';
 
-import Select from '@/components/Form/Select';
-import Link from '@/components/Link';
+import { sortNodes, type EntityNode } from './utils';
 
 interface SelectEntityProps {
   label: string;

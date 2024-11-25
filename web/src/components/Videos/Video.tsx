@@ -2,9 +2,9 @@ import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import type { SyntheticEvent } from 'react';
 
-import Link, { type CustomLinkProps } from '@/components/Link';
-import TextTitle from '@/components/TextTitle';
-import type { VideoThumbnail, Video } from '@/types/graphql';
+import Link, { type CustomLinkProps } from '~/components/Link';
+import TextTitle from '~/components/TextTitle';
+import type { VideoThumbnail, Video } from '~/types/graphql';
 
 const VideoLink = ({ className, children, ...props }: CustomLinkProps) => (
   <Link {...props} className={cn('mb-6 block max-w-full', className)}>

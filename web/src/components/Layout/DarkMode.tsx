@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 
-import { getItem, setItem, removeItem } from '@/utils/storage';
+import { getItem, setItem, removeItem } from '~/utils/storage';
 
 const STORAGE_KEY = 'darkMode';
 

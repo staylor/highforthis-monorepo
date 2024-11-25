@@ -1,16 +1,16 @@
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 
-import Form from '@/components/Admin/Form';
-import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
-import Tags from '@/components/Admin/Form/Tags';
-import { Heading } from '@/components/Admin/styles';
-import Button from '@/components/Button';
-import Message from '@/components/Form/Message';
-import TextNodes from '@/components/Post/TextNodes';
-import Video from '@/components/Videos/Video';
-import type { Fields } from '@/types';
-import type { Artist, Post } from '@/types/graphql';
+import Form from '~/components/Admin/Form';
+import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
+import Tags from '~/components/Admin/Form/Tags';
+import { Heading } from '~/components/Admin/styles';
+import Button from '~/components/Button';
+import Message from '~/components/Form/Message';
+import TextNodes from '~/components/Post/TextNodes';
+import Video from '~/components/Videos/Video';
+import type { Fields } from '~/types';
+import type { Artist, Post } from '~/types/graphql';
 
 interface PostFormProps {
   data?: Post;

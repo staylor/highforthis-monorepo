@@ -10,11 +10,11 @@ import type {
   UpdateShowInput,
 } from 'types/graphql';
 
-import { parseConnection, emptyConnection } from './utils/collection';
+import type Artist from '~/models/Artist';
+import type Show from '~/models/Show';
+import type Venue from '~/models/Venue';
 
-import type Artist from '@/models/Artist';
-import type Show from '@/models/Show';
-import type Venue from '@/models/Venue';
+import { parseConnection, emptyConnection } from './utils/collection';
 
 const resolvers = {
   Show: {

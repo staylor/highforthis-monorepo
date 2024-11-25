@@ -1,8 +1,8 @@
 import type { ActionFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 
-import PostForm from '@/components/Admin/Post/Form';
-import { handleSubmission } from '@/utils/action';
+import PostForm from '~/components/Admin/Post/Form';
+import { handleSubmission } from '~/utils/action';
 
 export const action: ActionFunction = ({ request, context }) => {
   return handleSubmission({

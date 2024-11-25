@@ -1,9 +1,9 @@
 import cn from 'classnames';
 import { useState } from 'react';
 
-import { sortNodes, type EntityNode } from './utils';
+import Select from '~/components/Form/Select';
 
-import Select from '@/components/Form/Select';
+import { sortNodes, type EntityNode } from './utils';
 
 interface SelectEntityProps {
   name: string;

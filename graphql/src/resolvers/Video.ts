@@ -7,9 +7,9 @@ import type {
   QueryVideosArgs,
 } from 'types/graphql';
 
-import { parseConnection } from './utils/collection';
+import type Video from '~/models/Video';
 
-import type Video from '@/models/Video';
+import { parseConnection } from './utils/collection';
 
 const resolvers = {
   Video: {

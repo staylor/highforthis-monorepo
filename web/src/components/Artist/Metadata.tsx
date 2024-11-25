@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from 'react';
 
-import Artwork, { DEFAULT_IMAGE_SIZE } from './Artwork';
+import type { AppleMusicData } from '~/types/graphql';
 
-import type { AppleMusicData } from '@/types/graphql';
+import Artwork, { DEFAULT_IMAGE_SIZE } from './Artwork';
 
 interface AppleMusicProps {
   name: string;

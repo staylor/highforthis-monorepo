@@ -1,5 +1,5 @@
-import Analytics from '@/components/Analytics';
-import { useRootData } from '@/utils/rootData';
+import Analytics from '~/components/Analytics';
+import { useRootData } from '~/utils/rootData';
 
 export default function Dashboard() {
   const { dashboardSettings } = useRootData();

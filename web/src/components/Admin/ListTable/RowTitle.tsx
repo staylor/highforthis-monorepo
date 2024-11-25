@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import Link from '@/components/Link';
+import Link from '~/components/Link';
 
 interface RowTitleProps {
   url: string;

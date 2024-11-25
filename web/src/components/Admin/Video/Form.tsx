@@ -1,11 +1,11 @@
 import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 
-import Form from '@/components/Admin/Form';
-import { Heading } from '@/components/Admin/styles';
-import Message from '@/components/Form/Message';
-import type { Fields } from '@/types';
-import type { Video } from '@/types/graphql';
+import Form from '~/components/Admin/Form';
+import { Heading } from '~/components/Admin/styles';
+import Message from '~/components/Form/Message';
+import type { Fields } from '~/types';
+import type { Video } from '~/types/graphql';
 
 type VideoFormProps = PropsWithChildren<{
   data?: Video;

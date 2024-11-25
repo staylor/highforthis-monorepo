@@ -1,4 +1,4 @@
-import { base64Encode, base64Decode } from '@/utils/base64';
+import { base64Encode, base64Decode } from '~/utils/base64';
 
 describe('base64', () => {
   it('serialization', () => {

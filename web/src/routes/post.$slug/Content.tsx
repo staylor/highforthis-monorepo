@@ -1,11 +1,7 @@
-import TextNodes from '../../components/Post/TextNodes';
-
-import PostTitle from './PostTitle';
-
-import Blockquote from '@/components/Blockquote';
-import { Heading2, Heading3, Heading4 } from '@/components/Heading';
-import Paragraph from '@/components/Paragraph';
-import VideoComponent from '@/components/Videos/Video';
+import Blockquote from '~/components/Blockquote';
+import { Heading2, Heading3, Heading4 } from '~/components/Heading';
+import Paragraph from '~/components/Paragraph';
+import VideoComponent from '~/components/Videos/Video';
 import type {
   CodeNode,
   EditorState,
@@ -17,9 +13,13 @@ import type {
   TextNode,
   Video,
   VideoNode,
-} from '@/types/graphql';
-import { HeadingTag } from '@/types/graphql';
-import { uploadUrl } from '@/utils/media';
+} from '~/types/graphql';
+import { HeadingTag } from '~/types/graphql';
+import { uploadUrl } from '~/utils/media';
+
+import TextNodes from '../../components/Post/TextNodes';
+
+import PostTitle from './PostTitle';
 
 function isEmptyText(nodes: TextNode[]) {
   return nodes.length === 0 || nodes.filter(({ text }) => text?.trim()).length === 0;

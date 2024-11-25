@@ -7,10 +7,10 @@ import type {
   QueryVenuesArgs,
 } from 'types/graphql';
 
-import { parseConnection } from './utils/collection';
+import type Media from '~/models/Media';
+import type Venue from '~/models/Venue';
 
-import type Media from '@/models/Media';
-import type Venue from '@/models/Venue';
+import { parseConnection } from './utils/collection';
 
 const resolvers = {
   Venue: {

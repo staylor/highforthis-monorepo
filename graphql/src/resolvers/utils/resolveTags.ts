@@ -1,4 +1,4 @@
-import type Artist from '@/models/Artist';
+import type Artist from '~/models/Artist';
 
 export default async function resolveTags(inputTerms: string[], { Artist }: { Artist: Artist }) {
   let ids: string[] = [];

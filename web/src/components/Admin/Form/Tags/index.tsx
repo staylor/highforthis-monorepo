@@ -2,7 +2,7 @@ import cn from 'classnames';
 import type { KeyboardEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
 
-import Input from '@/components/Form/Input';
+import Input from '~/components/Form/Input';
 
 interface TagsProps {
   name: string;

@@ -1,4 +1,4 @@
-import type { AdminRouteGroup } from '@/types';
+import type { AdminRouteGroup } from '~/types';
 
 const useRouteConfig = () => {
   const routeConfig: AdminRouteGroup[] = [

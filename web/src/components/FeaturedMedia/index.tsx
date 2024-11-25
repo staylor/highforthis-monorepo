@@ -1,5 +1,5 @@
-import type { ImageUpload, ImageUploadCrop } from '@/types/graphql';
-import { uploadUrl } from '@/utils/media';
+import type { ImageUpload, ImageUploadCrop } from '~/types/graphql';
+import { uploadUrl } from '~/utils/media';
 
 interface FeaturedMediaProps {
   featuredMedia: ImageUpload[];

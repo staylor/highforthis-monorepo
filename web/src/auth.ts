@@ -2,9 +2,9 @@ import { type AppLoadContext } from '@remix-run/server-runtime';
 import { Authenticator } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
 
-import { sessionStorage } from './session';
+import { post } from '~/utils/action';
 
-import { post } from '@/utils/action';
+import { sessionStorage } from './session';
 
 interface User {
   token: string;

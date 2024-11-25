@@ -1,7 +1,7 @@
 import { useLoaderData } from '@remix-run/react';
 
-import ShowsList from '@/components/Shows/List';
-import type { ShowConnection, ShowsQuery } from '@/types/graphql';
+import ShowsList from '~/components/Shows/List';
+import type { ShowConnection, ShowsQuery } from '~/types/graphql';
 
 export { loader, meta } from './shows._index';
 

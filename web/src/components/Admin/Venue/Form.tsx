@@ -1,6 +1,14 @@
 import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 
+import Form from '~/components/Admin/Form';
+import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
+import { HeaderAdd, Heading } from '~/components/Admin/styles';
+import Checkbox from '~/components/Form/Checkbox';
+import Input from '~/components/Form/Input';
+import Message from '~/components/Form/Message';
+import type { Fields } from '~/types';
+
 import {
   name,
   slug,
@@ -10,14 +18,6 @@ import {
   shows,
   excludeFromSearch,
 } from '../Entity/Form';
-
-import Form from '@/components/Admin/Form';
-import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
-import { HeaderAdd, Heading } from '@/components/Admin/styles';
-import Checkbox from '@/components/Form/Checkbox';
-import Input from '@/components/Form/Input';
-import Message from '@/components/Form/Message';
-import type { Fields } from '@/types';
 
 interface VenueFormProps {
   data?: any;

@@ -2,14 +2,14 @@ import { useLoaderData } from '@remix-run/react';
 import type { LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 
-import FeaturedMedia from '@/components/FeaturedMedia';
-import { Heading1 } from '@/components/Heading';
-import Map from '@/components/Map';
-import Shows from '@/components/Shows';
-import Attended from '@/components/Shows/Attended';
-import type { ImageUpload, ShowConnection, Venue as VenueType, VenueQuery } from '@/types/graphql';
-import { createClientCache } from '@/utils/cache';
-import query from '@/utils/query';
+import FeaturedMedia from '~/components/FeaturedMedia';
+import { Heading1 } from '~/components/Heading';
+import Map from '~/components/Map';
+import Shows from '~/components/Shows';
+import Attended from '~/components/Shows/Attended';
+import type { ImageUpload, ShowConnection, Venue as VenueType, VenueQuery } from '~/types/graphql';
+import { createClientCache } from '~/utils/cache';
+import query from '~/utils/query';
 
 export const loader: LoaderFunction = async ({ params, context }) => {
   return query({ context, query: venueQuery, variables: { first: 100, slug: params.slug } });

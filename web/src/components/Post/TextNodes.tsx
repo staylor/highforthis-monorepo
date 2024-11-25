@@ -1,6 +1,6 @@
 import { gql } from 'graphql-tag';
 
-import type { TextNode } from '@/types/graphql';
+import type { TextNode } from '~/types/graphql';
 
 const FORMATS = {
   BOLD: 1,

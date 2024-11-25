@@ -1,14 +1,14 @@
 import { gql } from 'graphql-tag';
 
+import Form from '~/components/Admin/Form';
+import { Heading, HeaderAdd } from '~/components/Admin/styles';
+import Checkbox from '~/components/Form/Checkbox';
+import Message from '~/components/Form/Message';
+import type { Fields } from '~/types';
+import type { ArtistConnection, Show, VenueConnection } from '~/types/graphql';
+
 import SelectEntities from './SelectEntities';
 import SelectEntity from './SelectEntity';
-
-import Form from '@/components/Admin/Form';
-import { Heading, HeaderAdd } from '@/components/Admin/styles';
-import Checkbox from '@/components/Form/Checkbox';
-import Message from '@/components/Form/Message';
-import type { Fields } from '@/types';
-import type { ArtistConnection, Show, VenueConnection } from '@/types/graphql';
 
 interface ShowFormProps {
   data?: any;

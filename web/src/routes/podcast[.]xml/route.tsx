@@ -1,11 +1,11 @@
 import type { LoaderFunction } from '@remix-run/server-runtime';
 import escape from 'html-escape';
 
-import feedQuery from './graphql';
+import type { AudioUpload, PodcastConnection, PodcastSettings } from '~/types/graphql';
+import { uploadUrl } from '~/utils/media';
+import query from '~/utils/query';
 
-import type { AudioUpload, PodcastConnection, PodcastSettings } from '@/types/graphql';
-import { uploadUrl } from '@/utils/media';
-import query from '@/utils/query';
+import feedQuery from './graphql';
 
 interface PodcastData {
   podcastSettings: PodcastSettings;

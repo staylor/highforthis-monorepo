@@ -2,13 +2,13 @@ import { useLoaderData } from '@remix-run/react';
 import type { LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 
-import Metadata from '@/components/Artist/Metadata';
-import { Heading1 } from '@/components/Heading';
-import Shows from '@/components/Shows';
-import Attended from '@/components/Shows/Attended';
-import type { Artist as ArtistType, ArtistQuery, ShowConnection } from '@/types/graphql';
-import { createClientCache } from '@/utils/cache';
-import query from '@/utils/query';
+import Metadata from '~/components/Artist/Metadata';
+import { Heading1 } from '~/components/Heading';
+import Shows from '~/components/Shows';
+import Attended from '~/components/Shows/Attended';
+import type { Artist as ArtistType, ArtistQuery, ShowConnection } from '~/types/graphql';
+import { createClientCache } from '~/utils/cache';
+import query from '~/utils/query';
 
 export const loader: LoaderFunction = async ({ params, context }) => {
   return query({ context, query: artistQuery, variables: { first: 100, slug: params.slug } });

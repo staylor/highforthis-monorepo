@@ -1,4 +1,4 @@
-import type { ImageUploadCrop, VideoThumbnail } from '@/types/graphql';
+import type { ImageUploadCrop, VideoThumbnail } from '~/types/graphql';
 
 type SelectedImageCrop = Pick<ImageUploadCrop, 'width' | 'fileName'>;
 

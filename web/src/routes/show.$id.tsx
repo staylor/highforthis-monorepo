@@ -3,12 +3,12 @@ import type { LoaderFunction } from '@remix-run/server-runtime';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 
-import Artwork from '@/components/Artist/Artwork';
-import { Heading1, Heading2 } from '@/components/Heading';
-import Link from '@/components/Link';
-import { formatDate } from '@/components/Shows/utils';
-import type { Show, ShowQuery } from '@/types/graphql';
-import query from '@/utils/query';
+import Artwork from '~/components/Artist/Artwork';
+import { Heading1, Heading2 } from '~/components/Heading';
+import Link from '~/components/Link';
+import { formatDate } from '~/components/Shows/utils';
+import type { Show, ShowQuery } from '~/types/graphql';
+import query from '~/utils/query';
 
 export const loader: LoaderFunction = async ({ params, context }) => {
   return query({ context, query: showQuery, variables: { id: params.id } });

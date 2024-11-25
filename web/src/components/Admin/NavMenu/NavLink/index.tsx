@@ -1,7 +1,7 @@
 import { useLocation, NavLink as RRNavLink } from '@remix-run/react';
 import cn from 'classnames';
 
-import type { AdminTopLevelRoute } from '@/types';
+import type { AdminTopLevelRoute } from '~/types';
 
 interface NavLinkProps {
   isHovered: boolean;

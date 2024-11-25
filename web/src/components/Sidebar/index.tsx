@@ -1,8 +1,8 @@
-import { formatArtists, formatDate, formatShowLink } from '../Shows/utils';
+import { Heading2 } from '~/components/Heading';
+import Link from '~/components/Link';
+import type { ShowConnection } from '~/types/graphql';
 
-import { Heading2 } from '@/components/Heading';
-import Link from '@/components/Link';
-import type { ShowConnection } from '@/types/graphql';
+import { formatArtists, formatDate, formatShowLink } from '../Shows/utils';
 
 function Sidebar({ shows }: { shows: ShowConnection }) {
   if (!shows) {

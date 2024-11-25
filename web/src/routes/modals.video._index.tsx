@@ -2,8 +2,8 @@ import type { OperationVariables } from '@apollo/client';
 import type { LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 
-import Video from '@/components/Videos/Video';
-import query from '@/utils/query';
+import Video from '~/components/Videos/Video';
+import query from '~/utils/query';
 
 export const loader: LoaderFunction = ({ context, params }) => {
   const variables = { first: 50 } as OperationVariables;

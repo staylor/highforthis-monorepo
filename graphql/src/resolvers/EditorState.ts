@@ -1,7 +1,7 @@
 import type { Document } from 'mongodb';
 
-import type Media from '@/models/Media';
-import type Video from '@/models/Video';
+import type Media from '~/models/Media';
+import type Video from '~/models/Video';
 
 const resolvers = {
   EditorNode: {

@@ -1,9 +1,9 @@
 import cn from 'classnames';
 
-import { blockquoteBase } from '@/components/Blockquote';
-import { headingBase, heading2, heading3, heading4 } from '@/components/Heading';
-import { orderedListBase, unorderedListBase } from '@/components/List';
-import { paragraphBase } from '@/components/Paragraph';
+import { blockquoteBase } from '~/components/Blockquote';
+import { headingBase, heading2, heading3, heading4 } from '~/components/Heading';
+import { orderedListBase, unorderedListBase } from '~/components/List';
+import { paragraphBase } from '~/components/Paragraph';
 
 export default {
   code: cn('font-code p-2 text-base bg-[rgba(0,0,0,0.05)]'),

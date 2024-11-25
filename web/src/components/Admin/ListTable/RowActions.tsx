@@ -3,7 +3,7 @@ import cn from 'classnames';
 import type { ChangeEvent } from 'react';
 import { Fragment } from 'react';
 
-import Link from '@/components/Link';
+import Link from '~/components/Link';
 
 export interface RowAction {
   ids?: string[];

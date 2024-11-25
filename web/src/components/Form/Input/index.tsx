@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import type { ChangeEvent, InputHTMLAttributes } from 'react';
 
-import { inputBase } from '@/components/Form/styles';
+import { inputBase } from '~/components/Form/styles';
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   onChange?: (value: string) => void;

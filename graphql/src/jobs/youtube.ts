@@ -3,7 +3,7 @@ import { URL } from 'node:url';
 import type { Db } from 'mongodb';
 import fetch from 'node-fetch';
 
-import { slugify } from '@/models/utils';
+import { slugify } from '~/models/utils';
 
 const API_HOST = 'https://www.googleapis.com';
 const PLAYLISTS_PATH = '/youtube/v3/playlists';

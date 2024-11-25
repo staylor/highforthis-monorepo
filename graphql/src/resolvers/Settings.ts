@@ -1,7 +1,7 @@
 import type { Document } from 'mongodb';
 
-import type Media from '@/models/Media';
-import type Settings from '@/models/Settings';
+import type Media from '~/models/Media';
+import type Settings from '~/models/Settings';
 
 async function updateSettings(
   _: unknown,

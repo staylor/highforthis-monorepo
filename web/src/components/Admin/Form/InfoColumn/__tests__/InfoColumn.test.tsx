@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import InfoColumn from '@/components/Admin/Form/InfoColumn';
+import InfoColumn from '~/components/Admin/Form/InfoColumn';
 
 const label = 'Info!';
 

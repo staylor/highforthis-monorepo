@@ -1,13 +1,13 @@
-import Form from '@/components/Admin/Form';
-import { Heading } from '@/components/Admin/styles';
-import Message from '@/components/Form/Message';
-import type { Fields } from '@/types';
+import Form from '~/components/Admin/Form';
+import { Heading } from '~/components/Admin/styles';
+import Message from '~/components/Form/Message';
+import type { Fields } from '~/types';
 import type {
   DashboardSettings,
   MediaSettings,
   PodcastSettings,
   SiteSettings,
-} from '@/types/graphql';
+} from '~/types/graphql';
 
 interface SettingsFormProps {
   data?: SiteSettings | PodcastSettings | DashboardSettings | MediaSettings;

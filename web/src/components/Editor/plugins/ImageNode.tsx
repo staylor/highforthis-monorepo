@@ -2,8 +2,8 @@ import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import type { LexicalNode, NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 import type { ReactNode } from 'react';
 
-import ImageComponent from '@/components/Editor/Blocks/Image';
-import type { ImageUpload } from '@/types/graphql';
+import ImageComponent from '~/components/Editor/Blocks/Image';
+import type { ImageUpload } from '~/types/graphql';
 
 // this data gets saved
 export type SerializedImageNode = Spread<{ imageId: string; size: string }, SerializedLexicalNode>;

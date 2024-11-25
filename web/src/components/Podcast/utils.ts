@@ -1,6 +1,6 @@
-import type { ImageUpload, SiteSettings } from '@/types/graphql';
-import { uploadUrl } from '@/utils/media';
-import titleTemplate from '@/utils/title';
+import type { ImageUpload, SiteSettings } from '~/types/graphql';
+import { uploadUrl } from '~/utils/media';
+import titleTemplate from '~/utils/title';
 
 interface MetaTags {
   title: string;

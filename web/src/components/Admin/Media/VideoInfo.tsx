@@ -1,4 +1,4 @@
-import type { VideoUpload } from '@/types/graphql';
+import type { VideoUpload } from '~/types/graphql';
 
 export default function VideoInfo({ media }: { media: VideoUpload }) {
   return (

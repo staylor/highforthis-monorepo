@@ -1,10 +1,10 @@
 import { useNavigate, useSearchParams } from '@remix-run/react';
 import type { SyntheticEvent } from 'react';
 
+import type { VideoConnection } from '~/types/graphql';
+
 import Button from './Button';
 import Video from './Video';
-
-import type { VideoConnection } from '@/types/graphql';
 
 function Videos({ videos }: { videos: VideoConnection }) {
   const [searchParams] = useSearchParams();

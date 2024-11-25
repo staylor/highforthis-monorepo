@@ -6,7 +6,7 @@ import {
   INSTAGRAM_USERNAME,
   TWITTER_USERNAME,
   TIKTOK_USERNAME,
-} from '@/constants';
+} from '~/constants';
 
 type IconProps = PropsWithChildren<{
   url: string;

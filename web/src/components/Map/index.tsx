@@ -1,9 +1,9 @@
 import cn from 'classnames';
 import qs from 'qs';
 
-import Image from '@/components/Image';
-import type { VenueCoordinates } from '@/types/graphql';
-import { useRootData } from '@/utils/rootData';
+import Image from '~/components/Image';
+import type { VenueCoordinates } from '~/types/graphql';
+import { useRootData } from '~/utils/rootData';
 
 interface MapProps {
   name?: string;

@@ -7,10 +7,10 @@ import type {
   QueryPodcastsArgs,
 } from 'types/graphql';
 
-import { parseConnection } from './utils/collection';
+import type Media from '~/models/Media';
+import type Podcast from '~/models/Podcast';
 
-import type Media from '@/models/Media';
-import type Podcast from '@/models/Podcast';
+import { parseConnection } from './utils/collection';
 
 const resolvers = {
   Podcast: {

@@ -1,4 +1,4 @@
-import { cursorToOffset, offsetToCursor } from '@/utils/connection';
+import { cursorToOffset, offsetToCursor } from '~/utils/connection';
 
 describe('connection', () => {
   it('serialization', () => {

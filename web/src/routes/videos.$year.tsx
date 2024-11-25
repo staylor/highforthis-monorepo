@@ -1,11 +1,11 @@
 import type { MetaFunction } from '@remix-run/node';
 import { useLoaderData, useParams } from '@remix-run/react';
 
-import TextTitle from '@/components/TextTitle';
-import Videos from '@/components/Videos';
-import type { VideoConnection, VideosQuery } from '@/types/graphql';
-import { rootData } from '@/utils/rootData';
-import titleTemplate from '@/utils/title';
+import TextTitle from '~/components/TextTitle';
+import Videos from '~/components/Videos';
+import type { VideoConnection, VideosQuery } from '~/types/graphql';
+import { rootData } from '~/utils/rootData';
+import titleTemplate from '~/utils/title';
 
 export { loader } from './videos._index';
 

@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import type { SelectHTMLAttributes, ChangeEvent } from 'react';
 
-import { inputBase } from '@/components/Form/styles';
+import { inputBase } from '~/components/Form/styles';
 
 export type Choice = string | number | { label: string; value: string | number };
 type Group = { label: string; choices: Choice[] };

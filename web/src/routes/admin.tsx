@@ -5,11 +5,11 @@ import { redirect } from '@remix-run/server-runtime';
 import cn from 'classnames';
 import { useState } from 'react';
 
-import { authenticator } from '@/auth';
-import NavMenu from '@/components/Admin/NavMenu';
-import adminCss from '@/styles/admin.css?url';
-import { rootData } from '@/utils/rootData';
-import titleTemplate from '@/utils/title';
+import { authenticator } from '~/auth';
+import NavMenu from '~/components/Admin/NavMenu';
+import adminCss from '~/styles/admin.css?url';
+import { rootData } from '~/utils/rootData';
+import titleTemplate from '~/utils/title';
 
 export const handle = {
   layout: 'admin',

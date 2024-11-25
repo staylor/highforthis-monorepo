@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import type { TextareaHTMLAttributes, ChangeEvent } from 'react';
 
-import { inputBase } from '@/components/Form/styles';
+import { inputBase } from '~/components/Form/styles';
 
 interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
   onChange?: (value: string) => void;

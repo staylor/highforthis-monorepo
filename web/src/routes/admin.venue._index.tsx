@@ -2,17 +2,17 @@ import { useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 
-import { name, slug, excludeFromSearch, website } from '@/components/Admin/Entity/ListTable';
-import ListTable, { Thumbnail } from '@/components/Admin/ListTable';
-import Search from '@/components/Admin/ListTable/Search';
-import PermanentlyClosed from '@/components/Admin/Venue/PermanentlyClosed';
-import { Heading, HeaderAdd } from '@/components/Admin/styles';
-import Message from '@/components/Form/Message';
-import type { Columns } from '@/types';
-import type { VenueConnection, VenuesAdminQuery } from '@/types/graphql';
-import { handleDelete } from '@/utils/action';
-import mutate, { parseFormData } from '@/utils/mutate';
-import query, { addPageOffset, addSearchParam } from '@/utils/query';
+import { name, slug, excludeFromSearch, website } from '~/components/Admin/Entity/ListTable';
+import ListTable, { Thumbnail } from '~/components/Admin/ListTable';
+import Search from '~/components/Admin/ListTable/Search';
+import PermanentlyClosed from '~/components/Admin/Venue/PermanentlyClosed';
+import { Heading, HeaderAdd } from '~/components/Admin/styles';
+import Message from '~/components/Form/Message';
+import type { Columns } from '~/types';
+import type { VenueConnection, VenuesAdminQuery } from '~/types/graphql';
+import { handleDelete } from '~/utils/action';
+import mutate, { parseFormData } from '~/utils/mutate';
+import query, { addPageOffset, addSearchParam } from '~/utils/query';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const variables = addSearchParam(request, addPageOffset(params));

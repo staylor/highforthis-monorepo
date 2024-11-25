@@ -1,5 +1,5 @@
-import { SITE_TITLE, SITE_TAGLINE } from '@/constants';
-import type { SiteSettings } from '@/types/graphql';
+import { SITE_TITLE, SITE_TAGLINE } from '~/constants';
+import type { SiteSettings } from '~/types/graphql';
 
 export interface TitleProps {
   title?: string;

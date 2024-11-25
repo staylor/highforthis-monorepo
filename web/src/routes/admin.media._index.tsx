@@ -3,16 +3,16 @@ import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
 import debounce from 'lodash.debounce';
 
-import ListTable, { Thumbnail, RowTitle, RowActions, usePath } from '@/components/Admin/ListTable';
-import { Heading, HeaderAdd } from '@/components/Admin/styles';
-import Input from '@/components/Form/Input';
-import Message from '@/components/Form/Message';
-import Select from '@/components/Form/Select';
-import Link from '@/components/Link';
-import type { Columns } from '@/types';
-import type { MediaUpload, MediaUploadConnection, UploadsAdminQuery } from '@/types/graphql';
-import { handleDelete } from '@/utils/action';
-import query, { addPageOffset } from '@/utils/query';
+import ListTable, { Thumbnail, RowTitle, RowActions, usePath } from '~/components/Admin/ListTable';
+import { Heading, HeaderAdd } from '~/components/Admin/styles';
+import Input from '~/components/Form/Input';
+import Message from '~/components/Form/Message';
+import Select from '~/components/Form/Select';
+import Link from '~/components/Link';
+import type { Columns } from '~/types';
+import type { MediaUpload, MediaUploadConnection, UploadsAdminQuery } from '~/types/graphql';
+import { handleDelete } from '~/utils/action';
+import query, { addPageOffset } from '~/utils/query';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const url = new URL(request.url);

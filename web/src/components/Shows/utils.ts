@@ -1,4 +1,4 @@
-import type { Show } from '@/types/graphql';
+import type { Show } from '~/types/graphql';
 
 export const formatDate = (date?: number) => {
   const d = date ? new Date(date) : new Date();

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 
-import { SITE_TITLE } from '@/constants';
-import { useRootData } from '@/utils/rootData';
+import { SITE_TITLE } from '~/constants';
+import { useRootData } from '~/utils/rootData';
 
 const Wrapper = ({ children }: PropsWithChildren) => {
   const { siteSettings } = useRootData();

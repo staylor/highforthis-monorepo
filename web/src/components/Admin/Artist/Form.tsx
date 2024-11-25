@@ -1,6 +1,12 @@
 import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 
+import Form from '~/components/Admin/Form';
+import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
+import { HeaderAdd, Heading } from '~/components/Admin/styles';
+import Message from '~/components/Form/Message';
+import type { Fields } from '~/types';
+
 import {
   name,
   slug,
@@ -10,12 +16,6 @@ import {
   shows,
   excludeFromSearch,
 } from '../Entity/Form';
-
-import Form from '@/components/Admin/Form';
-import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
-import { HeaderAdd, Heading } from '@/components/Admin/styles';
-import Message from '@/components/Form/Message';
-import type { Fields } from '@/types';
 
 interface ArtistFormProps {
   data?: any;

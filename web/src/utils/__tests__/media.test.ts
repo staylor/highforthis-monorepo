@@ -1,4 +1,4 @@
-import { uploadUrl } from '@/utils/media';
+import { uploadUrl } from '~/utils/media';
 
 describe('media', () => {
   it('uploadUrl', () => {

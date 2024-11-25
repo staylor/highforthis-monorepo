@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
-import Textarea from '@/components/Form/Textarea';
+import Textarea from '~/components/Form/Textarea';
 
 const TEXT_VALUE = 'Run for the border.';
 
