@@ -21,7 +21,12 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function UserEdit({ loaderData }: Route.ComponentProps) {
-  return <UserForm data={loaderData.user} heading="Edit User" buttonLabel="Update User" />;
+  const { user } = loaderData;
+  if (!user) {
+    return null;
+  }
+
+  return <UserForm data={user} heading="Edit User" buttonLabel="Update User" />;
 }
 
 const userQuery = gql`

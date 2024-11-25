@@ -19,6 +19,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 export default function Users({ loaderData }: Route.ComponentProps) {
   const path = usePath();
+  const { users } = loaderData;
 
   const columns = [
     {
@@ -45,7 +46,7 @@ export default function Users({ loaderData }: Route.ComponentProps) {
       <Heading>Users</Heading>
       <HeaderAdd label="Add User" />
       <Message param="deleted" text="Deleted %s users." />
-      <ListTable columns={columns} data={loaderData.users} />
+      <ListTable columns={columns} data={users!} />
     </>
   );
 }

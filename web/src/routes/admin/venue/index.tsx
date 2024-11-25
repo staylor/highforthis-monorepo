@@ -47,6 +47,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Venues({ loaderData }: Route.ComponentProps) {
+  const { venues } = loaderData;
+
   const columns: Columns = [
     {
       className: 'w-16',
@@ -83,7 +85,7 @@ export default function Venues({ loaderData }: Route.ComponentProps) {
       <HeaderAdd label="Add Venue" />
       <Message param="deleted" text="Deleted %s Venues." />
       <Search placeholder="Search Venues" />
-      <ListTable columns={columns} data={loaderData.venues} />
+      <ListTable columns={columns} data={venues!} />
     </>
   );
 }

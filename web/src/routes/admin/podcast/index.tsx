@@ -50,7 +50,7 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
       <Heading>Podcasts</Heading>
       <HeaderAdd label="Add Podcast" />
       <Message param="deleted" text="Deleted %s podcasts." />
-      <ListTable columns={columns} data={loaderData.podcasts} />
+      <ListTable columns={columns} data={loaderData.podcasts!} />
     </>
   );
 }

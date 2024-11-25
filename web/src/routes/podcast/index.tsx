@@ -4,12 +4,12 @@ import type { MetaFunction } from 'react-router';
 import Link from '~/components/Link';
 import Podcast from '~/components/Podcast';
 import { metaTags } from '~/components/Podcast/utils';
-import type { PodcastsQuery } from '~/types/graphql';
+import type { PodcastEdge, PodcastsQuery } from '~/types/graphql';
 import { createClientCache } from '~/utils/cache';
 import query from '~/utils/query';
 import { rootData, useRootData } from '~/utils/rootData';
 
-import type { Route } from './+types';
+import type { Route } from './+types/index';
 
 export const meta: MetaFunction = ({ matches }) => {
   const { siteSettings, podcastSettings } = rootData(matches);
@@ -37,7 +37,7 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
 
   return (
     <Podcast title={`Podcast: ${title}`} description={summary as string}>
-      {podcasts.edges.map(({ node }) => (
+      {podcasts.edges.map(({ node }: PodcastEdge) => (
         <figure className="mb-6" key={node.id}>
           <figcaption className="mb-3">
             <Link to={`/podcast/${node.id}`} className="block text-pink dark:text-pink">

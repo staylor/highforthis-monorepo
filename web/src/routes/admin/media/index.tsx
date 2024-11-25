@@ -104,7 +104,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
         className="mx-2"
         placeholder="Select Media Type"
         value={searchParams.get('type') || ''}
-        choices={uploads.types?.map((type: string) => ({
+        choices={uploads?.types?.map((type: string) => ({
           value: type,
           label: type.charAt(0).toUpperCase() + type.substring(1),
         }))}
@@ -115,7 +115,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
         className="mx-2"
         placeholder="Select MIME Type"
         value={searchParams.get('mimeType') || ''}
-        choices={uploads.mimeTypes || []}
+        choices={uploads?.mimeTypes || []}
         onChange={updateQuery('mimeType')}
       />
     </>
@@ -132,7 +132,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
           onChange={updateSearch}
         />
       </div>
-      <ListTable columns={columns} filters={filters} data={uploads} />
+      <ListTable columns={columns} filters={filters} data={uploads!} />
     </>
   );
 }

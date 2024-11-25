@@ -3,7 +3,11 @@ import { gql } from 'graphql-tag';
 import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
 import SettingsForm from '~/components/Admin/Settings/Form';
 import type { Fields } from '~/types';
-import type { Podcast, PodcastSettingsQuery } from '~/types/graphql';
+import type {
+  Podcast,
+  PodcastSettings as PodcastSettingsType,
+  PodcastSettingsQuery,
+} from '~/types/graphql';
 import { handleSubmission } from '~/utils/action';
 import query from '~/utils/query';
 
@@ -76,7 +80,7 @@ export default function PodcastSettings({ loaderData }: Route.ComponentProps) {
   return (
     <SettingsForm
       heading="Podcast Settings"
-      data={loaderData.podcastSettings}
+      data={loaderData.podcastSettings as PodcastSettingsType}
       fields={settingsFields}
     />
   );

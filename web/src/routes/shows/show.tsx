@@ -16,6 +16,10 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
 
 export default function ShowRoute({ loaderData }: Route.ComponentProps) {
   const { show } = loaderData;
+  if (!show) {
+    return null;
+  }
+
   const lastIndex = show.artists.length - 1;
   const d = formatDate(show.date);
   const ArtistHeading = show.title ? Heading2 : Heading1;

@@ -57,7 +57,6 @@ export default [
   route('sphere', 'routes/sphere/index.tsx'),
   route('venue/:slug', 'routes/venue.tsx'),
   route('video/:slug', 'routes/videos/video.tsx'),
-  route('videos/:year', 'routes/videos/year.tsx'),
-  route('videos', 'routes/videos/index.tsx'),
+  route('videos/:year?', 'routes/videos/index.tsx'),
   route('*', 'routes/$.tsx'),
 ] satisfies RouteConfig;

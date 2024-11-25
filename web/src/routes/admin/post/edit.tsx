@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag';
 
 import PostForm from '~/components/Admin/Post/Form';
-import type { PostQuery } from '~/types/graphql';
+import type { Post, PostQuery } from '~/types/graphql';
 import { handleSubmission } from '~/utils/action';
 import query from '~/utils/query';
 
@@ -21,7 +21,12 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function PostEdit({ loaderData }: Route.ComponentProps) {
-  return <PostForm data={loaderData.post} heading="Edit Post" buttonLabel="Update Post" />;
+  const { post } = loaderData;
+  if (!post) {
+    return null;
+  }
+
+  return <PostForm data={post as Post} heading="Edit Post" buttonLabel="Update Post" />;
 }
 
 const postQuery = gql`
