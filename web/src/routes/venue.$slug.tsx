@@ -7,7 +7,7 @@ import { Heading1 } from '@/components/Heading';
 import Map from '@/components/Map';
 import Shows from '@/components/Shows';
 import Attended from '@/components/Shows/Attended';
-import type { ImageUpload, ShowConnection, Venue, VenueQuery } from '@/types/graphql';
+import type { ImageUpload, ShowConnection, Venue as VenueType, VenueQuery } from '@/types/graphql';
 import { createClientCache } from '@/utils/cache';
 import query from '@/utils/query';
 
@@ -19,7 +19,7 @@ export const clientLoader = createClientCache();
 
 export default function Venue() {
   const data = useLoaderData<VenueQuery>();
-  const venue = data.venue as Venue;
+  const venue = data.venue as VenueType;
   const shows = data.shows as ShowConnection;
   const attended = data.attended as ShowConnection;
 

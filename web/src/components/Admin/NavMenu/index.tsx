@@ -63,7 +63,7 @@ function NavMenu({
                 onMouseEnter={() => mouseEnter(key)}
                 onMouseLeave={mouseLeave}
               >
-                <NavLink // eslint-disable-line jsx-a11y/anchor-has-content
+                <NavLink
                   item={item}
                   isHovered={isActive}
                   hasSubNav={hasSubNav}

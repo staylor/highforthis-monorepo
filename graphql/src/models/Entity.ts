@@ -18,7 +18,7 @@ export interface EntityCriteria {
   permanentlyClosed?: Falsy;
 }
 
-export default class Entity extends Model {
+export default abstract class Entity extends Model {
   protected parseCriteria(args: EntityParams) {
     const criteria: EntityCriteria = {};
     const { filtered = false, search = '' } = args;

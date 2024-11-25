@@ -41,7 +41,7 @@ export default class Video extends Upload {
             meta.duration = parseFloat(video.duration as any);
           }
         }
-      } catch (e) {
+      } catch (_) {
         // silence is golden
       }
 

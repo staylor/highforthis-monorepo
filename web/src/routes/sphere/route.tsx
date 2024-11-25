@@ -8,10 +8,10 @@ import Button from '@/components/Button';
 import { Heading1 } from '@/components/Heading';
 
 type Stats = Record<string, number>;
-type SetlistSet = string[];
+type SetlistSetType = string[];
 type Setlist = {
   date: string;
-  sets: SetlistSet[];
+  sets: SetlistSetType[];
 };
 type AllSetlists = { setlists: Setlist[]; stats: Stats };
 

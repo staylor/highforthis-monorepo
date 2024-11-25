@@ -14,7 +14,6 @@ describe('textarea', () => {
   });
 
   it('add className', () => {
-    // eslint-disable-next-line tailwindcss/no-custom-classname
     const { container } = render(<Textarea className="foo" />);
 
     expect(container.firstChild).toMatchSnapshot();

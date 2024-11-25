@@ -13,7 +13,7 @@ export const setStyle = (
 
   Object.keys(styles).forEach((cssKey) => {
     const key = cssKey as keyof CSSProperties;
-    // @ts-ignore
+    // @ts-expect-error todo todo
     (ref.current as HTMLElement).style[key] = styles[key];
   });
 };

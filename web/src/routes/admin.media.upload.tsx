@@ -19,7 +19,6 @@ export default function Media() {
   const [uploads, setUploads] = useReducer(reducer, {} as PendingUploads);
 
   const setUpload = (guid: string, data: Partial<PendingUpload>) => {
-    // @ts-ignore
     setUploads({
       [guid]: {
         ...uploads[guid],

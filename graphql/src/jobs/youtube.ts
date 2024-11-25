@@ -122,7 +122,7 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
   let items;
   try {
     items = await fetchPlaylistItems(playlistId);
-  } catch (e) {
+  } catch (_) {
     console.log('Fetch playlist', playlistId, 'failed :(');
     return [];
   }
@@ -135,7 +135,7 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
   const existing = cursor.map(({ dataId }) => dataId);
 
   const updates = await Promise.all(
-    items.map((item, i) => {
+    items.map((item) => {
       // console.log('Map start:', i);
       if (
         !item ||
@@ -174,7 +174,7 @@ export default async (db: Db) => {
   let response: any;
   try {
     response = await fetchPlaylists();
-  } catch (e) {
+  } catch (_) {
     console.log('Fetch playlists failed :(');
     return;
   }

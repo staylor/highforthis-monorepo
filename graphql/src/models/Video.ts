@@ -1,7 +1,6 @@
 import type { Document, ObjectId } from 'mongodb';
 
 import Model from './Model';
-import type { ModelContext } from './types';
 import { getUniqueSlug } from './utils';
 
 interface VideoParams {
@@ -20,11 +19,7 @@ interface VideoCriteria {
 }
 
 export default class Video extends Model {
-  public constructor(context: ModelContext) {
-    super(context);
-
-    this.collection = context.db.collection('video');
-  }
+  public collection = this.context.db.collection('video');
 
   protected parseCriteria(args: VideoParams) {
     const { year = '', search = '' } = args;

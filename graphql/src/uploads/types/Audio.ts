@@ -109,7 +109,7 @@ export default class Audio extends Upload {
         if (metadata.duration) {
           meta.duration = metadata.duration;
         }
-      } catch (e) {
+      } catch (_) {
         // silence is golden
       }
 

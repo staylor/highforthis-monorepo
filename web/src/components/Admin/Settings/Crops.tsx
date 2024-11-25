@@ -41,7 +41,7 @@ function Crops({ settings }: { settings: MediaSettings }) {
   const bindOnChange = (prop: 'name' | 'width' | 'height', i: number) => (value: string) => {
     const newCrops = [...crops] as MediaCropSetting[];
     newCrops[i] = { ...newCrops[i] } as MediaCropSetting;
-    // @ts-ignore
+    // @ts-expect-error todo todo
     newCrops[i][prop] = value;
     setCrops(newCrops);
   };

@@ -30,9 +30,8 @@ async function findByIds(collection: Collection, ids: readonly any[]) {
     });
 }
 
-export default class Model {
-  // @ts-ignore
-  public collection: Collection;
+export default abstract class Model {
+  public abstract collection: Collection;
 
   protected context: ModelContext;
 

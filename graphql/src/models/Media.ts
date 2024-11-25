@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 
 import type { SearchCriteria } from './Model';
 import Model from './Model';
-import type { FileInfo, ModelContext } from './types';
+import type { FileInfo } from './types';
 
 const deleteFile = (file: string): Promise<void> =>
   new Promise((resolve) => {
@@ -29,11 +29,7 @@ interface MediaCriteria extends SearchCriteria {
 }
 
 export default class Media extends Model {
-  public constructor(context: ModelContext) {
-    super(context);
-
-    this.collection = context.db.collection('media');
-  }
+  public collection = this.context.db.collection('media');
 
   protected parseCriteria(args: MediaParams) {
     const { type = null, mimeType = null, search = null } = args;

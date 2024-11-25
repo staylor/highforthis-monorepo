@@ -28,7 +28,6 @@ describe('select', () => {
   });
 
   it('add className', () => {
-    // eslint-disable-next-line tailwindcss/no-custom-classname
     const { container } = render(<Select className="foo" />);
 
     expect(container.firstChild).toMatchSnapshot();
@@ -68,21 +67,21 @@ describe('select', () => {
     });
 
     it('string', () => {
-      // @ts-ignore
+      // @ts-expect-error test
       const { container } = render(<Select multiple="multiple" />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
     it('truthy', () => {
-      // @ts-ignore
+      // @ts-expect-error test
       const { container } = render(<Select multiple="1" />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
     it('falsey', () => {
-      // @ts-ignore
+      // @ts-expect-error test
       const { container } = render(<Select multiple="0" />);
 
       expect(container.firstChild).toMatchSnapshot();

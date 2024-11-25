@@ -4,7 +4,6 @@ import type { PostStatus } from 'types/graphql';
 
 import type { SearchCriteria } from './Model';
 import Model from './Model';
-import type { ModelContext } from './types';
 import { getUniqueSlug } from './utils';
 
 interface PostParams {
@@ -17,11 +16,7 @@ interface PostCriteria extends SearchCriteria {
 }
 
 export default class Post extends Model {
-  public constructor(context: ModelContext) {
-    super(context);
-
-    this.collection = context.db.collection('post');
-  }
+  public collection = this.context.db.collection('post');
 
   protected parseCriteria(args: PostParams) {
     const { status = null, search = null } = args;

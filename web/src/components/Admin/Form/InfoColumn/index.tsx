@@ -1,8 +1,6 @@
 import cn from 'classnames';
 import type { HTMLAttributes, ReactNode } from 'react';
 
-import type { Fields } from '@/types';
-
 const border = cn('border border-detail');
 
 const InfoBox = (props: HTMLAttributes<HTMLElement>) => (
@@ -14,8 +12,8 @@ const Content = (props: HTMLAttributes<HTMLDivElement>) => (
 );
 
 interface InfoColumnProps {
-  infoFields?: Fields;
-  metaFields?: Fields;
+  infoFields?: ReactNode[];
+  metaFields?: ReactNode[];
   label?: string;
   button?: ReactNode;
 }
@@ -34,16 +32,14 @@ export default function InfoColumn({
             {label}
           </h3>
           <Content>
-            <>{infoFields}</>
+            {infoFields}
             {button}
           </Content>
         </InfoBox>
       ) : null}
       {metaFields.length > 0 ? (
         <InfoBox>
-          <Content>
-            <>{metaFields}</>
-          </Content>
+          <Content>{metaFields}</Content>
         </InfoBox>
       ) : null}
     </section>
