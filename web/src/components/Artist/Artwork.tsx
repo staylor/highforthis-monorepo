@@ -1,7 +1,7 @@
 import cn from 'classnames';
 
-import type { AppleMusicData } from '@/types/graphql';
 import Image from '@/components/Image';
+import type { AppleMusicData } from '@/types/graphql';
 
 interface ArtworkProps {
   name: string;

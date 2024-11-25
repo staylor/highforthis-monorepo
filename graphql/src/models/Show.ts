@@ -1,5 +1,4 @@
 import Model from './Model';
-import type { ModelContext } from './types';
 
 enum ShowOrder {
   ASC,
@@ -27,11 +26,7 @@ interface ShowCriteria {
 }
 
 export default class Show extends Model {
-  public constructor(context: ModelContext) {
-    super(context);
-
-    this.collection = context.db.collection('show');
-  }
+  public collection = this.context.db.collection('show');
 
   public async all({ order = ShowOrder.ASC, offset = 0, limit = 10, ...params }: ShowParams) {
     const criteria = this.parseCriteria(params);

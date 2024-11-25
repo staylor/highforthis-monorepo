@@ -1,15 +1,15 @@
 import { gql } from 'graphql-tag';
 
-import { Heading } from '@/components/Admin/styles';
+import AudioInfo from './AudioInfo';
+import ImageInfo from './ImageInfo';
+import VideoInfo from './VideoInfo';
+
 import Form from '@/components/Admin/Form';
+import { Heading } from '@/components/Admin/styles';
 import Message from '@/components/Form/Message';
-import { uploadUrl } from '@/utils/media';
 import type { Fields } from '@/types';
 import type { MediaUpload, ImageUpload, VideoUpload, AudioUpload } from '@/types/graphql';
-
-import ImageInfo from './ImageInfo';
-import AudioInfo from './AudioInfo';
-import VideoInfo from './VideoInfo';
+import { uploadUrl } from '@/utils/media';
 
 interface MediaFormProps {
   data?: MediaUpload;

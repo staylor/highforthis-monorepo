@@ -1,7 +1,7 @@
 import { cursorToOffset, offsetToCursor } from '@/utils/connection';
 
 describe('connection', () => {
-  test('serialization', () => {
+  it('serialization', () => {
     const value = 7;
 
     const serialized = offsetToCursor(value);

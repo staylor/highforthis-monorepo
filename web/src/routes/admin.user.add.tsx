@@ -1,5 +1,5 @@
-import { gql } from 'graphql-tag';
 import type { ActionFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
 import UserForm from '@/components/Admin/User/Form';
 import { handleSubmission } from '@/utils/action';

@@ -1,6 +1,10 @@
-import type { SyntheticEvent } from 'react';
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import type { LexicalNode, RangeSelection } from 'lexical';
+import { $createCodeNode } from '@lexical/code';
+import { $createListNode, type ListType } from '@lexical/list';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
+import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
+import type { HeadingTagType } from '@lexical/rich-text';
+import { $setBlocksType } from '@lexical/selection';
+import { mergeRegister, $insertNodeToNearestRoot } from '@lexical/utils';
 import {
   $createParagraphNode,
   $getSelection,
@@ -9,25 +13,21 @@ import {
   $setSelection,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
-import type { HeadingTagType } from '@lexical/rich-text';
-import { $createCodeNode } from '@lexical/code';
-import { $createListNode, type ListType } from '@lexical/list';
-import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
-import { $setBlocksType } from '@lexical/selection';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
-import { mergeRegister, $insertNodeToNearestRoot } from '@lexical/utils';
+import type { LexicalNode, RangeSelection } from 'lexical';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import type { SyntheticEvent } from 'react';
 
-import Toolbar from '@/components/Editor/Toolbar';
-import Controls from '@/components/Editor/Controls';
-import StyleButton from '@/components/Editor/Controls/StyleButton';
-import BlockButton from '@/components/Editor/Controls/BlockButton';
-import VideoModal from '@/components/Admin/Modals/Video';
-import MediaModal from '@/components/Admin/Modals/Media';
-import type { ImageUpload, Video } from '@/types/graphql';
-
-import { getNodeFromSelection, getStyleFromNode, setStyle } from './utils';
-import { $createVideoNode } from './VideoNode';
 import { $createImageNode } from './ImageNode';
+import { $createVideoNode } from './VideoNode';
+import { getNodeFromSelection, getStyleFromNode, setStyle } from './utils';
+
+import MediaModal from '@/components/Admin/Modals/Media';
+import VideoModal from '@/components/Admin/Modals/Video';
+import Controls from '@/components/Editor/Controls';
+import BlockButton from '@/components/Editor/Controls/BlockButton';
+import StyleButton from '@/components/Editor/Controls/StyleButton';
+import Toolbar from '@/components/Editor/Toolbar';
+import type { ImageUpload, Video } from '@/types/graphql';
 
 interface BlockType {
   label: string;

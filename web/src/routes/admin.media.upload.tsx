@@ -1,8 +1,8 @@
 import type { DragEvent } from 'react';
 import { useReducer } from 'react';
 
-import Link from '@/components/Link';
 import { Heading } from '@/components/Admin/styles';
+import Link from '@/components/Link';
 
 interface PendingUpload extends File {
   id: string;
@@ -19,7 +19,6 @@ export default function Media() {
   const [uploads, setUploads] = useReducer(reducer, {} as PendingUploads);
 
   const setUpload = (guid: string, data: Partial<PendingUpload>) => {
-    // @ts-ignore
     setUploads({
       [guid]: {
         ...uploads[guid],

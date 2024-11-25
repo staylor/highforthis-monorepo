@@ -1,6 +1,6 @@
-import type { LexicalNode } from 'lexical';
 import type { ListNode } from '@lexical/list';
 import type { HeadingNode } from '@lexical/rich-text';
+import type { LexicalNode } from 'lexical';
 import type { CSSProperties } from 'react';
 
 export const setStyle = (
@@ -13,7 +13,7 @@ export const setStyle = (
 
   Object.keys(styles).forEach((cssKey) => {
     const key = cssKey as keyof CSSProperties;
-    // @ts-ignore
+    // @ts-expect-error todo todo
     (ref.current as HTMLElement).style[key] = styles[key];
   });
 };

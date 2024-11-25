@@ -14,7 +14,7 @@ export const metaTags = ({ title, description, url, image, siteSettings }: MetaT
   const featuredImage = uploadUrl(image.destination, image.fileName);
 
   return [
-    { title: titleTemplate({ title: title, siteSettings }) },
+    { title: titleTemplate({ title, siteSettings }) },
     { property: 'og:type', content: 'article' },
     { property: 'og:title', content: title },
     { property: 'og:description', content: description },

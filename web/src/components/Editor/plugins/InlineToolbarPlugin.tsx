@@ -1,15 +1,15 @@
-import type { RangeSelection, TextFormatType } from 'lexical';
-import { $getSelection, FORMAT_TEXT_COMMAND, SELECTION_CHANGE_COMMAND } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
 import { mergeRegister } from '@lexical/utils';
+import type { RangeSelection, TextFormatType } from 'lexical';
+import { $getSelection, FORMAT_TEXT_COMMAND, SELECTION_CHANGE_COMMAND } from 'lexical';
 import type { ReactNode } from 'react';
 import { useRef, useEffect, useCallback, useReducer, useMemo } from 'react';
 
-import Toolbar from '@/components/Editor/Toolbar';
-import StyleButton from '@/components/Editor/Controls/StyleButton';
-import Controls from '@/components/Editor/Controls';
-
 import { setStyle } from './utils';
+
+import Controls from '@/components/Editor/Controls';
+import StyleButton from '@/components/Editor/Controls/StyleButton';
+import Toolbar from '@/components/Editor/Toolbar';
 
 const LowPriority = 1;
 

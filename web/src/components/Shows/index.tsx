@@ -1,7 +1,7 @@
-import type { ShowConnection } from '@/types/graphql';
-
-import ShowsList from './List';
 import ShowsGrid from './Grid';
+import ShowsList from './List';
+
+import type { ShowConnection } from '@/types/graphql';
 
 function Shows({
   shows,

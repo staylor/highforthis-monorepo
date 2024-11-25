@@ -1,9 +1,9 @@
 import type { ThHTMLAttributes, TdHTMLAttributes, SyntheticEvent } from 'react';
 import { useState } from 'react';
 
+import Button from '@/components/Button';
 import type { InputProps } from '@/components/Form/Input';
 import Input from '@/components/Form/Input';
-import Button from '@/components/Button';
 import type { MediaCropSetting, MediaSettings } from '@/types/graphql';
 
 const NumberInput = (props: InputProps) => (
@@ -41,7 +41,7 @@ function Crops({ settings }: { settings: MediaSettings }) {
   const bindOnChange = (prop: 'name' | 'width' | 'height', i: number) => (value: string) => {
     const newCrops = [...crops] as MediaCropSetting[];
     newCrops[i] = { ...newCrops[i] } as MediaCropSetting;
-    // @ts-ignore
+    // @ts-expect-error todo todo
     newCrops[i][prop] = value;
     setCrops(newCrops);
   };

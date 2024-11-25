@@ -1,7 +1,7 @@
+import type { OperationVariables } from '@apollo/client';
 import type { ActionFunctionArgs } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/server-runtime';
 import type { DocumentNode } from 'graphql';
-import type { OperationVariables } from '@apollo/client';
 
 import type { ParseFormDataArgs } from './mutate';
 import mutate, { parseFormData } from './mutate';

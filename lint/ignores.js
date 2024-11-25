@@ -1,0 +1,15 @@
+export default [
+  '**/package.json',
+  '**/tsconfig.json',
+  '.cache',
+  '.vscode',
+  'apollo-codegen-config.json',
+  'graphql/lib/',
+  'graphql/public/',
+  'graphql/generated/',
+  'graphql/**/*.json',
+  'node_modules',
+  'web/.react-router',
+  'web/build',
+  'xcode/**/*.json',
+];

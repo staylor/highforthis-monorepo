@@ -1,12 +1,12 @@
-import { gql } from 'graphql-tag';
-import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
+import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
 import SettingsForm from '@/components/Admin/Settings/Form';
-import query from '@/utils/query';
-import { handleSubmission } from '@/utils/action';
 import type { Fields } from '@/types';
 import type { SiteSettingsQuery } from '@/types/graphql';
+import { handleSubmission } from '@/utils/action';
+import query from '@/utils/query';
 
 export const loader: LoaderFunction = ({ request, context }) => {
   return query({ request, context, query: settingsQuery });

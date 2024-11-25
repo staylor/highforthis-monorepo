@@ -1,6 +1,6 @@
 import type { OperationVariables } from '@apollo/client';
-import { gql } from 'graphql-tag';
 import type { LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
 import query from '@/utils/query';
 

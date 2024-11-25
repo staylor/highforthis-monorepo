@@ -7,10 +7,10 @@ import type {
   QueryArtistsArgs,
 } from 'types/graphql';
 
-import type Media from '@/models/Media';
-import type Artist from '@/models/Artist';
-
 import { parseConnection } from './utils/collection';
+
+import type Artist from '@/models/Artist';
+import type Media from '@/models/Media';
 
 const resolvers = {
   Artist: {

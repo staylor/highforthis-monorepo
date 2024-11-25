@@ -8,12 +8,12 @@ import type {
   QueryPostsArgs,
 } from 'types/graphql';
 
-import type Media from '@/models/Media';
-import type Artist from '@/models/Artist';
-import type Post from '@/models/Post';
-
 import { parseConnection } from './utils/collection';
 import resolveTags from './utils/resolveTags';
+
+import type Artist from '@/models/Artist';
+import type Media from '@/models/Media';
+import type Post from '@/models/Post';
 
 const resolvers = {
   Post: {

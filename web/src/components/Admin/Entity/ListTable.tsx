@@ -1,5 +1,5 @@
-import Name from './Name';
 import ExcludeFromSearch from './ExcludeFromSearch';
+import Name from './Name';
 
 export const name = {
   label: 'Name',

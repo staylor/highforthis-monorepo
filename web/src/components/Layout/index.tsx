@@ -1,16 +1,16 @@
+import { useMatches } from '@remix-run/react';
 import cn from 'classnames';
 import type { HtmlHTMLAttributes, HTMLAttributes, PropsWithChildren } from 'react';
-import { useMatches } from '@remix-run/react';
 
-import { SITE_TITLE } from '@/constants';
+import DarkMode from './DarkMode';
+import SocialIcons from './SocialIcons';
+
 import Link from '@/components/Link';
 import Navigation from '@/components/Nav';
 import Sidebar from '@/components/Sidebar';
+import { SITE_TITLE } from '@/constants';
 import type { ShowConnection } from '@/types/graphql';
 import { useRootData } from '@/utils/rootData';
-
-import SocialIcons from './SocialIcons';
-import DarkMode from './DarkMode';
 
 // Find the deepest matched route that has 'layout' set on 'handle'
 export const useLayout = () => {

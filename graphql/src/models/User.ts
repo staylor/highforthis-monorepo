@@ -4,16 +4,11 @@ import { ObjectId } from 'mongodb';
 import type { UpdateUserInput } from 'types/graphql';
 
 import Model from './Model';
-import type { ModelContext } from './types';
 
 const SALT_ROUNDS = 10;
 
 export default class User extends Model {
-  public constructor(context: ModelContext) {
-    super(context);
-
-    this.collection = context.db.collection('user');
-  }
+  public collection = this.context.db.collection('user');
 
   public async all(args: any) {
     const { limit = 10, offset = 0 } = args;

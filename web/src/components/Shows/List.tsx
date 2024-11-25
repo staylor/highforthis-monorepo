@@ -1,6 +1,6 @@
-import type { ShowConnection } from '@/types/graphql';
-
 import { formatArtists, formatDate } from './utils';
+
+import type { ShowConnection } from '@/types/graphql';
 
 export default function ShowsList({
   shows,

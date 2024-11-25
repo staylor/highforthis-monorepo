@@ -1,23 +1,29 @@
-import { gql } from 'graphql-tag';
-import type { LoaderFunction } from '@remix-run/server-runtime';
-import { useLoaderData } from '@remix-run/react';
 import type { MetaFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+import type { LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
-import query from '@/utils/query';
-import titleTemplate from '@/utils/title';
-import { uploadUrl } from '@/utils/media';
-import type { EditorState, ImageUpload, ImageUploadCrop, Post, PostQuery } from '@/types/graphql';
-import { rootData } from '@/utils/rootData';
-import Video from '@/components/Videos/Video';
-import TextNodes from '@/components/Post/TextNodes';
-
-import PostTitle from './PostTitle';
 import Content from './Content';
+import PostTitle from './PostTitle';
+
+import TextNodes from '@/components/Post/TextNodes';
+import Video from '@/components/Videos/Video';
+import type {
+  EditorState,
+  ImageUpload,
+  ImageUploadCrop,
+  Post as PostType,
+  PostQuery,
+} from '@/types/graphql';
+import { uploadUrl } from '@/utils/media';
+import query from '@/utils/query';
+import { rootData } from '@/utils/rootData';
+import titleTemplate from '@/utils/title';
 
 export const meta: MetaFunction = ({ data, matches }) => {
   const { post } = data as PostQuery;
   const { siteSettings } = rootData(matches);
-  const { title, featuredMedia, summary, slug } = post as Post;
+  const { title, featuredMedia, summary, slug } = post as PostType;
   const url = `${siteSettings.siteUrl}/post/${slug}`;
 
   let featuredImage;
@@ -48,7 +54,7 @@ export const loader: LoaderFunction = ({ params, context }) => {
 
 export default function Post() {
   const data = useLoaderData<PostQuery>();
-  const post = data.post as Post;
+  const post = data.post as PostType;
   const editorState = post.editorState as Partial<EditorState>;
 
   return (

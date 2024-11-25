@@ -1,17 +1,17 @@
-import { gql } from 'graphql-tag';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
-import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import ListTable, { RowTitle, RowActions, usePath } from '@/components/Admin/ListTable';
-import Message from '@/components/Form/Message';
-import query, { addPageOffset, addSearchParam } from '@/utils/query';
-import { handleDelete } from '@/utils/action';
-import type { Show, ShowConnection, ShowsAdminQuery } from '@/types/graphql';
 import Search from '@/components/Admin/ListTable/Search';
-import { formatShowLink } from '@/components/Shows/utils';
+import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import Checkbox from '@/components/Form/Checkbox';
+import Message from '@/components/Form/Message';
+import { formatShowLink } from '@/components/Shows/utils';
+import type { Show, ShowConnection, ShowsAdminQuery } from '@/types/graphql';
+import { handleDelete } from '@/utils/action';
 import mutate, { parseFormData } from '@/utils/mutate';
+import query, { addPageOffset, addSearchParam } from '@/utils/query';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const variables = addSearchParam(request, addPageOffset(params, { order: 'DESC' }));

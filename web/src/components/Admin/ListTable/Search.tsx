@@ -1,8 +1,8 @@
 import debounce from 'lodash.debounce';
 
-import Input from '@/components/Form/Input';
-
 import { useUpdateQuery } from './utils';
+
+import Input from '@/components/Form/Input';
 
 export default function Search({ placeholder }: { placeholder: string }) {
   const { updateQuery, searchParams } = useUpdateQuery();

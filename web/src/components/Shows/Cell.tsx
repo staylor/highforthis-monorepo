@@ -1,5 +1,5 @@
-import type { TdHTMLAttributes } from 'react';
 import cn from 'classnames';
+import type { TdHTMLAttributes } from 'react';
 
 export const Cell = ({ className, ...props }: TdHTMLAttributes<HTMLTableCellElement>) => (
   <td

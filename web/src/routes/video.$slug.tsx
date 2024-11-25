@@ -1,14 +1,14 @@
-import type { LoaderFunction } from '@remix-run/server-runtime';
-import { useLoaderData } from '@remix-run/react';
-import { gql } from 'graphql-tag';
 import type { MetaFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+import type { LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
 import Video from '@/components/Videos/Video';
-import titleTemplate from '@/utils/title';
-import query from '@/utils/query';
-import { rootData } from '@/utils/rootData';
 import type { VideoQuery, Video as VideoType } from '@/types/graphql';
 import { createClientCache } from '@/utils/cache';
+import query from '@/utils/query';
+import { rootData } from '@/utils/rootData';
+import titleTemplate from '@/utils/title';
 
 export const meta: MetaFunction = ({ data, matches }) => {
   const { siteSettings } = rootData(matches);

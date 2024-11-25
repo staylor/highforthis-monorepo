@@ -1,14 +1,14 @@
+import { useSubmit } from '@remix-run/react';
+import cn from 'classnames';
 import type { ReactNode, ChangeEvent } from 'react';
 import { useReducer } from 'react';
-import cn from 'classnames';
-import { useSubmit } from '@remix-run/react';
-
-import Select from '@/components/Form/Select';
-import Checkbox from '@/components/Form/Checkbox';
-import type { Column, Columns } from '@/types';
 
 import Pagination from './Pagination';
 import { formatDate, usePath } from './utils';
+
+import Checkbox from '@/components/Form/Checkbox';
+import Select from '@/components/Form/Select';
+import type { Column, Columns } from '@/types';
 
 export { default as RowTitle } from './RowTitle';
 export { default as RowActions } from './RowActions';

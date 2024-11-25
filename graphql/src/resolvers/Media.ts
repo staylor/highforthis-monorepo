@@ -6,9 +6,9 @@ import type {
   QueryUploadsArgs,
 } from 'types/graphql';
 
-import type Media from '@/models/Media';
-
 import { parseConnection } from './utils/collection';
+
+import type Media from '@/models/Media';
 
 const resolvers = {
   MediaUpload: {

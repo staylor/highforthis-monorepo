@@ -1,7 +1,7 @@
 export const getItem = (key: string) => {
   try {
     return localStorage.getItem(key);
-  } catch (e) {
+  } catch (_) {
     // silence
     return null;
   }
@@ -10,7 +10,7 @@ export const getItem = (key: string) => {
 export const setItem = (key: string, value: string) => {
   try {
     localStorage.setItem(key, value);
-  } catch (e) {
+  } catch (_) {
     // silence
   }
 };
@@ -18,7 +18,7 @@ export const setItem = (key: string, value: string) => {
 export const removeItem = (key: string) => {
   try {
     localStorage.removeItem(key);
-  } catch (e) {
+  } catch (_) {
     // silence
   }
 };

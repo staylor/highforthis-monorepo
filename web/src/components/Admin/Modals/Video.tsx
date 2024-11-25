@@ -2,12 +2,12 @@ import type { SyntheticEvent } from 'react';
 import { useRef } from 'react';
 import ReactDOM from 'react-dom';
 
+import CloseButton from './CloseButton';
+import { modalClass, frameClass, itemTitleClass } from './styles';
+import useInfiniteScroll from './useInfiniteScroll';
+
 import Loading from '@/components/Loading';
 import type { Video, VideoConnection, VideoThumbnail } from '@/types/graphql';
-
-import CloseButton from './CloseButton';
-import useInfiniteScroll from './useInfiniteScroll';
-import { modalClass, frameClass, itemTitleClass } from './styles';
 
 interface SelectedVideoData {
   dataId: string;

@@ -2,4 +2,5 @@
 
 exports[`base64 > serialization 1`] = `"bHNoamdqaDM0dDA5MzR0KCpeJipeKl4qXiomXktISkhIS0op"`;
 
-exports[`base64 > unicode 1`] = `"a2rwn463aGtq8J+agHdoZTgwOTgw8J+Zjzk4MjM18J+YtCMkJV4mKigp8J+agg=="`;
+exports[`base64 > unicode 1`] =
+  `"a2rwn463aGtq8J+agHdoZTgwOTgw8J+Zjzk4MjM18J+YtCMkJV4mKigp8J+agg=="`;

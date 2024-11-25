@@ -1,6 +1,6 @@
+import DataLoader from 'dataloader';
 import type { Collection, Document } from 'mongodb';
 import { ObjectId } from 'mongodb';
-import DataLoader from 'dataloader';
 
 import type { ModelContext } from './types';
 
@@ -30,9 +30,8 @@ async function findByIds(collection: Collection, ids: readonly any[]) {
     });
 }
 
-export default class Model {
-  // @ts-ignore
-  public collection: Collection;
+export default abstract class Model {
+  public abstract collection: Collection;
 
   protected context: ModelContext;
 

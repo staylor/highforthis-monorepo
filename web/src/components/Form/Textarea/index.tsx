@@ -1,5 +1,5 @@
-import type { TextareaHTMLAttributes, ChangeEvent } from 'react';
 import cn from 'classnames';
+import type { TextareaHTMLAttributes, ChangeEvent } from 'react';
 
 import { inputBase } from '@/components/Form/styles';
 

@@ -1,14 +1,14 @@
-import { gql } from 'graphql-tag';
 import { useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
-import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import ListTable, { RowTitle, RowActions, usePath } from '@/components/Admin/ListTable';
+import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import Message from '@/components/Form/Message';
-import query, { addPageOffset } from '@/utils/query';
-import { handleDelete } from '@/utils/action';
-import type { Podcast, PodcastConnection, PodcastsQuery } from '@/types/graphql';
 import type { Columns } from '@/types';
+import type { Podcast, PodcastConnection, PodcastsQuery } from '@/types/graphql';
+import { handleDelete } from '@/utils/action';
+import query, { addPageOffset } from '@/utils/query';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   return query({

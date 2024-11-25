@@ -1,10 +1,10 @@
-import type { Params } from '@remix-run/react';
 import type { ApolloError, OperationVariables, QueryOptions, ServerError } from '@apollo/client';
-
-import { PER_PAGE } from '@/constants';
-import { authenticator } from '@/auth';
+import type { Params } from '@remix-run/react';
 
 import { offsetToCursor } from './connection';
+
+import { authenticator } from '@/auth';
+import { PER_PAGE } from '@/constants';
 
 type QueryData = Pick<QueryOptions, 'query' | 'variables'> & AppData;
 

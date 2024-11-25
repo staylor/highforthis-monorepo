@@ -1,6 +1,6 @@
-import { describe, expect, test, vi } from 'vitest';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 
 import Select from '@/components/Form/Select';
 
@@ -20,34 +20,33 @@ const groups = [
   { label: 'Saunce', choices: flavorMap },
 ];
 
-describe('Select', () => {
-  test('empty', () => {
+describe('select', () => {
+  it('empty', () => {
     const { container } = render(<Select />);
 
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test('add className', () => {
-    // eslint-disable-next-line tailwindcss/no-custom-classname
+  it('add className', () => {
     const { container } = render(<Select className="foo" />);
 
     expect(container.firstChild).toMatchSnapshot();
   });
 
   describe('placeholder', () => {
-    test('no choices', () => {
+    it('no choices', () => {
       const { container } = render(<Select placeholder={placeholder} />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('choices', () => {
+    it('choices', () => {
       const { container } = render(<Select placeholder={placeholder} choices={flavors} />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('choices as objects', () => {
+    it('choices as objects', () => {
       const { container } = render(<Select placeholder={placeholder} choices={flavorMap} />);
 
       expect(container.firstChild).toMatchSnapshot();
@@ -55,34 +54,34 @@ describe('Select', () => {
   });
 
   describe('multiple', () => {
-    test('true', () => {
+    it('true', () => {
       const { container } = render(<Select multiple />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('false', () => {
+    it('false', () => {
       const { container } = render(<Select multiple={false} />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('string', () => {
-      // @ts-ignore
+    it('string', () => {
+      // @ts-expect-error test
       const { container } = render(<Select multiple="multiple" />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('truthy', () => {
-      // @ts-ignore
+    it('truthy', () => {
+      // @ts-expect-error test
       const { container } = render(<Select multiple="1" />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('falsey', () => {
-      // @ts-ignore
+    it('falsey', () => {
+      // @ts-expect-error test
       const { container } = render(<Select multiple="0" />);
 
       expect(container.firstChild).toMatchSnapshot();
@@ -90,7 +89,7 @@ describe('Select', () => {
   });
 
   describe('onChange', () => {
-    test('value', async () => {
+    it('value', async () => {
       const user = userEvent.setup();
       const func = vi.fn();
       render(<Select onChange={func} choices={flavorMap} />);
@@ -101,7 +100,7 @@ describe('Select', () => {
       expect(func).toHaveBeenCalledWith(value);
     });
 
-    test('values', async () => {
+    it('values', async () => {
       const user = userEvent.setup();
       const selectSpy = {
         onChange: () => null,
@@ -117,19 +116,19 @@ describe('Select', () => {
   });
 
   describe('choices', () => {
-    test('choices', () => {
+    it('choices', () => {
       const { container } = render(<Select choices={flavors} />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('choices as objects', () => {
+    it('choices as objects', () => {
       const { container } = render(<Select choices={flavorMap} />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('choice', () => {
+    it('choice', () => {
       const value = 'medium';
       const { container } = render(<Select choices={flavorMap} value={value} />);
 
@@ -138,20 +137,20 @@ describe('Select', () => {
   });
 
   describe('groups', () => {
-    test('no value', () => {
+    it('no value', () => {
       const { container } = render(<Select groups={groups} />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('value', () => {
+    it('value', () => {
       const value = 'mild';
       const { container } = render(<Select groups={groups} value={value} />);
 
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('values', () => {
+    it('values', () => {
       const value = ['soft', 'mild'];
       const { container } = render(<Select multiple groups={groups} value={value} />);
 
@@ -160,7 +159,7 @@ describe('Select', () => {
   });
 
   describe('child nodes', () => {
-    test('children', () => {
+    it('children', () => {
       const { container } = render(
         <Select>
           <option value="meximelt">Mexi-melt</option>
@@ -170,7 +169,7 @@ describe('Select', () => {
       expect(container.firstChild).toMatchSnapshot();
     });
 
-    test('children with choices', () => {
+    it('children with choices', () => {
       const { container } = render(
         <Select choices={flavorMap}>
           <option value="meximelt">Mexi-melt</option>

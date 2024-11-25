@@ -1,9 +1,9 @@
-import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
-import type { ShowConnection } from '@/types/graphql';
-import type { FieldUnion } from '@/types';
-import Checkbox from '@/components/Form/Checkbox';
-
 import Shows from './Shows';
+
+import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
+import Checkbox from '@/components/Form/Checkbox';
+import type { FieldUnion } from '@/types';
+import type { ShowConnection } from '@/types/graphql';
 
 export const name = (field: string) => ({
   label: 'Name',

@@ -1,11 +1,11 @@
-import { describe, test, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
+import { describe, it, expect } from 'vitest';
 
 import Message from '@/components/Form/Message';
 
-describe('Message', () => {
-  test('empty', () => {
+describe('message', () => {
+  it('empty', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/foo?message=updated']}>
         <Message />
@@ -15,7 +15,7 @@ describe('Message', () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test('text', () => {
+  it('text', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/foo?message=updated']}>
         <Message text="This is an admin message." />

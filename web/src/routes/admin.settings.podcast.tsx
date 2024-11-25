@@ -1,13 +1,17 @@
-import { gql } from 'graphql-tag';
-import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
+import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
 import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
 import SettingsForm from '@/components/Admin/Settings/Form';
-import query from '@/utils/query';
-import { handleSubmission } from '@/utils/action';
-import type { Podcast, PodcastSettings, PodcastSettingsQuery } from '@/types/graphql';
 import type { Fields } from '@/types';
+import type {
+  Podcast,
+  PodcastSettings as PodcastSettingsType,
+  PodcastSettingsQuery,
+} from '@/types/graphql';
+import { handleSubmission } from '@/utils/action';
+import query from '@/utils/query';
 
 export const loader: LoaderFunction = ({ request, context }) => {
   return query({ request, context, query: settingsQuery });
@@ -74,7 +78,7 @@ const settingsFields: Fields = [
 
 export default function PodcastSettings() {
   const data = useLoaderData<PodcastSettingsQuery>();
-  const podcastSettings = data.podcastSettings as PodcastSettings;
+  const podcastSettings = data.podcastSettings as PodcastSettingsType;
   return <SettingsForm heading="Podcast Settings" data={podcastSettings} fields={settingsFields} />;
 }
 
