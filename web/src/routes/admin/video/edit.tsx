@@ -27,6 +27,10 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 
 export default function VideoEdit({ loaderData }: Route.ComponentProps) {
   const { video } = loaderData;
+  if (!video) {
+    return null;
+  }
+
   const thumb = video?.thumbnails.find((t) => t.width === 480) as VideoThumbnail;
 
   return (

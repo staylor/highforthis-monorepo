@@ -8,7 +8,7 @@ import type { Post, PostsAdminQuery } from '~/types/graphql';
 import { handleDelete } from '~/utils/action';
 import query, { addPageOffset } from '~/utils/query';
 
-import type { Route } from './+types/edit';
+import type { Route } from './+types/index';
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
   return query<PostsAdminQuery>({
@@ -62,7 +62,7 @@ export default function Posts({ loaderData }: Route.ComponentProps) {
       <Heading>Posts</Heading>
       <HeaderAdd label="Add Post" />
       <Message param="deleted" text="Deleted %s posts." />
-      <ListTable columns={columns} data={loaderData.posts} />
+      <ListTable columns={columns} data={loaderData.posts!} />
     </>
   );
 }

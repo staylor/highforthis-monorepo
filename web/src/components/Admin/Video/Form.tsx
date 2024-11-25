@@ -8,7 +8,7 @@ import type { Fields } from '~/types';
 import type { Video } from '~/types/graphql';
 
 type VideoFormProps = PropsWithChildren<{
-  data?: Video;
+  data?: Partial<Video>;
   heading: string;
   buttonLabel: string;
 }>;
@@ -32,7 +32,7 @@ const videoFields: Fields = [
   },
 ];
 
-function VideoForm({ data = {} as Video, heading, buttonLabel, children = null }: VideoFormProps) {
+function VideoForm({ data = {}, heading, buttonLabel, children = null }: VideoFormProps) {
   return (
     <>
       <Heading>{heading}</Heading>

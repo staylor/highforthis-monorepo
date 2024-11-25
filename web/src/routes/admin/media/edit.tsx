@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag';
 
 import MediaForm from '~/components/Admin/Media/Form';
-import type { MediaAdminQuery } from '~/types/graphql';
+import type { MediaAdminQuery, MediaUpload } from '~/types/graphql';
 import { handleSubmission } from '~/utils/action';
 import query from '~/utils/query';
 
@@ -26,7 +26,18 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function MediaEdit({ loaderData }: Route.ComponentProps) {
-  return <MediaForm data={loaderData.media} heading="Edit Media" buttonLabel="Update Media" />;
+  const { media } = loaderData;
+  if (!media) {
+    return null;
+  }
+
+  return (
+    <MediaForm
+      data={loaderData.media as MediaUpload}
+      heading="Edit Media"
+      buttonLabel="Update Media"
+    />
+  );
 }
 
 const mediaQuery = gql`

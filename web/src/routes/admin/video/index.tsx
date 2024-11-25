@@ -94,7 +94,7 @@ export default function Videos({ loaderData }: Route.ComponentProps) {
       <Heading>Videos</Heading>
       <Message param="deleted" text="Deleted %s videos." />
       <Search placeholder="Search videos" />
-      <ListTable columns={columns} filters={filters} data={videos} />
+      <ListTable columns={columns} filters={filters} data={videos!} />
     </>
   );
 }

@@ -1,9 +1,10 @@
 import { gql } from 'graphql-tag';
-import type { MetaFunction } from 'react-router';
+import { useParams, type MetaFunction } from 'react-router';
 
+import TextTitle from '~/components/TextTitle';
 import Videos from '~/components/Videos';
 import { videosQuery as queryFragment } from '~/components/Videos/graphql';
-import type { VideosQuery } from '~/types/graphql';
+import type { VideoConnection, VideosQuery } from '~/types/graphql';
 import query from '~/utils/query';
 import { rootData } from '~/utils/rootData';
 import titleTemplate from '~/utils/title';
@@ -49,15 +50,29 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
   });
 }
 
-export const meta: MetaFunction = ({ matches }) => {
+export const meta: MetaFunction = ({ matches, params }) => {
   const { siteSettings } = rootData(matches);
   return [
     {
-      title: titleTemplate({ title: 'Videos', siteSettings }),
+      title: titleTemplate({
+        title: params.year ? `${params.year} » Videos` : 'Videos',
+        siteSettings,
+      }),
     },
   ];
 };
 
 export default function VideosIndex({ loaderData }: Route.ComponentProps) {
-  return <Videos videos={loaderData.videos} />;
+  const params = useParams();
+  const { videos } = loaderData;
+  if (!videos) {
+    return null;
+  }
+
+  return (
+    <>
+      {params.year && <TextTitle>{params.year}</TextTitle>}
+      <Videos videos={videos as VideoConnection} />
+    </>
+  );
 }

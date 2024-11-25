@@ -53,6 +53,10 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
 
 export default function Post({ loaderData }: Route.ComponentProps) {
   const { post } = loaderData;
+  if (!post) {
+    return null;
+  }
+
   const editorState = post.editorState as Partial<EditorState>;
 
   return (

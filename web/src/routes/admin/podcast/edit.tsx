@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag';
 
 import PodcastForm from '~/components/Admin/Podcast/Form';
-import type { PodcastQuery } from '~/types/graphql';
+import type { Podcast, PodcastQuery } from '~/types/graphql';
 import { handleSubmission } from '~/utils/action';
 import query from '~/utils/query';
 
@@ -26,8 +26,13 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function PodcastEdit({ loaderData }: Route.ComponentProps) {
+  const { podcast } = loaderData;
+  if (!podcast) {
+    return null;
+  }
+
   return (
-    <PodcastForm data={loaderData.podcast} heading="Edit Podcast" buttonLabel="Update Podcast" />
+    <PodcastForm data={podcast as Podcast} heading="Edit Podcast" buttonLabel="Update Podcast" />
   );
 }
 

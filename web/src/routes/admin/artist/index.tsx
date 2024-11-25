@@ -66,7 +66,7 @@ export default function Artists({ loaderData }: Route.ComponentProps) {
       <HeaderAdd label="Add Artist" />
       <Message param="deleted" text="Deleted %s Artists." />
       <Search placeholder="Search Artists" />
-      <ListTable columns={columns} data={loaderData.artists} />
+      <ListTable columns={columns} data={loaderData.artists!} />
     </>
   );
 }

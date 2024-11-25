@@ -39,6 +39,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 export default function Shows({ loaderData }: Route.ComponentProps) {
   const fetcher = useFetcher();
   const path = usePath();
+  const { shows } = loaderData;
 
   const columns = [
     {
@@ -133,7 +134,7 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
       <HeaderAdd label="Add Show" />
       <Message param="deleted" text="Deleted %s shows." />
       <Search placeholder="Search shows" />
-      <ListTable columns={columns} data={loaderData.shows} />
+      <ListTable columns={columns} data={shows!} />
     </>
   );
 }
