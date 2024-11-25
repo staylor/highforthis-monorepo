@@ -1,7 +1,7 @@
-import { ObjectId } from 'mongodb';
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language/index.js';
 import merge from 'lodash.merge';
+import { ObjectId } from 'mongodb';
 
 import APIKeys from '@/resolvers/APIKeys';
 import Artist from '@/resolvers/Artist';

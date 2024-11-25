@@ -1,12 +1,12 @@
-import type { LoaderFunction } from '@remix-run/server-runtime';
-import { gql } from 'graphql-tag';
 import { useLoaderData, useParams } from '@remix-run/react';
+import type { LoaderFunction } from '@remix-run/server-runtime';
 import cn from 'classnames';
+import { gql } from 'graphql-tag';
 
-import query from '@/utils/query';
-import type { ShowStat, ShowStatsQuery } from '@/types/graphql';
 import { Heading1 } from '@/components/Heading';
 import Link from '@/components/Link';
+import type { ShowStat, ShowStatsQuery } from '@/types/graphql';
+import query from '@/utils/query';
 
 export const loader: LoaderFunction = async ({ params, context }) => {
   return query({

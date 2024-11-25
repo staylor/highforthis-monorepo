@@ -3,9 +3,9 @@ import path from 'node:path';
 
 import { ObjectId } from 'mongodb';
 
-import type { FileInfo, ModelContext } from './types';
 import type { SearchCriteria } from './Model';
 import Model from './Model';
+import type { FileInfo, ModelContext } from './types';
 
 const deleteFile = (file: string): Promise<void> =>
   new Promise((resolve) => {

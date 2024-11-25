@@ -7,9 +7,9 @@ import type {
   QueryUsersArgs,
 } from 'types/graphql';
 
-import type User from '@/models/User';
-
 import { parseConnection } from './utils/collection';
+
+import type User from '@/models/User';
 
 const resolvers = {
   User: {

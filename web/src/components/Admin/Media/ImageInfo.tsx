@@ -1,8 +1,8 @@
-import { Fragment } from 'react';
 import { filesize } from 'filesize';
+import { Fragment } from 'react';
 
-import { uploadUrl } from '@/utils/media';
 import type { ImageUpload } from '@/types/graphql';
+import { uploadUrl } from '@/utils/media';
 
 export default function ImageInfo({ media }: { media: ImageUpload }) {
   return (

@@ -1,8 +1,8 @@
 import type { Document, ObjectId } from 'mongodb';
 
 import Model from './Model';
-import { getUniqueSlug } from './utils';
 import type { ModelContext } from './types';
+import { getUniqueSlug } from './utils';
 
 interface VideoParams {
   year?: string;

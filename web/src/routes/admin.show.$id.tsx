@@ -1,11 +1,11 @@
-import { gql } from 'graphql-tag';
-import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
+import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
 import ShowForm from '@/components/Admin/Show/Form';
-import query from '@/utils/query';
-import { handleSubmission } from '@/utils/action';
 import type { ShowEditQuery } from '@/types/graphql';
+import { handleSubmission } from '@/utils/action';
+import query from '@/utils/query';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   return query({ request, context, query: showQuery, variables: { id: params.id } });

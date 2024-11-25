@@ -1,12 +1,12 @@
 import type { PropsWithChildren } from 'react';
 import invariant from 'tiny-invariant';
 
+import EditableField from './EditableField';
+import InfoColumn from './InfoColumn';
+
 import { FormWrap } from '@/components/Admin/styles';
 import Button from '@/components/Button';
 import type { Fields, FieldUnion } from '@/types';
-
-import InfoColumn from './InfoColumn';
-import EditableField from './EditableField';
 
 const Label = ({ children }: PropsWithChildren) => (
   <span className="mb-1 block text-sm tracking-wide text-gray-700">{children}</span>
@@ -90,7 +90,7 @@ export default function AdminForm({
       <form method="post" className="before:clear-both before:table">
         <fieldset className="mr-75 block">
           <div className="w-full max-w-2xl md:float-left">
-            <>{primaryFields}</>
+            {primaryFields}
             {infoFields.length === 0 ? button : null}
           </div>
           <InfoColumn

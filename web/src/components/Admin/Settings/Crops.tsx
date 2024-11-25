@@ -1,9 +1,9 @@
 import type { ThHTMLAttributes, TdHTMLAttributes, SyntheticEvent } from 'react';
 import { useState } from 'react';
 
+import Button from '@/components/Button';
 import type { InputProps } from '@/components/Form/Input';
 import Input from '@/components/Form/Input';
-import Button from '@/components/Button';
 import type { MediaCropSetting, MediaSettings } from '@/types/graphql';
 
 const NumberInput = (props: InputProps) => (

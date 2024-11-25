@@ -1,10 +1,10 @@
+import bcrypt from 'bcrypt';
+import type { Request, Response, NextFunction, Router } from 'express';
+import jwt from 'jwt-simple';
+import type { Document } from 'mongodb';
 import passport from 'passport';
 import type { VerifiedCallback } from 'passport-jwt';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import bcrypt from 'bcrypt';
-import jwt from 'jwt-simple';
-import type { Request, Response, NextFunction, Router } from 'express';
-import type { Document } from 'mongodb';
 
 import type User from './models/User';
 

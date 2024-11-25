@@ -1,21 +1,21 @@
-import path from 'node:path';
 import http from 'node:http';
+import path from 'node:path';
 
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import express from 'express';
-import cors from 'cors';
 import bodyParser from 'body-parser';
-import morgan from 'morgan';
 import compression from 'compression';
+import cors from 'cors';
+import express from 'express';
+import morgan from 'morgan';
 
-import typeDefs from './schema';
-import resolvers from './resolvers';
-import addModelsToContext from './models';
-import cronJobs from './jobs';
-import database from './database';
 import { authMiddleware, jwtMiddleware, initialize } from './authentication';
+import database from './database';
+import cronJobs from './jobs';
+import addModelsToContext from './models';
+import resolvers from './resolvers';
+import typeDefs from './schema';
 import { multerMiddleware, mediaMiddleware } from './uploads';
 
 const GRAPHQL_PORT = process.env.GRAPHQL_PORT || 8080;

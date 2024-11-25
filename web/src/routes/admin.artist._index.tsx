@@ -1,18 +1,18 @@
-import { gql } from 'graphql-tag';
 import { useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
-import { Heading, HeaderAdd } from '@/components/Admin/styles';
-import ListTable from '@/components/Admin/ListTable';
-import Message from '@/components/Form/Message';
-import Search from '@/components/Admin/ListTable/Search';
-import query, { addPageOffset, addSearchParam } from '@/utils/query';
-import { handleDelete } from '@/utils/action';
-import type { ArtistConnection, ArtistsAdminQuery } from '@/types/graphql';
-import type { Columns } from '@/types';
-import mutate, { parseFormData } from '@/utils/mutate';
 import { name, slug, excludeFromSearch, website } from '@/components/Admin/Entity/ListTable';
+import ListTable from '@/components/Admin/ListTable';
+import Search from '@/components/Admin/ListTable/Search';
+import { Heading, HeaderAdd } from '@/components/Admin/styles';
 import Artwork from '@/components/Artist/Artwork';
+import Message from '@/components/Form/Message';
+import type { Columns } from '@/types';
+import type { ArtistConnection, ArtistsAdminQuery } from '@/types/graphql';
+import { handleDelete } from '@/utils/action';
+import mutate, { parseFormData } from '@/utils/mutate';
+import query, { addPageOffset, addSearchParam } from '@/utils/query';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const variables = addSearchParam(request, addPageOffset(params));
@@ -46,7 +46,7 @@ export default function Artists() {
   const data = useLoaderData<ArtistsAdminQuery>();
   const artists = data.artists as ArtistConnection;
 
-  let columns: Columns = [
+  const columns: Columns = [
     {
       className: 'w-16',
       render: (data: any) => {

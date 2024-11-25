@@ -1,5 +1,5 @@
-import type { ChangeEvent, InputHTMLAttributes } from 'react';
 import cn from 'classnames';
+import type { ChangeEvent, InputHTMLAttributes } from 'react';
 
 import { inputBase } from '@/components/Form/styles';
 

@@ -1,11 +1,11 @@
-import { gql } from 'graphql-tag';
-import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
+import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
 import VideoForm from '@/components/Admin/Video/Form';
-import query from '@/utils/query';
-import { handleSubmission } from '@/utils/action';
 import type { Video, VideoEditQuery, VideoThumbnail } from '@/types/graphql';
+import { handleSubmission } from '@/utils/action';
+import query from '@/utils/query';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   return query({ request, context, query: videoQuery, variables: { id: params.id } });

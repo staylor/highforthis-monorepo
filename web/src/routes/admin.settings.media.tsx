@@ -1,13 +1,13 @@
-import { gql } from 'graphql-tag';
-import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
+import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
-import SettingsForm from '@/components/Admin/Settings/Form';
 import Crops from '@/components/Admin/Settings/Crops';
-import query from '@/utils/query';
-import { handleSubmission } from '@/utils/action';
-import type { MediaSettings, MediaSettingsQuery } from '@/types/graphql';
+import SettingsForm from '@/components/Admin/Settings/Form';
 import type { Fields } from '@/types';
+import type { MediaSettings, MediaSettingsQuery } from '@/types/graphql';
+import { handleSubmission } from '@/utils/action';
+import query from '@/utils/query';
 
 export const loader: LoaderFunction = ({ request, context }) => {
   return query({ request, context, query: settingsQuery });

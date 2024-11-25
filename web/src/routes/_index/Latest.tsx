@@ -1,6 +1,6 @@
 import Link from '@/components/Link';
-import { uploadUrl } from '@/utils/media';
 import type { ImageUpload, PostConnection } from '@/types/graphql';
+import { uploadUrl } from '@/utils/media';
 
 function Latest({ posts }: { posts: PostConnection }) {
   return (

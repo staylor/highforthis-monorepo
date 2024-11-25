@@ -1,8 +1,8 @@
-import { Fragment } from 'react';
 import { filesize } from 'filesize';
+import { Fragment } from 'react';
 
-import { uploadUrl } from '@/utils/media';
 import type { AudioUpload, ImageUploadCrop } from '@/types/graphql';
+import { uploadUrl } from '@/utils/media';
 
 export default function AudioInfo({ media }: { media: AudioUpload }) {
   const crops = [...(media.images || [])].filter(Boolean) as ImageUploadCrop[];

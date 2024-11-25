@@ -1,20 +1,20 @@
-import { describe, expect, test, vi } from 'vitest';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 
 import Input from '@/components/Form/Input';
 
 const TEXT_VALUE = 'Run for the border.';
 
-describe('Input', () => {
-  test('empty', () => {
+describe('input', () => {
+  it('empty', () => {
     const { container } = render(<Input />);
 
     expect(container.firstChild).toMatchSnapshot();
-    expect((container.firstChild as HTMLInputElement).value).toEqual('');
+    expect((container.firstChild as HTMLInputElement).value).toBe('');
   });
 
-  test('add className', () => {
+  it('add className', () => {
     // eslint-disable-next-line tailwindcss/no-custom-classname
     const { container } = render(<Input className="foo" />);
 
@@ -22,7 +22,7 @@ describe('Input', () => {
   });
 
   describe('onChange', () => {
-    test('adding text', async () => {
+    it('adding text', async () => {
       const user = userEvent.setup();
       const func = vi.fn();
       const value = TEXT_VALUE;
@@ -33,7 +33,7 @@ describe('Input', () => {
       expect(func).toHaveBeenCalledTimes(value.length);
     });
 
-    test('removing text', async () => {
+    it('removing text', async () => {
       const user = userEvent.setup();
       const func = vi.fn();
       const value = TEXT_VALUE;

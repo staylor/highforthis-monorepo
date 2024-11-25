@@ -1,5 +1,5 @@
-import qs from 'qs';
 import cn from 'classnames';
+import qs from 'qs';
 
 import Image from '@/components/Image';
 import type { VenueCoordinates } from '@/types/graphql';

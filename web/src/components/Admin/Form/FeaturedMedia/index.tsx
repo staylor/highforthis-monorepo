@@ -1,12 +1,12 @@
+import { gql } from 'graphql-tag';
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
-import { gql } from 'graphql-tag';
 
 import MediaModal from '@/components/Admin/Modals/Media';
 import Button from '@/components/Button';
-import { uploadUrl } from '@/utils/media';
-import type { AudioUpload, ImageUpload, MediaUpload } from '@/types/graphql';
 import type { SelectedImage } from '@/types/admin';
+import type { AudioUpload, ImageUpload, MediaUpload } from '@/types/graphql';
+import { uploadUrl } from '@/utils/media';
 
 type SelectedMedia = ImageUpload | AudioUpload | MediaUpload | SelectedImage;
 
@@ -75,7 +75,7 @@ function FeaturedMedia({ className, type, media, buttonText = 'Set Featured Medi
           );
         }
 
-        let image = selected.length ? (upload as SelectedImage).image : (upload as ImageUpload);
+        const image = selected.length ? (upload as SelectedImage).image : (upload as ImageUpload);
         const crop = image.crops.find((c) => c.width === 300);
         if (crop) {
           return (

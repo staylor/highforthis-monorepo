@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vitest';
 import { render } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 
 import InfoColumn from '@/components/Admin/Form/InfoColumn';
 
@@ -18,32 +18,32 @@ const metaFields = [
   </p>,
 ];
 
-describe('InfoColumn', () => {
-  test('No props', () => {
+describe('infoColumn', () => {
+  it('no props', () => {
     const { container } = render(<InfoColumn />);
 
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test('with infoFields', () => {
+  it('with infoFields', () => {
     const { container } = render(<InfoColumn infoFields={infoFields} />);
 
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test('with metaFields', () => {
+  it('with metaFields', () => {
     const { container } = render(<InfoColumn metaFields={metaFields} />);
 
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test('with info and meta fields', () => {
+  it('with info and meta fields', () => {
     const { container } = render(<InfoColumn infoFields={infoFields} metaFields={metaFields} />);
 
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test('no button', () => {
+  it('no button', () => {
     const { container } = render(
       <InfoColumn label={label} infoFields={infoFields} metaFields={metaFields} />
     );
@@ -51,7 +51,7 @@ describe('InfoColumn', () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test('with button', () => {
+  it('with button', () => {
     const { container } = render(
       <InfoColumn label={label} infoFields={infoFields} metaFields={metaFields} button={button} />
     );

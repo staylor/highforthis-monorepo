@@ -1,6 +1,6 @@
-import type { SyntheticEvent } from 'react';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
+import type { SyntheticEvent } from 'react';
 
 import Link, { type CustomLinkProps } from '@/components/Link';
 import TextTitle from '@/components/TextTitle';

@@ -1,17 +1,17 @@
+import type { MetaFunction } from '@remix-run/node';
 import { useLoaderData, useParams } from '@remix-run/react';
 import type { LoaderFunction } from '@remix-run/server-runtime';
-import type { MetaFunction } from '@remix-run/node';
 import { gql } from 'graphql-tag';
 
+import { Heading2 } from '@/components/Heading';
+import Link from '@/components/Link';
 import Shows from '@/components/Shows';
+import ShowsGrid from '@/components/Shows/Grid';
 import type { ShowConnection, ShowsHistoryQuery } from '@/types/graphql';
 import { createClientCache } from '@/utils/cache';
 import query from '@/utils/query';
-import titleTemplate from '@/utils/title';
-import ShowsGrid from '@/components/Shows/Grid';
 import { rootData } from '@/utils/rootData';
-import { Heading2 } from '@/components/Heading';
-import Link from '@/components/Link';
+import titleTemplate from '@/utils/title';
 
 export const meta: MetaFunction = ({ params, matches }) => {
   const { siteSettings } = rootData(matches);

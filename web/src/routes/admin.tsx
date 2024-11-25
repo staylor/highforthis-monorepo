@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import cn from 'classnames';
+import type { MetaFunction } from '@remix-run/node';
+import { Outlet } from '@remix-run/react';
 import type { LinksFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/server-runtime';
-import { Outlet } from '@remix-run/react';
-import type { MetaFunction } from '@remix-run/node';
+import cn from 'classnames';
+import { useState } from 'react';
 
-import NavMenu from '@/components/Admin/NavMenu';
-import titleTemplate from '@/utils/title';
 import { authenticator } from '@/auth';
+import NavMenu from '@/components/Admin/NavMenu';
 import adminCss from '@/styles/admin.css?url';
 import { rootData } from '@/utils/rootData';
+import titleTemplate from '@/utils/title';
 
 export const handle = {
   layout: 'admin',

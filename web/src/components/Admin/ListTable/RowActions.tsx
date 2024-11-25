@@ -1,7 +1,7 @@
+import { useSubmit } from '@remix-run/react';
+import cn from 'classnames';
 import type { ChangeEvent } from 'react';
 import { Fragment } from 'react';
-import cn from 'classnames';
-import { useSubmit } from '@remix-run/react';
 
 import Link from '@/components/Link';
 

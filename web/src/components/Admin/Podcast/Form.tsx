@@ -1,9 +1,9 @@
 import { gql } from 'graphql-tag';
 
-import { Heading } from '@/components/Admin/styles';
 import Form from '@/components/Admin/Form';
-import Message from '@/components/Form/Message';
 import FeaturedMedia from '@/components/Admin/Form/FeaturedMedia';
+import { Heading } from '@/components/Admin/styles';
+import Message from '@/components/Form/Message';
 import type { Fields } from '@/types';
 import type { Podcast } from '@/types/graphql';
 

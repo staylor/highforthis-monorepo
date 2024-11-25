@@ -1,11 +1,11 @@
-import { gql } from 'graphql-tag';
-import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
+import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
 import MediaForm from '@/components/Admin/Media/Form';
-import query from '@/utils/query';
-import { handleSubmission } from '@/utils/action';
 import type { MediaAdminQuery, MediaUpload } from '@/types/graphql';
+import { handleSubmission } from '@/utils/action';
+import query from '@/utils/query';
 
 export const loader: LoaderFunction = ({ params, request, context }) => {
   return query({ request, context, query: mediaQuery, variables: { id: params.id } });

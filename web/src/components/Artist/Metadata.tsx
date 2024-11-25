@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from 'react';
 
-import type { AppleMusicData } from '@/types/graphql';
-
 import Artwork, { DEFAULT_IMAGE_SIZE } from './Artwork';
+
+import type { AppleMusicData } from '@/types/graphql';
 
 interface AppleMusicProps {
   name: string;
@@ -34,7 +34,7 @@ export default function Metadata({
 
   let site;
   let listen;
-  let image = <Artwork name={name} imageSize={imageSize} data={data} className="rounded-lg" />;
+  const image = <Artwork name={name} imageSize={imageSize} data={data} className="rounded-lg" />;
   if (website) {
     site = <ArtistLink url={website}>Artist Website</ArtistLink>;
   }

@@ -1,5 +1,5 @@
-import cn from 'classnames';
 import { useLocation, NavLink } from '@remix-run/react';
+import cn from 'classnames';
 
 import type { AdminTopLevelRoute } from '@/types';
 

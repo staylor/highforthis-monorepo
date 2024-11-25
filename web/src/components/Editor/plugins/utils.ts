@@ -1,6 +1,6 @@
-import type { LexicalNode } from 'lexical';
 import type { ListNode } from '@lexical/list';
 import type { HeadingNode } from '@lexical/rich-text';
+import type { LexicalNode } from 'lexical';
 import type { CSSProperties } from 'react';
 
 export const setStyle = (

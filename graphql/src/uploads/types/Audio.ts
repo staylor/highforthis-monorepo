@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import sharp from 'sharp';
 import mm from 'musicmetadata';
+import sharp from 'sharp';
 
 import type { Callback } from '../Storage';
 
-import Upload from './Upload';
 import type { CropInfo } from './Image';
+import Upload from './Upload';
 
 type Metadata = {
   title: string;

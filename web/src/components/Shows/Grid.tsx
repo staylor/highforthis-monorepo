@@ -1,11 +1,11 @@
-import { Fragment } from 'react';
 import { gql } from 'graphql-tag';
+import { Fragment } from 'react';
+
+import { Cell } from './Cell';
+import { formatArtists, formatDate, formatShowLink } from './utils';
 
 import Link from '@/components/Link';
 import type { ShowConnection } from '@/types/graphql';
-
-import { formatArtists, formatDate, formatShowLink } from './utils';
-import { Cell } from './Cell';
 
 export default function ShowsGrid({
   shows,

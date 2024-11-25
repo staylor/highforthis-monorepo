@@ -1,6 +1,6 @@
+import cn from 'classnames';
 import type { KeyboardEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
-import cn from 'classnames';
 
 import Input from '@/components/Form/Input';
 

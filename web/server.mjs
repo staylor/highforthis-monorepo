@@ -1,10 +1,10 @@
-import express from 'express';
-import compression from 'compression';
-import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
-import { createProxyMiddleware } from 'http-proxy-middleware';
 import { createRequestHandler } from '@remix-run/express';
 import { installGlobals } from '@remix-run/node';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import morgan from 'morgan';
 
 import factory from './apollo/client.mjs';
 

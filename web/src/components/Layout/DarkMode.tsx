@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
+import React, { useEffect, useState } from 'react';
 
 import { getItem, setItem, removeItem } from '@/utils/storage';
 

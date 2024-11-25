@@ -1,18 +1,18 @@
-import { gql } from 'graphql-tag';
 import { useLoaderData } from '@remix-run/react';
 import type { ActionFunction, LoaderFunction } from '@remix-run/server-runtime';
+import { gql } from 'graphql-tag';
 
-import { Heading, HeaderAdd } from '@/components/Admin/styles';
-import ListTable, { Thumbnail } from '@/components/Admin/ListTable';
-import Message from '@/components/Form/Message';
-import Search from '@/components/Admin/ListTable/Search';
-import query, { addPageOffset, addSearchParam } from '@/utils/query';
-import { handleDelete } from '@/utils/action';
-import type { VenueConnection, VenuesAdminQuery } from '@/types/graphql';
-import type { Columns } from '@/types';
 import { name, slug, excludeFromSearch, website } from '@/components/Admin/Entity/ListTable';
+import ListTable, { Thumbnail } from '@/components/Admin/ListTable';
+import Search from '@/components/Admin/ListTable/Search';
 import PermanentlyClosed from '@/components/Admin/Venue/PermanentlyClosed';
+import { Heading, HeaderAdd } from '@/components/Admin/styles';
+import Message from '@/components/Form/Message';
+import type { Columns } from '@/types';
+import type { VenueConnection, VenuesAdminQuery } from '@/types/graphql';
+import { handleDelete } from '@/utils/action';
 import mutate, { parseFormData } from '@/utils/mutate';
+import query, { addPageOffset, addSearchParam } from '@/utils/query';
 
 export const loader: LoaderFunction = ({ request, context, params }) => {
   const variables = addSearchParam(request, addPageOffset(params));
@@ -50,7 +50,7 @@ export default function Venues() {
   const data = useLoaderData<VenuesAdminQuery>();
   const venues = data.venues as VenueConnection;
 
-  let columns: Columns = [
+  const columns: Columns = [
     {
       className: 'w-16',
       render: (data: any) => {

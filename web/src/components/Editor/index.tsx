@@ -1,20 +1,20 @@
 import { CodeNode } from '@lexical/code';
 import { ListNode, ListItemNode } from '@lexical/list';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import { LexicalComposer } from '@lexical/react/LexicalComposer.js';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin.js';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin.js';
+import { LexicalComposer } from '@lexical/react/LexicalComposer.js';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable.js';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin.js';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary.js';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin.js';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin.js';
+import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import type { LexicalEditor, SerializedEditorState } from 'lexical';
 
-import InlineToolbarPlugin from './plugins/InlineToolbarPlugin';
 import BlockToolbarPlugin from './plugins/BlockToolbarPlugin';
+import HiddenFieldPlugin from './plugins/HiddenFieldPlugin';
 import ImageNode from './plugins/ImageNode';
+import InlineToolbarPlugin from './plugins/InlineToolbarPlugin';
 import VideoNode from './plugins/VideoNode';
 import theme from './theme';
-import HiddenFieldPlugin from './plugins/HiddenFieldPlugin';
 
 function Placeholder() {
   return <div className="editor-placeholder">Start writing...</div>;

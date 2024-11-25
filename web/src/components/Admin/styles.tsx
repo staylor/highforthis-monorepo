@@ -1,9 +1,9 @@
 import cn from 'classnames';
 import type { HTMLAttributes } from 'react';
 
-import Link, { type CustomLinkProps } from '@/components/Link';
-
 import { usePath } from './ListTable/utils';
+
+import Link, { type CustomLinkProps } from '@/components/Link';
 
 export const Heading = ({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
   <h1

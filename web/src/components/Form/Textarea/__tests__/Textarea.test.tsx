@@ -1,19 +1,19 @@
-import { describe, expect, test, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 
 import Textarea from '@/components/Form/Textarea';
 
 const TEXT_VALUE = 'Run for the border.';
 
-describe('Textarea', () => {
-  test('empty', () => {
+describe('textarea', () => {
+  it('empty', () => {
     const { container } = render(<Textarea />);
 
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test('add className', () => {
+  it('add className', () => {
     // eslint-disable-next-line tailwindcss/no-custom-classname
     const { container } = render(<Textarea className="foo" />);
 
@@ -21,7 +21,7 @@ describe('Textarea', () => {
   });
 
   describe('onChange', () => {
-    test('adding text', async () => {
+    it('adding text', async () => {
       const user = userEvent.setup();
       const func = vi.fn();
       render(<Textarea onChange={func} />);
@@ -32,7 +32,7 @@ describe('Textarea', () => {
       expect(func).toHaveBeenCalledTimes(value.length);
     });
 
-    test('removing text', async () => {
+    it('removing text', async () => {
       const user = userEvent.setup();
       const func = vi.fn();
       const value = TEXT_VALUE;

@@ -1,5 +1,5 @@
-import type { AnchorHTMLAttributes, SyntheticEvent } from 'react';
 import { Link, type NavLinkProps } from '@remix-run/react';
+import type { AnchorHTMLAttributes, SyntheticEvent } from 'react';
 
 export type CustomLinkProps = Pick<NavLinkProps, 'to'> &
   Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'onClick'> & {

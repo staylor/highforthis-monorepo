@@ -1,15 +1,15 @@
-import type { LoaderFunction } from '@remix-run/server-runtime';
 import { useLoaderData } from '@remix-run/react';
+import type { LoaderFunction } from '@remix-run/server-runtime';
 import { gql } from 'graphql-tag';
+
+import Latest from './Latest';
 
 import Divider from '@/components/Divider';
 import Videos from '@/components/Videos';
-import query from '@/utils/query';
 import { videosQuery } from '@/components/Videos/graphql';
 import type { HomeQuery, PostConnection, VideoConnection } from '@/types/graphql';
 import { createClientCache } from '@/utils/cache';
-
-import Latest from './Latest';
+import query from '@/utils/query';
 
 export const loader: LoaderFunction = async ({ request, context }) => {
   const url = new URL(request.url);

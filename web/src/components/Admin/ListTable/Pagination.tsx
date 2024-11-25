@@ -1,6 +1,6 @@
-import type { PropsWithChildren } from 'react';
-import cn from 'classnames';
 import { useParams, useSearchParams } from '@remix-run/react';
+import cn from 'classnames';
+import type { PropsWithChildren } from 'react';
 
 import Link from '@/components/Link';
 

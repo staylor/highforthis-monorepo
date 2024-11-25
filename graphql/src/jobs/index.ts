@@ -1,8 +1,8 @@
-import type { Db } from 'mongodb';
 import { CronJob } from 'cron';
+import type { Db } from 'mongodb';
 
-import youtubeData from './youtube';
 import showsData from './shows';
+import youtubeData from './youtube';
 
 function jobs(db: Db): void {
   CronJob.from({

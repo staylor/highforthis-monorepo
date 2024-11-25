@@ -2,11 +2,11 @@ import fs from 'node:fs';
 
 import type { Request } from 'express';
 
-import Upload from './types/Upload';
-import Image from './types/Image';
-import Audio from './types/Audio';
-import Video from './types/Video';
 import type { StorageAdapter } from './adapter';
+import Audio from './types/Audio';
+import Image from './types/Image';
+import Upload from './types/Upload';
+import Video from './types/Video';
 
 export type Callback = (error?: any, info?: Partial<Express.Multer.File>) => void;
 

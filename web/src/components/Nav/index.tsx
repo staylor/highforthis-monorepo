@@ -1,10 +1,10 @@
-import cn from 'classnames';
 import type { Location } from '@remix-run/react';
 import { useLocation, useNavigate } from '@remix-run/react';
-
-import Select from '@/components/Form/Select';
+import cn from 'classnames';
 
 import Link from './Link';
+
+import Select from '@/components/Form/Select';
 
 const year = new Date().getFullYear() + 1;
 const yearChoices = (start: number, end: number) =>

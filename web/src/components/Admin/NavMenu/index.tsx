@@ -1,13 +1,13 @@
+import cn from 'classnames';
 import type { SyntheticEvent } from 'react';
 import { Fragment, useState } from 'react';
-import cn from 'classnames';
 
-import type { AdminRouteGroup, AdminTopLevelRoute } from '@/types';
-
+import CollapseButton from './CollapseButton';
 import NavLink from './NavLink';
 import SubNav from './SubNav';
-import CollapseButton from './CollapseButton';
 import useRouteConfig from './useRouteConfig';
+
+import type { AdminRouteGroup, AdminTopLevelRoute } from '@/types';
 
 const Separator = () => <i className="mb-1.5 block h-1.5" />;
 

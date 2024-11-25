@@ -1,8 +1,8 @@
-import type { PropsWithChildren } from 'react';
 import { gql } from 'graphql-tag';
+import type { PropsWithChildren } from 'react';
 
-import { Heading } from '@/components/Admin/styles';
 import Form from '@/components/Admin/Form';
+import { Heading } from '@/components/Admin/styles';
 import Message from '@/components/Form/Message';
 import type { Fields } from '@/types';
 import type { Video } from '@/types/graphql';

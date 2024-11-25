@@ -1,6 +1,6 @@
+import DataLoader from 'dataloader';
 import type { Collection, Document } from 'mongodb';
 import { ObjectId } from 'mongodb';
-import DataLoader from 'dataloader';
 
 import type { ModelContext } from './types';
 

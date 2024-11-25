@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunction } from '@remix-run/server-runtime';
+import type { MetaFunction } from '@remix-run/node';
 import {
   Links,
   Meta,
@@ -9,17 +9,17 @@ import {
   useRouteError,
   useLoaderData,
 } from '@remix-run/react';
-import type { MetaFunction } from '@remix-run/node';
-
-import mainStylesheetUrl from '@/styles/main.css?url';
+import type { LinksFunction, LoaderFunction } from '@remix-run/server-runtime';
 
 import { Html, Body, Boundary, useLayout } from './components/Layout';
 import { TWITTER_USERNAME } from './constants';
-import query from './utils/query';
-import titleTemplate, { type TitleProps } from './utils/title';
 import { appQuery } from './root.graphql';
 import type { AppQuery } from './types/graphql';
 import { createClientCache } from './utils/cache';
+import query from './utils/query';
+import titleTemplate, { type TitleProps } from './utils/title';
+
+import mainStylesheetUrl from '@/styles/main.css?url';
 
 export const links: LinksFunction = () => {
   return [
