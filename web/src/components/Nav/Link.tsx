@@ -1,7 +1,7 @@
-import { NavLink, useLocation } from '@remix-run/react';
-import type { NavLinkProps, Location } from '@remix-run/react';
 import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
+import { NavLink, useLocation } from 'react-router';
+import type { NavLinkProps, Location } from 'react-router';
 
 const isActive = (path: string, location: Location) => {
   if (path === location.pathname) {

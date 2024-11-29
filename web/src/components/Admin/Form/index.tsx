@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 import invariant from 'tiny-invariant';
 
 import { FormWrap } from '~/components/Admin/styles';
@@ -13,7 +13,7 @@ const Label = ({ children }: PropsWithChildren) => (
 );
 
 interface FormProps {
-  data?: AppData;
+  data?: Record<string, any>;
   fields: Fields;
   boxLabel?: string;
   buttonLabel?: string;
@@ -25,9 +25,9 @@ export default function AdminForm({
   boxLabel = 'Details',
   buttonLabel = 'Submit',
 }: FormProps) {
-  const primaryFields: Fields = [];
-  const infoFields: Fields = [];
-  const metaFields: Fields = [];
+  const primaryFields: ReactNode[] = [];
+  const infoFields: ReactNode[] = [];
+  const metaFields: ReactNode[] = [];
 
   fields.forEach((f: FieldUnion, i: number) => {
     const field = typeof f === 'function' ? f(data) : f;

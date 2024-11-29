@@ -1,5 +1,4 @@
-import { createRequestHandler } from '@remix-run/express';
-import { installGlobals } from '@remix-run/node';
+import { createRequestHandler } from '@react-router/express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
@@ -9,8 +8,6 @@ import morgan from 'morgan';
 import factory from './apollo/client.mjs';
 
 process.env.TZ = 'America/New_York';
-
-installGlobals();
 
 const mode = process.env.NODE_ENV;
 const serverPort = (process.env.SERVER_PORT && parseInt(process.env.SERVER_PORT, 10)) || 3000;
@@ -77,7 +74,7 @@ app.all(
   '*',
   createRequestHandler({
     build: viteDevServer
-      ? () => viteDevServer.ssrLoadModule('virtual:remix/server-build')
+      ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
       : await import('./build/server/index.js'),
     mode,
     getLoadContext,

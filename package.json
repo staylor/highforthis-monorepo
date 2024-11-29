@@ -83,8 +83,8 @@
     "test:web": "yarn workspace @highforthis/web test",
     "test:web:watch": "yarn workspace @highforthis/web test:watch",
     "test:web:update": "yarn workspace @highforthis/web test:update",
-    "typecheck:graphql": "tsc --project graphql/tsconfig.json",
-    "typecheck:web": "tsc --project web/tsconfig.json"
+    "typecheck:graphql": "yarn workspace @highforthis/graphql typecheck",
+    "typecheck:web": "yarn workspace @highforthis/web typecheck"
   },
   "workspaces": [
     "graphql",
