@@ -60,6 +60,10 @@ export default abstract class Model {
     });
   }
 
+  public lastAdded() {
+    return this.collection.findOne({}, { sort: { createdAt: -1 } });
+  }
+
   protected parseCriteria(args: any) {
     const { search = '' } = args;
     const criteria: SearchCriteria = {};

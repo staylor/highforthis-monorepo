@@ -510,7 +510,7 @@ type Query {
   podcasts(after: String, before: String, first: Int, last: Int, order: PodcastOrder, search: String): PodcastConnection
   post(id: ObjID, slug: String): Post
   posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus, year: Int): PostConnection
-  show(id: ObjID, slug: String): Show
+  show(id: ObjID, lastAdded: Boolean, slug: String): Show
   showStats(entity: ShowEntityType!): [ShowStat!]!
   shows(after: String, artist: EntityArg, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, venue: EntityArg, year: Int): ShowConnection
   siteSettings: SiteSettings!

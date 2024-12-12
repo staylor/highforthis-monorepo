@@ -746,6 +746,7 @@ export type QueryPostsArgs = {
 
 export type QueryShowArgs = {
   id?: InputMaybe<Scalars['ObjID']['input']>;
+  lastAdded?: InputMaybe<Scalars['Boolean']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 

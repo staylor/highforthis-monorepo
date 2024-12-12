@@ -28,8 +28,12 @@ export default function ShowAdd() {
 
 const showQuery = gql`
   query ShowEntities {
+    show(lastAdded: true) {
+      ...ShowForm_show
+    }
     ...ShowForm_entities
   }
+  ${ShowForm.fragments.show}
   ${ShowForm.fragments.entities}
 `;
 

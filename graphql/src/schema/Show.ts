@@ -79,7 +79,7 @@ const Show = `#graphql
       search: String
       order: ShowOrder
     ): ShowConnection
-    show(id: ObjID, slug: String): Show
+    show(id: ObjID, slug: String, lastAdded: Boolean): Show
     showStats(entity: ShowEntityType!): [ShowStat!]! 
   }
 

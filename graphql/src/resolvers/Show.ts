@@ -74,7 +74,11 @@ const resolvers = {
       return parseConnection(Show, connectionArgs);
     },
 
-    async show(_: unknown, { id, slug }: QueryShowArgs, { Show }: { Show: Show }) {
+    async show(_: unknown, { id, slug, lastAdded }: QueryShowArgs, { Show }: { Show: Show }) {
+      if (lastAdded) {
+        return Show.lastAdded();
+      }
+
       if (id) {
         return Show.findOneById(id);
       }
