@@ -1,5 +1,5 @@
-import { useNavigate, useSearchParams } from '@remix-run/react';
 import type { SyntheticEvent } from 'react';
+import { useNavigate, useSearchParams } from 'react-router';
 
 import type { VideoConnection } from '~/types/graphql';
 

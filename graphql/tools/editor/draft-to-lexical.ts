@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-import database from '../../src/database';
-import Post from '../../src/models/Post';
-import Video from '../../src/models/Video';
+import database from '~/database';
+import Post from '~/models/Post';
+import Video from '~/models/Video';
 
 const writeDir = path.join(process.cwd(), 'tools', 'editor', 'converted');
 const fileName = (id: string) => `${writeDir}/${id}.json`;

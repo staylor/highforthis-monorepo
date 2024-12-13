@@ -1,26 +1,34 @@
 import type { ApolloError, OperationVariables, QueryOptions, ServerError } from '@apollo/client';
-import type { Params } from '@remix-run/react';
+import type { AppLoadContext } from 'react-router';
 
-import { authenticator } from '~/auth';
+import { isAuthenticated } from '~/auth';
 import { PER_PAGE } from '~/constants';
 
 import { offsetToCursor } from './connection';
 
-type QueryData = Pick<QueryOptions, 'query' | 'variables'> & AppData;
+type QueryData = Pick<QueryOptions, 'query' | 'variables'> & {
+  request: Request;
+  context: AppLoadContext;
+};
 
-const query = async ({ query, variables, context, request }: QueryData) => {
+export default async function query<T = unknown>({
+  query,
+  variables,
+  context,
+  request,
+}: QueryData) {
   const { apolloClient } = context;
-  let data = {};
-  const headers: any = {};
+  let data = {} as T;
+  const headers: Record<string, string> = {};
   let authToken;
-  if (request && request.url.includes('/admin')) {
-    authToken = await authenticator.isAuthenticated(request);
+  if (request.url.includes('/admin')) {
+    authToken = await isAuthenticated(request);
   }
   if (authToken) {
-    headers.Authorization = `Bearer ${authToken.token}`;
+    headers.Authorization = `Bearer ${authToken}`;
   }
   try {
-    ({ data } = await apolloClient.query({
+    ({ data } = await apolloClient.query<T>({
       query,
       variables,
       context: {
@@ -41,17 +49,16 @@ const query = async ({ query, variables, context, request }: QueryData) => {
     }
   }
   return data;
-};
+}
 
-export default query;
-
-export const addPageOffset = (params: Params, listVariables?: OperationVariables) => {
+export const addPageOffset = (request: Request, listVariables?: OperationVariables) => {
+  const params = new URL(request.url).searchParams;
   const variables = listVariables || {};
   if (!variables.first) {
     variables.first = PER_PAGE;
   }
-  if (params.page) {
-    const pageOffset = parseInt(params.page, 10) - 1;
+  if (params.has('page')) {
+    const pageOffset = Number(params.get('page')) - 1;
     if (pageOffset > 0) {
       variables.after = offsetToCursor(pageOffset * variables.first - 1);
     }

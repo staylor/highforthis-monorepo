@@ -1,5 +1,5 @@
-import database from '../../src/database';
-import Show from '../../src/models/Show';
+import database from '~/database';
+import Show from '~/models/Show';
 
 const { db } = await database();
 const model = new Show({ db });

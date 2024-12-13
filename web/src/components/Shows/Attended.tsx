@@ -24,7 +24,7 @@ export default function Attended({
   return (
     <article className={className || 'mt-16'}>
       <p className="mb-2 font-stylized">
-        <Link to={`/show/stats/${relation}`} className="underline">
+        <Link to={`/shows/stats/${relation}`} className="underline">
           {shows.edges.length} Shows
         </Link>{' '}
         we have attended {relationText}:

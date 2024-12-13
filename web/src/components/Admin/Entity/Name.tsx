@@ -1,8 +1,10 @@
-import { RowActions, RowTitle, usePath } from '../ListTable';
+import { useLocation } from 'react-router';
+
+import { RowActions, RowTitle } from '../ListTable';
 
 export default function Name({ data }: { data: any }) {
-  const path = usePath();
-  const urlPath = `${path}/${data.id}`;
+  const location = useLocation();
+  const urlPath = `${location.pathname}/${data.id}`;
 
   return (
     <>

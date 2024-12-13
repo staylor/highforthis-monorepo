@@ -1,4 +1,5 @@
 {
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
   "eslint.validate": ["javascript", "javascriptreact", "json", "typescript", "typescriptreact"],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {

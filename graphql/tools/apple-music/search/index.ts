@@ -1,9 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
-import database from '../../../src/database';
-import Artist from '../../../src/models/Artist';
+import dotenv from '@dotenvx/dotenvx';
+
+import database from '~/database';
+import Artist from '~/models/Artist';
+
 import jwtToken from '../jwt';
+
+dotenv.config();
 
 const searchUrl = (term: string) =>
   `https://api.music.apple.com/v1/catalog/us/search?term=${encodeURIComponent(term)}`;

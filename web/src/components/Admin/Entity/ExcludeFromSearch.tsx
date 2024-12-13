@@ -1,4 +1,4 @@
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 
 import Checkbox from '~/components/Form/Checkbox';
 

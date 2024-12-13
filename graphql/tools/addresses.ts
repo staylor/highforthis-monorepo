@@ -1,5 +1,5 @@
-import database from '../src/database';
-import Venue from '../src/models/Venue';
+import database from '~/database';
+import Venue from '~/models/Venue';
 
 const { db } = await database();
 const model = new Venue({ db });

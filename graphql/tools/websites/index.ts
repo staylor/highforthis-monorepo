@@ -4,9 +4,9 @@ import path from 'path';
 import { JSDOM } from 'jsdom';
 import type { WithId } from 'mongodb';
 
-import database from '../../src/database';
-import Artist from '../../src/models/Artist';
-import Venue from '../../src/models/Venue';
+import database from '~/database';
+import Artist from '~/models/Artist';
+import Venue from '~/models/Venue';
 
 const omrHost = 'https://www.ohmyrockness.com';
 const filename = (name: string) => path.join(process.cwd(), 'tools', 'websites', 'responses', name);

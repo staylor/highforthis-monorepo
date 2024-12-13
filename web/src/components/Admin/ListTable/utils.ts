@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useSearchParams } from '@remix-run/react';
+import { useSearchParams } from 'react-router';
 
 const pad = (num: number): string => (num < 10 ? `0${num}` : `${num}`);
 
@@ -13,16 +13,8 @@ export const formatDate = (date: string | number) => {
   ${hour % 12}:${pad(min)}${hour < 12 ? 'am' : 'pm'}`;
 };
 
-export const usePath = () => {
-  const location = useLocation();
-  const paginated = location.pathname.indexOf('/page');
-  return paginated === -1 ? location.pathname : location.pathname.slice(0, paginated);
-};
-
 export const useUpdateQuery = () => {
-  const path = usePath();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return {
     updateQuery: (key: string) => (value: string) => {
@@ -31,8 +23,8 @@ export const useUpdateQuery = () => {
       } else {
         searchParams.delete(key);
       }
-      const qs = searchParams.toString();
-      navigate(qs ? `${path}?${qs}` : path);
+      searchParams.delete('page');
+      setSearchParams(searchParams);
     },
     searchParams,
   };

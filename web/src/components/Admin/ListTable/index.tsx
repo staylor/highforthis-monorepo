@@ -1,19 +1,18 @@
-import { useSubmit } from '@remix-run/react';
 import cn from 'classnames';
 import type { ReactNode, ChangeEvent } from 'react';
 import { useReducer } from 'react';
+import { useSubmit } from 'react-router';
 
 import Checkbox from '~/components/Form/Checkbox';
 import Select from '~/components/Form/Select';
 import type { Column, Columns } from '~/types';
 
 import Pagination from './Pagination';
-import { formatDate, usePath } from './utils';
+import { formatDate } from './utils';
 
 export { default as RowTitle } from './RowTitle';
 export { default as RowActions } from './RowActions';
 export { default as Thumbnail } from './Thumbnail';
-export { usePath };
 
 const cellHeading = cn('text-sm py-2 px-2.5 text-left');
 
@@ -39,7 +38,7 @@ const Headers = ({ className, checkClass, columns, checked, toggleAll }: Headers
 );
 
 interface ListTableProps {
-  data: AppData;
+  data: Record<string, any>;
   deletable?: boolean;
   columns: Columns;
   filters?: ReactNode;
@@ -60,7 +59,6 @@ function ListTable({
   filters,
   perPage = 20,
 }: ListTableProps) {
-  const path = usePath();
   const submit = useSubmit();
   const [state, setState] = useReducer(reducer, {
     checked: [],
@@ -79,7 +77,7 @@ function ListTable({
     const checkbox = e.target as HTMLInputElement;
     let ids;
     if (checkbox.checked) {
-      ids = data.edges.map(({ node }: AppData) => node.id);
+      ids = data.edges.map(({ node }: Record<string, any>) => node.id);
     } else {
       ids = [];
     }
@@ -108,9 +106,7 @@ function ListTable({
     return <p className="my-10">No items found.</p>;
   }
 
-  const paginationMatrix = (
-    <Pagination data={data} path={path} perPage={perPage} className="text-right" />
-  );
+  const paginationMatrix = <Pagination data={data} perPage={perPage} className="text-right" />;
   const toolbarClass = cn('flex items-center');
 
   return (
@@ -145,7 +141,7 @@ function ListTable({
           />
         </thead>
         <tbody>
-          {data.edges.map(({ node }: AppData) => (
+          {data.edges.map(({ node }: Record<string, any>) => (
             <tr className="even:bg-neutral-50" key={node.id}>
               <th className={cn(cellHeading, 'py-1.5 px-2.5 align-top')}>
                 <Checkbox

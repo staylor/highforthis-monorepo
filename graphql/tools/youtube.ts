@@ -1,6 +1,6 @@
-import database from '../src/database';
-import youtube from '../src/jobs/youtube';
-import Video from '../src/models/Video';
+import database from '~/database';
+import youtube from '~/jobs/youtube';
+import Video from '~/models/Video';
 
 const { db } = await database();
 const model = new Video({ db });

@@ -1,6 +1,7 @@
 import type { ApolloError, MutationOptions, ServerError } from '@apollo/client';
 import type { GraphQLErrors } from '@apollo/client/errors';
 import qs from 'qs';
+import type { AppLoadContext } from 'react-router';
 
 import parseObject from './parseObject';
 
@@ -19,7 +20,7 @@ export const parseFormData = async (request: Request, args?: ParseFormDataArgs) 
   return parseObject(qs.parse(formData), args?.skipKeys);
 };
 
-type MutationData = Pick<MutationOptions, 'mutation' | 'variables'> & AppData;
+type MutationData = Pick<MutationOptions, 'mutation' | 'variables'> & { context: AppLoadContext };
 
 const mutate = async ({ mutation, variables, context }: MutationData) => {
   const { apolloClient } = context;

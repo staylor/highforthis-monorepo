@@ -1204,24 +1204,19 @@ export type ShowsGrid_ShowsFragment = { __typename?: 'ShowConnection', edges: Ar
 
 export type Video_VideoFragment = { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> };
 
-export type Videos_VideosFragment = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', edges: Array<{ __typename?: 'VideoEdge', cursor: string, node: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null, hasPreviousPage?: boolean | null } } | null };
+export type Videos_VideosFragment = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', count: number, edges: Array<{ __typename?: 'VideoEdge', cursor: string, node: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null, hasPreviousPage?: boolean | null } } | null };
 
 export type AppQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type AppQuery = { __typename?: 'Query', apiKeys?: { __typename?: 'APIKeys', googleMaps?: string | null } | null, dashboardSettings: { __typename?: 'DashboardSettings', googleClientId?: string | null, googleTrackingId?: string | null, id: string }, podcastSettings: { __typename?: 'PodcastSettings', description?: string | null, feedLink?: string | null, id: string, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: any } | null }, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }> } | null, siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };
 
-export type HomeQueryVariables = Exact<{
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  cacheKey?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  year?: InputMaybe<Scalars['Int']['input']>;
+export type CreateArtistMutationVariables = Exact<{
+  input: CreateArtistInput;
 }>;
 
 
-export type HomeQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: any, slug: string, summary?: string | null, title: string, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, id: any } | { __typename?: 'FileUpload', destination: string, id: any } | { __typename?: 'ImageUpload', destination: string, id: any, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, id: any }> | null } }> } | null, videos?: { __typename?: 'VideoConnection', edges: Array<{ __typename?: 'VideoEdge', cursor: string, node: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null, hasPreviousPage?: boolean | null } } | null };
+export type CreateArtistMutation = { __typename?: 'Mutation', createArtist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type ArtistEditQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ObjID']['input']>;
@@ -1262,13 +1257,6 @@ export type DeleteArtistMutationVariables = Exact<{
 
 export type DeleteArtistMutation = { __typename?: 'Mutation', removeArtist?: boolean | null };
 
-export type CreateArtistMutationVariables = Exact<{
-  input: CreateArtistInput;
-}>;
-
-
-export type CreateArtistMutation = { __typename?: 'Mutation', createArtist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
-
 export type MediaAdminQueryVariables = Exact<{
   id: Scalars['ObjID']['input'];
 }>;
@@ -1302,6 +1290,13 @@ export type DeleteMediaMutationVariables = Exact<{
 
 export type DeleteMediaMutation = { __typename?: 'Mutation', removeMediaUpload?: boolean | null };
 
+export type CreatePodcastMutationVariables = Exact<{
+  input: CreatePodcastInput;
+}>;
+
+
+export type CreatePodcastMutation = { __typename?: 'Mutation', createPodcast?: { __typename?: 'Podcast', id: any } | null };
+
 export type PodcastEditQueryVariables = Exact<{
   id: Scalars['ObjID']['input'];
 }>;
@@ -1329,12 +1324,12 @@ export type DeletePodcastMutationVariables = Exact<{
 
 export type DeletePodcastMutation = { __typename?: 'Mutation', removePodcast?: boolean | null };
 
-export type CreatePodcastMutationVariables = Exact<{
-  input: CreatePodcastInput;
+export type CreatePostMutationVariables = Exact<{
+  input: CreatePostInput;
 }>;
 
 
-export type CreatePodcastMutation = { __typename?: 'Mutation', createPodcast?: { __typename?: 'Podcast', id: any } | null };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', date?: number | null, id: any, slug: string, status?: PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: any, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'HeadingNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, tag?: HeadingTag | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'ImageNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, image?: { __typename?: 'ImageUpload', destination: string, id: any, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | { __typename?: 'LinebreakNode' } | { __typename?: 'QuoteNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'TextNode' } | { __typename?: 'VideoNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, video?: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null } | null> | null } | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type PostEditQueryVariables = Exact<{
   id: Scalars['ObjID']['input'];
@@ -1366,13 +1361,6 @@ export type DeletePostMutationVariables = Exact<{
 
 
 export type DeletePostMutation = { __typename?: 'Mutation', removePost?: boolean | null };
-
-export type CreatePostMutationVariables = Exact<{
-  input: CreatePostInput;
-}>;
-
-
-export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', date?: number | null, id: any, slug: string, status?: PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: any, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'HeadingNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, tag?: HeadingTag | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'ImageNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, image?: { __typename?: 'ImageUpload', destination: string, id: any, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | { __typename?: 'LinebreakNode' } | { __typename?: 'QuoteNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'TextNode' } | { __typename?: 'VideoNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, video?: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null } | null> | null } | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type DashboardSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1426,6 +1414,18 @@ export type UpdateSiteSettingsMutationVariables = Exact<{
 
 export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings?: { __typename?: 'SiteSettings', id: string } | null };
 
+export type ShowEntitiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ShowEntitiesQuery = { __typename?: 'Query', artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: any, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: any, name: string } }> } | null };
+
+export type CreateShowMutationVariables = Exact<{
+  input: CreateShowInput;
+}>;
+
+
+export type CreateShowMutation = { __typename?: 'Mutation', createShow?: { __typename?: 'Show', id: any } | null };
+
 export type ShowEditQueryVariables = Exact<{
   id: Scalars['ObjID']['input'];
 }>;
@@ -1469,17 +1469,12 @@ export type DeleteShowMutationVariables = Exact<{
 
 export type DeleteShowMutation = { __typename?: 'Mutation', removeShow?: boolean | null };
 
-export type ShowEntitiesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ShowEntitiesQuery = { __typename?: 'Query', artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: any, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: any, name: string } }> } | null };
-
-export type CreateShowMutationVariables = Exact<{
-  input: CreateShowInput;
+export type CreateUserMutationVariables = Exact<{
+  input: CreateUserInput;
 }>;
 
 
-export type CreateShowMutation = { __typename?: 'Mutation', createShow?: { __typename?: 'Show', id: any } | null };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id: any } | null };
 
 export type UserEditQueryVariables = Exact<{
   id: Scalars['ObjID']['input'];
@@ -1508,12 +1503,12 @@ export type DeleteUserMutationVariables = Exact<{
 
 export type DeleteUserMutation = { __typename?: 'Mutation', removeUser?: boolean | null };
 
-export type CreateUserMutationVariables = Exact<{
-  input: CreateUserInput;
+export type CreateVenueMutationVariables = Exact<{
+  input: CreateVenueInput;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id: any } | null };
+export type CreateVenueMutation = { __typename?: 'Mutation', createVenue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type VenueEditQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ObjID']['input']>;
@@ -1553,13 +1548,6 @@ export type DeleteVenueMutationVariables = Exact<{
 
 
 export type DeleteVenueMutation = { __typename?: 'Mutation', removeVenue?: boolean | null };
-
-export type CreateVenueMutationVariables = Exact<{
-  input: CreateVenueInput;
-}>;
-
-
-export type CreateVenueMutation = { __typename?: 'Mutation', createVenue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type VideoEditQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ObjID']['input']>;
@@ -1601,6 +1589,18 @@ export type ArtistQueryVariables = Exact<{
 
 export type ArtistQuery = { __typename?: 'Query', artist?: { __typename?: 'Artist', id: any, name: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, url?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null } | null, attended?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', city?: string | null, id: any, name: string, slug: string, state?: string | null } } }> } | null, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
+export type HomeQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  cacheKey?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  year?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type HomeQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: any, slug: string, summary?: string | null, title: string, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, id: any } | { __typename?: 'FileUpload', destination: string, id: any } | { __typename?: 'ImageUpload', destination: string, id: any, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, id: any }> | null } }> } | null, videos?: { __typename?: 'VideoConnection', count: number, edges: Array<{ __typename?: 'VideoEdge', cursor: string, node: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null, hasPreviousPage?: boolean | null } } | null };
+
 export type MediaModalQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -1618,19 +1618,19 @@ export type VideoModalQueryVariables = Exact<{
 
 export type VideoModalQuery = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', edges: Array<{ __typename?: 'VideoEdge', node: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
 
-export type PodcastQueryVariables = Exact<{
-  id: Scalars['ObjID']['input'];
-}>;
-
-
-export type PodcastQuery = { __typename?: 'Query', podcast?: { __typename?: 'Podcast', description: string, id: any, title: string, audio?: { __typename?: 'AudioUpload', destination: string, duration?: number | null, fileName: string, id: any } | null } | null };
-
 export type PodcastsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
 export type PodcastsQuery = { __typename?: 'Query', podcasts?: { __typename?: 'PodcastConnection', edges: Array<{ __typename?: 'PodcastEdge', node: { __typename?: 'Podcast', description: string, id: any, title: string } }> } | null };
+
+export type PodcastQueryVariables = Exact<{
+  id: Scalars['ObjID']['input'];
+}>;
+
+
+export type PodcastQuery = { __typename?: 'Query', podcast?: { __typename?: 'Podcast', description: string, id: any, title: string, audio?: { __typename?: 'AudioUpload', destination: string, duration?: number | null, fileName: string, id: any } | null } | null };
 
 export type PodcastFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1644,27 +1644,12 @@ export type PostQueryVariables = Exact<{
 
 export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: any, slug: string, summary?: string | null, title: string, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'HeadingNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, tag?: HeadingTag | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'ImageNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, image?: { __typename?: 'ImageUpload', destination: string, id: any, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | { __typename?: 'LinebreakNode' } | { __typename?: 'QuoteNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'TextNode' } | { __typename?: 'VideoNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, video?: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null } | null> | null } | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, id: any } | { __typename?: 'FileUpload', destination: string, id: any } | { __typename?: 'ImageUpload', destination: string, id: any, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, id: any }> | null } | null };
 
-export type ShowQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ObjID']['input']>;
-}>;
-
-
-export type ShowQuery = { __typename?: 'Query', show?: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } | null };
-
 export type ShowStatsQueryVariables = Exact<{
   entity: ShowEntityType;
 }>;
 
 
 export type ShowStatsQuery = { __typename?: 'Query', showStats: Array<{ __typename?: 'ShowStat', count: number, entity: { __typename?: 'Artist', id: any, name: string, slug: string } | { __typename?: 'Venue', id: any, name: string, slug: string } }> };
-
-export type ShowsQueryVariables = Exact<{
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-
-export type ShowsQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type ShowsHistoryQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1675,6 +1660,21 @@ export type ShowsHistoryQueryVariables = Exact<{
 
 export type ShowsHistoryQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
+export type ShowsQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type ShowsQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type ShowQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ObjID']['input']>;
+}>;
+
+
+export type ShowQuery = { __typename?: 'Query', show?: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } | null };
+
 export type VenueQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
   slug: Scalars['String']['input'];
@@ -1682,13 +1682,6 @@ export type VenueQueryVariables = Exact<{
 
 
 export type VenueQuery = { __typename?: 'Query', attended?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', city?: string | null, id: any, name: string, slug: string, state?: string | null } } }> } | null, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null, venue?: { __typename?: 'Venue', address?: string | null, capacity?: string | null, id: any, name: string, permanentlyClosed?: boolean | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
-
-export type VideoQueryVariables = Exact<{
-  slug?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type VideoQuery = { __typename?: 'Query', video?: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
 
 export type VideosQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1700,4 +1693,11 @@ export type VideosQueryVariables = Exact<{
 }>;
 
 
-export type VideosQuery = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', edges: Array<{ __typename?: 'VideoEdge', cursor: string, node: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null, hasPreviousPage?: boolean | null } } | null };
+export type VideosQuery = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', count: number, edges: Array<{ __typename?: 'VideoEdge', cursor: string, node: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null, hasPreviousPage?: boolean | null } } | null };
+
+export type VideoQueryVariables = Exact<{
+  slug?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type VideoQuery = { __typename?: 'Query', video?: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
