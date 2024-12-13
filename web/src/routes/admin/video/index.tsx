@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
+import { useLocation } from 'react-router';
 
-import ListTable, { RowTitle, RowActions, usePath } from '~/components/Admin/ListTable';
+import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
 import Search from '~/components/Admin/ListTable/Search';
 import { useUpdateQuery } from '~/components/Admin/ListTable/utils';
 import { Heading } from '~/components/Admin/styles';
@@ -13,9 +14,9 @@ import query, { addPageOffset } from '~/utils/query';
 
 import type { Route } from './+types/index';
 
-export async function loader({ request, context, params }: Route.LoaderArgs) {
+export async function loader({ request, context }: Route.LoaderArgs) {
   const url = new URL(request.url);
-  const variables = addPageOffset(params);
+  const variables = addPageOffset(request);
   ['search', 'year'].forEach((key) => {
     const value = url.searchParams.get(key);
     if (value) {
@@ -31,7 +32,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Videos({ loaderData }: Route.ComponentProps) {
-  const path = usePath();
+  const location = useLocation();
   const { updateQuery, searchParams } = useUpdateQuery();
   const { videos } = loaderData;
 
@@ -50,7 +51,7 @@ export default function Videos({ loaderData }: Route.ComponentProps) {
     {
       label: 'Title',
       render: (video: Video) => {
-        const videoUrl = `${path}/${video.id}`;
+        const videoUrl = `${location.pathname}/${video.id}`;
         return (
           <>
             <RowTitle url={videoUrl} title={video.title} />

@@ -1,8 +1,9 @@
 import { gql } from 'graphql-tag';
 import debounce from 'lodash.debounce';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useLocation } from 'react-router';
 
-import ListTable, { Thumbnail, RowTitle, RowActions, usePath } from '~/components/Admin/ListTable';
+import ListTable, { Thumbnail, RowTitle, RowActions } from '~/components/Admin/ListTable';
+import { useUpdateQuery } from '~/components/Admin/ListTable/utils';
 import { Heading, HeaderAdd } from '~/components/Admin/styles';
 import Input from '~/components/Form/Input';
 import Message from '~/components/Form/Message';
@@ -15,9 +16,9 @@ import query, { addPageOffset } from '~/utils/query';
 
 import type { Route } from './+types/index';
 
-export async function loader({ request, context, params }: Route.LoaderArgs) {
+export async function loader({ request, context }: Route.LoaderArgs) {
   const url = new URL(request.url);
-  const variables = addPageOffset(params);
+  const variables = addPageOffset(request);
   ['type', 'mimeType', 'search'].forEach((key) => {
     const value = url.searchParams.get(key);
     if (value) {
@@ -33,18 +34,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 export default function Media({ loaderData }: Route.ComponentProps) {
   const { uploads } = loaderData;
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const path = usePath();
-  const updateQuery = (key: string) => (value: string) => {
-    if (value) {
-      searchParams.set(key, value);
-    } else {
-      searchParams.delete(key);
-    }
-    const qs = searchParams.toString();
-    navigate(qs ? `${path}?${qs}` : path);
-  };
+  const location = useLocation();
+  const { updateQuery, searchParams } = useUpdateQuery();
   const querySearch = updateQuery('search');
   const updateSearch = debounce(querySearch, 600);
   const columns: Columns = [
@@ -66,7 +57,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       className: 'w-[60%]',
       label: 'Title',
       render: (media: MediaUpload) => {
-        const editUrl = `${path}/${media.id}`;
+        const editUrl = `${location.pathname}/${media.id}`;
         return (
           <>
             <RowTitle url={editUrl} title={media.title} subtitle={media.originalName} />
@@ -85,7 +76,9 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       render: (media: MediaUpload) => {
         const search = new URLSearchParams();
         search.set('type', media.type);
-        return <Link to={{ pathname: path, search: search.toString() }}>{media.type}</Link>;
+        return (
+          <Link to={{ pathname: location.pathname, search: search.toString() }}>{media.type}</Link>
+        );
       },
     },
     {
@@ -93,7 +86,11 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       render: (media: MediaUpload) => {
         const search = new URLSearchParams();
         search.set('mimeType', media.mimeType);
-        return <Link to={{ pathname: path, search: search.toString() }}>{media.mimeType}</Link>;
+        return (
+          <Link to={{ pathname: location.pathname, search: search.toString() }}>
+            {media.mimeType}
+          </Link>
+        );
       },
     },
   ];
@@ -123,7 +120,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <Heading>Media</Heading>
-      <HeaderAdd label="Add Media" to={`${path}/upload`} />
+      <HeaderAdd label="Add Media" to={`${location.pathname}/upload`} />
       <Message param="deleted" text="Deleted %s uploads." />
       <div className="float-right">
         <Input

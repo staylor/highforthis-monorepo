@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
-import { useParams, useSearchParams } from 'react-router';
+import { useLocation, useSearchParams } from 'react-router';
 
 import Link from '~/components/Link';
 
@@ -15,52 +15,60 @@ const Count = ({ children }: PropsWithChildren) => (
 
 interface PaginationProps {
   data: Record<string, any>;
-  path: string;
   perPage: number;
   className: string;
 }
 
-export default function Pagination({ data, path, perPage, className }: PaginationProps) {
-  const params = useParams();
+export default function Pagination({ data, perPage, className }: PaginationProps) {
+  const location = useLocation();
   const [searchParams] = useSearchParams();
+  const page = searchParams.get('page');
   const pages = data.count > 0 ? Math.ceil(data.count / perPage) : 0;
   const firstPage = pages === 0 ? 0 : 1;
-  const currentPage = params.page ? parseInt(params.page, 10) : firstPage;
+  const currentPage = page ? Number(page) : firstPage;
   const paginated = currentPage && currentPage > 1;
-  let previousUrl = null;
-  let nextUrl = null;
+  let previousPage = null;
+  let nextPage = null;
   if (paginated) {
     if (currentPage - 1 > 1) {
-      previousUrl = `/page/${currentPage - 1}`;
+      previousPage = currentPage - 1;
     } else {
-      previousUrl = '';
+      previousPage = 0;
     }
   }
   if (currentPage !== pages && data.pageInfo.hasNextPage) {
-    nextUrl = `/page/${currentPage + 1}`;
+    nextPage = currentPage + 1;
   }
 
   const LinkTo = ({
-    to = '',
+    page,
     className,
     children,
   }: PropsWithChildren<{
-    to?: string;
+    page?: number;
     className: string;
-  }>) => (
-    <Link className={className} to={{ pathname: `${path}${to}`, search: searchParams.toString() }}>
-      {children}
-    </Link>
-  );
+  }>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (page) {
+      params.set('page', String(page));
+    } else if (page === 0) {
+      params.delete('page');
+    }
+    return (
+      <Link className={className} to={{ pathname: location.pathname, search: params.toString() }}>
+        {children}
+      </Link>
+    );
+  };
 
   const Inactive = ({ children }: PropsWithChildren) => (
     <span className={cn(textClass, 'bg-neutral-50')}>{children}</span>
   );
 
-  const Active = ({ to, children }: PropsWithChildren<{ to?: string }>) => (
+  const Active = ({ page, children }: PropsWithChildren<{ page?: number }>) => (
     <LinkTo
       className={cn(textClass, 'text-dark hover:bg-detail bg-white hover:text-black')}
-      to={to}
+      page={page}
     >
       {children}
     </LinkTo>
@@ -70,12 +78,12 @@ export default function Pagination({ data, path, perPage, className }: Paginatio
     <nav className={cn('select-none text-sm', className)}>
       <Count>{data.count} items</Count>
       {paginated ? <Active>«</Active> : <Inactive>«</Inactive>}
-      {previousUrl === null ? <Inactive>‹</Inactive> : <Active to={previousUrl}>‹</Active>}
+      {previousPage === null ? <Inactive>‹</Inactive> : <Active page={previousPage}>‹</Active>}
       <Count>
         {paginated ? currentPage : firstPage} of {pages}
       </Count>
-      {nextUrl === null ? <Inactive>›</Inactive> : <Active to={nextUrl}>›</Active>}
-      {currentPage !== pages ? <Active to={`/page/${pages}`}>»</Active> : <Inactive>»</Inactive>}
+      {nextPage === null ? <Inactive>›</Inactive> : <Active page={nextPage}>›</Active>}
+      {currentPage !== pages ? <Active page={pages}>»</Active> : <Inactive>»</Inactive>}
     </nav>
   );
 }

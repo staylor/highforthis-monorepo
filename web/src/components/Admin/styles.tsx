@@ -1,9 +1,8 @@
 import cn from 'classnames';
 import type { HTMLAttributes } from 'react';
+import { useLocation } from 'react-router';
 
 import Link, { type CustomLinkProps } from '~/components/Link';
-
-import { usePath } from './ListTable/utils';
 
 export const Heading = ({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
   <h1
@@ -20,14 +19,14 @@ export const HeaderAdd = ({
   to,
   ...props
 }: Partial<CustomLinkProps> & { label: string }) => {
-  const path = usePath();
+  const location = useLocation();
   return (
     <Link
       className={cn(
         'relative z-10 cursor-pointer bg-[#ededed] py-1 px-2 font-bold outline-0',
         'border-detail -top-0.75 rounded-sm border text-sm'
       )}
-      to={to || `${path}/add`}
+      to={to || `${location.pathname}/add`}
       {...props}
     >
       {label}

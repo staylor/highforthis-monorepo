@@ -1,5 +1,5 @@
-import database from '../src/database';
-import shows from '../src/jobs/shows';
+import database from '~/database';
+import shows from '~/jobs/shows';
 
 const { db } = await database();
 

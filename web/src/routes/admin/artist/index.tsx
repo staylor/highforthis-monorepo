@@ -14,8 +14,8 @@ import query, { addPageOffset, addSearchParam } from '~/utils/query';
 
 import type { Route } from './+types/index';
 
-export async function loader({ request, context, params }: Route.LoaderArgs) {
-  const variables = addSearchParam(request, addPageOffset(params));
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const variables = addSearchParam(request, addPageOffset(request));
 
   return query<ArtistsAdminQuery>({
     request,

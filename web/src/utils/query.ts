@@ -1,7 +1,7 @@
 import type { ApolloError, OperationVariables, QueryOptions, ServerError } from '@apollo/client';
-import type { AppLoadContext, Params } from 'react-router';
+import type { AppLoadContext } from 'react-router';
 
-import { authenticator } from '~/auth';
+import { isAuthenticated } from '~/auth';
 import { PER_PAGE } from '~/constants';
 
 import { offsetToCursor } from './connection';
@@ -22,10 +22,10 @@ export default async function query<T = unknown>({
   const headers: Record<string, string> = {};
   let authToken;
   if (request.url.includes('/admin')) {
-    authToken = await authenticator.isAuthenticated(request);
+    authToken = await isAuthenticated(request);
   }
   if (authToken) {
-    headers.Authorization = `Bearer ${authToken.token}`;
+    headers.Authorization = `Bearer ${authToken}`;
   }
   try {
     ({ data } = await apolloClient.query<T>({
@@ -51,13 +51,14 @@ export default async function query<T = unknown>({
   return data;
 }
 
-export const addPageOffset = (params: Params, listVariables?: OperationVariables) => {
+export const addPageOffset = (request: Request, listVariables?: OperationVariables) => {
+  const params = new URL(request.url).searchParams;
   const variables = listVariables || {};
   if (!variables.first) {
     variables.first = PER_PAGE;
   }
-  if (params.page) {
-    const pageOffset = parseInt(params.page, 10) - 1;
+  if (params.has('page')) {
+    const pageOffset = Number(params.get('page')) - 1;
     if (pageOffset > 0) {
       variables.after = offsetToCursor(pageOffset * variables.first - 1);
     }

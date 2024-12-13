@@ -4,7 +4,6 @@ const adminRoutes = (slug: string) =>
   prefix(slug, [
     index(`routes/admin/${slug}/index.tsx`),
     route(`add`, `routes/admin/${slug}/add.tsx`),
-    route(`page/:page`, `routes/admin/${slug}/page.tsx`),
     route(`:id`, `routes/admin/${slug}/edit.tsx`),
   ]);
 
@@ -16,7 +15,6 @@ export default [
     ...prefix('media', [
       index('routes/admin/media/index.tsx'),
       route('upload', 'routes/admin/media/upload.tsx'),
-      route('page/:page', 'routes/admin/media/page.tsx'),
       route(':id', 'routes/admin/media/edit.tsx'),
     ]),
     ...adminRoutes('podcast'),
@@ -32,7 +30,6 @@ export default [
     ...adminRoutes('venue'),
     ...prefix('video', [
       index('routes/admin/video/index.tsx'),
-      route('page/:page', 'routes/admin/video/page.tsx'),
       route(':id', 'routes/admin/video/edit.tsx'),
     ]),
   ]),

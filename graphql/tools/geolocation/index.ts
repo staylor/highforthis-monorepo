@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import database from '../../src/database';
-import Venue from '../../src/models/Venue';
+import database from '~/database';
+import Venue from '~/models/Venue';
 
 const API_KEY = process.env.GOOGLE_MAPS_GEOLOCATION_API_KEY as string;
 

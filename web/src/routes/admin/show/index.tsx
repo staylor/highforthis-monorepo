@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag';
-import { useFetcher } from 'react-router';
+import { useFetcher, useLocation } from 'react-router';
 
-import ListTable, { RowTitle, RowActions, usePath } from '~/components/Admin/ListTable';
+import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
 import Search from '~/components/Admin/ListTable/Search';
 import { Heading, HeaderAdd } from '~/components/Admin/styles';
 import Checkbox from '~/components/Form/Checkbox';
@@ -14,8 +14,8 @@ import query, { addPageOffset, addSearchParam } from '~/utils/query';
 
 import type { Route } from './+types';
 
-export async function loader({ request, context, params }: Route.LoaderArgs) {
-  const variables = addSearchParam(request, addPageOffset(params, { order: 'DESC' }));
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const variables = addSearchParam(request, addPageOffset(request, { order: 'DESC' }));
   return query<ShowsAdminQuery>({ request, context, query: showsQuery, variables });
 }
 
@@ -38,14 +38,14 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 export default function Shows({ loaderData }: Route.ComponentProps) {
   const fetcher = useFetcher();
-  const path = usePath();
+  const location = useLocation();
   const { shows } = loaderData;
 
   const columns = [
     {
       label: 'Title',
       render: (show: Show) => {
-        const showUrl = `${path}/${show.id}`;
+        const showUrl = `${location.pathname}/${show.id}`;
         return (
           <>
             <RowTitle url={showUrl} title={show.title} />

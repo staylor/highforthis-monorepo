@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
+import { useLocation } from 'react-router';
 
-import ListTable, { RowTitle, RowActions, usePath } from '~/components/Admin/ListTable';
+import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
 import { Heading, HeaderAdd } from '~/components/Admin/styles';
 import Message from '~/components/Form/Message';
 import type { Columns } from '~/types';
@@ -10,12 +11,12 @@ import query, { addPageOffset } from '~/utils/query';
 
 import type { Route } from './+types/index';
 
-export async function loader({ request, context, params }: Route.LoaderArgs) {
+export async function loader({ request, context }: Route.LoaderArgs) {
   return query<PostsAdminQuery>({
     request,
     context,
     query: postsQuery,
-    variables: addPageOffset(params),
+    variables: addPageOffset(request),
   });
 }
 
@@ -24,12 +25,12 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Posts({ loaderData }: Route.ComponentProps) {
-  const path = usePath();
+  const location = useLocation();
   const columns: Columns = [
     {
       label: 'Title',
       render: (post: Post) => {
-        const editUrl = `${path}/${post.id}`;
+        const editUrl = `${location.pathname}/${post.id}`;
         return (
           <>
             <RowTitle

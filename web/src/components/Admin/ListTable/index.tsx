@@ -8,12 +8,11 @@ import Select from '~/components/Form/Select';
 import type { Column, Columns } from '~/types';
 
 import Pagination from './Pagination';
-import { formatDate, usePath } from './utils';
+import { formatDate } from './utils';
 
 export { default as RowTitle } from './RowTitle';
 export { default as RowActions } from './RowActions';
 export { default as Thumbnail } from './Thumbnail';
-export { usePath };
 
 const cellHeading = cn('text-sm py-2 px-2.5 text-left');
 
@@ -60,7 +59,6 @@ function ListTable({
   filters,
   perPage = 20,
 }: ListTableProps) {
-  const path = usePath();
   const submit = useSubmit();
   const [state, setState] = useReducer(reducer, {
     checked: [],
@@ -108,9 +106,7 @@ function ListTable({
     return <p className="my-10">No items found.</p>;
   }
 
-  const paginationMatrix = (
-    <Pagination data={data} path={path} perPage={perPage} className="text-right" />
-  );
+  const paginationMatrix = <Pagination data={data} perPage={perPage} className="text-right" />;
   const toolbarClass = cn('flex items-center');
 
   return (

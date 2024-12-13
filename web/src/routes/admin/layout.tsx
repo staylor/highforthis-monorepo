@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { LinksFunction, MetaFunction } from 'react-router';
 import { redirect, Outlet } from 'react-router';
 
-import { authenticator } from '~/auth';
+import { isAuthenticated } from '~/auth';
 import NavMenu from '~/components/Admin/NavMenu';
 import adminCss from '~/styles/admin.css?url';
 import { rootData } from '~/utils/rootData';
@@ -31,7 +31,7 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const user = await authenticator.isAuthenticated(request);
+  const user = await isAuthenticated(request);
   if (!user) {
     return redirect('/login/unauthorized');
   }

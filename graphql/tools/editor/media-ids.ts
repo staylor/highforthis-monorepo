@@ -1,5 +1,5 @@
-import database from '../../src/database';
-import Post from '../../src/models/Post';
+import database from '~/database';
+import Post from '~/models/Post';
 
 const { db } = await database();
 const model = new Post({ db });
