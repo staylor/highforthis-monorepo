@@ -20,7 +20,8 @@ export default function ShowsGrid({
 }) {
   const years = {} as { [key: number]: number };
   const months = {} as { [key: string]: number };
-  const sorted = shows.edges.sort(({ node: showA }, { node: showB }) => {
+  const sorted = [...shows.edges];
+  sorted.sort(({ node: showA }, { node: showB }) => {
     const dateA = showA.date;
     const dateB = showB.date;
     if (dateA === dateB) {
