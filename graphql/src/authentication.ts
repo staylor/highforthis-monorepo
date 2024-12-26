@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import type { Request, Response, NextFunction, Router } from 'express';
 import jwt from 'jwt-simple';
-import type { Document } from 'mongodb';
+import { ObjectId, type Document } from 'mongodb';
 import passport from 'passport';
 import type { VerifiedCallback } from 'passport-jwt';
 import { Strategy, ExtractJwt } from 'passport-jwt';
@@ -20,7 +20,8 @@ async function userFromPayload(
     throw new Error('No userId in JWT');
   }
 
-  const user = await User.findOneById(jwtPayload.userId);
+  const id = new ObjectId(jwtPayload.userId);
+  const user = await User.findOneById(id);
   return user;
 }
 
