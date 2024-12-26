@@ -39,7 +39,11 @@ const viteDevServer =
 const app = express();
 
 app.use(compression());
-app.use(morgan('tiny'));
+app.use(
+  morgan('tiny', {
+    skip: (req, res) => res.statusCode < 400,
+  })
+);
 app.use(cookieParser());
 
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header

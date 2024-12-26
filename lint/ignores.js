@@ -1,4 +1,5 @@
 export default [
+  '**/*.snap',
   '**/package.json',
   '**/tsconfig.json',
   '.cache',

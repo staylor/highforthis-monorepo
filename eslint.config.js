@@ -43,7 +43,7 @@ export default tseslint.config(
       },
     },
     plugins: {
-      import: legacyPlugin('eslint-plugin-import', 'import'),
+      import: importPlugin,
       json,
       node,
       react,
