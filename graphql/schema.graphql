@@ -195,6 +195,8 @@ input EditorNodeInput {
   style: String
   tag: HeadingTag
   text: String
+  textFormat: Int
+  textStyle: String
   type: String
   version: Int
   videoId: String
@@ -612,6 +614,8 @@ type TextNode implements LexicalNode {
   mode: TextModeType
   style: String
   text: String
+  textFormat: Int
+  textStyle: String
   type: String
   version: Int
 }

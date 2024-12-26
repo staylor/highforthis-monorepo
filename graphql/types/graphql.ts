@@ -227,6 +227,8 @@ export type EditorNodeInput = {
   style?: InputMaybe<Scalars['String']['input']>;
   tag?: InputMaybe<HeadingTag>;
   text?: InputMaybe<Scalars['String']['input']>;
+  textFormat?: InputMaybe<Scalars['Int']['input']>;
+  textStyle?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
   videoId?: InputMaybe<Scalars['String']['input']>;
@@ -916,6 +918,8 @@ export type TextNode = LexicalNode & {
   mode?: Maybe<TextModeType>;
   style?: Maybe<Scalars['String']['output']>;
   text?: Maybe<Scalars['String']['output']>;
+  textFormat?: Maybe<Scalars['Int']['output']>;
+  textStyle?: Maybe<Scalars['String']['output']>;
   type?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['Int']['output']>;
 };

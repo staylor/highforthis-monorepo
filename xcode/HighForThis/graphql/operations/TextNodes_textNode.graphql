@@ -4,5 +4,7 @@ fragment TextNodes_textNode on TextNode {
   mode
   style
   text
+  textFormat
+  textStyle
   type
 }

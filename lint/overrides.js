@@ -1,4 +1,5 @@
 import graphql from '@graphql-eslint/eslint-plugin';
+import lexical from '@lexical/eslint-plugin';
 import tailwind from 'eslint-plugin-tailwindcss';
 import testingLibrary from 'eslint-plugin-testing-library';
 import vitest from 'eslint-plugin-vitest';
@@ -30,6 +31,10 @@ const parserOptions = {
 };
 
 export default [
+  {
+    ...lexical.configs.all,
+    files: ['./web/**/*'],
+  },
   {
     ...tailwind.configs['flat/recommended'],
     files: ['./web/**/*'],

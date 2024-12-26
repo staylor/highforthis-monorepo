@@ -79,6 +79,8 @@ TextNodes.fragments = {
       mode
       style
       text
+      textFormat
+      textStyle
       type
       version
     }

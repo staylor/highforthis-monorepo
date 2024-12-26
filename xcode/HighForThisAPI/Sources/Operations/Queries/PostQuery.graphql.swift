@@ -222,6 +222,8 @@ public class PostQuery: GraphQLQuery {
                   public var mode: GraphQLEnum<HighForThisAPI.TextModeType>? { __data["mode"] }
                   public var style: String? { __data["style"] }
                   public var text: String? { __data["text"] }
+                  public var textFormat: Int? { __data["textFormat"] }
+                  public var textStyle: String? { __data["textStyle"] }
                   public var type: String? { __data["type"] }
 
                   public struct Fragments: FragmentContainer {
@@ -423,6 +425,8 @@ public class PostQuery: GraphQLQuery {
                   public var mode: GraphQLEnum<HighForThisAPI.TextModeType>? { __data["mode"] }
                   public var style: String? { __data["style"] }
                   public var text: String? { __data["text"] }
+                  public var textFormat: Int? { __data["textFormat"] }
+                  public var textStyle: String? { __data["textStyle"] }
                   public var type: String? { __data["type"] }
 
                   public struct Fragments: FragmentContainer {

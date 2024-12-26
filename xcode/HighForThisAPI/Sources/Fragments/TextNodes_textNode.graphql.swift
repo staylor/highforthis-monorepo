@@ -5,7 +5,7 @@
 
 public struct TextNodes_textNode: HighForThisAPI.SelectionSet, Fragment {
   public static var fragmentDefinition: StaticString {
-    #"fragment TextNodes_textNode on TextNode { __typename detail format mode style text type }"#
+    #"fragment TextNodes_textNode on TextNode { __typename detail format mode style text textFormat textStyle type }"#
   }
 
   public let __data: DataDict
@@ -19,6 +19,8 @@ public struct TextNodes_textNode: HighForThisAPI.SelectionSet, Fragment {
     .field("mode", GraphQLEnum<HighForThisAPI.TextModeType>?.self),
     .field("style", String?.self),
     .field("text", String?.self),
+    .field("textFormat", Int?.self),
+    .field("textStyle", String?.self),
     .field("type", String?.self),
   ] }
 
@@ -27,5 +29,7 @@ public struct TextNodes_textNode: HighForThisAPI.SelectionSet, Fragment {
   public var mode: GraphQLEnum<HighForThisAPI.TextModeType>? { __data["mode"] }
   public var style: String? { __data["style"] }
   public var text: String? { __data["text"] }
+  public var textFormat: Int? { __data["textFormat"] }
+  public var textStyle: String? { __data["textStyle"] }
   public var type: String? { __data["type"] }
 }

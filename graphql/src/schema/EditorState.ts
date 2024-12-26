@@ -104,6 +104,8 @@ const EditorState = `#graphql
     mode: TextModeType
     style: String
     text: String
+    textFormat: Int
+    textStyle: String
     type: String
     version: Int
   }
@@ -130,6 +132,8 @@ const EditorState = `#graphql
     mode: TextModeType
     style: String
     text: String
+    textFormat: Int
+    textStyle: String
     # Code
     language: String
     # Heading
