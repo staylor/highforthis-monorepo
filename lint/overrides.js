@@ -1,4 +1,4 @@
-import { flatConfigs } from '@graphql-eslint/eslint-plugin';
+import graphql from '@graphql-eslint/eslint-plugin';
 import tailwind from 'eslint-plugin-tailwindcss';
 import testingLibrary from 'eslint-plugin-testing-library';
 import vitest from 'eslint-plugin-vitest';
@@ -41,7 +41,7 @@ export default [
   },
   {
     files: ['./web/src/**/*.tsx', './web/src/**/*.graphql.ts', './web/src/**/graphql.ts'],
-    processor: '@graphql-eslint/graphql',
+    processor: graphql.processor,
   },
   {
     files: ['./web/src/**/*.graphql'],
@@ -49,8 +49,8 @@ export default [
       parserOptions,
     },
     rules: {
-      ...flatConfigs['operations-all'].rules,
-      ...flatConfigs.relay.rules,
+      ...graphql.configs['flat/operations-all'].rules,
+      ...graphql.configs['flat/schema-relay'].rules,
       '@graphql-eslint/naming-convention': namingConvention,
       '@graphql-eslint/unique-fragment-name': OFF,
       '@graphql-eslint/unique-operation-name': OFF,
@@ -62,8 +62,8 @@ export default [
       parserOptions,
     },
     rules: {
-      ...flatConfigs['operations-all'].rules,
-      ...flatConfigs.relay.rules,
+      ...graphql.configs['flat/operations-all'].rules,
+      ...graphql.configs['flat/schema-relay'].rules,
       '@graphql-eslint/match-document-filename': OFF,
       '@graphql-eslint/naming-convention': namingConvention,
       '@graphql-eslint/no-one-place-fragments': OFF,
