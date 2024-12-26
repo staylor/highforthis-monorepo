@@ -11,3 +11,15 @@ exports[`Textarea > empty 1`] = `
   class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full"
 />
 `;
+
+exports[`textarea > add className 1`] = `
+<textarea
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full foo"
+/>
+`;
+
+exports[`textarea > empty 1`] = `
+<textarea
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full"
+/>
+`;

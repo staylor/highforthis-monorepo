@@ -15,3 +15,19 @@ exports[`Input > empty 1`] = `
   value=""
 />
 `;
+
+exports[`input > add className 1`] = `
+<input
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full foo"
+  type="text"
+  value=""
+/>
+`;
+
+exports[`input > empty 1`] = `
+<input
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full"
+  type="text"
+  value=""
+/>
+`;

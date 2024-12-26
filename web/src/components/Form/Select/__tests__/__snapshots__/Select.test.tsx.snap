@@ -337,3 +337,262 @@ exports[`Select > placeholder > no choices 1`] = `
   </option>
 </select>
 `;
+
+exports[`select > add className 1`] = `bound HTMLSelectElement {}`;
+
+exports[`select > child nodes > children 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value="meximelt"
+  >
+    Mexi-melt
+  </option>,
+}
+`;
+
+exports[`select > child nodes > children with choices 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value="mild"
+  >
+    Mild
+  </option>,
+  "1": <option
+    value="hot"
+  >
+    Hot
+  </option>,
+  "2": <option
+    value="fire"
+  >
+    Fire
+  </option>,
+  "3": <option
+    value="meximelt"
+  >
+    Mexi-melt
+  </option>,
+}
+`;
+
+exports[`select > choices > choice 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value="mild"
+  >
+    Mild
+  </option>,
+  "1": <option
+    value="hot"
+  >
+    Hot
+  </option>,
+  "2": <option
+    value="fire"
+  >
+    Fire
+  </option>,
+}
+`;
+
+exports[`select > choices > choices 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value="Mild"
+  >
+    Mild
+  </option>,
+  "1": <option
+    value="Hot"
+  >
+    Hot
+  </option>,
+  "2": <option
+    value="Fire"
+  >
+    Fire
+  </option>,
+}
+`;
+
+exports[`select > choices > choices as objects 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value="mild"
+  >
+    Mild
+  </option>,
+  "1": <option
+    value="hot"
+  >
+    Hot
+  </option>,
+  "2": <option
+    value="fire"
+  >
+    Fire
+  </option>,
+}
+`;
+
+exports[`select > empty 1`] = `bound HTMLSelectElement {}`;
+
+exports[`select > groups > no value 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value="crunchy"
+  >
+    Crunchy
+  </option>,
+  "1": <option
+    value="soft"
+  >
+    Soft
+  </option>,
+  "2": <option
+    value="mild"
+  >
+    Mild
+  </option>,
+  "3": <option
+    value="hot"
+  >
+    Hot
+  </option>,
+  "4": <option
+    value="fire"
+  >
+    Fire
+  </option>,
+}
+`;
+
+exports[`select > groups > value 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value="crunchy"
+  >
+    Crunchy
+  </option>,
+  "1": <option
+    value="soft"
+  >
+    Soft
+  </option>,
+  "2": <option
+    value="mild"
+  >
+    Mild
+  </option>,
+  "3": <option
+    value="hot"
+  >
+    Hot
+  </option>,
+  "4": <option
+    value="fire"
+  >
+    Fire
+  </option>,
+}
+`;
+
+exports[`select > groups > values 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value="crunchy"
+  >
+    Crunchy
+  </option>,
+  "1": <option
+    value="soft"
+  >
+    Soft
+  </option>,
+  "2": <option
+    value="mild"
+  >
+    Mild
+  </option>,
+  "3": <option
+    value="hot"
+  >
+    Hot
+  </option>,
+  "4": <option
+    value="fire"
+  >
+    Fire
+  </option>,
+}
+`;
+
+exports[`select > multiple > false 1`] = `bound HTMLSelectElement {}`;
+
+exports[`select > multiple > falsey 1`] = `bound HTMLSelectElement {}`;
+
+exports[`select > multiple > string 1`] = `bound HTMLSelectElement {}`;
+
+exports[`select > multiple > true 1`] = `bound HTMLSelectElement {}`;
+
+exports[`select > multiple > truthy 1`] = `bound HTMLSelectElement {}`;
+
+exports[`select > placeholder > choices 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value=""
+  >
+    -- Select Flavor --
+  </option>,
+  "1": <option
+    value="Mild"
+  >
+    Mild
+  </option>,
+  "2": <option
+    value="Hot"
+  >
+    Hot
+  </option>,
+  "3": <option
+    value="Fire"
+  >
+    Fire
+  </option>,
+}
+`;
+
+exports[`select > placeholder > choices as objects 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value=""
+  >
+    -- Select Flavor --
+  </option>,
+  "1": <option
+    value="mild"
+  >
+    Mild
+  </option>,
+  "2": <option
+    value="hot"
+  >
+    Hot
+  </option>,
+  "3": <option
+    value="fire"
+  >
+    Fire
+  </option>,
+}
+`;
+
+exports[`select > placeholder > no choices 1`] = `
+bound HTMLSelectElement {
+  "0": <option
+    value=""
+  >
+    -- Select Flavor --
+  </option>,
+}
+`;
