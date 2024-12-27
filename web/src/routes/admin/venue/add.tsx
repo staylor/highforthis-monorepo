@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import VenueForm from '~/components/Admin/Venue/Form';
 import { handleSubmission } from '~/utils/action';
@@ -16,7 +17,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function VenueAdd() {
-  const label = 'Add Venue';
+  const { t } = useTranslation();
+  const label = t('venues.add');
   return <VenueForm heading={label} buttonLabel={label} />;
 }
 

@@ -1,10 +1,12 @@
 import { filesize } from 'filesize';
 import { Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { AudioUpload, ImageUploadCrop } from '~/types/graphql';
 import { uploadUrl } from '~/utils/media';
 
 export default function AudioInfo({ media }: { media: AudioUpload }) {
+  const { t } = useTranslation();
   const crops = [...(media.images || [])].filter(Boolean) as ImageUploadCrop[];
   let cropInfo = null;
   if (crops.length > 0) {
@@ -15,19 +17,21 @@ export default function AudioInfo({ media }: { media: AudioUpload }) {
       <>
         <img className="my-2.5" src={src} alt="" />
         <strong>
-          Showing:
+          {t('audio.showing')}:
           <br />
         </strong>{' '}
-        {first.width} x {first.height}
+        {first.width}
+        {' x '}
+        {first.height}
       </>
     );
   }
 
   const mediaInfo = (
     <>
-      <strong>File Size:</strong> {filesize(media.fileSize)}
+      <strong>{t('audio.fileSize')}:</strong> {filesize(media.fileSize)}
       <br />
-      <strong>File Type:</strong> {media.mimeType}
+      <strong>{t('audio.fileType')}:</strong> {media.mimeType}
       {cropInfo}
     </>
   );
@@ -36,12 +40,14 @@ export default function AudioInfo({ media }: { media: AudioUpload }) {
     <>
       {mediaInfo}
       <br />
-      <strong>Other available images:</strong>
+      <strong>{t('audio.otherCrops')}:</strong>
       {crops.map((crop) => (
         <Fragment key={crop.fileName}>
           <br />
           <a href={uploadUrl(media.destination, crop.fileName)}>
-            {crop.width} x {crop.height}
+            {crop.width}
+            {' x '}
+            {crop.height}
           </a>{' '}
         </Fragment>
       ))}

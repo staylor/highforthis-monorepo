@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import SettingsForm from '~/components/Admin/Settings/Form';
 import type { DashboardSettingsQuery } from '~/types/graphql';
@@ -20,15 +21,20 @@ export async function action({ context, request }: Route.ActionArgs) {
   });
 }
 
-const settingsFields = [
-  { label: 'Google Analytics Client ID', prop: 'googleClientId' },
-  { label: 'Google Analytics Tracking ID', prop: 'googleTrackingId' },
-];
-
 export default function DashboardSettings({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { dashboardSettings } = loaderData;
+  const settingsFields = ['googleClientId', 'googleTrackingId'].map((prop) => ({
+    label: t(`settings.dashboard.analytics.${prop}`),
+    prop,
+  }));
+
   return (
-    <SettingsForm heading="Dashboard Settings" data={dashboardSettings} fields={settingsFields} />
+    <SettingsForm
+      heading={t('settings.dashboard.heading')}
+      data={dashboardSettings}
+      fields={settingsFields}
+    />
   );
 }
 

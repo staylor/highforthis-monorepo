@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
-import { useFetcher, useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { useFetcher, useLocation, useSearchParams } from 'react-router';
 
 import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
 import Search from '~/components/Admin/ListTable/Search';
@@ -37,13 +38,16 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Shows({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const fetcher = useFetcher();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const count = Number(searchParams.get('deleted') || 0);
   const { shows } = loaderData;
 
   const columns = [
     {
-      label: 'Title',
+      label: t('shows.title'),
       render: (show: Show) => {
         const showUrl = `${location.pathname}/${show.id}`;
         return (
@@ -60,7 +64,7 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
       },
     },
     {
-      label: 'Artists',
+      label: t('shows.artists'),
       render: (show: Show) => {
         const { artists } = show;
         const editUrl = `/admin/artist/${artists[0].id}`;
@@ -83,7 +87,7 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
       },
     },
     {
-      label: 'Venue',
+      label: t('shows.venue'),
       render: ({ venue }: Show) => {
         const editUrl = `/admin/venue/${venue.id}`;
         return (
@@ -100,7 +104,7 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
       },
     },
     {
-      label: 'Attended',
+      label: t('shows.attended.label'),
       className: 'text-center',
       render: ({ id, attended }: Show) => {
         return (
@@ -122,7 +126,7 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
       },
     },
     {
-      label: 'Date',
+      label: t('shows.date'),
       prop: 'date',
       type: 'date',
     },
@@ -130,10 +134,10 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <Heading>Shows</Heading>
-      <HeaderAdd label="Add Show" />
-      <Message param="deleted" text="Deleted %s shows." />
-      <Search placeholder="Search shows" />
+      <Heading>{t('shows.heading')}</Heading>
+      <HeaderAdd label={t('show.add')} />
+      {count && <Message param="deleted" text={t('shows.deleted', { count })} />}
+      <Search placeholder={t('shows.search')} />
       <ListTable columns={columns} data={shows!} />
     </>
   );

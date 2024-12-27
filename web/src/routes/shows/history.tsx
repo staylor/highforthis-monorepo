@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import type { MetaFunction } from 'react-router';
 
@@ -46,28 +47,29 @@ export const showsQuery = gql`
 export const clientLoader = createClientCache();
 
 function ShowsHistoryRoute({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { year } = useParams();
   const { shows } = loaderData;
-  const plural = shows.edges.length === 1 ? 'Show' : 'Shows';
 
   return (
     <article>
       {year ? (
         <>
           <Heading2>
-            <span className="text-pink">{shows.edges.length}</span> {plural} attended in {year}
+            <span className="text-pink">{shows.edges.length}</span>{' '}
+            {t('shows.attendedIn', { count: shows.edges.length, year })}
           </Heading2>
           <p className="my-5">
             <Link
-              className="bold font-stylized text-xl uppercase text-pink underline"
+              className="bold font-stylized text-pink text-xl uppercase underline"
               to="/shows/history"
             >
-              View Full History
+              {t('shows.viewFullHistory')}
             </Link>
           </p>
         </>
       ) : (
-        <Heading2>Shows I have attended</Heading2>
+        <Heading2>{t('shows.attended.heading')}</Heading2>
       )}
       <Shows shows={shows} showMonths={false} />
     </article>

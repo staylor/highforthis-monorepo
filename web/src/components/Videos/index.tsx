@@ -1,4 +1,5 @@
 import type { SyntheticEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
 
 import type { VideoConnection } from '~/types/graphql';
@@ -7,6 +8,7 @@ import Button from './Button';
 import Video from './Video';
 
 function Videos({ videos }: { videos: VideoConnection }) {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -27,12 +29,12 @@ function Videos({ videos }: { videos: VideoConnection }) {
 
   return (
     <>
-      {videos.edges.length === 0 && <p>No videos found.</p>}
+      {videos.edges.length === 0 && <p>{t('videos.noFound')}</p>}
       {videos.edges.map((edge) => (
         <Video key={edge.node.id} video={edge.node} />
       ))}
-      {hasPrevious && <Button onClick={loadPrevious}>PREVIOUS</Button>}
-      {hasNext && <Button onClick={loadNext}>NEXT</Button>}
+      {hasPrevious && <Button onClick={loadPrevious}>{t('videos.previous')}</Button>}
+      {hasNext && <Button onClick={loadNext}>{t('videos.next')}</Button>}
     </>
   );
 }

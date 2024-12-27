@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 import type { MetaFunction } from 'react-router';
 
 import { Heading2 } from '~/components/Heading';
@@ -43,12 +44,13 @@ export const showsQuery = gql`
 export const clientLoader = createClientCache();
 
 function ShowsRoute({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const date = formatDate();
   return (
     <article>
-      <Heading2>Recommended Shows</Heading2>
+      <Heading2>{t('shows.recommended')}</Heading2>
       <p className="mb-6 text-xl">
-        Today's date is: <strong>{date.formatted}</strong>
+        {t('shows.todaysDate')}: <strong>{date.formatted}</strong>
       </p>
       <Shows shows={loaderData.shows} />
     </article>

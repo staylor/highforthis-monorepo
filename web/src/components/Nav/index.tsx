@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { useTranslation } from 'react-i18next';
 import type { Location } from 'react-router';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -14,6 +15,7 @@ const showsIsActive = (_: string, location: Location) =>
   !!location.pathname.match(/^\/(shows|venue|artist)/);
 
 const Navigation = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -26,21 +28,21 @@ const Navigation = () => {
   return (
     <nav
       className={cn(
-        'mx-auto mt-2 mb-3 text-center md:my-3 lg:mx-0 lg:mt-0 lg:text-left',
+        'mx-auto mb-3 mt-2 text-center md:my-3 lg:mx-0 lg:mt-0 lg:text-left',
         'md:flex md:items-center md:justify-start lg:h-12'
       )}
     >
-      <Link to="/">Home</Link>
-      <Link to="/podcast">Podcast</Link>
+      <Link to="/">{t('nav.home')}</Link>
+      <Link to="/podcast">{t('nav.podcast')}</Link>
       <Link to="/shows" isActive={showsIsActive}>
-        Shows
+        {t('nav.shows')}
       </Link>
-      <Link to="/videos">Videos</Link>
+      <Link to="/videos">{t('nav.videos')}</Link>
       {showYears && (
         <Select
           value=""
-          className="mx-auto my-0 dark:text-dark md:mx-0"
-          placeholder="-- Videos By Year --"
+          className="dark:text-dark mx-auto my-0 md:mx-0"
+          placeholder={t('nav.videosByYear')}
           choices={yearChoices(2011, year).reverse()}
           onChange={onChange}
         />

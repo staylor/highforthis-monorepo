@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
-import { useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useSearchParams } from 'react-router';
 
 import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
 import { Heading, HeaderAdd } from '~/components/Admin/styles';
@@ -25,10 +26,13 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Podcasts({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const count = Number(searchParams.get('deleted') || 0);
   const columns: Columns = [
     {
-      label: 'Title',
+      label: t('podcasts.title'),
       render: (podcast: Podcast) => {
         const editUrl = `${location.pathname}/${podcast.id}`;
         return (
@@ -48,9 +52,9 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
   ];
   return (
     <>
-      <Heading>Podcasts</Heading>
-      <HeaderAdd label="Add Podcast" />
-      <Message param="deleted" text="Deleted %s podcasts." />
+      <Heading>{t('podcasts.heading')}</Heading>
+      <HeaderAdd label={t('podcasts.add')} />
+      {count && <Message param="deleted" text={t('podcasts.deleted', { count })} />}
       <ListTable columns={columns} data={loaderData.podcasts!} />
     </>
   );

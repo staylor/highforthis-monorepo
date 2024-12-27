@@ -40,7 +40,7 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
       {podcasts.edges.map(({ node }: PodcastEdge) => (
         <figure className="mb-6" key={node.id}>
           <figcaption className="mb-3">
-            <Link to={`/podcast/${node.id}`} className="block text-pink dark:text-pink">
+            <Link to={`/podcast/${node.id}`} className="text-pink dark:text-pink block">
               {node.title}
             </Link>
             <p>{node.description}</p>

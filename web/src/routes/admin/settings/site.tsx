@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import SettingsForm from '~/components/Admin/Settings/Form';
 import type { Fields } from '~/types';
@@ -21,31 +22,37 @@ export async function action({ request, context }: Route.ActionArgs) {
   });
 }
 
-const settingsFields: Fields = [
-  { label: 'Site Title', prop: 'siteTitle' },
-  { label: 'Tagline', prop: 'tagline' },
-  { label: 'Site URL', inputType: 'url', prop: 'siteUrl' },
-  {
-    label: 'Email Address',
-    inputType: 'email',
-    prop: 'emailAddress',
-  },
-  {
-    label: 'Site Language',
-    prop: 'language',
-    type: 'select',
-    choices: [{ value: 'en-US', label: 'English (United States)' }],
-  },
-  {
-    label: 'Copyright Text',
-    prop: 'copyrightText',
-    type: 'textarea',
-  },
-];
-
 export default function SiteSettings({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { siteSettings } = loaderData;
-  return <SettingsForm heading="General Settings" data={siteSettings} fields={settingsFields} />;
+  const settingsFields: Fields = [
+    { label: t('settings.site.siteTitle'), prop: 'siteTitle' },
+    { label: t('settings.site.tagline'), prop: 'tagline' },
+    { label: t('settings.site.siteUrl'), inputType: 'url', prop: 'siteUrl' },
+    {
+      label: t('settings.site.email'),
+      inputType: 'email',
+      prop: 'emailAddress',
+    },
+    {
+      label: t('settings.site.language.label'),
+      prop: 'language',
+      type: 'select',
+      choices: [{ value: 'en-US', label: t('settings.site.language.en-US') }],
+    },
+    {
+      label: t('settings.site.copyrightText'),
+      prop: 'copyrightText',
+      type: 'textarea',
+    },
+  ];
+  return (
+    <SettingsForm
+      heading={t('settings.site.heading')}
+      data={siteSettings}
+      fields={settingsFields}
+    />
+  );
 }
 
 const settingsQuery = gql`

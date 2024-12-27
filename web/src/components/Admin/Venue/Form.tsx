@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Form from '~/components/Admin/Form';
 import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
@@ -31,7 +32,7 @@ function PageLink({ url, children }: PropsWithChildren<{ url: string }>) {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="mx-4 inline-block text-sm text-pink underline"
+      className="text-pink mx-4 inline-block text-sm underline"
     >
       {children}
     </a>
@@ -39,61 +40,62 @@ function PageLink({ url, children }: PropsWithChildren<{ url: string }>) {
 }
 
 export default function VenueForm({ data = {}, heading, buttonLabel }: VenueFormProps) {
+  const { t, i18n } = useTranslation();
   const fields: Fields = [
-    name('venue'),
-    slug('venue'),
-    description('venue'),
-    website('venue'),
+    name('venue', i18n),
+    slug('venue', i18n),
+    description('venue', i18n),
+    website('venue', i18n),
     {
-      label: 'Capacity',
+      label: t('venues.capacity'),
       prop: 'capacity',
       render: ({ venue }) => venue?.capacity,
     },
     {
-      label: 'Street Address',
+      label: t('venues.streetAddress'),
       prop: 'streetAddress',
       type: 'textarea',
       render: ({ venue }) => venue?.streetAddress,
     },
     {
-      label: 'City',
+      label: t('venues.city'),
       prop: 'city',
       render: ({ venue }) => venue?.city,
     },
     {
-      label: 'State',
+      label: t('venues.state'),
       prop: 'state',
       render: ({ venue }) => venue?.state,
     },
     {
-      label: 'Postal Code',
+      label: t('venues.postalCode'),
       prop: 'postalCode',
       render: ({ venue }) => venue?.postalCode,
     },
     {
-      label: 'Coordinates',
+      label: t('venues.coordinates'),
       prop: 'coordinates',
       type: 'custom',
       render: ({ venue }) => (
         <>
           <Input
-            placeholder="Latitude"
+            placeholder={t('venues.latitude')}
             name="coordinates[latitude]"
             value={venue?.coordinates?.latitude}
           />
           <Input
-            placeholder="Longitude"
+            placeholder={t('venues.longitude')}
             name="coordinates[longitude]"
             value={venue?.coordinates?.longitude}
           />
         </>
       ),
     },
-    featuredMedia('venue'),
-    shows('artists'),
-    excludeFromSearch('venue'),
+    featuredMedia('venue', i18n),
+    shows('artists', i18n),
+    excludeFromSearch('venue', i18n),
     {
-      label: 'Permanently closed',
+      label: t('venues.permanentlyClosed'),
       type: 'custom',
       render: ({ venue }) => (
         <Checkbox name="permanentlyClosed" checked={venue?.permanentlyClosed} />
@@ -103,9 +105,9 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
   return (
     <>
       <Heading>{heading}</Heading>
-      <HeaderAdd label="All Venues" to="/admin/venue" />
-      {data.venue && <PageLink url={`/venue/${data.venue.slug}`}>View Venue</PageLink>}
-      <Message text="Venue updated." />
+      <HeaderAdd label={t('venues.all')} to="/admin/venue" />
+      {data.venue && <PageLink url={`/venue/${data.venue.slug}`}>{t('venues.view')}</PageLink>}
+      <Message text={t('venues.updated')} />
       <Form data={data} fields={fields} buttonLabel={buttonLabel} />
     </>
   );

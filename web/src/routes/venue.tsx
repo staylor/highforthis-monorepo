@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import FeaturedMedia from '~/components/FeaturedMedia';
 import { Heading1 } from '~/components/Heading';
@@ -23,6 +24,7 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
 export const clientLoader = createClientCache();
 
 export default function Venue({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { venue, shows, attended } = loaderData;
 
   return (
@@ -39,7 +41,7 @@ export default function Venue({ loaderData }: Route.ComponentProps) {
           )}
           {venue.capacity && (
             <p className="mb-5">
-              <strong>Capacity:</strong> {venue.capacity}
+              <strong>{t('venues.capacity')}:</strong> {venue.capacity}
             </p>
           )}
           {venue.website && (
@@ -49,11 +51,13 @@ export default function Venue({ loaderData }: Route.ComponentProps) {
               rel="noreferrer"
               className="text-pink underline"
             >
-              Venue Website &rarr;
+              {t('venues.website')} &rarr;
             </a>
           )}
           {venue.permanentlyClosed && (
-            <p className="rounded-lg bg-pink p-2 font-bold text-white">Permanently Closed.</p>
+            <p className="bg-pink rounded-lg p-2 font-bold text-white">
+              {t('venues.permanentlyClosed')}.
+            </p>
           )}
         </div>
         {venue.coordinates && (

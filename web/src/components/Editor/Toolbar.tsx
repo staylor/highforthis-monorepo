@@ -8,7 +8,7 @@ const Toolbar = forwardRef<HTMLDivElement, any>(({ className, ...props }, ref) =
     className={cn(
       'absolute z-50 scale-0 rounded bg-white shadow-lg transition-transform',
       'after:border-l-1.5 after:border-transparent after:border-t-white',
-      'after:pointer-events-none after:absolute after:right-1/2 after:-bottom-3 after:h-0 after:w-0',
+      'after:pointer-events-none after:absolute after:-bottom-3 after:right-1/2 after:h-0 after:w-0',
       'after:[&.Toolbar-flush]:border-t-transparent',
       className
     )}

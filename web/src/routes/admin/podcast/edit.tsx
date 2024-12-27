@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import PodcastForm from '~/components/Admin/Podcast/Form';
 import type { Podcast, PodcastQuery } from '~/types/graphql';
@@ -26,13 +27,18 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function PodcastEdit({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { podcast } = loaderData;
   if (!podcast) {
     return null;
   }
 
   return (
-    <PodcastForm data={podcast as Podcast} heading="Edit Podcast" buttonLabel="Update Podcast" />
+    <PodcastForm
+      data={podcast as Podcast}
+      heading={t('podcasts.edit')}
+      buttonLabel={t('podcasts.update')}
+    />
   );
 }
 

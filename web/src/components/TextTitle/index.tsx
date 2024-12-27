@@ -6,7 +6,7 @@ export default function TextTitle({ className, ...props }: HTMLAttributes<HTMLHe
     <h2
       {...props}
       className={cn(
-        'mb-2 block text-3xl font-semibold tracking-wide text-neutral-800 dark:text-white lg:mb-3',
+        'mb-2 block text-3xl font-semibold tracking-wide text-neutral-800 lg:mb-3 dark:text-white',
         className
       )}
     />

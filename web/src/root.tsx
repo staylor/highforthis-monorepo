@@ -1,3 +1,4 @@
+import { I18nextProvider } from 'react-i18next';
 import type { LinksFunction, MetaFunction } from 'react-router';
 import {
   Links,
@@ -14,6 +15,7 @@ import mainStylesheetUrl from '~/styles/main.css?url';
 import type { Route } from './+types/root';
 import { Html, Body, Boundary, useLayout } from './components/Layout';
 import { TWITTER_USERNAME } from './constants';
+import i18n from './i18n';
 import { appQuery } from './root.graphql';
 import type { AppQuery } from './types/graphql';
 import { createClientCache } from './utils/cache';
@@ -76,25 +78,27 @@ const AppLinks = ({ data }: { data: AppQuery }) => {
 export default function Root({ loaderData }: Route.ComponentProps) {
   const layout = useLayout();
   return (
-    <Html>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <meta property="twitter:site" content={`@${TWITTER_USERNAME}`} />
-        <meta property="twitter:creator" content={`@${TWITTER_USERNAME}`} />
-        <Meta />
-        <Links />
-        {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
-        {layout === 'app' && <AppLinks data={loaderData} />}
-      </head>
-      <Body>
-        <Boundary>
-          <Outlet />
-        </Boundary>
-        <ScrollRestoration />
-        <Scripts />
-      </Body>
-    </Html>
+    <I18nextProvider i18n={i18n}>
+      <Html>
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
+          <meta property="twitter:site" content={`@${TWITTER_USERNAME}`} />
+          <meta property="twitter:creator" content={`@${TWITTER_USERNAME}`} />
+          <Meta />
+          <Links />
+          {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
+          {layout === 'app' && <AppLinks data={loaderData} />}
+        </head>
+        <Body>
+          <Boundary>
+            <Outlet />
+          </Boundary>
+          <ScrollRestoration />
+          <Scripts />
+        </Body>
+      </Html>
+    </I18nextProvider>
   );
 }
 

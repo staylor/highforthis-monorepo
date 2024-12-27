@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { AppleMusicData } from '~/types/graphql';
 
@@ -15,7 +16,7 @@ function ArtistLink({ url, children }: PropsWithChildren<{ url: string }>) {
   return (
     <a
       href={url}
-      className="mb-2 block text-lg text-pink underline"
+      className="text-pink mb-2 block text-lg underline"
       target="_blank"
       rel="noreferrer"
     >
@@ -30,16 +31,17 @@ export default function Metadata({
   imageSize = DEFAULT_IMAGE_SIZE,
   data,
 }: AppleMusicProps) {
+  const { t } = useTranslation();
   const { url } = data;
 
   let site;
   let listen;
   const image = <Artwork name={name} imageSize={imageSize} data={data} className="rounded-lg" />;
   if (website) {
-    site = <ArtistLink url={website}>Artist Website</ArtistLink>;
+    site = <ArtistLink url={website}>{t('artists.website')}</ArtistLink>;
   }
   if (url) {
-    listen = <ArtistLink url={url}>Listen on Apple Music</ArtistLink>;
+    listen = <ArtistLink url={url}>{t('artists.listen')}</ArtistLink>;
   }
 
   if (!(image || listen || site)) {

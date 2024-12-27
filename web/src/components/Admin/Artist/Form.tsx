@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Form from '~/components/Admin/Form';
 import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
@@ -29,7 +30,7 @@ function PageLink({ url, children }: PropsWithChildren<{ url: string }>) {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="mx-4 inline-block text-sm text-pink underline"
+      className="text-pink mx-4 inline-block text-sm underline"
     >
       {children}
     </a>
@@ -37,6 +38,7 @@ function PageLink({ url, children }: PropsWithChildren<{ url: string }>) {
 }
 
 export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFormProps) {
+  const { t, i18n } = useTranslation();
   const fields: Fields = [
     {
       type: 'custom',
@@ -49,20 +51,20 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
           />
         ),
     },
-    name('artist'),
-    slug('artist'),
-    description('artist'),
-    website('artist'),
-    featuredMedia('artist'),
-    shows('venue'),
-    excludeFromSearch('artist'),
+    name('artist', i18n),
+    slug('artist', i18n),
+    description('artist', i18n),
+    website('artist', i18n),
+    featuredMedia('artist', i18n),
+    shows('venue', i18n),
+    excludeFromSearch('artist', i18n),
   ];
   return (
     <>
       <Heading>{heading}</Heading>
-      <HeaderAdd label="All Artists" to="/admin/artist" />
-      {data.artist && <PageLink url={`/artist/${data.artist.slug}`}>View Artist</PageLink>}
-      <Message text="Artist updated." />
+      <HeaderAdd label={t('artists.all')} to="/admin/artist" />
+      {data.artist && <PageLink url={`/artist/${data.artist.slug}`}>{t('artist.view')}</PageLink>}
+      <Message text={t('artists.updated')} />
       <Form data={data} fields={fields} buttonLabel={buttonLabel} />
     </>
   );

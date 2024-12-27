@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import ShowForm from '~/components/Admin/Show/Form';
 import type { ShowEditQuery } from '~/types/graphql';
@@ -21,7 +22,8 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function ShowEdit({ loaderData }: Route.ComponentProps) {
-  return <ShowForm data={loaderData} heading="Edit Show" buttonLabel="Update Show" />;
+  const { t } = useTranslation();
+  return <ShowForm data={loaderData} heading={t('shows.edit')} buttonLabel={t('shows.update')} />;
 }
 
 const showQuery = gql`

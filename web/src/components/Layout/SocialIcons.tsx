@@ -1,5 +1,6 @@
 import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   YOUTUBE_USERNAME,
@@ -27,19 +28,21 @@ const SocialIcon = ({ url, className, children }: IconProps) => (
 );
 
 export default function SocialIcons() {
+  const { t } = useTranslation();
+
   return (
     <>
       <SocialIcon className="icons-youtube" url={`https://youtube.com/${YOUTUBE_USERNAME}`}>
-        YouTube
+        {t('social.youtube')}
       </SocialIcon>
       <SocialIcon className="icons-instagram" url={`https://instagram.com/${INSTAGRAM_USERNAME}`}>
-        Instagram
+        {t('social.instagram')}
       </SocialIcon>
       <SocialIcon className="icons-twitter" url={`https://twitter.com/${TWITTER_USERNAME}`}>
-        Twitter
+        {t('social.twitter')}
       </SocialIcon>
       <SocialIcon className="icons-tiktok" url={`https://www.tiktok.com/${TIKTOK_USERNAME}`}>
-        TikTok
+        {t('social.tiktok')}
       </SocialIcon>
     </>
   );

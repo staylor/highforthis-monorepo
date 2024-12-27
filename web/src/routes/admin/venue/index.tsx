@@ -1,4 +1,6 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router';
 
 import { name, slug, excludeFromSearch, website } from '~/components/Admin/Entity/ListTable';
 import ListTable, { Thumbnail } from '~/components/Admin/ListTable';
@@ -47,6 +49,9 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Venues({ loaderData }: Route.ComponentProps) {
+  const { t, i18n } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const count = Number(searchParams.get('deleted') || 0);
   const { venues } = loaderData;
 
   const columns: Columns = [
@@ -60,20 +65,20 @@ export default function Venues({ loaderData }: Route.ComponentProps) {
         return null;
       },
     },
-    name,
-    slug,
-    website,
+    name(i18n),
+    slug(i18n),
+    website(i18n),
     {
-      label: 'Capacity',
+      label: t('venues.capacity'),
       prop: 'capacity',
     },
     {
-      label: 'Address',
+      label: t('venues.address'),
       prop: 'address',
     },
-    excludeFromSearch,
+    excludeFromSearch(i18n),
     {
-      label: 'Permanently Closed',
+      label: t('venues.permanentlyClosed'),
       className: 'text-center',
       render: (data: any) => <PermanentlyClosed data={data} />,
     },
@@ -81,10 +86,10 @@ export default function Venues({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <Heading>Venues</Heading>
-      <HeaderAdd label="Add Venue" />
-      <Message param="deleted" text="Deleted %s Venues." />
-      <Search placeholder="Search Venues" />
+      <Heading>{t('venues.heading')}</Heading>
+      <HeaderAdd label={t('venues.add')} />
+      {count && <Message param="deleted" text={t('venues.deleted', { count })} />}
+      <Search placeholder={t('venues.search')} />
       <ListTable columns={columns} data={venues!} />
     </>
   );

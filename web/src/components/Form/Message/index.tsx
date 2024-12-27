@@ -18,10 +18,7 @@ export default function Message({
   if (!text || (dismissable && !currentParam)) {
     return null;
   }
-  let message = text;
-  if (dismissable && text.includes('%s')) {
-    message = text.replace('%s', currentParam);
-  }
+
   const onClick = (e: SyntheticEvent) => {
     e.preventDefault();
 
@@ -33,10 +30,10 @@ export default function Message({
     <div
       className={cn(
         'border-pink border-l-4 bg-neutral-50 shadow-sm',
-        'relative mb-4 mt-1 block py-px pr-9 pl-3'
+        'relative mb-4 mt-1 block py-px pl-3 pr-9'
       )}
     >
-      <p className="my-2 p-0.5 text-sm text-dark">{message}</p>
+      <p className="text-dark my-2 p-0.5 text-sm">{text}</p>
       {dismissable && (
         <button
           type="button"

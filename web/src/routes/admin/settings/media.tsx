@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import Crops from '~/components/Admin/Settings/Crops';
 import SettingsForm from '~/components/Admin/Settings/Form';
@@ -22,18 +23,25 @@ export async function action({ context, request }: Route.ActionArgs) {
   });
 }
 
-const settingsFields: Fields = [
-  {
-    label: 'Crop Sizes',
-    prop: 'crops',
-    type: 'custom',
-    render: (settings: MediaSettings) => <Crops settings={settings} />,
-  },
-];
-
 export default function MediaSettingsRoute({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { mediaSettings } = loaderData;
-  return <SettingsForm heading="Media Settings" data={mediaSettings} fields={settingsFields} />;
+
+  const settingsFields: Fields = [
+    {
+      label: t('settings.media.cropSizes'),
+      prop: 'crops',
+      type: 'custom',
+      render: (settings: MediaSettings) => <Crops settings={settings} />,
+    },
+  ];
+  return (
+    <SettingsForm
+      heading={t('settings.media.heading')}
+      data={mediaSettings}
+      fields={settingsFields}
+    />
+  );
 }
 
 const settingsQuery = gql`

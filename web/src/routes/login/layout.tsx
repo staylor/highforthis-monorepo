@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router';
 import type { LinksFunction } from 'react-router';
 
@@ -12,14 +13,15 @@ export const handle = {
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/css/dashicons.min.css' }];
 
 export default function Login() {
+  const { t } = useTranslation();
   const params = useParams();
   let error;
   switch (params.error) {
     case 'unauthorized':
-      error = 'You must login to access this area.';
+      error = t('login.unauthorized');
       break;
     case 'required':
-      error = 'All fields are required.';
+      error = t('login.required');
       break;
   }
 

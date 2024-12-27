@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import type { ReactNode, ChangeEvent } from 'react';
 import { useReducer } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router';
 
 import Checkbox from '~/components/Form/Checkbox';
@@ -59,6 +60,7 @@ function ListTable({
   filters,
   perPage = 20,
 }: ListTableProps) {
+  const { t } = useTranslation();
   const submit = useSubmit();
   const [state, setState] = useReducer(reducer, {
     checked: [],
@@ -103,7 +105,7 @@ function ListTable({
   };
 
   if (!data || !data.edges || !data.edges.length) {
-    return <p className="my-10">No items found.</p>;
+    return <p className="my-10">{t('table.noItems')}</p>;
   }
 
   const paginationMatrix = <Pagination data={data} perPage={perPage} className="text-right" />;
@@ -121,8 +123,8 @@ function ListTable({
               <Select
                 key="bulk"
                 name="bulkActions"
-                placeholder="Bulk Actions"
-                choices={[{ label: 'Delete', value: 'deleteAll' }]}
+                placeholder={t('table.bulkActions')}
+                choices={[{ label: t('table.delete'), value: 'deleteAll' }]}
               />
             </form>
           )}
@@ -130,10 +132,10 @@ function ListTable({
         </div>
         {paginationMatrix}
       </section>
-      <table className="w-full table-fixed border-spacing-0 border border-detail shadow">
+      <table className="border-detail w-full table-fixed border-spacing-0 border shadow">
         <thead>
           <Headers
-            className="border-b border-detail"
+            className="border-detail border-b"
             checkClass="border-b border-detail"
             columns={columns}
             checked={state.all}
@@ -143,7 +145,7 @@ function ListTable({
         <tbody>
           {data.edges.map(({ node }: Record<string, any>) => (
             <tr className="even:bg-neutral-50" key={node.id}>
-              <th className={cn(cellHeading, 'py-1.5 px-2.5 align-top')}>
+              <th className={cn(cellHeading, 'px-2.5 py-1.5 align-top')}>
                 <Checkbox
                   className="align-text-top"
                   checked={state.checked.includes(node.id)}
@@ -161,7 +163,7 @@ function ListTable({
                 return (
                   <td
                     key={`${i.toString(16)}`}
-                    className={cn('break-words py-2 px-2.5 align-top text-sm', column.className)}
+                    className={cn('break-words px-2.5 py-2 align-top text-sm', column.className)}
                   >
                     {content}
                   </td>
@@ -172,7 +174,7 @@ function ListTable({
         </tbody>
         <tfoot>
           <Headers
-            className="border-t border-detail"
+            className="border-detail border-t"
             checkClass="border-t border-detail"
             columns={columns}
             checked={state.all}
