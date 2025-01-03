@@ -24,7 +24,7 @@ const config: CodegenConfig = {
         useTypeImports: true,
       },
     },
-    './web/apollo/fragmentMatcher.js': {
+    './web/apollo/fragmentMatcher.ts': {
       plugins: ['fragment-matcher'],
     },
     './web/src/types/graphql.ts': {

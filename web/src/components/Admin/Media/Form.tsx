@@ -29,7 +29,7 @@ export default function MediaForm({
       prop: 'title',
       editable: true,
       className: 'h-9 text-xl py-1 px-2',
-      placeholder: 'Enter a title',
+      placeholder: t('media.placeholder'),
     },
     {
       type: 'custom',

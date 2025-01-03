@@ -1,15 +1,16 @@
 import type { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { SITE_TITLE } from '~/constants';
 import { useRootData } from '~/utils/rootData';
 
 const Wrapper = ({ children }: PropsWithChildren) => {
+  const { t } = useTranslation();
   const { siteSettings } = useRootData();
   return (
     <div className="block min-h-screen">
       <div className="m-auto w-80 pt-[8%]">
         <h1 className="font-stylized mb-5 block text-5xl font-bold">
-          {siteSettings?.siteTitle || SITE_TITLE}
+          {siteSettings?.siteTitle || t('title')}
         </h1>
         {children}
       </div>

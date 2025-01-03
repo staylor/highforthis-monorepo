@@ -3,7 +3,7 @@ import { ListNode, ListItemNode } from '@lexical/list';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin.js';
 import { LexicalComposer } from '@lexical/react/LexicalComposer.js';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable.js';
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary.js';
+import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary.js';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin.js';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin.js';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';

@@ -15,7 +15,6 @@ import mainStylesheetUrl from '~/styles/main.css?url';
 import type { Route } from './+types/root';
 import { Html, Body, Boundary, useLayout } from './components/Layout';
 import { TWITTER_USERNAME } from './constants';
-import i18n from './i18n';
 import { appQuery } from './root.graphql';
 import type { AppQuery } from './types/graphql';
 import { createClientCache } from './utils/cache';
@@ -37,7 +36,8 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  return query<AppQuery>({ request, context, query: appQuery });
+  const data = await query<AppQuery>({ request, context, query: appQuery });
+  return { data, i18n: context.i18n };
 }
 
 export const clientLoader = createClientCache();
@@ -76,6 +76,7 @@ const AppLinks = ({ data }: { data: AppQuery }) => {
 };
 
 export default function Root({ loaderData }: Route.ComponentProps) {
+  const { data, i18n } = loaderData;
   const layout = useLayout();
   return (
     <I18nextProvider i18n={i18n}>
@@ -88,7 +89,7 @@ export default function Root({ loaderData }: Route.ComponentProps) {
           <Meta />
           <Links />
           {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
-          {layout === 'app' && <AppLinks data={loaderData} />}
+          {layout === 'app' && <AppLinks data={data} />}
         </head>
         <Body>
           <Boundary>
@@ -118,7 +119,7 @@ export function ErrorBoundary() {
     <Html>
       <head>
         <meta charSet="utf-8" />
-        <title>Oops!</title>
+        <title>{'Oops!'}</title>
         <Meta />
         <Links />
         <link rel="stylesheet" href={mainStylesheetUrl} />

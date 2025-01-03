@@ -51,7 +51,7 @@ export default function BlockToolbarPlugin() {
   const [activeStyle, setActiveStyle] = useState('');
   const [toolbarActive, setToolbarActive] = useState(false);
   const [modals, setModals] = useReducer(reducer, allModals());
-  const selectionRef = useRef<RangeSelection>();
+  const selectionRef = useRef<RangeSelection>(null);
   const blockButtonRef = useRef(null);
   const blockToolbarRef = useRef(null);
   const [editor] = useLexicalComposerContext();

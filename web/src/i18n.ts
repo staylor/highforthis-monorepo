@@ -1,24 +1,31 @@
 import { createInstance } from 'i18next';
+import fs from 'i18next-fs-backend';
 import { initReactI18next } from 'react-i18next';
 
-import global from './locales/en/global.json';
+async function createI18n(locale = 'en') {
+  const instance = createInstance();
 
-const instance = createInstance();
+  await instance
+    .use(fs)
+    .use(initReactI18next)
+    .init({
+      backend: {
+        loadPath: '../locales/{{lng}}/{{ns}}.json',
+      },
+      defaultNS: 'global',
+      ns: ['global'],
+      preload: [...new Set(['en', locale])],
+      lng: locale,
+      fallbackLng: 'en',
+      interpolation: {
+        escapeValue: false,
+      },
+      react: {
+        useSuspense: false,
+      },
+    });
 
-instance.use(initReactI18next).init({
-  debug: true,
-  defaultNS: 'global',
-  ns: ['global'],
-  resources: {
-    en: {
-      global,
-    },
-  },
-  lng: 'en',
-  fallbackLng: 'en',
-  interpolation: {
-    escapeValue: false,
-  },
-});
+  return instance;
+}
 
-export default instance;
+export default createI18n;

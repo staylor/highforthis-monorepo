@@ -12,11 +12,13 @@ const makeEmptyData = () => {
   };
 };
 
-const getCacheKey = (options) => {
+const getCacheKey = (options: any) => {
   let cacheKey = 'default';
-  const cacheDirective = options.field.directives.find((d) => d.name && d.name.value === 'cache');
+  const cacheDirective = options.field.directives.find(
+    (d: any) => d.name && d.name.value === 'cache'
+  );
   if (cacheDirective) {
-    const arg = cacheDirective.arguments.find((d) => d.name && d.name.value === 'key');
+    const arg = cacheDirective.arguments.find((d: any) => d.name && d.name.value === 'key');
     if (arg.value.kind === 'Variable' && options.variables[arg.value.name.value]) {
       cacheKey = options.variables[arg.value.name.value];
     } else if (arg.value.kind === 'StringValue') {
@@ -26,16 +28,16 @@ const getCacheKey = (options) => {
   return [cacheKey, cacheKey + JSON.stringify(options.variables)];
 };
 
-const makeCacheAware = (typePolicy, paginationKey) => ({
+const makeCacheAware = (typePolicy: any, paginationKey: string) => ({
   ...typePolicy,
-  read(existing, options) {
+  read(existing: any, options: any) {
     const [key, hash] = getCacheKey(options);
     if (key === paginationKey) {
       return existing && existing[hash] ? existing[hash] : undefined;
     }
     return existing && existing[key] ? typePolicy.read(existing[key], options) : undefined;
   },
-  merge(existing, incoming, options) {
+  merge(existing: any, incoming: any, options: any) {
     const [key, hash] = getCacheKey(options);
     if (key === paginationKey) {
       return {

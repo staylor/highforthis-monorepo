@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import type { KeyboardEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Input from '~/components/Form/Input';
 
@@ -10,7 +11,8 @@ interface TagsProps {
 }
 
 export default function Tags({ name, tags }: TagsProps) {
-  const [pending, setPending] = useState(tags || []);
+  const { t } = useTranslation();
+  const [pending, setPending] = useState<string[]>(tags || []);
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -34,9 +36,9 @@ export default function Tags({ name, tags }: TagsProps) {
 
   return (
     <>
-      <Input placeholder="Type tag then press ENTER" onKeyDown={onKeyDown} />
+      <Input placeholder={t('tags.placeholder')} onKeyDown={onKeyDown} />
       <div className="my-1.5 overflow-auto text-xs">
-        {pending.map((tag: string, i: number) => (
+        {pending.map((tag, i) => (
           <div
             className="float-left mr-1.5 max-w-full cursor-default overflow-hidden text-ellipsis text-sm"
             key={tag}

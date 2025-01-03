@@ -1,23 +1,25 @@
 import { createRequestHandler } from '@react-router/express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-import express from 'express';
+import express, { type Request, type Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import morgan from 'morgan';
 
-import factory from './apollo/client.mjs';
+import createI18n from '~/i18n';
+
+import factory from './apollo/client';
 
 process.env.TZ = 'America/New_York';
 
-const mode = process.env.NODE_ENV;
 const serverPort = (process.env.SERVER_PORT && parseInt(process.env.SERVER_PORT, 10)) || 3000;
 
 // use a local GQL server by default
 const gqlHost = process.env.GQL_HOST || 'http://localhost:8080';
 const getClient = factory(`${gqlHost}/graphql`);
 
-function getLoadContext() {
+function getLoadContext(_: Request, res: Response) {
   return {
+    i18n: res.locals.i18n,
     apolloClient: getClient(),
     graphqlHost: gqlHost,
   };
@@ -36,12 +38,20 @@ const viteDevServer =
           server: { middlewareMode: true },
         })
       );
+
+const reactRouterHandler = createRequestHandler({
+  build: viteDevServer
+    ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
+    : await import('./build/server/index.js'),
+  getLoadContext,
+} as any);
+
 const app = express();
 
 app.use(compression());
 app.use(
   morgan('tiny', {
-    skip: (req, res) => res.statusCode < 400,
+    skip: (_, res) => res.statusCode < 400,
   })
 );
 app.use(cookieParser());
@@ -74,16 +84,12 @@ app.use('/upload', proxy);
 app.use('/uploads', proxy);
 
 // handle SSR requests
-app.all(
-  '*',
-  createRequestHandler({
-    build: viteDevServer
-      ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
-      : await import('./build/server/index.js'),
-    mode,
-    getLoadContext,
-  })
-);
+app.all('*', async (_, res, next) => {
+  // determine locale here
+  res.locals.i18n = await createI18n('en');
+  next();
+});
+app.all('*', reactRouterHandler);
 
 app.listen(serverPort, async () => {
   console.log(`Server running at http://localhost:${serverPort}`);

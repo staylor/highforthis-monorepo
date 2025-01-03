@@ -1,4 +1,8 @@
 {
+  "admin": {
+    "details": "Details",
+    "submit": "Submit"
+  },
   "artists": {
     "add": "Add Artist",
     "all": "All Artists",
@@ -70,6 +74,7 @@
     "heading": "Media",
     "mimeType": "MIME type",
     "originalName": "Original name",
+    "placeholder": "Enter a title",
     "search": "Search Media",
     "selectMediaType": "Select Media Type",
     "selectMimeType": "Select MIME Type",
@@ -249,6 +254,11 @@
     "noTitle": "(no title)",
     "view": "View"
   },
+  "tagline": "Music as it happens.",
+  "tags": {
+    "placeholder": "Type tag then press ENTER"
+  },
+  "title": "High for This",
   "users": {
     "add": "Add User",
     "all": "All Users",
