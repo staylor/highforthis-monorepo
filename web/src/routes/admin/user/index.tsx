@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
-import { useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useSearchParams } from 'react-router';
 
 import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
 import { Heading, HeaderAdd } from '~/components/Admin/styles';
@@ -19,12 +20,15 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Users({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const count = Number(searchParams.get('deleted') || 0);
   const { users } = loaderData;
 
   const columns = [
     {
-      label: 'Name',
+      label: t('users.name'),
       render: (user: User) => {
         const userUrl = `${location.pathname}/${user.id}`;
         return (
@@ -44,9 +48,9 @@ export default function Users({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <Heading>Users</Heading>
-      <HeaderAdd label="Add User" />
-      <Message param="deleted" text="Deleted %s users." />
+      <Heading>{t('users.heading')}</Heading>
+      <HeaderAdd label={t('users.add')} />
+      {count > 0 && <Message param="deleted" text={t('users.deleted', { count })} />}
       <ListTable columns={columns} data={users!} />
     </>
   );

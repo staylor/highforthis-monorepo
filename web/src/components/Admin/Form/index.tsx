@@ -1,4 +1,5 @@
 import type { PropsWithChildren, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
 import { FormWrap } from '~/components/Admin/styles';
@@ -19,12 +20,8 @@ interface FormProps {
   buttonLabel?: string;
 }
 
-export default function AdminForm({
-  data = {},
-  fields,
-  boxLabel = 'Details',
-  buttonLabel = 'Submit',
-}: FormProps) {
+export default function AdminForm({ data = {}, fields, boxLabel, buttonLabel }: FormProps) {
+  const { t } = useTranslation();
   const primaryFields: ReactNode[] = [];
   const infoFields: ReactNode[] = [];
   const metaFields: ReactNode[] = [];
@@ -81,7 +78,7 @@ export default function AdminForm({
 
   const button = (
     <Button buttonType="primary" className="h-7.5 px-3 pb-0.5 leading-7" type="submit">
-      {buttonLabel}
+      {buttonLabel || t('admin.submit')}
     </Button>
   );
 
@@ -97,7 +94,7 @@ export default function AdminForm({
             infoFields={infoFields}
             metaFields={metaFields}
             button={button}
-            label={boxLabel}
+            label={boxLabel || t('admin.details')}
           />
         </fieldset>
       </form>

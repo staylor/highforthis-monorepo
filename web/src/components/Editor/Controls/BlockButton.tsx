@@ -1,9 +1,13 @@
 import cn from 'classnames';
-import type { LegacyRef } from 'react';
-import { forwardRef } from 'react';
+import type { RefAttributes } from 'react';
 
-const BlockButton = forwardRef<LegacyRef<HTMLDivElement> | undefined, any>(
-  ({ active, onMouseDown }, ref) => (
+interface Props extends RefAttributes<HTMLDivElement> {
+  active: boolean;
+  onMouseDown: () => void;
+}
+
+function BlockButton({ active, onMouseDown, ref }: Props) {
+  return (
     <div
       className={cn(
         'text-detail hover:text-detail-dark text-2xl',
@@ -24,9 +28,7 @@ const BlockButton = forwardRef<LegacyRef<HTMLDivElement> | undefined, any>(
     >
       {' '}
     </div>
-  )
-);
-
-BlockButton.displayName = 'BlockButton';
+  );
+}
 
 export default BlockButton;

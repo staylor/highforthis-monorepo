@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import VideoForm from '~/components/Admin/Video/Form';
 import type { VideoEditQuery, VideoThumbnail } from '~/types/graphql';
@@ -26,6 +27,7 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function VideoEdit({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { video } = loaderData;
   if (!video) {
     return null;
@@ -34,7 +36,7 @@ export default function VideoEdit({ loaderData }: Route.ComponentProps) {
   const thumb = video?.thumbnails.find((t) => t.width === 480) as VideoThumbnail;
 
   return (
-    <VideoForm data={video} heading="Edit Video" buttonLabel="Update Video">
+    <VideoForm data={video} heading={t('videos.edit')} buttonLabel={t('videos.update')}>
       <figure className="mb-6 max-w-full overflow-hidden">
         <img className="relative z-10" src={thumb.url} alt={video.title} />
       </figure>

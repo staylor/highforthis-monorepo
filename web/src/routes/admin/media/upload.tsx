@@ -1,5 +1,6 @@
 import type { DragEvent } from 'react';
 import { useReducer } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Heading } from '~/components/Admin/styles';
 import Link from '~/components/Link';
@@ -16,6 +17,7 @@ interface PendingUploads {
 const reducer = (a: PendingUploads, b: PendingUploads) => ({ ...a, ...b });
 
 export default function Media() {
+  const { t } = useTranslation();
   const [uploads, setUploads] = useReducer(reducer, {} as PendingUploads);
 
   const setUpload = (guid: string, data: Partial<PendingUpload>) => {
@@ -80,24 +82,25 @@ export default function Media() {
 
   return (
     <>
-      <Heading>Upload Media</Heading>
+      <Heading>{t('media.upload')}</Heading>
       <div
-        className="my-5 block h-50 w-150 border-4 border-dashed border-dark"
+        className="h-50 w-150 border-dark my-5 block border-4 border-dashed"
         onDrop={onDrop}
         onDragOver={(e) => e.preventDefault()}
         onDragEnd={() => false}
       >
-        <p className="mx-auto mt-16 px-5 py-1 text-center text-xl">Drop files Here</p>
+        <p className="mx-auto mt-16 px-5 py-1 text-center text-xl">{t('media.dropFiles')}</p>
       </div>
       {Object.keys(uploads).map((key) => {
         const upload = uploads[key];
         return (
-          <div className="relative my-2.5 box-border h-7.5 w-150 text-sm" key={key}>
+          <div className="h-7.5 w-150 relative my-2.5 box-border text-sm" key={key}>
             <div className="relative z-20">
-              {upload.name} {upload.id ? <Link to={`/admin/media/${upload.id}`}>Edit</Link> : null}
+              {upload.name}{' '}
+              {upload.id ? <Link to={`/admin/media/${upload.id}`}>{t('media.edit')}</Link> : null}
             </div>
             <div
-              className="absolute left-0 top-0 z-10 h-7.5 bg-pink"
+              className="h-7.5 bg-pink absolute left-0 top-0 z-10"
               style={{ width: upload.id ? '3px' : `${upload.progress}%` }}
             />
           </div>

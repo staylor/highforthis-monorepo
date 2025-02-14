@@ -58,11 +58,11 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
         'before:bg-pink before:absolute before:z-20 before:rounded-xl hover:before:bg-black',
         'before:w-19 before:h-13 before:-ml-12.5 before:left-1/2 before:top-1/2 before:-mt-5',
         'after:border-y-[10px] after:border-l-[20px] after:border-y-transparent after:border-l-white',
-        'after:absolute after:left-1/2 after:top-1/2 after:z-30 after:-mt-1 after:-ml-5 after:h-0 after:w-0'
+        'after:absolute after:left-1/2 after:top-1/2 after:z-30 after:-ml-5 after:-mt-1 after:h-0 after:w-0'
       )}
     >
       {thumb && (
-        <img src={thumb.url} alt={video.title} className="relative z-10 my-[-9.375%] w-160" />
+        <img src={thumb.url} alt={video.title} className="w-160 relative z-10 my-[-9.375%]" />
       )}
       <figcaption className="hidden">{video.title}</figcaption>
     </figure>
@@ -74,7 +74,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
         <VideoLink to={`/video/${video.slug}`} onClick={onClick} className="m-0">
           {placeholder}
         </VideoLink>
-        <h3 className="mb-6 font-stylized text-base tracking-wide">
+        <h3 className="font-stylized mb-6 text-base tracking-wide">
           {single ? video.title : <Link to={`/video/${video.slug}`}>{video.title}</Link>}
         </h3>
       </>
@@ -86,7 +86,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
       {single ? (
         <TextTitle>{video.title}</TextTitle>
       ) : (
-        <h1 className="mb-2.5 font-text text-base font-semibold xs:text-xl">
+        <h1 className="font-text xs:text-xl mb-2.5 text-base font-semibold">
           <Link to={`/video/${video.slug}`}>{video.title}</Link>
         </h1>
       )}

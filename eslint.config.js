@@ -1,5 +1,6 @@
+import json from '@eslint/json';
+import i18next from 'eslint-plugin-i18next';
 import importPlugin from 'eslint-plugin-import';
-import json from 'eslint-plugin-json';
 import node from 'eslint-plugin-node';
 import prettier from 'eslint-plugin-prettier/recommended';
 import react from 'eslint-plugin-react';
@@ -9,7 +10,6 @@ import tseslint from 'typescript-eslint';
 import ignores from './lint/ignores.js';
 import { legacyPlugin } from './lint/legacy.js';
 import overrides from './lint/overrides.js';
-import { ERROR } from './lint/rules/constants.js';
 import coreRules from './lint/rules/core.js';
 import importRules from './lint/rules/import.js';
 import reactRules from './lint/rules/react.js';
@@ -27,6 +27,7 @@ export default tseslint.config(
   {
     ignores,
   },
+  i18next.configs['flat/recommended'],
   importPlugin.flatConfigs.typescript,
   prettier,
   ...tseslint.configs.recommended.map(createConfig),
@@ -54,7 +55,6 @@ export default tseslint.config(
       ...reactSettings,
     },
     rules: {
-      'json/*': ERROR,
       ...coreRules,
       ...importRules,
       ...reactRules,

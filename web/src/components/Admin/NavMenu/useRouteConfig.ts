@@ -1,42 +1,45 @@
+import { useTranslation } from 'react-i18next';
+
 import type { AdminRouteGroup } from '~/types';
 
 const useRouteConfig = () => {
+  const { t } = useTranslation();
   const routeConfig: AdminRouteGroup[] = [
     [
       {
         path: '/',
-        label: 'Dashboard',
+        label: t('settings.dashboard.label'),
         dashicon: 'dashboard',
       },
     ],
     [
       {
         path: '/post',
-        label: 'Posts',
+        label: t('posts.heading'),
         dashicon: 'admin-post',
         routes: [
           {
             path: '/post',
-            label: 'All Posts',
+            label: t('posts.all'),
           },
           {
             path: '/post/add',
-            label: 'Add New',
+            label: t('nav.addNew'),
           },
         ],
       },
       {
         path: '/media',
-        label: 'Media',
+        label: t('media.heading'),
         dashicon: 'admin-media',
         routes: [
           {
             path: '/media',
-            label: 'All Media',
+            label: t('media.all'),
           },
           {
             path: '/media/upload',
-            label: 'Upload Media',
+            label: t('media.upload'),
           },
         ],
       },
@@ -44,36 +47,36 @@ const useRouteConfig = () => {
     [
       {
         path: '/video',
-        label: 'Videos',
+        label: t('videos.heading'),
         dashicon: 'video-alt',
       },
       {
         path: '/show',
-        label: 'Shows',
+        label: t('shows.heading'),
         dashicon: 'calendar',
         routes: [
           {
             path: '/show',
-            label: 'All Shows',
+            label: t('shows.all'),
           },
           {
             path: '/show/add',
-            label: 'Add New',
+            label: t('nav.addNew'),
           },
         ],
       },
       {
         path: '/podcast',
-        label: 'Podcasts',
+        label: t('podcasts.heading'),
         dashicon: 'microphone',
         routes: [
           {
             path: '/podcast',
-            label: 'All Podcasts',
+            label: t('podcasts.all'),
           },
           {
             path: '/podcast/add',
-            label: 'Add New',
+            label: t('nav.addNew'),
           },
         ],
       },
@@ -81,31 +84,31 @@ const useRouteConfig = () => {
     [
       {
         path: '/artist',
-        label: 'Artists',
+        label: t('artists.heading'),
         dashicon: 'tag',
         routes: [
           {
             path: '/artist',
-            label: 'All Artists',
+            label: t('artists.all'),
           },
           {
             path: '/artist/add',
-            label: 'Add New',
+            label: t('nav.addNew'),
           },
         ],
       },
       {
         path: '/venue',
-        label: 'Venues',
+        label: t('venues.heading'),
         dashicon: 'tag',
         routes: [
           {
             path: '/venue',
-            label: 'All Venues',
+            label: t('venues.all'),
           },
           {
             path: '/venue/add',
-            label: 'Add New',
+            label: t('nav.addNew'),
           },
         ],
       },
@@ -113,39 +116,39 @@ const useRouteConfig = () => {
     [
       {
         path: '/user',
-        label: 'Users',
+        label: t('users.heading'),
         dashicon: 'admin-users',
         routes: [
           {
             path: '/user',
-            label: 'All Users',
+            label: t('users.all'),
           },
           {
             path: '/user/add',
-            label: 'Add User',
+            label: t('users.add'),
           },
         ],
       },
       {
         path: '/settings',
-        label: 'Settings',
+        label: t('settings.label'),
         dashicon: 'admin-settings',
         routes: [
           {
             path: '/settings/site',
-            label: 'General',
+            label: t('settings.site.label'),
           },
           {
             path: '/settings/dashboard',
-            label: 'Dashboard',
+            label: t('settings.dashboard.label'),
           },
           {
             path: '/settings/media',
-            label: 'Media',
+            label: t('settings.media.label'),
           },
           {
             path: '/settings/podcast',
-            label: 'Podcast',
+            label: t('settings.podcast.label'),
           },
         ],
       },

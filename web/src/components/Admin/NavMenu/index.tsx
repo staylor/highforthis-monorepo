@@ -2,8 +2,6 @@ import cn from 'classnames';
 import type { SyntheticEvent } from 'react';
 import { Fragment, useState } from 'react';
 
-import type { AdminRouteGroup, AdminTopLevelRoute } from '~/types';
-
 import CollapseButton from './CollapseButton';
 import NavLink from './NavLink';
 import SubNav from './SubNav';
@@ -44,10 +42,10 @@ function NavMenu({
         'w-9': isCollapsed,
       })}
     >
-      {routeConfig.map((items: AdminRouteGroup, i: number) => (
+      {routeConfig.map((items, i) => (
         <Fragment key={`${i.toString(16)}`}>
           {k > 0 && <Separator />}
-          {items.map((item: AdminTopLevelRoute, j: number) => {
+          {items.map((item, j) => {
             if (!item.label) {
               return null;
             }

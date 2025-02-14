@@ -1,4 +1,6 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router';
 
 import { name, slug, excludeFromSearch, website } from '~/components/Admin/Entity/ListTable';
 import ListTable from '~/components/Admin/ListTable';
@@ -43,6 +45,9 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Artists({ loaderData }: Route.ComponentProps) {
+  const { t, i18n } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const count = Number(searchParams.get('deleted') || 0);
   const columns: Columns = [
     {
       className: 'w-16',
@@ -54,18 +59,18 @@ export default function Artists({ loaderData }: Route.ComponentProps) {
         return null;
       },
     },
-    name,
-    slug,
-    excludeFromSearch,
-    website,
+    name(i18n),
+    slug(i18n),
+    excludeFromSearch(i18n),
+    website(i18n),
   ];
 
   return (
     <>
-      <Heading>Artists</Heading>
-      <HeaderAdd label="Add Artist" />
-      <Message param="deleted" text="Deleted %s Artists." />
-      <Search placeholder="Search Artists" />
+      <Heading>{t('artists.heading')}</Heading>
+      <HeaderAdd label={t('artists.add')} />
+      {count > 0 && <Message param="deleted" text={t('artists.deleted', { count })} />}
+      <Search placeholder={t('artists.search')} />
       <ListTable columns={columns} data={loaderData.artists!} />
     </>
   );

@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Form from '~/components/Admin/Form';
 import { Heading } from '~/components/Admin/styles';
@@ -13,30 +14,31 @@ type VideoFormProps = PropsWithChildren<{
   buttonLabel: string;
 }>;
 
-const videoFields: Fields = [
-  { label: 'Title', prop: 'title' },
-  { label: 'Slug', prop: 'slug' },
-  { label: 'Type', prop: 'dataType' },
-  {
-    label: 'Playlist',
-    prop: 'dataPlaylistId',
-    type: 'custom',
-    render: (video: Video) => (
-      <a
-        className="underline"
-        href={`https://www.youtube.com/playlist?list=${video.dataPlaylistId}`}
-      >
-        View {video.year} Playlist
-      </a>
-    ),
-  },
-];
-
 function VideoForm({ data = {}, heading, buttonLabel, children = null }: VideoFormProps) {
+  const { t } = useTranslation();
+  const videoFields: Fields = [
+    { label: t('videos.title'), prop: 'title' },
+    { label: t('videos.slug'), prop: 'slug' },
+    { label: t('videos.type'), prop: 'dataType' },
+    {
+      label: t('videos.playlist'),
+      prop: 'dataPlaylistId',
+      type: 'custom',
+      render: (video: Video) => (
+        <a
+          className="underline"
+          href={`https://www.youtube.com/playlist?list=${video.dataPlaylistId}`}
+        >
+          {t('videos.viewPlaylist', { year: video.year })}
+        </a>
+      ),
+    },
+  ];
+
   return (
     <>
       <Heading>{heading}</Heading>
-      <Message text="Video updated." />
+      <Message text={t('videos.updated')} />
       {children}
       <Form data={data} fields={videoFields} buttonLabel={buttonLabel} />
     </>

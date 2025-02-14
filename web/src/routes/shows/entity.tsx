@@ -1,5 +1,6 @@
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
 import { Heading1 } from '~/components/Heading';
@@ -37,6 +38,7 @@ function parseClasses(total: number, size: number) {
 }
 
 export default function ShowStatsRoute({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const params = useParams();
   const { showStats } = loaderData;
   const buckets: Record<string, ShowStat[]> = {};
@@ -52,14 +54,14 @@ export default function ShowStatsRoute({ loaderData }: Route.ComponentProps) {
 
   return (
     <article className="w-160 max-w-full">
-      <Heading1>Show Stats: {params.entity}s</Heading1>
+      <Heading1>{t(`entity.stats.${params.entity}`)}</Heading1>
       <p className="mb-8">
-        <Link to={`/shows/stats/${other}`} className="mr-2 text-lg text-pink underline">
-          See {other} stats
+        <Link to={`/shows/stats/${other}`} className="text-pink mr-2 text-lg underline">
+          {t(`entity.stats.see.${other}`)}
         </Link>
         {' • '}
-        <Link to="/shows/history" className="ml-2 text-lg text-pink underline">
-          See all shows I have attended
+        <Link to="/shows/history" className="text-pink ml-2 text-lg underline">
+          {t('entity.stats.see.all')}
         </Link>
       </p>
       {Object.entries(buckets).map(([key, stats]) => (

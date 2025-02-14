@@ -1,5 +1,6 @@
 import cn from 'classnames';
 import type { SyntheticEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CollapseButtonProps {
   isCollapsed: boolean;
@@ -7,6 +8,7 @@ interface CollapseButtonProps {
 }
 
 function CollapseButton({ isCollapsed, onClick }: CollapseButtonProps) {
+  const { t } = useTranslation();
   return (
     <button
       onClick={onClick}
@@ -29,7 +31,7 @@ function CollapseButton({ isCollapsed, onClick }: CollapseButtonProps) {
         )}
       />
       {!isCollapsed && (
-        <span className="absolute left-0 top-0 block pl-9 leading-9">Collapse menu</span>
+        <span className="absolute left-0 top-0 block pl-9 leading-9">{t('nav.collapse')}</span>
       )}
     </button>
   );

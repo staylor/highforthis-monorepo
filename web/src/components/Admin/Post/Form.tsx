@@ -1,5 +1,6 @@
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import Form from '~/components/Admin/Form';
 import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
@@ -19,9 +20,10 @@ interface PostFormProps {
 }
 
 export default function PostForm({ data = {} as Post, heading, buttonLabel }: PostFormProps) {
+  const { t } = useTranslation();
   const postFields: Fields = [
     {
-      prop: 'slug',
+      prop: t('videos.slug'),
       type: 'custom',
       render: (post: Post) => {
         if (!post.slug) {
@@ -31,7 +33,7 @@ export default function PostForm({ data = {} as Post, heading, buttonLabel }: Po
         const url = `/post/${post.slug}`;
         return (
           <Button href={url} target="_blank" rel="noreferrer">
-            View Post
+            {t('posts.view')}
           </Button>
         );
       },
@@ -42,27 +44,27 @@ export default function PostForm({ data = {} as Post, heading, buttonLabel }: Po
       className: cn(
         'block font-stylized font-semibold tracking-wide mb-2.5 lg:mb-6 text-4xl lg:text-5xl m-0 p-0 shadow-none border-0 h-12'
       ),
-      placeholder: 'Add a Title',
+      placeholder: t('posts.addTitle'),
     },
     {
       prop: 'editorState',
       type: 'editor',
     },
     {
-      label: 'Featured Media',
+      label: t('posts.featuredMedia'),
       prop: 'featuredMedia',
       type: 'custom',
       render: (p: Post) => <FeaturedMedia media={p.featuredMedia || []} />,
       position: 'meta',
     },
     {
-      label: 'Summary',
+      label: t('posts.summary'),
       prop: 'summary',
       type: 'textarea',
       position: 'meta',
     },
     {
-      label: 'Artists',
+      label: t('posts.artists'),
       prop: 'artists',
       type: 'custom',
       position: 'meta',
@@ -74,18 +76,18 @@ export default function PostForm({ data = {} as Post, heading, buttonLabel }: Po
       },
     },
     {
-      label: 'Publish Date',
+      label: t('posts.publishDate'),
       prop: 'date',
       type: 'date',
       position: 'info',
     },
     {
-      label: 'Status',
+      label: t('posts.status.label'),
       prop: 'status',
       type: 'select',
       choices: [
-        { label: 'Publish', value: 'PUBLISH' },
-        { label: 'Draft', value: 'DRAFT' },
+        { label: t('posts.status.publish'), value: 'PUBLISH' },
+        { label: t('posts.status.draft'), value: 'DRAFT' },
       ],
       position: 'info',
     },
@@ -93,7 +95,7 @@ export default function PostForm({ data = {} as Post, heading, buttonLabel }: Po
   return (
     <>
       <Heading>{heading}</Heading>
-      <Message text="Post updated." />
+      <Message text={t('posts.updated')} />
       <Form data={data} fields={postFields} buttonLabel={buttonLabel} />
     </>
   );

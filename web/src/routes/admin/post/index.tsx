@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
-import { useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useSearchParams } from 'react-router';
 
 import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
 import { Heading, HeaderAdd } from '~/components/Admin/styles';
@@ -25,10 +26,13 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Posts({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const count = Number(searchParams.get('deleted') || 0);
   const columns: Columns = [
     {
-      label: 'Title',
+      label: t('posts.title'),
       render: (post: Post) => {
         const editUrl = `${location.pathname}/${post.id}`;
         return (
@@ -49,20 +53,20 @@ export default function Posts({ loaderData }: Route.ComponentProps) {
       },
     },
     {
-      label: 'Slug',
+      label: t('posts.slug'),
       prop: 'slug',
     },
     {
-      label: 'Date',
+      label: t('posts.date'),
       prop: 'date',
       type: 'date',
     },
   ];
   return (
     <>
-      <Heading>Posts</Heading>
-      <HeaderAdd label="Add Post" />
-      <Message param="deleted" text="Deleted %s posts." />
+      <Heading>{t('posts.heading')}</Heading>
+      <HeaderAdd label={t('posts.add')} />
+      {count > 0 && <Message param="deleted" text={t('posts.deleted', { count })} />}
       <ListTable columns={columns} data={loaderData.posts!} />
     </>
   );

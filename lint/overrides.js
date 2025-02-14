@@ -99,15 +99,16 @@ export default [
     },
   },
   {
-    files: ['vitest.setup.ts', 'src/**/*.test.{tsx,ts}', 'src/tests/**/*.{tsx,ts}'],
+    files: ['vitest.setup.ts', 'web/**/*.test.{tsx,ts}', 'web/tests/**/*.{tsx,ts}'],
     rules: {
       '@typescript-eslint/consistent-type-imports': OFF,
       '@typescript-eslint/no-explicit-any': OFF,
     },
   },
   {
-    files: ['src/**/*.test.tsx', 'src/**/*.test.ts'],
+    files: ['web/**/*.test.tsx', 'web/**/*.test.ts'],
     rules: {
+      'i18next/no-literal-string': OFF,
       'testing-library/no-await-sync-events': OFF,
       'testing-library/prefer-user-event': OFF,
       'testing-library/render-result-naming-convention': OFF,

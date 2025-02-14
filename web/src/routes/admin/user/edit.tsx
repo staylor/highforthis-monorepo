@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import UserForm from '~/components/Admin/User/Form';
 import type { UserEditQuery } from '~/types/graphql';
@@ -21,12 +22,13 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function UserEdit({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { user } = loaderData;
   if (!user) {
     return null;
   }
 
-  return <UserForm data={user} heading="Edit User" buttonLabel="Update User" />;
+  return <UserForm data={user} heading={t('users.edit')} buttonLabel={t('users.update')} />;
 }
 
 const userQuery = gql`

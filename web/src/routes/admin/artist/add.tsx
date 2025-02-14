@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import ArtistForm from '~/components/Admin/Artist/Form';
 import { handleSubmission } from '~/utils/action';
@@ -19,7 +20,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function ArtistAdd() {
-  const label = 'Add Artist';
+  const { t } = useTranslation();
+  const label = t('artists.add');
   return <ArtistForm heading={label} buttonLabel={label} />;
 }
 

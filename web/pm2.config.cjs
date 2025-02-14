@@ -3,8 +3,8 @@ module.exports = {
     {
       name: 'highforthis-remix',
       interpreter: './node_modules/.bin/dotenvx',
-      interpreter_args: 'run --env-file=.env.production -- node',
-      script: 'server.mjs',
+      interpreter_args: 'run --env-file=.env.production -- tsx',
+      script: 'server.ts',
     },
   ],
 };

@@ -25,10 +25,10 @@ export default function InfoColumn({
   button = null,
 }: InfoColumnProps) {
   return (
-    <section className="sticky top-2.5 mr-0 mt-2.5 w-full md:float-right md:-mr-75 md:w-70">
+    <section className="md:-mr-75 md:w-70 sticky top-2.5 mr-0 mt-2.5 w-full md:float-right">
       {infoFields.length > 0 ? (
         <InfoBox>
-          <h3 className={cn(border, 'text-dark select-none py-2 px-3 text-sm font-bold')}>
+          <h3 className={cn(border, 'text-dark select-none px-3 py-2 text-sm font-bold')}>
             {label}
           </h3>
           <Content>

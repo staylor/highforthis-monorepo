@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Link from '~/components/Link';
 
@@ -9,9 +10,10 @@ interface RowTitleProps {
 }
 
 export default function RowTitle({ url, title, subtitle }: RowTitleProps) {
+  const { t } = useTranslation();
   return (
     <strong className="mb-1 block break-words text-sm font-bold">
-      <Link to={url}>{title || '(no title)'}</Link>
+      <Link to={url}>{title || t('table.noTitle')}</Link>
       {subtitle && (
         <>
           <br />

@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import ArtistForm from '~/components/Admin/Artist/Form';
 import type { ArtistEditQuery } from '~/types/graphql';
@@ -26,7 +27,8 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function ArtistEdit({ loaderData }: Route.ComponentProps) {
-  const label = 'Edit Artist';
+  const { t } = useTranslation();
+  const label = t('artists.edit');
   return <ArtistForm data={loaderData} heading={label} buttonLabel={label} />;
 }
 

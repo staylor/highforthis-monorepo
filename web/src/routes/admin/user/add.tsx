@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import UserForm from '~/components/Admin/User/Form';
 import { handleSubmission } from '~/utils/action';
@@ -15,7 +16,9 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function UserAdd() {
-  return <UserForm heading="Add User" buttonLabel="Add User" />;
+  const { t } = useTranslation();
+  const label = t('users.add');
+  return <UserForm heading={label} buttonLabel={label} />;
 }
 
 const userMutation = gql`

@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
 import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
@@ -20,7 +21,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   ['search', 'year'].forEach((key) => {
     const value = url.searchParams.get(key);
     if (value) {
-      variables[key] = key === 'year' ? parseInt(value, 10) : value;
+      variables[key] = key === 'year' ? Number(value) : value;
     }
   });
 
@@ -32,15 +33,17 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Videos({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const location = useLocation();
   const { updateQuery, searchParams } = useUpdateQuery();
+  const count = Number(searchParams.get('deleted') || 0);
   const { videos } = loaderData;
 
   const filters = (
     <Select
       className="mx-2"
       key="year"
-      placeholder="Select Year"
+      placeholder={t('videos.selectYear')}
       value={searchParams.get('year') || ''}
       choices={videos?.years as number[]}
       onChange={updateQuery('year')}
@@ -49,7 +52,7 @@ export default function Videos({ loaderData }: Route.ComponentProps) {
 
   const columns: Columns = [
     {
-      label: 'Title',
+      label: t('videos.title'),
       render: (video: Video) => {
         const videoUrl = `${location.pathname}/${video.id}`;
         return (
@@ -67,21 +70,21 @@ export default function Videos({ loaderData }: Route.ComponentProps) {
       },
     },
     {
-      label: 'Slug',
+      label: t('videos.slug'),
       prop: 'slug',
     },
     {
-      label: 'Year',
+      label: t('videos.year'),
       prop: 'year',
     },
     {
-      label: 'Date',
+      label: t('videos.date'),
       render: (video: Video) => {
         const date = new Date(video.publishedAt);
         const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
         return (
           <>
-            Published
+            {t('videos.published')}
             <br />
             {formattedDate}
           </>
@@ -92,9 +95,9 @@ export default function Videos({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <Heading>Videos</Heading>
-      <Message param="deleted" text="Deleted %s videos." />
-      <Search placeholder="Search videos" />
+      <Heading>{t('videos.heading')}</Heading>
+      {count > 0 && <Message param="deleted" text={t('videos.deleted', { count })} />}
+      <Search placeholder={t('videos.search')} />
       <ListTable columns={columns} filters={filters} data={videos!} />
     </>
   );

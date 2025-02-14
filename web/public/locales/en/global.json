@@ -1,0 +1,326 @@
+{
+  "admin": {
+    "details": "Details",
+    "submit": "Submit"
+  },
+  "artists": {
+    "add": "Add Artist",
+    "all": "All Artists",
+    "deleted_one": "Deleted {{count}} artist",
+    "deleted_other": "Deleted {{count}} artists",
+    "edit": "Edit Artist",
+    "heading": "Artists",
+    "listen": "Listen on Apple Music",
+    "search": "Search Artists",
+    "updated": "Artist updated.",
+    "view": "View Artist",
+    "website": "Artist Website"
+  },
+  "audio": {
+    "fileSize": "File Size",
+    "fileType": "File Type",
+    "otherCrops": "Other available images",
+    "showing": "Showing"
+  },
+  "entity": {
+    "add": {
+      "artist": "Add Artist",
+      "venue": "Add Venue"
+    },
+    "description": "Description",
+    "edit": {
+      "artist": "Edit Artist",
+      "venue": "Edit Venue"
+    },
+    "excludeFromSearch": "Exclude from search",
+    "featuredMedia": "Featured Media",
+    "name": "Name",
+    "noShows": "No associated shows.",
+    "shows": "Shows",
+    "slug": "Slug",
+    "stats": {
+      "artist": "Show Stats: Artists",
+      "venue": "Show Stats: Venues",
+      "see": {
+        "all": "See all shows I have attended",
+        "artist": "See artist stats",
+        "venue": "See venue stats"
+      }
+    },
+    "website": "Website"
+  },
+  "image": {
+    "availableCrops": "Available crops",
+    "fileType": "File Type",
+    "original": "Original"
+  },
+  "login": {
+    "email": "Email",
+    "button": "Log In",
+    "password": "Password",
+    "required": "All fields are required.",
+    "unauthorized": "You must login to access this area."
+  },
+  "media": {
+    "add": "Add Media",
+    "all": "All Media",
+    "altText": "Alternative Text",
+    "caption": "Caption",
+    "deleted_one": "Deleted {{count}} upload",
+    "deleted_other": "Deleted {{count}} uploads",
+    "description": "Description",
+    "dropFiles": "Drop files Here",
+    "edit": "Edit Media",
+    "heading": "Media",
+    "mimeType": "MIME type",
+    "originalName": "Original name",
+    "placeholder": "Enter a title",
+    "search": "Search Media",
+    "selectMediaType": "Select Media Type",
+    "selectMimeType": "Select MIME Type",
+    "title": "Title",
+    "type": "Type",
+    "update": "Update Media",
+    "updated": "Media updated.",
+    "upload": "Upload Media"
+  },
+  "nav": {
+    "addNew": "Add New",
+    "collapse": "Collapse menu",
+    "darkMode": "Enable Dark Mode!",
+    "home": "Home",
+    "podcast": "Podcast",
+    "shows": "Shows",
+    "videos": "Videos",
+    "videosByYear": "-- Videos By Year --"
+  },
+  "pagination": {
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} items",
+    "pages": "{{page}} of {{pages}}"
+  },
+  "podcasts": {
+    "add": "Add Podcast",
+    "all": "All Podcasts",
+    "audio": "Audio",
+    "deleted_one": "Deleted {{count}} podcast",
+    "deleted_other": "Deleted {{count}} podcasts",
+    "description": "Description",
+    "edit": "Edit Podcast",
+    "heading": "Podcasts",
+    "image": "Image",
+    "setAudio": "Set Audio",
+    "setImage": "Set Image",
+    "title": "Title",
+    "update": "Update Podcast",
+    "updated": "Podcast updated."
+  },
+  "posts": {
+    "add": "Add Post",
+    "addTitle": "Add a Title",
+    "all": "All Posts",
+    "artists": "Artists",
+    "date": "Date",
+    "deleted_one": "Deleted {{count}} post",
+    "deleted_other": "Deleted {{count}} posts",
+    "edit": "Edit Post",
+    "featuredMedia": "Featured Media",
+    "heading": "Posts",
+    "publishDate": "Publish Date",
+    "slug": "Slug",
+    "status": {
+      "draft": "Draft",
+      "label": "Status",
+      "publish": "Publish"
+    },
+    "summary": "Summary",
+    "title": "Title",
+    "update": "Update Post",
+    "updated": "Post updated.",
+    "view": "View Post"
+  },
+  "settings": {
+    "dashboard": {
+      "analytics": {
+        "googleClientId": "Google Analytics Client ID",
+        "googleTrackingId": "Google Analytics Tracking ID"
+      },
+      "heading": "Dashboard Settings",
+      "label": "Dashboard"
+    },
+    "label": "Settings",
+    "media": {
+      "crops": {
+        "add": "Add Crop",
+        "dimensions": "Dimensions",
+        "name": "Name",
+        "remove": "Remove"
+      },
+      "cropSizes": "Crop Sizes",
+      "heading": "Media Settings",
+      "label": "Media"
+    },
+    "podcast": {
+      "category": "Category",
+      "copyrightText": "Copyright Text",
+      "description": "Description",
+      "explicit": "Explicit",
+      "feedLink": "Feed Link",
+      "generator": "Generator",
+      "heading": "Podcast Settings",
+      "image": "Image",
+      "itunesEmail": "iTunes Email",
+      "itunesName": "iTunes Name",
+      "label": "Podcast",
+      "language": "Language",
+      "managingEditor": "Managing Editor",
+      "setImage": "Set Podcast Image",
+      "title": "Podcast Title",
+      "websiteLink": "Website Link"
+    },
+    "site": {
+      "copyrightText": "Copyright Text",
+      "email": "Email Address",
+      "heading": "General Settings",
+      "label": "General",
+      "language": {
+        "en-US": "English (United States)",
+        "label": "Site Language"
+      },
+      "siteTitle": "Site Title",
+      "siteUrl": "Site URL",
+      "tagline": "Tagline"
+    },
+    "update": "Update Settings",
+    "updated": "Settings Updated."
+  },
+  "shows": {
+    "add": "Add Show",
+    "all": "All Shows",
+    "artists": "Artists",
+    "attended": {
+      "artist_one": "<span className=\"underline\">{{count}} Show</span> we have attended by this artist",
+      "artist_other": "<span className=\"underline\">{{count}} Shows</span> we have attended by this artist",
+      "heading": "Shows I have attended",
+      "label": "Attended",
+      "venue_one": "<span className=\"underline\">{{count}} Show</span> we have attended at this venue",
+      "venue_other": "<span className=\"underline\">{{count}} Shows</span> we have attended at this venue"
+    },
+    "attendedIn_one": "Show attended in {{year}}",
+    "attendedIn_other": "Shows attended in {{year}}",
+    "deleted_one": "Deleted {{count}} show.",
+    "deleted_other": "Deleted {{count}} shows.",
+    "edit": "Edit Show",
+    "heading": "Shows",
+    "noRecommended": "No recommended shows at this time. Please check back soon.",
+    "notes": "Notes",
+    "recommended": "Recommended Shows",
+    "search": "Search shows",
+    "title": "Title",
+    "todaysDate": "Today's date is",
+    "upcoming": "Upcoming Shows",
+    "update": "Update Show",
+    "updated": "Show updated.",
+    "url": "URL",
+    "venue": "Venue",
+    "viewFullHistory": "View Full History",
+    "website": "Event Website"
+  },
+  "social": {
+    "youtube": "YouTube",
+    "instagram": "Instagram",
+    "twitter": "Twitter",
+    "tiktok": "TikTok"
+  },
+  "sphere": {
+    "encore": "Encore",
+    "heading": "Dead & Company at the Sphere, Las Vegas, NV",
+    "set1": "Set 1",
+    "set2": "Set 2",
+    "stats": {
+      "hide": "Hide stats",
+      "show": "Show stats",
+      "song_one": "{{song}} was played <strong>{{count}}</strong> time",
+      "song_other": "{{song}} was played <strong>{{count}}</strong> times",
+      "songs": "<strong>{{songCount}}</strong> songs played total during the residency (<strong>{{setlistCount}}</strong> shows)",
+      "weekend": "once per weekend"
+    }
+  },
+  "table": {
+    "bulkActions": "Bulk Actions",
+    "delete": "Delete",
+    "edit": "Edit",
+    "noItems": "No items found.",
+    "noTitle": "(no title)",
+    "view": "View"
+  },
+  "tagline": "Music as it happens.",
+  "tags": {
+    "placeholder": "Type tag then press ENTER"
+  },
+  "title": "High for This",
+  "users": {
+    "add": "Add User",
+    "all": "All Users",
+    "bio": "Bio",
+    "deleted_one": "Deleted {{count}} user.",
+    "deleted_other": "Deleted {{count}} users.",
+    "edit": "Edit User",
+    "email": "Email",
+    "heading": "Users",
+    "name": "Name",
+    "password": "Password",
+    "roles": {
+      "admin": "Admin",
+      "editor": "Editor",
+      "label": "Roles"
+    },
+    "update": "Update User",
+    "updated": "User updated."
+  },
+  "venues": {
+    "add": "Add Venue",
+    "address": "Address",
+    "all": "All Venues",
+    "capacity": "Capacity",
+    "city": "City",
+    "coordinates": "Coordinates",
+    "deleted_one": "Deleted {{count}} venue.",
+    "deleted_other": "Deleted {{count}} venues.",
+    "edit": "Edit Venue",
+    "heading": "Venues",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "permanentlyClosed": "Permanently Closed",
+    "postalCode": "Postal Code",
+    "search": "Search Venues",
+    "state": "State",
+    "streetAddress": "Street Address",
+    "updated": "Venue updated.",
+    "view": "View Venue",
+    "website": "Venue Website"
+  },
+  "videos": {
+    "date": "Date",
+    "deleted_one": "Deleted {{count}} video.",
+    "deleted_other": "Deleted {{count}} videos.",
+    "dimensions": "Dimensions",
+    "duration": "<strong>Duration:</strong> {{minutes}} mins, {{seconds}} seconds",
+    "edit": "Edit Video",
+    "heading": "Videos",
+    "next": "NEXT",
+    "noFound": "No videos found.",
+    "playlist": "Playlist",
+    "previous": "PREVIOUS",
+    "published": "Published",
+    "search": "Search videos",
+    "selectYear": "Select Year",
+    "slug": "Slug",
+    "title": "Title",
+    "type": "Type",
+    "update": "Update Video",
+    "updated": "Video updated.",
+    "viewPlaylist": "View {{year}} Playlist",
+    "year": "Year"
+  }
+}

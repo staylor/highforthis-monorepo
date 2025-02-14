@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
 import SettingsForm from '~/components/Admin/Settings/Form';
@@ -26,60 +27,41 @@ export async function action({ request, context }: Route.ActionArgs) {
   });
 }
 
-const settingsFields: Fields = [
-  { label: 'Podcast Title', prop: 'title', editable: true },
-  { label: 'Description', prop: 'description', type: 'textarea' },
-  { label: 'Managing Editor', prop: 'managingEditor' },
-  {
-    label: 'Copyright Text',
-    prop: 'copyrightText',
-  },
-  {
-    label: 'Website Link',
-    prop: 'websiteLink',
-  },
-  {
-    label: 'Feed Link',
-    prop: 'feedLink',
-  },
-  {
-    label: 'iTunes Name',
-    prop: 'itunesName',
-  },
-  {
-    label: 'iTunes Email',
-    prop: 'itunesEmail',
-  },
-  {
-    label: 'Generator',
-    prop: 'generator',
-  },
-  {
-    label: 'Language',
-    prop: 'language',
-  },
-  {
-    label: 'Explicit',
-    prop: 'explicit',
-  },
-  {
-    label: 'Category',
-    prop: 'category',
-  },
-  {
-    label: 'Image',
-    prop: 'image',
-    type: 'custom',
-    render: (p: Podcast) => (
-      <FeaturedMedia type="image" buttonText="Set Podcast Image" media={p.image ? [p.image] : []} />
-    ),
-  },
-];
-
 export default function PodcastSettings({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
+  const fields = [
+    'managingEditor',
+    'copyrightText',
+    'websiteLink',
+    'feedLink',
+    'itunesName',
+    'itunesEmail',
+    'generator',
+    'language',
+    'explicit',
+    'category',
+  ];
+  const settingsFields: Fields = [
+    { label: t('settings.podcast.title'), prop: 'title', editable: true },
+    { label: t('settings.podcast.description'), prop: 'description', type: 'textarea' },
+    ...fields.map((prop) => ({ label: t(`settings.podcast.${prop}`), prop })),
+    {
+      label: t('settings.podcast.image'),
+      prop: 'image',
+      type: 'custom',
+      render: (p: Podcast) => (
+        <FeaturedMedia
+          type="image"
+          buttonText={t('settings.podcast.setImage')}
+          media={p.image ? [p.image] : []}
+        />
+      ),
+    },
+  ];
+
   return (
     <SettingsForm
-      heading="Podcast Settings"
+      heading={t('settings.podcast.heading')}
       data={loaderData.podcastSettings as PodcastSettingsType}
       fields={settingsFields}
     />

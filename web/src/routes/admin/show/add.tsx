@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import ShowForm from '~/components/Admin/Show/Form';
 import type { ShowEntitiesQuery } from '~/types/graphql';
@@ -22,7 +23,8 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function ShowAdd({ loaderData }: Route.ComponentProps) {
-  return <ShowForm data={loaderData} heading="Add Show" buttonLabel="Add Show" />;
+  const { t } = useTranslation();
+  return <ShowForm data={loaderData} heading={t('show.add')} buttonLabel={t('show.add')} />;
 }
 
 const showQuery = gql`

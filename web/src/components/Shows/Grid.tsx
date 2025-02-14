@@ -44,7 +44,7 @@ export default function ShowsGrid({
             const d = formatDate(node.date);
             const showRow = (
               <tr key={node.id}>
-                <Cell className="text-right font-stylized text-sm">{d.formatted}</Cell>
+                <Cell className="font-stylized text-right text-sm">{d.formatted}</Cell>
                 <Cell className="text-base">
                   <Link className="text-pink underline" to={formatShowLink(node)}>
                     {formatArtists(node)}
@@ -52,7 +52,7 @@ export default function ShowsGrid({
                 </Cell>
                 <Cell className="text-base font-medium uppercase">
                   <Link
-                    className="hover:text-neutral-800 hover:underline dark:hover:text-pink"
+                    className="dark:hover:text-pink hover:text-neutral-800 hover:underline"
                     to={`/venue/${node.venue.slug}`}
                   >
                     {node.venue.name}

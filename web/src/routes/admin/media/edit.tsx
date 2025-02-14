@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import MediaForm from '~/components/Admin/Media/Form';
 import type { MediaAdminQuery, MediaUpload } from '~/types/graphql';
@@ -26,6 +27,7 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function MediaEdit({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { media } = loaderData;
   if (!media) {
     return null;
@@ -34,8 +36,8 @@ export default function MediaEdit({ loaderData }: Route.ComponentProps) {
   return (
     <MediaForm
       data={loaderData.media as MediaUpload}
-      heading="Edit Media"
-      buttonLabel="Update Media"
+      heading={t('media.edit')}
+      buttonLabel={t('media.update')}
     />
   );
 }

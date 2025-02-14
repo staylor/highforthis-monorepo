@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import PostForm from '~/components/Admin/Post/Form';
 import { handleSubmission } from '~/utils/action';
@@ -15,7 +16,9 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function PostAdd() {
-  return <PostForm heading="Add Post" buttonLabel="Add Post" />;
+  const { t } = useTranslation();
+  const label = t('posts.add');
+  return <PostForm heading={label} buttonLabel={label} />;
 }
 
 const postMutation = gql`

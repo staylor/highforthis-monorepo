@@ -1,5 +1,6 @@
 import type { ThHTMLAttributes, TdHTMLAttributes, SyntheticEvent } from 'react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Button from '~/components/Button';
 import type { InputProps } from '~/components/Form/Input';
@@ -10,7 +11,7 @@ const NumberInput = (props: InputProps) => (
   <Input {...props} className="inline-block h-8 w-16 px-1 py-0.5" size={4} inputType="number" />
 );
 
-const HeaderCell = (props: ThHTMLAttributes<HTMLTableHeaderCellElement>) => (
+const HeaderCell = (props: ThHTMLAttributes<HTMLTableCellElement>) => (
   <th className="py-1 pr-2.5 text-left text-sm" {...props} />
 );
 const Cell = (props: TdHTMLAttributes<HTMLTableCellElement>) => (
@@ -18,6 +19,7 @@ const Cell = (props: TdHTMLAttributes<HTMLTableCellElement>) => (
 );
 
 function Crops({ settings }: { settings: MediaSettings }) {
+  const { t } = useTranslation();
   const [crops, setCrops] = useState<MediaCropSetting[]>(
     settings.crops && settings.crops.length > 0 ? settings.crops : [{} as MediaCropSetting]
   );
@@ -49,13 +51,13 @@ function Crops({ settings }: { settings: MediaSettings }) {
   return (
     <>
       <Button className="h-6 px-2 pb-0.5 text-xs" onClick={addCrop}>
-        Add Crop
+        {t('settings.media.crops.add')}
       </Button>
       <table className="my-5">
         <thead>
           <tr>
-            <HeaderCell>Name</HeaderCell>
-            <HeaderCell colSpan={2}>Dimensions</HeaderCell>
+            <HeaderCell>{t('settings.media.crops.name')}</HeaderCell>
+            <HeaderCell colSpan={2}>{t('settings.media.crops.dimensions')}</HeaderCell>
           </tr>
         </thead>
         <tbody>
@@ -75,8 +77,8 @@ function Crops({ settings }: { settings: MediaSettings }) {
                   name={`crops[${i}][width]`}
                   onChange={bindOnChange('width', i)}
                   value={crop.width || 0}
-                />{' '}
-                x{' '}
+                />
+                {' x '}
                 <NumberInput
                   name={`crops[${i}][height]`}
                   onChange={bindOnChange('height', i)}
@@ -84,7 +86,7 @@ function Crops({ settings }: { settings: MediaSettings }) {
                 />
               </Cell>
               <Cell>
-                <button onClick={removeCrop(i) as any}>Remove</button>
+                <button onClick={removeCrop(i) as any}>{t('settings.media.crops.remove')}</button>
               </Cell>
             </tr>
           ))}

@@ -35,7 +35,8 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  return query<AppQuery>({ request, context, query: appQuery });
+  const data = await query<AppQuery>({ request, context, query: appQuery });
+  return { data };
 }
 
 export const clientLoader = createClientCache();
@@ -74,27 +75,28 @@ const AppLinks = ({ data }: { data: AppQuery }) => {
 };
 
 export default function Root({ loaderData }: Route.ComponentProps) {
+  const { data } = loaderData;
   const layout = useLayout();
   return (
-    <Html>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <meta property="twitter:site" content={`@${TWITTER_USERNAME}`} />
-        <meta property="twitter:creator" content={`@${TWITTER_USERNAME}`} />
-        <Meta />
-        <Links />
-        {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
-        {layout === 'app' && <AppLinks data={loaderData} />}
-      </head>
-      <Body>
-        <Boundary>
-          <Outlet />
-        </Boundary>
-        <ScrollRestoration />
-        <Scripts />
-      </Body>
-    </Html>
+      <Html>
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
+          <meta property="twitter:site" content={`@${TWITTER_USERNAME}`} />
+          <meta property="twitter:creator" content={`@${TWITTER_USERNAME}`} />
+          <Meta />
+          <Links />
+          {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
+          {layout === 'app' && <AppLinks data={data} />}
+        </head>
+        <Body>
+          <Boundary>
+            <Outlet />
+          </Boundary>
+          <ScrollRestoration />
+          <Scripts />
+        </Body>
+      </Html>
   );
 }
 
@@ -114,7 +116,7 @@ export function ErrorBoundary() {
     <Html>
       <head>
         <meta charSet="utf-8" />
-        <title>Oops!</title>
+        <title>{'Oops!'}</title>
         <Meta />
         <Links />
         <link rel="stylesheet" href={mainStylesheetUrl} />

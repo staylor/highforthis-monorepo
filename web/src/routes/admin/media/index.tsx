@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
 import debounce from 'lodash.debounce';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
 import ListTable, { Thumbnail, RowTitle, RowActions } from '~/components/Admin/ListTable';
@@ -33,9 +34,11 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function Media({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { uploads } = loaderData;
   const location = useLocation();
   const { updateQuery, searchParams } = useUpdateQuery();
+  const count = Number(searchParams.get('deleted') || 0);
   const querySearch = updateQuery('search');
   const updateSearch = debounce(querySearch, 600);
   const columns: Columns = [
@@ -55,7 +58,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
     },
     {
       className: 'w-[60%]',
-      label: 'Title',
+      label: t('media.title'),
       render: (media: MediaUpload) => {
         const editUrl = `${location.pathname}/${media.id}`;
         return (
@@ -72,7 +75,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       },
     },
     {
-      label: 'Type',
+      label: t('media.type'),
       render: (media: MediaUpload) => {
         const search = new URLSearchParams();
         search.set('type', media.type);
@@ -82,7 +85,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       },
     },
     {
-      label: 'MIME type',
+      label: t('media.mimeType'),
       render: (media: MediaUpload) => {
         const search = new URLSearchParams();
         search.set('mimeType', media.mimeType);
@@ -99,7 +102,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       <Select
         key="type"
         className="mx-2"
-        placeholder="Select Media Type"
+        placeholder={t('media.selectMediaType')}
         value={searchParams.get('type') || ''}
         choices={uploads?.types?.map((type: string) => ({
           value: type,
@@ -110,7 +113,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       <Select
         key="mimeType"
         className="mx-2"
-        placeholder="Select MIME Type"
+        placeholder={t('media.selectMimeType')}
         value={searchParams.get('mimeType') || ''}
         choices={uploads?.mimeTypes || []}
         onChange={updateQuery('mimeType')}
@@ -119,13 +122,13 @@ export default function Media({ loaderData }: Route.ComponentProps) {
   );
   return (
     <>
-      <Heading>Media</Heading>
-      <HeaderAdd label="Add Media" to={`${location.pathname}/upload`} />
-      <Message param="deleted" text="Deleted %s uploads." />
+      <Heading>{t('media.heading')}</Heading>
+      <HeaderAdd label={t('media.add')} to={`${location.pathname}/upload`} />
+      {count > 0 && <Message param="deleted" text={t('media.deleted', { count })} />}
       <div className="float-right">
         <Input
           value={searchParams.get('search') || ''}
-          placeholder="Search Media"
+          placeholder={t('media.search')}
           onChange={updateSearch}
         />
       </div>

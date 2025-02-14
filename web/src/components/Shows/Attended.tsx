@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { Trans } from 'react-i18next';
 
 import Link from '~/components/Link';
 import type { ShowConnection } from '~/types/graphql';
@@ -19,15 +20,13 @@ export default function Attended({
     return null;
   }
 
-  const relationText = relation === 'artist' ? 'by this artist' : 'at this venue';
-
   return (
     <article className={className || 'mt-16'}>
-      <p className="mb-2 font-stylized">
-        <Link to={`/shows/stats/${relation}`} className="underline">
-          {shows.edges.length} Shows
-        </Link>{' '}
-        we have attended {relationText}:
+      <p className="font-stylized mb-2">
+        <Link to={`/shows/stats/${relation}`}>
+          <Trans i18nKey={`shows.attended.${relation}`} count={shows.edges.length} />
+        </Link>
+        :
       </p>
       <table className="w-full border-collapse">
         <tbody>
@@ -36,12 +35,12 @@ export default function Attended({
 
             return (
               <tr key={node.id}>
-                <Cell className="w-36 text-right font-stylized text-sm">
+                <Cell className="font-stylized w-36 text-right text-sm">
                   {d.formatted}/{d.year}
                 </Cell>
                 <Cell className="text-base font-medium uppercase">
                   <Link
-                    className="hover:text-neutral-800 hover:underline dark:hover:text-pink"
+                    className="dark:hover:text-pink hover:text-neutral-800 hover:underline"
                     to={relation === 'artist' ? `/venue/${node.venue.slug}` : formatShowLink(node)}
                   >
                     {relation === 'artist' ? node.venue.name : formatArtists(node)}

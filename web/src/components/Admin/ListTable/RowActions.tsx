@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import type { ChangeEvent } from 'react';
 import { Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router';
 
 import Link from '~/components/Link';
@@ -13,6 +14,7 @@ export interface RowAction {
 }
 
 export default function RowActions({ actions }: { actions: RowAction[] }) {
+  const { t } = useTranslation();
   const submit = useSubmit();
   const lastIndex = actions.length - 1;
   const linkClass = cn('hover:underline');
@@ -25,14 +27,14 @@ export default function RowActions({ actions }: { actions: RowAction[] }) {
           case 'edit':
             elem = (
               <Link className={linkClass} to={url}>
-                {label || 'Edit'}
+                {label || t('table.edit')}
               </Link>
             );
             break;
           case 'view':
             elem = (
               <a className={linkClass} href={url} target="_blank" rel="noreferrer">
-                {label || 'View'}
+                {label || t('table.view')}
               </a>
             );
             break;
@@ -51,7 +53,7 @@ export default function RowActions({ actions }: { actions: RowAction[] }) {
                   <input key={id} type="hidden" name="ids" value={id} />
                 ))}
                 <button type="submit" className={cn(linkClass, 'text-pink')} {...props}>
-                  {label || 'Delete'}
+                  {label || t('table.delete')}
                 </button>
               </form>
             );

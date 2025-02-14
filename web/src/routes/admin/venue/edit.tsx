@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import VenueForm from '~/components/Admin/Venue/Form';
 import type { VenueEditQuery } from '~/types/graphql';
@@ -27,7 +28,8 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 }
 
 export default function VenueEdit({ loaderData }: Route.ComponentProps) {
-  const label = 'Edit Venue';
+  const { t } = useTranslation();
+  const label = t('venues.edit');
   return <VenueForm data={loaderData} heading={label} buttonLabel={label} />;
 }
 

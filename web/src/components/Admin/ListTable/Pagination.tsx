@@ -1,5 +1,6 @@
 import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useSearchParams } from 'react-router';
 
 import Link from '~/components/Link';
@@ -20,6 +21,7 @@ interface PaginationProps {
 }
 
 export default function Pagination({ data, perPage, className }: PaginationProps) {
+  const { t } = useTranslation();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const page = searchParams.get('page');
@@ -76,12 +78,10 @@ export default function Pagination({ data, perPage, className }: PaginationProps
 
   return (
     <nav className={cn('select-none text-sm', className)}>
-      <Count>{data.count} items</Count>
+      <Count>{t('pagination.items', { count: data.count })}</Count>
       {paginated ? <Active>«</Active> : <Inactive>«</Inactive>}
       {previousPage === null ? <Inactive>‹</Inactive> : <Active page={previousPage}>‹</Active>}
-      <Count>
-        {paginated ? currentPage : firstPage} of {pages}
-      </Count>
+      <Count>{t('pagination.pages', { page: paginated ? currentPage : firstPage, pages })}</Count>
       {nextPage === null ? <Inactive>›</Inactive> : <Active page={nextPage}>›</Active>}
       {currentPage !== pages ? <Active page={pages}>»</Active> : <Inactive>»</Inactive>}
     </nav>

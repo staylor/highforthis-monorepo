@@ -1,5 +1,6 @@
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
 
 import Artwork from '~/components/Artist/Artwork';
 import { Heading1, Heading2 } from '~/components/Heading';
@@ -15,6 +16,7 @@ export async function loader({ request, params, context }: Route.LoaderArgs) {
 }
 
 export default function ShowRoute({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const { show } = loaderData;
   if (!show) {
     return null;
@@ -61,10 +63,10 @@ export default function ShowRoute({ loaderData }: Route.ComponentProps) {
           <a
             href={show.url}
             target="_blank"
-            className="my-2 inline-block rounded-md border border-pink px-3 py-2 font-sans text-xl text-pink"
+            className="border-pink text-pink my-2 inline-block rounded-md border px-3 py-2 font-sans text-xl"
             rel="noreferrer"
           >
-            Event Website
+            {t('shows.website')}
           </a>
         )}
       </div>
