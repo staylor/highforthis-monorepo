@@ -1,4 +1,3 @@
-import { I18nextProvider } from 'react-i18next';
 import type { LinksFunction, MetaFunction } from 'react-router';
 import {
   Links,
@@ -37,7 +36,7 @@ export const meta: MetaFunction = ({ data }) => {
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const data = await query<AppQuery>({ request, context, query: appQuery });
-  return { data, i18n: context.i18n };
+  return { data };
 }
 
 export const clientLoader = createClientCache();
@@ -76,10 +75,9 @@ const AppLinks = ({ data }: { data: AppQuery }) => {
 };
 
 export default function Root({ loaderData }: Route.ComponentProps) {
-  const { data, i18n } = loaderData;
+  const { data } = loaderData;
   const layout = useLayout();
   return (
-    <I18nextProvider i18n={i18n}>
       <Html>
         <head>
           <meta charSet="utf-8" />
@@ -99,7 +97,6 @@ export default function Root({ loaderData }: Route.ComponentProps) {
           <Scripts />
         </Body>
       </Html>
-    </I18nextProvider>
   );
 }
 
