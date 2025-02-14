@@ -7,7 +7,7 @@ const Button = ({ className, ...props }: ButtonHTMLAttributes<HTMLButtonElement>
       'box-border cursor-pointer appearance-none bg-white',
       'border-detail border transition-colors',
       'mr-2 inline-block px-2 py-1.5 text-center text-base uppercase dark:text-black',
-      'hover:outline-none focus:outline-none active:outline-none',
+      'hover:outline-hidden focus:outline-hidden active:outline-hidden',
       'hover:text-black focus:text-black active:text-black',
       'hover:border-black focus:border-black active:border-black',
       className

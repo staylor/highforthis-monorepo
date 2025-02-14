@@ -34,7 +34,7 @@ export const Html = (props: HtmlHTMLAttributes<HTMLHtmlElement>) => {
 };
 
 export const Body = (props: HTMLAttributes<HTMLBodyElement>) => (
-  <body {...props} className="h-full" />
+  <body {...props} className="font-body h-full" />
 );
 
 export const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
