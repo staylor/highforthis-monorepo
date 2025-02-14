@@ -50,7 +50,7 @@ export default function Users({ loaderData }: Route.ComponentProps) {
     <>
       <Heading>{t('users.heading')}</Heading>
       <HeaderAdd label={t('users.add')} />
-      {count && <Message param="deleted" text={t('users.deleted', { count })} />}
+      {count > 0 && <Message param="deleted" text={t('users.deleted', { count })} />}
       <ListTable columns={columns} data={users!} />
     </>
   );

@@ -124,7 +124,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
     <>
       <Heading>{t('media.heading')}</Heading>
       <HeaderAdd label={t('media.add')} to={`${location.pathname}/upload`} />
-      {count && <Message param="deleted" text={t('media.deleted', { count })} />}
+      {count > 0 && <Message param="deleted" text={t('media.deleted', { count })} />}
       <div className="float-right">
         <Input
           value={searchParams.get('search') || ''}

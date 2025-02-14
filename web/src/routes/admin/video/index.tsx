@@ -96,7 +96,7 @@ export default function Videos({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <Heading>{t('videos.heading')}</Heading>
-      {count && <Message param="deleted" text={t('videos.deleted', { count })} />}
+      {count > 0 && <Message param="deleted" text={t('videos.deleted', { count })} />}
       <Search placeholder={t('videos.search')} />
       <ListTable columns={columns} filters={filters} data={videos!} />
     </>

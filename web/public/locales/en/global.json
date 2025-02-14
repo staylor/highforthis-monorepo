@@ -242,7 +242,7 @@
       "show": "Show stats",
       "song_one": "{{song}} was played <strong>{{count}}</strong> time",
       "song_other": "{{song}} was played <strong>{{count}}</strong> times",
-      "songs": "<strong>{{soungCount}}</strong> songs played total during the residency (<strong>{{setlistCount}}</strong> shows)",
+      "songs": "<strong>{{songCount}}</strong> songs played total during the residency (<strong>{{setlistCount}}</strong> shows)",
       "weekend": "once per weekend"
     }
   },

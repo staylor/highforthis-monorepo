@@ -69,7 +69,7 @@ export default function Artists({ loaderData }: Route.ComponentProps) {
     <>
       <Heading>{t('artists.heading')}</Heading>
       <HeaderAdd label={t('artists.add')} />
-      {count && <Message param="deleted" text={t('artists.deleted', { count })} />}
+      {count > 0 && <Message param="deleted" text={t('artists.deleted', { count })} />}
       <Search placeholder={t('artists.search')} />
       <ListTable columns={columns} data={loaderData.artists!} />
     </>

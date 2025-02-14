@@ -51,13 +51,13 @@ function Crops({ settings }: { settings: MediaSettings }) {
   return (
     <>
       <Button className="h-6 px-2 pb-0.5 text-xs" onClick={addCrop}>
-        {t('media.crops.add')}
+        {t('settings.media.crops.add')}
       </Button>
       <table className="my-5">
         <thead>
           <tr>
-            <HeaderCell>{t('media.crops.name')}</HeaderCell>
-            <HeaderCell colSpan={2}>{t('media.crops.dimensions')}</HeaderCell>
+            <HeaderCell>{t('settings.media.crops.name')}</HeaderCell>
+            <HeaderCell colSpan={2}>{t('settings.media.crops.dimensions')}</HeaderCell>
           </tr>
         </thead>
         <tbody>
@@ -86,7 +86,7 @@ function Crops({ settings }: { settings: MediaSettings }) {
                 />
               </Cell>
               <Cell>
-                <button onClick={removeCrop(i) as any}>{t('media.crops.remove')}</button>
+                <button onClick={removeCrop(i) as any}>{t('settings.media.crops.remove')}</button>
               </Cell>
             </tr>
           ))}

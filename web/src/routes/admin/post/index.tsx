@@ -66,7 +66,7 @@ export default function Posts({ loaderData }: Route.ComponentProps) {
     <>
       <Heading>{t('posts.heading')}</Heading>
       <HeaderAdd label={t('posts.add')} />
-      {count && <Message param="deleted" text={t('posts.deleted', { count })} />}
+      {count > 0 && <Message param="deleted" text={t('posts.deleted', { count })} />}
       <ListTable columns={columns} data={loaderData.posts!} />
     </>
   );

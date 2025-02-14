@@ -88,7 +88,7 @@ export default function Venues({ loaderData }: Route.ComponentProps) {
     <>
       <Heading>{t('venues.heading')}</Heading>
       <HeaderAdd label={t('venues.add')} />
-      {count && <Message param="deleted" text={t('venues.deleted', { count })} />}
+      {count > 0 && <Message param="deleted" text={t('venues.deleted', { count })} />}
       <Search placeholder={t('venues.search')} />
       <ListTable columns={columns} data={venues!} />
     </>

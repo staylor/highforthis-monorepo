@@ -135,8 +135,8 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <Heading>{t('shows.heading')}</Heading>
-      <HeaderAdd label={t('show.add')} />
-      {count && <Message param="deleted" text={t('shows.deleted', { count })} />}
+      <HeaderAdd label={t('shows.add')} />
+      {count > 0 && <Message param="deleted" text={t('shows.deleted', { count })} />}
       <Search placeholder={t('shows.search')} />
       <ListTable columns={columns} data={shows!} />
     </>

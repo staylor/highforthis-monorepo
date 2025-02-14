@@ -54,7 +54,7 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
     <>
       <Heading>{t('podcasts.heading')}</Heading>
       <HeaderAdd label={t('podcasts.add')} />
-      {count && <Message param="deleted" text={t('podcasts.deleted', { count })} />}
+      {count > 0 && <Message param="deleted" text={t('podcasts.deleted', { count })} />}
       <ListTable columns={columns} data={loaderData.podcasts!} />
     </>
   );
