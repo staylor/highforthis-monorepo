@@ -24,7 +24,9 @@ export default function Attended({
     <article className={className || 'mt-16'}>
       <p className="font-stylized mb-2">
         <Link to={`/shows/stats/${relation}`}>
-          <Trans i18nKey={`shows.attended.${relation}`} count={shows.edges.length} />
+          <Trans i18nKey={`shows.attended.${relation}`} count={shows.edges.length} components={{
+            Bold: <span className="underline" />
+          }} />
         </Link>
         :
       </p>

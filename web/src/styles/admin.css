@@ -1,8 +1,5 @@
-@config "./admin-config.js";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import './theme.css';
 
 @layer base {
   a {

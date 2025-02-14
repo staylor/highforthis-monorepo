@@ -24,7 +24,7 @@ export default function Checkbox({
       value={value}
       defaultChecked={checked}
       className={cn(
-        'text-pink focus:border-pink focus:ring-pink rounded border-gray-300 shadow-sm focus:ring focus:ring-opacity-50 focus:ring-offset-0',
+        'text-pink focus:border-pink focus:ring-pink rounded-sm border-gray-300 shadow-sm focus:ring-3 focus:ring-opacity-50 focus:ring-offset-0',
         className
       )}
       type="checkbox"

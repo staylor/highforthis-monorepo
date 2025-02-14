@@ -1,0 +1,73 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
+@plugin '@tailwindcss/forms';
+
+@theme {
+  --breakpoint-xs: 320px;
+
+  --container-nav: 10rem; /* 160px */
+
+  --color-dark: #262626;
+  --color-pink: #e50082;
+  --color-detail: #d1d5db;
+  --color-detail-dark: #4b5563;
+
+  --font-body:
+    proxima-nova, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --font-stylized: cubano, sans-serif;
+  --font-text: proxima-nova, sans-serif;
+  --font-georgia: Georgia, serif;
+  --font-dashicons: dashicons;
+  --font-icons: icons;
+  --font-code: Inconsolata, Menlo, Consolas, monospace;
+
+  --leading-zero: 0;
+
+  --spacing-0\.75: 0.1875rem; /* 3px */
+  --spacing-7\.5: 1.875rem; /* 30px */
+  --spacing-12\.5: 3.125rem; /* 50px */
+  --spacing-13: 3.25rem; /* 52px */
+  --spacing-15: 3.75rem; /* 60px */
+  --spacing-19: 4.75rem; /* 76px */
+  --spacing-25: 6.25rem; /* 100px */
+  --spacing-30: 7.5rem; /* 120px */
+  --spacing-50: 12.5rem; /* 200px */
+  --spacing-70: 17.5rem; /* 280px */
+  --spacing-75: 18.75rem; /* 300px */
+  --spacing-150: 37.5rem; /* 600px */
+  --spacing-160: 40rem; /* 640px */
+
+  --animate-loading-1: loading 2s infinite ease-in-out;
+  --animate-loading-2: loading 2s infinite -1s ease-in-out;
+
+  @keyframes loading {
+    0%,
+    100% {
+      transform: 'scale(0)';
+    }
+    50% {
+      transform: 'scale(1)';
+    }
+  }
+}
+
+@utility z-top {
+  z-index: 100000;
+}
+
+@utility z-close {
+  z-index: 100001;
+}
+
+@utility content-checkmark {
+  content: '\f147';
+}
+
+@utility content-collapse {
+  content: '\f148';
+}
+
+@utility content-dismiss {
+  content: '\f153';
+}
