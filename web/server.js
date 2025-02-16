@@ -1,13 +1,13 @@
 import { createRequestHandler } from '@react-router/express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-import express, { type Request, type Response } from 'express';
+import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import morgan from 'morgan';
 
-import createI18n from '~/i18n';
+import createI18n from './src/i18n.js';
 
-import factory from './apollo/client';
+import factory from './apollo/client.js';
 
 process.env.TZ = 'America/New_York';
 
@@ -17,7 +17,7 @@ const serverPort = (process.env.SERVER_PORT && parseInt(process.env.SERVER_PORT,
 const gqlHost = process.env.GQL_HOST || 'http://localhost:8080';
 const getClient = factory(`${gqlHost}/graphql`);
 
-function getLoadContext(_: Request, res: Response) {
+function getLoadContext(_, res) {
   return {
     i18n: res.locals.i18n,
     apolloClient: getClient(),
@@ -44,7 +44,7 @@ const reactRouterHandler = createRequestHandler({
     ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
     : await import('./build/server/index.js'),
   getLoadContext,
-} as any);
+});
 
 const app = express();
 

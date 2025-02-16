@@ -17,7 +17,6 @@ export const handle = {
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: '/css/dashicons.min.css' },
-  { rel: 'stylesheet', href: '/css/Draft.css' },
   { rel: 'stylesheet', href: adminCss },
 ];
 

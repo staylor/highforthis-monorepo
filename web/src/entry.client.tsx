@@ -3,7 +3,7 @@ import { hydrateRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import { HydratedRouter } from 'react-router/dom';
 
-import createI18n from './i18n';
+import createI18n from './i18n.js';
 
 (async () => {
   const i18n = await createI18n('en', false);

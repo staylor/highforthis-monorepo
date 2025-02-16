@@ -1,10 +1,10 @@
 import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache.js';
 import { ApolloClient } from '@apollo/client/core/ApolloClient.js';
 
-import fragmentMatcher from './fragmentMatcher';
-import typePolicies from './typePolicies';
+import fragmentMatcher from './fragmentMatcher.js';
+import typePolicies from './typePolicies.js';
 
-function factory(uri: string) {
+function factory(uri) {
   return () =>
     new ApolloClient({
       uri,

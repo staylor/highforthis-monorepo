@@ -11,7 +11,7 @@ async function createI18n(locale = 'en', isServer = true) {
     : '/locales/{{lng}}/{{ns}}.json';
 
   await instance
-    .use(Backend as any)
+    .use(Backend)
     .use(initReactI18next)
     .init({
       backend: {
