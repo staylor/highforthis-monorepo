@@ -1,598 +1,339 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Select > add className 1`] = `
+exports[`select > add className 1`] = `
 <select
   class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors foo"
 />
 `;
 
-exports[`Select > child nodes > children 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <option
-    value="meximelt"
-  >
-    Mexi-melt
-  </option>
-</select>
-`;
-
-exports[`Select > child nodes > children with choices 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <option
-    value="mild"
-  >
-    Mild
-  </option>
-  <option
-    value="hot"
-  >
-    Hot
-  </option>
-  <option
-    value="fire"
-  >
-    Fire
-  </option>
-  <option
-    value="meximelt"
-  >
-    Mexi-melt
-  </option>
-</select>
-`;
-
-exports[`Select > choices > choice 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <option
-    value="mild"
-  >
-    Mild
-  </option>
-  <option
-    value="hot"
-  >
-    Hot
-  </option>
-  <option
-    value="fire"
-  >
-    Fire
-  </option>
-</select>
-`;
-
-exports[`Select > choices > choices 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <option
-    value="Mild"
-  >
-    Mild
-  </option>
-  <option
-    value="Hot"
-  >
-    Hot
-  </option>
-  <option
-    value="Fire"
-  >
-    Fire
-  </option>
-</select>
-`;
-
-exports[`Select > choices > choices as objects 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <option
-    value="mild"
-  >
-    Mild
-  </option>
-  <option
-    value="hot"
-  >
-    Hot
-  </option>
-  <option
-    value="fire"
-  >
-    Fire
-  </option>
-</select>
-`;
-
-exports[`Select > empty 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
-/>
-`;
-
-exports[`Select > groups > no value 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <optgroup
-    label="Tacos"
-  >
-    <option
-      value="crunchy"
-    >
-      Crunchy
-    </option>
-    <option
-      value="soft"
-    >
-      Soft
-    </option>
-  </optgroup>
-  <optgroup
-    label="Saunce"
-  >
-    <option
-      value="mild"
-    >
-      Mild
-    </option>
-    <option
-      value="hot"
-    >
-      Hot
-    </option>
-    <option
-      value="fire"
-    >
-      Fire
-    </option>
-  </optgroup>
-</select>
-`;
-
-exports[`Select > groups > value 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <optgroup
-    label="Tacos"
-  >
-    <option
-      value="crunchy"
-    >
-      Crunchy
-    </option>
-    <option
-      value="soft"
-    >
-      Soft
-    </option>
-  </optgroup>
-  <optgroup
-    label="Saunce"
-  >
-    <option
-      value="mild"
-    >
-      Mild
-    </option>
-    <option
-      value="hot"
-    >
-      Hot
-    </option>
-    <option
-      value="fire"
-    >
-      Fire
-    </option>
-  </optgroup>
-</select>
-`;
-
-exports[`Select > groups > values 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
-  multiple=""
->
-  <optgroup
-    label="Tacos"
-  >
-    <option
-      value="crunchy"
-    >
-      Crunchy
-    </option>
-    <option
-      value="soft"
-    >
-      Soft
-    </option>
-  </optgroup>
-  <optgroup
-    label="Saunce"
-  >
-    <option
-      value="mild"
-    >
-      Mild
-    </option>
-    <option
-      value="hot"
-    >
-      Hot
-    </option>
-    <option
-      value="fire"
-    >
-      Fire
-    </option>
-  </optgroup>
-</select>
-`;
-
-exports[`Select > multiple > false 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
-/>
-`;
-
-exports[`Select > multiple > falsey 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
-  multiple=""
-/>
-`;
-
-exports[`Select > multiple > string 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
-  multiple=""
-/>
-`;
-
-exports[`Select > multiple > true 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
-  multiple=""
-/>
-`;
-
-exports[`Select > multiple > truthy 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
-  multiple=""
-/>
-`;
-
-exports[`Select > placeholder > choices 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <option
-    value=""
-  >
-    -- Select Flavor --
-  </option>
-  <option
-    value="Mild"
-  >
-    Mild
-  </option>
-  <option
-    value="Hot"
-  >
-    Hot
-  </option>
-  <option
-    value="Fire"
-  >
-    Fire
-  </option>
-</select>
-`;
-
-exports[`Select > placeholder > choices as objects 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <option
-    value=""
-  >
-    -- Select Flavor --
-  </option>
-  <option
-    value="mild"
-  >
-    Mild
-  </option>
-  <option
-    value="hot"
-  >
-    Hot
-  </option>
-  <option
-    value="fire"
-  >
-    Fire
-  </option>
-</select>
-`;
-
-exports[`Select > placeholder > no choices 1`] = `
-<select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
->
-  <option
-    value=""
-  >
-    -- Select Flavor --
-  </option>
-</select>
-`;
-
-exports[`select > add className 1`] = `bound HTMLSelectElement {}`;
-
 exports[`select > child nodes > children 1`] = `
-bound HTMLSelectElement {
-  "0": <option
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <option
     value="meximelt"
   >
     Mexi-melt
-  </option>,
-}
+  </option>
+</select>
 `;
 
 exports[`select > child nodes > children with choices 1`] = `
-bound HTMLSelectElement {
-  "0": <option
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <option
     value="mild"
   >
     Mild
-  </option>,
-  "1": <option
+  </option>
+  <option
     value="hot"
   >
     Hot
-  </option>,
-  "2": <option
+  </option>
+  <option
     value="fire"
   >
     Fire
-  </option>,
-  "3": <option
+  </option>
+  <option
     value="meximelt"
   >
     Mexi-melt
-  </option>,
-}
+  </option>
+</select>
 `;
 
 exports[`select > choices > choice 1`] = `
-bound HTMLSelectElement {
-  "0": <option
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <option
     value="mild"
   >
     Mild
-  </option>,
-  "1": <option
+  </option>
+  <option
     value="hot"
   >
     Hot
-  </option>,
-  "2": <option
+  </option>
+  <option
     value="fire"
   >
     Fire
-  </option>,
-}
+  </option>
+</select>
 `;
 
 exports[`select > choices > choices 1`] = `
-bound HTMLSelectElement {
-  "0": <option
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <option
     value="Mild"
   >
     Mild
-  </option>,
-  "1": <option
+  </option>
+  <option
     value="Hot"
   >
     Hot
-  </option>,
-  "2": <option
+  </option>
+  <option
     value="Fire"
   >
     Fire
-  </option>,
-}
+  </option>
+</select>
 `;
 
 exports[`select > choices > choices as objects 1`] = `
-bound HTMLSelectElement {
-  "0": <option
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <option
     value="mild"
   >
     Mild
-  </option>,
-  "1": <option
+  </option>
+  <option
     value="hot"
   >
     Hot
-  </option>,
-  "2": <option
+  </option>
+  <option
     value="fire"
   >
     Fire
-  </option>,
-}
+  </option>
+</select>
 `;
 
-exports[`select > empty 1`] = `bound HTMLSelectElement {}`;
+exports[`select > empty 1`] = `
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+/>
+`;
 
 exports[`select > groups > no value 1`] = `
-bound HTMLSelectElement {
-  "0": <option
-    value="crunchy"
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <optgroup
+    label="Tacos"
   >
-    Crunchy
-  </option>,
-  "1": <option
-    value="soft"
+    <option
+      value="crunchy"
+    >
+      Crunchy
+    </option>
+    <option
+      value="soft"
+    >
+      Soft
+    </option>
+  </optgroup>
+  <optgroup
+    label="Saunce"
   >
-    Soft
-  </option>,
-  "2": <option
-    value="mild"
-  >
-    Mild
-  </option>,
-  "3": <option
-    value="hot"
-  >
-    Hot
-  </option>,
-  "4": <option
-    value="fire"
-  >
-    Fire
-  </option>,
-}
+    <option
+      value="mild"
+    >
+      Mild
+    </option>
+    <option
+      value="hot"
+    >
+      Hot
+    </option>
+    <option
+      value="fire"
+    >
+      Fire
+    </option>
+  </optgroup>
+</select>
 `;
 
 exports[`select > groups > value 1`] = `
-bound HTMLSelectElement {
-  "0": <option
-    value="crunchy"
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <optgroup
+    label="Tacos"
   >
-    Crunchy
-  </option>,
-  "1": <option
-    value="soft"
+    <option
+      value="crunchy"
+    >
+      Crunchy
+    </option>
+    <option
+      value="soft"
+    >
+      Soft
+    </option>
+  </optgroup>
+  <optgroup
+    label="Saunce"
   >
-    Soft
-  </option>,
-  "2": <option
-    value="mild"
-  >
-    Mild
-  </option>,
-  "3": <option
-    value="hot"
-  >
-    Hot
-  </option>,
-  "4": <option
-    value="fire"
-  >
-    Fire
-  </option>,
-}
+    <option
+      value="mild"
+    >
+      Mild
+    </option>
+    <option
+      value="hot"
+    >
+      Hot
+    </option>
+    <option
+      value="fire"
+    >
+      Fire
+    </option>
+  </optgroup>
+</select>
 `;
 
 exports[`select > groups > values 1`] = `
-bound HTMLSelectElement {
-  "0": <option
-    value="crunchy"
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  multiple=""
+>
+  <optgroup
+    label="Tacos"
   >
-    Crunchy
-  </option>,
-  "1": <option
-    value="soft"
+    <option
+      value="crunchy"
+    >
+      Crunchy
+    </option>
+    <option
+      value="soft"
+    >
+      Soft
+    </option>
+  </optgroup>
+  <optgroup
+    label="Saunce"
   >
-    Soft
-  </option>,
-  "2": <option
-    value="mild"
-  >
-    Mild
-  </option>,
-  "3": <option
-    value="hot"
-  >
-    Hot
-  </option>,
-  "4": <option
-    value="fire"
-  >
-    Fire
-  </option>,
-}
+    <option
+      value="mild"
+    >
+      Mild
+    </option>
+    <option
+      value="hot"
+    >
+      Hot
+    </option>
+    <option
+      value="fire"
+    >
+      Fire
+    </option>
+  </optgroup>
+</select>
 `;
 
-exports[`select > multiple > false 1`] = `bound HTMLSelectElement {}`;
+exports[`select > multiple > false 1`] = `
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+/>
+`;
 
-exports[`select > multiple > falsey 1`] = `bound HTMLSelectElement {}`;
+exports[`select > multiple > falsey 1`] = `
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  multiple=""
+/>
+`;
 
-exports[`select > multiple > string 1`] = `bound HTMLSelectElement {}`;
+exports[`select > multiple > string 1`] = `
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  multiple=""
+/>
+`;
 
-exports[`select > multiple > true 1`] = `bound HTMLSelectElement {}`;
+exports[`select > multiple > true 1`] = `
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  multiple=""
+/>
+`;
 
-exports[`select > multiple > truthy 1`] = `bound HTMLSelectElement {}`;
+exports[`select > multiple > truthy 1`] = `
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  multiple=""
+/>
+`;
 
 exports[`select > placeholder > choices 1`] = `
-bound HTMLSelectElement {
-  "0": <option
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <option
     value=""
   >
     -- Select Flavor --
-  </option>,
-  "1": <option
+  </option>
+  <option
     value="Mild"
   >
     Mild
-  </option>,
-  "2": <option
+  </option>
+  <option
     value="Hot"
   >
     Hot
-  </option>,
-  "3": <option
+  </option>
+  <option
     value="Fire"
   >
     Fire
-  </option>,
-}
+  </option>
+</select>
 `;
 
 exports[`select > placeholder > choices as objects 1`] = `
-bound HTMLSelectElement {
-  "0": <option
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <option
     value=""
   >
     -- Select Flavor --
-  </option>,
-  "1": <option
+  </option>
+  <option
     value="mild"
   >
     Mild
-  </option>,
-  "2": <option
+  </option>
+  <option
     value="hot"
   >
     Hot
-  </option>,
-  "3": <option
+  </option>
+  <option
     value="fire"
   >
     Fire
-  </option>,
-}
+  </option>
+</select>
 `;
 
 exports[`select > placeholder > no choices 1`] = `
-bound HTMLSelectElement {
-  "0": <option
+<select
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+>
+  <option
     value=""
   >
     -- Select Flavor --
-  </option>,
-}
+  </option>
+</select>
 `;
