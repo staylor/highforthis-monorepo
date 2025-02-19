@@ -4,7 +4,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 const border = cn('border border-detail');
 
 const InfoBox = (props: HTMLAttributes<HTMLElement>) => (
-  <aside className={cn(border, 'mb-5 box-border block shadow')} {...props} />
+  <aside className={cn(border, 'mb-5 box-border block shadow-sm')} {...props} />
 );
 
 const Content = (props: HTMLAttributes<HTMLDivElement>) => (
