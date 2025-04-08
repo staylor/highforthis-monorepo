@@ -1,3 +1,3 @@
 export const uploadUrl = (destination: string, fileName: string) => {
-  return `https://static.highforthis.com/${destination}/${fileName}`;
+  return `https://storage.googleapis.com/wonderboymusic/${destination}/${fileName}`;
 };

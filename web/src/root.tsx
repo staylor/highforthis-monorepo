@@ -22,7 +22,7 @@ import titleTemplate, { type TitleProps } from './utils/title';
 
 export const links: LinksFunction = () => {
   return [
-    { rel: 'preconnect', href: 'https://static.highforthis.com' },
+    { rel: 'preconnect', href: 'https://storage.googleapis.com' },
     { rel: 'preconnect', href: 'https://use.typekit.net' },
     { rel: 'shortcut icon', href: '/favicon.png', type: 'image/png' },
     { rel: 'stylesheet', href: 'https://use.typekit.net/tts4dcv.css' },
@@ -78,25 +78,25 @@ export default function Root({ loaderData }: Route.ComponentProps) {
   const { data } = loaderData;
   const layout = useLayout();
   return (
-      <Html>
-        <head>
-          <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width,initial-scale=1" />
-          <meta property="twitter:site" content={`@${TWITTER_USERNAME}`} />
-          <meta property="twitter:creator" content={`@${TWITTER_USERNAME}`} />
-          <Meta />
-          <Links />
-          {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
-          {layout === 'app' && <AppLinks data={data} />}
-        </head>
-        <Body>
-          <Boundary>
-            <Outlet />
-          </Boundary>
-          <ScrollRestoration />
-          <Scripts />
-        </Body>
-      </Html>
+    <Html>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta property="twitter:site" content={`@${TWITTER_USERNAME}`} />
+        <meta property="twitter:creator" content={`@${TWITTER_USERNAME}`} />
+        <Meta />
+        <Links />
+        {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
+        {layout === 'app' && <AppLinks data={data} />}
+      </head>
+      <Body>
+        <Boundary>
+          <Outlet />
+        </Boundary>
+        <ScrollRestoration />
+        <Scripts />
+      </Body>
+    </Html>
   );
 }
 

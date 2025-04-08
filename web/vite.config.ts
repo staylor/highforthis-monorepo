@@ -4,7 +4,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 let publicPath = '/';
 if (process.env.NODE_ENV === 'production') {
-  publicPath = 'https://static.highforthis.com/build/';
+  publicPath = 'https://storage.googleapis.com/wonderboymusic/highforthis/';
 }
 
 export default defineConfig({

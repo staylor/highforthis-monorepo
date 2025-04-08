@@ -53,7 +53,7 @@
     "prod": "run-s prod:*",
     "prod:clean": "rimraf build node_modules/.vite",
     "prod:build": "NODE_ENV=production react-router build",
-    "prod:upload": "gsutil -m -h 'Cache-control:public, max-age=259200' rsync -r build/client gs://static.highforthis.com/build",
+    "prod:upload": "gsutil -m -h 'Cache-control:public, max-age=259200' rsync -r build/client gs://wonderboymusic/highforthis",
     "prod:stop": "pm2 stop pm2.config.cjs",
     "prod:start": "pm2 start pm2.config.cjs",
     "test": "vitest run",
