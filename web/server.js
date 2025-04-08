@@ -5,9 +5,8 @@ import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import morgan from 'morgan';
 
-import createI18n from './src/i18n.js';
-
 import factory from './apollo/client.js';
+import createI18n from './src/i18n.js';
 
 process.env.TZ = 'America/New_York';
 
