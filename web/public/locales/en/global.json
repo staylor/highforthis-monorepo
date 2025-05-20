@@ -1,7 +1,8 @@
 {
   "admin": {
     "details": "Details",
-    "submit": "Submit"
+    "submit": "Submit",
+    "viewSite": "View Site"
   },
   "artists": {
     "add": "Add Artist",
@@ -199,12 +200,12 @@
     "all": "All Shows",
     "artists": "Artists",
     "attended": {
-      "artist_one": "<span className=\"underline\">{{count}} Show</span> we have attended by this artist",
-      "artist_other": "<span className=\"underline\">{{count}} Shows</span> we have attended by this artist",
+      "artist_one": "<Bold>{{count}} Show</Bold> we have attended by this artist",
+      "artist_other": "<Bold>{{count}} Shows</Bold> we have attended by this artist",
       "heading": "Shows I have attended",
       "label": "Attended",
-      "venue_one": "<span className=\"underline\">{{count}} Show</span> we have attended at this venue",
-      "venue_other": "<span className=\"underline\">{{count}} Shows</span> we have attended at this venue"
+      "venue_one": "<Bold>{{count}} Show</Bold> we have attended at this venue",
+      "venue_other": "<Bold>{{count}} Shows</Bold> we have attended at this venue"
     },
     "attendedIn_one": "Show attended in {{year}}",
     "attendedIn_other": "Shows attended in {{year}}",

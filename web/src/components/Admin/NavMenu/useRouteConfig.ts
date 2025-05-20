@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
 import type { AdminRouteGroup } from '~/types';
+import { useRootData } from '~/utils/rootData';
 
 const useRouteConfig = () => {
+  const {siteSettings} = useRootData();
   const { t } = useTranslation();
   const routeConfig: AdminRouteGroup[] = [
     [
@@ -10,6 +12,12 @@ const useRouteConfig = () => {
         path: '/',
         label: t('settings.dashboard.label'),
         dashicon: 'dashboard',
+      },
+      {
+        path: `${siteSettings.siteUrl}`,
+        label: t('admin.viewSite'),
+        dashicon: 'desktop',
+        external: true,
       },
     ],
     [

@@ -12,7 +12,7 @@ export default function Button({ className, buttonType, href, children, ...props
   const buttonClass = cn(
     'm-0 inline-block cursor-pointer rounded px-2.5 pb-px align-top',
     'text-sm leading-6 h-7 whitespace-nowrap box-border',
-    'border shadow-sm transition-colors active:translate-y-px hover:shadow-md',
+    'border shadow-xs transition-colors active:translate-y-px hover:shadow-md',
     {
       'border-gray-800 bg-gray-800 hover:border-black hover:bg-black text-white':
         buttonType === 'primary',

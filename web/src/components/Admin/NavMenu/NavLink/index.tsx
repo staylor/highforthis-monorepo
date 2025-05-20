@@ -12,7 +12,7 @@ interface NavLinkProps {
 
 function NavLink({ item, isCollapsed, isHovered, hasSubNav }: NavLinkProps) {
   const location = useLocation();
-  const adminPath = item.path === '/' ? '/admin' : `/admin${item.path}`;
+  const adminPath = item.path === '/' ? '/admin' : item.path.startsWith('/') ? `/admin${item.path}` : item.path;
   const isActive =
     adminPath === location.pathname ||
     (adminPath !== '/admin' && location.pathname.indexOf(adminPath) === 0);
@@ -39,7 +39,7 @@ function NavLink({ item, isCollapsed, isHovered, hasSubNav }: NavLinkProps) {
     }
   );
   return (
-    <RRNavLink to={adminPath} className={className}>
+    <RRNavLink to={adminPath} className={className} target={item.external ? '_blank' : undefined}>
       {item.dashicon && (
         <i
           className={cn(

@@ -132,7 +132,7 @@ function ListTable({
         </div>
         {paginationMatrix}
       </section>
-      <table className="border-detail w-full table-fixed border-spacing-0 border shadow">
+      <table className="border-detail w-full table-fixed border-spacing-0 border shadow-sm">
         <thead>
           <Headers
             className="border-detail border-b"

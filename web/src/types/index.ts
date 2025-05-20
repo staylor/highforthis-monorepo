@@ -43,6 +43,7 @@ export interface AdminRoute {
 
 export interface AdminTopLevelRoute extends AdminRoute {
   dashicon: string;
+  external?: boolean;
   routes?: AdminRoute[];
 }
 

@@ -24,7 +24,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 export default function ShowAdd({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation();
-  return <ShowForm data={loaderData} heading={t('show.add')} buttonLabel={t('show.add')} />;
+  return <ShowForm data={loaderData} heading={t('shows.add')} buttonLabel={t('shows.add')} />;
 }
 
 const showQuery = gql`

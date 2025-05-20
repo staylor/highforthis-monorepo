@@ -29,7 +29,7 @@ export default function Message({
   return (
     <div
       className={cn(
-        'border-pink border-l-4 bg-neutral-50 shadow-sm',
+        'border-pink border-l-4 bg-neutral-50 shadow-xs',
         'relative mb-4 mt-1 block py-px pl-3 pr-9'
       )}
     >
