@@ -1,0 +1,161 @@
+{
+  "id": "313208491",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/313208491",
+  "attributes": {
+    "name": "Phantogram",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 5221,
+      "height": 5221,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages211/v4/47/87/e7/4787e717-785c-460c-408e-b1cc0e58c14b/b010c455-aee4-4693-b434-8ceda787532b_file_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "d6c3a3",
+      "textColor1": "08080d",
+      "textColor2": "0c1012",
+      "textColor3": "312d2b",
+      "textColor4": "34342f"
+    },
+    "editorialNotes": {
+      "name": "Phantogram’s Running Through Colors Tour Set List",
+      "standard": "New York duo Phantogram hit the road on their Running Through Colors Tour, with stops across North America, from Nashville to Los Angeles. Listen to their set list—heavy on tracks from their 2024 album <i>Memory of a Day</i>, like “Come Alive,” but sprinkled with throwback favorites such as “Mouthful of Diamonds”—and put yourself in the crowd.",
+      "short": "Phantogram “Come Alive” on their Running Through Colors tour.",
+      "tagline": "Set List: Phantogram"
+    },
+    "url": "https://music.apple.com/us/artist/phantogram/313208491"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/313208491/albums",
+      "next": "/v1/catalog/us/artists/313208491/albums?offset=25",
+      "data": [
+        {
+          "id": "1444276174",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444276174"
+        },
+        {
+          "id": "1440842511",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440842511"
+        },
+        {
+          "id": "1440858700",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440858700"
+        },
+        {
+          "id": "1626132518",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1626132518"
+        },
+        {
+          "id": "1690703688",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1690703688"
+        },
+        {
+          "id": "718557592",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/718557592"
+        },
+        {
+          "id": "1496844632",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1496844632"
+        },
+        {
+          "id": "1583101706",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1583101706"
+        },
+        {
+          "id": "1445154556",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445154556"
+        },
+        {
+          "id": "1445309732",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445309732"
+        },
+        {
+          "id": "1763684613",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1763684613"
+        },
+        {
+          "id": "718915269",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/718915269"
+        },
+        {
+          "id": "1533638810",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1533638810"
+        },
+        {
+          "id": "1110115910",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1110115910"
+        },
+        {
+          "id": "1533639128",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1533639128"
+        },
+        {
+          "id": "1742855947",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1742855947"
+        },
+        {
+          "id": "1444277200",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444277200"
+        },
+        {
+          "id": "1376818297",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1376818297"
+        },
+        {
+          "id": "1757386134",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1757386134"
+        },
+        {
+          "id": "1445301724",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445301724"
+        },
+        {
+          "id": "1737858644",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1737858644"
+        },
+        {
+          "id": "1646004402",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1646004402"
+        },
+        {
+          "id": "718541007",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/718541007"
+        },
+        {
+          "id": "1760820420",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1760820420"
+        },
+        {
+          "id": "1648728270",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1648728270"
+        }
+      ]
+    }
+  }
+}

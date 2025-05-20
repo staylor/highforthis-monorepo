@@ -1,0 +1,99 @@
+{
+  "id": "1247728627",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/1247728627",
+  "attributes": {
+    "name": "MJ Lenderman",
+    "genreNames": [
+      "Alternative"
+    ],
+    "artwork": {
+      "width": 2047,
+      "height": 2047,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/ab/b3/72/abb3728b-5080-b5e8-3edb-012f1586761e/c64c1027-5e6d-410f-a161-f464900c6cfb_ami-identity-ac954ea3f9c0d1f506adeb2b16e54584-2024-06-24T14-19-05.218Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "1e180c",
+      "textColor1": "c8ebbc",
+      "textColor2": "d1d1aa",
+      "textColor3": "a6c099",
+      "textColor4": "adac8b"
+    },
+    "url": "https://music.apple.com/us/artist/mj-lenderman/1247728627"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/1247728627/albums",
+      "data": [
+        {
+          "id": "1749088991",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1749088991"
+        },
+        {
+          "id": "1754432024",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1754432024"
+        },
+        {
+          "id": "1711811842",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1711811842"
+        },
+        {
+          "id": "1697513798",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1697513798"
+        },
+        {
+          "id": "1467827928",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1467827928"
+        },
+        {
+          "id": "1693630562",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1693630562"
+        },
+        {
+          "id": "1754426511",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1754426511"
+        },
+        {
+          "id": "1754427117",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1754427117"
+        },
+        {
+          "id": "1553075697",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1553075697"
+        },
+        {
+          "id": "1446481440",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1446481440"
+        },
+        {
+          "id": "1492648544",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1492648544"
+        },
+        {
+          "id": "1276454651",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1276454651"
+        },
+        {
+          "id": "1633519946",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1633519946"
+        },
+        {
+          "id": "1646675742",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1646675742"
+        }
+      ]
+    }
+  }
+}

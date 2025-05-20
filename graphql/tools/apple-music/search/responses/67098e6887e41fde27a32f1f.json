@@ -1,0 +1,161 @@
+{
+  "id": "414023649",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/414023649",
+  "attributes": {
+    "name": "Foster the People",
+    "genreNames": [
+      "Alternative"
+    ],
+    "editorialNotes": {
+      "name": "Foster the People’s Paradise State of Mind Tour",
+      "standard": "Listen to the hits performed on the blockbuster tour.",
+      "short": "Listen to the hits performed on the blockbuster tour.",
+      "tagline": "Set List: Foster the People"
+    },
+    "artwork": {
+      "width": 3300,
+      "height": 3300,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages211/v4/81/00/82/81008263-3cd7-1adc-b04e-4a75bc6e0cc2/eb9333ee-702b-4bf7-8bbb-ab23da198ac6_ami-identity-464010268ce7a195f14bf7158030a4f5-2024-05-30T17-47-03.898Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "eeddc3",
+      "textColor1": "000002",
+      "textColor2": "151a1d",
+      "textColor3": "2f2c28",
+      "textColor4": "40413e"
+    },
+    "url": "https://music.apple.com/us/artist/foster-the-people/414023649"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/414023649/albums",
+      "next": "/v1/catalog/us/artists/414023649/albums?offset=25",
+      "data": [
+        {
+          "id": "1349473907",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1349473907"
+        },
+        {
+          "id": "435761204",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/435761204"
+        },
+        {
+          "id": "1468505110",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1468505110"
+        },
+        {
+          "id": "1247002400",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1247002400"
+        },
+        {
+          "id": "1440080223",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440080223"
+        },
+        {
+          "id": "1477643675",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1477643675"
+        },
+        {
+          "id": "793285794",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/793285794"
+        },
+        {
+          "id": "1456190749",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1456190749"
+        },
+        {
+          "id": "1444664747",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444664747"
+        },
+        {
+          "id": "1510740252",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1510740252"
+        },
+        {
+          "id": "1747040856",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1747040856"
+        },
+        {
+          "id": "1598034269",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1598034269"
+        },
+        {
+          "id": "1500307707",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1500307707"
+        },
+        {
+          "id": "1539088829",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1539088829"
+        },
+        {
+          "id": "1060286826",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1060286826"
+        },
+        {
+          "id": "1321978123",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1321978123"
+        },
+        {
+          "id": "1518533477",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1518533477"
+        },
+        {
+          "id": "1555164430",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1555164430"
+        },
+        {
+          "id": "1589828528",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589828528"
+        },
+        {
+          "id": "1366292787",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1366292787"
+        },
+        {
+          "id": "1557554353",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1557554353"
+        },
+        {
+          "id": "1591312607",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1591312607"
+        },
+        {
+          "id": "1593248230",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1593248230"
+        },
+        {
+          "id": "1396187512",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1396187512"
+        },
+        {
+          "id": "1360249151",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1360249151"
+        }
+      ]
+    }
+  }
+}

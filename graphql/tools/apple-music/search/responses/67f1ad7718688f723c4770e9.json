@@ -1,0 +1,155 @@
+{
+  "id": "334854763",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/334854763",
+  "attributes": {
+    "name": "Kesha",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 1500,
+      "height": 1500,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/e6/10/94/e6109439-b75a-3a18-0481-61db88a09731/ami-identity-072036b0bcbd7e6a5dfe255f05752c0d-2025-03-26T19-35-55.999Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "b1afb2",
+      "textColor1": "120d09",
+      "textColor2": "312017",
+      "textColor3": "322d2b",
+      "textColor4": "4b3c36"
+    },
+    "url": "https://music.apple.com/us/artist/kesha/334854763"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/334854763/albums",
+      "next": "/v1/catalog/us/artists/334854763/albums?offset=25",
+      "data": [
+        {
+          "id": "1253656856",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1253656856"
+        },
+        {
+          "id": "529843552",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/529843552"
+        },
+        {
+          "id": "381237317",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/381237317"
+        },
+        {
+          "id": "1770184671",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1770184671"
+        },
+        {
+          "id": "1326876669",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1326876669"
+        },
+        {
+          "id": "1484385866",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484385866"
+        },
+        {
+          "id": "1253688426",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1253688426"
+        },
+        {
+          "id": "592364993",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/592364993"
+        },
+        {
+          "id": "1682344136",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1682344136"
+        },
+        {
+          "id": "1445021492",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445021492"
+        },
+        {
+          "id": "1804117398",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1804117398"
+        },
+        {
+          "id": "1547632930",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1547632930"
+        },
+        {
+          "id": "538288663",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/538288663"
+        },
+        {
+          "id": "1436332958",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1436332958"
+        },
+        {
+          "id": "1467282032",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1467282032"
+        },
+        {
+          "id": "1473142033",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1473142033"
+        },
+        {
+          "id": "1497801433",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1497801433"
+        },
+        {
+          "id": "1589931777",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1589931777"
+        },
+        {
+          "id": "485969700",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/485969700"
+        },
+        {
+          "id": "434225532",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/434225532"
+        },
+        {
+          "id": "1663515706",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1663515706"
+        },
+        {
+          "id": "1780102185",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1780102185"
+        },
+        {
+          "id": "1804119712",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1804119712"
+        },
+        {
+          "id": "1498548463",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1498548463"
+        },
+        {
+          "id": "1441174465",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1441174465"
+        }
+      ]
+    }
+  }
+}

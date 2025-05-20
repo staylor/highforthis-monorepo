@@ -1,0 +1,155 @@
+{
+  "id": "396295677",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/396295677",
+  "attributes": {
+    "name": "Troye Sivan",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 2400,
+      "height": 2400,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Features126/v4/29/a6/7e/29a67ede-0004-7401-c388-d255c84dc40b/mzl.ejngdavp.jpg/{w}x{h}bb.jpg",
+      "bgColor": "37140c",
+      "textColor1": "dac087",
+      "textColor2": "dba06e",
+      "textColor3": "b99d6e",
+      "textColor4": "ba845a"
+    },
+    "url": "https://music.apple.com/us/artist/troye-sivan/396295677"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/396295677/albums",
+      "next": "/v1/catalog/us/artists/396295677/albums?offset=25",
+      "data": [
+        {
+          "id": "1448700180",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1448700180"
+        },
+        {
+          "id": "1396292262",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1396292262"
+        },
+        {
+          "id": "1559745571",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1559745571"
+        },
+        {
+          "id": "1694860250",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1694860250"
+        },
+        {
+          "id": "1238673344",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1238673344"
+        },
+        {
+          "id": "1440849884",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440849884"
+        },
+        {
+          "id": "1584262363",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1584262363"
+        },
+        {
+          "id": "1543288293",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1543288293"
+        },
+        {
+          "id": "1523003841",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1523003841"
+        },
+        {
+          "id": "1389111732",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1389111732"
+        },
+        {
+          "id": "1460746852",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1460746852"
+        },
+        {
+          "id": "1767862072",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1767862072"
+        },
+        {
+          "id": "1440858740",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440858740"
+        },
+        {
+          "id": "1454504019",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1454504019"
+        },
+        {
+          "id": "1704603042",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1704603042"
+        },
+        {
+          "id": "1574430143",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1574430143"
+        },
+        {
+          "id": "1445176965",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445176965"
+        },
+        {
+          "id": "1571755147",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1571755147"
+        },
+        {
+          "id": "1536713511",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1536713511"
+        },
+        {
+          "id": "1440302715",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440302715"
+        },
+        {
+          "id": "1804049166",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1804049166"
+        },
+        {
+          "id": "1567276675",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1567276675"
+        },
+        {
+          "id": "1540692841",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1540692841"
+        },
+        {
+          "id": "1445300782",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445300782"
+        },
+        {
+          "id": "1608823561",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1608823561"
+        }
+      ]
+    }
+  }
+}

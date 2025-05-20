@@ -1,0 +1,44 @@
+{
+  "id": "257543477",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/257543477",
+  "attributes": {
+    "name": "Dark Star Orchestra",
+    "genreNames": [
+      "Rock"
+    ],
+    "artwork": {
+      "width": 1200,
+      "height": 964,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/b3/91/a5/mzi.szsjxiew.jpg/{w}x{h}ac.jpg",
+      "bgColor": "584585",
+      "textColor1": "ffe000",
+      "textColor2": "fcb018",
+      "textColor3": "ddc11b",
+      "textColor4": "db9b2e"
+    },
+    "url": "https://music.apple.com/us/artist/dark-star-orchestra/257543477"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/257543477/albums",
+      "data": [
+        {
+          "id": "1597562433",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1597562433"
+        },
+        {
+          "id": "1739534932",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1739534932"
+        },
+        {
+          "id": "1740461646",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1740461646"
+        }
+      ]
+    }
+  }
+}

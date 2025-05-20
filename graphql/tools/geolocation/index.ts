@@ -22,7 +22,7 @@ const venues = await term.all({ limit: 200 });
 
 for (const venue of venues) {
   if (!venue.streetAddress) {
-    console.log('No addresss for: ', venue.name);
+    console.log('No address for: ', venue.name);
     continue;
   }
 

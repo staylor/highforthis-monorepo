@@ -1,0 +1,155 @@
+{
+  "id": "64387566",
+  "type": "artists",
+  "href": "/v1/catalog/us/artists/64387566",
+  "attributes": {
+    "name": "Katy Perry",
+    "genreNames": [
+      "Pop"
+    ],
+    "artwork": {
+      "width": 1288,
+      "height": 1288,
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages211/v4/f3/91/8e/f3918e06-cc76-a530-7bdb-d81e4c9b61c6/0a49278f-f82c-42ef-b8b5-7c872b8af1ad_ami-identity-a20881c0091131dba460d0001617648c-2024-07-10T18-29-13.733Z_cropped.png/{w}x{h}bb.jpg",
+      "bgColor": "475a9c",
+      "textColor1": "e1e9fb",
+      "textColor2": "e3dbf5",
+      "textColor3": "c3cce8",
+      "textColor4": "c4c1e3"
+    },
+    "url": "https://music.apple.com/us/artist/katy-perry/64387566"
+  },
+  "relationships": {
+    "albums": {
+      "href": "/v1/catalog/us/artists/64387566/albums",
+      "next": "/v1/catalog/us/artists/64387566/albums?offset=25",
+      "data": [
+        {
+          "id": "716192216",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716192216"
+        },
+        {
+          "id": "1464985433",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1464985433"
+        },
+        {
+          "id": "715891425",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/715891425"
+        },
+        {
+          "id": "1482965877",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1482965877"
+        },
+        {
+          "id": "1445048853",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1445048853"
+        },
+        {
+          "id": "1444872546",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444872546"
+        },
+        {
+          "id": "1460175369",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1460175369"
+        },
+        {
+          "id": "716084282",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716084282"
+        },
+        {
+          "id": "1451766633",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1451766633"
+        },
+        {
+          "id": "1440818542",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440818542"
+        },
+        {
+          "id": "1599783575",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1599783575"
+        },
+        {
+          "id": "1475159897",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1475159897"
+        },
+        {
+          "id": "1522811732",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1522811732"
+        },
+        {
+          "id": "1013032931",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1013032931"
+        },
+        {
+          "id": "1756201803",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1756201803"
+        },
+        {
+          "id": "1444886599",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444886599"
+        },
+        {
+          "id": "1395619660",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1395619660"
+        },
+        {
+          "id": "1566916282",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1566916282"
+        },
+        {
+          "id": "1484609633",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1484609633"
+        },
+        {
+          "id": "716036033",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716036033"
+        },
+        {
+          "id": "1440871208",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1440871208"
+        },
+        {
+          "id": "1522814183",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1522814183"
+        },
+        {
+          "id": "716153185",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/716153185"
+        },
+        {
+          "id": "1608631140",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1608631140"
+        },
+        {
+          "id": "1444608458",
+          "type": "albums",
+          "href": "/v1/catalog/us/albums/1444608458"
+        }
+      ]
+    }
+  }
+}
