@@ -6,7 +6,7 @@ import dotenv from '@dotenvx/dotenvx';
 import database from '~/database';
 import Artist from '~/models/Artist';
 
-import jwtToken from '../jwt';
+import {generateToken} from '../jwt';
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ const searchUrl = (term: string) =>
 const search = (term: string) =>
   fetch(searchUrl(term), {
     headers: {
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${generateToken()}`,
     },
   })
     .then((response) => response.json())
