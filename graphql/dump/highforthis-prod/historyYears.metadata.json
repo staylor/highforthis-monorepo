@@ -1,0 +1,1 @@
+{"options":{"viewOn":"show","pipeline":[{"$match":{"attended":true}},{"$project":{"year":{"$year":{"$toDate":"$date"}}}},{"$group":{"_id":"$year"}},{"$project":{"_id":{"$numberInt":"0"},"year":"$_id"}},{"$sort":{"year":{"$numberInt":"-1"}}}]},"indexes":[],"collectionName":"historyYears","type":"view"}
