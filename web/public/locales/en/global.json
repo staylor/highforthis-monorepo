@@ -209,6 +209,7 @@
     },
     "attendedIn_one": "Show attended in {{year}}",
     "attendedIn_other": "Shows attended in {{year}}",
+    "date": "Date",
     "deleted_one": "Deleted {{count}} show.",
     "deleted_other": "Deleted {{count}} shows.",
     "edit": "Edit Show",
