@@ -9,6 +9,9 @@ node_modules
 
 graphql/lib
 graphql/public/uploads
+graphql/tools/dead/docx
+graphql/tools/dead/pdf
+graphql/tools/dead/responses
 web/build
 xcode/HighForThis.xcodeproj/project.xcworkspace/xcuserdata/
 
