@@ -1,0 +1,5 @@
+{
+  "schema": "./graphql/schema.graphql",
+  "documents": ["./web/src/**/*.{ts,tsx}", "./xcode/HighForThis/graphql/operations/*.graphql"],
+  "operations": ["./web/src/**/*.{ts,tsx}", "./xcode/HighForThis/graphql/operations/*.graphql"]
+}

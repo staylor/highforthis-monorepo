@@ -1,12 +1,12 @@
 fragment ShowList_show on Show {
+  id
+  date
+  title
   artists {
     id
     name
     slug
   }
-  date
-  id
-  title
   venue {
     id
     name

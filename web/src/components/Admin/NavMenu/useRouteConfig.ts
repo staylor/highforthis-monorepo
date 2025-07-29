@@ -4,7 +4,7 @@ import type { AdminRouteGroup } from '~/types';
 import { useRootData } from '~/utils/rootData';
 
 const useRouteConfig = () => {
-  const {siteSettings} = useRootData();
+  const { siteSettings } = useRootData();
   const { t } = useTranslation();
   const routeConfig: AdminRouteGroup[] = [
     [

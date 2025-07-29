@@ -1,11 +1,11 @@
 fragment Video_video on Video {
-  dataId
   id
+  dataId
   slug
+  title
   thumbnails {
     height
     url
     width
   }
-  title
 }

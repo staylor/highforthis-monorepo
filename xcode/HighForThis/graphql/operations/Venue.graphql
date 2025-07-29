@@ -14,15 +14,15 @@ query Venue($slug: String!) {
     }
   }
   venue(slug: $slug) {
+    id
     address
     capacity
+    name
+    slug
+    website
     coordinates {
       latitude
       longitude
     }
-    id
-    name
-    slug
-    website
   }
 }

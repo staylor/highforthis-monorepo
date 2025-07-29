@@ -1,7 +1,16 @@
 query Post($slug: String!) {
   post(slug: $slug) {
+    id
+    slug
+    summary
+    title
     editorState {
       root {
+        direction
+        format
+        indent
+        type
+        version
         children {
           ... on ElementNodeType {
             direction
@@ -11,21 +20,21 @@ query Post($slug: String!) {
             version
           }
           ... on HeadingNode {
+            tag
             children {
               ...TextNodes_linebreakNode
               ...TextNodes_textNode
             }
-            tag
           }
           ... on ImageNode {
             image {
+              id
+              destination
               crops {
                 fileName
                 height
                 width
               }
-              destination
-              id
             }
           }
           ... on VideoNode {
@@ -40,16 +49,11 @@ query Post($slug: String!) {
             }
           }
         }
-        direction
-        format
-        indent
-        type
-        version
       }
     }
     featuredMedia {
-      destination
       id
+      destination
       ... on ImageUpload {
         crops {
           fileName
@@ -57,9 +61,5 @@ query Post($slug: String!) {
         }
       }
     }
-    id
-    slug
-    summary
-    title
   }
 }

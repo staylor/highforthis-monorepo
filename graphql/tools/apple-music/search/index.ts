@@ -6,7 +6,7 @@ import dotenv from '@dotenvx/dotenvx';
 import database from '~/database';
 import Artist from '~/models/Artist';
 
-import {generateToken} from '../jwt';
+import { generateToken } from '../jwt';
 
 dotenv.config();
 

@@ -2,9 +2,13 @@ query Posts {
   posts(first: 20, status: PUBLISH) {
     edges {
       node {
+        id
+        slug
+        summary
+        title
         featuredMedia {
-          destination
           id
+          destination
           ... on ImageUpload {
             crops {
               fileName
@@ -12,10 +16,6 @@ query Posts {
             }
           }
         }
-        id
-        slug
-        summary
-        title
       }
     }
   }

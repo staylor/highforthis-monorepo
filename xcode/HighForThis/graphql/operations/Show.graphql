@@ -1,22 +1,22 @@
 query Show($id: ObjID!) {
   show(id: $id) {
+    id
+    date
+    title
     artists {
+      id
+      name
+      slug
       appleMusic {
+        id
+        url
         artwork {
           height
           url
           width
         }
-        id
-        url
       }
-      id
-      name
-      slug
     }
-    date
-    id
-    title
     venue {
       id
       name

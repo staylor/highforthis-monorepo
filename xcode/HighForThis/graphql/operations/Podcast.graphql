@@ -1,14 +1,14 @@
 query Podcast($id: ObjID!) {
   podcast(id: $id) {
+    id
+    date
+    description
+    title
     audio {
+      id
       destination
       duration
       fileName
-      id
     }
-    date
-    description
-    id
-    title
   }
 }

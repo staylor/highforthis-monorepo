@@ -1,13 +1,8 @@
 import graphql from '@graphql-eslint/eslint-plugin';
-import lexical from '@lexical/eslint-plugin';
-import tailwind from 'eslint-plugin-tailwindcss';
-import testingLibrary from 'eslint-plugin-testing-library';
-import vitest from 'eslint-plugin-vitest';
+import { legacyPlugin } from '@wonderboymusic/eslint-config/lint/legacy.js';
+// import tailwind from 'eslint-plugin-tailwindcss';
 
-import { legacyPlugin } from './legacy.js';
 import { ERROR, OFF } from './rules/constants.js';
-import testingLibraryRules from './rules/testing-library.js';
-import vitestRules from './rules/vitest.js';
 
 const namingConvention = [
   ERROR,
@@ -25,34 +20,32 @@ const namingConvention = [
   },
 ];
 
-const parserOptions = {
-  operations: ['./web/src/**/*.{ts,tsx}', './xcode/HighForThis/graphql/operations/*.graphql'],
-  schema: './graphql/schema.graphql',
-};
-
 export default [
   {
-    ...lexical.configs.all,
     files: ['./web/**/*'],
-  },
-  {
-    ...tailwind.configs['flat/recommended'],
-    files: ['./web/**/*'],
-    settings: {
-      tailwindcss: {
-        config: './web/src/styles/tailwind-base.js',
-      },
+    plugins: {
+      '@lexical': legacyPlugin('@lexical/eslint-plugin', '@lexical'),
+    },
+    rules: {
+      '@lexical/rules-of-lexical': ERROR,
     },
   },
-  {
-    files: ['./web/src/**/*.tsx', './web/src/**/*.graphql.ts', './web/src/**/graphql.ts'],
-    processor: graphql.processor,
-  },
+  // NO SUPPORT FOR TAILWIND 4 YET!!!!!
+  // {
+  //   ...tailwind.configs['flat/recommended'],
+  //   files: ['./web/**/*'],
+  //   settings: {
+  //     tailwindcss: {
+  //       config: './web/src/styles/tailwind-base.js',
+  //     },
+  //   },
+  // },
   {
     files: ['./web/src/**/*.graphql'],
     languageOptions: {
-      parserOptions,
+      parser: graphql.parser,
     },
+    plugins: { '@graphql-eslint': graphql },
     rules: {
       ...graphql.configs['flat/operations-all'].rules,
       ...graphql.configs['flat/schema-relay'].rules,
@@ -64,54 +57,24 @@ export default [
   {
     files: ['./xcode/HighForThis/graphql/operations/*.graphql'],
     languageOptions: {
-      parserOptions,
+      parser: graphql.parser,
     },
+    plugins: { '@graphql-eslint': graphql },
     rules: {
       ...graphql.configs['flat/operations-all'].rules,
       ...graphql.configs['flat/schema-relay'].rules,
       '@graphql-eslint/match-document-filename': OFF,
       '@graphql-eslint/naming-convention': namingConvention,
       '@graphql-eslint/no-one-place-fragments': OFF,
+      '@graphql-eslint/require-import-fragment': OFF,
       '@graphql-eslint/unique-fragment-name': OFF,
       '@graphql-eslint/unique-operation-name': OFF,
-    },
-  },
-  {
-    files: ['**/*.{js,cjs,json}'],
-    rules: {
-      '@typescript-eslint/no-require-imports': OFF,
-      '@typescript-eslint/no-unused-expressions': OFF,
-    },
-  },
-  {
-    // Rules specifically for our tests
-    files: ['**/*.test.*'],
-    plugins: {
-      'testing-library': legacyPlugin('eslint-plugin-testing-library', 'testing-library'),
-      vitest,
-    },
-    rules: {
-      ...testingLibrary.configs.dom.rules,
-      ...testingLibrary.configs.react.rules,
-      ...testingLibraryRules,
-      ...vitest.configs.all.rules,
-      ...vitestRules,
-    },
-  },
-  {
-    files: ['vitest.setup.ts', 'web/**/*.test.{tsx,ts}', 'web/tests/**/*.{tsx,ts}'],
-    rules: {
-      '@typescript-eslint/consistent-type-imports': OFF,
-      '@typescript-eslint/no-explicit-any': OFF,
     },
   },
   {
     files: ['web/**/*.test.tsx', 'web/**/*.test.ts'],
     rules: {
       'i18next/no-literal-string': OFF,
-      'testing-library/no-await-sync-events': OFF,
-      'testing-library/prefer-user-event': OFF,
-      'testing-library/render-result-naming-convention': OFF,
     },
   },
 ];

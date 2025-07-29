@@ -1,10 +1,10 @@
 query Shows($attended: Boolean, $first: Int!, $latest: Boolean, $year: Int) {
   shows(attended: $attended, first: $first, latest: $latest, year: $year) {
+    years
     edges {
       node {
         ...ShowList_show
       }
     }
-    years
   }
 }

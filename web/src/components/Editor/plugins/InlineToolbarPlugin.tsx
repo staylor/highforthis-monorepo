@@ -79,7 +79,7 @@ export default function InlineToolbarPlugin() {
   const inlineToolbarRef = useRef(null);
   const [editor] = useLexicalComposerContext();
 
-  const updateToolbar = useCallback(() => {
+  const $updateToolbar = useCallback(() => {
     if (!inlineToolbarRef.current) {
       return;
     }
@@ -143,19 +143,19 @@ export default function InlineToolbarPlugin() {
     mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
-          updateToolbar();
+          $updateToolbar();
         });
       }),
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         () => {
-          updateToolbar();
+          $updateToolbar();
           return false;
         },
         LowPriority
       )
     );
-  }, [editor, updateToolbar]);
+  }, [editor, $updateToolbar]);
 
   return (
     <Toolbar ref={inlineToolbarRef}>

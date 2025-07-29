@@ -199,7 +199,7 @@ export default function BlockToolbarPlugin() {
     }
   }, [getTopOffset, hideButton]);
 
-  const updateButton = useCallback(() => {
+  const $updateButton = useCallback(() => {
     const selection = $getSelection() as RangeSelection;
     if (!selection) {
       hideButton();
@@ -254,19 +254,19 @@ export default function BlockToolbarPlugin() {
     mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
-          updateButton();
+          $updateButton();
         });
       }),
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         () => {
-          updateButton();
+          $updateButton();
           return false;
         },
         LowPriority
       )
     );
-  }, [editor, updateButton]);
+  }, [editor, $updateButton]);
 
   const onToggle = useCallback(
     (type: BlockType) => {
@@ -317,7 +317,7 @@ export default function BlockToolbarPlugin() {
           setToolbarActive(!toolbarActive);
         }}
       />
-      <Toolbar ref={blockToolbarRef} className="-left-7 after:left-1 after:right-auto">
+      <Toolbar ref={blockToolbarRef} className="-left-7 after:right-auto after:left-1">
         <Controls>
           {BLOCK_TYPES.map((type) => (
             <StyleButton
