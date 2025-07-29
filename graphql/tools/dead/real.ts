@@ -1,7 +1,7 @@
 import { PDFDocument } from 'pdf-lib';
 import * as fs from 'fs/promises';
 import path from 'path';
-import pdfs from './real.json';
+import schema from './real.json';
 
 const ICLOUD_DIR = '/Users/scott/Documents/Scores/Lead Sheets/Grateful Dead';
 
@@ -23,6 +23,7 @@ async function mergePDFs(pdfPaths: string[], outputPath: string) {
 }
 
 const outputPDF = path.resolve(ICLOUD_DIR, 'real-book.pdf');
+const pdfs = schema.flatMap((data) => data.files);
 
 await mergePDFs(pdfs, outputPDF);
 
