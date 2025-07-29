@@ -80,7 +80,7 @@ function FeaturedMedia({ className, type, media, buttonText = 'Set Featured Medi
         if (crop) {
           return (
             <img
-              className="mb-2.5 mr-2.5"
+              className="mr-2.5 mb-2.5"
               key={crop.fileName}
               alt=""
               src={uploadUrl(image.destination, crop.fileName)}

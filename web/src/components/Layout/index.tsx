@@ -60,7 +60,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
           <h1 className="font-stylized xs:text-5xl text-center text-4xl font-bold lg:text-left lg:text-7xl">
             <Link to="/">{siteSettings?.siteTitle || t('title')}</Link>
           </h1>
-          <div className="right-0 top-6 flex items-center justify-center lg:absolute lg:flex-none">
+          <div className="top-6 right-0 flex items-center justify-center lg:absolute lg:flex-none">
             <DarkMode />
             <nav className="mt-1.5 text-center">{social}</nav>
           </div>

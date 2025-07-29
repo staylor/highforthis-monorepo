@@ -8,7 +8,7 @@ export const Heading = ({ className, ...props }: HTMLAttributes<HTMLHeadingEleme
   <h1
     {...props}
     className={cn(
-      'font-stylized mb-4 mr-2 inline-block pb-1 pt-2 text-2xl font-normal tracking-wide',
+      'font-stylized mr-2 mb-4 inline-block pt-2 pb-1 text-2xl font-normal tracking-wide',
       className
     )}
   />

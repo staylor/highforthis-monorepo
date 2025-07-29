@@ -20,7 +20,7 @@ function Latest({ posts }: { posts: PostConnection }) {
                 <Link
                   to={`/post/${node.slug}`}
                   key={crop.fileName}
-                  className="float-left mb-4 mr-4 block w-2/5 md:float-none md:mr-0 md:w-full"
+                  className="float-left mr-4 mb-4 block w-2/5 md:float-none md:mr-0 md:w-full"
                 >
                   <img alt="" src={uploadUrl(media.destination, crop.fileName)} />
                 </Link>

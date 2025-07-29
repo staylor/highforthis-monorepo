@@ -48,7 +48,7 @@ function Shows({ shows, dataKey }: { shows: ShowConnection; dataKey: 'artists' |
         {shows.edges.length > limit && (
           <Button onClick={onClick}>{showAll ? 'Show Less' : 'Show More'}</Button>
         )}
-        <Link to="/admin/show/add" className="ml-4 mt-1 inline-block underline">
+        <Link to="/admin/show/add" className="mt-1 ml-4 inline-block underline">
           {t('shows.add')}
         </Link>
       </div>

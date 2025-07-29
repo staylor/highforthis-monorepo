@@ -25,7 +25,7 @@ export default function SelectEntity({ name, node, filtered }: SelectEntityProps
           value: node.id,
         }))}
       />
-      <p className="mb-8 mt-2">
+      <p className="mt-2 mb-8">
         <Link className="text-pink ml-2 underline" to={`/admin/${name}/add`}>
           {t(`entity.add.${name}`)}
         </Link>

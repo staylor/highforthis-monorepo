@@ -49,7 +49,7 @@ export default function Metadata({
   }
 
   return (
-    <div className="mb-8 mt-4 md:mb-12 md:mt-8 md:flex">
+    <div className="mt-4 mb-8 md:mt-8 md:mb-12 md:flex">
       {image}
       <div className="md:mt-4">
         {site}

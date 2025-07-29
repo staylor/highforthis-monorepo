@@ -47,7 +47,7 @@ export default function MediaForm({
         } else if (media.type === 'audio') {
           mediaInfo = (
             <audio
-              className="mb-5 mt-2.5"
+              className="mt-2.5 mb-5"
               controls
               src={uploadUrl(media.destination, media.fileName)}
             />
@@ -56,7 +56,7 @@ export default function MediaForm({
           const video = media as VideoUpload;
           mediaInfo = (
             <video
-              className="mb-5 mt-2.5 max-w-screen-sm appearance-none"
+              className="mt-2.5 mb-5 max-w-screen-sm appearance-none"
               preload="metadata"
               width={video.width || undefined}
               height={video.height || undefined}

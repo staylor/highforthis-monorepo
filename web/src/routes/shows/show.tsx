@@ -29,7 +29,7 @@ export default function ShowRoute({ loaderData }: Route.ComponentProps) {
 
   return (
     <article className="mx-auto text-center md:flex md:text-left">
-      <div className="mb-8 mt-3 md:mr-8">
+      <div className="mt-3 mb-8 md:mr-8">
         <Artwork
           name={artist.name}
           data={artist.appleMusic || {}}

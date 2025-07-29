@@ -45,7 +45,7 @@ function VideoModal({ selectVideo, onClose }: VideoModalProps) {
           const crop = node.thumbnails.find((c) => c.width === 120) as VideoThumbnail;
           return (
             <div
-              className="w-30 float-left m-1.5 h-28 cursor-pointer overflow-hidden"
+              className="float-left m-1.5 h-28 w-30 cursor-pointer overflow-hidden"
               key={node.id}
               onClick={(e) => {
                 e.preventDefault();

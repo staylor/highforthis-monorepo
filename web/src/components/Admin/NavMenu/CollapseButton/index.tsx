@@ -22,7 +22,7 @@ function CollapseButton({ isCollapsed, onClick }: CollapseButtonProps) {
     >
       <span
         className={cn(
-          'absolute left-0 top-0 block h-9 w-9 leading-9',
+          'absolute top-0 left-0 block h-9 w-9 leading-9',
           'before:relative before:top-2',
           'dashicons-before before:content-collapse',
           {
@@ -31,7 +31,7 @@ function CollapseButton({ isCollapsed, onClick }: CollapseButtonProps) {
         )}
       />
       {!isCollapsed && (
-        <span className="absolute left-0 top-0 block pl-9 leading-9">{t('nav.collapse')}</span>
+        <span className="absolute top-0 left-0 block pl-9 leading-9">{t('nav.collapse')}</span>
       )}
     </button>
   );

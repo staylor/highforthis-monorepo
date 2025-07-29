@@ -40,7 +40,7 @@ export default function Tags({ name, tags }: TagsProps) {
       <div className="my-1.5 overflow-auto text-xs">
         {pending.map((tag, i) => (
           <div
-            className="float-left mr-1.5 max-w-full cursor-default overflow-hidden text-ellipsis text-sm"
+            className="float-left mr-1.5 max-w-full cursor-default overflow-hidden text-sm text-ellipsis"
             key={tag}
           >
             <input type="hidden" name={name} value={tag} />

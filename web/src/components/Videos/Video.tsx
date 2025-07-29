@@ -56,13 +56,13 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
       className={cn(
         'relative inline-block max-w-full overflow-hidden',
         'before:bg-pink before:absolute before:z-20 before:rounded-xl hover:before:bg-black',
-        'before:w-19 before:h-13 before:-ml-12.5 before:left-1/2 before:top-1/2 before:-mt-5',
+        'before:top-1/2 before:left-1/2 before:-mt-5 before:-ml-12.5 before:h-13 before:w-19',
         'after:border-y-[10px] after:border-l-[20px] after:border-y-transparent after:border-l-white',
-        'after:absolute after:left-1/2 after:top-1/2 after:z-30 after:-ml-5 after:-mt-1 after:h-0 after:w-0'
+        'after:absolute after:top-1/2 after:left-1/2 after:z-30 after:-mt-1 after:-ml-5 after:h-0 after:w-0'
       )}
     >
       {thumb && (
-        <img src={thumb.url} alt={video.title} className="w-160 relative z-10 my-[-9.375%]" />
+        <img src={thumb.url} alt={video.title} className="relative z-10 my-[-9.375%] w-160" />
       )}
       <figcaption className="hidden">{video.title}</figcaption>
     </figure>

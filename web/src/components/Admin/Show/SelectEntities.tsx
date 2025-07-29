@@ -36,7 +36,7 @@ export default function SelectEntities({ name, nodes, filtered }: SelectEntityPr
         }}
       />
       {ids.length > 0 && (
-        <p className="mb-8 mt-2">
+        <p className="mt-2 mb-8">
           {ids.map((id: string, i: number) => (
             <span className="ml-2" key={`span-${id}`}>
               {entityMap[id].name}

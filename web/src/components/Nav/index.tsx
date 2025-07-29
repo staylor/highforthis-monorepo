@@ -28,7 +28,7 @@ const Navigation = () => {
   return (
     <nav
       className={cn(
-        'mx-auto mb-3 mt-2 text-center md:my-3 lg:mx-0 lg:mt-0 lg:text-left',
+        'mx-auto mt-2 mb-3 text-center md:my-3 lg:mx-0 lg:mt-0 lg:text-left',
         'md:flex md:items-center md:justify-start lg:h-12'
       )}
     >

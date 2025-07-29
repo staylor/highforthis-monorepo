@@ -11,7 +11,7 @@ const textClass = cn(
 );
 
 const Count = ({ children }: PropsWithChildren) => (
-  <strong className="mx-1 inline-block select-none px-2 text-center font-normal">{children}</strong>
+  <strong className="mx-1 inline-block px-2 text-center font-normal select-none">{children}</strong>
 );
 
 interface PaginationProps {
@@ -77,7 +77,7 @@ export default function Pagination({ data, perPage, className }: PaginationProps
   );
 
   return (
-    <nav className={cn('select-none text-sm', className)}>
+    <nav className={cn('text-sm select-none', className)}>
       <Count>{t('pagination.items', { count: data.count })}</Count>
       {paginated ? <Active>«</Active> : <Inactive>«</Inactive>}
       {previousPage === null ? <Inactive>‹</Inactive> : <Active page={previousPage}>‹</Active>}

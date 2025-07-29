@@ -44,7 +44,7 @@ function Song({ song }: { song: string }) {
   const isCurrent = currentSong === song;
   return (
     <li
-      className={cn('-ml-1 mb-1 cursor-pointer p-1', {
+      className={cn('mb-1 -ml-1 cursor-pointer p-1', {
         'bg-pink text-white': isCurrent,
         'bg-detail': !isCurrent && stats[song] === 1,
       })}

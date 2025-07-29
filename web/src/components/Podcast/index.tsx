@@ -19,13 +19,13 @@ export default function Podcast({ title, description, children }: PodcastProps) 
       <footer className="mt-10 sm:flex">
         <a
           href="https://podcasts.apple.com/us/podcast/high-for-this/id1461883255"
-          className="mb-3 sm:mb-0 sm:mr-3"
+          className="mb-3 sm:mr-3 sm:mb-0"
         >
           <AppleLogo className="h-12 w-auto" />
         </a>
         <a
           href="https://open.spotify.com/show/7FDueRQTovjtNdcqEzfGgV"
-          className="mb-3 sm:mb-0 sm:mr-3"
+          className="mb-3 sm:mr-3 sm:mb-0"
         >
           <SpotifyLogo className="h-12 w-auto" />
         </a>

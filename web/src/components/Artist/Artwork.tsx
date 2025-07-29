@@ -38,7 +38,7 @@ export default function Artwork({
     image = (
       <a
         href={url}
-        className={cn('mb-4 block md:mb-0 md:mr-8', className)}
+        className={cn('mb-4 block md:mr-8 md:mb-0', className)}
         style={{ width: imageSize, height: imageSize }}
         target="_blank"
         rel="noreferrer"

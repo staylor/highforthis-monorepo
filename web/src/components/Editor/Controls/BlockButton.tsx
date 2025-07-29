@@ -11,7 +11,7 @@ function BlockButton({ active, onMouseDown, ref }: Props) {
     <div
       className={cn(
         'text-detail hover:text-detail-dark text-2xl',
-        '-left-7.5 absolute block scale-0 cursor-pointer transition-transform',
+        'absolute -left-7.5 block scale-0 cursor-pointer transition-transform',
         'dashicons',
         {
           'dashicons-plus-alt': !active,

@@ -39,7 +39,7 @@ function MediaModal({ type = 'image', onClose, selectAudio, selectImage }: Media
           const crop = crops?.find((c) => c?.width === 150);
           return (
             <div
-              className="w-30 float-left m-1.5 h-28 cursor-pointer overflow-hidden bg-zinc-50"
+              className="float-left m-1.5 h-28 w-30 cursor-pointer overflow-hidden bg-zinc-50"
               key={node.id}
               onClick={(e: SyntheticEvent) => {
                 e.preventDefault();

@@ -8,7 +8,7 @@ const InfoBox = (props: HTMLAttributes<HTMLElement>) => (
 );
 
 const Content = (props: HTMLAttributes<HTMLDivElement>) => (
-  <div className="px-5 pb-5 pt-1.5 text-sm" {...props} />
+  <div className="px-5 pt-1.5 pb-5 text-sm" {...props} />
 );
 
 interface InfoColumnProps {
@@ -25,10 +25,10 @@ export default function InfoColumn({
   button = null,
 }: InfoColumnProps) {
   return (
-    <section className="md:-mr-75 md:w-70 sticky top-2.5 mr-0 mt-2.5 w-full md:float-right">
+    <section className="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70">
       {infoFields.length > 0 ? (
         <InfoBox>
-          <h3 className={cn(border, 'text-dark select-none px-3 py-2 text-sm font-bold')}>
+          <h3 className={cn(border, 'text-dark px-3 py-2 text-sm font-bold select-none')}>
             {label}
           </h3>
           <Content>

@@ -163,7 +163,7 @@ function ListTable({
                 return (
                   <td
                     key={`${i.toString(16)}`}
-                    className={cn('break-words px-2.5 py-2 align-top text-sm', column.className)}
+                    className={cn('px-2.5 py-2 align-top text-sm break-words', column.className)}
                   >
                     {content}
                   </td>
