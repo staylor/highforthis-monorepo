@@ -12,6 +12,7 @@ import {
 import mainStylesheetUrl from '~/styles/main.css?url';
 
 import type { Route } from './+types/root';
+import { isAuthenticated } from './auth';
 import { Html, Body, Boundary, useLayout } from './components/Layout';
 import { TWITTER_USERNAME } from './constants';
 import { appQuery } from './root.graphql';
@@ -35,8 +36,13 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export async function loader({ request, context }: Route.LoaderArgs) {
+  const user = await isAuthenticated(request);
   const data = await query<AppQuery>({ request, context, query: appQuery });
-  return { data };
+  return {
+    data,
+    isAuthenticated: Boolean(user),
+    graphqlHost: context.graphqlHost,
+  };
 }
 
 export const clientLoader = createClientCache();

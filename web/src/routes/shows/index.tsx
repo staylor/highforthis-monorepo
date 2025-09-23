@@ -7,7 +7,6 @@ import Shows from '~/components/Shows';
 import ShowsGrid from '~/components/Shows/Grid';
 import { formatDate } from '~/components/Shows/utils';
 import type { ShowsQuery } from '~/types/graphql';
-import { createClientCache } from '~/utils/cache';
 import query from '~/utils/query';
 import { rootData } from '~/utils/rootData';
 import titleTemplate from '~/utils/title';
@@ -41,8 +40,6 @@ export const showsQuery = gql`
   ${ShowsGrid.fragments.shows}
 `;
 
-export const clientLoader = createClientCache();
-
 function ShowsRoute({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation();
   const date = formatDate();
@@ -52,7 +49,7 @@ function ShowsRoute({ loaderData }: Route.ComponentProps) {
       <p className="mb-6 text-xl">
         {t('shows.todaysDate')}: <strong>{date.formatted}</strong>
       </p>
-      <Shows shows={loaderData.shows} />
+      <Shows shows={loaderData.shows!} />
     </article>
   );
 }

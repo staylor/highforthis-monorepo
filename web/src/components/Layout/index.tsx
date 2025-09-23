@@ -6,6 +6,7 @@ import { useMatches } from 'react-router';
 import Link from '~/components/Link';
 import Navigation from '~/components/Nav';
 import Sidebar from '~/components/Sidebar';
+import useSSE from '~/hooks/useSSE';
 import type { ShowConnection } from '~/types/graphql';
 import { useRootData } from '~/utils/rootData';
 
@@ -51,6 +52,8 @@ export const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>)
 export const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation();
   const { siteSettings, shows } = useRootData();
+
+  useSSE();
 
   const social = <SocialIcons />;
   return (

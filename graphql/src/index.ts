@@ -27,7 +27,22 @@ async function startServer(): Promise<void> {
   const app = express();
   const httpServer = http.createServer(app);
 
-  app.get('/favicon.ico', (_req, res) => res.status(204));
+  app.get('/favicon.ico', (_req, res) => {
+    res.status(204);
+  });
+
+  app.get('/sse', cors(), (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders?.();
+
+    const watcher = db.collection('show').watch();
+    watcher.on('change', () => {
+      res.write('event: revalidate\n');
+      res.write('data: Change detected!\n\n');
+    });
+  });
 
   app.use(compression());
   app.use(morgan('tiny'));
@@ -52,9 +67,7 @@ async function startServer(): Promise<void> {
   app.post('/upload', jwtMiddleware, multerMiddleware(uploadDir), mediaMiddleware);
 
   const server = new ApolloServer({
-    typeDefs: `#graphql
-      ${typeDefs}
-    `,
+    typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
