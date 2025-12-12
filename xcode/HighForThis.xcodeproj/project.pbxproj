@@ -22,6 +22,11 @@
 		D278176D2B6BAC8900D44B4D /* VideoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278176C2B6BAC8900D44B4D /* VideoList.swift */; };
 		D27817732B810BB900D44B4D /* PodcastDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27817722B810BB900D44B4D /* PodcastDetail.swift */; };
 		D27C2DD82B6C145E0036F4A9 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27C2DD72B6C145E0036F4A9 /* MapView.swift */; };
+		D27C31EA2EEC757A002397F8 /* VideoListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27C31E92EEC757A002397F8 /* VideoListRow.swift */; };
+		D27C31EC2EEC758C002397F8 /* ShowListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27C31EB2EEC758C002397F8 /* ShowListRow.swift */; };
+		D27C31EE2EEC7594002397F8 /* PostListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27C31ED2EEC7594002397F8 /* PostListRow.swift */; };
+		D27C31F02EEC75A0002397F8 /* PodcastListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27C31EF2EEC75A0002397F8 /* PodcastListRow.swift */; };
+		D27C31F22EEC7D09002397F8 /* YearPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27C31F12EEC7D09002397F8 /* YearPicker.swift */; };
 		D27CC07F2C24C6CE0075997D /* ArtistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27CC07E2C24C6CE0075997D /* ArtistModel.swift */; };
 		D27CC0812C24C88B0075997D /* ShowListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27CC0802C24C88B0075997D /* ShowListModel.swift */; };
 		D27CC0832C24C9B30075997D /* VenueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27CC0822C24C9B30075997D /* VenueModel.swift */; };
@@ -75,6 +80,11 @@
 		D278176C2B6BAC8900D44B4D /* VideoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoList.swift; sourceTree = "<group>"; };
 		D27817722B810BB900D44B4D /* PodcastDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetail.swift; sourceTree = "<group>"; };
 		D27C2DD72B6C145E0036F4A9 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		D27C31E92EEC757A002397F8 /* VideoListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListRow.swift; sourceTree = "<group>"; };
+		D27C31EB2EEC758C002397F8 /* ShowListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowListRow.swift; sourceTree = "<group>"; };
+		D27C31ED2EEC7594002397F8 /* PostListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListRow.swift; sourceTree = "<group>"; };
+		D27C31EF2EEC75A0002397F8 /* PodcastListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastListRow.swift; sourceTree = "<group>"; };
+		D27C31F12EEC7D09002397F8 /* YearPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearPicker.swift; sourceTree = "<group>"; };
 		D27CC07E2C24C6CE0075997D /* ArtistModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistModel.swift; sourceTree = "<group>"; };
 		D27CC0802C24C88B0075997D /* ShowListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowListModel.swift; sourceTree = "<group>"; };
 		D27CC0822C24C9B30075997D /* VenueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueModel.swift; sourceTree = "<group>"; };
@@ -126,6 +136,7 @@
 		D22BA1152B6B37800037E129 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D27C31F12EEC7D09002397F8 /* YearPicker.swift */,
 				D2E6440D2BAB6CEF001B5DC2 /* AppWrapper.swift */,
 				D2E6440F2BAB6DA0001B5DC2 /* Artist */,
 				D2D50F7F2B6AB472007F335C /* ContentView.swift */,
@@ -158,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				D2A9291B2B6B3ED700480408 /* ShowDetail.swift */,
+				D27C31EB2EEC758C002397F8 /* ShowListRow.swift */,
 				D22BA1132B6B36E20037E129 /* ShowList.swift */,
 				D27CC0802C24C88B0075997D /* ShowListModel.swift */,
 				D273C9222BE5C2CA005E0D9A /* ShowSectionItem.swift */,
@@ -171,6 +183,7 @@
 			children = (
 				D27817722B810BB900D44B4D /* PodcastDetail.swift */,
 				D24492EC2B6D8A5A00DBCC13 /* PodcastList.swift */,
+				D27C31EF2EEC75A0002397F8 /* PodcastListRow.swift */,
 			);
 			path = Podcasts;
 			sourceTree = "<group>";
@@ -236,6 +249,7 @@
 		D2E644232BAD393E001B5DC2 /* Videos */ = {
 			isa = PBXGroup;
 			children = (
+				D27C31E92EEC757A002397F8 /* VideoListRow.swift */,
 				D278176C2B6BAC8900D44B4D /* VideoList.swift */,
 				D2E644262BADDC45001B5DC2 /* VideoListModel.swift */,
 			);
@@ -246,6 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				D2E644312BAE716C001B5DC2 /* ElementNode.swift */,
+				D27C31ED2EEC7594002397F8 /* PostListRow.swift */,
 				D2E6442D2BAE6BFD001B5DC2 /* HeadingNode.swift */,
 				D2E644332BAE71F4001B5DC2 /* ImageNode.swift */,
 				D2E6442B2BAE5A32001B5DC2 /* Post.swift */,
@@ -290,7 +305,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1520;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					D2D50F792B6AB472007F335C = {
 						CreatedOnToolsVersion = 15.2;
@@ -342,7 +357,9 @@
 				D2D50F802B6AB472007F335C /* ContentView.swift in Sources */,
 				D273C9272BE5C45E005E0D9A /* ArtistAttendedShows.swift in Sources */,
 				D2E644112BAB6E20001B5DC2 /* ArtistArtwork.swift in Sources */,
+				D27C31EE2EEC7594002397F8 /* PostListRow.swift in Sources */,
 				D2E644162BABC872001B5DC2 /* Network.swift in Sources */,
+				D27C31F02EEC75A0002397F8 /* PodcastListRow.swift in Sources */,
 				D2FCA4E12BA975C3007A6EFC /* VenueMain.swift in Sources */,
 				D2E6440E2BAB6CEF001B5DC2 /* AppWrapper.swift in Sources */,
 				D2CBDD082B89438500F4437D /* ApolloClient.swift in Sources */,
@@ -354,7 +371,10 @@
 				D2E6442A2BAE5A1E001B5DC2 /* PostList.swift in Sources */,
 				D2E6442C2BAE5A32001B5DC2 /* Post.swift in Sources */,
 				D2E644142BAB7D1A001B5DC2 /* TextBlock.swift in Sources */,
+				D27C31EA2EEC757A002397F8 /* VideoListRow.swift in Sources */,
+				D27C31F22EEC7D09002397F8 /* YearPicker.swift in Sources */,
 				D273C9232BE5C2CA005E0D9A /* ShowSectionItem.swift in Sources */,
+				D27C31EC2EEC758C002397F8 /* ShowListRow.swift in Sources */,
 				D2E644322BAE716C001B5DC2 /* ElementNode.swift in Sources */,
 				D27CC0812C24C88B0075997D /* ShowListModel.swift in Sources */,
 				D24492ED2B6D8A5A00DBCC13 /* PodcastList.swift in Sources */,
@@ -422,6 +442,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LQR2VDPY65;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -448,6 +469,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -490,6 +512,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = LQR2VDPY65;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -509,6 +532,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
@@ -524,10 +548,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = LQR2VDPY65;
-				ENABLE_APP_SANDBOX = NO;
-				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				GRAPHQL_ENDPOINT = "https://graphql.highforthis.com/graphql";
 				INFOPLIST_FILE = HighForThis/Info.plist;
@@ -573,11 +598,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"HighForThis/Preview Content\"";
-				DEVELOPMENT_TEAM = LQR2VDPY65;
-				ENABLE_APP_SANDBOX = NO;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_TESTABILITY = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				GRAPHQL_ENDPOINT = "https://graphql.highforthis.com/graphql";
 				INFOPLIST_FILE = HighForThis/Info.plist;

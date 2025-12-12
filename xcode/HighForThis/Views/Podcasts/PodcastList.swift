@@ -7,33 +7,30 @@ struct PodcastList: View {
     @State private var podcasts: [PodcastListNode]?
 
     var body: some View {
-        VStack(alignment: .leading) {
+        Group {
             if let podcasts {
                 if podcasts.isEmpty {
-                    Text(L10N("noPodcastEpisodes"))
+                    ContentUnavailableView(
+                        L10N("noPodcastEpisodes"),
+                        systemImage: "mic.slash"
+                    )
                 } else {
                     List {
                         ForEach(podcasts, id: \.self) { podcast in
-                            let posted = podcast.date.map { L10N("posted \(parseDate($0))") } ?? ""
                             NavigationLink {
                                 PodcastDetail(id: podcast.id)
                             } label: {
-                                VStack(alignment: .leading) {
-                                    Text(posted).foregroundColor(.gray).padding(.bottom, 1)
-                                    Text(podcast.title).font(.title3).foregroundColor(.pink)
-                                }
+                                PodcastListRow(podcast: podcast)
                             }
                         }
                     }
                     .listStyle(.plain)
-                    .navigationTitle(L10N("podcastEpisodes"))
                 }
             } else {
-                Spacer()
-                Loading()
+                ProgressView()
             }
-            Spacer()
         }
+        .navigationTitle(L10N("podcastEpisodes"))
         .task {
             let query = HighForThisAPI.PodcastsQuery()
             if let data = await fetchData(query) {

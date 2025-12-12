@@ -10,37 +10,31 @@ struct ShowList: View {
     @State private var model = ShowListModel()
 
     var body: some View {
-        VStack(alignment: .leading) {
+        Group {
             if let groups = model.groups {
                 if groups.isEmpty {
-                    Text(L10N("noRecommendedShows"))
+                    ContentUnavailableView(
+                        L10N("noRecommendedShows"),
+                        systemImage: "calendar.badge.exclamationmark"
+                    )
                 } else {
                     List {
                         ForEach(groups) { group in
                             Section {
                                 ForEach(group.shows, id: \.self) { show in
-                                    let title = show.title ?? ""
-                                    let label = title.isEmpty ? show.artists.map { $0.name }.joined(separator: " / ") : title
                                     NavigationLink {
                                         ShowDetail(id: show.id)
                                     } label: {
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text(label).foregroundColor(.accentColor)
-                                                Text(show.venue.name).foregroundColor(.gray)
-                                            }
-
-                                            Spacer()
-                                        }
+                                        ShowListRow(show: show)
                                     }
                                 }
                             } header: {
                                 Text(group.dateFormatted())
-                                    .foregroundColor(.black)
-                                    .fontWeight(.bold)
+                                    .fontWeight(.semibold)
                             }
                         }
                     }
+                    .listStyle(.insetGrouped)
                     .refreshable {
                         await model.fetchShows(
                             first: first,
@@ -49,44 +43,25 @@ struct ShowList: View {
                             refresh: true
                         )
                     }
-                    .listStyle(.plain)
-                    .navigationTitle(title)
-                    .toolbar {
-                        if attended == .some(true), let years = model.connection?.years {
-                            let filterByYear = L10N("filterByYear")
-                            ToolbarItem {
-                                Picker(filterByYear, selection: $year) {
-                                    #if os(macOS)
-                                    Text(verbatim: "--").tag(0)
-                                    #elseif os(iOS)
-                                    Text(filterByYear).tag(0)
-                                    #endif
-                                    ForEach(years, id: \.self) {
-                                        Text(String($0)).tag($0)
-                                    }
-                                }
-                                .onChange(of: year) {
-                                    Task {
-                                        await model.fetchShows(
-                                            first: first,
-                                            latest: latest,
-                                            attended: attended,
-                                            year: .some(year)
-                                        )
-                                    }
-                                }
-                                #if os(macOS)
-                                .frame(maxWidth: 160)
-                                #endif
-                            }
-                        }
-                    }
                 }
             } else {
-                Spacer()
-                Loading()
+                ProgressView()
             }
-            Spacer()
+        }
+        .navigationTitle(title)
+        .toolbar {
+            if attended == .some(true), let years = model.connection?.years {
+                ToolbarItem {
+                    YearPicker(years: years, selection: $year) {
+                        await model.fetchShows(
+                            first: first,
+                            latest: latest,
+                            attended: attended,
+                            year: .some(year)
+                        )
+                    }
+                }
+            }
         }
         .task {
             await model.fetchShows(first: first, latest: latest, attended: attended)

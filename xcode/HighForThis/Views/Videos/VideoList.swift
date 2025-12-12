@@ -1,6 +1,5 @@
 import SwiftUI
 import HighForThisAPI
-import CachedAsyncImage
 
 struct VideoList: View {
     @State private var year: Int = 0
@@ -8,80 +7,53 @@ struct VideoList: View {
     @Environment(\.openURL) private var openURL
 
     var body: some View {
-        VStack(alignment: .leading) {
+        Group {
             if let videos = model.videos {
                 if videos.isEmpty {
-                    Text(L10N("noVideos"))
+                    ContentUnavailableView(
+                        L10N("noVideos"),
+                        systemImage: "video.slash"
+                    )
                 } else {
-                    let filterByYear = L10N("filterByYear")
                     List {
                         ForEach(videos, id: \.self) { video in
-                            Button(action: {
+                            Button {
                                 if let url = URL(string: "youtube://v/\(video.dataId)") {
                                     openURL(url)
                                 }
-                            }, label: {
-                                HStack {
-                                    Paragraph(video.title).padding(.trailing).font(.subheadline)
-                                    if let thumb = video.thumbnails.first(where: { $0.width != 0 }) {
-                                        Spacer()
-                                        CachedAsyncImage(url: URL(string: thumb.url)) { image in
-                                            image.resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(height: 90)
-                                        } placeholder: {
-                                            ImageLoading(width: 120, height: 90)
-                                        }
-                                    }
-                                }
-                            }).buttonStyle(.plain)
+                            } label: {
+                                VideoListRow(video: video)
+                            }
+                            .buttonStyle(.plain)
                         }
+
                         if model.connection?.pageInfo.hasNextPage == true {
-                            Button(action: {
+                            Button {
                                 Task { await model.fetchCursor() }
-                            }, label: {
+                            } label: {
                                 Text(L10N("loadMore"))
-                                    .font(.title3)
-                                    .foregroundColor(.accentColor)
-                                    #if os(macOS)
-                                    .padding(8)
-                                    #endif
-                            })
-                            #if os(macOS)
-                            .padding(.vertical)
-                            #endif
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.bordered)
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
                         }
                     }
                     .listStyle(.plain)
-                    .navigationTitle(L10N("videos"))
-                    .toolbar {
-                        if let years = model.connection?.years {
-                            ToolbarItem {
-                                Picker(filterByYear, selection: $year) {
-                                    #if os(macOS)
-                                    Text(verbatim: "--").tag(0)
-                                    #elseif os(iOS)
-                                    Text(filterByYear).tag(0)
-                                    #endif
-                                    ForEach(years, id: \.self) {
-                                        Text(String($0)).tag($0)
-                                    }
-                                }
-                                .onChange(of: year) {
-                                    Task { await model.fetchYear(year) }
-                                }
-                                #if os(macOS)
-                                .frame(maxWidth: 160)
-                                #endif
-                            }
-                        }
-                    }
                 }
             } else {
-                Spacer()
-                Loading()
+                ProgressView()
             }
-            Spacer()
+        }
+        .navigationTitle(L10N("videos"))
+        .toolbar {
+            if let years = model.connection?.years {
+                ToolbarItem {
+                    YearPicker(years: years, selection: $year) {
+                        await model.fetchYear(year)
+                    }
+                }
+            }
         }
         .task {
             await model.fetchVideos()

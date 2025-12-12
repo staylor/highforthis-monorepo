@@ -1,6 +1,17 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "allYears" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Years"
+          }
+        }
+      }
+    },
     "artistWebsite" : {
       "extractionState" : "manual",
       "localizations" : {
