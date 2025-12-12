@@ -11,7 +11,7 @@ struct VideoList: View {
             if let videos = model.videos {
                 if videos.isEmpty {
                     ContentUnavailableView(
-                        L10N("noVideos"),
+                        "noVideos",
                         systemImage: "video.slash"
                     )
                 } else {
@@ -31,7 +31,7 @@ struct VideoList: View {
                             Button {
                                 Task { await model.fetchCursor() }
                             } label: {
-                                Text(L10N("loadMore"))
+                                Text("loadMore")
                                     .frame(maxWidth: .infinity)
                             }
                             .buttonStyle(.bordered)
@@ -45,7 +45,7 @@ struct VideoList: View {
                 ProgressView()
             }
         }
-        .navigationTitle(L10N("videos"))
+        .navigationTitle("videos")
         .toolbar {
             if let years = model.connection?.years {
                 ToolbarItem {

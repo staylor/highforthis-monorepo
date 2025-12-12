@@ -5,29 +5,29 @@ struct ContentView: View {
         AppWrapper {
             TabView {
                 NavigationView {
-                    ShowList(title: L10N("recommendedShows"), latest: true)
+                    ShowList(title: "recommendedShows", latest: true)
                 }.tabItem {
-                    Label(L10N("shows"), systemImage: "calendar")
+                    Label("shows", systemImage: "calendar")
                 }
                 NavigationView {
                     PodcastList()
                 }.tabItem {
-                    Label(L10N("podcast"), systemImage: "mic.circle")
+                    Label("podcast", systemImage: "mic.circle")
                 }
                 NavigationView {
                     VideoList()
                 }.tabItem {
-                    Label(L10N("videos"), systemImage: "video")
+                    Label("videos", systemImage: "video")
                 }
                 NavigationView {
                     PostList()
                 }.tabItem {
-                    Label(L10N("posts"), systemImage: "note.text")
+                    Label("posts", systemImage: "note.text")
                 }
                 NavigationView {
-                    ShowList(title: L10N("showHistory"), attended: true)
+                    ShowList(title: "showHistory", attended: true)
                 }.tabItem {
-                    Label(L10N("showHistory"), systemImage: "calendar")
+                    Label("showHistory", systemImage: "calendar")
                 }
             }
             #if os(macOS)

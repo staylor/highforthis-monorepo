@@ -7,15 +7,15 @@ struct YearPicker: View {
 
     var body: some View {
         Menu {
-            Picker(L10N("filterByYear"), selection: $selection) {
-                Text(L10N("allYears")).tag(0)
+            Picker("filterByYear", selection: $selection) {
+                Text("allYears").tag(0)
                 ForEach(years, id: \.self) {
                     Text(String($0)).tag($0)
                 }
             }
         } label: {
             Label(
-                selection == 0 ? L10N("allYears") : String(selection),
+                selection == 0 ? "allYears" : String(selection),
                 systemImage: "calendar"
             )
         }

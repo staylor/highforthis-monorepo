@@ -2,15 +2,17 @@ import SwiftUI
 
 struct ExternalLink: View {
     var url: String
-    var label: String
+    var label: LocalizedStringKey
     var color: Color = .accentColor
     @Environment(\.openURL) private var openURL
-    
+
     var body: some View {
-        Button(label, systemImage: "arrow.up.right.square", action: {
+        Button {
             guard let url = URL(string: url) else { return }
             openURL(url)
-        })
+        } label: {
+            Label(label, systemImage: "arrow.up.right.square")
+        }
         .foregroundColor(color)
         .buttonStyle(.plain)
         .font(.title3)

@@ -11,7 +11,7 @@ struct PostList: View {
             if let posts {
                 if posts.isEmpty {
                     ContentUnavailableView(
-                        L10N("noPosts"),
+                        "noPosts",
                         systemImage: "doc.text"
                     )
                 } else {
@@ -30,7 +30,7 @@ struct PostList: View {
                 ProgressView()
             }
         }
-        .navigationTitle(L10N("posts"))
+        .navigationTitle("posts")
         .task {
             let query = HighForThisAPI.PostsQuery()
             if let data = await fetchData(query) {

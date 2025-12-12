@@ -28,12 +28,12 @@ struct VenueMain: View {
                                     .padding(.bottom, 2)
                             }
                             if let capacity = venue.capacity {
-                                Text(L10N("capacity \(capacity)"))
+                                Text("capacity \(capacity)")
                                     .foregroundColor(.gray)
                                     .padding(.bottom, 2)
                             }
                             if let website = venue.website {
-                                ExternalLink(url: website, label: L10N("venueWebsite"))
+                                ExternalLink(url: website, label: "venueWebsite")
                             }
                         }
                         if let shows = model.shows, !shows.isEmpty {

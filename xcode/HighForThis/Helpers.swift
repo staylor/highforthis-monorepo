@@ -2,10 +2,6 @@ import Foundation
 import CoreLocation
 import SwiftUI
 
-func L10N(_ key: String.LocalizationValue) -> String {
-    return String(localized: key, table: "Localizable")
-}
-
 var screenWidth: CGFloat {
     #if os(iOS)
     return UIScreen.main.bounds.size.width.rounded(.up)

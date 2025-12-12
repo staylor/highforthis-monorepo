@@ -16,11 +16,11 @@ struct ArtistMain: View {
                         let block = TextBlock {
                             Text(name).font(.title).bold()
                             if let website = model.website {
-                                ExternalLink(url: website, label: L10N("artistWebsite"))
+                                ExternalLink(url: website, label: "artistWebsite")
                                     .padding(.vertical, 1)
                             }
                             if let url = model.appleMusic?.url {
-                                ExternalLink(url: url, label: L10N("listenOnAppleMusic"))
+                                ExternalLink(url: url, label: "listenOnAppleMusic")
                             }
                         }
                         if let artwork = model.appleMusic?.artwork,
@@ -40,7 +40,7 @@ struct ArtistMain: View {
                             ArtistRecommendedShows(shows: shows)
                         } else {
                             HStack {
-                                Text(L10N("noRecommendedShows"))
+                                Text("noRecommendedShows")
                                 Spacer()
                             }.padding()
                             Spacer()

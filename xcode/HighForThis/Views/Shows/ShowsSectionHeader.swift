@@ -2,12 +2,12 @@ import SwiftUI
 import HighForThisAPI
 
 struct ShowsSectionHeader: View {
-    var label: String
-    
-    init(_ label: String) {
+    var label: LocalizedStringKey
+
+    init(_ label: LocalizedStringKey) {
         self.label = label
     }
-    
+
     var body: some View {
         Text(label)
             .font(.headline)
@@ -21,7 +21,7 @@ struct ShowsSectionHeader: View {
 #Preview {
     AppWrapper {
         VStack(alignment: .leading) {
-            ShowsSectionHeader(L10N("recommendedShows"))
+            ShowsSectionHeader("recommendedShows")
             ShowSectionItem(id: "foo", name: "Arcade Fire", date: 1519434000000)
             Spacer()
         }

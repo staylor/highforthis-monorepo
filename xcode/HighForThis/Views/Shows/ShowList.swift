@@ -2,7 +2,7 @@ import SwiftUI
 import HighForThisAPI
 
 struct ShowList: View {
-    var title: String
+    var title: LocalizedStringKey
     var first: Int = 200
     var latest: GraphQLNullable<Bool> = nil
     var attended: GraphQLNullable<Bool> = nil
@@ -14,7 +14,7 @@ struct ShowList: View {
             if let groups = model.groups {
                 if groups.isEmpty {
                     ContentUnavailableView(
-                        L10N("noRecommendedShows"),
+                        "noRecommendedShows",
                         systemImage: "calendar.badge.exclamationmark"
                     )
                 } else {
@@ -71,12 +71,12 @@ struct ShowList: View {
 
 #Preview("Shows") {
     AppWrapper {
-        ShowList(title: L10N("recommendedShows"), latest: .some(true))
+        ShowList(title: "recommendedShows", latest: .some(true))
     }
 }
 
 #Preview("History") {
     AppWrapper {
-        ShowList(title: L10N("showHistory"), attended: true)
+        ShowList(title: "showHistory", attended: true)
     }
 }

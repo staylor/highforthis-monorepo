@@ -11,7 +11,7 @@ xcode/
 │   ├── ApolloClient.swift            # GraphQL data fetching utilities
 │   ├── Network.swift                 # Apollo network configuration
 │   ├── Environment.swift             # Build configuration/environment variables
-│   ├── Helpers.swift                 # Utility functions (date parsing, L10N)
+│   ├── Helpers.swift                 # Utility functions (date parsing)
 │   │
 │   ├── Models/
 │   │   └── AudioPlayerViewModel.swift    # Audio playback state management
@@ -115,25 +115,29 @@ xcode/
 
 ## Key Technologies
 
-| Technology | Purpose |
-|------------|---------|
-| SwiftUI | UI framework (pure SwiftUI, no UIKit) |
-| Apollo iOS 1.0+ | GraphQL client with code generation |
-| AVFoundation | Audio playback for podcasts |
-| CachedAsyncImage | Efficient image loading with caching |
+| Technology       | Purpose                               |
+| ---------------- | ------------------------------------- |
+| SwiftUI          | UI framework (pure SwiftUI, no UIKit) |
+| Apollo iOS 1.0+  | GraphQL client with code generation   |
+| AVFoundation     | Audio playback for podcasts           |
+| CachedAsyncImage | Efficient image loading with caching  |
 
 ## GraphQL Integration
 
 ### Query Definitions
+
 Queries are defined in `.graphql` files under `HighForThis/graphql/operations/`.
 
 ### Code Generation
+
 Apollo generates Swift types into the `HighForThisAPI` package:
+
 - Query classes (e.g., `ShowsQuery`, `ArtistQuery`)
 - Fragment types for reusable data shapes
 - Schema types for all GraphQL types
 
 ### Data Fetching Pattern
+
 ```swift
 // ApolloClient.swift
 func getData<Query: GraphQLQuery>(
@@ -145,18 +149,20 @@ func getData<Query: GraphQLQuery>(
 
 ## ViewModels
 
-| ViewModel | Purpose |
-|-----------|---------|
-| `ShowListModel` | Fetches and groups shows by date |
-| `VideoListModel` | Manages video list with cursor pagination |
-| `ArtistModel` | Fetches artist profile data |
-| `VenueModel` | Fetches venue profile data |
-| `AudioPlayerViewModel` | Manages audio playback state |
+| ViewModel              | Purpose                                   |
+| ---------------------- | ----------------------------------------- |
+| `ShowListModel`        | Fetches and groups shows by date          |
+| `VideoListModel`       | Manages video list with cursor pagination |
+| `ArtistModel`          | Fetches artist profile data               |
+| `VenueModel`           | Fetches venue profile data                |
+| `AudioPlayerViewModel` | Manages audio playback state              |
 
 ## App Structure
 
 ### Tab Navigation
+
 The app uses a `TabView` with 5 tabs:
+
 1. **Shows** - Recommended upcoming concerts
 2. **Podcast** - Audio episodes
 3. **Videos** - YouTube videos
@@ -164,6 +170,7 @@ The app uses a `TabView` with 5 tabs:
 5. **Show History** - Attended concerts
 
 ### Navigation
+
 - `NavigationView` wraps each tab
 - `NavigationLink` for drill-down navigation
 - Deep linking to Artist/Venue/Show details
@@ -171,6 +178,7 @@ The app uses a `TabView` with 5 tabs:
 ## Platform Support
 
 The app supports both iOS and macOS via conditional compilation:
+
 ```swift
 #if os(iOS)
 // iOS-specific code
@@ -184,6 +192,7 @@ The app supports both iOS and macOS via conditional compilation:
 ## Configuration
 
 Environment variables are loaded from build settings:
+
 - `GRAPHQL_ENDPOINT` - API endpoint URL
 - `STATIC_ASSETS_HOST` - CDN for images
 
@@ -204,4 +213,4 @@ Environment variables are loaded from build settings:
 
 ---
 
-*Last updated: December 2024*
+_Last updated: December 2024_

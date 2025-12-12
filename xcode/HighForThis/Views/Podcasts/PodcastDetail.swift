@@ -10,7 +10,7 @@ struct PodcastDetail: View {
     var body: some View {
         VStack(alignment: .leading) {
             if let podcast {
-                let posted = podcast.date.map { L10N("posted \(parseDate($0))") } ?? ""
+                let posted = podcast.date.map { "posted \(parseDate($0))" } ?? ""
                 TextBlock {
                     VStack(alignment: .leading) {
                         Text(podcast.title).foregroundColor(.black).font(.title).fontWeight(.bold)

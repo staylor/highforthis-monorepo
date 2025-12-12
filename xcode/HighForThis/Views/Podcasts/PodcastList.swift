@@ -11,7 +11,7 @@ struct PodcastList: View {
             if let podcasts {
                 if podcasts.isEmpty {
                     ContentUnavailableView(
-                        L10N("noPodcastEpisodes"),
+                        "noPodcastEpisodes",
                         systemImage: "mic.slash"
                     )
                 } else {
@@ -30,7 +30,7 @@ struct PodcastList: View {
                 ProgressView()
             }
         }
-        .navigationTitle(L10N("podcastEpisodes"))
+        .navigationTitle("podcastEpisodes")
         .task {
             let query = HighForThisAPI.PodcastsQuery()
             if let data = await fetchData(query) {
