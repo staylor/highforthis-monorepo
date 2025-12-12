@@ -1,5 +1,4 @@
 import SwiftUI
-import CachedAsyncImage
 
 struct VideoListRow: View {
     var video: VideoListNode
@@ -23,7 +22,7 @@ struct VideoListRow: View {
             Spacer()
 
             if let url = thumbnailURL {
-                CachedAsyncImage(url: url) { image in
+                AsyncImage(url: url) { image in
                     image.resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 120, height: 90)

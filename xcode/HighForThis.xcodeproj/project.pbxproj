@@ -49,7 +49,6 @@
 		D2E644162BABC872001B5DC2 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644152BABC872001B5DC2 /* Network.swift */; };
 		D2E6441D2BABE478001B5DC2 /* Stripes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E6441C2BABE478001B5DC2 /* Stripes.swift */; };
 		D2E6441F2BAC86D0001B5DC2 /* Paragraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E6441E2BAC86D0001B5DC2 /* Paragraph.swift */; };
-		D2E644222BAC8C0D001B5DC2 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = D2E644212BAC8C0D001B5DC2 /* CachedAsyncImage */; };
 		D2E644252BAD3ADB001B5DC2 /* ImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644242BAD3ADB001B5DC2 /* ImageLoading.swift */; };
 		D2E644272BADDC45001B5DC2 /* VideoListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644262BADDC45001B5DC2 /* VideoListModel.swift */; };
 		D2E6442A2BAE5A1E001B5DC2 /* PostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644292BAE5A1E001B5DC2 /* PostList.swift */; };
@@ -125,7 +124,6 @@
 				D2A116912B89365900CA5EFD /* ApolloAPI in Frameworks */,
 				D2CBDD1A2B894B5E00F4437D /* HighForThisAPI in Frameworks */,
 				D2A116972B89365900CA5EFD /* ApolloWebSocket in Frameworks */,
-				D2E644222BAC8C0D001B5DC2 /* CachedAsyncImage in Frameworks */,
 				D2A1168D2B89365900CA5EFD /* Apollo in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,7 +289,6 @@
 				D2A116902B89365900CA5EFD /* ApolloAPI */,
 				D2A116962B89365900CA5EFD /* ApolloWebSocket */,
 				D2CBDD192B894B5E00F4437D /* HighForThisAPI */,
-				D2E644212BAC8C0D001B5DC2 /* CachedAsyncImage */,
 			);
 			productName = HighForThis;
 			productReference = D25099C72BB3E093003904A8 /* HighForThis.app */;
@@ -324,7 +321,6 @@
 			packageReferences = (
 				D2A1168B2B89365900CA5EFD /* XCRemoteSwiftPackageReference "apollo-ios" */,
 				D2CBDD182B894B5E00F4437D /* XCLocalSwiftPackageReference "HighForThisAPI" */,
-				D2E644202BAC8AA7001B5DC2 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 			);
 			productRefGroup = D2D50F712B6AB472007F335C;
 			projectDirPath = "";
@@ -677,14 +673,6 @@
 				minimumVersion = 1.9.0;
 			};
 		};
-		D2E644202BAC8AA7001B5DC2 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -706,11 +694,6 @@
 		D2CBDD192B894B5E00F4437D /* HighForThisAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = HighForThisAPI;
-		};
-		D2E644212BAC8C0D001B5DC2 /* CachedAsyncImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D2E644202BAC8AA7001B5DC2 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
-			productName = CachedAsyncImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

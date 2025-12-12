@@ -1,6 +1,5 @@
 import SwiftUI
 import HighForThisAPI
-import CachedAsyncImage
 
 struct ArtistArtwork: View {
     var url: String
@@ -9,7 +8,7 @@ struct ArtistArtwork: View {
     @State private var isAnimating = false
 
     var body: some View {
-        CachedAsyncImage(url: URL(string: resizedUrl())) { image in
+        AsyncImage(url: URL(string: resizedUrl())) { image in
             image.resizable()
                 .aspectRatio(contentMode: .fit)
                 .ignoresSafeArea()

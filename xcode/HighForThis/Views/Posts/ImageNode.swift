@@ -1,6 +1,5 @@
 import SwiftUI
 import HighForThisAPI
-import CachedAsyncImage
 
 struct ImageNode: View {
     var image: PostData.EditorState.Root.Child.AsImageNode.Image
@@ -15,7 +14,7 @@ struct ImageNode: View {
             let ratio = (maxWidth / width) * width
             let resizedHeight = height == width ? ratio : (height / width) * ratio
             
-            CachedAsyncImage(url: url) { image in
+            AsyncImage(url: url) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: ratio, height: resizedHeight)

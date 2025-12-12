@@ -1,5 +1,4 @@
 import SwiftUI
-import CachedAsyncImage
 import HighForThisAPI
 
 struct PostListRow: View {
@@ -23,7 +22,7 @@ struct PostListRow: View {
 
             Group {
                 if let url = thumbnailURL {
-                    CachedAsyncImage(url: url) { image in
+                    AsyncImage(url: url) { image in
                         image.resizable()
                             .scaledToFill()
                     } placeholder: {

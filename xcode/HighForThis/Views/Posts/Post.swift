@@ -1,5 +1,4 @@
 import SwiftUI
-import CachedAsyncImage
 import HighForThisAPI
 
 struct Post: View {
