@@ -53,12 +53,10 @@ struct ShowDetail: View {
         #elseif os(macOS)
         .padding(.all, 8)
         #endif
-        .onAppear {
+        .task {
             let query = HighForThisAPI.ShowQuery(id: id)
-            getData(query) { data in
-                DispatchQueue.main.async {
-                    self.show = data.show
-                }
+            if let data = await fetchData(query) {
+                show = data.show
             }
         }
     }

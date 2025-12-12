@@ -4,7 +4,7 @@ import CachedAsyncImage
 
 struct VideoList: View {
     @State private var year: Int = 0
-    @StateObject private var model = VideoListModel()
+    @State private var model = VideoListModel()
     @Environment(\.openURL) private var openURL
 
     var body: some View {
@@ -38,7 +38,7 @@ struct VideoList: View {
                         }
                         if model.connection?.pageInfo.hasNextPage == true {
                             Button(action: {
-                                model.fetchCursor()
+                                Task { await model.fetchCursor() }
                             }, label: {
                                 Text(L10N("loadMore"))
                                     .font(.title3)
@@ -68,7 +68,7 @@ struct VideoList: View {
                                     }
                                 }
                                 .onChange(of: year) {
-                                    model.fetchYear(year)
+                                    Task { await model.fetchYear(year) }
                                 }
                                 #if os(macOS)
                                 .frame(maxWidth: 160)
@@ -83,8 +83,8 @@ struct VideoList: View {
             }
             Spacer()
         }
-        .onAppear {
-            model.fetchData()
+        .task {
+            await model.fetchVideos()
         }
     }
 }

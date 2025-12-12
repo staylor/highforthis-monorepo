@@ -1,12 +1,13 @@
 import Combine
 import AVFoundation
 
-class AudioPlayerViewModel: ObservableObject {
+@Observable
+class AudioPlayerViewModel {
     private var lastUrl: String = ""
     private var audioPlayer: AVPlayer?
     private var cancellables = Set<AnyCancellable>()
-    @Published var isPlaying = false
-    @Published var error: String?
+    var isPlaying = false
+    var error: String?
 
     #if os(iOS)
     private var session = AVAudioSession.sharedInstance()

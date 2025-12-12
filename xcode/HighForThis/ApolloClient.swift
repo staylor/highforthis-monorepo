@@ -8,24 +8,27 @@ typealias ArtistData = HighForThisAPI.ArtistQuery.Data
 typealias PostData = HighForThisAPI.PostQuery.Data.Post
 typealias VenueData = HighForThisAPI.VenueQuery.Data
 
-func getData<Query: GraphQLQuery>(_ query: Query, cachePolicy: CachePolicy = cachePolicy, completion: @escaping ((Query.Data) -> Void)) {
+func fetchData<Query: GraphQLQuery>(_ query: Query, cachePolicy: CachePolicy = cachePolicy) async -> Query.Data? {
     #if DEBUG
     print("\(Query.operationName) is being fetched.")
     #endif
-    Network.shared.apollo.fetch(query: query, cachePolicy: cachePolicy) { result in
-        switch result {
-        case .success(let graphQLResult):
-            guard let data = graphQLResult.data else {
+
+    return await withCheckedContinuation { continuation in
+        Network.shared.apollo.fetch(query: query, cachePolicy: cachePolicy) { result in
+            switch result {
+            case .success(let graphQLResult):
                 #if DEBUG
-                print("Query returned no data: \(Query.operationName)")
+                if let errors = graphQLResult.errors {
+                    print("GraphQL errors: \(errors)")
+                }
                 #endif
-                return
+                continuation.resume(returning: graphQLResult.data)
+            case .failure(let error):
+                #if DEBUG
+                print("Query failed: \(error)")
+                #endif
+                continuation.resume(returning: nil)
             }
-            completion(data)
-        case .failure(let error):
-            #if DEBUG
-            print("Query failed: \(error)")
-            #endif
         }
     }
 }

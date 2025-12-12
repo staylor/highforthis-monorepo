@@ -1,22 +1,20 @@
 import SwiftUI
 import HighForThisAPI
 
-class ArtistModel: ObservableObject {
-    @Published var website: String?
-    @Published var appleMusic: ArtistData.Artist.AppleMusic?
-    @Published var shows: [ArtistData.Shows.Edge.Node]?
-    @Published var attended: [ArtistData.Attended.Edge.Node]?
+@Observable
+class ArtistModel {
+    var website: String?
+    var appleMusic: ArtistData.Artist.AppleMusic?
+    var shows: [ArtistData.Shows.Edge.Node]?
+    var attended: [ArtistData.Attended.Edge.Node]?
 
-    func fetchData(slug: String) {
+    func load(slug: String) async {
         let query = HighForThisAPI.ArtistQuery(slug: slug)
-        getData(query) { [weak self] data in
-            guard let self else { return }
-            DispatchQueue.main.async {
-                self.website = data.artist?.website
-                self.appleMusic = data.artist?.appleMusic
-                self.shows = data.shows?.edges.map { $0.node } ?? []
-                self.attended = data.attended?.edges.map { $0.node } ?? []
-            }
-        }
+        guard let data = await fetchData(query) else { return }
+
+        website = data.artist?.website
+        appleMusic = data.artist?.appleMusic
+        shows = data.shows?.edges.map { $0.node } ?? []
+        attended = data.attended?.edges.map { $0.node } ?? []
     }
 }

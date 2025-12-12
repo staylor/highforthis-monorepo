@@ -4,7 +4,7 @@ import HighForThisAPI
 struct ArtistMain: View {
     var name: String
     var slug: String
-    @StateObject var model = ArtistModel()
+    @State private var model = ArtistModel()
     
     var body: some View {
         ZStack {
@@ -58,8 +58,8 @@ struct ArtistMain: View {
         #elseif os(macOS)
         .padding(.all, 8)
         #endif
-        .onAppear {
-            model.fetchData(slug: slug)
+        .task {
+            await model.load(slug: slug)
         }
     }
 }

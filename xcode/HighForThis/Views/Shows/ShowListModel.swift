@@ -14,9 +14,10 @@ struct ShowGroup: Identifiable {
     }
 }
 
-class ShowListModel: ObservableObject {
-    @Published var connection: ShowListData?
-    @Published var groups: [ShowGroup]?
+@Observable
+class ShowListModel {
+    var connection: ShowListData?
+    var groups: [ShowGroup]?
 
     func fetchShows(
         first: Int = 200,
@@ -24,34 +25,30 @@ class ShowListModel: ObservableObject {
         attended: GraphQLNullable<Bool> = false,
         year: GraphQLNullable<Int> = nil,
         refresh: Bool = false
-    ) {
+    ) async {
         let query = HighForThisAPI.ShowsQuery(attended: attended, first: first, latest: latest, year: year)
-        getData(query, cachePolicy: refresh ? .fetchIgnoringCacheData : cachePolicy) { [weak self] data in
-            guard let self else { return }
-            guard let shows = data.shows else { return }
+        guard let data = await fetchData(query, cachePolicy: refresh ? .fetchIgnoringCacheData : cachePolicy) else { return }
+        guard let shows = data.shows else { return }
 
-            let nodes = shows.edges.map { $0.node }
-            var dict: [Double: ShowGroup] = [:]
+        let nodes = shows.edges.map { $0.node }
+        var dict: [Double: ShowGroup] = [:]
 
-            for show in nodes {
-                if dict[show.date] == nil {
-                    dict[show.date] = ShowGroup(date: show.date, shows: [])
-                }
-                dict[show.date]?.shows.append(show)
+        for show in nodes {
+            if dict[show.date] == nil {
+                dict[show.date] = ShowGroup(date: show.date, shows: [])
             }
-
-            let byDate = dict.keys.sorted().compactMap { key -> ShowGroup? in
-                guard var group = dict[key] else { return nil }
-                group.shows.sort {
-                    ($0.artists.first?.name ?? "") < ($1.artists.first?.name ?? "")
-                }
-                return group
-            }
-
-            DispatchQueue.main.async {
-                self.groups = byDate
-                self.connection = shows
-            }
+            dict[show.date]?.shows.append(show)
         }
+
+        let byDate = dict.keys.sorted().compactMap { key -> ShowGroup? in
+            guard var group = dict[key] else { return nil }
+            group.shows.sort {
+                ($0.artists.first?.name ?? "") < ($1.artists.first?.name ?? "")
+            }
+            return group
+        }
+
+        groups = byDate
+        connection = shows
     }
 }

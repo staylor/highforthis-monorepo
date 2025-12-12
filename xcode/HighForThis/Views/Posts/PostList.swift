@@ -21,7 +21,7 @@ struct PostList: View {
                                 HStack {
                                     Text(post.title).font(.title3)
                                     Spacer()
-                                    if let thumb = post.featuredMedia?.first??.asImageUpload,
+                                    if let thumb = post.featuredMedia?.first?.asImageUpload,
                                        let crop = thumb.crops.first {
                                         let thumbUrl = cdnUrl("\(thumb.destination)/\(crop.fileName)")
                                         CachedAsyncImage(url: URL(string: thumbUrl)) { image in
@@ -48,12 +48,10 @@ struct PostList: View {
             }
             Spacer()
         }
-        .onAppear {
+        .task {
             let query = HighForThisAPI.PostsQuery()
-            getData(query) { data in
-                DispatchQueue.main.async {
-                    self.posts = data.posts?.edges.map { $0.node } ?? []
-                }
+            if let data = await fetchData(query) {
+                posts = data.posts?.edges.map { $0.node } ?? []
             }
         }
     }

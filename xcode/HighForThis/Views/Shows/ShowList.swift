@@ -7,7 +7,7 @@ struct ShowList: View {
     var latest: GraphQLNullable<Bool> = nil
     var attended: GraphQLNullable<Bool> = nil
     @State private var year: Int = 0
-    @StateObject private var model = ShowListModel()
+    @State private var model = ShowListModel()
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -42,7 +42,7 @@ struct ShowList: View {
                         }
                     }
                     .refreshable {
-                        model.fetchShows(
+                        await model.fetchShows(
                             first: first,
                             latest: latest,
                             attended: attended,
@@ -66,12 +66,14 @@ struct ShowList: View {
                                     }
                                 }
                                 .onChange(of: year) {
-                                    model.fetchShows(
-                                        first: first,
-                                        latest: latest,
-                                        attended: attended,
-                                        year: .some(year)
-                                    )
+                                    Task {
+                                        await model.fetchShows(
+                                            first: first,
+                                            latest: latest,
+                                            attended: attended,
+                                            year: .some(year)
+                                        )
+                                    }
                                 }
                                 #if os(macOS)
                                 .frame(maxWidth: 160)
@@ -86,8 +88,8 @@ struct ShowList: View {
             }
             Spacer()
         }
-        .onAppear {
-            model.fetchShows(first: first, latest: latest, attended: attended)
+        .task {
+            await model.fetchShows(first: first, latest: latest, attended: attended)
         }
     }
 }

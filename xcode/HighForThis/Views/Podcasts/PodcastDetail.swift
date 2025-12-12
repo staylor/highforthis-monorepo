@@ -5,7 +5,7 @@ import HighForThisAPI
 struct PodcastDetail: View {
     var id: ObjID
     @State private var podcast: HighForThisAPI.PodcastQuery.Data.Podcast?
-    @StateObject private var audioPlayer = AudioPlayerViewModel()
+    @State private var audioPlayer = AudioPlayerViewModel()
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -47,12 +47,10 @@ struct PodcastDetail: View {
             }
             Spacer()
         }
-        .onAppear {
+        .task {
             let query = HighForThisAPI.PodcastQuery(id: id)
-            getData(query) { data in
-                DispatchQueue.main.async {
-                    self.podcast = data.podcast
-                }
+            if let data = await fetchData(query) {
+                podcast = data.podcast
             }
         }
     }

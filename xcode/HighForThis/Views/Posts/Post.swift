@@ -58,12 +58,10 @@ struct Post: View {
             }
             Spacer()
         }
-        .onAppear {
+        .task {
             let query = HighForThisAPI.PostQuery(slug: slug)
-            getData(query) { data in
-                DispatchQueue.main.async {
-                    self.post = data.post
-                }
+            if let data = await fetchData(query) {
+                post = data.post
             }
         }
     }

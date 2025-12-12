@@ -34,12 +34,10 @@ struct PodcastList: View {
             }
             Spacer()
         }
-        .onAppear {
+        .task {
             let query = HighForThisAPI.PodcastsQuery()
-            getData(query) { data in
-                DispatchQueue.main.async {
-                    self.podcasts = data.podcasts?.edges.map { $0.node } ?? []
-                }
+            if let data = await fetchData(query) {
+                podcasts = data.podcasts?.edges.map { $0.node } ?? []
             }
         }
     }

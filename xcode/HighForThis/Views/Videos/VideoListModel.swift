@@ -4,31 +4,32 @@ import HighForThisAPI
 typealias VideosData = HighForThisAPI.VideosQuery.Data.Videos
 typealias VideoListNode = VideosData.Edge.Node
 
-class VideoListModel: ObservableObject {
+@Observable
+class VideoListModel {
     private var cursor: String?
     private var lastYear: Int?
     private var currentYear: Int?
 
-    @Published var connection: VideosData?
-    @Published var videos: [VideoListNode]?
+    var connection: VideosData?
+    var videos: [VideoListNode]?
 
-    func fetchCursor() {
+    func fetchCursor() async {
         cursor = connection?.edges.last?.cursor
         #if DEBUG
         print("setting cursor to: \(cursor ?? "nil")")
         #endif
-        fetchData()
+        await fetchVideos()
     }
 
-    func fetchYear(_ year: Int) {
+    func fetchYear(_ year: Int) async {
         currentYear = year > 0 ? year : nil
         #if DEBUG
         print("setting year to: \(year)")
         #endif
-        fetchData()
+        await fetchVideos()
     }
 
-    func fetchData() {
+    func fetchVideos() async {
         var after: GraphQLNullable<String> = .none
         let first: GraphQLNullable<Int> = 10
         var year: GraphQLNullable<Int> = .none
@@ -48,18 +49,14 @@ class VideoListModel: ObservableObject {
         }
 
         let query = HighForThisAPI.VideosQuery(after: after, first: first, year: year)
-        getData(query) { [weak self] data in
-            guard let self else { return }
-            guard let videosData = data.videos else { return }
+        guard let data = await fetchData(query) else { return }
+        guard let videosData = data.videos else { return }
 
-            let nodes = videosData.edges.map { $0.node }
+        let nodes = videosData.edges.map { $0.node }
 
-            DispatchQueue.main.async {
-                self.connection = videosData
-                var currentVideos = self.videos ?? []
-                currentVideos.append(contentsOf: nodes)
-                self.videos = currentVideos
-            }
-        }
+        connection = videosData
+        var currentVideos = videos ?? []
+        currentVideos.append(contentsOf: nodes)
+        videos = currentVideos
     }
 }

@@ -4,7 +4,7 @@ import HighForThisAPI
 struct VenueMain: View {
     var name: String
     var slug: String
-    @StateObject private var model = VenueModel()
+    @State private var model = VenueModel()
 
     var body: some View {
         ZStack {
@@ -53,8 +53,8 @@ struct VenueMain: View {
         #elseif os(macOS)
         .padding(.all, 8)
         #endif
-        .onAppear {
-            model.fetchData(slug: slug)
+        .task {
+            await model.load(slug: slug)
         }
     }
 }
