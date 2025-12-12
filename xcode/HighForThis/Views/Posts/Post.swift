@@ -8,11 +8,7 @@ struct Post: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            if post == nil {
-                Spacer()
-                Loading()
-            } else {
-                let post = post!
+            if let post {
                 ScrollView {
                     VStack(alignment: .leading) {
                         HStack {
@@ -31,31 +27,43 @@ struct Post: View {
                         #elseif os(macOS)
                         .padding(.leading, 8)
                         #endif
-                        ForEach(post.editorState!.root!.children!, id: \.self) { child in
-                            switch child!.__typename! {
-                            case "HeadingNode":
-                                let elem = child!.asHeadingNode!
-                                HeadingNode(heading: elem)
-                            case "ImageNode":
-                                let image = child!.asImageNode!.image!
-                                ImageNode(image: image)
-                            case "ElementNode":
-                                let elem = child!.asElementNode!
-                                ElementNode(node: elem)
-                            default:
-                                EmptyView()
+                        if let children = post.editorState?.root?.children {
+                            ForEach(children, id: \.self) { child in
+                                if let typename = child?.__typename {
+                                    switch typename {
+                                    case "HeadingNode":
+                                        if let elem = child?.asHeadingNode {
+                                            HeadingNode(heading: elem)
+                                        }
+                                    case "ImageNode":
+                                        if let image = child?.asImageNode?.image {
+                                            ImageNode(image: image)
+                                        }
+                                    case "ElementNode":
+                                        if let elem = child?.asElementNode {
+                                            ElementNode(node: elem)
+                                        }
+                                    default:
+                                        EmptyView()
+                                    }
+                                }
                             }
                         }
                     }.frame(maxWidth: min(screenWidth, 640))
                 }
                 .padding(.top, 16)
+            } else {
+                Spacer()
+                Loading()
             }
             Spacer()
         }
-        .onAppear() {
+        .onAppear {
             let query = HighForThisAPI.PostQuery(slug: slug)
             getData(query) { data in
-                self.post = data.post!
+                DispatchQueue.main.async {
+                    self.post = data.post
+                }
             }
         }
     }

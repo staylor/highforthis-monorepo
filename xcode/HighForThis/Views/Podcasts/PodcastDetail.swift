@@ -5,16 +5,12 @@ import HighForThisAPI
 struct PodcastDetail: View {
     var id: ObjID
     @State private var podcast: HighForThisAPI.PodcastQuery.Data.Podcast?
-    @StateObject private var viewModel = AudioPlayerViewModel()
+    @StateObject private var audioPlayer = AudioPlayerViewModel()
 
     var body: some View {
         VStack(alignment: .leading) {
-            if podcast == nil {
-                Spacer()
-                Loading()
-            } else {
-                let podcast = podcast!
-                let posted = L10N("posted \(parseDate(podcast.date!))")
+            if let podcast {
+                let posted = podcast.date.map { L10N("posted \(parseDate($0))") } ?? ""
                 TextBlock {
                     VStack(alignment: .leading) {
                         Text(podcast.title).foregroundColor(.black).font(.title).fontWeight(.bold)
@@ -22,27 +18,41 @@ struct PodcastDetail: View {
                         Text(podcast.description)
                     }.padding(.vertical, 24)
                     HStack {
-                        Button(action: {
-                            viewModel.toggle(url: cdnUrl("\(podcast.audio!.destination)/\(podcast.audio!.fileName)"))
-                        }) {
-                            Image(systemName: viewModel.isPlaying ? "pause.circle.fill" : "play.circle.fill").resizable()
-                                .foregroundColor(.accentColor)
-                                .frame(width: 50, height: 50)
-                                .aspectRatio(contentMode: .fit)
-                        }.buttonStyle(.plain)
+                        if let audio = podcast.audio {
+                            Button(action: {
+                                audioPlayer.toggle(url: cdnUrl("\(audio.destination)/\(audio.fileName)"))
+                            }) {
+                                Image(systemName: audioPlayer.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                                    .resizable()
+                                    .foregroundColor(.accentColor)
+                                    .frame(width: 50, height: 50)
+                                    .aspectRatio(contentMode: .fit)
+                            }.buttonStyle(.plain)
+                        }
                         Spacer()
                         Image(systemName: "waveform")
                             .resizable()
                             .frame(width: 80, height: 80)
                     }.padding(.trailing)
+                    if let error = audioPlayer.error {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .font(.caption)
+                            .padding(.top, 8)
+                    }
                 }
+            } else {
+                Spacer()
+                Loading()
             }
             Spacer()
         }
-        .onAppear() {
+        .onAppear {
             let query = HighForThisAPI.PodcastQuery(id: id)
             getData(query) { data in
-                self.podcast = data.podcast!
+                DispatchQueue.main.async {
+                    self.podcast = data.podcast
+                }
             }
         }
     }

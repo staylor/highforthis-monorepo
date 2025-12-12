@@ -4,21 +4,20 @@ import HighForThisAPI
 struct VenueMain: View {
     var name: String
     var slug: String
-    @StateObject var model = VenueModel()
-    
+    @StateObject private var model = VenueModel()
+
     var body: some View {
         ZStack {
-            if model.venue == nil {
-                Loading()
-            } else {
-                let venue = model.venue!
+            if let venue = model.venue {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        if let coordinates = venue.coordinates {
+                        if let coordinates = venue.coordinates,
+                           let latitude = coordinates.latitude,
+                           let longitude = coordinates.longitude {
                             MapView(
                                 name: name,
-                                latitude: coordinates.latitude!,
-                                longitude: coordinates.longitude!
+                                latitude: latitude,
+                                longitude: longitude
                             )
                         }
                         TextBlock {
@@ -37,14 +36,16 @@ struct VenueMain: View {
                                 ExternalLink(url: website, label: L10N("venueWebsite"))
                             }
                         }
-                        if model.shows!.count > 0 {
-                            VenueRecommendedShows(shows: model.shows!)
+                        if let shows = model.shows, !shows.isEmpty {
+                            VenueRecommendedShows(shows: shows)
                         }
-                        if model.attended!.count > 0 {
-                            VenueAttendedShows(attended: model.attended!)
+                        if let attended = model.attended, !attended.isEmpty {
+                            VenueAttendedShows(attended: attended)
                         }
                     }.padding(.bottom, 32)
                 }.ignoresSafeArea()
+            } else {
+                Loading()
             }
         }
         #if os(iOS)
@@ -52,7 +53,7 @@ struct VenueMain: View {
         #elseif os(macOS)
         .padding(.all, 8)
         #endif
-        .onAppear() {
+        .onAppear {
             model.fetchData(slug: slug)
         }
     }

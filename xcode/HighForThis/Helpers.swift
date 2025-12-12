@@ -10,7 +10,7 @@ var screenWidth: CGFloat {
     #if os(iOS)
     return UIScreen.main.bounds.size.width.rounded(.up)
     #elseif os(macOS)
-    return NSScreen.main!.visibleFrame.size.width.rounded(.up)
+    return (NSScreen.main?.visibleFrame.size.width ?? 640).rounded(.up)
     #endif
 }
 

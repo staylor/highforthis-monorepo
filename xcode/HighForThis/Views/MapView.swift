@@ -20,10 +20,11 @@ struct MapView: View {
         .mapStyle(.standard(elevation: .automatic))
         .mapControlVisibility(.visible)
         .onTapGesture {
-            let location = name.addingPercentEncoding(withAllowedCharacters: .alphanumerics)
-            let mapsUrl = "maps://?q=\(location!)&center=\(latitude),\(longitude)&z=18"
-            let url = URL(string: mapsUrl)
-            openURL(url!)
+            guard let location = name.addingPercentEncoding(withAllowedCharacters: .alphanumerics),
+                  let url = URL(string: "maps://?q=\(location)&center=\(latitude),\(longitude)&z=18") else {
+                return
+            }
+            openURL(url)
         }
     }
 }

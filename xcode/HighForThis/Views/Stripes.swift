@@ -33,7 +33,7 @@ struct Stripes: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in
             let longSide = screenWidth
             let itemWidth = config.barWidth + config.barSpacing
             let items = Int(2 * longSide / itemWidth)

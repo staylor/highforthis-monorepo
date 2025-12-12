@@ -6,25 +6,17 @@ class ArtistModel: ObservableObject {
     @Published var appleMusic: ArtistData.Artist.AppleMusic?
     @Published var shows: [ArtistData.Shows.Edge.Node]?
     @Published var attended: [ArtistData.Attended.Edge.Node]?
-    
+
     func fetchData(slug: String) {
         let query = HighForThisAPI.ArtistQuery(slug: slug)
-        getData(query) { data in
-            self.website = data.artist!.website
-            if data.artist?.appleMusic != nil {
-                self.appleMusic = data.artist!.appleMusic!
+        getData(query) { [weak self] data in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                self.website = data.artist?.website
+                self.appleMusic = data.artist?.appleMusic
+                self.shows = data.shows?.edges.map { $0.node } ?? []
+                self.attended = data.attended?.edges.map { $0.node } ?? []
             }
-            var shows = [ArtistData.Shows.Edge.Node]()
-            for edge in data.shows!.edges {
-                shows.append(edge.node)
-            }
-            self.shows = shows
-            
-            var attended = [ArtistData.Attended.Edge.Node]()
-            for edge in data.attended!.edges {
-                attended.append(edge.node)
-            }
-            self.attended = attended
         }
     }
 }

@@ -204,7 +204,6 @@
 				D25099CE2BE18D9B003904A8 /* Localizable.xcstrings */,
 				D22BA1182B6B37C20037E129 /* Models */,
 				D2E644152BABC872001B5DC2 /* Network.swift */,
-				D2E644172BABCB3F001B5DC2 /* Preview Content */,
 				D22BA1152B6B37800037E129 /* Views */,
 				D2EB6E322C331CC000D8CC29 /* Environment.swift */,
 			);
@@ -232,13 +231,6 @@
 				D27CC0822C24C9B30075997D /* VenueModel.swift */,
 			);
 			path = Venue;
-			sourceTree = "<group>";
-		};
-		D2E644172BABCB3F001B5DC2 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		D2E644232BAD393E001B5DC2 /* Videos */ = {

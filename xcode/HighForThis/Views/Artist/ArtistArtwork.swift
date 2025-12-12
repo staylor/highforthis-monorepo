@@ -7,14 +7,14 @@ struct ArtistArtwork: View {
     var width: Int
     var height: Int
     @State private var isAnimating = false
-    
+
     var body: some View {
         CachedAsyncImage(url: URL(string: resizedUrl())) { image in
             image.resizable()
                 .aspectRatio(contentMode: .fit)
                 .ignoresSafeArea()
                 .opacity(isAnimating ? 1 : 0)
-                .onAppear() {
+                .onAppear {
                     withAnimation(.easeInOut(duration: 0.5)) {
                         isAnimating = true
                     }
@@ -22,11 +22,14 @@ struct ArtistArtwork: View {
         } placeholder: {
             ImageLoading().frame(height: screenWidth)
         }
+        .onChange(of: url) {
+            isAnimating = false
+        }
     }
-    
+
     func resizedUrl() -> String {
         let fullWidth = Int(screenWidth) * 2
-        let resizedHeight = height == width ? fullWidth : (height / width) * fullWidth
+        let resizedHeight = Int(Double(height) / Double(width) * Double(fullWidth))
         return url
             .replacingOccurrences(of: "{w}", with: "\(fullWidth)")
             .replacingOccurrences(of: "{h}", with: "\(resizedHeight)")

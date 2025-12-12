@@ -1,29 +1,34 @@
 import SwiftUI
 
-enum FORMATS: Int {
-    case BOLD = 1
-    case ITALIC = 2
-    case STRIKETHROUGH = 4
-    case UNDERLINE = 8
-    case CODE = 16
-    case SUBSCRIPT = 32
-    case SUPERSCRIPT = 64
-    case HIGHLIGHT = 128
+enum TextFormat: Int {
+    case bold = 1
+    case italic = 2
+    case strikethrough = 4
+    case underline = 8
+    case code = 16
+    case `subscript` = 32
+    case superscript = 64
+    case highlight = 128
 }
 
 func formatText(view: Text, format: Int) -> Text {
-    switch format {
-    case FORMATS.BOLD.rawValue:
-        return view.bold()
-    case FORMATS.ITALIC.rawValue:
-        return view.italic()
-    case FORMATS.UNDERLINE.rawValue:
-        return view.underline()
-    case FORMATS.BOLD.rawValue | FORMATS.ITALIC.rawValue:
-        return view.bold().italic()
-    case FORMATS.BOLD.rawValue | FORMATS.ITALIC.rawValue | FORMATS.UNDERLINE.rawValue:
-        return view.bold().italic().underline()
-    default:
-        return view
+    var result = view
+
+    if format & TextFormat.bold.rawValue != 0 {
+        result = result.bold()
     }
+    if format & TextFormat.italic.rawValue != 0 {
+        result = result.italic()
+    }
+    if format & TextFormat.underline.rawValue != 0 {
+        result = result.underline()
+    }
+    if format & TextFormat.strikethrough.rawValue != 0 {
+        result = result.strikethrough()
+    }
+    if format & TextFormat.code.rawValue != 0 {
+        result = result.monospaced()
+    }
+
+    return result
 }

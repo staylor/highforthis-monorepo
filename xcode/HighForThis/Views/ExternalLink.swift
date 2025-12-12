@@ -8,8 +8,8 @@ struct ExternalLink: View {
     
     var body: some View {
         Button(label, systemImage: "arrow.up.right.square", action: {
-            let url = URL(string: url)
-            openURL(url!)
+            guard let url = URL(string: url) else { return }
+            openURL(url)
         })
         .foregroundColor(color)
         .buttonStyle(.plain)

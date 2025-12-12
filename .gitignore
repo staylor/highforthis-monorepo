@@ -10,7 +10,22 @@ node_modules
 graphql/lib
 graphql/public/uploads
 web/build
-xcode/HighForThis.xcodeproj/project.xcworkspace/xcuserdata/
+# Xcode
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+DerivedData/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Packages/
+Package.resolved
 
 *.log
 *.p8

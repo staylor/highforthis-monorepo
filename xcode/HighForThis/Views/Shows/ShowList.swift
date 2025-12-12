@@ -7,85 +7,86 @@ struct ShowList: View {
     var latest: GraphQLNullable<Bool> = nil
     var attended: GraphQLNullable<Bool> = nil
     @State private var year: Int = 0
-    @StateObject var model = ShowListModel()
+    @StateObject private var model = ShowListModel()
 
     var body: some View {
         VStack(alignment: .leading) {
-            if (model.groups == nil) {
-                Spacer()
-                Loading()
-            } else if model.groups!.count == 0 {
-                Text(L10N("noRecommendedShows"))
-            } else {
-                List {
-                    ForEach(model.groups!) { group in
-                        Section {
-                            ForEach(group.shows, id: \.self) { show in
-                                let title = show.title ?? ""
-                                let label = title.isEmpty ? show.artists.map { $0.name }.joined(separator: " / ") : title
-                                NavigationLink {
-                                    ShowDetail(id: show.id)
-                                } label: {
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(label).foregroundColor(.accentColor)
-                                            Text(show.venue.name).foregroundColor(.gray)
+            if let groups = model.groups {
+                if groups.isEmpty {
+                    Text(L10N("noRecommendedShows"))
+                } else {
+                    List {
+                        ForEach(groups) { group in
+                            Section {
+                                ForEach(group.shows, id: \.self) { show in
+                                    let title = show.title ?? ""
+                                    let label = title.isEmpty ? show.artists.map { $0.name }.joined(separator: " / ") : title
+                                    NavigationLink {
+                                        ShowDetail(id: show.id)
+                                    } label: {
+                                        HStack {
+                                            VStack(alignment: .leading) {
+                                                Text(label).foregroundColor(.accentColor)
+                                                Text(show.venue.name).foregroundColor(.gray)
+                                            }
+
+                                            Spacer()
                                         }
-                                        
-                                        Spacer()
                                     }
                                 }
+                            } header: {
+                                Text(group.dateFormatted())
+                                    .foregroundColor(.black)
+                                    .fontWeight(.bold)
                             }
-                        } header: {
-                            Text(group.dateFormatted())
-                                .foregroundColor(.black)
-                                .fontWeight(.bold)
                         }
                     }
-                }
-                .refreshable {
-                    model.fetchShows(
-                        first: first,
-                        latest: latest,
-                        attended: attended,
-                        refresh: true
-                    )
-                }
-                .listStyle(.plain)
-                .navigationTitle(title)
-                .toolbar {
-                    let _ = print("\(attended)")
-                    if attended == .some(true) {
-                        let filterByYear = L10N("filterByYear")
-                        ToolbarItem {
-                            Picker(filterByYear, selection: $year) {
-                                #if os(macOS)
-                                Text(verbatim: "--").tag(0)
-                                #elseif os(iOS)
-                                Text(filterByYear).tag(0)
-                                #endif
-                                ForEach(model.connection!.years!, id: \.self) {
-                                    Text(String($0)).tag($0)
+                    .refreshable {
+                        model.fetchShows(
+                            first: first,
+                            latest: latest,
+                            attended: attended,
+                            refresh: true
+                        )
+                    }
+                    .listStyle(.plain)
+                    .navigationTitle(title)
+                    .toolbar {
+                        if attended == .some(true), let years = model.connection?.years {
+                            let filterByYear = L10N("filterByYear")
+                            ToolbarItem {
+                                Picker(filterByYear, selection: $year) {
+                                    #if os(macOS)
+                                    Text(verbatim: "--").tag(0)
+                                    #elseif os(iOS)
+                                    Text(filterByYear).tag(0)
+                                    #endif
+                                    ForEach(years, id: \.self) {
+                                        Text(String($0)).tag($0)
+                                    }
                                 }
+                                .onChange(of: year) {
+                                    model.fetchShows(
+                                        first: first,
+                                        latest: latest,
+                                        attended: attended,
+                                        year: .some(year)
+                                    )
+                                }
+                                #if os(macOS)
+                                .frame(maxWidth: 160)
+                                #endif
                             }
-                            .onChange(of: year) {
-                                model.fetchShows(
-                                    first: first,
-                                    latest: latest,
-                                    attended: attended,
-                                    year: .some(year)
-                                )
-                            }
-                            #if os(macOS)
-                            .frame(maxWidth: 160)
-                            #endif
                         }
                     }
                 }
+            } else {
+                Spacer()
+                Loading()
             }
             Spacer()
         }
-        .onAppear() {
+        .onAppear {
             model.fetchShows(first: first, latest: latest, attended: attended)
         }
     }

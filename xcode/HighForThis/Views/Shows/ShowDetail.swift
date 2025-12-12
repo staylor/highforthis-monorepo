@@ -4,20 +4,18 @@ import HighForThisAPI
 struct ShowDetail: View {
     var id: ObjID
     @State private var show: HighForThisAPI.ShowQuery.Data.Show?
-    
+
     var body: some View {
         VStack(alignment: .leading) {
-            if (show == nil) {
-                // Required to make the spinner align in the center
-                Spacer()
-                Loading()
-            } else {
-                let show = show!
-                if let artwork = show.artists[0].appleMusic?.artwork {
+            if let show {
+                if let artwork = show.artists.first?.appleMusic?.artwork,
+                   let url = artwork.url,
+                   let width = artwork.width,
+                   let height = artwork.height {
                     ArtistArtwork(
-                        url: artwork.url!,
-                        width: artwork.width!,
-                        height: artwork.height!
+                        url: url,
+                        width: width,
+                        height: height
                     )
                 }
                 TextBlock {
@@ -29,7 +27,7 @@ struct ShowDetail: View {
                     .foregroundColor(.black)
                     .font(.subheadline)
                     .padding(.bottom, 8)
-                    
+
                     VStack(alignment: .leading) {
                         ForEach(show.artists, id: \.self) { artist in
                             InternalLink(artist.name, color: .accentColor) {
@@ -41,13 +39,13 @@ struct ShowDetail: View {
                             VenueMain(name: show.venue.name, slug: show.venue.slug)
                         }
                     }.padding(.bottom, 32)
-                    
-                    // ExternalLink(url: "", label: "Tickets")
 
                     Spacer()
                 }
+            } else {
+                Spacer()
+                Loading()
             }
-            // Required to make the full bleed image stay at the top
             Spacer()
         }
         #if os(iOS)
@@ -55,10 +53,12 @@ struct ShowDetail: View {
         #elseif os(macOS)
         .padding(.all, 8)
         #endif
-        .onAppear() {
+        .onAppear {
             let query = HighForThisAPI.ShowQuery(id: id)
             getData(query) { data in
-                self.show = data.show!
+                DispatchQueue.main.async {
+                    self.show = data.show
+                }
             }
         }
     }

@@ -19,31 +19,34 @@ struct ArtistMain: View {
                                 ExternalLink(url: website, label: L10N("artistWebsite"))
                                     .padding(.vertical, 1)
                             }
-                            if let url = model.appleMusic?.url! {
+                            if let url = model.appleMusic?.url {
                                 ExternalLink(url: url, label: L10N("listenOnAppleMusic"))
                             }
                         }
-                        if let artwork = model.appleMusic?.artwork {
+                        if let artwork = model.appleMusic?.artwork,
+                           let url = artwork.url,
+                           let width = artwork.width,
+                           let height = artwork.height {
                             ArtistArtwork(
-                                url: artwork.url!,
-                                width: artwork.width!,
-                                height: artwork.height!
+                                url: url,
+                                width: width,
+                                height: height
                             )
                             block
                         } else {
                             block.padding(.top, 64)
                         }
-                        if model.shows?.count == 0 {
+                        if let shows = model.shows, !shows.isEmpty {
+                            ArtistRecommendedShows(shows: shows)
+                        } else {
                             HStack {
                                 Text(L10N("noRecommendedShows"))
                                 Spacer()
                             }.padding()
                             Spacer()
-                        } else {
-                            ArtistRecommendedShows(shows: model.shows!)
                         }
-                        if model.attended!.count > 0 {
-                            ArtistAttendedShows(attended: model.attended!)
+                        if let attended = model.attended, !attended.isEmpty {
+                            ArtistAttendedShows(attended: attended)
                         }
                         Spacer()
                     }.padding(.bottom, 32)
@@ -55,7 +58,7 @@ struct ArtistMain: View {
         #elseif os(macOS)
         .padding(.all, 8)
         #endif
-        .onAppear() {
+        .onAppear {
             model.fetchData(slug: slug)
         }
     }
