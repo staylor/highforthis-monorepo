@@ -43,13 +43,15 @@ struct VenueMain: View {
                             VenueAttendedShows(attended: attended)
                         }
                     }.padding(.bottom, 32)
-                }.ignoresSafeArea()
+                }
             } else {
                 Loading()
             }
         }
         #if os(iOS)
-        .ignoresSafeArea()
+        .frame(maxWidth: 640)
+        .frame(maxWidth: .infinity)
+        .ignoresSafeArea(edges: UIDevice.current.userInterfaceIdiom == .phone ? .all : [])
         #elseif os(macOS)
         .padding(.all, 8)
         #endif

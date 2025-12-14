@@ -48,7 +48,7 @@ struct Post: View {
                                 }
                             }
                         }
-                    }.frame(maxWidth: min(screenWidth, 640))
+                    }.frame(maxWidth: 640)
                 }
                 .padding(.top, 16)
             } else {

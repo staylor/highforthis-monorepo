@@ -33,8 +33,8 @@ struct Stripes: View {
     }
 
     var body: some View {
-        GeometryReader { _ in
-            let longSide = screenWidth
+        GeometryReader { geometry in
+            let longSide = max(geometry.size.width, geometry.size.height)
             let itemWidth = config.barWidth + config.barSpacing
             let items = Int(2 * longSide / itemWidth)
             HStack(spacing: config.barSpacing) {

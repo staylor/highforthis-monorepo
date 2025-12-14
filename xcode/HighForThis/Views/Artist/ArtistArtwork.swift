@@ -7,27 +7,38 @@ struct ArtistArtwork: View {
     var height: Int
     @State private var isAnimating = false
 
+    private var aspectRatio: CGFloat {
+        CGFloat(width) / CGFloat(height)
+    }
+
     var body: some View {
-        AsyncImage(url: URL(string: resizedUrl())) { image in
-            image.resizable()
-                .aspectRatio(contentMode: .fit)
-                .ignoresSafeArea()
-                .opacity(isAnimating ? 1 : 0)
-                .onAppear {
-                    withAnimation(.easeInOut(duration: 0.5)) {
-                        isAnimating = true
+        GeometryReader { geometry in
+            let containerWidth = geometry.size.width
+            let imageHeight = containerWidth / aspectRatio
+
+            AsyncImage(url: URL(string: resizedUrl(for: containerWidth))) { image in
+                image.resizable()
+                    .aspectRatio(aspectRatio, contentMode: .fit)
+                    .opacity(isAnimating ? 1 : 0)
+                    .onAppear {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            isAnimating = true
+                        }
                     }
-                }
-        } placeholder: {
-            ImageLoading().frame(height: screenWidth)
+            } placeholder: {
+                Rectangle()
+                    .fill(.quaternary)
+            }
+            .frame(width: containerWidth, height: imageHeight)
         }
+        .aspectRatio(aspectRatio, contentMode: .fill)
         .onChange(of: url) {
             isAnimating = false
         }
     }
 
-    func resizedUrl() -> String {
-        let fullWidth = Int(screenWidth) * 2
+    func resizedUrl(for containerWidth: CGFloat) -> String {
+        let fullWidth = Int(containerWidth) * 2
         let resizedHeight = Int(Double(height) / Double(width) * Double(fullWidth))
         return url
             .replacingOccurrences(of: "{w}", with: "\(fullWidth)")
@@ -44,7 +55,7 @@ struct ArtistArtwork: View {
                 height: PREVIEW_ARTWORK_HEIGHT
             )
             Spacer()
-        }.ignoresSafeArea()
+        }.ignoresSafeArea(edges: UIDevice.current.userInterfaceIdiom == .phone ? .all : [])
     }
 }
 

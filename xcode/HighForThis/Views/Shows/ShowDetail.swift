@@ -6,7 +6,7 @@ struct ShowDetail: View {
     @State private var show: HighForThisAPI.ShowQuery.Data.Show?
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
             if let show {
                 if let artwork = show.artists.first?.appleMusic?.artwork,
                    let url = artwork.url,
@@ -19,14 +19,10 @@ struct ShowDetail: View {
                     )
                 }
                 TextBlock {
-                    Group {
-                        Text(parseDate(show.date, format: "EEEE, MM/dd/yyyy")) +
-                        Text(verbatim: " - ") +
-                        Text(parseDate(show.date, format: "h:mma"))
-                    }
-                    .foregroundColor(.black)
-                    .font(.subheadline)
-                    .padding(.bottom, 8)
+                    Text("\(parseDate(show.date, format: "EEEE, MM/dd/yyyy")) - \(parseDate(show.date, format: "h:mma"))")
+                        .foregroundStyle(.primary)
+                        .font(.subheadline)
+                        .padding(.bottom, 8)
 
                     VStack(alignment: .leading) {
                         ForEach(show.artists, id: \.self) { artist in
@@ -48,10 +44,12 @@ struct ShowDetail: View {
             }
             Spacer()
         }
-        #if os(iOS)
-        .ignoresSafeArea()
-        #elseif os(macOS)
+        #if os(macOS)
         .padding(.all, 8)
+        #elseif os(iOS)
+        .frame(maxWidth: 640)
+        .frame(maxWidth: .infinity)
+        .ignoresSafeArea(edges: UIDevice.current.userInterfaceIdiom == .phone ? .all : [])
         #endif
         .task {
             let query = HighForThisAPI.ShowQuery(id: id)

@@ -7,22 +7,17 @@ struct ImageNode: View {
     var body: some View {
         if let crop = image.crops.first(where: { $0.width == 640 }) {
             let imageUrl = cdnUrl("\(image.destination)/\(crop.fileName)")
-            let url = URL(string: imageUrl)
-            let width = CGFloat(crop.width)
-            let height = CGFloat(crop.height)
-            let maxWidth = min(screenWidth, 640)
-            let ratio = (maxWidth / width) * width
-            let resizedHeight = height == width ? ratio : (height / width) * ratio
-            
-            AsyncImage(url: url) { image in
+            let aspectRatio = CGFloat(crop.width) / CGFloat(crop.height)
+
+            AsyncImage(url: URL(string: imageUrl)) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: ratio, height: resizedHeight)
-            }  placeholder: {
-                ImageLoading().frame(width: ratio, height: resizedHeight)
+            } placeholder: {
+                Rectangle()
+                    .fill(.quaternary)
+                    .aspectRatio(aspectRatio, contentMode: .fit)
             }
-        } else {
-            EmptyView()
+            .frame(maxWidth: 640)
         }
     }
 }

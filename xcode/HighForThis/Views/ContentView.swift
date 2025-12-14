@@ -4,33 +4,35 @@ struct ContentView: View {
     var body: some View {
         AppWrapper {
             TabView {
-                NavigationView {
+                NavigationStack {
                     ShowList(title: "recommendedShows", latest: true)
                 }.tabItem {
                     Label("shows", systemImage: "calendar")
                 }
-                NavigationView {
+                NavigationStack {
                     PodcastList()
                 }.tabItem {
                     Label("podcast", systemImage: "mic.circle")
                 }
-                NavigationView {
+                NavigationStack {
                     VideoList()
                 }.tabItem {
                     Label("videos", systemImage: "video")
                 }
-                NavigationView {
+                NavigationStack {
                     PostList()
                 }.tabItem {
                     Label("posts", systemImage: "note.text")
                 }
-                NavigationView {
+                NavigationStack {
                     ShowList(title: "showHistory", attended: true)
                 }.tabItem {
                     Label("showHistory", systemImage: "calendar")
                 }
             }
-            #if os(macOS)
+            #if os(iOS)
+            .tabViewStyle(.tabBarOnly)
+            #elseif os(macOS)
             .padding(.vertical, 18)
             #endif
         }

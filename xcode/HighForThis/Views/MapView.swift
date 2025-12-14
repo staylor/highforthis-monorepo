@@ -33,5 +33,5 @@ struct MapView: View {
     VStack(alignment: .leading) {
         MapView(name: "Brooklyn Steel", latitude:  40.7193319, longitude: -73.9387361)
         Spacer()
-    }.ignoresSafeArea()
+    }.ignoresSafeArea(edges: UIDevice.current.userInterfaceIdiom == .phone ? .all : [])
 }
