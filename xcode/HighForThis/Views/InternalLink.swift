@@ -24,7 +24,7 @@ struct InternalLink <Content: View>: View {
 }
 
 #Preview {
-    AppWrapper {
+    NavigationStack {
         InternalLink("Foo") {
             EmptyView()
         }

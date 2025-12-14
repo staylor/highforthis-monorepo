@@ -61,7 +61,7 @@ struct ShowDetail: View {
 }
 
 #Preview {
-    AppWrapper {
+    NavigationStack {
         ShowDetail(id: PREVIEW_SHOW_ID)
     }
 }

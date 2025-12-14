@@ -20,7 +20,5 @@ struct ImageLoading: View {
 }
 
 #Preview {
-    AppWrapper {
-        ImageLoading(width: 300, height: 300)
-    }
+    ImageLoading(width: 300, height: 300)
 }

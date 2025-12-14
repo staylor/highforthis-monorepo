@@ -67,19 +67,19 @@ struct ArtistMain: View {
 }
 
 #Preview("With shows") {
-    AppWrapper {
+    NavigationStack {
         ArtistMain(name: "Julia Jacklin", slug: "julia-jacklin")
     }
 }
 
 #Preview("No shows") {
-    AppWrapper {
+    NavigationStack {
         ArtistMain(name: "Olivia Rodrigo", slug: "olivia-rodrigo")
     }
 }
 
 #Preview("No artwork") {
-    AppWrapper {
+    NavigationStack {
         ArtistMain(name: "Mac DeMarco", slug: "mac-demarco")
     }
 }

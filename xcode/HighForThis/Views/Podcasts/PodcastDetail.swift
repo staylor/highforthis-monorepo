@@ -57,9 +57,7 @@ struct PodcastDetail: View {
 }
 
 #Preview {
-    AppWrapper {
-        PodcastDetail(id: PREVIEW_PODCAST_ID)
-    }
+    PodcastDetail(id: PREVIEW_PODCAST_ID)
 }
 
 let PREVIEW_PODCAST_ID = ObjID("5cc94450a331ab4fcdcd8cd7")

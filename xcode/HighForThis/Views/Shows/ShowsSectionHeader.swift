@@ -19,7 +19,7 @@ struct ShowsSectionHeader: View {
 }
 
 #Preview {
-    AppWrapper {
+    NavigationStack {
         VStack(alignment: .leading) {
             ShowsSectionHeader("recommendedShows")
             ShowSectionItem(id: "foo", name: "Arcade Fire", date: 1519434000000)

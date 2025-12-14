@@ -62,7 +62,7 @@ struct VideoList: View {
 }
 
 #Preview {
-    AppWrapper {
+    NavigationStack {
         VideoList()
     }
 }

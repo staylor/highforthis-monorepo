@@ -70,13 +70,13 @@ struct ShowList: View {
 }
 
 #Preview("Shows") {
-    AppWrapper {
+    NavigationStack {
         ShowList(title: "recommendedShows", latest: .some(true))
     }
 }
 
 #Preview("History") {
-    AppWrapper {
+    NavigationStack {
         ShowList(title: "showHistory", attended: true)
     }
 }

@@ -62,43 +62,43 @@ struct VenueMain: View {
 }
 
 #Preview("MHOW") {
-    AppWrapper {
+    NavigationStack {
         VenueMain(name: "Music Hall of Williamsburg", slug: "music-hall-of-williamsburg")
     }
 }
 
 #Preview("Radio City Music Hall") {
-    AppWrapper {
+    NavigationStack {
         VenueMain(name: "Radio City Music Hall", slug: "radio-city-music-hall")
     }
 }
 
 #Preview("United Palace") {
-    AppWrapper {
+    NavigationStack {
         VenueMain(name: "United Palace", slug: "united-palace-theatre")
     }
 }
 
 #Preview("Hammerstein Ballroom") {
-    AppWrapper {
+    NavigationStack {
         VenueMain(name: "Hammerstein Ballroom", slug: "hammerstein-ballroom")
     }
 }
 
 #Preview("Forest Hills Stadium") {
-    AppWrapper {
+    NavigationStack {
         VenueMain(name: "Forest Hills Stadium", slug: "forest-hills-stadium")
     }
 }
 
 #Preview("Barclays Center") {
-    AppWrapper {
+    NavigationStack {
         VenueMain(name: "Barclays Center", slug: "barclays-center")
     }
 }
 
 #Preview("Knockdown Center") {
-    AppWrapper {
+    NavigationStack {
         VenueMain(name: "Knockdown Center", slug: "knockdown-center")
     }
 }

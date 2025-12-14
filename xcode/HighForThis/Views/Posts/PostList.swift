@@ -41,7 +41,7 @@ struct PostList: View {
 }
 
 #Preview {
-    AppWrapper {
+    NavigationStack {
         PostList()
     }
 }

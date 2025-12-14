@@ -67,7 +67,5 @@ struct Post: View {
 }
 
 #Preview {
-    AppWrapper {
-        Post(slug: "best-albums-of-2016")
-    }
+    Post(slug: "best-albums-of-2016")
 }

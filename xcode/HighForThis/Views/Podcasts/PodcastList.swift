@@ -41,7 +41,7 @@ struct PodcastList: View {
 }
 
 #Preview {
-    AppWrapper {
+    NavigationStack {
         PodcastList()
     }
 }
