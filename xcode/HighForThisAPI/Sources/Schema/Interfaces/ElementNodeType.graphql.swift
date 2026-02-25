@@ -4,5 +4,5 @@
 import ApolloAPI
 
 public extension Interfaces {
-  static let ElementNodeType = Interface(name: "ElementNodeType")
+  static let ElementNodeType = Interface(name: "ElementNodeType", implementingObjects: [])
 }

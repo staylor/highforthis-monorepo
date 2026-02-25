@@ -1,14 +1,14 @@
-// swift-tools-version:5.7
+// swift-tools-version:6.2
 
 import PackageDescription
 
 let package = Package(
   name: "HighForThisAPI",
   platforms: [
-    .iOS(.v12),
-    .macOS(.v10_14),
-    .tvOS(.v12),
-    .watchOS(.v5),
+    .iOS(.v26),
+    .macOS(.v26),
+    .tvOS(.v26),
+    .watchOS(.v26),
   ],
   products: [
     .library(name: "HighForThisAPI", targets: ["HighForThisAPI"]),
