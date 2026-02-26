@@ -30,26 +30,29 @@ const filename = (id: string) =>
 const fileExists = (id: string) => fs.existsSync(filename(id));
 
 async function main() {
-  const artists = await prisma.artist.findMany({ take: 1000 });
+  const artists = await prisma.artist.findMany({
+    take: 1000,
+    include: { appleMusic: true },
+  });
 
   for (const artist of artists) {
     const { id } = artist;
     if (fileExists(id)) {
       if (!artist.appleMusic) {
         const data = await import(filename(id));
-
         const { url, genreNames, artwork } = data.attributes;
-        const appleMusic = {
-          id: data.id,
-          url,
-          genreNames,
-          artwork,
-        };
 
         console.log('Setting appleMusic for: ', id);
-        await prisma.artist.update({
-          where: { id },
-          data: { appleMusic },
+        await prisma.appleMusicData.create({
+          data: {
+            artistId: id,
+            appleId: data.id,
+            url,
+            genreNames: {
+              create: (genreNames || []).map((name: string) => ({ name })),
+            },
+            artwork: artwork ? { create: artwork } : undefined,
+          },
         });
       }
       continue;

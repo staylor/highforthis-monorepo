@@ -36,7 +36,7 @@ const resolvers = {
     async posts(_: unknown, args: QueryPostsArgs, { prisma, authUser }: AppContext) {
       const { search, status, ...connectionArgs } = args;
       const where: any = {};
-      const userCanSee = authUser?.roles?.includes?.('admin');
+      const userCanSee = authUser?.roles?.some?.((r: any) => r.name === 'admin');
       if (!userCanSee) {
         where.status = 'PUBLISH';
       } else if (status) {
@@ -64,7 +64,7 @@ const resolvers = {
 
       if (!post) return null;
 
-      const userCanSee = authUser?.roles?.includes?.('admin');
+      const userCanSee = authUser?.roles?.some?.((r: any) => r.name === 'admin');
       if (post.status === 'DRAFT' && !userCanSee) {
         throw new Error('You do not have permission');
       }

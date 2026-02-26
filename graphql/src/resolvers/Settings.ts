@@ -1,6 +1,11 @@
 import type { AppContext } from '~/models';
 
 const resolvers = {
+  MediaSettings: {
+    async crops(settings: any, _: unknown, { prisma }: AppContext) {
+      return prisma.mediaCropSetting.findMany({ where: { mediaSettingsId: settings.id } });
+    },
+  },
   PodcastSettings: {
     async image(settings: any, _: unknown, { prisma }: AppContext) {
       if (!settings.imageId) return null;
@@ -18,7 +23,7 @@ const resolvers = {
     },
     async mediaSettings(_0: unknown, _1: unknown, { prisma }: AppContext) {
       const settings = await prisma.mediaSettings.findUnique({ where: { id: 'media' } });
-      return settings || { id: 'media', crops: [] };
+      return settings || { id: 'media' };
     },
     async podcastSettings(_0: unknown, _1: unknown, { prisma }: AppContext) {
       const settings = await prisma.podcastSettings.findUnique({ where: { id: 'podcast' } });
@@ -53,11 +58,21 @@ const resolvers = {
       { id, input }: { id: string; input: any },
       { prisma }: AppContext
     ) {
-      return prisma.mediaSettings.upsert({
+      const { crops, ...rest } = input;
+      const settings = await prisma.mediaSettings.upsert({
         where: { id },
-        create: { id, ...input },
-        update: input,
+        create: { id, ...rest },
+        update: rest,
       });
+      if (typeof crops !== 'undefined') {
+        await prisma.mediaCropSetting.deleteMany({ where: { mediaSettingsId: id } });
+        if (crops?.length) {
+          await prisma.mediaCropSetting.createMany({
+            data: crops.map((crop: any) => ({ ...crop, mediaSettingsId: id })),
+          });
+        }
+      }
+      return settings;
     },
     async updatePodcastSettings(
       _: unknown,

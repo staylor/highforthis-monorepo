@@ -18,7 +18,10 @@ async function userFromPayload(
     throw new Error('No userId in JWT');
   }
 
-  const user = await prisma.user.findUnique({ where: { id: jwtPayload.userId } });
+  const user = await prisma.user.findUnique({
+    where: { id: jwtPayload.userId },
+    include: { roles: true },
+  });
   return user;
 }
 

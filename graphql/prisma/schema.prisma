@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// --- Artist ---
+
 model Artist {
   id                String              @id @default(cuid())
   name              String
@@ -14,12 +16,43 @@ model Artist {
   description       String?
   website           String?
   excludeFromSearch Boolean             @default(false)
-  appleMusic        Json?
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
+  appleMusic        AppleMusicData?
   featuredMedia     ArtistFeaturedMedia[]
   posts             PostArtist[]
   shows             ShowArtist[]
+}
+
+model AppleMusicData {
+  id        String             @id @default(cuid())
+  artistId  String             @unique
+  artist    Artist             @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  appleId   String?
+  url       String?
+  genreNames AppleMusicGenre[]
+  artwork   AppleMusicArtwork?
+}
+
+model AppleMusicGenre {
+  id              String         @id @default(cuid())
+  appleMusicDataId String
+  appleMusicData  AppleMusicData @relation(fields: [appleMusicDataId], references: [id], onDelete: Cascade)
+  name            String
+}
+
+model AppleMusicArtwork {
+  id              String         @id @default(cuid())
+  appleMusicDataId String        @unique
+  appleMusicData  AppleMusicData @relation(fields: [appleMusicDataId], references: [id], onDelete: Cascade)
+  width           Int?
+  height          Int?
+  url             String?
+  bgColor         String?
+  textColor1      String?
+  textColor2      String?
+  textColor3      String?
+  textColor4      String?
 }
 
 model ArtistFeaturedMedia {
@@ -30,6 +63,8 @@ model ArtistFeaturedMedia {
 
   @@id([artistId, mediaId])
 }
+
+// --- Media ---
 
 model MediaUpload {
   id               String              @id @default(cuid())
@@ -46,15 +81,15 @@ model MediaUpload {
   height           Int?
   caption          String?
   altText          String?
-  crops            Json?
+  crops            ImageUploadCrop[]
   // Audio fields
-  artist           Json?
+  audioArtists     AudioArtist[]
   album            String?
-  albumArtist      Json?
-  genre            Json?
+  audioAlbumArtists AudioAlbumArtist[]
+  audioGenres      AudioGenre[]
   year             Int?
   duration         Float?
-  images           Json?
+  audioImages      AudioImage[]
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
   artistFeatured   ArtistFeaturedMedia[]
@@ -64,6 +99,49 @@ model MediaUpload {
   podcastImage     Podcast[]           @relation("PodcastImage")
   podcastSettings  PodcastSettings[]   @relation("PodcastSettingsImage")
 }
+
+model ImageUploadCrop {
+  id        String      @id @default(cuid())
+  mediaId   String
+  media     MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  fileName  String
+  width     Int
+  height    Int
+  fileSize  Int
+}
+
+model AudioArtist {
+  id       String      @id @default(cuid())
+  mediaId  String
+  media    MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  name     String
+}
+
+model AudioAlbumArtist {
+  id       String      @id @default(cuid())
+  mediaId  String
+  media    MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  name     String
+}
+
+model AudioGenre {
+  id       String      @id @default(cuid())
+  mediaId  String
+  media    MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  name     String
+}
+
+model AudioImage {
+  id       String      @id @default(cuid())
+  mediaId  String
+  media    MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  fileName String
+  width    Int
+  height   Int
+  fileSize Int
+}
+
+// --- Podcast ---
 
 model Podcast {
   id          String       @id @default(cuid())
@@ -76,6 +154,8 @@ model Podcast {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
+
+// --- Post ---
 
 model Post {
   id            String             @id @default(cuid())
@@ -109,18 +189,20 @@ model PostArtist {
   @@id([postId, artistId])
 }
 
+// --- Show ---
+
 model Show {
-  id       String       @id @default(cuid())
-  title    String?
-  notes    String?
-  date     DateTime
-  url      String?
-  attended Boolean      @default(false)
-  venueId  String
-  venue    Venue        @relation(fields: [venueId], references: [id])
-  artists  ShowArtist[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id        String       @id @default(cuid())
+  title     String?
+  notes     String?
+  date      DateTime
+  url       String?
+  attended  Boolean      @default(false)
+  venueId   String
+  venue     Venue        @relation(fields: [venueId], references: [id])
+  artists   ShowArtist[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 model ShowArtist {
@@ -132,16 +214,29 @@ model ShowArtist {
   @@id([showId, artistId])
 }
 
+// --- User ---
+
 model User {
-  id        String   @id @default(cuid())
+  id        String     @id @default(cuid())
   name      String?
-  email     String   @unique
+  email     String     @unique
   bio       String?
-  roles     Json     @default("[]")
   hash      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  roles     UserRole[]
 }
+
+model UserRole {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name   String
+
+  @@unique([userId, name])
+}
+
+// --- Venue ---
 
 model Venue {
   id                String              @id @default(cuid())
@@ -173,21 +268,34 @@ model VenueFeaturedMedia {
   @@id([venueId, mediaId])
 }
 
+// --- Video ---
+
 model Video {
-  id             String   @id @default(cuid())
-  dataId         String   @unique
-  slug           String   @unique
-  dataType       String   @default("youtube")
+  id             String           @id @default(cuid())
+  dataId         String           @unique
+  slug           String           @unique
+  dataType       String           @default("youtube")
   dataPlaylistId String
   year           Int
   publishedAt    DateTime
   publishedISO   String
   title          String
-  thumbnails     Json     @default("[]")
-  position       Int      @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  thumbnails     VideoThumbnail[]
+  position       Int              @default(0)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
+
+model VideoThumbnail {
+  id       String @id @default(cuid())
+  videoId  String
+  video    Video  @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  url      String
+  width    Int
+  height   Int
+}
+
+// --- Settings ---
 
 model SiteSettings {
   id            String  @id @default("site")
@@ -206,8 +314,17 @@ model DashboardSettings {
 }
 
 model MediaSettings {
-  id    String @id @default("media")
-  crops Json   @default("[]")
+  id    String             @id @default("media")
+  crops MediaCropSetting[]
+}
+
+model MediaCropSetting {
+  id              String        @id @default(cuid())
+  mediaSettingsId String
+  mediaSettings   MediaSettings @relation(fields: [mediaSettingsId], references: [id], onDelete: Cascade)
+  name            String
+  width           Int?
+  height          Int?
 }
 
 model PodcastSettings {

@@ -80,7 +80,11 @@ async function updateVideo(
 ) {
   const thumbnails =
     snippet && snippet.thumbnails
-      ? Object.keys(snippet.thumbnails).map((thumb) => snippet.thumbnails[thumb])
+      ? Object.keys(snippet.thumbnails).map((thumb: string) => ({
+          url: snippet.thumbnails[thumb].url,
+          width: snippet.thumbnails[thumb].width,
+          height: snippet.thumbnails[thumb].height,
+        }))
       : [];
 
   const date = new Date(contentDetails.videoPublishedAt);
@@ -94,19 +98,26 @@ async function updateVideo(
     title: snippet.title,
     position: snippet.position,
     slug: slugify(snippet.title),
-    thumbnails: thumbnails as any,
   };
 
   try {
-    await prisma.video.upsert({
+    const video = await prisma.video.upsert({
       where: { dataId: data.dataId },
       create: data,
       update: {
         ...data,
-        // don't overwrite slug on update
         slug: undefined,
       },
     });
+
+    // Replace thumbnails
+    await prisma.videoThumbnail.deleteMany({ where: { videoId: video.id } });
+    if (thumbnails.length) {
+      await prisma.videoThumbnail.createMany({
+        data: thumbnails.map((t) => ({ ...t, videoId: video.id })),
+      });
+    }
+
     return data.dataId;
   } catch (e) {
     throw e;

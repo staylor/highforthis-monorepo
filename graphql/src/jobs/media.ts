@@ -15,18 +15,20 @@ interface FileData {
   const adapter: StorageAdapter = mediaAdapter(uploadDir);
 
   const uploads: FileData[] = [];
-  const items = await prisma.mediaUpload.findMany();
+  const items = await prisma.mediaUpload.findMany({
+    include: { crops: true, audioImages: true },
+  });
   items.forEach((item) => {
     uploads.push({ destination: item.destination, fileName: item.fileName });
-    if (item.type === 'image' && Array.isArray(item.crops)) {
-      (item.crops as any[]).forEach((crop: FileData) => {
+    if (item.type === 'image' && item.crops.length > 0) {
+      item.crops.forEach((crop) => {
         uploads.push({
           destination: item.destination,
           fileName: crop.fileName,
         });
       });
-    } else if (item.type === 'audio' && Array.isArray(item.images)) {
-      (item.images as any[]).forEach((image: FileData) => {
+    } else if (item.type === 'audio' && item.audioImages.length > 0) {
+      item.audioImages.forEach((image) => {
         uploads.push({
           destination: item.destination,
           fileName: image.fileName,

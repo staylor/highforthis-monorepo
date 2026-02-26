@@ -15,8 +15,9 @@ const SALT_ROUNDS = 10;
 
 const resolvers = {
   User: {
-    roles(user: any) {
-      return user.roles || [];
+    async roles(user: any, _: unknown, { prisma }: AppContext) {
+      const records = await prisma.userRole.findMany({ where: { userId: user.id } });
+      return records.map((r: any) => r.name);
     },
   },
   Query: {
@@ -41,7 +42,7 @@ const resolvers = {
   },
   Mutation: {
     async createUser(_: unknown, { input }: MutationCreateUserArgs, { prisma }: AppContext) {
-      const { password, ...fields } = input as any;
+      const { password, roles, ...fields } = input as any;
       if (!fields.email || !password) {
         throw new Error('Email and Password are required.');
       }
@@ -53,8 +54,10 @@ const resolvers = {
       return prisma.user.create({
         data: {
           ...fields,
-          roles: fields.roles || [],
           hash,
+          roles: roles?.length
+            ? { create: roles.map((name: string) => ({ name })) }
+            : undefined,
         },
       });
     },
@@ -64,7 +67,7 @@ const resolvers = {
       { id, input }: MutationUpdateUserArgs,
       { prisma }: AppContext
     ) {
-      const { password, ...fields } = input as any;
+      const { password, roles, ...fields } = input as any;
       const user = await prisma.user.findUnique({ where: { id } });
       if (!user) throw new Error('User not found');
 
@@ -78,6 +81,15 @@ const resolvers = {
       const data: any = { ...fields };
       if (password) {
         data.hash = await bcrypt.hash(password, SALT_ROUNDS);
+      }
+
+      if (typeof roles !== 'undefined') {
+        await prisma.userRole.deleteMany({ where: { userId: id } });
+        if (roles?.length) {
+          await prisma.userRole.createMany({
+            data: roles.map((name: string) => ({ userId: id, name })),
+          });
+        }
       }
 
       return prisma.user.update({ where: { id }, data });

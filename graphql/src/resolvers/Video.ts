@@ -22,8 +22,8 @@ const resolvers = {
     updatedAt(video: any) {
       return new Date(video.updatedAt).getTime();
     },
-    thumbnails(video: any) {
-      return video.thumbnails || [];
+    async thumbnails(video: any, _: unknown, { prisma }: AppContext) {
+      return prisma.videoThumbnail.findMany({ where: { videoId: video.id } });
     },
   },
   VideoConnection: {

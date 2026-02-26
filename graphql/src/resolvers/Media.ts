@@ -19,22 +19,25 @@ const resolvers = {
     },
   },
   ImageUpload: {
-    crops(media: any) {
-      return media.crops || [];
+    async crops(media: any, _: unknown, { prisma }: AppContext) {
+      return prisma.imageUploadCrop.findMany({ where: { mediaId: media.id } });
     },
   },
   AudioUpload: {
-    artist(media: any) {
-      return media.artist || [];
+    async artist(media: any, _: unknown, { prisma }: AppContext) {
+      const records = await prisma.audioArtist.findMany({ where: { mediaId: media.id } });
+      return records.map((r: any) => r.name);
     },
-    albumArtist(media: any) {
-      return media.albumArtist || [];
+    async albumArtist(media: any, _: unknown, { prisma }: AppContext) {
+      const records = await prisma.audioAlbumArtist.findMany({ where: { mediaId: media.id } });
+      return records.map((r: any) => r.name);
     },
-    genre(media: any) {
-      return media.genre || [];
+    async genre(media: any, _: unknown, { prisma }: AppContext) {
+      const records = await prisma.audioGenre.findMany({ where: { mediaId: media.id } });
+      return records.map((r: any) => r.name);
     },
-    images(media: any) {
-      return media.images || [];
+    async images(media: any, _: unknown, { prisma }: AppContext) {
+      return prisma.audioImage.findMany({ where: { mediaId: media.id } });
     },
   },
   MediaUploadConnection: {
