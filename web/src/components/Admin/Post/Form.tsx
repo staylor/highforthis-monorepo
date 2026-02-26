@@ -42,7 +42,7 @@ export default function PostForm({ data = {} as Post, heading, buttonLabel }: Po
     {
       prop: 'title',
       className: cn(
-        'block font-stylized font-semibold tracking-wide mb-2.5 lg:mb-6 text-4xl lg:text-5xl m-0 p-0 shadow-none border-0 h-12'
+        'block font-black tracking-wide mb-2.5 lg:mb-6 text-4xl lg:text-5xl m-0 p-0 shadow-none border-0 h-12'
       ),
       placeholder: t('posts.addTitle'),
     },

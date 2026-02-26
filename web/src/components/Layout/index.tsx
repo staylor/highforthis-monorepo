@@ -60,7 +60,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
     <Wrapper className="lg:my-6">
       <header className="relative md:mb-6">
         <div className="md:flex md:justify-between">
-          <h1 className="font-stylized xs:text-5xl text-center text-4xl font-bold lg:text-left lg:text-7xl">
+          <h1 className="xs:text-5xl text-center text-4xl font-black uppercase lg:text-left lg:text-7xl">
             <Link to="/">{siteSettings?.siteTitle || t('title')}</Link>
           </h1>
           <div className="top-6 right-0 flex items-center justify-center lg:absolute lg:flex-none">

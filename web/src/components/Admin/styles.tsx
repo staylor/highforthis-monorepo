@@ -7,10 +7,7 @@ import Link, { type CustomLinkProps } from '~/components/Link';
 export const Heading = ({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
   <h1
     {...props}
-    className={cn(
-      'font-stylized mr-2 mb-4 inline-block pt-2 pb-1 text-2xl font-normal tracking-wide',
-      className
-    )}
+    className={cn('mr-2 mb-4 inline-block pt-2 pb-1 text-2xl font-normal tracking-wide', className)}
   />
 );
 

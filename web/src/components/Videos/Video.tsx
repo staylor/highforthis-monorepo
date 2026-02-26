@@ -74,7 +74,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
         <VideoLink to={`/video/${video.slug}`} onClick={onClick} className="m-0">
           {placeholder}
         </VideoLink>
-        <h3 className="font-stylized mb-6 text-base tracking-wide">
+        <h3 className="mb-6 text-base tracking-wide">
           {single ? video.title : <Link to={`/video/${video.slug}`}>{video.title}</Link>}
         </h3>
       </>

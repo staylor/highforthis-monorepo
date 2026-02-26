@@ -44,7 +44,7 @@ export default function ShowsGrid({
             const d = formatDate(node.date);
             const showRow = (
               <tr key={node.id}>
-                <Cell className="font-stylized text-right text-sm">{d.formatted}</Cell>
+                <Cell className="text-right text-sm">{d.formatted}</Cell>
                 <Cell className="text-base">
                   <Link className="text-pink underline" to={formatShowLink(node)}>
                     {formatArtists(node)}
@@ -67,15 +67,13 @@ export default function ShowsGrid({
               return (
                 <Fragment key={`${d.year}${d.month}`}>
                   <tr>
-                    <Cell colSpan={3} className="font-stylized font-bold">
+                    <Cell colSpan={3} className="font-bold">
                       {d.year}
                     </Cell>
                   </tr>
                   {showMonths && (
                     <tr>
-                      <Cell colSpan={3} className="font-stylized">
-                        {d.monthName}
-                      </Cell>
+                      <Cell colSpan={3}>{d.monthName}</Cell>
                     </tr>
                   )}
                   {showRow}
@@ -87,9 +85,7 @@ export default function ShowsGrid({
               return (
                 <Fragment key={`${d.year}${d.month}`}>
                   <tr>
-                    <Cell colSpan={3} className="font-stylized">
-                      {d.monthName}
-                    </Cell>
+                    <Cell colSpan={3}>{d.monthName}</Cell>
                   </tr>
                   {showRow}
                 </Fragment>

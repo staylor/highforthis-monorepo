@@ -22,7 +22,7 @@ export default function Attended({
 
   return (
     <article className={className || 'mt-16'}>
-      <p className="font-stylized mb-2">
+      <p className="mb-2">
         <Link to={`/shows/stats/${relation}`}>
           <Trans
             i18nKey={`shows.attended.${relation}`}
@@ -41,7 +41,7 @@ export default function Attended({
 
             return (
               <tr key={node.id}>
-                <Cell className="font-stylized w-36 text-right text-sm">
+                <Cell className="w-36 text-right text-sm">
                   {d.formatted}/{d.year}
                 </Cell>
                 <Cell className="text-base font-medium uppercase">
