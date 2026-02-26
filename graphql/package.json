@@ -50,6 +50,7 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
+    "db:migrate-from-mongo": "tsx tools/migrate-from-mongo.ts",
     "tools:script:dev": "dotenv -- tsx",
     "tools:script:prod": "dotenv -e .env.production -- tsx",
     "typecheck": "tsc"
