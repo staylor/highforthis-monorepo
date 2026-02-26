@@ -9,6 +9,14 @@ import type { AppContext } from '~/models';
 
 import { parseConnection } from './utils/collection';
 
+const mediaIncludes = {
+  crops: true,
+  audioArtists: true,
+  audioAlbumArtists: true,
+  audioGenres: true,
+  audioImages: true,
+};
+
 const resolvers = {
   MediaUpload: {
     __resolveType(media: any) {
@@ -19,24 +27,32 @@ const resolvers = {
     },
   },
   ImageUpload: {
-    async crops(media: any, _: unknown, { prisma }: AppContext) {
+    crops(media: any, _: unknown, { prisma }: AppContext) {
+      if ('crops' in media) return media.crops;
       return prisma.imageUploadCrop.findMany({ where: { mediaId: media.id } });
     },
   },
   AudioUpload: {
-    async artist(media: any, _: unknown, { prisma }: AppContext) {
-      const records = await prisma.audioArtist.findMany({ where: { mediaId: media.id } });
-      return records.map((r: any) => r.name);
+    artist(media: any, _: unknown, { prisma }: AppContext) {
+      if ('audioArtists' in media) return media.audioArtists.map((r: any) => r.name);
+      return prisma.audioArtist
+        .findMany({ where: { mediaId: media.id } })
+        .then((records: any[]) => records.map((r) => r.name));
     },
-    async albumArtist(media: any, _: unknown, { prisma }: AppContext) {
-      const records = await prisma.audioAlbumArtist.findMany({ where: { mediaId: media.id } });
-      return records.map((r: any) => r.name);
+    albumArtist(media: any, _: unknown, { prisma }: AppContext) {
+      if ('audioAlbumArtists' in media) return media.audioAlbumArtists.map((r: any) => r.name);
+      return prisma.audioAlbumArtist
+        .findMany({ where: { mediaId: media.id } })
+        .then((records: any[]) => records.map((r) => r.name));
     },
-    async genre(media: any, _: unknown, { prisma }: AppContext) {
-      const records = await prisma.audioGenre.findMany({ where: { mediaId: media.id } });
-      return records.map((r: any) => r.name);
+    genre(media: any, _: unknown, { prisma }: AppContext) {
+      if ('audioGenres' in media) return media.audioGenres.map((r: any) => r.name);
+      return prisma.audioGenre
+        .findMany({ where: { mediaId: media.id } })
+        .then((records: any[]) => records.map((r) => r.name));
     },
-    async images(media: any, _: unknown, { prisma }: AppContext) {
+    images(media: any, _: unknown, { prisma }: AppContext) {
+      if ('audioImages' in media) return media.audioImages;
       return prisma.audioImage.findMany({ where: { mediaId: media.id } });
     },
   },
@@ -73,11 +89,12 @@ const resolvers = {
       return parseConnection(prisma.mediaUpload, connectionArgs, {
         where,
         orderBy: { createdAt: 'desc' },
+        include: mediaIncludes,
       });
     },
     media(_: unknown, { id }: QueryMediaArgs, { prisma }: AppContext) {
       if (!id) return null;
-      return prisma.mediaUpload.findUnique({ where: { id } });
+      return prisma.mediaUpload.findUnique({ where: { id }, include: mediaIncludes });
     },
   },
   Mutation: {
@@ -86,7 +103,7 @@ const resolvers = {
       { id, input }: MutationUpdateMediaUploadArgs,
       { prisma }: AppContext
     ) {
-      return prisma.mediaUpload.update({ where: { id }, data: input });
+      return prisma.mediaUpload.update({ where: { id }, data: input, include: mediaIncludes });
     },
 
     async removeMediaUpload(

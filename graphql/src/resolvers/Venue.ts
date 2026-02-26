@@ -11,6 +11,10 @@ import { getUniqueSlug } from '~/models/utils';
 
 import { parseConnection } from './utils/collection';
 
+const venueIncludes = {
+  featuredMedia: { include: { media: true } },
+};
+
 const resolvers = {
   Venue: {
     address(venue: any) {
@@ -20,12 +24,13 @@ const resolvers = {
       if (venue.latitude == null && venue.longitude == null) return null;
       return { latitude: venue.latitude, longitude: venue.longitude };
     },
-    async featuredMedia(venue: any, _: unknown, { prisma }: AppContext) {
-      const records = await prisma.venueFeaturedMedia.findMany({
-        where: { venueId: venue.id },
-        include: { media: true },
-      });
-      return records.map((r: any) => r.media);
+    featuredMedia(venue: any, _: unknown, { prisma }: AppContext) {
+      if ('featuredMedia' in venue) {
+        return venue.featuredMedia.map((r: any) => r.media);
+      }
+      return prisma.venueFeaturedMedia
+        .findMany({ where: { venueId: venue.id }, include: { media: true } })
+        .then((records: any[]) => records.map((r) => r.media));
     },
   },
   Query: {
@@ -42,15 +47,16 @@ const resolvers = {
       return parseConnection(prisma.venue, connectionArgs, {
         where,
         orderBy: { name: 'asc' },
+        include: venueIncludes,
       });
     },
 
     async venue(_: unknown, { id, slug }: QueryVenueArgs, { prisma }: AppContext) {
       if (id) {
-        return prisma.venue.findUnique({ where: { id } });
+        return prisma.venue.findUnique({ where: { id }, include: venueIncludes });
       }
       if (slug) {
-        return prisma.venue.findUnique({ where: { slug } });
+        return prisma.venue.findUnique({ where: { slug }, include: venueIncludes });
       }
     },
   },
@@ -68,6 +74,7 @@ const resolvers = {
             ? { create: featuredMedia.map((mediaId: string) => ({ mediaId })) }
             : undefined,
         },
+        include: venueIncludes,
       });
     },
 
@@ -90,7 +97,7 @@ const resolvers = {
           });
         }
       }
-      return prisma.venue.update({ where: { id }, data: updateData });
+      return prisma.venue.update({ where: { id }, data: updateData, include: venueIncludes });
     },
 
     async removeVenue(_: unknown, { ids }: MutationRemoveVenueArgs, { prisma }: AppContext) {

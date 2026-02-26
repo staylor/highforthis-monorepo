@@ -11,6 +11,11 @@ import { getUniqueSlug } from '~/models/utils';
 
 import { parseConnection } from './utils/collection';
 
+const artistIncludes = {
+  appleMusic: { include: { genreNames: true, artwork: true } },
+  featuredMedia: { include: { media: true } },
+};
+
 async function upsertAppleMusic(prisma: any, artistId: string, appleMusic: any) {
   if (!appleMusic) return;
 
@@ -52,18 +57,20 @@ async function upsertAppleMusic(prisma: any, artistId: string, appleMusic: any) 
 
 const resolvers = {
   Artist: {
-    async appleMusic(artist: any, _: unknown, { prisma }: AppContext) {
+    appleMusic(artist: any, _: unknown, { prisma }: AppContext) {
+      if ('appleMusic' in artist) return artist.appleMusic;
       return prisma.appleMusicData.findUnique({
         where: { artistId: artist.id },
         include: { genreNames: true, artwork: true },
       });
     },
-    async featuredMedia(artist: any, _: unknown, { prisma }: AppContext) {
-      const records = await prisma.artistFeaturedMedia.findMany({
-        where: { artistId: artist.id },
-        include: { media: true },
-      });
-      return records.map((r: any) => r.media);
+    featuredMedia(artist: any, _: unknown, { prisma }: AppContext) {
+      if ('featuredMedia' in artist) {
+        return artist.featuredMedia.map((r: any) => r.media);
+      }
+      return prisma.artistFeaturedMedia
+        .findMany({ where: { artistId: artist.id }, include: { media: true } })
+        .then((records: any[]) => records.map((r) => r.media));
     },
   },
   AppleMusicData: {
@@ -87,15 +94,16 @@ const resolvers = {
       return parseConnection(prisma.artist, connectionArgs, {
         where,
         orderBy: { name: 'asc' },
+        include: artistIncludes,
       });
     },
 
     async artist(_: unknown, { id, slug }: QueryArtistArgs, { prisma }: AppContext) {
       if (id) {
-        return prisma.artist.findUnique({ where: { id } });
+        return prisma.artist.findUnique({ where: { id }, include: artistIncludes });
       }
       if (slug) {
-        return prisma.artist.findUnique({ where: { slug } });
+        return prisma.artist.findUnique({ where: { slug }, include: artistIncludes });
       }
     },
   },
@@ -111,6 +119,7 @@ const resolvers = {
             ? { create: featuredMedia.map((mediaId: string) => ({ mediaId })) }
             : undefined,
         },
+        include: artistIncludes,
       });
     },
 
@@ -131,7 +140,7 @@ const resolvers = {
       if (appleMusic) {
         await upsertAppleMusic(prisma, id, appleMusic);
       }
-      return prisma.artist.update({ where: { id }, data });
+      return prisma.artist.update({ where: { id }, data, include: artistIncludes });
     },
 
     async removeArtist(_: unknown, { ids }: MutationRemoveArtistArgs, { prisma }: AppContext) {

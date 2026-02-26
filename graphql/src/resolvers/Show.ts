@@ -12,19 +12,28 @@ import type { AppContext } from '~/models';
 
 import { parseConnection, emptyConnection } from './utils/collection';
 
+const showIncludes = {
+  artists: { include: { artist: true } },
+  venue: true,
+};
+
 const resolvers = {
   Show: {
     date(show: any) {
       return new Date(show.date).getTime();
     },
-    async artists(show: any, _: unknown, { prisma }: AppContext) {
-      const records = await prisma.showArtist.findMany({
-        where: { showId: show.id },
-        include: { artist: true },
-      });
-      return records.map((r: any) => r.artist);
+    artists(show: any, _: unknown, { prisma }: AppContext) {
+      if ('artists' in show && Array.isArray(show.artists)) {
+        return show.artists.map((r: any) => r.artist || r);
+      }
+      return prisma.showArtist
+        .findMany({ where: { showId: show.id }, include: { artist: true } })
+        .then((records: any[]) => records.map((r) => r.artist));
     },
-    async venue(show: any, _: unknown, { prisma }: AppContext) {
+    venue(show: any, _: unknown, { prisma }: AppContext) {
+      if ('venue' in show && show.venue && typeof show.venue === 'object') {
+        return show.venue;
+      }
       return prisma.venue.findUnique({ where: { id: show.venueId } });
     },
   },
@@ -94,17 +103,17 @@ const resolvers = {
       return parseConnection(prisma.show, connectionArgs, {
         where,
         orderBy: { date: order === 'ASC' ? 'asc' : 'desc' },
+        include: showIncludes,
       });
     },
 
     async show(_: unknown, { id, slug, lastAdded }: QueryShowArgs, { prisma }: AppContext) {
       if (lastAdded) {
-        return prisma.show.findFirst({ orderBy: { createdAt: 'desc' } });
+        return prisma.show.findFirst({ orderBy: { createdAt: 'desc' }, include: showIncludes });
       }
       if (id) {
-        return prisma.show.findUnique({ where: { id } });
+        return prisma.show.findUnique({ where: { id }, include: showIncludes });
       }
-      // Shows don't have slugs in the schema, but just in case:
       return null;
     },
 
@@ -155,6 +164,7 @@ const resolvers = {
             ? { create: artists.map((artistId: string) => ({ artistId })) }
             : undefined,
         },
+        include: showIncludes,
       });
     },
 
@@ -184,7 +194,7 @@ const resolvers = {
         }
       }
 
-      return prisma.show.update({ where: { id }, data: values });
+      return prisma.show.update({ where: { id }, data: values, include: showIncludes });
     },
 
     async removeShow(_: unknown, { ids }: MutationRemoveShowArgs, { prisma }: AppContext) {

@@ -11,6 +11,10 @@ import { getUniqueSlug } from '~/models/utils';
 
 import { parseConnection } from './utils/collection';
 
+const videoIncludes = {
+  thumbnails: true,
+};
+
 const resolvers = {
   Video: {
     publishedAt(video: any) {
@@ -22,7 +26,8 @@ const resolvers = {
     updatedAt(video: any) {
       return new Date(video.updatedAt).getTime();
     },
-    async thumbnails(video: any, _: unknown, { prisma }: AppContext) {
+    thumbnails(video: any, _: unknown, { prisma }: AppContext) {
+      if ('thumbnails' in video && Array.isArray(video.thumbnails)) return video.thumbnails;
       return prisma.videoThumbnail.findMany({ where: { videoId: video.id } });
     },
   },
@@ -48,15 +53,16 @@ const resolvers = {
       return parseConnection(prisma.video, connectionArgs, {
         where,
         orderBy: [{ year: 'desc' }, { position: 'desc' }],
+        include: videoIncludes,
       });
     },
 
     video(_: unknown, { id, slug }: QueryVideoArgs, { prisma }: AppContext) {
       if (id) {
-        return prisma.video.findUnique({ where: { id } });
+        return prisma.video.findUnique({ where: { id }, include: videoIncludes });
       }
       if (slug) {
-        return prisma.video.findUnique({ where: { slug } });
+        return prisma.video.findUnique({ where: { slug }, include: videoIncludes });
       }
     },
   },
@@ -65,7 +71,7 @@ const resolvers = {
       const data = { ...input } as any;
       data.slug = await getUniqueSlug(prisma.video, data.title);
       data.publishedAt = new Date(data.publishedAt);
-      return prisma.video.create({ data });
+      return prisma.video.create({ data, include: videoIncludes });
     },
 
     async updateVideo(
@@ -77,7 +83,7 @@ const resolvers = {
       if (data.publishedAt) {
         data.publishedAt = new Date(data.publishedAt);
       }
-      return prisma.video.update({ where: { id }, data });
+      return prisma.video.update({ where: { id }, data, include: videoIncludes });
     },
 
     async removeVideo(_: unknown, { ids }: MutationRemoveVideoArgs, { prisma }: AppContext) {

@@ -12,24 +12,31 @@ import { getUniqueSlug } from '~/models/utils';
 import { parseConnection } from './utils/collection';
 import resolveTags from './utils/resolveTags';
 
+const postIncludes = {
+  featuredMedia: { include: { media: true } },
+  artists: { include: { artist: true } },
+};
+
 const resolvers = {
   Post: {
     date(post: any) {
       return new Date(post.date || post.createdAt).getTime();
     },
-    async featuredMedia(post: any, _: unknown, { prisma }: AppContext) {
-      const records = await prisma.postFeaturedMedia.findMany({
-        where: { postId: post.id },
-        include: { media: true },
-      });
-      return records.map((r: any) => r.media);
+    featuredMedia(post: any, _: unknown, { prisma }: AppContext) {
+      if ('featuredMedia' in post) {
+        return post.featuredMedia.map((r: any) => r.media);
+      }
+      return prisma.postFeaturedMedia
+        .findMany({ where: { postId: post.id }, include: { media: true } })
+        .then((records: any[]) => records.map((r) => r.media));
     },
-    async artists(post: any, _: unknown, { prisma }: AppContext) {
-      const records = await prisma.postArtist.findMany({
-        where: { postId: post.id },
-        include: { artist: true },
-      });
-      return records.map((r: any) => r.artist);
+    artists(post: any, _: unknown, { prisma }: AppContext) {
+      if ('artists' in post && Array.isArray(post.artists)) {
+        return post.artists.map((r: any) => r.artist || r);
+      }
+      return prisma.postArtist
+        .findMany({ where: { postId: post.id }, include: { artist: true } })
+        .then((records: any[]) => records.map((r) => r.artist));
     },
   },
   Query: {
@@ -51,15 +58,16 @@ const resolvers = {
       return parseConnection(prisma.post, connectionArgs, {
         where,
         orderBy: { date: 'desc' },
+        include: postIncludes,
       });
     },
 
     async post(_: unknown, { id, slug }: QueryPostArgs, { prisma, authUser }: AppContext) {
       let post;
       if (id) {
-        post = await prisma.post.findUnique({ where: { id } });
+        post = await prisma.post.findUnique({ where: { id }, include: postIncludes });
       } else if (slug) {
-        post = await prisma.post.findUnique({ where: { slug } });
+        post = await prisma.post.findUnique({ where: { slug }, include: postIncludes });
       }
 
       if (!post) return null;
@@ -94,6 +102,7 @@ const resolvers = {
             ? { create: artistIds.map((artistId) => ({ artistId })) }
             : undefined,
         },
+        include: postIncludes,
       });
     },
 
@@ -124,7 +133,7 @@ const resolvers = {
         });
       }
 
-      return prisma.post.update({ where: { id }, data: updateData });
+      return prisma.post.update({ where: { id }, data: updateData, include: postIncludes });
     },
 
     async removePost(_: unknown, { ids }: MutationRemovePostArgs, { prisma }: AppContext) {

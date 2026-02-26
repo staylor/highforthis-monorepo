@@ -13,11 +13,17 @@ import { parseConnection } from './utils/collection';
 
 const SALT_ROUNDS = 10;
 
+const userIncludes = { roles: true };
+
 const resolvers = {
   User: {
-    async roles(user: any, _: unknown, { prisma }: AppContext) {
-      const records = await prisma.userRole.findMany({ where: { userId: user.id } });
-      return records.map((r: any) => r.name);
+    roles(user: any, _: unknown, { prisma }: AppContext) {
+      if ('roles' in user && Array.isArray(user.roles)) {
+        return user.roles.map((r: any) => r.name || r);
+      }
+      return prisma.userRole
+        .findMany({ where: { userId: user.id } })
+        .then((records: any[]) => records.map((r) => r.name));
     },
   },
   Query: {
@@ -33,11 +39,12 @@ const resolvers = {
       return parseConnection(prisma.user, connectionArgs, {
         where,
         orderBy: { name: 'asc' },
+        include: userIncludes,
       });
     },
 
     user(_: unknown, { id }: QueryUserArgs, { prisma }: AppContext) {
-      return prisma.user.findUnique({ where: { id } });
+      return prisma.user.findUnique({ where: { id }, include: userIncludes });
     },
   },
   Mutation: {
@@ -59,6 +66,7 @@ const resolvers = {
             ? { create: roles.map((name: string) => ({ name })) }
             : undefined,
         },
+        include: userIncludes,
       });
     },
 
@@ -92,7 +100,7 @@ const resolvers = {
         }
       }
 
-      return prisma.user.update({ where: { id }, data });
+      return prisma.user.update({ where: { id }, data, include: userIncludes });
     },
 
     async removeUser(_: unknown, { ids }: MutationRemoveUserArgs, { prisma }: AppContext) {
