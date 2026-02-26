@@ -4,6 +4,7 @@ packages:
 
 onlyBuiltDependencies:
   - '@apollo/protobufjs'
+  - '@tailwindcss/oxide'
   - bcrypt
   - esbuild
   - sharp
