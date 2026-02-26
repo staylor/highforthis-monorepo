@@ -116,32 +116,30 @@ const resolvers = {
           where: { show: { attended: true } },
           _count: { artistId: true },
         });
-        const stats = await Promise.all(
-          results.map(async (r: any) => {
-            const artistEntity = await prisma.artist.findUnique({ where: { id: r.artistId } });
-            return {
-              count: r._count.artistId,
-              entity: { ...artistEntity, type: 'artist' },
-            };
-          })
-        );
-        return stats.sort((a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? ''));
+        const artistIds = results.map((r: any) => r.artistId);
+        const artists = await prisma.artist.findMany({ where: { id: { in: artistIds } } });
+        const artistMap = new Map(artists.map((a: any) => [a.id, a]));
+        return results
+          .map((r: any) => ({
+            count: r._count.artistId,
+            entity: { ...artistMap.get(r.artistId), type: 'artist' },
+          }))
+          .sort((a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? ''));
       } else {
         const results = await prisma.show.groupBy({
           by: ['venueId'],
           where: { attended: true },
           _count: { venueId: true },
         });
-        const stats = await Promise.all(
-          results.map(async (r: any) => {
-            const venueEntity = await prisma.venue.findUnique({ where: { id: r.venueId } });
-            return {
-              count: r._count.venueId,
-              entity: { ...venueEntity, type: 'venue' },
-            };
-          })
-        );
-        return stats.sort((a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? ''));
+        const venueIds = results.map((r: any) => r.venueId);
+        const venues = await prisma.venue.findMany({ where: { id: { in: venueIds } } });
+        const venueMap = new Map(venues.map((v: any) => [v.id, v]));
+        return results
+          .map((r: any) => ({
+            count: r._count.venueId,
+            entity: { ...venueMap.get(r.venueId), type: 'venue' },
+          }))
+          .sort((a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? ''));
       }
     },
   },
