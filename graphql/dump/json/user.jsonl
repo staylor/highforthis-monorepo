@@ -1,0 +1,1 @@
+{"_id":{"$oid":"5a34a372492e02c6c95041d4"},"name":"Scott Taylor","email":"scott.c.taylor@mac.com","hash":"$2a$10$k4CcX474bhMCjwkHQFWkmunf7oLwVHCuFeXc1bMPMbnqiLvHThNR6","createdAt":{"$numberDouble":"1.513399154199E+12"},"updatedAt":{"$numberDouble":"1.698947049957E+12"},"bio":"","roles":["admin"]}

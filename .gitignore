@@ -14,4 +14,4 @@ xcode/HighForThis.xcodeproj/project.xcworkspace/xcuserdata/
 
 *.log
 *.p8
-graphql/dump
+graphql/dump/highforthis-prod
