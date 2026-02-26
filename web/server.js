@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { createRequestHandler } from '@react-router/express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';

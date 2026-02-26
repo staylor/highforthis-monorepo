@@ -1,0 +1,10 @@
+packages:
+  - graphql
+  - web
+
+onlyBuiltDependencies:
+  - '@apollo/protobufjs'
+  - bcrypt
+  - esbuild
+  - sharp
+  - unrs-resolver

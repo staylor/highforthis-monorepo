@@ -58,24 +58,20 @@
     "typescript": "5.7.3"
   },
   "scripts": {
-    "codegen": "graphql-codegen && yarn lint-fix && ./apollo-ios-cli generate",
-    "graphql:dev": "yarn workspace @highforthis/graphql dev",
-    "graphql:prod": "yarn workspace @highforthis/graphql prod",
-    "web:dev": "yarn workspace @highforthis/web dev",
-    "web:prod": "yarn workspace @highforthis/web prod",
-    "prod": "yarn workspaces run prod",
+    "codegen": "graphql-codegen && pnpm lint-fix && ./apollo-ios-cli generate",
+    "graphql:dev": "pnpm --filter @highforthis/graphql dev",
+    "graphql:prod": "pnpm --filter @highforthis/graphql prod",
+    "web:dev": "pnpm --filter @highforthis/web dev",
+    "web:prod": "pnpm --filter @highforthis/web prod",
+    "prod": "pnpm -r prod",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint --report-unused-disable-directives .",
-    "lint-fix": "yarn lint --fix",
-    "test:web": "yarn workspace @highforthis/web test",
-    "test:web:watch": "yarn workspace @highforthis/web test:watch",
-    "test:web:update": "yarn workspace @highforthis/web test:update",
-    "typecheck:graphql": "yarn workspace @highforthis/graphql typecheck",
-    "typecheck:web": "yarn workspace @highforthis/web typecheck"
+    "lint-fix": "pnpm lint --fix",
+    "test:web": "pnpm --filter @highforthis/web test",
+    "test:web:watch": "pnpm --filter @highforthis/web test:watch",
+    "test:web:update": "pnpm --filter @highforthis/web test:update",
+    "typecheck:graphql": "pnpm --filter @highforthis/graphql typecheck",
+    "typecheck:web": "pnpm --filter @highforthis/web typecheck"
   },
-  "workspaces": [
-    "graphql",
-    "web"
-  ],
   "dependencies": {
     "pm2": "6.0.5"
   }

@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@apollo/server": "4.11.3",
-    "@dotenvx/dotenvx": "1.36.0",
+    "dotenv": "17.3.1",
     "@google-cloud/storage": "7.15.1",
     "bcrypt": "5.1.1",
     "body-parser": "1.20.3",
@@ -30,18 +30,27 @@
     "sharp": "0.33.5",
     "slugify": "1.6.6"
   },
+  "devDependencies": {
+    "dotenv-cli": "11.0.0",
+    "esbuild": "0.25.0",
+    "npm-run-all": "4.1.5",
+    "pm2": "6.0.5",
+    "rimraf": "6.0.1",
+    "tsx": "4.19.2",
+    "typescript": "5.7.3"
+  },
   "scripts": {
-    "dev": "dotenvx run -- tsx watch src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "prod": "run-s prod:*",
     "prod:stop": "pm2 stop pm2.config.cjs",
     "prod:clean": "rimraf lib",
     "prod:build": "esbuild src/index.ts --packages=external --bundle --platform=node --target=node20.11.1 --format=esm --outfile=lib/index.js",
     "prod:start": "pm2 start pm2.config.cjs",
-    "tools:database:data": "yarn tools:database:dump && yarn tools:database:restore",
-    "tools:database:dump": "dotenvx run --env-file=.env.production -- sh ./tools/database/dump",
+    "tools:database:data": "pnpm tools:database:dump && pnpm tools:database:restore",
+    "tools:database:dump": "dotenv -e .env.production -- sh ./tools/database/dump",
     "tools:database:restore": "sh ./tools/database/restore",
-    "tools:script:dev": "dotenvx run -- tsx",
-    "tools:script:prod": "dotenvx run --env-file=.env.production -- tsx",
+    "tools:script:dev": "dotenv -- tsx",
+    "tools:script:prod": "dotenv -e .env.production -- tsx",
     "typecheck": "tsc"
   }
 }

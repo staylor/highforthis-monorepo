@@ -5,8 +5,13 @@
   "type": "module",
   "dependencies": {
     "@apollo/client": "3.13.1",
-    "@dotenvx/dotenvx": "1.36.0",
+    "dotenv": "17.3.1",
+    "@lexical/code": "0.24.0",
+    "@lexical/list": "0.24.0",
     "@lexical/react": "0.24.0",
+    "@lexical/rich-text": "0.24.0",
+    "@lexical/selection": "0.24.0",
+    "@lexical/utils": "0.24.0",
     "@react-router/express": "7.1.5",
     "@react-router/node": "7.1.5",
     "classnames": "2.5.1",
@@ -15,6 +20,7 @@
     "express": "4.21.2",
     "filesize": "10.1.6",
     "graphql": "16.10.0",
+    "graphql-tag": "2.12.6",
     "html-escape": "2.0.0",
     "http-proxy-middleware": "3.0.3",
     "i18next": "24.2.2",
@@ -33,6 +39,10 @@
     "tsx": "4.19.2"
   },
   "devDependencies": {
+    "npm-run-all": "4.1.5",
+    "pm2": "6.0.5",
+    "rimraf": "6.0.1",
+    "typescript": "5.7.3",
     "@react-router/dev": "7.1.5",
     "@tailwindcss/forms": "0.5.10",
     "@tailwindcss/vite": "4.0.6",
@@ -49,7 +59,7 @@
     "vitest": "3.0.5"
   },
   "scripts": {
-    "dev": "dotenvx run -- node server.js",
+    "dev": "node server.js",
     "prod": "run-s prod:*",
     "prod:clean": "rimraf build node_modules/.vite",
     "prod:build": "NODE_ENV=production react-router build",
