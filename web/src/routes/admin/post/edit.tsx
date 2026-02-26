@@ -32,7 +32,7 @@ export default function PostEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const postQuery = gql`
-  query PostEdit($id: ObjID!) {
+  query PostEdit($id: String!) {
     post(id: $id) {
       ...PostForm_post
     }
@@ -41,7 +41,7 @@ const postQuery = gql`
 `;
 
 const postMutation = gql`
-  mutation UpdatePost($id: ObjID!, $input: UpdatePostInput!) {
+  mutation UpdatePost($id: String!, $input: UpdatePostInput!) {
     updatePost(id: $id, input: $input) {
       ...PostForm_post
     }

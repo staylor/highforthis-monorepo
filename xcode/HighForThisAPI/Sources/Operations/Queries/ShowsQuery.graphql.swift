@@ -98,7 +98,7 @@ public class ShowsQuery: GraphQLQuery {
 
           public var artists: [Artist] { __data["artists"] }
           public var date: Double { __data["date"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
+          public var id: HighForThisAPI.String { __data["id"] }
           public var title: String? { __data["title"] }
           public var venue: Venue { __data["venue"] }
 

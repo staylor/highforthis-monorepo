@@ -15,14 +15,14 @@ public struct Video_video: HighForThisAPI.SelectionSet, Fragment {
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("dataId", String.self),
-    .field("id", HighForThisAPI.ObjID.self),
+    .field("id", HighForThisAPI.String.self),
     .field("slug", String.self),
     .field("thumbnails", [Thumbnail].self),
     .field("title", String.self),
   ] }
 
   public var dataId: String { __data["dataId"] }
-  public var id: HighForThisAPI.ObjID { __data["id"] }
+  public var id: HighForThisAPI.String { __data["id"] }
   public var slug: String { __data["slug"] }
   public var thumbnails: [Thumbnail] { __data["thumbnails"] }
   public var title: String { __data["title"] }

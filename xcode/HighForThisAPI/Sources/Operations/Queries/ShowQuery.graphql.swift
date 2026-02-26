@@ -7,12 +7,12 @@ public class ShowQuery: GraphQLQuery {
   public static let operationName: String = "Show"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Show($id: ObjID!) { show(id: $id) { __typename artists { __typename appleMusic { __typename artwork { __typename height url width } id url } id name slug } date id title venue { __typename id name slug } } }"#
+      #"query Show($id: String!) { show(id: $id) { __typename artists { __typename appleMusic { __typename artwork { __typename height url width } id url } id name slug } date id title venue { __typename id name slug } } }"#
     ))
 
-  public var id: ObjID
+  public var id: String
 
-  public init(id: ObjID) {
+  public init(id: String) {
     self.id = id
   }
 
@@ -41,14 +41,14 @@ public class ShowQuery: GraphQLQuery {
         .field("__typename", String.self),
         .field("artists", [Artist].self),
         .field("date", Double.self),
-        .field("id", HighForThisAPI.ObjID.self),
+        .field("id", HighForThisAPI.String.self),
         .field("title", String?.self),
         .field("venue", Venue.self),
       ] }
 
       public var artists: [Artist] { __data["artists"] }
       public var date: Double { __data["date"] }
-      public var id: HighForThisAPI.ObjID { __data["id"] }
+      public var id: HighForThisAPI.String { __data["id"] }
       public var title: String? { __data["title"] }
       public var venue: Venue { __data["venue"] }
 
@@ -63,13 +63,13 @@ public class ShowQuery: GraphQLQuery {
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("appleMusic", AppleMusic?.self),
-          .field("id", HighForThisAPI.ObjID.self),
+          .field("id", HighForThisAPI.String.self),
           .field("name", String.self),
           .field("slug", String.self),
         ] }
 
         public var appleMusic: AppleMusic? { __data["appleMusic"] }
-        public var id: HighForThisAPI.ObjID { __data["id"] }
+        public var id: HighForThisAPI.String { __data["id"] }
         public var name: String { __data["name"] }
         public var slug: String { __data["slug"] }
 
@@ -124,12 +124,12 @@ public class ShowQuery: GraphQLQuery {
         public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
-          .field("id", HighForThisAPI.ObjID.self),
+          .field("id", HighForThisAPI.String.self),
           .field("name", String.self),
           .field("slug", String.self),
         ] }
 
-        public var id: HighForThisAPI.ObjID { __data["id"] }
+        public var id: HighForThisAPI.String { __data["id"] }
         public var name: String { __data["name"] }
         public var slug: String { __data["slug"] }
       }

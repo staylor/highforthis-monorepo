@@ -3,7 +3,7 @@ import AVKit
 import HighForThisAPI
 
 struct PodcastDetail: View {
-    var id: ObjID
+    var id: String
     @State private var podcast: HighForThisAPI.PodcastQuery.Data.Podcast?
     @StateObject private var viewModel = AudioPlayerViewModel()
 
@@ -54,4 +54,4 @@ struct PodcastDetail: View {
     }
 }
 
-let PREVIEW_PODCAST_ID = ObjID("5cc94450a331ab4fcdcd8cd7")
+let PREVIEW_PODCAST_ID = String("5cc94450a331ab4fcdcd8cd7")

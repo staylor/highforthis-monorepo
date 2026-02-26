@@ -52,7 +52,7 @@ export default function PodcastRoute({ loaderData }: Route.ComponentProps) {
 }
 
 const podcastQuery = gql`
-  query Podcast($id: ObjID!) {
+  query Podcast($id: String!) {
     podcast(id: $id) {
       audio {
         destination

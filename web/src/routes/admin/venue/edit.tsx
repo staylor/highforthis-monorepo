@@ -34,7 +34,7 @@ export default function VenueEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const venueQuery = gql`
-  query VenueEdit($id: ObjID) {
+  query VenueEdit($id: String) {
     shows(first: 200, venue: { id: $id }) {
       edges {
         node {
@@ -60,7 +60,7 @@ const venueQuery = gql`
 `;
 
 const venueMutation = gql`
-  mutation UpdateVenue($id: ObjID!, $input: UpdateVenueInput!) {
+  mutation UpdateVenue($id: String!, $input: UpdateVenueInput!) {
     updateVenue(id: $id, input: $input) {
       ...VenueForm_venue
     }

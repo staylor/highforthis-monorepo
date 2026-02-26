@@ -180,7 +180,7 @@ const uploadsQuery = gql`
 `;
 
 const uploadsMutation = gql`
-  mutation DeleteMedia($ids: [ObjID]!) {
+  mutation DeleteMedia($ids: [String]!) {
     removeMediaUpload(ids: $ids)
   }
 `;

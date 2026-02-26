@@ -1,5 +1,3 @@
-import type { Document } from 'mongodb';
-import { PostStatus } from 'types/graphql';
 import type {
   MutationRemovePostArgs,
   MutationUpdatePostArgs,
@@ -8,55 +6,65 @@ import type {
   QueryPostsArgs,
 } from 'types/graphql';
 
-import type Artist from '~/models/Artist';
-import type Media from '~/models/Media';
-import type Post from '~/models/Post';
+import type { AppContext } from '~/models';
+import { getUniqueSlug } from '~/models/utils';
 
 import { parseConnection } from './utils/collection';
 import resolveTags from './utils/resolveTags';
 
 const resolvers = {
   Post: {
-    id(post: Document) {
-      return post._id;
+    date(post: any) {
+      return new Date(post.date || post.createdAt).getTime();
     },
-    date(post: Document) {
-      return post.date || post.createdAt;
+    async featuredMedia(post: any, _: unknown, { prisma }: AppContext) {
+      const records = await prisma.postFeaturedMedia.findMany({
+        where: { postId: post.id },
+        include: { media: true },
+      });
+      return records.map((r: any) => r.media);
     },
-    featuredMedia(post: Document, _: unknown, { Media }: { Media: Media }) {
-      return Media.findByIds(post.featuredMedia || []);
-    },
-    artists(post: Document, _: unknown, { Artist }: { Artist: Artist }) {
-      return Artist.findByIds(post.artists || []);
+    async artists(post: any, _: unknown, { prisma }: AppContext) {
+      const records = await prisma.postArtist.findMany({
+        where: { postId: post.id },
+        include: { artist: true },
+      });
+      return records.map((r: any) => r.artist);
     },
   },
   Query: {
-    async posts(
-      _: unknown,
-      args: QueryPostsArgs,
-      { Post, authUser }: { Post: Post; authUser: Document }
-    ) {
-      const connectionArgs = { ...args };
-      const userCanSee = authUser && authUser.roles && authUser.roles.includes('admin');
+    async posts(_: unknown, args: QueryPostsArgs, { prisma, authUser }: AppContext) {
+      const { search, status, ...connectionArgs } = args;
+      const where: any = {};
+      const userCanSee = authUser?.roles?.includes?.('admin');
       if (!userCanSee) {
-        connectionArgs.status = PostStatus.Publish;
+        where.status = 'PUBLISH';
+      } else if (status) {
+        where.status = status;
       }
-      return parseConnection(Post, connectionArgs);
+      if (search) {
+        where.OR = [
+          { title: { contains: search, mode: 'insensitive' } },
+          { summary: { contains: search, mode: 'insensitive' } },
+        ];
+      }
+      return parseConnection(prisma.post, connectionArgs, {
+        where,
+        orderBy: { date: 'desc' },
+      });
     },
 
-    async post(
-      _: unknown,
-      { id, slug }: QueryPostArgs,
-      { Post, authUser }: { Post: Post; authUser: Document }
-    ) {
+    async post(_: unknown, { id, slug }: QueryPostArgs, { prisma, authUser }: AppContext) {
       let post;
       if (id) {
-        post = await Post.findOneById(id);
+        post = await prisma.post.findUnique({ where: { id } });
       } else if (slug) {
-        post = await Post.findOneBySlug(slug);
+        post = await prisma.post.findUnique({ where: { slug } });
       }
 
-      const userCanSee = authUser && authUser.roles && authUser.roles.includes('admin');
+      if (!post) return null;
+
+      const userCanSee = authUser?.roles?.includes?.('admin');
       if (post.status === 'DRAFT' && !userCanSee) {
         throw new Error('You do not have permission');
       }
@@ -65,46 +73,67 @@ const resolvers = {
     },
   },
   Mutation: {
-    async createPost(
-      _: unknown,
-      { input }: MutationCreatePostArgs,
-      { Post, Artist }: { Post: Post; Artist: Artist }
-    ) {
-      const data = { ...input };
-      if (input.artists && input.artists.length > 0) {
-        data.artists = await resolveTags(input.artists as string[], {
-          Artist,
-        });
-      } else {
-        data.artists = [];
+    async createPost(_: unknown, { input }: MutationCreatePostArgs, { prisma }: AppContext) {
+      const { featuredMedia, artists: inputArtists, ...data } = input as any;
+      const slug = await getUniqueSlug(prisma.post, data.title);
+
+      let artistIds: string[] = [];
+      if (inputArtists?.length) {
+        artistIds = await resolveTags(inputArtists, prisma);
       }
 
-      const id = await Post.insert(data);
-      return Post.findOneById(id);
+      return prisma.post.create({
+        data: {
+          ...data,
+          slug,
+          date: data.date ? new Date(data.date) : new Date(),
+          featuredMedia: featuredMedia?.length
+            ? { create: featuredMedia.map((mediaId: string) => ({ mediaId })) }
+            : undefined,
+          artists: artistIds.length
+            ? { create: artistIds.map((artistId) => ({ artistId })) }
+            : undefined,
+        },
+      });
     },
 
-    async updatePost(
-      _: unknown,
-      { id, input }: MutationUpdatePostArgs,
-      { Post, Artist }: { Post: Post; Artist: Artist }
-    ) {
-      const data = { ...input };
-      if (input.artists && input.artists.length > 0) {
-        data.artists = await resolveTags(input.artists as string[], {
-          Artist,
-        });
-      } else {
-        data.artists = [];
+    async updatePost(_: unknown, { id, input }: MutationUpdatePostArgs, { prisma }: AppContext) {
+      const { featuredMedia, artists: inputArtists, ...data } = input as any;
+      const updateData: any = { ...data };
+      if (data.date) {
+        updateData.date = new Date(data.date);
       }
 
-      await Post.updateById(id, data);
-      return Post.findOneById(id);
+      if (typeof featuredMedia !== 'undefined') {
+        await prisma.postFeaturedMedia.deleteMany({ where: { postId: id } });
+        if (featuredMedia?.length) {
+          await prisma.postFeaturedMedia.createMany({
+            data: featuredMedia.map((mediaId: string) => ({ postId: id, mediaId })),
+          });
+        }
+      }
+
+      let artistIds: string[] = [];
+      if (inputArtists?.length) {
+        artistIds = await resolveTags(inputArtists, prisma);
+      }
+      await prisma.postArtist.deleteMany({ where: { postId: id } });
+      if (artistIds.length) {
+        await prisma.postArtist.createMany({
+          data: artistIds.map((artistId) => ({ postId: id, artistId })),
+        });
+      }
+
+      return prisma.post.update({ where: { id }, data: updateData });
     },
 
-    async removePost(_: unknown, { ids }: MutationRemovePostArgs, { Post }: { Post: Post }) {
-      return Promise.all(ids.map((id) => Post.removeById(id)))
-        .then(() => true)
-        .catch(() => false);
+    async removePost(_: unknown, { ids }: MutationRemovePostArgs, { prisma }: AppContext) {
+      try {
+        await prisma.post.deleteMany({ where: { id: { in: ids as string[] } } });
+        return true;
+      } catch {
+        return false;
+      }
     },
   },
 };

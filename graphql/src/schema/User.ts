@@ -1,6 +1,6 @@
 const User = `#graphql      
   type User {
-    id: ObjID!
+    id: String!
     name: String
     email: String!
     bio: String
@@ -42,13 +42,13 @@ const User = `#graphql
       before: String
       search: String
     ): UserConnection
-    user(id: ObjID!): User
+    user(id: String!): User
   }
 
   extend type Mutation {
     createUser(input: CreateUserInput!): User
-    updateUser(id: ObjID!, input: UpdateUserInput!): User
-    removeUser(ids: [ObjID]!): Boolean
+    updateUser(id: String!, input: UpdateUserInput!): User
+    removeUser(ids: [String]!): Boolean
   }
 `;
 

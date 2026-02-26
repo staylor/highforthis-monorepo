@@ -104,7 +104,7 @@ const artistsQuery = gql`
 `;
 
 const updateMutation = gql`
-  mutation UpdateArtistExclude($id: ObjID!, $input: UpdateArtistInput!) {
+  mutation UpdateArtistExclude($id: String!, $input: UpdateArtistInput!) {
     updateArtist(id: $id, input: $input) {
       id
     }
@@ -112,7 +112,7 @@ const updateMutation = gql`
 `;
 
 const deleteMutation = gql`
-  mutation DeleteArtist($ids: [ObjID]!) {
+  mutation DeleteArtist($ids: [String]!) {
     removeArtist(ids: $ids)
   }
 `;

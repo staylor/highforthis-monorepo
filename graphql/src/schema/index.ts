@@ -27,7 +27,6 @@ const modules = {
 } as Record<string, string>;
 
 const typeDefs = `#graphql
-  scalar ObjID
   type Query
 
   type Mutation

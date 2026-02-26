@@ -5,7 +5,7 @@ const Venue = `#graphql
   }
 
   type Venue {
-    id: ObjID!
+    id: String!
     name: String!
     slug: String!
     description: String
@@ -79,13 +79,13 @@ const Venue = `#graphql
       search: String
       filtered: Boolean
     ): VenueConnection
-    venue(id: ObjID, slug: String): Venue
+    venue(id: String, slug: String): Venue
   }
 
   extend type Mutation {
     createVenue(input: CreateVenueInput!): Venue
-    updateVenue(id: ObjID!, input: UpdateVenueInput!): Venue
-    removeVenue(ids: [ObjID]!): Boolean
+    updateVenue(id: String!, input: UpdateVenueInput!): Venue
+    removeVenue(ids: [String]!): Boolean
   }
 `;
 

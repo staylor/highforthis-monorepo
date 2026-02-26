@@ -53,14 +53,14 @@ public class ArtistQuery: GraphQLQuery {
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("appleMusic", AppleMusic?.self),
-        .field("id", HighForThisAPI.ObjID.self),
+        .field("id", HighForThisAPI.String.self),
         .field("name", String.self),
         .field("slug", String.self),
         .field("website", String?.self),
       ] }
 
       public var appleMusic: AppleMusic? { __data["appleMusic"] }
-      public var id: HighForThisAPI.ObjID { __data["id"] }
+      public var id: HighForThisAPI.String { __data["id"] }
       public var name: String { __data["name"] }
       public var slug: String { __data["slug"] }
       public var website: String? { __data["website"] }
@@ -151,7 +151,7 @@ public class ArtistQuery: GraphQLQuery {
 
           public var artists: [Artist] { __data["artists"] }
           public var date: Double { __data["date"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
+          public var id: HighForThisAPI.String { __data["id"] }
           public var title: String? { __data["title"] }
           public var venue: Venue { __data["venue"] }
 
@@ -214,7 +214,7 @@ public class ArtistQuery: GraphQLQuery {
 
           public var artists: [Artist] { __data["artists"] }
           public var date: Double { __data["date"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
+          public var id: HighForThisAPI.String { __data["id"] }
           public var title: String? { __data["title"] }
           public var venue: Venue { __data["venue"] }
 

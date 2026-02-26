@@ -16,14 +16,14 @@ public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
     .field("__typename", String.self),
     .field("artists", [Artist].self),
     .field("date", Double.self),
-    .field("id", HighForThisAPI.ObjID.self),
+    .field("id", HighForThisAPI.String.self),
     .field("title", String?.self),
     .field("venue", Venue.self),
   ] }
 
   public var artists: [Artist] { __data["artists"] }
   public var date: Double { __data["date"] }
-  public var id: HighForThisAPI.ObjID { __data["id"] }
+  public var id: HighForThisAPI.String { __data["id"] }
   public var title: String? { __data["title"] }
   public var venue: Venue { __data["venue"] }
 
@@ -37,12 +37,12 @@ public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
     public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Artist }
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
-      .field("id", HighForThisAPI.ObjID.self),
+      .field("id", HighForThisAPI.String.self),
       .field("name", String.self),
       .field("slug", String.self),
     ] }
 
-    public var id: HighForThisAPI.ObjID { __data["id"] }
+    public var id: HighForThisAPI.String { __data["id"] }
     public var name: String { __data["name"] }
     public var slug: String { __data["slug"] }
   }
@@ -57,12 +57,12 @@ public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
     public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
-      .field("id", HighForThisAPI.ObjID.self),
+      .field("id", HighForThisAPI.String.self),
       .field("name", String.self),
       .field("slug", String.self),
     ] }
 
-    public var id: HighForThisAPI.ObjID { __data["id"] }
+    public var id: HighForThisAPI.String { __data["id"] }
     public var name: String { __data["name"] }
     public var slug: String { __data["slug"] }
   }

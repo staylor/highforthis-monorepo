@@ -1,14 +1,13 @@
-import type { Db } from 'mongodb';
+import type { PrismaClient } from '@prisma/client';
 
-import Show from '../models/Show';
-
-async function cleanupShows(db: Db) {
+async function cleanupShows(prisma: PrismaClient) {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setDate(sixMonthsAgo.getDate() - 180);
-  const model = new Show({ db });
-  const result = await model.collection.deleteMany({
-    date: { $lt: sixMonthsAgo.getTime() },
-    attended: { $in: [null, false] },
+  const result = await prisma.show.deleteMany({
+    where: {
+      date: { lt: sixMonthsAgo },
+      attended: false,
+    },
   });
   console.log('[Shows]', result);
 }

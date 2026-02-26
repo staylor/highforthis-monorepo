@@ -1,0 +1,229 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Artist {
+  id                String              @id @default(cuid())
+  name              String
+  slug              String              @unique
+  description       String?
+  website           String?
+  excludeFromSearch Boolean             @default(false)
+  appleMusic        Json?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  featuredMedia     ArtistFeaturedMedia[]
+  posts             PostArtist[]
+  shows             ShowArtist[]
+}
+
+model ArtistFeaturedMedia {
+  artistId String
+  mediaId  String
+  artist   Artist      @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  media    MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@id([artistId, mediaId])
+}
+
+model MediaUpload {
+  id               String              @id @default(cuid())
+  title            String?
+  description      String?
+  originalName     String
+  destination      String
+  fileName         String
+  mimeType         String
+  type             String
+  fileSize         Int
+  // Image fields
+  width            Int?
+  height           Int?
+  caption          String?
+  altText          String?
+  crops            Json?
+  // Audio fields
+  artist           Json?
+  album            String?
+  albumArtist      Json?
+  genre            Json?
+  year             Int?
+  duration         Float?
+  images           Json?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  artistFeatured   ArtistFeaturedMedia[]
+  venueFeatured    VenueFeaturedMedia[]
+  postFeatured     PostFeaturedMedia[]
+  podcastAudio     Podcast[]           @relation("PodcastAudio")
+  podcastImage     Podcast[]           @relation("PodcastImage")
+  podcastSettings  PodcastSettings[]   @relation("PodcastSettingsImage")
+}
+
+model Podcast {
+  id          String       @id @default(cuid())
+  title       String
+  description String       @default("")
+  audioId     String?
+  imageId     String?
+  audio       MediaUpload? @relation("PodcastAudio", fields: [audioId], references: [id])
+  image       MediaUpload? @relation("PodcastImage", fields: [imageId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Post {
+  id            String             @id @default(cuid())
+  title         String
+  slug          String             @unique
+  editorState   Json?
+  summary       String?
+  status        String             @default("DRAFT")
+  date          DateTime           @default(now())
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  featuredMedia PostFeaturedMedia[]
+  artists       PostArtist[]
+}
+
+model PostFeaturedMedia {
+  postId  String
+  mediaId String
+  post    Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
+  media   MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@id([postId, mediaId])
+}
+
+model PostArtist {
+  postId   String
+  artistId String
+  post     Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  artist   Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@id([postId, artistId])
+}
+
+model Show {
+  id       String       @id @default(cuid())
+  title    String?
+  notes    String?
+  date     DateTime
+  url      String?
+  attended Boolean      @default(false)
+  venueId  String
+  venue    Venue        @relation(fields: [venueId], references: [id])
+  artists  ShowArtist[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model ShowArtist {
+  showId   String
+  artistId String
+  show     Show   @relation(fields: [showId], references: [id], onDelete: Cascade)
+  artist   Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@id([showId, artistId])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  bio       String?
+  roles     Json     @default("[]")
+  hash      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Venue {
+  id                String              @id @default(cuid())
+  name              String
+  slug              String              @unique
+  description       String?
+  capacity          String?
+  streetAddress     String?
+  city              String?
+  state             String?
+  postalCode        String?
+  latitude          Float?
+  longitude         Float?
+  website           String?
+  excludeFromSearch Boolean             @default(false)
+  permanentlyClosed Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  featuredMedia     VenueFeaturedMedia[]
+  shows             Show[]
+}
+
+model VenueFeaturedMedia {
+  venueId String
+  mediaId String
+  venue   Venue       @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  media   MediaUpload @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@id([venueId, mediaId])
+}
+
+model Video {
+  id             String   @id @default(cuid())
+  dataId         String   @unique
+  slug           String   @unique
+  dataType       String   @default("youtube")
+  dataPlaylistId String
+  year           Int
+  publishedAt    DateTime
+  publishedISO   String
+  title          String
+  thumbnails     Json     @default("[]")
+  position       Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model SiteSettings {
+  id            String  @id @default("site")
+  siteTitle     String?
+  tagline       String?
+  siteUrl       String?
+  emailAddress  String?
+  language      String?
+  copyrightText String?
+}
+
+model DashboardSettings {
+  id               String  @id @default("dashboard")
+  googleClientId   String?
+  googleTrackingId String?
+}
+
+model MediaSettings {
+  id    String @id @default("media")
+  crops Json   @default("[]")
+}
+
+model PodcastSettings {
+  id              String       @id @default("podcast")
+  title           String?
+  description     String?
+  managingEditor  String?
+  copyrightText   String?
+  websiteLink     String?
+  feedLink        String?
+  imageId         String?
+  image           MediaUpload? @relation("PodcastSettingsImage", fields: [imageId], references: [id])
+  itunesName      String?
+  itunesEmail     String?
+  generator       String?
+  language        String?
+  explicit        String?
+  category        String?
+}

@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 
+import type { PrismaClient } from '@prisma/client';
 import type { Request } from 'express';
 
 import type { StorageAdapter } from './adapter';
@@ -21,7 +22,7 @@ export interface FileInfo {
 }
 
 interface StorageOpts {
-  models: { Settings: any };
+  prisma: PrismaClient;
   uploadDir: string;
   adapter: StorageAdapter;
 }
@@ -34,13 +35,14 @@ class Storage {
   }
 
   public async _handleFile(_req: Request, file: Express.Multer.File, cb: Callback) {
-    const { Settings } = this.opts.models;
-    const mediaSettings = await Settings.findOneById('media');
+    const mediaSettings = await this.opts.prisma.mediaSettings.findUnique({
+      where: { id: 'media' },
+    });
 
     let upload: Upload;
     const uploadOpts = {
       uploadDir: this.opts.uploadDir,
-      settings: mediaSettings,
+      settings: mediaSettings || { crops: [] },
     };
     if (file.mimetype.indexOf('image/') === 0) {
       upload = new Image(uploadOpts);

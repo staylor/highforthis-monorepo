@@ -87,7 +87,7 @@ public class VenueQuery: GraphQLQuery {
 
           public var artists: [Artist] { __data["artists"] }
           public var date: Double { __data["date"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
+          public var id: HighForThisAPI.String { __data["id"] }
           public var title: String? { __data["title"] }
           public var venue: Venue { __data["venue"] }
 
@@ -150,7 +150,7 @@ public class VenueQuery: GraphQLQuery {
 
           public var artists: [Artist] { __data["artists"] }
           public var date: Double { __data["date"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
+          public var id: HighForThisAPI.String { __data["id"] }
           public var title: String? { __data["title"] }
           public var venue: Venue { __data["venue"] }
 
@@ -181,7 +181,7 @@ public class VenueQuery: GraphQLQuery {
         .field("address", String?.self),
         .field("capacity", String?.self),
         .field("coordinates", Coordinates?.self),
-        .field("id", HighForThisAPI.ObjID.self),
+        .field("id", HighForThisAPI.String.self),
         .field("name", String.self),
         .field("slug", String.self),
         .field("website", String?.self),
@@ -190,7 +190,7 @@ public class VenueQuery: GraphQLQuery {
       public var address: String? { __data["address"] }
       public var capacity: String? { __data["capacity"] }
       public var coordinates: Coordinates? { __data["coordinates"] }
-      public var id: HighForThisAPI.ObjID { __data["id"] }
+      public var id: HighForThisAPI.String { __data["id"] }
       public var name: String { __data["name"] }
       public var slug: String { __data["slug"] }
       public var website: String? { __data["website"] }

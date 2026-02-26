@@ -1,4 +1,4 @@
-query Podcast($id: ObjID!) {
+query Podcast($id: String!) {
   podcast(id: $id) {
     id
     date

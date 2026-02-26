@@ -1,9 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import database from '~/database';
-import Post from '~/models/Post';
-import Video from '~/models/Video';
+import prisma from '~/database';
 
 const writeDir = path.join(process.cwd(), 'tools', 'editor', 'converted');
 const fileName = (id: string) => `${writeDir}/${id}.json`;
@@ -11,7 +9,7 @@ const writeFile = (name: string, data: any) => {
   fs.writeFileSync(name, JSON.stringify(data, null, 2) + '\n');
 };
 
-const FORMATS = {
+const FORMATS: Record<string, number> = {
   BOLD: 1,
   ITALIC: 2,
   STRIKETHROUGH: 4,
@@ -22,38 +20,39 @@ const FORMATS = {
   HIGHLIGHT: 128,
 };
 
-const ENTITY_TO_TYPE = {
+const ENTITY_TO_TYPE: Record<string, string> = {
   IMAGE: 'image',
   VIDEO: 'video',
 };
 
-const TYPE_TO_TYPE = {
+const TYPE_TO_TYPE: Record<string, string> = {
   'header-three': 'heading',
   unstyled: 'paragraph',
 };
 
-const TYPE_TO_TAG = {
+const TYPE_TO_TAG: Record<string, string> = {
   'header-three': 'h3',
 };
 
 async function main() {
-  const { db } = await database();
-  const model = new Post({ db });
-  const video = new Video({ db });
-  const posts = await model.all({});
+  const posts = await prisma.post.findMany();
 
   for (const post of posts) {
-    const postId = String(post._id);
+    const { id: postId } = post;
     const file = fileName(postId);
 
     if (fs.existsSync(file)) {
       const editorState = await import(file);
       console.log('Setting editorState for', postId);
-      await model.updateById(postId, {
-        editorState: editorState.default,
+      await prisma.post.update({
+        where: { id: postId },
+        data: { editorState: editorState.default },
       });
       continue;
     }
+
+    const contentState = (post as any).contentState;
+    if (!contentState) continue;
 
     const data = {
       root: {
@@ -66,10 +65,10 @@ async function main() {
       },
     };
 
-    for (const block of post.contentState.blocks) {
+    for (const block of contentState.blocks) {
       if (block.type === 'atomic') {
         const [range] = block.entityRanges;
-        const entity = post.contentState.entityMap[range.key];
+        const entity = contentState.entityMap[range.key];
         const { type, ...rest } = entity.data;
         let fields = rest;
 
@@ -81,7 +80,7 @@ async function main() {
             };
             break;
           case 'VIDEO':
-            const record = await video.findOneById(fields.videoId);
+            const record = await prisma.video.findUnique({ where: { id: fields.videoId } });
             if (record) {
               fields = {
                 videoId: fields.videoId,
@@ -164,7 +163,7 @@ async function main() {
         const blockType = TYPE_TO_TYPE[block.type];
         if (
           blockType === 'paragraph' &&
-          children.filter((node) => node.type === 'text' && node.text.trim()).length === 0
+          children.filter((node: any) => node.type === 'text' && node.text.trim()).length === 0
         ) {
           continue;
         }

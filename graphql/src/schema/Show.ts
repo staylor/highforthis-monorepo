@@ -1,6 +1,6 @@
 const Show = `#graphql      
   type Show {
-    id: ObjID!
+    id: String!
     title: String
     notes: String
     date: Float!
@@ -28,8 +28,8 @@ const Show = `#graphql
     date: Float!
     url: String
     attended: Boolean
-    artists: [ObjID!]!
-    venue: ObjID!
+    artists: [String!]!
+    venue: String!
   }
 
   input UpdateShowInput {
@@ -38,8 +38,8 @@ const Show = `#graphql
     date: Float
     url: String
     attended: Boolean
-    artists: [ObjID]
-    venue: ObjID
+    artists: [String]
+    venue: String
   }
 
   enum ShowOrder {
@@ -60,7 +60,7 @@ const Show = `#graphql
   }
 
   input EntityArg {
-    id: ObjID
+    id: String
     slug: String
   }
 
@@ -79,14 +79,14 @@ const Show = `#graphql
       search: String
       order: ShowOrder
     ): ShowConnection
-    show(id: ObjID, slug: String, lastAdded: Boolean): Show
+    show(id: String, slug: String, lastAdded: Boolean): Show
     showStats(entity: ShowEntityType!): [ShowStat!]! 
   }
 
   extend type Mutation {
     createShow(input: CreateShowInput!): Show
-    updateShow(id: ObjID!, input: UpdateShowInput!): Show
-    removeShow(ids: [ObjID]!): Boolean
+    updateShow(id: String!, input: UpdateShowInput!): Show
+    removeShow(ids: [String]!): Boolean
   }
 `;
 

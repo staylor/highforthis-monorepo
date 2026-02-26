@@ -2,7 +2,7 @@ import SwiftUI
 import HighForThisAPI
 
 struct ShowDetail: View {
-    var id: ObjID
+    var id: String
     @State private var show: HighForThisAPI.ShowQuery.Data.Show?
     
     var body: some View {
@@ -70,4 +70,4 @@ struct ShowDetail: View {
     }
 }
 
-let PREVIEW_SHOW_ID = ObjID("5a3d8330bf3bd82f73a5ffab")
+let PREVIEW_SHOW_ID = String("5a3d8330bf3bd82f73a5ffab")

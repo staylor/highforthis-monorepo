@@ -1,8 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import database from '~/database';
-import Venue from '~/models/Venue';
+import prisma from '~/database';
 
 const API_KEY = process.env.GOOGLE_MAPS_GEOLOCATION_API_KEY as string;
 
@@ -16,9 +15,7 @@ const filename = (id: string) =>
 
 const fileExists = (id: string) => fs.existsSync(filename(id));
 
-const { db } = await database();
-const term = new Venue({ db });
-const venues = await term.all({ limit: 200 });
+const venues = await prisma.venue.findMany({ take: 200 });
 
 for (const venue of venues) {
   if (!venue.streetAddress) {
@@ -26,16 +23,20 @@ for (const venue of venues) {
     continue;
   }
 
-  const id = String(venue._id);
+  const { id } = venue;
   if (fileExists(id)) {
-    if (venue.coordinates?.latitude && venue.coordinates?.longitude) {
+    if (venue.latitude && venue.longitude) {
       // console.log('Coordinates already set for: ', venue.name);
     } else {
       const coordinates = await import(filename(id));
 
       console.log('Setting coordinates for: ', venue.name);
-      await term.updateById(id, {
-        coordinates: coordinates.default,
+      await prisma.venue.update({
+        where: { id },
+        data: {
+          latitude: coordinates.default.latitude,
+          longitude: coordinates.default.longitude,
+        },
       });
     }
     continue;
@@ -68,8 +69,9 @@ for (const venue of venues) {
     longitude: geolocation.lng,
   };
 
-  await term.updateById(id, {
-    coordinates,
+  await prisma.venue.update({
+    where: { id },
+    data: coordinates,
   });
 
   console.log('Saving:', venue.name, coordinates);

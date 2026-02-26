@@ -53,7 +53,7 @@ const Settings = `#graphql
     copyrightText: String
     websiteLink: String
     feedLink: String
-    image: ObjID
+    image: String
     itunesName: String
     itunesEmail: String
     generator: String

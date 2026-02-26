@@ -6,16 +6,15 @@ import path from 'node:path';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import bodyParser from 'body-parser';
+
 import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
 
 import { authMiddleware, jwtMiddleware, initialize } from './authentication';
-import database from './database';
+import prisma from './database';
 import cronJobs from './jobs';
-import addModelsToContext from './models';
 import resolvers from './resolvers';
 import typeDefs from './schema';
 import { multerMiddleware, mediaMiddleware } from './uploads';
@@ -23,8 +22,7 @@ import { multerMiddleware, mediaMiddleware } from './uploads';
 const GRAPHQL_PORT = process.env.GRAPHQL_PORT || 8080;
 
 async function startServer(): Promise<void> {
-  const { db } = await database();
-  const context = addModelsToContext(db);
+  const context = { prisma };
 
   const app = express();
   const httpServer = http.createServer(app);
@@ -33,26 +31,13 @@ async function startServer(): Promise<void> {
     res.status(204);
   });
 
-  app.get('/sse', cors(), (req, res) => {
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-    res.flushHeaders?.();
-
-    const watcher = db.collection('show').watch();
-    watcher.on('change', () => {
-      res.write('event: revalidate\n');
-      res.write('data: Change detected!\n\n');
-    });
-  });
-
   app.use(compression());
   app.use(morgan('tiny'));
   // This server handles uploads, and can serve previews of static assets
   const uploadDir = path.join(process.cwd(), 'public/uploads');
   app.use(express.static(uploadDir));
 
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(express.urlencoded({ extended: true }));
 
   app.use((req, _res, next) => {
     req.context = context;
@@ -64,7 +49,7 @@ async function startServer(): Promise<void> {
 
   app.use('/graphql', jwtMiddleware);
 
-  app.post('/auth', bodyParser.json(), authMiddleware);
+  app.post('/auth', express.json(), authMiddleware);
 
   app.post('/upload', jwtMiddleware, multerMiddleware(uploadDir), mediaMiddleware);
 
@@ -75,17 +60,18 @@ async function startServer(): Promise<void> {
   });
   await server.start();
 
-  app.use(
-    cors(),
-    bodyParser.json(),
-    expressMiddleware(server, {
-      context: async () => context,
-    })
-  );
+  const graphqlMiddleware = expressMiddleware(server, {
+    context: async ({ req }) => ({
+      ...context,
+      authUser: (req as any).context?.authUser,
+    }),
+  });
+
+  app.use('/graphql', cors(), express.json(), graphqlMiddleware as any);
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: GRAPHQL_PORT }, () => {
-      cronJobs(db);
+      cronJobs(prisma);
       resolve();
     })
   );

@@ -96,7 +96,7 @@ const podcastsQuery = gql`
 `;
 
 const podcastMutation = gql`
-  mutation DeletePodcast($ids: [ObjID]!) {
+  mutation DeletePodcast($ids: [String]!) {
     removePodcast(ids: $ids)
   }
 `;

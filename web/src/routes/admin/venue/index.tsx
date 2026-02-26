@@ -130,7 +130,7 @@ const venuesQuery = gql`
 `;
 
 const updateMutation = gql`
-  mutation UpdateVenueExclude($id: ObjID!, $input: UpdateVenueInput!) {
+  mutation UpdateVenueExclude($id: String!, $input: UpdateVenueInput!) {
     updateVenue(id: $id, input: $input) {
       id
     }
@@ -138,7 +138,7 @@ const updateMutation = gql`
 `;
 
 const deleteMutation = gql`
-  mutation DeleteVenue($ids: [ObjID]!) {
+  mutation DeleteVenue($ids: [String]!) {
     removeVenue(ids: $ids)
   }
 `;

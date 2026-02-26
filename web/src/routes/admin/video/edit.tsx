@@ -45,7 +45,7 @@ export default function VideoEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const videoQuery = gql`
-  query VideoEdit($id: ObjID) {
+  query VideoEdit($id: String) {
     video(id: $id) {
       ...VideoForm_video
     }
@@ -54,7 +54,7 @@ const videoQuery = gql`
 `;
 
 const videoMutation = gql`
-  mutation UpdateVideo($id: ObjID!, $input: UpdateVideoInput!) {
+  mutation UpdateVideo($id: String!, $input: UpdateVideoInput!) {
     updateVideo(id: $id, input: $input) {
       ...VideoForm_video
     }

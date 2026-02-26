@@ -189,7 +189,7 @@ const showsQuery = gql`
 `;
 
 const updateMutation = gql`
-  mutation UpdateShowAttended($id: ObjID!, $input: UpdateShowInput!) {
+  mutation UpdateShowAttended($id: String!, $input: UpdateShowInput!) {
     updateShow(id: $id, input: $input) {
       id
     }
@@ -197,7 +197,7 @@ const updateMutation = gql`
 `;
 
 const deleteMutation = gql`
-  mutation DeleteShow($ids: [ObjID]!) {
+  mutation DeleteShow($ids: [String]!) {
     removeShow(ids: $ids)
   }
 `;

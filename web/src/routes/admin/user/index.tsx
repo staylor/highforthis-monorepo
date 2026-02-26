@@ -74,7 +74,7 @@ const usersQuery = gql`
 `;
 
 const usersMutation = gql`
-  mutation DeleteUser($ids: [ObjID]!) {
+  mutation DeleteUser($ids: [String]!) {
     removeUser(ids: $ids)
   }
 `;

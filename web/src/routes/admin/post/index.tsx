@@ -93,7 +93,7 @@ const postsQuery = gql`
 `;
 
 const postsMutation = gql`
-  mutation DeletePost($ids: [ObjID]!) {
+  mutation DeletePost($ids: [String]!) {
     removePost(ids: $ids)
   }
 `;

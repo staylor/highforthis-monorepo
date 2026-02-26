@@ -64,12 +64,12 @@ public class PodcastsQuery: GraphQLQuery {
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .field("date", Double?.self),
-            .field("id", HighForThisAPI.ObjID.self),
+            .field("id", HighForThisAPI.String.self),
             .field("title", String.self),
           ] }
 
           public var date: Double? { __data["date"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
+          public var id: HighForThisAPI.String { __data["id"] }
           public var title: String { __data["title"] }
         }
       }

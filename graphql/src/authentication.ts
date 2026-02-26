@@ -1,27 +1,24 @@
+import type { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import type { Request, Response, NextFunction, Router } from 'express';
 import jwt from 'jwt-simple';
-import { ObjectId, type Document } from 'mongodb';
 import passport from 'passport';
 import type { VerifiedCallback } from 'passport-jwt';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-
-import type User from './models/User';
 
 type JWTPayload = {
   userId: string;
 };
 
 async function userFromPayload(
-  { context: { User } }: { context: { User: User } },
+  { context: { prisma } }: { context: { prisma: PrismaClient } },
   jwtPayload: JWTPayload
 ) {
   if (!jwtPayload.userId) {
     throw new Error('No userId in JWT');
   }
 
-  const id = new ObjectId(jwtPayload.userId);
-  const user = await User.findOneById(id);
+  const user = await prisma.user.findUnique({ where: { id: jwtPayload.userId } });
   return user;
 }
 
@@ -53,7 +50,7 @@ export function initialize(app: Router) {
 }
 
 export function jwtMiddleware(req: Request, res: Response, next: NextFunction) {
-  passport.authenticate('jwt', { session: false }, (_err: any, user: Document) => {
+  passport.authenticate('jwt', { session: false }, (_err: any, user: any) => {
     if (user) {
       req.context.authUser = user;
     }
@@ -69,14 +66,14 @@ export async function authMiddleware(req: Request, res: Response) {
       throw new Error('Username or password not set on request');
     }
 
-    const userModel = req.context.User;
-    const user = await userModel.collection.findOne({ email });
+    const { prisma } = req.context;
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.hash))) {
       throw new Error('User not found matching email/password combination');
     }
 
     const payload = {
-      userId: user._id.toString(),
+      userId: user.id,
     };
 
     if (!process.env.TOKEN_SECRET) {

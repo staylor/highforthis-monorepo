@@ -1,14 +1,7 @@
-import type { Db, Collection } from 'mongodb';
-
-export interface ModelInterface {
-  collection: Collection;
-  insert: (args: any) => any;
-  all: (args: any) => any;
-  count: (args: any) => any;
-}
+import type { PrismaClient } from '@prisma/client';
 
 export interface ModelContext {
-  db: Db;
+  prisma: PrismaClient;
 }
 
 export interface FileInfo {

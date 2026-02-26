@@ -12,7 +12,6 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  ObjID: { input: any; output: any; }
 };
 
 export type ApiKeys = {
@@ -64,7 +63,7 @@ export type Artist = {
   description?: Maybe<Scalars['String']['output']>;
   excludeFromSearch?: Maybe<Scalars['Boolean']['output']>;
   featuredMedia?: Maybe<Array<MediaUpload>>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   name: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   website?: Maybe<Scalars['String']['output']>;
@@ -94,7 +93,7 @@ export type AudioUpload = MediaUpload & {
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
   genre?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   images?: Maybe<Array<Maybe<ImageUploadCrop>>>;
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
@@ -124,10 +123,10 @@ export type CreateArtistInput = {
 };
 
 export type CreatePodcastInput = {
-  audio?: InputMaybe<Scalars['ObjID']['input']>;
+  audio?: InputMaybe<Scalars['String']['input']>;
   date?: InputMaybe<Scalars['Float']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  image?: InputMaybe<Scalars['ObjID']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
 
@@ -142,13 +141,13 @@ export type CreatePostInput = {
 };
 
 export type CreateShowInput = {
-  artists: Array<Scalars['ObjID']['input']>;
+  artists: Array<Scalars['String']['input']>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
   date: Scalars['Float']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
-  venue: Scalars['ObjID']['input'];
+  venue: Scalars['String']['input'];
 };
 
 export type CreateUserInput = {
@@ -264,7 +263,7 @@ export type ElementNodeType = {
 };
 
 export type EntityArg = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -274,7 +273,7 @@ export type FileUpload = MediaUpload & {
   destination: Scalars['String']['output'];
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
   title?: Maybe<Scalars['String']['output']>;
@@ -322,7 +321,7 @@ export type ImageUpload = MediaUpload & {
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
   height?: Maybe<Scalars['Int']['output']>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
   title?: Maybe<Scalars['String']['output']>;
@@ -383,7 +382,7 @@ export type MediaUpload = {
   destination: Scalars['String']['output'];
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
   title?: Maybe<Scalars['String']['output']>;
@@ -473,47 +472,47 @@ export type MutationCreateVideoArgs = {
 
 
 export type MutationRemoveArtistArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 
 export type MutationRemoveMediaUploadArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 
 export type MutationRemovePodcastArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 
 export type MutationRemovePostArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 
 export type MutationRemoveShowArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 
 export type MutationRemoveUserArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 
 export type MutationRemoveVenueArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 
 export type MutationRemoveVideoArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 
 export type MutationUpdateArtistArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateArtistInput;
 };
 
@@ -531,13 +530,13 @@ export type MutationUpdateMediaSettingsArgs = {
 
 
 export type MutationUpdateMediaUploadArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateMediaUploadInput;
 };
 
 
 export type MutationUpdatePodcastArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdatePodcastInput;
 };
 
@@ -549,13 +548,13 @@ export type MutationUpdatePodcastSettingsArgs = {
 
 
 export type MutationUpdatePostArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdatePostInput;
 };
 
 
 export type MutationUpdateShowArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateShowInput;
 };
 
@@ -567,19 +566,19 @@ export type MutationUpdateSiteSettingsArgs = {
 
 
 export type MutationUpdateUserArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateUserInput;
 };
 
 
 export type MutationUpdateVenueArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateVenueInput;
 };
 
 
 export type MutationUpdateVideoArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateVideoInput;
 };
 
@@ -596,7 +595,7 @@ export type Podcast = {
   audio?: Maybe<AudioUpload>;
   date?: Maybe<Scalars['Float']['output']>;
   description: Scalars['String']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   image?: Maybe<ImageUpload>;
   title: Scalars['String']['output'];
 };
@@ -644,7 +643,7 @@ export type PodcastSettingsInput = {
   explicit?: InputMaybe<Scalars['String']['input']>;
   feedLink?: InputMaybe<Scalars['String']['input']>;
   generator?: InputMaybe<Scalars['String']['input']>;
-  image?: InputMaybe<Scalars['ObjID']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   itunesEmail?: InputMaybe<Scalars['String']['input']>;
   itunesName?: InputMaybe<Scalars['String']['input']>;
   language?: InputMaybe<Scalars['String']['input']>;
@@ -659,7 +658,7 @@ export type Post = {
   date?: Maybe<Scalars['Float']['output']>;
   editorState?: Maybe<EditorState>;
   featuredMedia?: Maybe<Array<MediaUpload>>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   status?: Maybe<PostStatus>;
   summary?: Maybe<Scalars['String']['output']>;
@@ -712,7 +711,7 @@ export type Query = {
 
 
 export type QueryArtistArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -728,12 +727,12 @@ export type QueryArtistsArgs = {
 
 
 export type QueryMediaArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryPodcastArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -749,7 +748,7 @@ export type QueryPodcastsArgs = {
 
 
 export type QueryPostArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -766,7 +765,7 @@ export type QueryPostsArgs = {
 
 
 export type QueryShowArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   lastAdded?: InputMaybe<Scalars['Boolean']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
@@ -805,7 +804,7 @@ export type QueryUploadsArgs = {
 
 
 export type QueryUserArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -819,7 +818,7 @@ export type QueryUsersArgs = {
 
 
 export type QueryVenueArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -835,7 +834,7 @@ export type QueryVenuesArgs = {
 
 
 export type QueryVideoArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -873,7 +872,7 @@ export type Show = {
   artists: Array<Artist>;
   attended?: Maybe<Scalars['Boolean']['output']>;
   date: Scalars['Float']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
@@ -969,10 +968,10 @@ export type UpdateMediaUploadInput = {
 };
 
 export type UpdatePodcastInput = {
-  audio?: InputMaybe<Scalars['ObjID']['input']>;
+  audio?: InputMaybe<Scalars['String']['input']>;
   date?: InputMaybe<Scalars['Float']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  image?: InputMaybe<Scalars['ObjID']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
 
@@ -987,13 +986,13 @@ export type UpdatePostInput = {
 };
 
 export type UpdateShowInput = {
-  artists?: InputMaybe<Array<InputMaybe<Scalars['ObjID']['input']>>>;
+  artists?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
   date?: InputMaybe<Scalars['Float']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
-  venue?: InputMaybe<Scalars['ObjID']['input']>;
+  venue?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -1036,7 +1035,7 @@ export type User = {
   __typename?: 'User';
   bio?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   name?: Maybe<Scalars['String']['output']>;
   roles?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
@@ -1063,7 +1062,7 @@ export type Venue = {
   description?: Maybe<Scalars['String']['output']>;
   excludeFromSearch?: Maybe<Scalars['Boolean']['output']>;
   featuredMedia?: Maybe<Array<MediaUpload>>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   name: Scalars['String']['output'];
   permanentlyClosed?: Maybe<Scalars['Boolean']['output']>;
   postalCode?: Maybe<Scalars['String']['output']>;
@@ -1103,7 +1102,7 @@ export type Video = {
   dataId: Scalars['String']['output'];
   dataPlaylistId: Scalars['String']['output'];
   dataType: Scalars['String']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   position: Scalars['Int']['output'];
   publishedAt: Scalars['Float']['output'];
   publishedISO: Scalars['String']['output'];
@@ -1154,7 +1153,7 @@ export type VideoUpload = MediaUpload & {
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
   height?: Maybe<Scalars['Int']['output']>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
   title?: Maybe<Scalars['String']['output']>;
@@ -1223,14 +1222,14 @@ export type CreateArtistMutationVariables = Exact<{
 export type CreateArtistMutation = { __typename?: 'Mutation', createArtist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type ArtistEditQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type ArtistEditQuery = { __typename?: 'Query', artist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', attended?: boolean | null, date: number, id: any, artists: Array<{ __typename?: 'Artist', id: any, name: string }>, venue: { __typename?: 'Venue', id: any, name: string } } }> } | null };
 
 export type UpdateArtistMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateArtistInput;
 }>;
 
@@ -1247,7 +1246,7 @@ export type ArtistsAdminQueryVariables = Exact<{
 export type ArtistsAdminQuery = { __typename?: 'Query', artists?: { __typename?: 'ArtistConnection', count: number, edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', excludeFromSearch?: boolean | null, id: any, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, url?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type UpdateArtistExcludeMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateArtistInput;
 }>;
 
@@ -1255,21 +1254,21 @@ export type UpdateArtistExcludeMutationVariables = Exact<{
 export type UpdateArtistExcludeMutation = { __typename?: 'Mutation', updateArtist?: { __typename?: 'Artist', id: any } | null };
 
 export type DeleteArtistMutationVariables = Exact<{
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
+  ids: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type DeleteArtistMutation = { __typename?: 'Mutation', removeArtist?: boolean | null };
 
 export type MediaAdminQueryVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
 }>;
 
 
 export type MediaAdminQuery = { __typename?: 'Query', media?: { __typename?: 'AudioUpload', description?: string | null, duration?: number | null, destination: string, fileName: string, fileSize: number, id: any, mimeType: string, originalName: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, fileSize: number, height: number, width: number } | null> | null } | { __typename?: 'FileUpload', description?: string | null, destination: string, fileName: string, fileSize: number, id: any, mimeType: string, originalName: string, title?: string | null, type: string } | { __typename?: 'ImageUpload', altText?: string | null, caption?: string | null, height?: number | null, width?: number | null, destination: string, fileName: string, fileSize: number, id: any, mimeType: string, originalName: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, fileSize: number, height: number, width: number }> } | { __typename?: 'VideoUpload', description?: string | null, duration?: number | null, height?: number | null, width?: number | null, destination: string, fileName: string, fileSize: number, id: any, mimeType: string, originalName: string, title?: string | null, type: string } | null };
 
 export type UpdateMediaMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateMediaUploadInput;
 }>;
 
@@ -1288,7 +1287,7 @@ export type UploadsAdminQueryVariables = Exact<{
 export type UploadsAdminQuery = { __typename?: 'Query', uploads?: { __typename?: 'MediaUploadConnection', count: number, mimeTypes?: Array<string> | null, types?: Array<string> | null, edges: Array<{ __typename?: 'MediaUploadEdge', node: { __typename?: 'AudioUpload', destination: string, id: any, mimeType: string, originalName: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null } | { __typename?: 'FileUpload', destination: string, id: any, mimeType: string, originalName: string, title?: string | null, type: string } | { __typename?: 'ImageUpload', destination: string, id: any, mimeType: string, originalName: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, id: any, mimeType: string, originalName: string, title?: string | null, type: string } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type DeleteMediaMutationVariables = Exact<{
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
+  ids: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1302,14 +1301,14 @@ export type CreatePodcastMutationVariables = Exact<{
 export type CreatePodcastMutation = { __typename?: 'Mutation', createPodcast?: { __typename?: 'Podcast', id: any } | null };
 
 export type PodcastEditQueryVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
 }>;
 
 
 export type PodcastEditQuery = { __typename?: 'Query', podcast?: { __typename?: 'Podcast', description: string, id: any, title: string, audio?: { __typename?: 'AudioUpload', id: any, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: any, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
 
 export type UpdatePodcastMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdatePodcastInput;
 }>;
 
@@ -1322,7 +1321,7 @@ export type PodcastsAdminQueryVariables = Exact<{ [key: string]: never; }>;
 export type PodcastsAdminQuery = { __typename?: 'Query', podcasts?: { __typename?: 'PodcastConnection', count: number, edges: Array<{ __typename?: 'PodcastEdge', node: { __typename?: 'Podcast', id: any, title: string, audio?: { __typename?: 'AudioUpload', destination: string, id: any, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null } | null, image?: { __typename?: 'ImageUpload', destination: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type DeletePodcastMutationVariables = Exact<{
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
+  ids: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1336,14 +1335,14 @@ export type CreatePostMutationVariables = Exact<{
 export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', date?: number | null, id: any, slug: string, status?: PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: any, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'HeadingNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, tag?: HeadingTag | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'ImageNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, image?: { __typename?: 'ImageUpload', destination: string, id: any, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | { __typename?: 'LinebreakNode' } | { __typename?: 'QuoteNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'TextNode' } | { __typename?: 'VideoNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, video?: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null } | null> | null } | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type PostEditQueryVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
 }>;
 
 
 export type PostEditQuery = { __typename?: 'Query', post?: { __typename?: 'Post', date?: number | null, id: any, slug: string, status?: PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: any, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'ElementNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'HeadingNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, tag?: HeadingTag | null, children?: Array<{ __typename?: 'CodeNode' } | { __typename?: 'ElementNode' } | { __typename?: 'HeadingNode' } | { __typename?: 'ImageNode' } | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null } | { __typename?: 'QuoteNode' } | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null } | { __typename?: 'VideoNode' } | null> | null } | { __typename?: 'ImageNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, image?: { __typename?: 'ImageUpload', destination: string, id: any, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | { __typename?: 'LinebreakNode' } | { __typename?: 'QuoteNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null } | { __typename?: 'TextNode' } | { __typename?: 'VideoNode', direction?: ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, video?: { __typename?: 'Video', dataId: string, id: any, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null } | null> | null } | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type UpdatePostMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdatePostInput;
 }>;
 
@@ -1360,7 +1359,7 @@ export type PostsAdminQueryVariables = Exact<{
 export type PostsAdminQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', count: number, edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', date?: number | null, id: any, slug: string, status?: PostStatus | null, title: string } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type DeletePostMutationVariables = Exact<{
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
+  ids: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1431,14 +1430,14 @@ export type CreateShowMutationVariables = Exact<{
 export type CreateShowMutation = { __typename?: 'Mutation', createShow?: { __typename?: 'Show', id: any } | null };
 
 export type ShowEditQueryVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
 }>;
 
 
 export type ShowEditQuery = { __typename?: 'Query', show?: { __typename?: 'Show', attended?: boolean | null, date: number, id: any, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string }>, venue: { __typename?: 'Venue', id: any, name: string } } | null, artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: any, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: any, name: string } }> } | null };
 
 export type UpdateShowMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateShowInput;
 }>;
 
@@ -1459,7 +1458,7 @@ export type ShowsAdminQueryVariables = Exact<{
 export type ShowsAdminQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', count?: number | null, edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', attended?: boolean | null, date: number, id: any, title?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type UpdateShowAttendedMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateShowInput;
 }>;
 
@@ -1467,7 +1466,7 @@ export type UpdateShowAttendedMutationVariables = Exact<{
 export type UpdateShowAttendedMutation = { __typename?: 'Mutation', updateShow?: { __typename?: 'Show', id: any } | null };
 
 export type DeleteShowMutationVariables = Exact<{
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
+  ids: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1481,14 +1480,14 @@ export type CreateUserMutationVariables = Exact<{
 export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id: any } | null };
 
 export type UserEditQueryVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
 }>;
 
 
 export type UserEditQuery = { __typename?: 'Query', user?: { __typename?: 'User', bio?: string | null, email: string, id: any, name?: string | null, roles?: Array<string | null> | null } | null };
 
 export type UpdateUserMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateUserInput;
 }>;
 
@@ -1501,7 +1500,7 @@ export type UsersAdminQueryVariables = Exact<{ [key: string]: never; }>;
 export type UsersAdminQuery = { __typename?: 'Query', users?: { __typename?: 'UserConnection', count: number, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', id: any, name?: string | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type DeleteUserMutationVariables = Exact<{
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
+  ids: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1515,14 +1514,14 @@ export type CreateVenueMutationVariables = Exact<{
 export type CreateVenueMutation = { __typename?: 'Mutation', createVenue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type VenueEditQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type VenueEditQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: any, title?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string }>, venue: { __typename?: 'Venue', id: any, name: string } } }> } | null, venue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<{ __typename?: 'AudioUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'FileUpload', destination: string, fileName: string, id: any, type: string } | { __typename?: 'ImageUpload', destination: string, fileName: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload', destination: string, fileName: string, id: any, type: string }> | null } | null };
 
 export type UpdateVenueMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateVenueInput;
 }>;
 
@@ -1539,7 +1538,7 @@ export type VenuesAdminQueryVariables = Exact<{
 export type VenuesAdminQuery = { __typename?: 'Query', venues?: { __typename?: 'VenueConnection', count: number, edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', address?: string | null, capacity?: string | null, excludeFromSearch?: boolean | null, id: any, name: string, permanentlyClosed?: boolean | null, slug: string, website?: string | null, featuredMedia?: Array<{ __typename?: 'AudioUpload' } | { __typename?: 'FileUpload' } | { __typename?: 'ImageUpload', destination: string, id: any, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | { __typename?: 'VideoUpload' }> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type UpdateVenueExcludeMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateVenueInput;
 }>;
 
@@ -1547,21 +1546,21 @@ export type UpdateVenueExcludeMutationVariables = Exact<{
 export type UpdateVenueExcludeMutation = { __typename?: 'Mutation', updateVenue?: { __typename?: 'Venue', id: any } | null };
 
 export type DeleteVenueMutationVariables = Exact<{
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
+  ids: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type DeleteVenueMutation = { __typename?: 'Mutation', removeVenue?: boolean | null };
 
 export type VideoEditQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type VideoEditQuery = { __typename?: 'Query', video?: { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: any, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
 
 export type UpdateVideoMutationVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateVideoInput;
 }>;
 
@@ -1579,7 +1578,7 @@ export type VideosAdminQueryVariables = Exact<{
 export type VideosAdminQuery = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', count: number, years?: Array<number> | null, edges: Array<{ __typename?: 'VideoEdge', node: { __typename?: 'Video', id: any, publishedAt: number, slug: string, title: string, year: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type DeleteVideoMutationVariables = Exact<{
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>> | InputMaybe<Scalars['ObjID']['input']>;
+  ids: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1630,7 +1629,7 @@ export type PodcastsQueryVariables = Exact<{
 export type PodcastsQuery = { __typename?: 'Query', podcasts?: { __typename?: 'PodcastConnection', edges: Array<{ __typename?: 'PodcastEdge', node: { __typename?: 'Podcast', description: string, id: any, title: string } }> } | null };
 
 export type PodcastQueryVariables = Exact<{
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
 }>;
 
 
@@ -1673,7 +1672,7 @@ export type ShowsQueryVariables = Exact<{
 export type ShowsQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: any, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: any, name: string, slug: string }>, venue: { __typename?: 'Venue', id: any, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
 
 export type ShowQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 

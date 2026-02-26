@@ -1,7 +1,6 @@
 import path from 'node:path';
 
-import database from '../database';
-import Media from '../models/Media';
+import prisma from '../database';
 import type { StorageAdapter } from '../uploads/adapter';
 import mediaAdapter from '../uploads/adapter';
 
@@ -13,34 +12,32 @@ interface FileData {
 }
 
 (async () => {
-  const { db, client } = await database();
-  const media = new Media({ db });
   const adapter: StorageAdapter = mediaAdapter(uploadDir);
 
   const uploads: FileData[] = [];
-  const items = await media.collection.find({}).toArray();
+  const items = await prisma.mediaUpload.findMany();
   items.forEach((item) => {
     uploads.push({ destination: item.destination, fileName: item.fileName });
-    if (item.type === 'image') {
-      item.crops.forEach((crop: FileData) => {
+    if (item.type === 'image' && Array.isArray(item.crops)) {
+      (item.crops as any[]).forEach((crop: FileData) => {
         uploads.push({
           destination: item.destination,
           fileName: crop.fileName,
         });
       });
-    } else if (item.type === 'audio') {
-      item.images.forEach((crop: FileData) => {
+    } else if (item.type === 'audio' && Array.isArray(item.images)) {
+      (item.images as any[]).forEach((image: FileData) => {
         uploads.push({
           destination: item.destination,
-          fileName: crop.fileName,
+          fileName: image.fileName,
         });
       });
     }
   });
 
   console.log(`Uploading ${uploads.length} files`);
-  adapter.run(uploads).then(() => {
-    client.close();
+  adapter.run(uploads).then(async () => {
+    await prisma.$disconnect();
     console.log('All done!');
   });
 })();

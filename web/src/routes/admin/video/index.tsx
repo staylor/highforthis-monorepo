@@ -125,7 +125,7 @@ const videosQuery = gql`
 `;
 
 const videoMutation = gql`
-  mutation DeleteVideo($ids: [ObjID]!) {
+  mutation DeleteVideo($ids: [String]!) {
     removeVideo(ids: $ids)
   }
 `;

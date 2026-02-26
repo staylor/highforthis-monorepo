@@ -15,6 +15,7 @@ interface FileCopy {
   filename: string;
   path: string;
   buffer: Buffer;
+  [key: string]: any;
 }
 
 const uploadFields = ['fieldname', 'originalname', 'encoding', 'mimetype'];
@@ -28,7 +29,12 @@ export default async (req: Request, res: Response) => {
     return fileCopy;
   });
 
-  const { Media } = req.context;
-  const ids = await Promise.all(files.map((file: FileCopy) => Media.insert(file)));
+  const { prisma } = req.context;
+  const ids = await Promise.all(
+    files.map(async (file: FileCopy) => {
+      const record = await prisma.mediaUpload.create({ data: file });
+      return record.id;
+    })
+  );
   res.json(ids);
 };

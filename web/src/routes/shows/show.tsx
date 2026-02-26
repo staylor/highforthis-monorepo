@@ -75,7 +75,7 @@ export default function ShowRoute({ loaderData }: Route.ComponentProps) {
 }
 
 const showQuery = gql`
-  query Show($id: ObjID) {
+  query Show($id: String) {
     show(id: $id) {
       artists {
         appleMusic {

@@ -1,14 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-import dotenv from '@dotenvx/dotenvx';
-
-import database from '~/database';
-import Artist from '~/models/Artist';
+import prisma from '~/database';
 
 import { generateToken } from '../jwt';
-
-dotenv.config();
 
 const searchUrl = (term: string) =>
   `https://api.music.apple.com/v1/catalog/us/search?term=${encodeURIComponent(term)}`;
@@ -35,12 +30,10 @@ const filename = (id: string) =>
 const fileExists = (id: string) => fs.existsSync(filename(id));
 
 async function main() {
-  const { db } = await database();
-  const term = new Artist({ db });
-  const artists = await term.all({ limit: 1000 });
+  const artists = await prisma.artist.findMany({ take: 1000 });
 
   for (const artist of artists) {
-    const id = String(artist._id);
+    const { id } = artist;
     if (fileExists(id)) {
       if (!artist.appleMusic) {
         const data = await import(filename(id));
@@ -54,8 +47,9 @@ async function main() {
         };
 
         console.log('Setting appleMusic for: ', id);
-        await term.updateById(id, {
-          appleMusic,
+        await prisma.artist.update({
+          where: { id },
+          data: { appleMusic },
         });
       }
       continue;

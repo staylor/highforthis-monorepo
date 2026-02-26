@@ -1,8 +1,6 @@
-import database from '~/database';
+import prisma from '~/database';
 import shows from '~/jobs/shows';
 
-const { db } = await database();
-
-await shows(db);
+await shows(prisma);
 
 process.exit(0);

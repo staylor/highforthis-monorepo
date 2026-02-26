@@ -1,6 +1,6 @@
 import { URL } from 'node:url';
 
-import type { Db } from 'mongodb';
+import type { PrismaClient } from '@prisma/client';
 import fetch from 'node-fetch';
 
 import { slugify } from '~/models/utils';
@@ -47,7 +47,6 @@ async function fetchPlaylistItems(playlistId: string): Promise<any[]> {
 
     const fetchPage = (pageToken?: string): void => {
       const playlistUrl = getPlaylistUrl(playlistId, pageToken);
-      // console.log(playlistUrl);
       fetch(playlistUrl)
         .catch((e) => {
           if (items.length) {
@@ -74,17 +73,15 @@ async function fetchPlaylistItems(playlistId: string): Promise<any[]> {
 }
 
 async function updateVideo(
-  db: Db,
+  prisma: PrismaClient,
   { contentDetails, snippet }: Record<string, any>,
   year: string,
   playlistId: string
 ) {
-  // console.log('Update start for dataId:', contentDetails.videoId);
-  // console.log('Title:', snippet.title);
   const thumbnails =
     snippet && snippet.thumbnails
       ? Object.keys(snippet.thumbnails).map((thumb) => snippet.thumbnails[thumb])
-      : null;
+      : [];
 
   const date = new Date(contentDetails.videoPublishedAt);
   const data = {
@@ -93,32 +90,34 @@ async function updateVideo(
     dataPlaylistId: playlistId,
     year: parseInt(year, 10),
     publishedISO: contentDetails.videoPublishedAt,
-    publishedAt: date.getTime(),
+    publishedAt: date,
     title: snippet.title,
     position: snippet.position,
     slug: slugify(snippet.title),
-    updatedAt: Date.now(),
-    thumbnails,
+    thumbnails: thumbnails as any,
   };
 
   try {
-    await db.collection('video').updateOne(
-      { dataId: data.dataId },
-      {
-        $set: data,
-        $setOnInsert: {
-          createdAt: Date.now(),
-        },
+    await prisma.video.upsert({
+      where: { dataId: data.dataId },
+      create: data,
+      update: {
+        ...data,
+        // don't overwrite slug on update
+        slug: undefined,
       },
-      { upsert: true }
-    );
+    });
     return data.dataId;
   } catch (e) {
     throw e;
   }
 }
 
-async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<string[]> {
+async function fetchPlaylist(
+  prisma: PrismaClient,
+  year: string,
+  playlistId: string
+): Promise<string[]> {
   let items;
   try {
     items = await fetchPlaylistItems(playlistId);
@@ -128,15 +127,14 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
   }
 
   const newIds = items.filter(Boolean).map((item) => item.contentDetails.videoId);
-  const cursor = await db
-    .collection('video')
-    .find({ dataPlaylistId: playlistId }, { dataId: 1 } as any)
-    .toArray();
-  const existing = cursor.map(({ dataId }) => dataId);
+  const existing = await prisma.video.findMany({
+    where: { dataPlaylistId: playlistId },
+    select: { dataId: true },
+  });
+  const existingIds = existing.map(({ dataId }) => dataId);
 
   const updates = await Promise.all(
     items.map((item) => {
-      // console.log('Map start:', i);
       if (
         !item ||
         item.snippet.title === 'Private video' ||
@@ -145,32 +143,31 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
         console.log(playlistId, 'has a deletion:', item.contentDetails.videoId);
         return false;
       }
-      return updateVideo(db, item, year, playlistId);
+      return updateVideo(prisma, item, year, playlistId);
     })
   );
 
-  // console.log('Existing length:', existing.length);
-  // console.log('Updates count:', updates.length);
   const updated = updates.filter(Boolean);
-  // console.log('Updated count:', updated.length);
-  if (existing.length) {
-    const orphans = existing.filter((id: string) => newIds.indexOf(id) < 0);
+  if (existingIds.length) {
+    const orphans = existingIds.filter((id: string) => newIds.indexOf(id) < 0);
     if (orphans.length) {
       console.log('Orphans in:', playlistId, '-', orphans);
-      await db.collection('video').deleteMany({
-        dataId: { $in: orphans },
-        dataPlaylistId: playlistId,
+      await prisma.video.deleteMany({
+        where: {
+          dataId: { in: orphans },
+          dataPlaylistId: playlistId,
+        },
       });
-    } else if (updated.length > existing.length) {
-      console.log('Added', updated.length - existing.length, 'items to', playlistId);
+    } else if (updated.length > existingIds.length) {
+      console.log('Added', updated.length - existingIds.length, 'items to', playlistId);
     }
   } else {
     console.log('Imported', updated.length, 'of', items.length, 'items from', playlistId);
   }
-  return updated;
+  return updated as string[];
 }
 
-export default async (db: Db) => {
+export default async (prisma: PrismaClient) => {
   let response: any;
   try {
     response = await fetchPlaylists();
@@ -182,7 +179,7 @@ export default async (db: Db) => {
   await Promise.all(
     response?.items?.map((playlist: any) => {
       if (playlist.snippet.title.match(/^[0-9]{4}$/)) {
-        return fetchPlaylist(db, playlist.snippet.title, playlist.id);
+        return fetchPlaylist(prisma, playlist.snippet.title, playlist.id);
       }
       return Promise.resolve();
     }) || []

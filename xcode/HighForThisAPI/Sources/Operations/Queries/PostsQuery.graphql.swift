@@ -67,14 +67,14 @@ public class PostsQuery: GraphQLQuery {
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .field("featuredMedia", [FeaturedMedium]?.self),
-            .field("id", HighForThisAPI.ObjID.self),
+            .field("id", HighForThisAPI.String.self),
             .field("slug", String.self),
             .field("summary", String?.self),
             .field("title", String.self),
           ] }
 
           public var featuredMedia: [FeaturedMedium]? { __data["featuredMedia"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
+          public var id: HighForThisAPI.String { __data["id"] }
           public var slug: String { __data["slug"] }
           public var summary: String? { __data["summary"] }
           public var title: String { __data["title"] }
@@ -90,12 +90,12 @@ public class PostsQuery: GraphQLQuery {
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
               .field("destination", String.self),
-              .field("id", HighForThisAPI.ObjID.self),
+              .field("id", HighForThisAPI.String.self),
               .inlineFragment(AsImageUpload.self),
             ] }
 
             public var destination: String { __data["destination"] }
-            public var id: HighForThisAPI.ObjID { __data["id"] }
+            public var id: HighForThisAPI.String { __data["id"] }
 
             public var asImageUpload: AsImageUpload? { _asInlineFragment() }
 
@@ -114,7 +114,7 @@ public class PostsQuery: GraphQLQuery {
 
               public var crops: [Crop] { __data["crops"] }
               public var destination: String { __data["destination"] }
-              public var id: HighForThisAPI.ObjID { __data["id"] }
+              public var id: HighForThisAPI.String { __data["id"] }
 
               /// Posts.Edge.Node.FeaturedMedium.AsImageUpload.Crop
               ///

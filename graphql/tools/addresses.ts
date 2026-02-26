@@ -1,9 +1,6 @@
-import database from '~/database';
-import Venue from '~/models/Venue';
+import prisma from '~/database';
 
-const { db } = await database();
-const model = new Venue({ db });
-const venues = await model.all({ limit: 1000 });
+const venues = await prisma.venue.findMany({ take: 1000 });
 
 const trim = (str: string) => str.replace(/^\s+|\s+$/g, '');
 
@@ -13,12 +10,14 @@ for (const venue of venues) {
     continue;
   }
 
-  if (!venue.address) {
+  // Reconstruct the old-style address field
+  const address = [venue.streetAddress, [venue.city, venue.state, venue.postalCode].filter(Boolean).join(', ')].filter(Boolean).join('\n');
+  if (!address) {
     console.log('Missing address:', venue.name);
     continue;
   }
 
-  const parts = trim(venue.address).split('\n');
+  const parts = trim(address).split('\n');
   if (parts.length !== 2) {
     console.log('Malformed:', parts);
     continue;
@@ -35,12 +34,9 @@ for (const venue of venues) {
   const state = trim(stateZip.replace(postalCode, ''));
 
   console.log('Saving new address data:', venue.name);
-  const id = String(venue._id);
-  await model.updateById(id, {
-    streetAddress,
-    city,
-    state,
-    postalCode,
+  await prisma.venue.update({
+    where: { id: venue.id },
+    data: { streetAddress, city, state, postalCode },
   });
 }
 

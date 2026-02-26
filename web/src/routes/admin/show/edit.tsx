@@ -27,7 +27,7 @@ export default function ShowEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const showQuery = gql`
-  query ShowEdit($id: ObjID!) {
+  query ShowEdit($id: String!) {
     show(id: $id) {
       ...ShowForm_show
     }
@@ -38,7 +38,7 @@ const showQuery = gql`
 `;
 
 const showMutation = gql`
-  mutation UpdateShow($id: ObjID!, $input: UpdateShowInput!) {
+  mutation UpdateShow($id: String!, $input: UpdateShowInput!) {
     updateShow(id: $id, input: $input) {
       ...ShowForm_show
     }

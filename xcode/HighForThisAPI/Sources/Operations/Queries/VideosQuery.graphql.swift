@@ -96,7 +96,7 @@ public class VideosQuery: GraphQLQuery {
           ] }
 
           public var dataId: String { __data["dataId"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
+          public var id: HighForThisAPI.String { __data["id"] }
           public var slug: String { __data["slug"] }
           public var thumbnails: [Thumbnail] { __data["thumbnails"] }
           public var title: String { __data["title"] }

@@ -32,7 +32,7 @@ export default function UserEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const userQuery = gql`
-  query UserEdit($id: ObjID!) {
+  query UserEdit($id: String!) {
     user(id: $id) {
       ...UserForm_user
     }
@@ -41,7 +41,7 @@ const userQuery = gql`
 `;
 
 const userMutation = gql`
-  mutation UpdateUser($id: ObjID!, $input: UpdateUserInput!) {
+  mutation UpdateUser($id: String!, $input: UpdateUserInput!) {
     updateUser(id: $id, input: $input) {
       ...UserForm_user
     }
