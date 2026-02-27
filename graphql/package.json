@@ -12,7 +12,7 @@
     "cors": "2.8.6",
     "cron": "4.4.0",
     "dotenv": "17.3.1",
-    "express": "4.21.2",
+    "express": "5.2.1",
     "ffprobe": "1.1.2",
     "ffprobe-static": "3.1.0",
     "graphql": "16.13.0",

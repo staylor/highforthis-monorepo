@@ -28,7 +28,7 @@ async function startServer(): Promise<void> {
   const httpServer = http.createServer(app);
 
   app.get('/favicon.ico', (_req, res) => {
-    res.status(204);
+    res.sendStatus(204);
   });
 
   app.use(compression());
