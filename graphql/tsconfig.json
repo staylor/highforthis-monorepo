@@ -1,23 +1,20 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "lib": ["ES2024"],
     "isolatedModules": true,
     "esModuleInterop": true,
-    "module": "ES2022",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
-    "target": "ES2022",
+    "target": "ES2024",
     "strict": true,
     "baseUrl": ".",
     "paths": {
       "#/*": ["./src/*"]
     },
     "skipLibCheck": true,
-    "noEmit": false,
-    "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "outDir": "lib"
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true
   },
-	"include": ["src/**/*.ts", "types/*.ts", "tools/**/*.ts"],
+  "include": ["src/**/*.ts", "types/*.ts", "tools/**/*.ts"]
 }
