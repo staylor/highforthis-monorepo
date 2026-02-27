@@ -38,7 +38,7 @@ interface BlockType {
   onToggle?: () => void;
 }
 
-const BLOCK_OFFSET = 7;
+const BLOCK_OFFSET = 0;
 const BLOCK_TOOLBAR_OFFSET = 40;
 
 const LowPriority = 1;
@@ -220,47 +220,56 @@ export default function BlockToolbarPlugin() {
     }
   }, [showToolbar, hideToolbar]);
 
-  const $updateButton = useCallback(() => {
-    const selection = $getSelection() as RangeSelection;
-    if (!selection) {
-      hideButton();
-      return;
-    }
-
-    const range = selection as RangeSelection;
-    const anchorOffset = range.anchor.offset;
-    const focusOffset = range.focus.offset;
-
-    if (anchorOffset === 0 && focusOffset === 0) {
-      showButton();
-
-      editor.update(() => {
-        const selectedNode = getNodeFromSelection();
-        if (!selectedNode) {
-          return;
-        }
-
-        const node = $getNearestNodeFromDOMNode(selectedNode) as LexicalNode;
-        if (!node) {
-          return;
-        }
-        if (ALL_TYPES.includes(node.__type)) {
-          const style = getStyleFromNode(node) as string;
-          setButtonActive(true);
-          showToolbar();
-          setActiveStyle(style);
-        } else {
-          setButtonActive(false);
-          hideToolbar();
-          setActiveStyle('');
-        }
-      });
-    } else {
-      hideButton();
-    }
-  }, [editor, showButton, hideButton, showToolbar, hideToolbar, ALL_TYPES]);
+  const showButtonRef = useRef(showButton);
+  showButtonRef.current = showButton;
+  const hideButtonRef = useRef(hideButton);
+  hideButtonRef.current = hideButton;
+  const showToolbarRef = useRef(showToolbar);
+  showToolbarRef.current = showToolbar;
+  const hideToolbarRef = useRef(hideToolbar);
+  hideToolbarRef.current = hideToolbar;
 
   useEffect(() => {
+    const $updateButton = () => {
+      const selection = $getSelection() as RangeSelection;
+      if (!selection) {
+        hideButtonRef.current();
+        return;
+      }
+
+      const range = selection as RangeSelection;
+      const anchorOffset = range.anchor.offset;
+      const focusOffset = range.focus.offset;
+
+      if (anchorOffset === 0 && focusOffset === 0) {
+        showButtonRef.current();
+
+        editor.update(() => {
+          const selectedNode = getNodeFromSelection();
+          if (!selectedNode) {
+            return;
+          }
+
+          const node = $getNearestNodeFromDOMNode(selectedNode) as LexicalNode;
+          if (!node) {
+            return;
+          }
+          if (ALL_TYPES.includes(node.__type)) {
+            const style = getStyleFromNode(node) as string;
+            setButtonActive(true);
+            showToolbarRef.current();
+            setActiveStyle(style);
+          } else {
+            setButtonActive(false);
+            hideToolbarRef.current();
+            setActiveStyle('');
+          }
+        });
+      } else {
+        hideButtonRef.current();
+      }
+    };
+
     const unregister = mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
@@ -277,7 +286,7 @@ export default function BlockToolbarPlugin() {
       )
     );
     return unregister;
-  }, [editor, $updateButton]);
+  }, [editor, ALL_TYPES]);
 
   const onToggle = useCallback(
     (type: BlockType) => {
