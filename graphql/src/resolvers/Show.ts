@@ -107,7 +107,7 @@ const resolvers = {
       });
     },
 
-    async show(_: unknown, { id, slug, lastAdded }: QueryShowArgs, { prisma }: AppContext) {
+    async show(_: unknown, { id, lastAdded }: QueryShowArgs, { prisma }: AppContext) {
       if (lastAdded) {
         return prisma.show.findFirst({ orderBy: { createdAt: 'desc' }, include: showIncludes });
       }
@@ -133,7 +133,9 @@ const resolvers = {
             count: r._count.artistId,
             entity: { ...artistMap.get(r.artistId), type: 'artist' },
           }))
-          .sort((a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? ''));
+          .sort(
+            (a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? '')
+          );
       } else {
         const results = await prisma.show.groupBy({
           by: ['venueId'],
@@ -148,7 +150,9 @@ const resolvers = {
             count: r._count.venueId,
             entity: { ...venueMap.get(r.venueId), type: 'venue' },
           }))
-          .sort((a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? ''));
+          .sort(
+            (a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? '')
+          );
       }
     },
   },
@@ -168,11 +172,7 @@ const resolvers = {
       });
     },
 
-    async updateShow(
-      _: unknown,
-      { id, input }: MutationUpdateShowArgs,
-      { prisma }: AppContext
-    ) {
+    async updateShow(_: unknown, { id, input }: MutationUpdateShowArgs, { prisma }: AppContext) {
       const { artists, venue, date, ...data } = input as any;
       const values: any = { ...data };
 

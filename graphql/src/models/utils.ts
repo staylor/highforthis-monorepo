@@ -1,7 +1,6 @@
-import type { PrismaClient } from '@prisma/client';
 import slugifyUtil from 'slugify';
 
-const removePattern = /[#,$*_+~.()[\]\/'"!-:@]/g;
+const removePattern = /[#,$*_+~.()[\]'"!-:@]/g;
 
 export function slugify(value: string): string {
   return slugifyUtil(value, {

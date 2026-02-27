@@ -41,6 +41,14 @@ function MediaModal({ type = 'image', onClose, selectAudio, selectImage }: Media
             <div
               className="float-left m-1.5 h-28 w-30 cursor-pointer overflow-hidden bg-zinc-50"
               key={node.id}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  (e.target as HTMLElement).click();
+                }
+              }}
               onClick={(e: SyntheticEvent) => {
                 e.preventDefault();
 

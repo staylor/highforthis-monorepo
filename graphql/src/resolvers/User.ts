@@ -62,19 +62,13 @@ const resolvers = {
         data: {
           ...fields,
           hash,
-          roles: roles?.length
-            ? { create: roles.map((name: string) => ({ name })) }
-            : undefined,
+          roles: roles?.length ? { create: roles.map((name: string) => ({ name })) } : undefined,
         },
         include: userIncludes,
       });
     },
 
-    async updateUser(
-      _: unknown,
-      { id, input }: MutationUpdateUserArgs,
-      { prisma }: AppContext
-    ) {
+    async updateUser(_: unknown, { id, input }: MutationUpdateUserArgs, { prisma }: AppContext) {
       const { password, roles, ...fields } = input as any;
       const user = await prisma.user.findUnique({ where: { id } });
       if (!user) throw new Error('User not found');

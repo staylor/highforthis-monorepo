@@ -44,15 +44,20 @@ function Song({ song }: { song: string }) {
   const isCurrent = currentSong === song;
   return (
     <li
-      className={cn('mb-1 -ml-1 cursor-pointer p-1', {
+      className={cn('mb-1 -ml-1 p-1', {
         'bg-pink text-white': isCurrent,
         'bg-detail': !isCurrent && stats[song] === 1,
       })}
-      onClick={() => {
-        setCurrentSong(currentSong === song ? '' : song);
-      }}
     >
-      {song}
+      <button
+        type="button"
+        className="w-full cursor-pointer text-left"
+        onClick={() => {
+          setCurrentSong(currentSong === song ? '' : song);
+        }}
+      >
+        {song}
+      </button>
     </li>
   );
 }

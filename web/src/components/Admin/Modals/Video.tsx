@@ -47,6 +47,14 @@ function VideoModal({ selectVideo, onClose }: VideoModalProps) {
             <div
               className="float-left m-1.5 h-28 w-30 cursor-pointer overflow-hidden"
               key={node.id}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  (e.target as HTMLElement).click();
+                }
+              }}
               onClick={(e) => {
                 e.preventDefault();
 

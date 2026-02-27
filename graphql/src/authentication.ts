@@ -36,17 +36,18 @@ export function initialize(app: Router) {
         passReqToCallback: true,
       },
       (request: Request, jwtPayload: JWTPayload, done: VerifiedCallback) => {
-        userFromPayload(request, jwtPayload)
-          .then((user) => {
+        void (async () => {
+          try {
+            const user = await userFromPayload(request, jwtPayload);
             if (user) {
               done(null, user);
             } else {
               done(null, false);
             }
-          })
-          .catch((e) => {
+          } catch (e) {
             done(e, false);
-          });
+          }
+        })();
       }
     )
   );

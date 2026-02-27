@@ -34,7 +34,7 @@ export async function parseConnection(
   connectionArgs: ConnectionArgs,
   findManyArgs: any = {}
 ) {
-  const { first = 10, after = null, last = 10, before = null, ...rest } = connectionArgs;
+  const { first = 10, after = null, last = 10, before = null, ..._rest } = connectionArgs;
 
   let limit = 10;
   let offset = 0;

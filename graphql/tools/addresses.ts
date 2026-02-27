@@ -11,7 +11,12 @@ for (const venue of venues) {
   }
 
   // Reconstruct the old-style address field
-  const address = [venue.streetAddress, [venue.city, venue.state, venue.postalCode].filter(Boolean).join(', ')].filter(Boolean).join('\n');
+  const address = [
+    venue.streetAddress,
+    [venue.city, venue.state, venue.postalCode].filter(Boolean).join(', '),
+  ]
+    .filter(Boolean)
+    .join('\n');
   if (!address) {
     console.log('Missing address:', venue.name);
     continue;

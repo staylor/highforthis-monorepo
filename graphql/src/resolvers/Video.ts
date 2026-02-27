@@ -74,11 +74,7 @@ const resolvers = {
       return prisma.video.create({ data, include: videoIncludes });
     },
 
-    async updateVideo(
-      _: unknown,
-      { id, input }: MutationUpdateVideoArgs,
-      { prisma }: AppContext
-    ) {
+    async updateVideo(_: unknown, { id, input }: MutationUpdateVideoArgs, { prisma }: AppContext) {
       const data = { ...input } as any;
       if (data.publishedAt) {
         data.publishedAt = new Date(data.publishedAt);

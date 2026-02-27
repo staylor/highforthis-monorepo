@@ -19,6 +19,8 @@ function BlockButton({ active, onMouseDown, ref }: Props) {
         }
       )}
       ref={ref as any}
+      role="button"
+      tabIndex={0}
       onMouseDown={(e) => {
         e.preventDefault();
         e.stopPropagation();

@@ -29,13 +29,13 @@ export default async function query<T = unknown>({
     headers.Authorization = `Bearer ${authToken}`;
   }
   try {
-    ({ data } = await apolloClient.query<T>({
+    ({ data } = (await apolloClient.query<T>({
       query,
       variables,
       context: {
         headers,
       },
-    }) as { data: T });
+    })) as { data: T });
   } catch (e) {
     const error = e as Error;
     if (ServerError.is(error)) {

@@ -63,11 +63,7 @@ const resolvers = {
       return prisma.podcast.update({ where: { id }, data: input as any, include: podcastIncludes });
     },
 
-    async removePodcast(
-      _: unknown,
-      { ids }: MutationRemovePodcastArgs,
-      { prisma }: AppContext
-    ) {
+    async removePodcast(_: unknown, { ids }: MutationRemovePodcastArgs, { prisma }: AppContext) {
       try {
         await prisma.podcast.deleteMany({ where: { id: { in: ids as string[] } } });
         return true;

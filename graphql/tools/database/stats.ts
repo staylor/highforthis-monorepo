@@ -16,9 +16,7 @@ async function logArtistStats() {
 
   console.log(
     'Artists:',
-    stats
-      .filter(({ count }) => count > 1)
-      .sort((a, b) => b.count - a.count)
+    stats.filter(({ count }) => count > 1).sort((a, b) => b.count - a.count)
   );
 }
 
@@ -38,9 +36,7 @@ async function logVenueStats() {
 
   console.log(
     'Venues:',
-    stats
-      .filter(({ count }) => count > 1)
-      .sort((a, b) => b.count - a.count)
+    stats.filter(({ count }) => count > 1).sort((a, b) => b.count - a.count)
   );
 }
 

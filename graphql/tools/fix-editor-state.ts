@@ -30,7 +30,11 @@ function oid(val: any): string {
  * 4. Convert {"$numberLong": "..."} → number
  * 5. Remap imageId / videoId from old Mongo ObjectId to new Prisma cuid
  */
-function cleanValue(val: any, key: string | null, idMaps: { media: Map<string, string>; video: Map<string, string> }): any {
+function cleanValue(
+  val: any,
+  key: string | null,
+  idMaps: { media: Map<string, string>; video: Map<string, string> }
+): any {
   if (val === null || val === undefined) return val;
 
   if (typeof val === 'object' && !Array.isArray(val)) {
@@ -133,7 +137,12 @@ async function main() {
   for (const post of posts) {
     const raw = JSON.stringify(post.editorState);
     // Only process posts that have MongoDB extended JSON artifacts
-    if (!raw.includes('$oid') && !raw.includes('$numberInt') && !raw.includes('$numberDouble') && !raw.includes('$numberLong')) {
+    if (
+      !raw.includes('$oid') &&
+      !raw.includes('$numberInt') &&
+      !raw.includes('$numberDouble') &&
+      !raw.includes('$numberLong')
+    ) {
       continue;
     }
 
@@ -149,9 +158,11 @@ async function main() {
   console.log(`\nDone! Updated ${updated} posts.`);
 }
 
-main()
-  .catch((e) => {
-    console.error('Fix failed:', e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+try {
+  await main();
+} catch (e) {
+  console.error('Fix failed:', e);
+  process.exit(1);
+} finally {
+  await prisma.$disconnect();
+}

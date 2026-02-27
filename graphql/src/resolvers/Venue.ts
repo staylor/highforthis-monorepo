@@ -21,7 +21,7 @@ const resolvers = {
       return `${venue.streetAddress}\n${venue.city}, ${venue.state} ${venue.postalCode}`;
     },
     coordinates(venue: any) {
-      if (venue.latitude == null && venue.longitude == null) return null;
+      if (venue.latitude === null && venue.longitude === null) return null;
       return { latitude: venue.latitude, longitude: venue.longitude };
     },
     featuredMedia(venue: any, _: unknown, { prisma }: AppContext) {
@@ -78,11 +78,7 @@ const resolvers = {
       });
     },
 
-    async updateVenue(
-      _: unknown,
-      { id, input }: MutationUpdateVenueArgs,
-      { prisma }: AppContext
-    ) {
+    async updateVenue(_: unknown, { id, input }: MutationUpdateVenueArgs, { prisma }: AppContext) {
       const { featuredMedia, coordinates, ...data } = input as any;
       const updateData: any = { ...data };
       if (coordinates) {

@@ -22,13 +22,13 @@ function oid(val: any): string {
 }
 
 function num(val: any): number {
-  if (val == null) return 0;
+  if (val === null || val === undefined) return 0;
   if (typeof val === 'number') return val;
   return parseFloat(val.$numberDouble || val.$numberInt || val.$numberLong || '0');
 }
 
 function numOrNull(val: any): number | null {
-  if (val == null) return null;
+  if (val === null || val === undefined) return null;
   return num(val);
 }
 
@@ -482,9 +482,11 @@ async function main() {
   }
 }
 
-main()
-  .catch((e) => {
-    console.error('Migration failed:', e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+try {
+  await main();
+} catch (e) {
+  console.error('Migration failed:', e);
+  process.exit(1);
+} finally {
+  await prisma.$disconnect();
+}

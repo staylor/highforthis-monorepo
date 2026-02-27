@@ -38,8 +38,7 @@ interface FileData {
   });
 
   console.log(`Uploading ${uploads.length} files`);
-  adapter.run(uploads).then(async () => {
-    await prisma.$disconnect();
-    console.log('All done!');
-  });
+  await adapter.run(uploads);
+  await prisma.$disconnect();
+  console.log('All done!');
 })();

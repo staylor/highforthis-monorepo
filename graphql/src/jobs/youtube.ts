@@ -37,38 +37,30 @@ function getPlaylistUrl(playlistId: string, pageToken?: string): string {
 }
 
 async function fetchPlaylists() {
-  return fetch(getPlaylistsUrl()).then((response) => response.json());
+  const response = await fetch(getPlaylistsUrl());
+  return response.json();
 }
 
 async function fetchPlaylistItems(playlistId: string): Promise<any[]> {
-  return new Promise((resolve, reject) => {
-    let items: any[] = [];
+  let items: any[] = [];
+  let pageToken: string | undefined;
 
-    const fetchPage = (pageToken?: string): void => {
-      const playlistUrl = getPlaylistUrl(playlistId, pageToken);
-      fetch(playlistUrl)
-        .catch((e) => {
-          if (items.length) {
-            resolve(items);
-          } else {
-            reject(e);
-          }
-        })
-        .then(async (response) => {
-          if (response) {
-            const result: any = await response.json();
-            items = items.concat(result.items);
-            if (result.nextPageToken) {
-              fetchPage(result.nextPageToken);
-            } else {
-              resolve(items);
-            }
-          }
-        });
-    };
+  do {
+    const playlistUrl = getPlaylistUrl(playlistId, pageToken);
+    try {
+      const response = await fetch(playlistUrl);
+      const result: any = await response.json();
+      items = items.concat(result.items);
+      pageToken = result.nextPageToken;
+    } catch (e) {
+      if (items.length) {
+        return items;
+      }
+      throw e;
+    }
+  } while (pageToken);
 
-    fetchPage();
-  });
+  return items;
 }
 
 async function updateVideo(

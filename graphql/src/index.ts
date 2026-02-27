@@ -5,7 +5,6 @@ import path from 'node:path';
 
 import { ApolloServer, HeaderMap } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-
 import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
@@ -106,12 +105,11 @@ async function startServer(): Promise<void> {
   console.log(`🚀 Server ready at http://localhost:${GRAPHQL_PORT}`);
 }
 
-startServer()
-  .then(() => {
-    console.log('All systems go');
-  })
-  .catch((e) => {
-    console.error('Uncaught error in startup');
-    console.error(e);
-    console.trace(e);
-  });
+try {
+  await startServer();
+  console.log('All systems go');
+} catch (e) {
+  console.error('Uncaught error in startup');
+  console.error(e);
+  console.trace(e);
+}
