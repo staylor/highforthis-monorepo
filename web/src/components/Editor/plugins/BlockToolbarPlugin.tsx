@@ -11,7 +11,6 @@ import {
   $getNearestNodeFromDOMNode,
   $isParagraphNode,
   $isRangeSelection,
-  $setSelection,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
 import type { LexicalNode, RangeSelection } from 'lexical';
@@ -52,33 +51,12 @@ export default function BlockToolbarPlugin() {
   const [activeStyle, setActiveStyle] = useState('');
   const [modals, setModals] = useReducer(reducer, allModals());
   const toolbarOpenRef = useRef(false);
-  const selectionRef = useRef<RangeSelection>(null);
   const blockButtonRef = useRef(null);
   const blockToolbarRef = useRef(null);
   // Track whether the button is currently shown (cursor on empty line)
   const buttonVisibleRef = useRef(false);
   const [buttonActive, setButtonActive] = useState(false);
   const [editor] = useLexicalComposerContext();
-
-  const saveSelection = useCallback(() => {
-    editor.getEditorState().read(() => {
-      selectionRef.current = $getSelection()?.clone() as RangeSelection;
-    });
-  }, [editor]);
-
-  const restoreSelection = useCallback(
-    (cb?: (selection: RangeSelection) => void) => {
-      editor.update(() => {
-        if (selectionRef.current) {
-          $setSelection(selectionRef.current);
-          if (cb) {
-            cb(selectionRef.current);
-          }
-        }
-      });
-    },
-    [editor]
-  );
 
   const BLOCK_TYPES: BlockType[] = useMemo(
     () => [
@@ -89,7 +67,6 @@ export default function BlockToolbarPlugin() {
         style: 'atomic-image',
         className: 'dashicons dashicons-format-image',
         onToggle: () => {
-          saveSelection();
           setModals({ media: true });
         },
       },
@@ -99,7 +76,6 @@ export default function BlockToolbarPlugin() {
         style: 'video',
         className: 'dashicons dashicons-format-video',
         onToggle: () => {
-          saveSelection();
           setModals({ video: true });
         },
       },
@@ -128,7 +104,7 @@ export default function BlockToolbarPlugin() {
         className: 'dashicons dashicons-editor-code',
       },
     ],
-    [setModals, saveSelection]
+    [setModals]
   );
   const ALL_TYPES = useMemo(
     () => BLOCK_TYPES.map((type) => type.nodeType).filter(Boolean),
@@ -330,11 +306,7 @@ export default function BlockToolbarPlugin() {
 
   return (
     <>
-      <BlockButton
-        ref={blockButtonRef as any}
-        active={buttonActive}
-        onMouseDown={toggleToolbar}
-      />
+      <BlockButton ref={blockButtonRef as any} active={buttonActive} onMouseDown={toggleToolbar} />
       <Toolbar ref={blockToolbarRef} className="-left-7 after:right-auto after:left-1">
         <Controls>
           {BLOCK_TYPES.map((type) => (
