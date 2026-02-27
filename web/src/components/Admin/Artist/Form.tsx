@@ -63,7 +63,7 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
     <>
       <Heading>{heading}</Heading>
       <HeaderAdd label={t('artists.all')} to="/admin/artist" />
-      {data.artist && <PageLink url={`/artist/${data.artist.slug}`}>{t('artist.view')}</PageLink>}
+      {data.artist && <PageLink url={`/artist/${data.artist.slug}`}>{t('artists.view')}</PageLink>}
       <Message text={t('artists.updated')} />
       <Form data={data} fields={fields} buttonLabel={buttonLabel} />
     </>
