@@ -1,0 +1,146 @@
+# @highforthis/graphql
+
+GraphQL API server for High For This, built with Apollo Server, Express, and Prisma with PostgreSQL.
+
+## Stack
+
+- **[Apollo Server](https://www.apollographql.com/docs/apollo-server/)** — GraphQL server
+- **[Express](https://expressjs.com/)** — HTTP server
+- **[Prisma](https://www.prisma.io/)** — ORM with PostgreSQL adapter (`@prisma/adapter-pg`)
+- **[Passport](http://www.passportjs.org/)** — JWT authentication
+
+## Setup
+
+```bash
+# From the monorepo root
+pnpm install
+
+# Configure environment variables
+cp .env.example .env  # then fill in values
+```
+
+### Environment Variables
+
+| Variable | Description |
+| --- | --- |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `TOKEN_KEY` | JWT token key |
+| `TOKEN_SECRET` | JWT token secret |
+| `YOUTUBE_API_KEY` | YouTube Data API key |
+| `GCS_BUCKET` | Google Cloud Storage bucket name |
+| `GCS_CLIENT_EMAIL` | GCS service account email |
+| `GCS_PRIVATE_KEY` | GCS service account private key |
+| `APPLE_MUSIC_AUTH_KEY_PATH` | Path to Apple Music auth key |
+| `APPLE_MUSIC_KEY_ID` | Apple Music key ID |
+| `APPLE_MUSIC_TEAM_ID` | Apple Music team ID |
+| `GOOGLE_MAPS_GEOLOCATION_API_KEY` | Google Maps geolocation API key |
+
+### Database
+
+```bash
+# Generate Prisma client
+pnpm db:generate
+
+# Push schema to database (no migrations)
+pnpm db:push
+
+# Create a migration
+pnpm db:migrate
+
+# Open Prisma Studio
+pnpm db:studio
+```
+
+## Development
+
+```bash
+pnpm dev
+# Server starts at http://localhost:8080/graphql
+```
+
+Uses `tsx watch` for hot reloading.
+
+## Production
+
+```bash
+pnpm prod
+```
+
+This runs the following steps in sequence:
+
+1. `prod:stop` — Stop the existing PM2 process
+2. `prod:clean` — Remove the `lib/` build directory
+3. `prod:generate` — Generate Prisma client
+4. `prod:build` — Bundle with esbuild (`lib/index.js`)
+5. `prod:start` — Start via PM2
+
+## Scripts
+
+| Script | Description |
+| --- | --- |
+| `pnpm dev` | Start in development with watch mode |
+| `pnpm prod` | Build and start for production |
+| `pnpm db:generate` | Generate Prisma client |
+| `pnpm db:migrate` | Run Prisma migrations |
+| `pnpm db:push` | Push schema to database |
+| `pnpm db:studio` | Open Prisma Studio |
+| `pnpm db:migrate-from-mongo` | Import data from MongoDB BSON dump into PostgreSQL |
+| `pnpm db:fix-editor-state` | Fix MongoDB extended JSON in post editor state |
+| `pnpm typecheck` | Type-check with TypeScript |
+
+## Data Migration (MongoDB → PostgreSQL)
+
+The `dump/` directory contains data for migrating from the original MongoDB database:
+
+```
+dump/
+├── highforthis-prod/   # Raw BSON files from mongodump
+├── json/               # JSONL files converted from BSON (used by import script)
+└── highforthis-seed.dump  # pg_dump for seeding a fresh PostgreSQL database
+```
+
+### Full migration from BSON
+
+```bash
+# 1. Convert BSON to JSONL (requires mongodb-database-tools)
+for bson in dump/highforthis-prod/*.bson; do
+  name=$(basename "$bson" .bson)
+  bsondump --type=json "$bson" > "dump/json/${name}.jsonl"
+done
+
+# 2. Reset database and push schema
+pnpm db:push
+
+# 3. Run migration (includes editor state fix)
+pnpm db:migrate-from-mongo
+```
+
+### Seeding from pg_dump
+
+```bash
+# On a fresh PostgreSQL instance
+pnpm db:push
+pg_restore --no-owner --no-privileges --data-only -d highforthis dump/highforthis-seed.dump
+```
+
+## Project Structure
+
+```
+src/
+├── index.ts          # Express + Apollo Server entry point
+├── authentication.ts # Passport JWT setup
+├── database/         # Prisma client
+├── models/           # Data access layer
+├── resolvers/        # GraphQL resolvers
+├── schema/           # GraphQL type definitions
+├── uploads/          # Media upload handling
+└── jobs/             # Scheduled tasks (cron)
+tools/
+├── migrate-from-mongo.ts  # MongoDB → PostgreSQL migration
+├── fix-editor-state.ts    # Fix editor state JSON references
+├── youtube.ts             # YouTube data tools
+├── shows.ts               # Show data tools
+└── addresses.ts           # Venue address tools
+prisma/
+└── schema.prisma          # Database schema
+```
