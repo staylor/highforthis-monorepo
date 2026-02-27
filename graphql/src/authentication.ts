@@ -1,5 +1,5 @@
 import type { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import type { Request, Response, NextFunction, Router } from 'express';
 import jwt from 'jwt-simple';
 import passport from 'passport';
