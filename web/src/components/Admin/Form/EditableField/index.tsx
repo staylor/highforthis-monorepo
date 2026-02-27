@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 
 import Date from '~/components/Admin/Form/Date';
 import Input from '~/components/Form/Input';
@@ -9,9 +9,9 @@ import type { Field } from '~/types';
 const Editor = lazy(() => import('~/components/Editor'));
 
 function ClientOnly({ children }: { children: React.ReactNode }) {
-  if (typeof document === 'undefined') {
-    return null;
-  }
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return <>{children}</>;
 }
 
