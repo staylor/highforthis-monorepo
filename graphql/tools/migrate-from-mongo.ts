@@ -1,5 +1,8 @@
+import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
+
+import { Prisma } from '@prisma/client';
 
 import prisma from '~/database';
 
@@ -460,6 +463,88 @@ async function migrateVideos() {
   }
 }
 
+/**
+ * Recursively walk JSON and:
+ * 1. Convert {"$oid": "..."} → the plain string (or remapped ID)
+ * 2. Convert {"$numberInt": "..."} → number
+ * 3. Convert {"$numberDouble": "..."} → number
+ * 4. Convert {"$numberLong": "..."} → number
+ * 5. Remap imageId / videoId from old Mongo ObjectId to new Prisma cuid
+ */
+function cleanEditorValue(val: any, key: string | null): any {
+  if (val === null || val === undefined) return val;
+
+  if (typeof val === 'object' && !Array.isArray(val)) {
+    if ('$oid' in val) {
+      const oldId = val.$oid;
+      if (key === 'imageId') {
+        const newId = getId('media', oldId);
+        if (!newId) console.warn(`  WARNING: No media mapping for old ObjectId ${oldId}`);
+        return newId || oldId;
+      }
+      if (key === 'videoId') {
+        const newId = getId('video', oldId);
+        if (!newId) console.warn(`  WARNING: No video mapping for old ObjectId ${oldId}`);
+        return newId || oldId;
+      }
+      return oldId;
+    }
+    if ('$numberInt' in val) return parseInt(val.$numberInt, 10);
+    if ('$numberDouble' in val) return parseFloat(val.$numberDouble);
+    if ('$numberLong' in val) return parseInt(val.$numberLong, 10);
+
+    const result: any = {};
+    for (const [k, v] of Object.entries(val)) {
+      result[k] = cleanEditorValue(v, k);
+    }
+    return result;
+  }
+
+  if (Array.isArray(val)) {
+    return val.map((item) => cleanEditorValue(item, null));
+  }
+
+  if (typeof val === 'string' && key === 'imageId') {
+    return getId('media', val) || val;
+  }
+  if (typeof val === 'string' && key === 'videoId') {
+    return getId('video', val) || val;
+  }
+
+  return val;
+}
+
+async function fixEditorState() {
+  console.log('Fixing Post editorState JSON...');
+  const posts = await prisma.post.findMany({
+    where: { editorState: { not: Prisma.JsonNull } },
+    select: { id: true, slug: true, editorState: true },
+  });
+
+  let updated = 0;
+  for (const post of posts) {
+    const raw = JSON.stringify(post.editorState);
+    if (
+      !raw.includes('$oid') &&
+      !raw.includes('$numberInt') &&
+      !raw.includes('$numberDouble') &&
+      !raw.includes('$numberLong')
+    ) {
+      continue;
+    }
+
+    const cleaned = cleanEditorValue(post.editorState, null);
+    await prisma.post.update({
+      where: { id: post.id },
+      data: { editorState: cleaned ?? undefined },
+    });
+    updated++;
+    console.log(`  Fixed: ${post.slug}`);
+  }
+
+  console.log(`Editor state: updated ${updated} posts.`);
+}
+
 async function main() {
   console.log('Starting MongoDB → Prisma migration...\n');
 
@@ -474,6 +559,7 @@ async function main() {
   await migratePodcasts();
   await migratePosts();
   await migrateVideos();
+  await fixEditorState();
 
   console.log('\nMigration complete!');
   console.log('Records migrated:');
