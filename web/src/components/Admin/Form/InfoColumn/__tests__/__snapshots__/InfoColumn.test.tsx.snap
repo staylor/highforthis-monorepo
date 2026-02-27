@@ -2,18 +2,18 @@
 
 exports[`infoColumn > no button 1`] = `
 <section
-  class="md:-mr-75 md:w-70 sticky top-2.5 mr-0 mt-2.5 w-full md:float-right"
+  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
 >
   <aside
-    class="border border-detail mb-5 box-border block shadow"
+    class="border border-detail mb-5 box-border block shadow-sm"
   >
     <h3
-      class="border border-detail text-dark select-none px-3 py-2 text-sm font-bold"
+      class="border border-detail text-dark px-3 py-2 text-sm font-bold select-none"
     >
       Info!
     </h3>
     <div
-      class="px-5 pb-5 pt-1.5 text-sm"
+      class="px-5 pt-1.5 pb-5 text-sm"
     >
       <p>
         <input
@@ -23,10 +23,10 @@ exports[`infoColumn > no button 1`] = `
     </div>
   </aside>
   <aside
-    class="border border-detail mb-5 box-border block shadow"
+    class="border border-detail mb-5 box-border block shadow-sm"
   >
     <div
-      class="px-5 pb-5 pt-1.5 text-sm"
+      class="px-5 pt-1.5 pb-5 text-sm"
     >
       <p>
         <input
@@ -40,24 +40,24 @@ exports[`infoColumn > no button 1`] = `
 
 exports[`infoColumn > no props 1`] = `
 <section
-  class="md:-mr-75 md:w-70 sticky top-2.5 mr-0 mt-2.5 w-full md:float-right"
+  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
 />
 `;
 
 exports[`infoColumn > with button 1`] = `
 <section
-  class="md:-mr-75 md:w-70 sticky top-2.5 mr-0 mt-2.5 w-full md:float-right"
+  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
 >
   <aside
-    class="border border-detail mb-5 box-border block shadow"
+    class="border border-detail mb-5 box-border block shadow-sm"
   >
     <h3
-      class="border border-detail text-dark select-none px-3 py-2 text-sm font-bold"
+      class="border border-detail text-dark px-3 py-2 text-sm font-bold select-none"
     >
       Info!
     </h3>
     <div
-      class="px-5 pb-5 pt-1.5 text-sm"
+      class="px-5 pt-1.5 pb-5 text-sm"
     >
       <p>
         <input
@@ -72,10 +72,10 @@ exports[`infoColumn > with button 1`] = `
     </div>
   </aside>
   <aside
-    class="border border-detail mb-5 box-border block shadow"
+    class="border border-detail mb-5 box-border block shadow-sm"
   >
     <div
-      class="px-5 pb-5 pt-1.5 text-sm"
+      class="px-5 pt-1.5 pb-5 text-sm"
     >
       <p>
         <input
@@ -89,16 +89,16 @@ exports[`infoColumn > with button 1`] = `
 
 exports[`infoColumn > with info and meta fields 1`] = `
 <section
-  class="md:-mr-75 md:w-70 sticky top-2.5 mr-0 mt-2.5 w-full md:float-right"
+  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
 >
   <aside
-    class="border border-detail mb-5 box-border block shadow"
+    class="border border-detail mb-5 box-border block shadow-sm"
   >
     <h3
-      class="border border-detail text-dark select-none px-3 py-2 text-sm font-bold"
+      class="border border-detail text-dark px-3 py-2 text-sm font-bold select-none"
     />
     <div
-      class="px-5 pb-5 pt-1.5 text-sm"
+      class="px-5 pt-1.5 pb-5 text-sm"
     >
       <p>
         <input
@@ -108,10 +108,10 @@ exports[`infoColumn > with info and meta fields 1`] = `
     </div>
   </aside>
   <aside
-    class="border border-detail mb-5 box-border block shadow"
+    class="border border-detail mb-5 box-border block shadow-sm"
   >
     <div
-      class="px-5 pb-5 pt-1.5 text-sm"
+      class="px-5 pt-1.5 pb-5 text-sm"
     >
       <p>
         <input
@@ -125,16 +125,16 @@ exports[`infoColumn > with info and meta fields 1`] = `
 
 exports[`infoColumn > with infoFields 1`] = `
 <section
-  class="md:-mr-75 md:w-70 sticky top-2.5 mr-0 mt-2.5 w-full md:float-right"
+  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
 >
   <aside
-    class="border border-detail mb-5 box-border block shadow"
+    class="border border-detail mb-5 box-border block shadow-sm"
   >
     <h3
-      class="border border-detail text-dark select-none px-3 py-2 text-sm font-bold"
+      class="border border-detail text-dark px-3 py-2 text-sm font-bold select-none"
     />
     <div
-      class="px-5 pb-5 pt-1.5 text-sm"
+      class="px-5 pt-1.5 pb-5 text-sm"
     >
       <p>
         <input
@@ -148,13 +148,13 @@ exports[`infoColumn > with infoFields 1`] = `
 
 exports[`infoColumn > with metaFields 1`] = `
 <section
-  class="md:-mr-75 md:w-70 sticky top-2.5 mr-0 mt-2.5 w-full md:float-right"
+  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
 >
   <aside
-    class="border border-detail mb-5 box-border block shadow"
+    class="border border-detail mb-5 box-border block shadow-sm"
   >
     <div
-      class="px-5 pb-5 pt-1.5 text-sm"
+      class="px-5 pt-1.5 pb-5 text-sm"
     >
       <p>
         <input

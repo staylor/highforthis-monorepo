@@ -2,14 +2,14 @@
 
 exports[`input > add className 1`] = `
 <input
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full foo"
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full foo"
   type="text"
 />
 `;
 
 exports[`input > empty 1`] = `
 <input
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-sm focus:border-pink focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full"
+  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors w-full"
   type="text"
 />
 `;
