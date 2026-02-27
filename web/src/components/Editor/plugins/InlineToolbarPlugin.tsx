@@ -13,7 +13,6 @@ import { setStyle } from './utils';
 
 const LowPriority = 1;
 
-const TOOLBAR_WIDTH = 250;
 const TOOLBAR_HEIGHT = 32;
 const TOOLBAR_OFFSET = 10;
 
@@ -114,10 +113,11 @@ export default function InlineToolbarPlugin() {
     }
 
     const toolbar = inlineToolbarRef.current as HTMLElement;
+    const toolbarWidth = toolbar.offsetWidth;
     const selected = window.getSelection() as Selection;
     const selectionBoundary = selected.getRangeAt(0).getBoundingClientRect();
 
-    const widthDiff = selectionBoundary.width - TOOLBAR_WIDTH;
+    const widthDiff = selectionBoundary.width - toolbarWidth;
     let leftOffset;
     if (widthDiff >= 0) {
       leftOffset = Math.max(widthDiff / 2, 0);
@@ -135,7 +135,6 @@ export default function InlineToolbarPlugin() {
       left: `${leftOffset}px`,
       top: `${selectionBoundary.top - editorBoundary.top - TOOLBAR_HEIGHT - TOOLBAR_OFFSET}px`,
       scale: '1',
-      width: `${TOOLBAR_WIDTH}px`,
     });
   }, [editor]);
 
