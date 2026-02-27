@@ -37,7 +37,15 @@ export default function EditableField({ field, data }: FieldProps) {
   if (field.type === 'editor') {
     return (
       <ClientOnly>
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <div className="editor-container relative -left-6">
+              <div className="editor-inner flex min-h-[150px] items-center justify-center text-sm text-gray-400">
+                Loading editor…
+              </div>
+            </div>
+          }
+        >
           <Editor editorState={value as any} />
         </Suspense>
       </ClientOnly>
