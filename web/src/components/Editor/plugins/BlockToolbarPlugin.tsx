@@ -9,6 +9,7 @@ import {
   $createParagraphNode,
   $getSelection,
   $getNearestNodeFromDOMNode,
+  $isParagraphNode,
   $isRangeSelection,
   $setSelection,
   SELECTION_CHANGE_COMMAND,
@@ -348,15 +349,30 @@ export default function BlockToolbarPlugin() {
       {modals.media && (
         <MediaModal
           selectImage={({ image, size }) => {
-            restoreSelection(() => {
+            hideToolbar();
+            hideButton();
+            editor.update(() => {
               const node = $createImageNode(image as ImageUpload, size);
-              $insertNodeToNearestRoot(node);
+              const selection = $getSelection();
+              if ($isRangeSelection(selection)) {
+                const anchor = selection.anchor.getNode();
+                const parent = anchor.getTopLevelElementOrThrow();
+                if ($isParagraphNode(parent) && parent.getTextContentSize() === 0) {
+                  parent.replace(node);
+                } else {
+                  $insertNodeToNearestRoot(node);
+                }
+              } else {
+                $insertNodeToNearestRoot(node);
+              }
+              const paragraph = $createParagraphNode();
+              node.insertAfter(paragraph);
+              paragraph.select();
             });
           }}
           selectAudio={() => {}}
           onClose={(e) => {
             e.preventDefault();
-            restoreSelection();
             setModals({});
           }}
         />
@@ -364,14 +380,29 @@ export default function BlockToolbarPlugin() {
       {modals.video && (
         <VideoModal
           selectVideo={({ video }) => {
-            restoreSelection(() => {
+            hideToolbar();
+            hideButton();
+            editor.update(() => {
               const node = $createVideoNode(video as Video);
-              $insertNodeToNearestRoot(node);
+              const selection = $getSelection();
+              if ($isRangeSelection(selection)) {
+                const anchor = selection.anchor.getNode();
+                const parent = anchor.getTopLevelElementOrThrow();
+                if ($isParagraphNode(parent) && parent.getTextContentSize() === 0) {
+                  parent.replace(node);
+                } else {
+                  $insertNodeToNearestRoot(node);
+                }
+              } else {
+                $insertNodeToNearestRoot(node);
+              }
+              const paragraph = $createParagraphNode();
+              node.insertAfter(paragraph);
+              paragraph.select();
             });
           }}
           onClose={(e: SyntheticEvent) => {
             e.preventDefault();
-            restoreSelection();
             setModals({});
           }}
         />
