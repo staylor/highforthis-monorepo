@@ -7,7 +7,7 @@ public class PodcastsQuery: GraphQLQuery {
   public static let operationName: String = "Podcasts"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Podcasts { podcasts(first: 200) { __typename edges { __typename node { __typename date id title } } } }"#
+      #"query Podcasts { podcasts(first: 200) { __typename edges { __typename node { __typename id date title } } } }"#
     ))
 
   public init() {}
@@ -63,13 +63,13 @@ public class PodcastsQuery: GraphQLQuery {
           public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Podcast }
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
+            .field("id", String.self),
             .field("date", Double?.self),
-            .field("id", HighForThisAPI.String.self),
             .field("title", String.self),
           ] }
 
+          public var id: String { __data["id"] }
           public var date: Double? { __data["date"] }
-          public var id: HighForThisAPI.String { __data["id"] }
           public var title: String { __data["title"] }
         }
       }

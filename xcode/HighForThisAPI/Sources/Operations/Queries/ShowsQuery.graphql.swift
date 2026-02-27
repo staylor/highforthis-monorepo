@@ -7,7 +7,7 @@ public class ShowsQuery: GraphQLQuery {
   public static let operationName: String = "Shows"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Shows($attended: Boolean, $first: Int!, $latest: Boolean, $year: Int) { shows(attended: $attended, first: $first, latest: $latest, year: $year) { __typename edges { __typename node { __typename ...ShowList_show } } years } }"#,
+      #"query Shows($attended: Boolean, $first: Int!, $latest: Boolean, $year: Int) { shows(attended: $attended, first: $first, latest: $latest, year: $year) { __typename years edges { __typename node { __typename ...ShowList_show } } } }"#,
       fragments: [ShowList_show.self]
     ))
 
@@ -61,12 +61,12 @@ public class ShowsQuery: GraphQLQuery {
       public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.ShowConnection }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("edges", [Edge].self),
         .field("years", [Int]?.self),
+        .field("edges", [Edge].self),
       ] }
 
-      public var edges: [Edge] { __data["edges"] }
       public var years: [Int]? { __data["years"] }
+      public var edges: [Edge] { __data["edges"] }
 
       /// Shows.Edge
       ///
@@ -96,10 +96,10 @@ public class ShowsQuery: GraphQLQuery {
             .fragment(ShowList_show.self),
           ] }
 
-          public var artists: [Artist] { __data["artists"] }
+          public var id: String { __data["id"] }
           public var date: Double { __data["date"] }
-          public var id: HighForThisAPI.String { __data["id"] }
           public var title: String? { __data["title"] }
+          public var artists: [Artist] { __data["artists"] }
           public var venue: Venue { __data["venue"] }
 
           public struct Fragments: FragmentContainer {

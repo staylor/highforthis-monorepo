@@ -404,8 +404,6 @@ type Mutation {
   updateVideo(id: String!, input: UpdateVideoInput!): Video
 }
 
-"""Id representation, based on Mongo Object Ids"""
-
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean
