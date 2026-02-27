@@ -36,7 +36,10 @@ const resolvers = {
       const { search, order, ...connectionArgs } = args;
       const where: any = {};
       if (search) {
-        where.title = { contains: search, mode: 'insensitive' };
+        where.OR = [
+          { title: { contains: search, mode: 'insensitive' } },
+          { description: { contains: search, mode: 'insensitive' } },
+        ];
       }
       return parseConnection(prisma.podcast, connectionArgs, {
         where,

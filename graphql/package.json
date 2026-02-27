@@ -53,6 +53,7 @@
     "db:studio": "prisma studio",
     "db:migrate-from-mongo": "tsx tools/migrate-from-mongo.ts",
     "db:fix-editor-state": "tsx tools/fix-editor-state.ts",
+    "db:backfill-content-body": "tsx tools/backfill-content-body.ts",
     "tools:script:dev": "dotenv -- tsx",
     "tools:script:prod": "dotenv -e .env.production -- tsx",
     "typecheck": "tsc"

@@ -97,7 +97,11 @@ const resolvers = {
       }
 
       if (search) {
-        where.title = { contains: search, mode: 'insensitive' };
+        where.OR = [
+          { title: { contains: search, mode: 'insensitive' } },
+          { venue: { name: { contains: search, mode: 'insensitive' } } },
+          { artists: { some: { artist: { name: { contains: search, mode: 'insensitive' } } } } },
+        ];
       }
 
       return parseConnection(prisma.show, connectionArgs, {

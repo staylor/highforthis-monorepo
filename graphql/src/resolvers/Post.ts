@@ -8,6 +8,7 @@ import type {
 
 import type { AppContext } from '~/models';
 import { getUniqueSlug } from '~/models/utils';
+import { extractText } from '~/utils/lexical';
 
 import { parseConnection } from './utils/collection';
 import resolveTags from './utils/resolveTags';
@@ -52,7 +53,9 @@ const resolvers = {
       if (search) {
         where.OR = [
           { title: { contains: search, mode: 'insensitive' } },
+          { slug: { contains: search, mode: 'insensitive' } },
           { summary: { contains: search, mode: 'insensitive' } },
+          { contentBody: { contains: search, mode: 'insensitive' } },
         ];
       }
       return parseConnection(prisma.post, connectionArgs, {
@@ -84,6 +87,7 @@ const resolvers = {
     async createPost(_: unknown, { input }: MutationCreatePostArgs, { prisma }: AppContext) {
       const { featuredMedia, artists: inputArtists, ...data } = input as any;
       const slug = await getUniqueSlug(prisma.post, data.title);
+      const contentBody = data.editorState ? extractText(data.editorState) : null;
 
       let artistIds: string[] = [];
       if (inputArtists?.length) {
@@ -94,6 +98,7 @@ const resolvers = {
         data: {
           ...data,
           slug,
+          contentBody,
           date: data.date ? new Date(data.date) : new Date(),
           featuredMedia: featuredMedia?.length
             ? { create: featuredMedia.map((mediaId: string) => ({ mediaId })) }
@@ -111,6 +116,9 @@ const resolvers = {
       const updateData: any = { ...data };
       if (data.date) {
         updateData.date = new Date(data.date);
+      }
+      if (data.editorState) {
+        updateData.contentBody = extractText(data.editorState);
       }
 
       if (typeof featuredMedia !== 'undefined') {

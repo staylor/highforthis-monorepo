@@ -33,6 +33,7 @@ const resolvers = {
       if (search) {
         where.OR = [
           { name: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
           { bio: { contains: search, mode: 'insensitive' } },
         ];
       }

@@ -38,7 +38,12 @@ const resolvers = {
       const { search, filtered, ...connectionArgs } = args;
       const where: any = {};
       if (search) {
-        where.name = { contains: search, mode: 'insensitive' };
+        where.OR = [
+          { name: { contains: search, mode: 'insensitive' } },
+          { slug: { contains: search, mode: 'insensitive' } },
+          { city: { contains: search, mode: 'insensitive' } },
+          { state: { contains: search, mode: 'insensitive' } },
+        ];
       }
       if (filtered) {
         where.excludeFromSearch = false;

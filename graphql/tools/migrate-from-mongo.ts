@@ -5,6 +5,7 @@ import path from 'node:path';
 import { Prisma } from '@prisma/client';
 
 import prisma from '~/database';
+import { extractText } from '~/utils/lexical';
 
 const jsonDir = path.join(process.cwd(), 'dump', 'json');
 
@@ -396,6 +397,7 @@ async function migratePosts() {
         title: doc.title,
         slug: doc.slug,
         editorState: doc.editorState || null,
+        contentBody: doc.editorState ? extractText(doc.editorState) : null,
         summary: doc.summary || null,
         status: doc.status || 'DRAFT',
         date: doc.date ? ts(doc.date) : ts(doc.createdAt),
@@ -536,7 +538,10 @@ async function fixEditorState() {
     const cleaned = cleanEditorValue(post.editorState, null);
     await prisma.post.update({
       where: { id: post.id },
-      data: { editorState: cleaned ?? undefined },
+      data: {
+        editorState: cleaned ?? undefined,
+        contentBody: cleaned ? extractText(cleaned) : undefined,
+      },
     });
     updated++;
     console.log(`  Fixed: ${post.slug}`);

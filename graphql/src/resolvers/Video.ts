@@ -48,7 +48,10 @@ const resolvers = {
       const where: any = {};
       if (year) where.year = year;
       if (search) {
-        where.title = { contains: search, mode: 'insensitive' };
+        where.OR = [
+          { title: { contains: search, mode: 'insensitive' } },
+          { slug: { contains: search, mode: 'insensitive' } },
+        ];
       }
       return parseConnection(prisma.video, connectionArgs, {
         where,
