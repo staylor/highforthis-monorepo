@@ -1,4 +1,7 @@
-const sets = [];
+// Browser console snippet for extracting setlists from setlist.fm
+// Usage: paste into browser console on a setlist.fm setlist page
+
+const sets: string[][] = [];
 let currentSet = -1;
 const parts = [...document.querySelectorAll('.setlistParts')];
 
@@ -8,7 +11,7 @@ parts.forEach((part) => {
   }
   if (part.classList.contains('song')) {
     sets[currentSet] ||= [];
-    sets[currentSet].push(part.querySelector('.songLabel').textContent);
+    sets[currentSet].push(part.querySelector('.songLabel')!.textContent!);
   }
 });
 
