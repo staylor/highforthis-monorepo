@@ -1,5 +1,9 @@
 # Agent Guidelines
 
+## Dependencies
+
+- **Always install exact versions of dependencies** (use `--save-exact` or `-E` flag with `pnpm add`). Do not use `^` or `~` ranges.
+
 ## Code Quality
 
 - **Run lint, test, and typecheck after making code changes.** Use `pnpm lint`, `pnpm test:web`, `pnpm typecheck:graphql`, and/or `pnpm typecheck:web` as appropriate for the workspaces affected.
