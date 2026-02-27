@@ -15,7 +15,6 @@
     "compression": "1.8.1",
     "cors": "2.8.6",
     "cron": "4.4.0",
-    "dotenv": "17.3.1",
     "express": "5.2.1",
     "ffprobe": "1.1.2",
     "ffprobe-static": "3.1.0",
@@ -32,7 +31,6 @@
   "devDependencies": {
     "@types/jsdom": "^28.0.0",
     "@types/jsonwebtoken": "^9.0.10",
-    "dotenv-cli": "11.0.0",
     "esbuild": "0.27.3",
     "jsdom": "^28.1.0",
     "npm-run-all": "4.1.5",
@@ -43,7 +41,7 @@
     "typescript": "5.9.3"
   },
   "scripts": {
-    "dev": "NODE_OPTIONS='--disable-warning=DEP0040' tsx watch src/index.ts",
+    "dev": "NODE_OPTIONS='--disable-warning=DEP0040' tsx watch --env-file=.env src/index.ts",
     "prod": "run-s prod:*",
     "prod:stop": "pm2 stop pm2.config.cjs",
     "prod:clean": "rimraf lib",
@@ -51,14 +49,14 @@
     "prod:build": "esbuild src/index.ts --packages=external --bundle --platform=node --target=node24 --format=esm --outfile=lib/index.js",
     "prod:start": "pm2 start pm2.config.cjs",
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
-    "db:push": "prisma db push",
-    "db:studio": "prisma studio",
-    "db:migrate-from-mongo": "tsx tools/migrate-from-mongo.ts",
-    "db:fix-editor-state": "tsx tools/fix-editor-state.ts",
-    "db:backfill-content-body": "tsx tools/backfill-content-body.ts",
-    "tools:script:dev": "dotenv -- tsx",
-    "tools:script:prod": "dotenv -e .env.production -- tsx",
+    "db:migrate": "NODE_OPTIONS='--env-file=.env' prisma migrate dev",
+    "db:push": "NODE_OPTIONS='--env-file=.env' prisma db push",
+    "db:studio": "NODE_OPTIONS='--env-file=.env' prisma studio",
+    "db:migrate-from-mongo": "tsx --env-file=.env tools/migrate-from-mongo.ts",
+    "db:fix-editor-state": "tsx --env-file=.env tools/fix-editor-state.ts",
+    "db:backfill-content-body": "tsx --env-file=.env tools/backfill-content-body.ts",
+    "tools:script:dev": "tsx --env-file=.env",
+    "tools:script:prod": "tsx --env-file=.env.production",
     "typecheck": "tsc"
   }
 }
