@@ -1,6 +1,5 @@
 import { CodeNode } from '@lexical/code';
 import { ListNode, ListItemNode } from '@lexical/list';
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin.js';
 import { LexicalComposer } from '@lexical/react/LexicalComposer.js';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable.js';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary.js';
@@ -49,7 +48,6 @@ export default function Editor({ editorState }: { editorState: SerializedEditorS
             ErrorBoundary={LexicalErrorBoundary}
           />
           <HistoryPlugin />
-          <AutoFocusPlugin />
         </div>
         <InlineToolbarPlugin />
         <BlockToolbarPlugin />
