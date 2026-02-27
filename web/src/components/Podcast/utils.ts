@@ -11,7 +11,7 @@ interface MetaTags {
 }
 
 export const metaTags = ({ title, description, url, image, siteSettings }: MetaTags) => {
-  const featuredImage = uploadUrl(image.destination, image.fileName);
+  const featuredImage = image ? uploadUrl(image.destination, image.fileName) : undefined;
 
   return [
     { title: titleTemplate({ title, siteSettings }) },

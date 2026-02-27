@@ -26,7 +26,10 @@ const resolvers = {
       return settings || { id: 'media' };
     },
     async podcastSettings(_0: unknown, _1: unknown, { prisma }: AppContext) {
-      const settings = await prisma.podcastSettings.findUnique({ where: { id: 'podcast' } });
+      const settings = await prisma.podcastSettings.findUnique({
+        where: { id: 'podcast' },
+        include: { image: true },
+      });
       return settings || { id: 'podcast' };
     },
   },
