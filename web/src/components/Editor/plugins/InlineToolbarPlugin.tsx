@@ -102,7 +102,7 @@ export default function InlineToolbarPlugin() {
     // empty selection
     if (anchorOffset === focusOffset) {
       setStyle(inlineToolbarRef, {
-        transform: 'scale(0)',
+        scale: '0',
       });
       return;
     }
@@ -134,13 +134,13 @@ export default function InlineToolbarPlugin() {
     setStyle(inlineToolbarRef, {
       left: `${leftOffset}px`,
       top: `${selectionBoundary.top - editorBoundary.top - TOOLBAR_HEIGHT - TOOLBAR_OFFSET}px`,
-      transform: 'scale(1)',
+      scale: '1',
       width: `${TOOLBAR_WIDTH}px`,
     });
   }, [editor]);
 
   useEffect(() => {
-    mergeRegister(
+    const unregister = mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           $updateToolbar();
@@ -155,6 +155,7 @@ export default function InlineToolbarPlugin() {
         LowPriority
       )
     );
+    return unregister;
   }, [editor, $updateToolbar]);
 
   return (

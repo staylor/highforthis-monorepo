@@ -49,11 +49,14 @@ const reducer = (_prev: Modals, action: Modals) => ({ ...allModals(), ...action 
 
 export default function BlockToolbarPlugin() {
   const [activeStyle, setActiveStyle] = useState('');
-  const [toolbarActive, setToolbarActive] = useState(false);
   const [modals, setModals] = useReducer(reducer, allModals());
+  const toolbarOpenRef = useRef(false);
   const selectionRef = useRef<RangeSelection>(null);
   const blockButtonRef = useRef(null);
   const blockToolbarRef = useRef(null);
+  // Track whether the button is currently shown (cursor on empty line)
+  const buttonVisibleRef = useRef(false);
+  const [buttonActive, setButtonActive] = useState(false);
   const [editor] = useLexicalComposerContext();
 
   const saveSelection = useCallback(() => {
@@ -162,17 +165,19 @@ export default function BlockToolbarPlugin() {
   }, [editor]);
 
   const hideToolbar = useCallback(() => {
+    toolbarOpenRef.current = false;
     setStyle(blockToolbarRef, {
-      transform: 'scale(0)',
+      scale: '0',
     });
   }, []);
 
   const showToolbar = useCallback(() => {
     const offset = getTopOffset();
-    if (offset) {
+    if (offset !== undefined) {
+      toolbarOpenRef.current = true;
       setStyle(blockToolbarRef, {
         top: `${offset - BLOCK_TOOLBAR_OFFSET}px`,
-        transform: 'scale(1)',
+        scale: '1',
       });
     } else {
       hideToolbar();
@@ -180,24 +185,39 @@ export default function BlockToolbarPlugin() {
   }, [getTopOffset, hideToolbar]);
 
   const hideButton = useCallback(() => {
+    buttonVisibleRef.current = false;
     setStyle(blockButtonRef, {
-      transform: 'scale(0)',
+      scale: '0',
     });
-    setToolbarActive(false);
+    if (toolbarOpenRef.current) {
+      hideToolbar();
+    }
+    setButtonActive(false);
     setActiveStyle('');
-  }, [setToolbarActive, setActiveStyle]);
+  }, [hideToolbar]);
 
   const showButton = useCallback(() => {
+    buttonVisibleRef.current = true;
     const topOffset = getTopOffset();
-    if (topOffset) {
+    if (topOffset !== undefined) {
       setStyle(blockButtonRef, {
         top: `${topOffset}px`,
-        transform: 'scale(1)',
+        scale: '1',
       });
     } else {
       hideButton();
     }
   }, [getTopOffset, hideButton]);
+
+  const toggleToolbar = useCallback(() => {
+    if (toolbarOpenRef.current) {
+      hideToolbar();
+      setButtonActive(false);
+    } else {
+      showToolbar();
+      setButtonActive(true);
+    }
+  }, [showToolbar, hideToolbar]);
 
   const $updateButton = useCallback(() => {
     const selection = $getSelection() as RangeSelection;
@@ -225,33 +245,22 @@ export default function BlockToolbarPlugin() {
         }
         if (ALL_TYPES.includes(node.__type)) {
           const style = getStyleFromNode(node) as string;
-
-          setToolbarActive(true);
+          setButtonActive(true);
+          showToolbar();
           setActiveStyle(style);
         } else {
-          setToolbarActive(false);
+          setButtonActive(false);
+          hideToolbar();
           setActiveStyle('');
         }
       });
     } else {
       hideButton();
     }
-  }, [editor, showButton, hideButton, ALL_TYPES]);
+  }, [editor, showButton, hideButton, showToolbar, hideToolbar, ALL_TYPES]);
 
   useEffect(() => {
-    if (!blockToolbarRef.current) {
-      return;
-    }
-
-    if (toolbarActive) {
-      showToolbar();
-    } else {
-      hideToolbar();
-    }
-  }, [toolbarActive, blockToolbarRef, showToolbar, hideToolbar]);
-
-  useEffect(() => {
-    mergeRegister(
+    const unregister = mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           $updateButton();
@@ -266,6 +275,7 @@ export default function BlockToolbarPlugin() {
         LowPriority
       )
     );
+    return unregister;
   }, [editor, $updateButton]);
 
   const onToggle = useCallback(
@@ -312,10 +322,8 @@ export default function BlockToolbarPlugin() {
     <>
       <BlockButton
         ref={blockButtonRef as any}
-        active={toolbarActive}
-        onMouseDown={() => {
-          setToolbarActive(!toolbarActive);
-        }}
+        active={buttonActive}
+        onMouseDown={toggleToolbar}
       />
       <Toolbar ref={blockToolbarRef} className="-left-7 after:right-auto after:left-1">
         <Controls>
