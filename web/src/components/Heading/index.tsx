@@ -4,7 +4,7 @@ import type { HTMLAttributes } from 'react';
 export const headingBase =
   'block font-semibold mb-2 lg:mb-3 tracking-wide text-neutral-800 dark:text-white';
 
-export const heading1 = 'text-3xl lg:text-4xl';
+const heading1 = 'text-3xl lg:text-4xl';
 
 export const heading2 = 'text-2xl';
 

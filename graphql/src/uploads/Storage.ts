@@ -16,11 +16,6 @@ export interface UploadOpts {
   settings: any;
 }
 
-export interface FileInfo {
-  fileName: string;
-  destination: string;
-}
-
 interface StorageOpts {
   prisma: PrismaClient;
   uploadDir: string;

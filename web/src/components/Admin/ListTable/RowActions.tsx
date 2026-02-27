@@ -6,7 +6,7 @@ import { useSubmit } from 'react-router';
 
 import Link from '~/components/Link';
 
-export interface RowAction {
+interface RowAction {
   ids?: string[];
   label?: string;
   type: 'edit' | 'view' | 'delete';

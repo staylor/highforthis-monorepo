@@ -38,7 +38,7 @@ export const Body = (props: HTMLAttributes<HTMLBodyElement>) => (
   <body {...props} className="font-body h-full" />
 );
 
-export const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       'mx-auto max-w-screen-xl bg-white p-6 dark:bg-black',
@@ -49,7 +49,7 @@ export const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>)
   />
 );
 
-export const Layout = ({ children }: PropsWithChildren) => {
+const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation();
   const { siteSettings, shows } = useRootData();
 

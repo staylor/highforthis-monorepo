@@ -6,7 +6,7 @@
 
 ## Code Quality
 
-- **Run lint, test, and typecheck after making code changes.** Use `pnpm lint`, `pnpm test:web`, `pnpm typecheck:graphql`, and/or `pnpm typecheck:web` as appropriate for the workspaces affected.
+- **Run lint, knip, test, and typecheck after making code changes.** Use `pnpm lint`, `pnpm knip`, `pnpm test:web`, `pnpm typecheck:graphql`, and/or `pnpm typecheck:web` as appropriate for the workspaces affected.
 
 ## Git
 

@@ -8,11 +8,11 @@ function unbase64(i: string) {
 
 const PREFIX = 'arrayconnection:';
 
-export function cursorToOffset(cursor: string) {
+function cursorToOffset(cursor: string) {
   return parseInt(unbase64(cursor).substring(PREFIX.length), 10);
 }
 
-export function offsetToCursor(offset: number) {
+function offsetToCursor(offset: number) {
   return base64(PREFIX + offset);
 }
 

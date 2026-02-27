@@ -18,5 +18,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm --filter @highforthis/graphql db:generate
+      - run: pnpm --filter @highforthis/web exec react-router typegen
+      - run: pnpm knip
       - run: pnpm -r typecheck
       - run: pnpm -r test

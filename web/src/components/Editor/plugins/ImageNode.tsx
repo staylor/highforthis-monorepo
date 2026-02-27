@@ -1,12 +1,12 @@
 import { $applyNodeReplacement, DecoratorNode } from 'lexical';
-import type { LexicalNode, NodeKey, SerializedLexicalNode, Spread } from 'lexical';
+import type { NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 import type { ReactNode } from 'react';
 
 import ImageComponent from '~/components/Editor/Blocks/Image';
 import type { ImageUpload } from '~/types/graphql';
 
 // this data gets saved
-export type SerializedImageNode = Spread<{ imageId: string; size: string }, SerializedLexicalNode>;
+type SerializedImageNode = Spread<{ imageId: string; size: string }, SerializedLexicalNode>;
 
 // this data gets sent by GraphQL
 type SerializedImageInput = Spread<{ image: ImageUpload; size: string }, SerializedLexicalNode>;
@@ -58,8 +58,4 @@ export default class ImageNode extends DecoratorNode<ReactNode> {
 
 export function $createImageNode(image: ImageUpload, size: string): ImageNode {
   return $applyNodeReplacement(new ImageNode(image, size));
-}
-
-export function $isImageNode(node: LexicalNode | null | undefined): node is ImageNode {
-  return node instanceof ImageNode;
 }
