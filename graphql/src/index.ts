@@ -10,7 +10,7 @@ import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
 
-import { authMiddleware, jwtMiddleware, initialize } from './authentication';
+import { authMiddleware, jwtMiddleware } from './authentication';
 import prisma from './database';
 import cronJobs from './jobs';
 import type { AppContext } from './models';
@@ -43,8 +43,6 @@ async function startServer(): Promise<void> {
 
     next();
   });
-
-  initialize(app);
 
   app.use('/graphql', jwtMiddleware);
 
