@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 
 import Date from '~/components/Admin/Form/Date';
 import Input from '~/components/Form/Input';
@@ -7,6 +7,13 @@ import Textarea from '~/components/Form/Textarea';
 import type { Field } from '~/types';
 
 const Editor = lazy(() => import('~/components/Editor'));
+
+function ClientOnly({ children }: { children: React.ReactNode }) {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+  return <>{children}</>;
+}
 
 interface FieldProps {
   field: Field;
@@ -28,7 +35,13 @@ export default function EditableField({ field, data }: FieldProps) {
   };
 
   if (field.type === 'editor') {
-    return <Editor editorState={value as any} />;
+    return (
+      <ClientOnly>
+        <Suspense fallback={null}>
+          <Editor editorState={value as any} />
+        </Suspense>
+      </ClientOnly>
+    );
   }
 
   if (field.type === 'hidden') {
