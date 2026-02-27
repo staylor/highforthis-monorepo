@@ -1,14 +1,14 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import FeaturedMedia from '~/components/FeaturedMedia';
-import { Heading1 } from '~/components/Heading';
-import Map from '~/components/Map';
-import Shows from '~/components/Shows';
-import Attended from '~/components/Shows/Attended';
-import type { ImageUpload, VenueQuery } from '~/types/graphql';
-import { createClientCache } from '~/utils/cache';
-import query from '~/utils/query';
+import FeaturedMedia from '#/components/FeaturedMedia';
+import { Heading1 } from '#/components/Heading';
+import Map from '#/components/Map';
+import Shows from '#/components/Shows';
+import Attended from '#/components/Shows/Attended';
+import type { ImageUpload, VenueQuery } from '#/types/graphql';
+import { createClientCache } from '#/utils/cache';
+import query from '#/utils/query';
 
 import type { Route } from './+types/venue';
 

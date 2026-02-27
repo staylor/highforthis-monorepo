@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import VenueForm from '~/components/Admin/Venue/Form';
-import { handleSubmission } from '~/utils/action';
+import VenueForm from '#/components/Admin/Venue/Form';
+import { handleSubmission } from '#/utils/action';
 
 import type { Route } from './+types/add';
 

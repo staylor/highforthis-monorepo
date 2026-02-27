@@ -5,9 +5,9 @@ import { $getSelection, FORMAT_TEXT_COMMAND, SELECTION_CHANGE_COMMAND } from 'le
 import type { ReactNode } from 'react';
 import { useRef, useEffect, useCallback, useReducer, useMemo } from 'react';
 
-import Controls from '~/components/Editor/Controls';
-import StyleButton from '~/components/Editor/Controls/StyleButton';
-import Toolbar from '~/components/Editor/Toolbar';
+import Controls from '#/components/Editor/Controls';
+import StyleButton from '#/components/Editor/Controls/StyleButton';
+import Toolbar from '#/components/Editor/Toolbar';
 
 import { setStyle } from './utils';
 

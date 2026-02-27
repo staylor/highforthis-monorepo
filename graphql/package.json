@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "license": "UNLICENSED",
   "type": "module",
+  "imports": {
+    "#/*": "./src/*"
+  },
   "dependencies": {
     "@apollo/server": "5.4.0",
     "@google-cloud/storage": "7.19.0",

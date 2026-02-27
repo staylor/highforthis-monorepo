@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import prisma from '~/database';
+import prisma from '#/database';
 
 const writeDir = path.join(process.cwd(), 'tools', 'editor', 'converted');
 const fileName = (id: string) => `${writeDir}/${id}.json`;

@@ -2,10 +2,10 @@ import type { SyntheticEvent } from 'react';
 import { useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-import Loading from '~/components/Loading';
-import type { SelectedImage, SelectedImageData } from '~/types/admin';
-import type { AudioUpload, ImageUpload, MediaUpload, MediaUploadConnection } from '~/types/graphql';
-import { uploadUrl } from '~/utils/media';
+import Loading from '#/components/Loading';
+import type { SelectedImage, SelectedImageData } from '#/types/admin';
+import type { AudioUpload, ImageUpload, MediaUpload, MediaUploadConnection } from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
 
 import CloseButton from './CloseButton';
 import { modalClass, frameClass, itemTitleClass } from './styles';

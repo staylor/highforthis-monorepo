@@ -2,11 +2,11 @@ import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Form from '~/components/Admin/Form';
-import { Heading } from '~/components/Admin/styles';
-import Message from '~/components/Form/Message';
-import type { Fields } from '~/types';
-import type { Video } from '~/types/graphql';
+import Form from '#/components/Admin/Form';
+import { Heading } from '#/components/Admin/styles';
+import Message from '#/components/Form/Message';
+import type { Fields } from '#/types';
+import type { Video } from '#/types/graphql';
 
 type VideoFormProps = PropsWithChildren<{
   data?: Partial<Video>;

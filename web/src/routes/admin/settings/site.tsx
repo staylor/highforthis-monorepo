@@ -1,11 +1,11 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import SettingsForm from '~/components/Admin/Settings/Form';
-import type { Fields } from '~/types';
-import type { SiteSettingsQuery } from '~/types/graphql';
-import { handleSubmission } from '~/utils/action';
-import query from '~/utils/query';
+import SettingsForm from '#/components/Admin/Settings/Form';
+import type { Fields } from '#/types';
+import type { SiteSettingsQuery } from '#/types/graphql';
+import { handleSubmission } from '#/utils/action';
+import query from '#/utils/query';
 
 import type { Route } from './+types/site';
 

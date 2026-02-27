@@ -1,6 +1,6 @@
 import { useFetcher } from 'react-router';
 
-import Checkbox from '~/components/Form/Checkbox';
+import Checkbox from '#/components/Form/Checkbox';
 
 export default function PermanentlyClosed({ data }: any) {
   const fetcher = useFetcher();

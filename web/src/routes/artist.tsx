@@ -1,12 +1,12 @@
 import { gql } from 'graphql-tag';
 
-import Metadata from '~/components/Artist/Metadata';
-import { Heading1 } from '~/components/Heading';
-import Shows from '~/components/Shows';
-import Attended from '~/components/Shows/Attended';
-import type { ArtistQuery } from '~/types/graphql';
-import { createClientCache } from '~/utils/cache';
-import query from '~/utils/query';
+import Metadata from '#/components/Artist/Metadata';
+import { Heading1 } from '#/components/Heading';
+import Shows from '#/components/Shows';
+import Attended from '#/components/Shows/Attended';
+import type { ArtistQuery } from '#/types/graphql';
+import { createClientCache } from '#/utils/cache';
+import query from '#/utils/query';
 
 import type { Route } from './+types/artist';
 

@@ -1,5 +1,5 @@
-import prisma from '~/database';
-import youtube from '~/jobs/youtube';
+import prisma from '#/database';
+import youtube from '#/jobs/youtube';
 
 await youtube(prisma);
 

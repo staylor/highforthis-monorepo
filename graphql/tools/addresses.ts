@@ -1,4 +1,4 @@
-import prisma from '~/database';
+import prisma from '#/database';
 
 const venues = await prisma.venue.findMany({ take: 1000 });
 

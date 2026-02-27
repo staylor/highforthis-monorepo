@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useRootData } from '~/utils/rootData';
+import { useRootData } from '#/utils/rootData';
 
 const Wrapper = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation();

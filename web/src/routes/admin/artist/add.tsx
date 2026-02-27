@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import ArtistForm from '~/components/Admin/Artist/Form';
-import { handleSubmission } from '~/utils/action';
+import ArtistForm from '#/components/Admin/Artist/Form';
+import { handleSubmission } from '#/utils/action';
 
 import type { Route } from './+types/add';
 

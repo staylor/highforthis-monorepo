@@ -6,8 +6,8 @@ import type {
   QueryVenuesArgs,
 } from 'types/graphql';
 
-import type { AppContext } from '~/models';
-import { getUniqueSlug } from '~/models/utils';
+import type { AppContext } from '#/models';
+import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
 

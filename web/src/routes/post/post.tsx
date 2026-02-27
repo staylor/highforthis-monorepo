@@ -1,19 +1,19 @@
 import { gql } from 'graphql-tag';
 import type { MetaFunction } from 'react-router';
 
-import TextNodes from '~/components/Post/TextNodes';
-import Video from '~/components/Videos/Video';
+import TextNodes from '#/components/Post/TextNodes';
+import Video from '#/components/Videos/Video';
 import type {
   EditorState,
   ImageUpload,
   ImageUploadCrop,
   Post as PostType,
   PostQuery,
-} from '~/types/graphql';
-import { uploadUrl } from '~/utils/media';
-import query from '~/utils/query';
-import { rootData } from '~/utils/rootData';
-import titleTemplate from '~/utils/title';
+} from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
+import query from '#/utils/query';
+import { rootData } from '#/utils/rootData';
+import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types/post';
 import Content from './Content';

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Link from '~/components/Link';
+import Link from '#/components/Link';
 
 interface RowTitleProps {
   url: string;

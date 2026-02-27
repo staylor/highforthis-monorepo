@@ -1,13 +1,13 @@
 import { gql } from 'graphql-tag';
 import { useParams, type MetaFunction } from 'react-router';
 
-import TextTitle from '~/components/TextTitle';
-import Videos from '~/components/Videos';
-import { videosQuery as queryFragment } from '~/components/Videos/graphql';
-import type { VideoConnection, VideosQuery } from '~/types/graphql';
-import query from '~/utils/query';
-import { rootData } from '~/utils/rootData';
-import titleTemplate from '~/utils/title';
+import TextTitle from '#/components/TextTitle';
+import Videos from '#/components/Videos';
+import { videosQuery as queryFragment } from '#/components/Videos/graphql';
+import type { VideoConnection, VideosQuery } from '#/types/graphql';
+import query from '#/utils/query';
+import { rootData } from '#/utils/rootData';
+import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types';
 

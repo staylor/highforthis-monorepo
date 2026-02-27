@@ -4,8 +4,8 @@ import path from 'node:path';
 
 import { Prisma } from '@prisma/client';
 
-import prisma from '~/database';
-import { extractText } from '~/utils/lexical';
+import prisma from '#/database';
+import { extractText } from '#/utils/lexical';
 
 const jsonDir = path.join(process.cwd(), 'dump', 'json');
 

@@ -17,13 +17,13 @@ import type { LexicalNode, RangeSelection } from 'lexical';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 
-import MediaModal from '~/components/Admin/Modals/Media';
-import VideoModal from '~/components/Admin/Modals/Video';
-import Controls from '~/components/Editor/Controls';
-import BlockButton from '~/components/Editor/Controls/BlockButton';
-import StyleButton from '~/components/Editor/Controls/StyleButton';
-import Toolbar from '~/components/Editor/Toolbar';
-import type { ImageUpload, Video } from '~/types/graphql';
+import MediaModal from '#/components/Admin/Modals/Media';
+import VideoModal from '#/components/Admin/Modals/Video';
+import Controls from '#/components/Editor/Controls';
+import BlockButton from '#/components/Editor/Controls/BlockButton';
+import StyleButton from '#/components/Editor/Controls/StyleButton';
+import Toolbar from '#/components/Editor/Toolbar';
+import type { ImageUpload, Video } from '#/types/graphql';
 
 import { $createImageNode } from './ImageNode';
 import { $createVideoNode } from './VideoNode';

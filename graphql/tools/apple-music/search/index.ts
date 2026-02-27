@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import prisma from '~/database';
+import prisma from '#/database';
 
 import { generateToken } from '../jwt';
 

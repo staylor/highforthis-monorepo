@@ -6,9 +6,9 @@ import type {
   QueryPostsArgs,
 } from 'types/graphql';
 
-import type { AppContext } from '~/models';
-import { getUniqueSlug } from '~/models/utils';
-import { extractText } from '~/utils/lexical';
+import type { AppContext } from '#/models';
+import { getUniqueSlug } from '#/models/utils';
+import { extractText } from '#/utils/lexical';
 
 import { parseConnection } from './utils/collection';
 import resolveTags from './utils/resolveTags';

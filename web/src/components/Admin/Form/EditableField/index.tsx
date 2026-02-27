@@ -1,12 +1,12 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 
-import Date from '~/components/Admin/Form/Date';
-import Input from '~/components/Form/Input';
-import Select from '~/components/Form/Select';
-import Textarea from '~/components/Form/Textarea';
-import type { Field } from '~/types';
+import Date from '#/components/Admin/Form/Date';
+import Input from '#/components/Form/Input';
+import Select from '#/components/Form/Select';
+import Textarea from '#/components/Form/Textarea';
+import type { Field } from '#/types';
 
-const Editor = lazy(() => import('~/components/Editor'));
+const Editor = lazy(() => import('#/components/Editor'));
 
 function ClientOnly({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);

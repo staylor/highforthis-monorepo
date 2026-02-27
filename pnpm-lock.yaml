@@ -85,8 +85,8 @@ importers:
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.14)
       '@wonderboymusic/eslint-config':
-        specifier: 2.0.2
-        version: 2.0.2(@typescript-eslint/utils@8.56.1(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(jiti@2.6.1)(vitest@4.0.18(@types/node@25.3.2)(happy-dom@20.7.0)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
+        specifier: 2.0.3
+        version: 2.0.3(@typescript-eslint/utils@8.56.1(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(jiti@2.6.1)(vitest@4.0.18(@types/node@25.3.2)(happy-dom@20.7.0)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
       esbuild:
         specifier: 0.27.3
         version: 0.27.3
@@ -2674,8 +2674,8 @@ packages:
     resolution: {integrity: sha512-Nst5JdK47VIl9UcGwtv2Rcgyn5lWtZ0/mhRQ4G8NN2isxpq2TO30iqHzmwoJycjWuyUfg3GFXqP/gFHXeV57IA==}
     engines: {node: '>=16.0.0'}
 
-  '@wonderboymusic/eslint-config@2.0.2':
-    resolution: {integrity: sha512-aVEn4K4Yzq3GCi52vZbK6ybVPj7cZGi/F10N7aELN+uwHeW+sKX3skoYlGK2WA7QfZyalk3ufI+XTEU5iRMweQ==}
+  '@wonderboymusic/eslint-config@2.0.3':
+    resolution: {integrity: sha512-exo+WOiMQYMa/pYnUK0/FOBbhq116eWRmqGvzwbpnszExEFU1lOiNhxfyEi7k36Qjv15jwtS/73drE0LxkEzwg==}
 
   '@wry/caches@1.0.1':
     resolution: {integrity: sha512-bXuaUNLVVkD20wcGBWRyo7j9N3TxePEWFZj2Y+r9OoUzfqmavM84+mFykRicNsBqatba5JLay1t48wxaXaWnlA==}
@@ -9040,7 +9040,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@wonderboymusic/eslint-config@2.0.2(@typescript-eslint/utils@8.56.1(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(jiti@2.6.1)(vitest@4.0.18(@types/node@25.3.2)(happy-dom@20.7.0)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))':
+  '@wonderboymusic/eslint-config@2.0.3(@typescript-eslint/utils@8.56.1(eslint@9.39.3(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(jiti@2.6.1)(vitest@4.0.18(@types/node@25.3.2)(happy-dom@20.7.0)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       eslint: 9.39.3(jiti@2.6.1)
       eslint-config-prettier: 10.1.8(eslint@9.39.3(jiti@2.6.1))

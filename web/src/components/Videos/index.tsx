@@ -2,7 +2,7 @@ import type { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
 
-import type { VideoConnection } from '~/types/graphql';
+import type { VideoConnection } from '#/types/graphql';
 
 import Button from './Button';
 import Video from './Video';

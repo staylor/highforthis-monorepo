@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import prisma from '~/database';
+import prisma from '#/database';
 
 const API_KEY = process.env.GOOGLE_MAPS_GEOLOCATION_API_KEY as string;
 

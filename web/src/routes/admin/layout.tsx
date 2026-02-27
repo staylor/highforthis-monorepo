@@ -3,11 +3,11 @@ import { useState } from 'react';
 import type { LinksFunction, MetaFunction } from 'react-router';
 import { redirect, Outlet } from 'react-router';
 
-import { isAuthenticated } from '~/auth';
-import NavMenu from '~/components/Admin/NavMenu';
-import adminCss from '~/styles/admin.css?url';
-import { rootData } from '~/utils/rootData';
-import titleTemplate from '~/utils/title';
+import { isAuthenticated } from '#/auth';
+import NavMenu from '#/components/Admin/NavMenu';
+import adminCss from '#/styles/admin.css?url';
+import { rootData } from '#/utils/rootData';
+import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types/layout';
 

@@ -3,12 +3,12 @@ import type { HtmlHTMLAttributes, HTMLAttributes, PropsWithChildren } from 'reac
 import { useTranslation } from 'react-i18next';
 import { useMatches } from 'react-router';
 
-import Link from '~/components/Link';
-import Navigation from '~/components/Nav';
-import Sidebar from '~/components/Sidebar';
-import useSSE from '~/hooks/useSSE';
-import type { ShowConnection } from '~/types/graphql';
-import { useRootData } from '~/utils/rootData';
+import Link from '#/components/Link';
+import Navigation from '#/components/Nav';
+import Sidebar from '#/components/Sidebar';
+import useSSE from '#/hooks/useSSE';
+import type { ShowConnection } from '#/types/graphql';
+import { useRootData } from '#/utils/rootData';
 
 import DarkMode from './DarkMode';
 import SocialIcons from './SocialIcons';

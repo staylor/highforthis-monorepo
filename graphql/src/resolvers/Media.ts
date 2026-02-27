@@ -5,7 +5,7 @@ import type {
   QueryUploadsArgs,
 } from 'types/graphql';
 
-import type { AppContext } from '~/models';
+import type { AppContext } from '#/models';
 
 import { parseConnection } from './utils/collection';
 

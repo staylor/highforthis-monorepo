@@ -1,5 +1,5 @@
-import prisma from '~/database';
-import shows from '~/jobs/shows';
+import prisma from '#/database';
+import shows from '#/jobs/shows';
 
 await shows(prisma);
 

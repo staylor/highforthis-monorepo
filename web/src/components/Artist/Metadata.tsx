@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { AppleMusicData } from '~/types/graphql';
+import type { AppleMusicData } from '#/types/graphql';
 
 import Artwork, { DEFAULT_IMAGE_SIZE } from './Artwork';
 

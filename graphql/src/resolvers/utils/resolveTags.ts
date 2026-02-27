@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@prisma/client';
 
-import { getUniqueSlug } from '~/models/utils';
+import { getUniqueSlug } from '#/models/utils';
 
 export default async function resolveTags(
   inputTerms: string[],

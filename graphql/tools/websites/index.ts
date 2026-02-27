@@ -3,7 +3,7 @@ import path from 'path';
 
 import { JSDOM } from 'jsdom';
 
-import prisma from '~/database';
+import prisma from '#/database';
 
 const omrHost = 'https://www.ohmyrockness.com';
 const filename = (name: string) => path.join(process.cwd(), 'tools', 'websites', 'responses', name);

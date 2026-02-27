@@ -2,17 +2,17 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
-import ListTable, { Thumbnail, RowTitle, RowActions } from '~/components/Admin/ListTable';
-import Search from '~/components/Admin/ListTable/Search';
-import { useUpdateQuery } from '~/components/Admin/ListTable/utils';
-import { Heading, HeaderAdd } from '~/components/Admin/styles';
-import Message from '~/components/Form/Message';
-import Select from '~/components/Form/Select';
-import Link from '~/components/Link';
-import type { Columns } from '~/types';
-import type { MediaUpload, UploadsAdminQuery } from '~/types/graphql';
-import { handleDelete } from '~/utils/action';
-import query, { addPageOffset } from '~/utils/query';
+import ListTable, { Thumbnail, RowTitle, RowActions } from '#/components/Admin/ListTable';
+import Search from '#/components/Admin/ListTable/Search';
+import { useUpdateQuery } from '#/components/Admin/ListTable/utils';
+import { Heading, HeaderAdd } from '#/components/Admin/styles';
+import Message from '#/components/Form/Message';
+import Select from '#/components/Form/Select';
+import Link from '#/components/Link';
+import type { Columns } from '#/types';
+import type { MediaUpload, UploadsAdminQuery } from '#/types/graphql';
+import { handleDelete } from '#/utils/action';
+import query, { addPageOffset } from '#/utils/query';
 
 import type { Route } from './+types/index';
 

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import Select from '~/components/Form/Select';
-import Link from '~/components/Link';
+import Select from '#/components/Form/Select';
+import Link from '#/components/Link';
 
 import { sortNodes, type EntityNode } from './utils';
 

@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router';
 
-import Link from '~/components/Link';
+import Link from '#/components/Link';
 
 interface RowAction {
   ids?: string[];

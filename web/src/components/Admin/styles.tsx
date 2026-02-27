@@ -2,7 +2,7 @@ import cn from 'classnames';
 import type { HTMLAttributes } from 'react';
 import { useLocation } from 'react-router';
 
-import Link, { type CustomLinkProps } from '~/components/Link';
+import Link, { type CustomLinkProps } from '#/components/Link';
 
 export const Heading = ({ className, children, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
   <h1

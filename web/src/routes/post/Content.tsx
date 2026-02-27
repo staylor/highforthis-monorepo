@@ -1,8 +1,8 @@
-import Blockquote from '~/components/Blockquote';
-import { Heading2, Heading3, Heading4 } from '~/components/Heading';
-import Paragraph from '~/components/Paragraph';
-import VideoComponent from '~/components/Videos/Video';
-import { HeadingTag } from '~/types/graphql';
+import Blockquote from '#/components/Blockquote';
+import { Heading2, Heading3, Heading4 } from '#/components/Heading';
+import Paragraph from '#/components/Paragraph';
+import VideoComponent from '#/components/Videos/Video';
+import { HeadingTag } from '#/types/graphql';
 import type {
   CodeNode,
   EditorState,
@@ -14,8 +14,8 @@ import type {
   TextNode,
   Video,
   VideoNode,
-} from '~/types/graphql';
-import { uploadUrl } from '~/utils/media';
+} from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
 
 import TextNodes from '../../components/Post/TextNodes';
 

@@ -2,14 +2,14 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useSearchParams } from 'react-router';
 
-import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
-import Search from '~/components/Admin/ListTable/Search';
-import { Heading, HeaderAdd } from '~/components/Admin/styles';
-import Message from '~/components/Form/Message';
-import type { Columns } from '~/types';
-import type { Post, PostsAdminQuery } from '~/types/graphql';
-import { handleDelete } from '~/utils/action';
-import query, { addPageOffset } from '~/utils/query';
+import ListTable, { RowTitle, RowActions } from '#/components/Admin/ListTable';
+import Search from '#/components/Admin/ListTable/Search';
+import { Heading, HeaderAdd } from '#/components/Admin/styles';
+import Message from '#/components/Form/Message';
+import type { Columns } from '#/types';
+import type { Post, PostsAdminQuery } from '#/types/graphql';
+import { handleDelete } from '#/utils/action';
+import query, { addPageOffset } from '#/utils/query';
 
 import type { Route } from './+types/index';
 

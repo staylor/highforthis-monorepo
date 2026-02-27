@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { Location } from 'react-router';
 import { useLocation, useNavigate } from 'react-router';
 
-import Select from '~/components/Form/Select';
+import Select from '#/components/Form/Select';
 
 import Link from './Link';
 

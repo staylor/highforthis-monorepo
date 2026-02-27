@@ -2,8 +2,8 @@ import type { OperationVariables, QueryOptions } from '@apollo/client';
 import { ServerError } from '@apollo/client/errors';
 import type { AppLoadContext } from 'react-router';
 
-import { isAuthenticated } from '~/auth';
-import { PER_PAGE } from '~/constants';
+import { isAuthenticated } from '#/auth';
+import { PER_PAGE } from '#/constants';
 
 import { offsetToCursor } from './connection';
 

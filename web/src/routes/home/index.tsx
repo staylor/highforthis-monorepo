@@ -1,11 +1,11 @@
 import { gql } from 'graphql-tag';
 
-import Divider from '~/components/Divider';
-import Videos from '~/components/Videos';
-import { videosQuery } from '~/components/Videos/graphql';
-import type { HomeQuery } from '~/types/graphql';
-import { createClientCache } from '~/utils/cache';
-import query from '~/utils/query';
+import Divider from '#/components/Divider';
+import Videos from '#/components/Videos';
+import { videosQuery } from '#/components/Videos/graphql';
+import type { HomeQuery } from '#/types/graphql';
+import { createClientCache } from '#/utils/cache';
+import query from '#/utils/query';
 
 import type { Route } from './+types';
 import Latest from './Latest';

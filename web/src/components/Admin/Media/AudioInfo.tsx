@@ -2,8 +2,8 @@ import { filesize } from 'filesize';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { AudioUpload, ImageUploadCrop } from '~/types/graphql';
-import { uploadUrl } from '~/utils/media';
+import type { AudioUpload, ImageUploadCrop } from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
 
 export default function AudioInfo({ media }: { media: AudioUpload }) {
   const { t } = useTranslation();

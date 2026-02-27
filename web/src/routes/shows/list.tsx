@@ -1,4 +1,4 @@
-import ShowsList from '~/components/Shows/List';
+import ShowsList from '#/components/Shows/List';
 
 import type { Route } from './+types/list';
 

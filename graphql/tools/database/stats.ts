@@ -1,4 +1,4 @@
-import prisma from '~/database';
+import prisma from '#/database';
 
 async function logArtistStats() {
   const results = await prisma.showArtist.groupBy({

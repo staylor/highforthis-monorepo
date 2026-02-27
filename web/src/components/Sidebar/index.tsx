@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Heading2 } from '~/components/Heading';
-import Link from '~/components/Link';
-import type { ShowConnection } from '~/types/graphql';
+import { Heading2 } from '#/components/Heading';
+import Link from '#/components/Link';
+import type { ShowConnection } from '#/types/graphql';
 
 import { formatArtists, formatDate, formatShowLink } from '../Shows/utils';
 

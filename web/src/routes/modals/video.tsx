@@ -1,9 +1,9 @@
 import type { OperationVariables } from '@apollo/client';
 import { gql } from 'graphql-tag';
 
-import Video from '~/components/Videos/Video';
-import type { VideoModalQuery } from '~/types/graphql';
-import query from '~/utils/query';
+import Video from '#/components/Videos/Video';
+import type { VideoModalQuery } from '#/types/graphql';
+import query from '#/utils/query';
 
 import type { Route } from './+types/video';
 

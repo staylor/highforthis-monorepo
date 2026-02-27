@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { useLocation, NavLink } from 'react-router';
 
-import type { AdminTopLevelRoute } from '~/types';
+import type { AdminTopLevelRoute } from '#/types';
 
 interface SubNavProps {
   isHovered: boolean;

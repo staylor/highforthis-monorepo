@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { Prisma } from '@prisma/client';
 
-import prisma from '~/database';
+import prisma from '#/database';
 
 const jsonDir = path.join(process.cwd(), 'dump', 'json');
 

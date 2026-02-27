@@ -2,8 +2,8 @@ import 'dotenv/config';
 
 import { Prisma } from '@prisma/client';
 
-import prisma from '~/database';
-import { extractText } from '~/utils/lexical';
+import prisma from '#/database';
+import { extractText } from '#/utils/lexical';
 
 async function main() {
   const posts = await prisma.post.findMany({

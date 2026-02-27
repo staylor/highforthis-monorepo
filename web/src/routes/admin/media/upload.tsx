@@ -2,8 +2,8 @@ import type { DragEvent } from 'react';
 import { useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Heading } from '~/components/Admin/styles';
-import Link from '~/components/Link';
+import { Heading } from '#/components/Admin/styles';
+import Link from '#/components/Link';
 
 interface PendingUpload extends File {
   id: string;

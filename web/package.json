@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "license": "UNLICENSED",
   "type": "module",
+  "imports": {
+    "#/*": "./src/*"
+  },
   "dependencies": {
     "@apollo/client": "4.1.6",
     "@lexical/code": "0.41.0",

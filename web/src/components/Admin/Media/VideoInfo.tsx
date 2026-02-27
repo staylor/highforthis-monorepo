@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import type { VideoUpload } from '~/types/graphql';
+import type { VideoUpload } from '#/types/graphql';
 
 export default function VideoInfo({ media }: { media: VideoUpload }) {
   const { t } = useTranslation();
