@@ -4,7 +4,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
-    "@apollo/server": "4.11.3",
+    "@apollo/server": "5.4.0",
     "@google-cloud/storage": "7.19.0",
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "7.4.1",

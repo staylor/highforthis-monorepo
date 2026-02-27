@@ -3,8 +3,7 @@ import 'dotenv/config';
 import http from 'node:http';
 import path from 'node:path';
 
-import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServer, HeaderMap } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 
 import compression from 'compression';
@@ -15,6 +14,7 @@ import morgan from 'morgan';
 import { authMiddleware, jwtMiddleware, initialize } from './authentication';
 import prisma from './database';
 import cronJobs from './jobs';
+import type { AppContext } from './models';
 import resolvers from './resolvers';
 import typeDefs from './schema';
 import { multerMiddleware, mediaMiddleware } from './uploads';
@@ -53,21 +53,49 @@ async function startServer(): Promise<void> {
 
   app.post('/upload', jwtMiddleware, multerMiddleware(uploadDir), mediaMiddleware);
 
-  const server = new ApolloServer({
+  const server = new ApolloServer<AppContext>({
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   await server.start();
 
-  const graphqlMiddleware = expressMiddleware(server, {
-    context: async ({ req }) => ({
-      ...context,
-      authUser: (req as any).context?.authUser,
-    }),
-  });
+  app.use('/graphql', cors(), express.json(), async (req, res) => {
+    const headers = new HeaderMap();
+    for (const [key, value] of Object.entries(req.headers)) {
+      if (value !== undefined) {
+        headers.set(key, Array.isArray(value) ? value.join(', ') : value);
+      }
+    }
 
-  app.use('/graphql', cors(), express.json(), graphqlMiddleware as any);
+    const httpGraphQLResponse = await server.executeHTTPGraphQLRequest({
+      httpGraphQLRequest: {
+        method: req.method.toUpperCase(),
+        headers,
+        search: new URL(req.url, `http://${req.headers.host}`).search ?? '',
+        body: req.body,
+      },
+      context: async () => ({
+        ...context,
+        authUser: (req as any).context?.authUser,
+      }),
+    });
+
+    for (const [key, value] of httpGraphQLResponse.headers) {
+      res.setHeader(key, value);
+    }
+    res.status(httpGraphQLResponse.status || 200);
+
+    if (httpGraphQLResponse.body.kind === 'complete') {
+      res.send(httpGraphQLResponse.body.string);
+      return;
+    }
+
+    for await (const chunk of httpGraphQLResponse.body.asyncIterator) {
+      res.write(chunk);
+    }
+    res.end();
+  });
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: GRAPHQL_PORT }, () => {
