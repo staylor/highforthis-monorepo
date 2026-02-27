@@ -1,7 +1,6 @@
 import { URL } from 'node:url';
 
 import type { PrismaClient } from '@prisma/client';
-import fetch from 'node-fetch';
 
 import { slugify } from '~/models/utils';
 

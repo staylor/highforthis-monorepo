@@ -81,9 +81,6 @@ importers:
       '@types/node':
         specifier: 22.13.4
         version: 22.13.4
-      '@types/node-fetch':
-        specifier: 2.6.12
-        version: 2.6.12
       '@types/passport':
         specifier: 1.0.17
         version: 1.0.17
@@ -201,9 +198,6 @@ importers:
       musicmetadata:
         specifier: 2.0.5
         version: 2.0.5
-      node-fetch:
-        specifier: 3.3.2
-        version: 3.3.2
       passport:
         specifier: 0.7.0
         version: 0.7.0

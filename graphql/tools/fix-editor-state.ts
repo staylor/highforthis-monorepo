@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { Prisma } from '@prisma/client';
+
 import prisma from '~/database';
 
 const jsonDir = path.join(process.cwd(), 'dump', 'json');
@@ -123,7 +125,7 @@ async function main() {
   // Now fix all Post editorState JSON
   console.log('\nFixing Post editorState JSON...');
   const posts = await prisma.post.findMany({
-    where: { editorState: { not: null } },
+    where: { editorState: { not: Prisma.JsonNull } },
     select: { id: true, slug: true, editorState: true },
   });
 
@@ -138,7 +140,7 @@ async function main() {
     const cleaned = cleanValue(post.editorState, null, idMaps);
     await prisma.post.update({
       where: { id: post.id },
-      data: { editorState: cleaned },
+      data: { editorState: cleaned ?? undefined },
     });
     updated++;
     console.log(`  Fixed: ${post.slug}`);

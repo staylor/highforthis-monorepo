@@ -7,7 +7,7 @@
   "license": "private",
   "private": true,
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "sideEffects": false,
   "type": "module",
@@ -35,7 +35,6 @@
     "@types/multer": "1.4.12",
     "@types/musicmetadata": "2.0.9",
     "@types/node": "22.13.4",
-    "@types/node-fetch": "2.6.12",
     "@types/passport": "1.0.17",
     "@types/passport-jwt": "4.0.1",
     "@types/react": "19.0.9",
