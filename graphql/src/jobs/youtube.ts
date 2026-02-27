@@ -1,7 +1,6 @@
 import { URL } from 'node:url';
 
-import type { PrismaClient } from '@prisma/client';
-
+import prisma from '#/database';
 import { slugify } from '#/models/utils';
 
 const API_HOST = 'https://www.googleapis.com';
@@ -64,7 +63,6 @@ async function fetchPlaylistItems(playlistId: string): Promise<any[]> {
 }
 
 async function updateVideo(
-  prisma: PrismaClient,
   { contentDetails, snippet }: Record<string, any>,
   year: string,
   playlistId: string
@@ -115,11 +113,7 @@ async function updateVideo(
   }
 }
 
-async function fetchPlaylist(
-  prisma: PrismaClient,
-  year: string,
-  playlistId: string
-): Promise<string[]> {
+async function fetchPlaylist(year: string, playlistId: string): Promise<string[]> {
   let items;
   try {
     items = await fetchPlaylistItems(playlistId);
@@ -145,7 +139,7 @@ async function fetchPlaylist(
         console.log(playlistId, 'has a deletion:', item.contentDetails.videoId);
         return false;
       }
-      return updateVideo(prisma, item, year, playlistId);
+      return updateVideo(item, year, playlistId);
     })
   );
 
@@ -169,7 +163,7 @@ async function fetchPlaylist(
   return updated as string[];
 }
 
-export default async (prisma: PrismaClient) => {
+export default async () => {
   let response: any;
   try {
     response = await fetchPlaylists();
@@ -181,7 +175,7 @@ export default async (prisma: PrismaClient) => {
   await Promise.all(
     response?.items?.map((playlist: any) => {
       if (playlist.snippet.title.match(/^[0-9]{4}$/)) {
-        return fetchPlaylist(prisma, playlist.snippet.title, playlist.id);
+        return fetchPlaylist(playlist.snippet.title, playlist.id);
       }
       return Promise.resolve();
     }) || []

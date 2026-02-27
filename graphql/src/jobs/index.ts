@@ -1,14 +1,13 @@
-import type { PrismaClient } from '@prisma/client';
 import { CronJob } from 'cron';
 
 import showsData from './shows';
 import youtubeData from './youtube';
 
-function jobs(prisma: PrismaClient): void {
+function jobs(): void {
   CronJob.from({
     cronTime: '0 */4 * * *',
     onTick: async () => {
-      await youtubeData(prisma);
+      await youtubeData();
     },
     timeZone: 'America/New_York',
     start: true,
@@ -16,7 +15,7 @@ function jobs(prisma: PrismaClient): void {
   CronJob.from({
     cronTime: '0 0 * * *',
     onTick: async () => {
-      await showsData(prisma);
+      await showsData();
     },
     timeZone: 'America/New_York',
     start: true,

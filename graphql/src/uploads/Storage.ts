@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 
-import type { PrismaClient } from '@prisma/client';
 import type { Request } from 'express';
+
+import prisma from '#/database';
 
 import type { StorageAdapter } from './adapter';
 import Audio from './types/Audio';
@@ -17,7 +18,6 @@ export interface UploadOpts {
 }
 
 interface StorageOpts {
-  prisma: PrismaClient;
   uploadDir: string;
   adapter: StorageAdapter;
 }
@@ -30,7 +30,7 @@ class Storage {
   }
 
   public async _handleFile(_req: Request, file: Express.Multer.File, cb: Callback) {
-    const mediaSettings = await this.opts.prisma.mediaSettings.findUnique({
+    const mediaSettings = await prisma.mediaSettings.findUnique({
       where: { id: 'media' },
     });
 

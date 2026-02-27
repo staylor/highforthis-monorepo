@@ -8,7 +8,7 @@ import type {
   UpdateShowInput,
 } from 'types/graphql';
 
-import type { AppContext } from '#/models';
+import prisma from '#/database';
 
 import { parseConnection, emptyConnection } from './utils/collection';
 
@@ -22,7 +22,7 @@ const resolvers = {
     date(show: any) {
       return new Date(show.date).getTime();
     },
-    artists(show: any, _: unknown, { prisma }: AppContext) {
+    artists(show: any) {
       if ('artists' in show && Array.isArray(show.artists)) {
         return show.artists.map((r: any) => r.artist || r);
       }
@@ -30,7 +30,7 @@ const resolvers = {
         .findMany({ where: { showId: show.id }, include: { artist: true } })
         .then((records: any[]) => records.map((r) => r.artist));
     },
-    venue(show: any, _: unknown, { prisma }: AppContext) {
+    venue(show: any) {
       if ('venue' in show && show.venue && typeof show.venue === 'object') {
         return show.venue;
       }
@@ -44,7 +44,7 @@ const resolvers = {
     },
   },
   ShowConnection: {
-    async years(_0: unknown, args: QueryShowsArgs, { prisma }: AppContext) {
+    async years(_0: unknown, args: QueryShowsArgs) {
       const where: any = {};
       if (args.attended) {
         where.attended = true;
@@ -58,7 +58,7 @@ const resolvers = {
     },
   },
   Query: {
-    async shows(_: unknown, args: QueryShowsArgs, { prisma }: AppContext) {
+    async shows(_: unknown, args: QueryShowsArgs) {
       const { artist, venue, latest, attended, year, search, order, ...connectionArgs } = args;
       const where: any = {};
 
@@ -111,7 +111,7 @@ const resolvers = {
       });
     },
 
-    async show(_: unknown, { id, lastAdded }: QueryShowArgs, { prisma }: AppContext) {
+    async show(_: unknown, { id, lastAdded }: QueryShowArgs) {
       if (lastAdded) {
         return prisma.show.findFirst({ orderBy: { createdAt: 'desc' }, include: showIncludes });
       }
@@ -121,7 +121,7 @@ const resolvers = {
       return null;
     },
 
-    async showStats(_: unknown, { entity }: QueryShowStatsArgs, { prisma }: AppContext) {
+    async showStats(_: unknown, { entity }: QueryShowStatsArgs) {
       const entityType = entity.toLowerCase();
       if (entityType === 'artist') {
         const results = await prisma.showArtist.groupBy({
@@ -161,7 +161,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    async createShow(_: unknown, { input }: MutationCreateShowArgs, { prisma }: AppContext) {
+    async createShow(_: unknown, { input }: MutationCreateShowArgs) {
       const { artists, venue, date, ...data } = input as any;
       return prisma.show.create({
         data: {
@@ -176,7 +176,7 @@ const resolvers = {
       });
     },
 
-    async updateShow(_: unknown, { id, input }: MutationUpdateShowArgs, { prisma }: AppContext) {
+    async updateShow(_: unknown, { id, input }: MutationUpdateShowArgs) {
       const { artists, venue, date, ...data } = input as any;
       const values: any = { ...data };
 
@@ -201,7 +201,7 @@ const resolvers = {
       return prisma.show.update({ where: { id }, data: values, include: showIncludes });
     },
 
-    async removeShow(_: unknown, { ids }: MutationRemoveShowArgs, { prisma }: AppContext) {
+    async removeShow(_: unknown, { ids }: MutationRemoveShowArgs) {
       try {
         await prisma.show.deleteMany({ where: { id: { in: ids as string[] } } });
         return true;

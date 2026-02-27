@@ -6,7 +6,7 @@ import type {
   QueryVenuesArgs,
 } from 'types/graphql';
 
-import type { AppContext } from '#/models';
+import prisma from '#/database';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
@@ -24,7 +24,7 @@ const resolvers = {
       if (venue.latitude === null && venue.longitude === null) return null;
       return { latitude: venue.latitude, longitude: venue.longitude };
     },
-    featuredMedia(venue: any, _: unknown, { prisma }: AppContext) {
+    featuredMedia(venue: any) {
       if ('featuredMedia' in venue) {
         return venue.featuredMedia.map((r: any) => r.media);
       }
@@ -34,7 +34,7 @@ const resolvers = {
     },
   },
   Query: {
-    async venues(_: unknown, args: QueryVenuesArgs, { prisma }: AppContext) {
+    async venues(_: unknown, args: QueryVenuesArgs) {
       const { search, filtered, ...connectionArgs } = args;
       const where: any = {};
       if (search) {
@@ -56,7 +56,7 @@ const resolvers = {
       });
     },
 
-    async venue(_: unknown, { id, slug }: QueryVenueArgs, { prisma }: AppContext) {
+    async venue(_: unknown, { id, slug }: QueryVenueArgs) {
       if (id) {
         return prisma.venue.findUnique({ where: { id }, include: venueIncludes });
       }
@@ -66,7 +66,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    async createVenue(_: unknown, { input }: MutationCreateVenueArgs, { prisma }: AppContext) {
+    async createVenue(_: unknown, { input }: MutationCreateVenueArgs) {
       const { featuredMedia, coordinates, ...data } = input as any;
       const slug = await getUniqueSlug(prisma.venue, data.name);
       return prisma.venue.create({
@@ -83,7 +83,7 @@ const resolvers = {
       });
     },
 
-    async updateVenue(_: unknown, { id, input }: MutationUpdateVenueArgs, { prisma }: AppContext) {
+    async updateVenue(_: unknown, { id, input }: MutationUpdateVenueArgs) {
       const { featuredMedia, coordinates, ...data } = input as any;
       const updateData: any = { ...data };
       if (coordinates) {
@@ -101,7 +101,7 @@ const resolvers = {
       return prisma.venue.update({ where: { id }, data: updateData, include: venueIncludes });
     },
 
-    async removeVenue(_: unknown, { ids }: MutationRemoveVenueArgs, { prisma }: AppContext) {
+    async removeVenue(_: unknown, { ids }: MutationRemoveVenueArgs) {
       try {
         await prisma.venue.deleteMany({ where: { id: { in: ids as string[] } } });
         return true;

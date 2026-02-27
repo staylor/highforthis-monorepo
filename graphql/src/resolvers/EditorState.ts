@@ -1,4 +1,4 @@
-import type { AppContext } from '#/models';
+import prisma from '#/database';
 
 const resolvers = {
   EditorNode: {
@@ -15,12 +15,12 @@ const resolvers = {
     },
   },
   ImageNode: {
-    image(data: any, _: unknown, { prisma }: AppContext) {
+    image(data: any) {
       return prisma.mediaUpload.findUnique({ where: { id: data.imageId } });
     },
   },
   VideoNode: {
-    video(data: any, _: unknown, { prisma }: AppContext) {
+    video(data: any) {
       return prisma.video.findUnique({ where: { id: data.videoId } });
     },
   },

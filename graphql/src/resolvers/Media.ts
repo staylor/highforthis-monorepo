@@ -5,7 +5,7 @@ import type {
   QueryUploadsArgs,
 } from 'types/graphql';
 
-import type { AppContext } from '#/models';
+import prisma from '#/database';
 
 import { parseConnection } from './utils/collection';
 
@@ -27,37 +27,37 @@ const resolvers = {
     },
   },
   ImageUpload: {
-    crops(media: any, _: unknown, { prisma }: AppContext) {
+    crops(media: any) {
       if ('crops' in media) return media.crops;
       return prisma.imageUploadCrop.findMany({ where: { mediaId: media.id } });
     },
   },
   AudioUpload: {
-    artist(media: any, _: unknown, { prisma }: AppContext) {
+    artist(media: any) {
       if ('audioArtists' in media) return media.audioArtists.map((r: any) => r.name);
       return prisma.audioArtist
         .findMany({ where: { mediaId: media.id } })
         .then((records: any[]) => records.map((r) => r.name));
     },
-    albumArtist(media: any, _: unknown, { prisma }: AppContext) {
+    albumArtist(media: any) {
       if ('audioAlbumArtists' in media) return media.audioAlbumArtists.map((r: any) => r.name);
       return prisma.audioAlbumArtist
         .findMany({ where: { mediaId: media.id } })
         .then((records: any[]) => records.map((r) => r.name));
     },
-    genre(media: any, _: unknown, { prisma }: AppContext) {
+    genre(media: any) {
       if ('audioGenres' in media) return media.audioGenres.map((r: any) => r.name);
       return prisma.audioGenre
         .findMany({ where: { mediaId: media.id } })
         .then((records: any[]) => records.map((r) => r.name));
     },
-    images(media: any, _: unknown, { prisma }: AppContext) {
+    images(media: any) {
       if ('audioImages' in media) return media.audioImages;
       return prisma.audioImage.findMany({ where: { mediaId: media.id } });
     },
   },
   MediaUploadConnection: {
-    async types(_0: unknown, _1: unknown, { prisma }: AppContext) {
+    async types() {
       const results = await prisma.mediaUpload.findMany({
         distinct: ['type'],
         select: { type: true },
@@ -65,7 +65,7 @@ const resolvers = {
       });
       return results.map((r: any) => r.type);
     },
-    async mimeTypes(_0: unknown, _1: unknown, { prisma }: AppContext) {
+    async mimeTypes() {
       const results = await prisma.mediaUpload.findMany({
         distinct: ['mimeType'],
         select: { mimeType: true },
@@ -75,7 +75,7 @@ const resolvers = {
     },
   },
   Query: {
-    async uploads(_: unknown, args: QueryUploadsArgs, { prisma }: AppContext) {
+    async uploads(_: unknown, args: QueryUploadsArgs) {
       const { type, mimeType, search, ...connectionArgs } = args;
       const where: any = {};
       if (type) where.type = type;
@@ -92,25 +92,17 @@ const resolvers = {
         include: mediaIncludes,
       });
     },
-    media(_: unknown, { id }: QueryMediaArgs, { prisma }: AppContext) {
+    media(_: unknown, { id }: QueryMediaArgs) {
       if (!id) return null;
       return prisma.mediaUpload.findUnique({ where: { id }, include: mediaIncludes });
     },
   },
   Mutation: {
-    async updateMediaUpload(
-      _: unknown,
-      { id, input }: MutationUpdateMediaUploadArgs,
-      { prisma }: AppContext
-    ) {
+    async updateMediaUpload(_: unknown, { id, input }: MutationUpdateMediaUploadArgs) {
       return prisma.mediaUpload.update({ where: { id }, data: input, include: mediaIncludes });
     },
 
-    async removeMediaUpload(
-      _: unknown,
-      { ids }: MutationRemoveMediaUploadArgs,
-      { prisma }: AppContext
-    ) {
+    async removeMediaUpload(_: unknown, { ids }: MutationRemoveMediaUploadArgs) {
       try {
         await prisma.mediaUpload.deleteMany({ where: { id: { in: ids as string[] } } });
         return true;

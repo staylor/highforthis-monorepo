@@ -1,31 +1,31 @@
-import type { AppContext } from '#/models';
+import prisma from '#/database';
 
 const resolvers = {
   MediaSettings: {
-    async crops(settings: any, _: unknown, { prisma }: AppContext) {
+    async crops(settings: any) {
       return prisma.mediaCropSetting.findMany({ where: { mediaSettingsId: settings.id } });
     },
   },
   PodcastSettings: {
-    async image(settings: any, _: unknown, { prisma }: AppContext) {
+    async image(settings: any) {
       if (!settings.imageId) return null;
       return prisma.mediaUpload.findUnique({ where: { id: settings.imageId } });
     },
   },
   Query: {
-    async siteSettings(_0: unknown, _1: unknown, { prisma }: AppContext) {
+    async siteSettings() {
       const settings = await prisma.siteSettings.findUnique({ where: { id: 'site' } });
       return settings || { id: 'site' };
     },
-    async dashboardSettings(_0: unknown, _1: unknown, { prisma }: AppContext) {
+    async dashboardSettings() {
       const settings = await prisma.dashboardSettings.findUnique({ where: { id: 'dashboard' } });
       return settings || { id: 'dashboard' };
     },
-    async mediaSettings(_0: unknown, _1: unknown, { prisma }: AppContext) {
+    async mediaSettings() {
       const settings = await prisma.mediaSettings.findUnique({ where: { id: 'media' } });
       return settings || { id: 'media' };
     },
-    async podcastSettings(_0: unknown, _1: unknown, { prisma }: AppContext) {
+    async podcastSettings() {
       const settings = await prisma.podcastSettings.findUnique({
         where: { id: 'podcast' },
         include: { image: true },
@@ -34,33 +34,21 @@ const resolvers = {
     },
   },
   Mutation: {
-    async updateSiteSettings(
-      _: unknown,
-      { id, input }: { id: string; input: any },
-      { prisma }: AppContext
-    ) {
+    async updateSiteSettings(_: unknown, { id, input }: { id: string; input: any }) {
       return prisma.siteSettings.upsert({
         where: { id },
         create: { id, ...input },
         update: input,
       });
     },
-    async updateDashboardSettings(
-      _: unknown,
-      { id, input }: { id: string; input: any },
-      { prisma }: AppContext
-    ) {
+    async updateDashboardSettings(_: unknown, { id, input }: { id: string; input: any }) {
       return prisma.dashboardSettings.upsert({
         where: { id },
         create: { id, ...input },
         update: input,
       });
     },
-    async updateMediaSettings(
-      _: unknown,
-      { id, input }: { id: string; input: any },
-      { prisma }: AppContext
-    ) {
+    async updateMediaSettings(_: unknown, { id, input }: { id: string; input: any }) {
       const { crops, ...rest } = input;
       const settings = await prisma.mediaSettings.upsert({
         where: { id },
@@ -77,11 +65,7 @@ const resolvers = {
       }
       return settings;
     },
-    async updatePodcastSettings(
-      _: unknown,
-      { id, input }: { id: string; input: any },
-      { prisma }: AppContext
-    ) {
+    async updatePodcastSettings(_: unknown, { id, input }: { id: string; input: any }) {
       return prisma.podcastSettings.upsert({
         where: { id },
         create: { id, ...input },

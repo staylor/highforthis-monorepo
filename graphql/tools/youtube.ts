@@ -1,6 +1,5 @@
-import prisma from '#/database';
 import youtube from '#/jobs/youtube';
 
-await youtube(prisma);
+await youtube();
 
 process.exit(0);

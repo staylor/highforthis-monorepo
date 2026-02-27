@@ -1,11 +1,7 @@
-import type { PrismaClient } from '@prisma/client';
-
+import prisma from '#/database';
 import { getUniqueSlug } from '#/models/utils';
 
-export default async function resolveTags(
-  inputTerms: string[],
-  prisma: PrismaClient
-): Promise<string[]> {
+export default async function resolveTags(inputTerms: string[]): Promise<string[]> {
   let ids: string[] = [];
   if (inputTerms && inputTerms.length > 0) {
     const terms = [...inputTerms];

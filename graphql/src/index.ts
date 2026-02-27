@@ -11,7 +11,6 @@ import express from 'express';
 import morgan from 'morgan';
 
 import { authMiddleware, jwtMiddleware } from './authentication';
-import prisma from './database';
 import cronJobs from './jobs';
 import type { AppContext } from './models';
 import resolvers from './resolvers';
@@ -21,8 +20,6 @@ import { multerMiddleware, mediaMiddleware } from './uploads';
 const GRAPHQL_PORT = process.env.GRAPHQL_PORT || 8080;
 
 async function startServer(): Promise<void> {
-  const context = { prisma };
-
   const app = express();
   const httpServer = http.createServer(app);
 
@@ -39,7 +36,7 @@ async function startServer(): Promise<void> {
   app.use(express.urlencoded({ extended: true }));
 
   app.use((req, _res, next) => {
-    req.context = context;
+    req.context = {};
 
     next();
   });
@@ -73,7 +70,6 @@ async function startServer(): Promise<void> {
         body: req.body,
       },
       context: async () => ({
-        ...context,
         authUser: (req as any).context?.authUser,
       }),
     });
@@ -96,7 +92,7 @@ async function startServer(): Promise<void> {
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: GRAPHQL_PORT }, () => {
-      cronJobs(prisma);
+      cronJobs();
       resolve();
     })
   );

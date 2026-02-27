@@ -1,6 +1,6 @@
-import type { PrismaClient } from '@prisma/client';
+import prisma from '#/database';
 
-async function cleanupShows(prisma: PrismaClient) {
+async function cleanupShows() {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setDate(sixMonthsAgo.getDate() - 180);
   const result = await prisma.show.deleteMany({

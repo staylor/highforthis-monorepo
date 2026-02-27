@@ -6,6 +6,7 @@ import type {
   QueryPostsArgs,
 } from 'types/graphql';
 
+import prisma from '#/database';
 import type { AppContext } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 import { extractText } from '#/utils/lexical';
@@ -23,7 +24,7 @@ const resolvers = {
     date(post: any) {
       return new Date(post.date || post.createdAt).getTime();
     },
-    featuredMedia(post: any, _: unknown, { prisma }: AppContext) {
+    featuredMedia(post: any) {
       if ('featuredMedia' in post) {
         return post.featuredMedia.map((r: any) => r.media);
       }
@@ -31,7 +32,7 @@ const resolvers = {
         .findMany({ where: { postId: post.id }, include: { media: true } })
         .then((records: any[]) => records.map((r) => r.media));
     },
-    artists(post: any, _: unknown, { prisma }: AppContext) {
+    artists(post: any) {
       if ('artists' in post && Array.isArray(post.artists)) {
         return post.artists.map((r: any) => r.artist || r);
       }
@@ -41,7 +42,7 @@ const resolvers = {
     },
   },
   Query: {
-    async posts(_: unknown, args: QueryPostsArgs, { prisma, authUser }: AppContext) {
+    async posts(_: unknown, args: QueryPostsArgs, { authUser }: AppContext) {
       const { search, status, ...connectionArgs } = args;
       const where: any = {};
       const userCanSee = authUser?.roles?.some?.((r: any) => r.name === 'admin');
@@ -65,7 +66,7 @@ const resolvers = {
       });
     },
 
-    async post(_: unknown, { id, slug }: QueryPostArgs, { prisma, authUser }: AppContext) {
+    async post(_: unknown, { id, slug }: QueryPostArgs, { authUser }: AppContext) {
       let post;
       if (id) {
         post = await prisma.post.findUnique({ where: { id }, include: postIncludes });
@@ -84,14 +85,14 @@ const resolvers = {
     },
   },
   Mutation: {
-    async createPost(_: unknown, { input }: MutationCreatePostArgs, { prisma }: AppContext) {
+    async createPost(_: unknown, { input }: MutationCreatePostArgs) {
       const { featuredMedia, artists: inputArtists, ...data } = input as any;
       const slug = await getUniqueSlug(prisma.post, data.title);
       const contentBody = data.editorState ? extractText(data.editorState) : null;
 
       let artistIds: string[] = [];
       if (inputArtists?.length) {
-        artistIds = await resolveTags(inputArtists, prisma);
+        artistIds = await resolveTags(inputArtists);
       }
 
       return prisma.post.create({
@@ -111,7 +112,7 @@ const resolvers = {
       });
     },
 
-    async updatePost(_: unknown, { id, input }: MutationUpdatePostArgs, { prisma }: AppContext) {
+    async updatePost(_: unknown, { id, input }: MutationUpdatePostArgs) {
       const { featuredMedia, artists: inputArtists, ...data } = input as any;
       const updateData: any = { ...data };
       if (data.date) {
@@ -132,7 +133,7 @@ const resolvers = {
 
       let artistIds: string[] = [];
       if (inputArtists?.length) {
-        artistIds = await resolveTags(inputArtists, prisma);
+        artistIds = await resolveTags(inputArtists);
       }
       await prisma.postArtist.deleteMany({ where: { postId: id } });
       if (artistIds.length) {
@@ -144,7 +145,7 @@ const resolvers = {
       return prisma.post.update({ where: { id }, data: updateData, include: postIncludes });
     },
 
-    async removePost(_: unknown, { ids }: MutationRemovePostArgs, { prisma }: AppContext) {
+    async removePost(_: unknown, { ids }: MutationRemovePostArgs) {
       try {
         await prisma.post.deleteMany({ where: { id: { in: ids as string[] } } });
         return true;

@@ -1,6 +1,5 @@
-import prisma from '#/database';
 import shows from '#/jobs/shows';
 
-await shows(prisma);
+await shows();
 
 process.exit(0);

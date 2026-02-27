@@ -6,7 +6,7 @@ import type {
   QueryArtistsArgs,
 } from 'types/graphql';
 
-import type { AppContext } from '#/models';
+import prisma from '#/database';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
@@ -16,7 +16,7 @@ const artistIncludes = {
   featuredMedia: { include: { media: true } },
 };
 
-async function upsertAppleMusic(prisma: any, artistId: string, appleMusic: any) {
+async function upsertAppleMusic(artistId: string, appleMusic: any) {
   if (!appleMusic) return;
 
   const existing = await prisma.appleMusicData.findUnique({ where: { artistId } });
@@ -57,14 +57,14 @@ async function upsertAppleMusic(prisma: any, artistId: string, appleMusic: any) 
 
 const resolvers = {
   Artist: {
-    appleMusic(artist: any, _: unknown, { prisma }: AppContext) {
+    appleMusic(artist: any) {
       if ('appleMusic' in artist) return artist.appleMusic;
       return prisma.appleMusicData.findUnique({
         where: { artistId: artist.id },
         include: { genreNames: true, artwork: true },
       });
     },
-    featuredMedia(artist: any, _: unknown, { prisma }: AppContext) {
+    featuredMedia(artist: any) {
       if ('featuredMedia' in artist) {
         return artist.featuredMedia.map((r: any) => r.media);
       }
@@ -82,7 +82,7 @@ const resolvers = {
     },
   },
   Query: {
-    async artists(_: unknown, args: QueryArtistsArgs, { prisma }: AppContext) {
+    async artists(_: unknown, args: QueryArtistsArgs) {
       const { search, filtered, ...connectionArgs } = args;
       const where: any = {};
       if (search) {
@@ -101,7 +101,7 @@ const resolvers = {
       });
     },
 
-    async artist(_: unknown, { id, slug }: QueryArtistArgs, { prisma }: AppContext) {
+    async artist(_: unknown, { id, slug }: QueryArtistArgs) {
       if (id) {
         return prisma.artist.findUnique({ where: { id }, include: artistIncludes });
       }
@@ -111,7 +111,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    async createArtist(_: unknown, { input }: MutationCreateArtistArgs, { prisma }: AppContext) {
+    async createArtist(_: unknown, { input }: MutationCreateArtistArgs) {
       const { featuredMedia, ...data } = input as any;
       const slug = await getUniqueSlug(prisma.artist, data.name);
       return prisma.artist.create({
@@ -126,11 +126,7 @@ const resolvers = {
       });
     },
 
-    async updateArtist(
-      _: unknown,
-      { id, input }: MutationUpdateArtistArgs,
-      { prisma }: AppContext
-    ) {
+    async updateArtist(_: unknown, { id, input }: MutationUpdateArtistArgs) {
       const { featuredMedia, appleMusic, ...data } = input as any;
       if (typeof featuredMedia !== 'undefined') {
         await prisma.artistFeaturedMedia.deleteMany({ where: { artistId: id } });
@@ -141,12 +137,12 @@ const resolvers = {
         }
       }
       if (appleMusic) {
-        await upsertAppleMusic(prisma, id, appleMusic);
+        await upsertAppleMusic(id, appleMusic);
       }
       return prisma.artist.update({ where: { id }, data, include: artistIncludes });
     },
 
-    async removeArtist(_: unknown, { ids }: MutationRemoveArtistArgs, { prisma }: AppContext) {
+    async removeArtist(_: unknown, { ids }: MutationRemoveArtistArgs) {
       try {
         await prisma.artist.deleteMany({ where: { id: { in: ids as string[] } } });
         return true;

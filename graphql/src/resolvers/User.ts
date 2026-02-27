@@ -7,7 +7,7 @@ import type {
   QueryUsersArgs,
 } from 'types/graphql';
 
-import type { AppContext } from '#/models';
+import prisma from '#/database';
 
 import { parseConnection } from './utils/collection';
 
@@ -17,7 +17,7 @@ const userIncludes = { roles: true };
 
 const resolvers = {
   User: {
-    roles(user: any, _: unknown, { prisma }: AppContext) {
+    roles(user: any) {
       if ('roles' in user && Array.isArray(user.roles)) {
         return user.roles.map((r: any) => r.name || r);
       }
@@ -27,7 +27,7 @@ const resolvers = {
     },
   },
   Query: {
-    async users(_: unknown, args: QueryUsersArgs, { prisma }: AppContext) {
+    async users(_: unknown, args: QueryUsersArgs) {
       const { search, ...connectionArgs } = args;
       const where: any = {};
       if (search) {
@@ -44,12 +44,12 @@ const resolvers = {
       });
     },
 
-    user(_: unknown, { id }: QueryUserArgs, { prisma }: AppContext) {
+    user(_: unknown, { id }: QueryUserArgs) {
       return prisma.user.findUnique({ where: { id }, include: userIncludes });
     },
   },
   Mutation: {
-    async createUser(_: unknown, { input }: MutationCreateUserArgs, { prisma }: AppContext) {
+    async createUser(_: unknown, { input }: MutationCreateUserArgs) {
       const { password, roles, ...fields } = input as any;
       if (!fields.email || !password) {
         throw new Error('Email and Password are required.');
@@ -69,7 +69,7 @@ const resolvers = {
       });
     },
 
-    async updateUser(_: unknown, { id, input }: MutationUpdateUserArgs, { prisma }: AppContext) {
+    async updateUser(_: unknown, { id, input }: MutationUpdateUserArgs) {
       const { password, roles, ...fields } = input as any;
       const user = await prisma.user.findUnique({ where: { id } });
       if (!user) throw new Error('User not found');
@@ -98,7 +98,7 @@ const resolvers = {
       return prisma.user.update({ where: { id }, data, include: userIncludes });
     },
 
-    async removeUser(_: unknown, { ids }: MutationRemoveUserArgs, { prisma }: AppContext) {
+    async removeUser(_: unknown, { ids }: MutationRemoveUserArgs) {
       try {
         await prisma.user.deleteMany({ where: { id: { in: ids as string[] } } });
         return true;

@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
 
+import prisma from '#/database';
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
@@ -11,8 +13,8 @@ declare global {
 
 const uploadFields = ['fieldname', 'originalname', 'encoding', 'mimetype'];
 
-export default async (req: Request, res: Response) => {
-  const files: any[] = (req.files as any[]).map((file) => {
+export default async (_req: Request, res: Response) => {
+  const files: any[] = (_req.files as any[]).map((file) => {
     const fileCopy = { ...file };
     uploadFields.forEach((field: string) => {
       delete fileCopy[field];
@@ -20,7 +22,6 @@ export default async (req: Request, res: Response) => {
     return fileCopy;
   });
 
-  const { prisma } = req.context;
   const ids = await Promise.all(
     files.map(async (file) => {
       const { crops, images, artist, albumArtist, genre, image, ...data } = file;

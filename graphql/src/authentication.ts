@@ -2,6 +2,8 @@ import bcrypt from 'bcryptjs';
 import type { Request, Response, NextFunction } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
 
+import prisma from '#/database';
+
 type JWTPayload = {
   userId: string;
 };
@@ -24,7 +26,7 @@ export async function jwtMiddleware(req: Request, _res: Response, next: NextFunc
   try {
     const payload = jsonwebtoken.verify(token, process.env.TOKEN_SECRET) as JWTPayload;
     if (payload.userId) {
-      const user = await req.context.prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: { id: payload.userId },
         include: { roles: true },
       });
@@ -47,7 +49,6 @@ export async function authMiddleware(req: Request, res: Response) {
       throw new Error('Username or password not set on request');
     }
 
-    const { prisma } = req.context;
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.hash))) {
       throw new Error('User not found matching email/password combination');
