@@ -115,12 +115,61 @@ pnpm db:push
 pnpm db:migrate-from-mongo
 ```
 
-### Seeding from pg_dump
+### Seeding PostgreSQL on Debian (production)
+
+#### 1. Install PostgreSQL
 
 ```bash
-# On a fresh PostgreSQL instance
+sudo apt update
+sudo apt install -y postgresql postgresql-client
+```
+
+#### 2. Start and enable the service
+
+```bash
+sudo systemctl enable postgresql
+sudo systemctl start postgresql
+```
+
+#### 3. Create a database and user
+
+```bash
+sudo -u postgres psql <<SQL
+CREATE USER highforthis WITH PASSWORD 'your_secure_password';
+CREATE DATABASE highforthis OWNER highforthis;
+GRANT ALL PRIVILEGES ON DATABASE highforthis TO highforthis;
+SQL
+```
+
+#### 4. Set `DATABASE_URL` in `.env.production`
+
+```
+DATABASE_URL="postgresql://highforthis:your_secure_password@localhost:5432/highforthis"
+```
+
+#### 5. Push the Prisma schema to create tables
+
+```bash
 pnpm db:push
-pg_restore --no-owner --no-privileges --data-only -d highforthis dump/highforthis-seed.dump
+```
+
+#### 6. Restore the seed data
+
+```bash
+pg_restore --no-owner --no-privileges --data-only \
+  -U highforthis -d highforthis dump/highforthis-seed.dump
+```
+
+If you get a password prompt, you can add the connection to `~/.pgpass`:
+
+```
+localhost:5432:highforthis:highforthis:your_secure_password
+```
+
+#### 7. Verify
+
+```bash
+psql -U highforthis -d highforthis -c "SELECT count(*) FROM \"Artist\";"
 ```
 
 ## Project Structure
