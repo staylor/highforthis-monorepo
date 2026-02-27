@@ -1,5 +1,6 @@
 {
   "name": "highforthis-monorepo",
+  "packageManager": "pnpm@10.30.1",
   "version": "1.0.0",
   "description": "GraphQL, Web, and Apps",
   "repository": "https://github.com/staylor/highforthis-monorepo",
