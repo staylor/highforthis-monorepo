@@ -35,6 +35,58 @@ cp .env.example .env  # then fill in values
 | `APPLE_MUSIC_TEAM_ID` | Apple Music team ID |
 | `GOOGLE_MAPS_GEOLOCATION_API_KEY` | Google Maps geolocation API key |
 
+### PostgreSQL (macOS)
+
+Install PostgreSQL via Homebrew:
+
+```bash
+brew install postgresql@17
+```
+
+Versioned formulae aren't linked to `/opt/homebrew/bin` by default. Add PostgreSQL to your PATH:
+
+```bash
+echo 'export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Start the service:
+
+```bash
+brew services start postgresql@17
+```
+
+Create a database and user:
+
+```bash
+psql postgres <<SQL
+CREATE USER hft_user WITH PASSWORD 'hft_pass';
+CREATE DATABASE highforthis OWNER hft_user;
+SQL
+```
+
+Set `DATABASE_URL` in your `.env` file:
+
+```
+DATABASE_URL="postgresql://hft_user:hft_pass@localhost:5432/highforthis"
+```
+
+Push the Prisma schema to create tables, then restore the seed data:
+
+```bash
+pnpm db:push
+pg_restore --no-owner --no-privileges --data-only --disable-triggers \
+  -U hft_user -d highforthis dump/highforthis-seed.dump
+```
+
+The `--disable-triggers` flag disables foreign key checks during restore so tables can be loaded in any order. This requires the user to have superuser privileges — grant them before restoring, then revoke after:
+
+```bash
+psql postgres -c "ALTER USER hft_user WITH SUPERUSER;"
+# run pg_restore above
+psql postgres -c "ALTER USER hft_user WITH NOSUPERUSER;"
+```
+
 ### Database
 
 ```bash
