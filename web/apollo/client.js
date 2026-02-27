@@ -1,5 +1,4 @@
-import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache.js';
-import { ApolloClient } from '@apollo/client/core/ApolloClient.js';
+import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 
 import fragmentMatcher from './fragmentMatcher.js';
 import typePolicies from './typePolicies.js';

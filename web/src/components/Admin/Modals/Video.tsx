@@ -30,7 +30,7 @@ function VideoModal({ selectVideo, onClose }: VideoModalProps) {
   const basePath = `/modals/video`;
   const frameRef = useRef(null);
   const { fetcher, connection } = useInfiniteScroll<Video>(frameRef, basePath);
-  const videos = connection as VideoConnection;
+  const videos = connection as unknown as VideoConnection;
 
   const portal = document.getElementById('portal');
   if (!portal) {

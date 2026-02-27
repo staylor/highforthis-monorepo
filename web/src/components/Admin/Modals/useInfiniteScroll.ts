@@ -1,4 +1,3 @@
-import type { TIncomingRelay } from '@apollo/client/utilities/policies/pagination';
 import debounce from 'lodash.debounce';
 import type { MutableRefObject } from 'react';
 import { useRef, useState, useEffect } from 'react';
@@ -6,10 +5,22 @@ import { useFetcher } from 'react-router';
 
 type DebouncedFunction = () => void;
 
+interface RelayPageInfo {
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  startCursor: string;
+  endCursor: string;
+}
+
+interface RelayConnection<T> {
+  edges?: T[];
+  pageInfo?: RelayPageInfo;
+}
+
 export default function useInfiniteScroll<T>(ref: MutableRefObject<null>, basePath: string) {
   const firstFetch = useRef({ [basePath]: false });
   const fetcher = useFetcher<T>();
-  const [connection, setConnection] = useState({} as TIncomingRelay<T>);
+  const [connection, setConnection] = useState({} as RelayConnection<T>);
 
   const scrollListener = debounce(() => {
     const { pageInfo } = connection;

@@ -22,7 +22,7 @@ function MediaModal({ type = 'image', onClose, selectAudio, selectImage }: Media
   const basePath = `/modals/media/${type}`;
   const frameRef = useRef(null);
   const { fetcher, connection } = useInfiniteScroll<MediaUpload>(frameRef, basePath);
-  const uploads = connection as MediaUploadConnection;
+  const uploads = connection as unknown as MediaUploadConnection;
 
   const portal = document.getElementById('portal');
   if (!portal) {

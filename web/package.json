@@ -4,7 +4,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
-    "@apollo/client": "3.13.1",
+    "@apollo/client": "4.1.6",
     "@lexical/code": "0.41.0",
     "@lexical/list": "0.41.0",
     "@lexical/react": "0.41.0",

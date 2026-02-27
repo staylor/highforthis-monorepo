@@ -1,4 +1,4 @@
-import { relayStylePagination } from '@apollo/client/utilities/index.js';
+import { relayStylePagination } from '@apollo/client/utilities';
 
 const makeEmptyData = () => {
   return {
