@@ -22,6 +22,7 @@ async function createI18n(locale = 'en', isServer = true) {
       preload: [...new Set(['en', locale])],
       lng: locale,
       fallbackLng: 'en',
+      showSupportNotice: false,
       interpolation: {
         escapeValue: false,
       },

@@ -8,4 +8,4 @@
 import ApolloAPI
 
 /// Id representation, based on Mongo Object Ids
-public typealias ObjID = String
+public typealias String = String

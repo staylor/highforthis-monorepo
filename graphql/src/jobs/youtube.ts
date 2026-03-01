@@ -1,9 +1,7 @@
 import { URL } from 'node:url';
 
-import type { Db } from 'mongodb';
-import fetch from 'node-fetch';
-
-import { slugify } from '~/models/utils';
+import prisma from '#/database';
+import { slugify } from '#/models/utils';
 
 const API_HOST = 'https://www.googleapis.com';
 const PLAYLISTS_PATH = '/youtube/v3/playlists';
@@ -38,53 +36,45 @@ function getPlaylistUrl(playlistId: string, pageToken?: string): string {
 }
 
 async function fetchPlaylists() {
-  return fetch(getPlaylistsUrl()).then((response) => response.json());
+  const response = await fetch(getPlaylistsUrl());
+  return response.json();
 }
 
 async function fetchPlaylistItems(playlistId: string): Promise<any[]> {
-  return new Promise((resolve, reject) => {
-    let items: any[] = [];
+  let items: any[] = [];
+  let pageToken: string | undefined;
 
-    const fetchPage = (pageToken?: string): void => {
-      const playlistUrl = getPlaylistUrl(playlistId, pageToken);
-      // console.log(playlistUrl);
-      fetch(playlistUrl)
-        .catch((e) => {
-          if (items.length) {
-            resolve(items);
-          } else {
-            reject(e);
-          }
-        })
-        .then(async (response) => {
-          if (response) {
-            const result: any = await response.json();
-            items = items.concat(result.items);
-            if (result.nextPageToken) {
-              fetchPage(result.nextPageToken);
-            } else {
-              resolve(items);
-            }
-          }
-        });
-    };
+  do {
+    const playlistUrl = getPlaylistUrl(playlistId, pageToken);
+    try {
+      const response = await fetch(playlistUrl);
+      const result: any = await response.json();
+      items = items.concat(result.items);
+      pageToken = result.nextPageToken;
+    } catch (e) {
+      if (items.length) {
+        return items;
+      }
+      throw e;
+    }
+  } while (pageToken);
 
-    fetchPage();
-  });
+  return items;
 }
 
 async function updateVideo(
-  db: Db,
   { contentDetails, snippet }: Record<string, any>,
   year: string,
   playlistId: string
 ) {
-  // console.log('Update start for dataId:', contentDetails.videoId);
-  // console.log('Title:', snippet.title);
   const thumbnails =
     snippet && snippet.thumbnails
-      ? Object.keys(snippet.thumbnails).map((thumb) => snippet.thumbnails[thumb])
-      : null;
+      ? Object.keys(snippet.thumbnails).map((thumb: string) => ({
+          url: snippet.thumbnails[thumb].url,
+          width: snippet.thumbnails[thumb].width,
+          height: snippet.thumbnails[thumb].height,
+        }))
+      : [];
 
   const date = new Date(contentDetails.videoPublishedAt);
   const data = {
@@ -93,32 +83,37 @@ async function updateVideo(
     dataPlaylistId: playlistId,
     year: parseInt(year, 10),
     publishedISO: contentDetails.videoPublishedAt,
-    publishedAt: date.getTime(),
+    publishedAt: date,
     title: snippet.title,
     position: snippet.position,
     slug: slugify(snippet.title),
-    updatedAt: Date.now(),
-    thumbnails,
   };
 
   try {
-    await db.collection('video').updateOne(
-      { dataId: data.dataId },
-      {
-        $set: data,
-        $setOnInsert: {
-          createdAt: Date.now(),
-        },
+    const video = await prisma.video.upsert({
+      where: { dataId: data.dataId },
+      create: data,
+      update: {
+        ...data,
+        slug: undefined,
       },
-      { upsert: true }
-    );
+    });
+
+    // Replace thumbnails
+    await prisma.videoThumbnail.deleteMany({ where: { videoId: video.id } });
+    if (thumbnails.length) {
+      await prisma.videoThumbnail.createMany({
+        data: thumbnails.map((t) => ({ ...t, videoId: video.id })),
+      });
+    }
+
     return data.dataId;
   } catch (e) {
     throw e;
   }
 }
 
-async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<string[]> {
+async function fetchPlaylist(year: string, playlistId: string): Promise<string[]> {
   let items;
   try {
     items = await fetchPlaylistItems(playlistId);
@@ -128,15 +123,14 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
   }
 
   const newIds = items.filter(Boolean).map((item) => item.contentDetails.videoId);
-  const cursor = await db
-    .collection('video')
-    .find({ dataPlaylistId: playlistId }, { dataId: 1 } as any)
-    .toArray();
-  const existing = cursor.map(({ dataId }) => dataId);
+  const existing = await prisma.video.findMany({
+    where: { dataPlaylistId: playlistId },
+    select: { dataId: true },
+  });
+  const existingIds = existing.map(({ dataId }) => dataId);
 
   const updates = await Promise.all(
     items.map((item) => {
-      // console.log('Map start:', i);
       if (
         !item ||
         item.snippet.title === 'Private video' ||
@@ -145,32 +139,31 @@ async function fetchPlaylist(db: Db, year: string, playlistId: string): Promise<
         console.log(playlistId, 'has a deletion:', item.contentDetails.videoId);
         return false;
       }
-      return updateVideo(db, item, year, playlistId);
+      return updateVideo(item, year, playlistId);
     })
   );
 
-  // console.log('Existing length:', existing.length);
-  // console.log('Updates count:', updates.length);
   const updated = updates.filter(Boolean);
-  // console.log('Updated count:', updated.length);
-  if (existing.length) {
-    const orphans = existing.filter((id: string) => newIds.indexOf(id) < 0);
+  if (existingIds.length) {
+    const orphans = existingIds.filter((id: string) => newIds.indexOf(id) < 0);
     if (orphans.length) {
       console.log('Orphans in:', playlistId, '-', orphans);
-      await db.collection('video').deleteMany({
-        dataId: { $in: orphans },
-        dataPlaylistId: playlistId,
+      await prisma.video.deleteMany({
+        where: {
+          dataId: { in: orphans },
+          dataPlaylistId: playlistId,
+        },
       });
-    } else if (updated.length > existing.length) {
-      console.log('Added', updated.length - existing.length, 'items to', playlistId);
+    } else if (updated.length > existingIds.length) {
+      console.log('Added', updated.length - existingIds.length, 'items to', playlistId);
     }
   } else {
     console.log('Imported', updated.length, 'of', items.length, 'items from', playlistId);
   }
-  return updated;
+  return updated as string[];
 }
 
-export default async (db: Db) => {
+export default async () => {
   let response: any;
   try {
     response = await fetchPlaylists();
@@ -182,7 +175,7 @@ export default async (db: Db) => {
   await Promise.all(
     response?.items?.map((playlist: any) => {
       if (playlist.snippet.title.match(/^[0-9]{4}$/)) {
-        return fetchPlaylist(db, playlist.snippet.title, playlist.id);
+        return fetchPlaylist(playlist.snippet.title, playlist.id);
       }
       return Promise.resolve();
     }) || []

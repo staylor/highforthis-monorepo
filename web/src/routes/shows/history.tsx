@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import type { MetaFunction } from 'react-router';
 
-import { Heading2 } from '~/components/Heading';
-import Link from '~/components/Link';
-import Shows from '~/components/Shows';
-import ShowsGrid from '~/components/Shows/Grid';
-import type { ShowsHistoryQuery } from '~/types/graphql';
-import { createClientCache } from '~/utils/cache';
-import query from '~/utils/query';
-import { rootData } from '~/utils/rootData';
-import titleTemplate from '~/utils/title';
+import { Heading2 } from '#/components/Heading';
+import Link from '#/components/Link';
+import Shows from '#/components/Shows';
+import ShowsGrid from '#/components/Shows/Grid';
+import type { ShowsHistoryQuery } from '#/types/graphql';
+import { createClientCache } from '#/utils/cache';
+import query from '#/utils/query';
+import { rootData } from '#/utils/rootData';
+import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types/history';
 

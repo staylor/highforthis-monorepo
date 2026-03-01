@@ -5,7 +5,7 @@
 
 public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
   public static var fragmentDefinition: StaticString {
-    #"fragment ShowList_show on Show { __typename artists { __typename id name slug } date id title venue { __typename id name slug } }"#
+    #"fragment ShowList_show on Show { __typename id date title artists { __typename id name slug } venue { __typename id name slug } }"#
   }
 
   public let __data: DataDict
@@ -14,17 +14,17 @@ public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
   public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
   public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
-    .field("artists", [Artist].self),
+    .field("id", String.self),
     .field("date", Double.self),
-    .field("id", HighForThisAPI.ObjID.self),
     .field("title", String?.self),
+    .field("artists", [Artist].self),
     .field("venue", Venue.self),
   ] }
 
-  public var artists: [Artist] { __data["artists"] }
+  public var id: String { __data["id"] }
   public var date: Double { __data["date"] }
-  public var id: HighForThisAPI.ObjID { __data["id"] }
   public var title: String? { __data["title"] }
+  public var artists: [Artist] { __data["artists"] }
   public var venue: Venue { __data["venue"] }
 
   /// Artist
@@ -37,12 +37,12 @@ public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
     public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Artist }
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
-      .field("id", HighForThisAPI.ObjID.self),
+      .field("id", String.self),
       .field("name", String.self),
       .field("slug", String.self),
     ] }
 
-    public var id: HighForThisAPI.ObjID { __data["id"] }
+    public var id: String { __data["id"] }
     public var name: String { __data["name"] }
     public var slug: String { __data["slug"] }
   }
@@ -57,12 +57,12 @@ public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
     public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
     public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
-      .field("id", HighForThisAPI.ObjID.self),
+      .field("id", String.self),
       .field("name", String.self),
       .field("slug", String.self),
     ] }
 
-    public var id: HighForThisAPI.ObjID { __data["id"] }
+    public var id: String { __data["id"] }
     public var name: String { __data["name"] }
     public var slug: String { __data["slug"] }
   }

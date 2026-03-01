@@ -1,5 +1,5 @@
 import graphql from '@graphql-eslint/eslint-plugin';
-import { legacyPlugin } from '@wonderboymusic/eslint-config/lint/legacy.js';
+import lexical from '@lexical/eslint-plugin';
 // import tailwind from 'eslint-plugin-tailwindcss';
 
 import { ERROR, OFF } from './rules/constants.js';
@@ -24,7 +24,7 @@ export default [
   {
     files: ['./web/**/*'],
     plugins: {
-      '@lexical': legacyPlugin('@lexical/eslint-plugin', '@lexical'),
+      '@lexical': lexical,
     },
     rules: {
       '@lexical/rules-of-lexical': ERROR,
@@ -75,6 +75,12 @@ export default [
     files: ['web/**/*.test.tsx', 'web/**/*.test.ts'],
     rules: {
       'i18next/no-literal-string': OFF,
+    },
+  },
+  {
+    files: ['web/src/components/Admin/**/*.tsx', 'web/src/routes/podcast/**/*.tsx'],
+    rules: {
+      'jsx-a11y/media-has-caption': OFF,
     },
   },
 ];

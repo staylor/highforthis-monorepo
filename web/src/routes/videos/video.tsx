@@ -1,12 +1,12 @@
 import { gql } from 'graphql-tag';
 import type { MetaFunction } from 'react-router';
 
-import Video from '~/components/Videos/Video';
-import type { VideoQuery } from '~/types/graphql';
-import { createClientCache } from '~/utils/cache';
-import query from '~/utils/query';
-import { rootData } from '~/utils/rootData';
-import titleTemplate from '~/utils/title';
+import Video from '#/components/Videos/Video';
+import type { VideoQuery } from '#/types/graphql';
+import { createClientCache } from '#/utils/cache';
+import query from '#/utils/query';
+import { rootData } from '#/utils/rootData';
+import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types/video';
 

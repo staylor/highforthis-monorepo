@@ -2,13 +2,15 @@ import cn from 'classnames';
 import type { HTMLAttributes } from 'react';
 import { useLocation } from 'react-router';
 
-import Link, { type CustomLinkProps } from '~/components/Link';
+import Link, { type CustomLinkProps } from '#/components/Link';
 
-export const Heading = ({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
+export const Heading = ({ className, children, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
   <h1
     {...props}
     className={cn('mr-2 mb-4 inline-block pt-2 pb-1 text-2xl font-normal tracking-wide', className)}
-  />
+  >
+    {children}
+  </h1>
 );
 
 export const HeaderAdd = ({

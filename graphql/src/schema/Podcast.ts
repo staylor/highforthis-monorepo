@@ -1,6 +1,6 @@
 const Podcast = `#graphql  
   type Podcast {
-    id: ObjID!
+    id: String!
     title: String!
     description: String!
     image: ImageUpload
@@ -22,16 +22,16 @@ const Podcast = `#graphql
   input CreatePodcastInput {
     title: String!
     description: String
-    image: ObjID
-    audio: ObjID
+    image: String
+    audio: String
     date: Float
   }
 
   input UpdatePodcastInput {
     title: String!
     description: String
-    image: ObjID
-    audio: ObjID
+    image: String
+    audio: String
     date: Float
   }
 
@@ -49,13 +49,13 @@ const Podcast = `#graphql
       search: String
       order: PodcastOrder
     ): PodcastConnection
-    podcast(id: ObjID, slug: String): Podcast
+    podcast(id: String, slug: String): Podcast
   }
 
   extend type Mutation {
     createPodcast(input: CreatePodcastInput!): Podcast
-    updatePodcast(id: ObjID!, input: UpdatePodcastInput!): Podcast
-    removePodcast(ids: [ObjID]!): Boolean
+    updatePodcast(id: String!, input: UpdatePodcastInput!): Podcast
+    removePodcast(ids: [String]!): Boolean
   }
 `;
 

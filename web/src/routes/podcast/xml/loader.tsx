@@ -5,9 +5,9 @@ import type {
   PodcastConnection,
   PodcastFeedQuery,
   PodcastSettings,
-} from '~/types/graphql';
-import { uploadUrl } from '~/utils/media';
-import query from '~/utils/query';
+} from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
+import query from '#/utils/query';
 
 import type { Route } from './+types/loader';
 import feedQuery from './graphql';

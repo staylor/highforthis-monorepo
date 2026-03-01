@@ -3,7 +3,7 @@ import type { KeyboardEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Input from '~/components/Form/Input';
+import Input from '#/components/Form/Input';
 
 interface TagsProps {
   name: string;

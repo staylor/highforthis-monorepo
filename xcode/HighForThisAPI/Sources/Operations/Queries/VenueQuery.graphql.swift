@@ -7,7 +7,7 @@ public class VenueQuery: GraphQLQuery {
   public static let operationName: String = "Venue"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Venue($slug: String!) { attended: shows(attended: true, first: 200, venue: { slug: $slug }) { __typename edges { __typename node { __typename ...ShowList_show } } } shows(first: 200, latest: true, venue: { slug: $slug }) { __typename edges { __typename node { __typename ...ShowList_show } } } venue(slug: $slug) { __typename address capacity coordinates { __typename latitude longitude } id name slug website } }"#,
+      #"query Venue($slug: String!) { attended: shows(attended: true, first: 200, venue: { slug: $slug }) { __typename edges { __typename node { __typename ...ShowList_show } } } shows(first: 200, latest: true, venue: { slug: $slug }) { __typename edges { __typename node { __typename ...ShowList_show } } } venue(slug: $slug) { __typename id address capacity name slug website coordinates { __typename latitude longitude } } }"#,
       fragments: [ShowList_show.self]
     ))
 
@@ -85,10 +85,10 @@ public class VenueQuery: GraphQLQuery {
             .fragment(ShowList_show.self),
           ] }
 
-          public var artists: [Artist] { __data["artists"] }
+          public var id: String { __data["id"] }
           public var date: Double { __data["date"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
           public var title: String? { __data["title"] }
+          public var artists: [Artist] { __data["artists"] }
           public var venue: Venue { __data["venue"] }
 
           public struct Fragments: FragmentContainer {
@@ -148,10 +148,10 @@ public class VenueQuery: GraphQLQuery {
             .fragment(ShowList_show.self),
           ] }
 
-          public var artists: [Artist] { __data["artists"] }
+          public var id: String { __data["id"] }
           public var date: Double { __data["date"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
           public var title: String? { __data["title"] }
+          public var artists: [Artist] { __data["artists"] }
           public var venue: Venue { __data["venue"] }
 
           public struct Fragments: FragmentContainer {
@@ -178,22 +178,22 @@ public class VenueQuery: GraphQLQuery {
       public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
+        .field("id", String.self),
         .field("address", String?.self),
         .field("capacity", String?.self),
-        .field("coordinates", Coordinates?.self),
-        .field("id", HighForThisAPI.ObjID.self),
         .field("name", String.self),
         .field("slug", String.self),
         .field("website", String?.self),
+        .field("coordinates", Coordinates?.self),
       ] }
 
+      public var id: String { __data["id"] }
       public var address: String? { __data["address"] }
       public var capacity: String? { __data["capacity"] }
-      public var coordinates: Coordinates? { __data["coordinates"] }
-      public var id: HighForThisAPI.ObjID { __data["id"] }
       public var name: String { __data["name"] }
       public var slug: String { __data["slug"] }
       public var website: String? { __data["website"] }
+      public var coordinates: Coordinates? { __data["coordinates"] }
 
       /// Venue.Coordinates
       ///

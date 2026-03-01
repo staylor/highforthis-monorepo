@@ -1,4 +1,3 @@
-import type { Document } from 'mongodb';
 import type {
   MutationCreateVenueArgs,
   MutationRemoveVenueArgs,
@@ -7,58 +6,108 @@ import type {
   QueryVenuesArgs,
 } from 'types/graphql';
 
-import type Media from '~/models/Media';
-import type Venue from '~/models/Venue';
+import prisma from '#/database';
+import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
 
+const venueIncludes = {
+  featuredMedia: { include: { media: true } },
+};
+
 const resolvers = {
   Venue: {
-    id(venue: Document) {
-      return venue._id;
-    },
-    address(venue: Document) {
+    address(venue: any) {
       return `${venue.streetAddress}\n${venue.city}, ${venue.state} ${venue.postalCode}`;
     },
-    featuredMedia(venue: Document, _: unknown, { Media }: { Media: Media }) {
-      return Media.findByIds(venue.featuredMedia || []);
+    coordinates(venue: any) {
+      if (venue.latitude === null && venue.longitude === null) return null;
+      return { latitude: venue.latitude, longitude: venue.longitude };
+    },
+    featuredMedia(venue: any) {
+      if ('featuredMedia' in venue) {
+        return venue.featuredMedia.map((r: any) => r.media);
+      }
+      return prisma.venueFeaturedMedia
+        .findMany({ where: { venueId: venue.id }, include: { media: true } })
+        .then((records: any[]) => records.map((r) => r.media));
     },
   },
   Query: {
-    async venues(_: unknown, args: QueryVenuesArgs, { Venue }: { Venue: Venue }) {
-      return parseConnection(Venue, args);
+    async venues(_: unknown, args: QueryVenuesArgs) {
+      const { search, filtered, ...connectionArgs } = args;
+      const where: any = {};
+      if (search) {
+        where.OR = [
+          { name: { contains: search, mode: 'insensitive' } },
+          { slug: { contains: search, mode: 'insensitive' } },
+          { city: { contains: search, mode: 'insensitive' } },
+          { state: { contains: search, mode: 'insensitive' } },
+        ];
+      }
+      if (filtered) {
+        where.excludeFromSearch = false;
+        where.permanentlyClosed = false;
+      }
+      return parseConnection(prisma.venue, connectionArgs, {
+        where,
+        orderBy: { name: 'asc' },
+        include: venueIncludes,
+      });
     },
 
-    async venue(_: unknown, { id, slug }: QueryVenueArgs, { Venue }: { Venue: Venue }) {
+    async venue(_: unknown, { id, slug }: QueryVenueArgs) {
       if (id) {
-        return Venue.findOneById(id);
+        return prisma.venue.findUnique({ where: { id }, include: venueIncludes });
       }
       if (slug) {
-        return Venue.findOneBySlug(slug);
+        return prisma.venue.findUnique({ where: { slug }, include: venueIncludes });
       }
     },
   },
   Mutation: {
-    async createVenue(_: unknown, { input }: MutationCreateVenueArgs, { Venue }: { Venue: Venue }) {
-      const data = { ...input };
-      const id = await Venue.insert(data);
-      return Venue.findOneById(id);
+    async createVenue(_: unknown, { input }: MutationCreateVenueArgs) {
+      const { featuredMedia, coordinates, ...data } = input as any;
+      const slug = await getUniqueSlug(prisma.venue, data.name);
+      return prisma.venue.create({
+        data: {
+          ...data,
+          slug,
+          latitude: coordinates?.latitude,
+          longitude: coordinates?.longitude,
+          featuredMedia: featuredMedia?.length
+            ? { create: featuredMedia.map((mediaId: string) => ({ mediaId })) }
+            : undefined,
+        },
+        include: venueIncludes,
+      });
     },
 
-    async updateVenue(
-      _: unknown,
-      { id, input }: MutationUpdateVenueArgs,
-      { Venue }: { Venue: Venue }
-    ) {
-      const data = { ...input };
-      await Venue.updateById(id, data);
-      return Venue.findOneById(id);
+    async updateVenue(_: unknown, { id, input }: MutationUpdateVenueArgs) {
+      const { featuredMedia, coordinates, ...data } = input as any;
+      const updateData: any = { ...data };
+      if (coordinates) {
+        updateData.latitude = coordinates.latitude;
+        updateData.longitude = coordinates.longitude;
+      }
+      if (typeof featuredMedia !== 'undefined') {
+        await prisma.venueFeaturedMedia.deleteMany({ where: { venueId: id } });
+        if (featuredMedia?.length) {
+          await prisma.venueFeaturedMedia.createMany({
+            data: featuredMedia.map((mediaId: string) => ({ venueId: id, mediaId })),
+          });
+        }
+      }
+      return prisma.venue.update({ where: { id }, data: updateData, include: venueIncludes });
     },
 
-    async removeVenue(_: unknown, { ids }: MutationRemoveVenueArgs, { Venue }: { Venue: Venue }) {
-      return Promise.all(ids.map((id: string) => Venue.removeById(id)))
-        .then(() => true)
-        .catch(() => false);
+    async removeVenue(_: unknown, { ids }: MutationRemoveVenueArgs) {
+      try {
+        await prisma.venue.deleteMany({ where: { id: { in: ids as string[] } } });
+        return true;
+      } catch {
+        return false;
+      }
     },
   },
 };

@@ -2,16 +2,16 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useFetcher, useLocation, useSearchParams } from 'react-router';
 
-import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
-import Search from '~/components/Admin/ListTable/Search';
-import { Heading, HeaderAdd } from '~/components/Admin/styles';
-import Checkbox from '~/components/Form/Checkbox';
-import Message from '~/components/Form/Message';
-import { formatShowLink } from '~/components/Shows/utils';
-import type { Show, ShowsAdminQuery } from '~/types/graphql';
-import { handleDelete } from '~/utils/action';
-import mutate, { parseFormData } from '~/utils/mutate';
-import query, { addPageOffset, addSearchParam } from '~/utils/query';
+import ListTable, { RowTitle, RowActions } from '#/components/Admin/ListTable';
+import Search from '#/components/Admin/ListTable/Search';
+import { Heading, HeaderAdd } from '#/components/Admin/styles';
+import Checkbox from '#/components/Form/Checkbox';
+import Message from '#/components/Form/Message';
+import { formatShowLink } from '#/components/Shows/utils';
+import type { Show, ShowsAdminQuery } from '#/types/graphql';
+import { handleDelete } from '#/utils/action';
+import mutate, { parseFormData } from '#/utils/mutate';
+import query, { addPageOffset, addSearchParam } from '#/utils/query';
 
 import type { Route } from './+types';
 
@@ -189,7 +189,7 @@ const showsQuery = gql`
 `;
 
 const updateMutation = gql`
-  mutation UpdateShowAttended($id: ObjID!, $input: UpdateShowInput!) {
+  mutation UpdateShowAttended($id: String!, $input: UpdateShowInput!) {
     updateShow(id: $id, input: $input) {
       id
     }
@@ -197,7 +197,7 @@ const updateMutation = gql`
 `;
 
 const deleteMutation = gql`
-  mutation DeleteShow($ids: [ObjID]!) {
+  mutation DeleteShow($ids: [String]!) {
     removeShow(ids: $ids)
   }
 `;

@@ -2,7 +2,7 @@ import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getItem, setItem, removeItem } from '~/utils/storage';
+import { getItem, setItem, removeItem } from '#/utils/storage';
 
 const STORAGE_KEY = 'darkMode';
 
@@ -36,7 +36,11 @@ export default function DarkMode() {
 
   return (
     <div className="mx-5 my-2 flex items-center justify-center">
-      <label className="relative inline-block h-9 w-16" htmlFor="checkbox">
+      <label
+        className="relative inline-block h-9 w-16"
+        htmlFor="checkbox"
+        aria-label="Toggle dark mode"
+      >
         <input
           type="checkbox"
           id="checkbox"

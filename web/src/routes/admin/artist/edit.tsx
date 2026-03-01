@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import ArtistForm from '~/components/Admin/Artist/Form';
-import type { ArtistEditQuery } from '~/types/graphql';
-import { handleSubmission } from '~/utils/action';
-import query from '~/utils/query';
+import ArtistForm from '#/components/Admin/Artist/Form';
+import type { ArtistEditQuery } from '#/types/graphql';
+import { handleSubmission } from '#/utils/action';
+import query from '#/utils/query';
 
 import type { Route } from './+types/edit';
 
@@ -33,7 +33,7 @@ export default function ArtistEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const artistQuery = gql`
-  query ArtistEdit($id: ObjID) {
+  query ArtistEdit($id: String) {
     artist(id: $id) {
       ...ArtistForm_artist
     }
@@ -59,7 +59,7 @@ const artistQuery = gql`
 `;
 
 const artistMutation = gql`
-  mutation UpdateArtist($id: ObjID!, $input: UpdateArtistInput!) {
+  mutation UpdateArtist($id: String!, $input: UpdateArtistInput!) {
     updateArtist(id: $id, input: $input) {
       ...ArtistForm_artist
     }

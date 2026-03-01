@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import UserForm from '~/components/Admin/User/Form';
-import type { UserEditQuery } from '~/types/graphql';
-import { handleSubmission } from '~/utils/action';
-import query from '~/utils/query';
+import UserForm from '#/components/Admin/User/Form';
+import type { UserEditQuery } from '#/types/graphql';
+import { handleSubmission } from '#/utils/action';
+import query from '#/utils/query';
 
 import type { Route } from './+types/edit';
 
@@ -32,7 +32,7 @@ export default function UserEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const userQuery = gql`
-  query UserEdit($id: ObjID!) {
+  query UserEdit($id: String!) {
     user(id: $id) {
       ...UserForm_user
     }
@@ -41,7 +41,7 @@ const userQuery = gql`
 `;
 
 const userMutation = gql`
-  mutation UpdateUser($id: ObjID!, $input: UpdateUserInput!) {
+  mutation UpdateUser($id: String!, $input: UpdateUserInput!) {
     updateUser(id: $id, input: $input) {
       ...UserForm_user
     }

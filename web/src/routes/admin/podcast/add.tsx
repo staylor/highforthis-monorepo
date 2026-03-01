@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import PodcastForm from '~/components/Admin/Podcast/Form';
-import { handleSubmission } from '~/utils/action';
+import PodcastForm from '#/components/Admin/Podcast/Form';
+import { handleSubmission } from '#/utils/action';
 
 import type { Route } from './+types/add';
 

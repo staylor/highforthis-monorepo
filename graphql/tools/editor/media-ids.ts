@@ -1,14 +1,12 @@
-import database from '~/database';
-import Post from '~/models/Post';
+import prisma from '#/database';
 
-const { db } = await database();
-const model = new Post({ db });
-const posts = await model.all({});
+const posts = await prisma.post.findMany();
 
 for (const post of posts) {
-  const id = String(post._id);
-
-  await model.updateById(id, post);
+  await prisma.post.update({
+    where: { id: post.id },
+    data: { editorState: post.editorState as any },
+  });
 }
 
 process.exit(0);

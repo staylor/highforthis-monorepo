@@ -1,64 +1,44 @@
-import bcrypt from 'bcrypt';
-import type { Request, Response, NextFunction, Router } from 'express';
-import jwt from 'jwt-simple';
-import { ObjectId, type Document } from 'mongodb';
-import passport from 'passport';
-import type { VerifiedCallback } from 'passport-jwt';
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import bcrypt from 'bcryptjs';
+import type { Request, Response, NextFunction } from 'express';
+import jsonwebtoken from 'jsonwebtoken';
 
-import type User from './models/User';
+import prisma from '#/database';
 
 type JWTPayload = {
   userId: string;
 };
 
-async function userFromPayload(
-  { context: { User } }: { context: { User: User } },
-  jwtPayload: JWTPayload
-) {
-  if (!jwtPayload.userId) {
-    throw new Error('No userId in JWT');
+function extractBearerToken(req: Request): string | null {
+  const header = req.headers.authorization;
+  if (!header) return null;
+  const [scheme, token] = header.split(' ');
+  if (scheme !== 'Bearer' || !token) return null;
+  return token;
+}
+
+export async function jwtMiddleware(req: Request, _res: Response, next: NextFunction) {
+  const token = extractBearerToken(req);
+  if (!token || !process.env.TOKEN_SECRET) {
+    next();
+    return;
   }
 
-  const id = new ObjectId(jwtPayload.userId);
-  const user = await User.findOneById(id);
-  return user;
-}
-
-export function initialize(app: Router) {
-  app.use(passport.initialize());
-
-  passport.use(
-    new Strategy(
-      {
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: process.env.TOKEN_SECRET || '',
-        passReqToCallback: true,
-      },
-      (request: Request, jwtPayload: JWTPayload, done: VerifiedCallback) => {
-        userFromPayload(request, jwtPayload)
-          .then((user) => {
-            if (user) {
-              done(null, user);
-            } else {
-              done(null, false);
-            }
-          })
-          .catch((e) => {
-            done(e, false);
-          });
+  try {
+    const payload = jsonwebtoken.verify(token, process.env.TOKEN_SECRET) as JWTPayload;
+    if (payload.userId) {
+      const user = await prisma.user.findUnique({
+        where: { id: payload.userId },
+        include: { roles: true },
+      });
+      if (user) {
+        req.context.authUser = user;
       }
-    )
-  );
-}
-
-export function jwtMiddleware(req: Request, res: Response, next: NextFunction) {
-  passport.authenticate('jwt', { session: false }, (_err: any, user: Document) => {
-    if (user) {
-      req.context.authUser = user;
     }
-    next();
-  })(req, res, next);
+  } catch {
+    // Invalid or expired token — continue as unauthenticated
+  }
+
+  next();
 }
 
 export async function authMiddleware(req: Request, res: Response) {
@@ -69,21 +49,16 @@ export async function authMiddleware(req: Request, res: Response) {
       throw new Error('Username or password not set on request');
     }
 
-    const userModel = req.context.User;
-    const user = await userModel.collection.findOne({ email });
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.hash))) {
       throw new Error('User not found matching email/password combination');
     }
-
-    const payload = {
-      userId: user._id.toString(),
-    };
 
     if (!process.env.TOKEN_SECRET) {
       throw new Error('TOKEN_SECRET does not exist on process.env');
     }
 
-    const token = jwt.encode(payload, process.env.TOKEN_SECRET);
+    const token = jsonwebtoken.sign({ userId: user.id }, process.env.TOKEN_SECRET);
     res.json({ token });
   } catch (e) {
     res.json({ error: (e as Error).message });

@@ -1,4 +1,3 @@
-import type { Document } from 'mongodb';
 import type {
   MutationCreatePodcastArgs,
   MutationRemovePodcastArgs,
@@ -7,62 +6,69 @@ import type {
   QueryPodcastsArgs,
 } from 'types/graphql';
 
-import type Media from '~/models/Media';
-import type Podcast from '~/models/Podcast';
+import prisma from '#/database';
 
 import { parseConnection } from './utils/collection';
 
+const podcastIncludes = {
+  audio: true,
+  image: true,
+};
+
 const resolvers = {
   Podcast: {
-    id(podcast: Document) {
-      return podcast._id;
+    audio(podcast: any) {
+      if ('audio' in podcast) return podcast.audio;
+      if (!podcast.audioId) return null;
+      return prisma.mediaUpload.findUnique({ where: { id: podcast.audioId } });
     },
-    audio(podcast: Document, _: unknown, { Media }: { Media: Media }) {
-      return podcast.audio ? Media.findOneById(podcast.audio) : null;
+    image(podcast: any) {
+      if ('image' in podcast) return podcast.image;
+      if (!podcast.imageId) return null;
+      return prisma.mediaUpload.findUnique({ where: { id: podcast.imageId } });
     },
-    image(podcast: Document, _: unknown, { Media }: { Media: Media }) {
-      return podcast.image ? Media.findOneById(podcast.image) : null;
-    },
-    date(podcast: Document) {
-      return podcast.updatedAt;
+    date(podcast: any) {
+      return new Date(podcast.updatedAt).getTime();
     },
   },
   Query: {
-    async podcasts(_: unknown, args: QueryPodcastsArgs, { Podcast }: { Podcast: Podcast }) {
-      return parseConnection(Podcast, args);
+    async podcasts(_: unknown, args: QueryPodcastsArgs) {
+      const { search, order, ...connectionArgs } = args;
+      const where: any = {};
+      if (search) {
+        where.OR = [
+          { title: { contains: search, mode: 'insensitive' } },
+          { description: { contains: search, mode: 'insensitive' } },
+        ];
+      }
+      return parseConnection(prisma.podcast, connectionArgs, {
+        where,
+        orderBy: { createdAt: order === 'ASC' ? 'asc' : 'desc' },
+        include: podcastIncludes,
+      });
     },
 
-    async podcast(_: unknown, { id }: QueryPodcastArgs, { Podcast }: { Podcast: Podcast }) {
-      return Podcast.findOneById(id);
+    async podcast(_: unknown, { id }: QueryPodcastArgs) {
+      if (!id) return null;
+      return prisma.podcast.findUnique({ where: { id }, include: podcastIncludes });
     },
   },
   Mutation: {
-    async createPodcast(
-      _: unknown,
-      { input }: MutationCreatePodcastArgs,
-      { Podcast }: { Podcast: Podcast }
-    ) {
-      const id = await Podcast.insert(input);
-      return Podcast.findOneById(id);
+    async createPodcast(_: unknown, { input }: MutationCreatePodcastArgs) {
+      return prisma.podcast.create({ data: input as any, include: podcastIncludes });
     },
 
-    async updatePodcast(
-      _: unknown,
-      { id, input }: MutationUpdatePodcastArgs,
-      { Podcast }: { Podcast: Podcast }
-    ) {
-      await Podcast.updateById(id, input);
-      return Podcast.findOneById(id);
+    async updatePodcast(_: unknown, { id, input }: MutationUpdatePodcastArgs) {
+      return prisma.podcast.update({ where: { id }, data: input as any, include: podcastIncludes });
     },
 
-    async removePodcast(
-      _: unknown,
-      { ids }: MutationRemovePodcastArgs,
-      { Podcast }: { Podcast: Podcast }
-    ) {
-      return Promise.all(ids.map((id: string) => Podcast.removeById(id)))
-        .then(() => true)
-        .catch(() => false);
+    async removePodcast(_: unknown, { ids }: MutationRemovePodcastArgs) {
+      try {
+        await prisma.podcast.deleteMany({ where: { id: { in: ids as string[] } } });
+        return true;
+      } catch {
+        return false;
+      }
     },
   },
 };

@@ -1,13 +1,13 @@
 import { gql } from 'graphql-tag';
 import type { MetaFunction } from 'react-router';
 
-import Podcast from '~/components/Podcast';
-import { metaTags } from '~/components/Podcast/utils';
-import type { PodcastQuery } from '~/types/graphql';
-import { createClientCache } from '~/utils/cache';
-import { uploadUrl } from '~/utils/media';
-import query from '~/utils/query';
-import { rootData } from '~/utils/rootData';
+import Podcast from '#/components/Podcast';
+import { metaTags } from '#/components/Podcast/utils';
+import type { PodcastQuery } from '#/types/graphql';
+import { createClientCache } from '#/utils/cache';
+import { uploadUrl } from '#/utils/media';
+import query from '#/utils/query';
+import { rootData } from '#/utils/rootData';
 
 import type { Route } from './+types/podcast';
 
@@ -52,7 +52,7 @@ export default function PodcastRoute({ loaderData }: Route.ComponentProps) {
 }
 
 const podcastQuery = gql`
-  query Podcast($id: ObjID!) {
+  query Podcast($id: String!) {
     podcast(id: $id) {
       audio {
         destination

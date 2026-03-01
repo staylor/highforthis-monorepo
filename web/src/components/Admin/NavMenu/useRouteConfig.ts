@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import type { AdminRouteGroup } from '~/types';
-import { useRootData } from '~/utils/rootData';
+import type { AdminRouteGroup } from '#/types';
+import { useRootData } from '#/utils/rootData';
 
 const useRouteConfig = () => {
   const { siteSettings } = useRootData();

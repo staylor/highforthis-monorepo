@@ -1,6 +1,6 @@
 const Media = `#graphql
   interface MediaUpload {
-    id: ObjID!
+    id: String!
     title: String
     originalName: String!
     destination: String!
@@ -25,7 +25,7 @@ const Media = `#graphql
   }
 
   type ImageUpload implements MediaUpload {
-    id: ObjID!
+    id: String!
     title: String
     originalName: String!
     destination: String!
@@ -41,7 +41,7 @@ const Media = `#graphql
   }
 
   type AudioUpload implements MediaUpload {
-    id: ObjID!
+    id: String!
     title: String
     description: String
     originalName: String!
@@ -60,7 +60,7 @@ const Media = `#graphql
   }
 
   type VideoUpload implements MediaUpload {
-    id: ObjID!
+    id: String!
     title: String
     description: String
     originalName: String!
@@ -75,7 +75,7 @@ const Media = `#graphql
   }
 
   type FileUpload implements MediaUpload {
-    id: ObjID!
+    id: String!
     title: String
     description: String
     originalName: String!
@@ -109,7 +109,7 @@ const Media = `#graphql
       mimeType: String
       search: String
     ): MediaUploadConnection
-    media(id: ObjID): MediaUpload
+    media(id: String): MediaUpload
   }
 
   input UpdateMediaUploadInput {
@@ -121,8 +121,8 @@ const Media = `#graphql
   }
 
   extend type Mutation {
-    updateMediaUpload(id: ObjID!, input: UpdateMediaUploadInput!): MediaUpload
-    removeMediaUpload(ids: [ObjID]!): Boolean
+    updateMediaUpload(id: String!, input: UpdateMediaUploadInput!): MediaUpload
+    removeMediaUpload(ids: [String]!): Boolean
   }
 `;
 

@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ['*']
+
+jobs:
+  ci:
+    name: Lint, Typecheck, Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm --filter @highforthis/graphql db:generate
+      - run: pnpm --filter @highforthis/web exec react-router typegen
+      - run: pnpm knip
+      - run: pnpm -r typecheck
+      - run: pnpm -r test

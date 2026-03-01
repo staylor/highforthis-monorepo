@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import PodcastForm from '~/components/Admin/Podcast/Form';
-import type { Podcast, PodcastQuery } from '~/types/graphql';
-import { handleSubmission } from '~/utils/action';
-import query from '~/utils/query';
+import PodcastForm from '#/components/Admin/Podcast/Form';
+import type { Podcast, PodcastQuery } from '#/types/graphql';
+import { handleSubmission } from '#/utils/action';
+import query from '#/utils/query';
 
 import type { Route } from './+types/edit';
 
@@ -43,7 +43,7 @@ export default function PodcastEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const podcastQuery = gql`
-  query PodcastEdit($id: ObjID!) {
+  query PodcastEdit($id: String!) {
     podcast(id: $id) {
       ...PodcastForm_podcast
     }
@@ -52,7 +52,7 @@ const podcastQuery = gql`
 `;
 
 const podcastMutation = gql`
-  mutation UpdatePodcast($id: ObjID!, $input: UpdatePodcastInput!) {
+  mutation UpdatePodcast($id: String!, $input: UpdatePodcastInput!) {
     updatePodcast(id: $id, input: $input) {
       ...PodcastForm_podcast
     }

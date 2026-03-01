@@ -2,17 +2,24 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useSearchParams } from 'react-router';
 
-import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
-import { Heading, HeaderAdd } from '~/components/Admin/styles';
-import Message from '~/components/Form/Message';
-import type { User, UsersAdminQuery } from '~/types/graphql';
-import { handleDelete } from '~/utils/action';
-import query from '~/utils/query';
+import ListTable, { RowTitle, RowActions } from '#/components/Admin/ListTable';
+import Search from '#/components/Admin/ListTable/Search';
+import { Heading, HeaderAdd } from '#/components/Admin/styles';
+import Message from '#/components/Form/Message';
+import type { User, UsersAdminQuery } from '#/types/graphql';
+import { handleDelete } from '#/utils/action';
+import query, { addPageOffset } from '#/utils/query';
 
 import type { Route } from './+types/index';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  return query<UsersAdminQuery>({ request, context, query: usersQuery });
+  const url = new URL(request.url);
+  const variables = addPageOffset(request);
+  const search = url.searchParams.get('search');
+  if (search) {
+    variables.search = search;
+  }
+  return query<UsersAdminQuery>({ request, context, query: usersQuery, variables });
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
@@ -51,14 +58,15 @@ export default function Users({ loaderData }: Route.ComponentProps) {
       <Heading>{t('users.heading')}</Heading>
       <HeaderAdd label={t('users.add')} />
       {count > 0 && <Message param="deleted" text={t('users.deleted', { count })} />}
+      <Search placeholder={t('users.search')} />
       <ListTable columns={columns} data={users!} />
     </>
   );
 }
 
 const usersQuery = gql`
-  query UsersAdmin {
-    users @cache(key: "admin") {
+  query UsersAdmin($after: String, $first: Int, $search: String) {
+    users(after: $after, first: $first, search: $search) @cache(key: "admin") {
       count
       edges {
         node {
@@ -74,7 +82,7 @@ const usersQuery = gql`
 `;
 
 const usersMutation = gql`
-  mutation DeleteUser($ids: [ObjID]!) {
+  mutation DeleteUser($ids: [String]!) {
     removeUser(ids: $ids)
   }
 `;

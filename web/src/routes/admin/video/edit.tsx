@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import VideoForm from '~/components/Admin/Video/Form';
-import type { VideoEditQuery, VideoThumbnail } from '~/types/graphql';
-import { handleSubmission } from '~/utils/action';
-import query from '~/utils/query';
+import VideoForm from '#/components/Admin/Video/Form';
+import type { VideoEditQuery, VideoThumbnail } from '#/types/graphql';
+import { handleSubmission } from '#/utils/action';
+import query from '#/utils/query';
 
 import type { Route } from './+types/edit';
 
@@ -45,7 +45,7 @@ export default function VideoEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const videoQuery = gql`
-  query VideoEdit($id: ObjID) {
+  query VideoEdit($id: String) {
     video(id: $id) {
       ...VideoForm_video
     }
@@ -54,7 +54,7 @@ const videoQuery = gql`
 `;
 
 const videoMutation = gql`
-  mutation UpdateVideo($id: ObjID!, $input: UpdateVideoInput!) {
+  mutation UpdateVideo($id: String!, $input: UpdateVideoInput!) {
     updateVideo(id: $id, input: $input) {
       ...VideoForm_video
     }

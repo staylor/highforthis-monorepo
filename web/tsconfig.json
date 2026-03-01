@@ -8,7 +8,7 @@
     ".react-router/types/**/*"
   ],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "lib": ["DOM", "DOM.Iterable", "ES2024"],
     "types": ["vitest/globals", "@react-router/node", "vite/client"],
     "isolatedModules": true,
     "esModuleInterop": true,
@@ -17,7 +17,7 @@
     "moduleResolution": "Bundler",
     "noUnusedParameters": true,
     "resolveJsonModule": true,
-    "target": "ES2022",
+    "target": "ES2024",
     "strict": true,
     "allowJs": true,
     "skipLibCheck": true,
@@ -25,7 +25,7 @@
     "baseUrl": ".",
     "rootDirs": [".", "./.react-router/types"],
     "paths": {
-      "~/*": ["./src/*"]
+      "#/*": ["./src/*"]
     },
     "noEmit": true
   }

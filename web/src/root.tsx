@@ -9,7 +9,7 @@ import {
   useRouteError,
 } from 'react-router';
 
-import mainStylesheetUrl from '~/styles/main.css?url';
+import mainStylesheetUrl from '#/styles/main.css?url';
 
 import type { Route } from './+types/root';
 import { isAuthenticated } from './auth';

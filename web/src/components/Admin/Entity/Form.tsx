@@ -1,9 +1,9 @@
 import type { i18n } from 'i18next';
 
-import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
-import Checkbox from '~/components/Form/Checkbox';
-import type { FieldUnion } from '~/types';
-import type { ShowConnection } from '~/types/graphql';
+import FeaturedMedia from '#/components/Admin/Form/FeaturedMedia';
+import Checkbox from '#/components/Form/Checkbox';
+import type { FieldUnion } from '#/types';
+import type { ShowConnection } from '#/types/graphql';
 
 import Shows from './Shows';
 

@@ -1,4 +1,4 @@
-query Show($id: ObjID!) {
+query Show($id: String!) {
   show(id: $id) {
     id
     date

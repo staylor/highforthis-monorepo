@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import ShowForm from '~/components/Admin/Show/Form';
-import type { ShowEditQuery } from '~/types/graphql';
-import { handleSubmission } from '~/utils/action';
-import query from '~/utils/query';
+import ShowForm from '#/components/Admin/Show/Form';
+import type { ShowEditQuery } from '#/types/graphql';
+import { handleSubmission } from '#/utils/action';
+import query from '#/utils/query';
 
 import type { Route } from './+types/edit';
 
@@ -27,7 +27,7 @@ export default function ShowEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const showQuery = gql`
-  query ShowEdit($id: ObjID!) {
+  query ShowEdit($id: String!) {
     show(id: $id) {
       ...ShowForm_show
     }
@@ -38,7 +38,7 @@ const showQuery = gql`
 `;
 
 const showMutation = gql`
-  mutation UpdateShow($id: ObjID!, $input: UpdateShowInput!) {
+  mutation UpdateShow($id: String!, $input: UpdateShowInput!) {
     updateShow(id: $id, input: $input) {
       ...ShowForm_show
     }

@@ -2,22 +2,29 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useSearchParams } from 'react-router';
 
-import ListTable, { RowTitle, RowActions } from '~/components/Admin/ListTable';
-import { Heading, HeaderAdd } from '~/components/Admin/styles';
-import Message from '~/components/Form/Message';
-import type { Columns } from '~/types';
-import type { Post, PostsAdminQuery } from '~/types/graphql';
-import { handleDelete } from '~/utils/action';
-import query, { addPageOffset } from '~/utils/query';
+import ListTable, { RowTitle, RowActions } from '#/components/Admin/ListTable';
+import Search from '#/components/Admin/ListTable/Search';
+import { Heading, HeaderAdd } from '#/components/Admin/styles';
+import Message from '#/components/Form/Message';
+import type { Columns } from '#/types';
+import type { Post, PostsAdminQuery } from '#/types/graphql';
+import { handleDelete } from '#/utils/action';
+import query, { addPageOffset } from '#/utils/query';
 
 import type { Route } from './+types/index';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const variables = addPageOffset(request);
+  const search = url.searchParams.get('search');
+  if (search) {
+    variables.search = search;
+  }
   return query<PostsAdminQuery>({
     request,
     context,
     query: postsQuery,
-    variables: addPageOffset(request),
+    variables,
   });
 }
 
@@ -67,6 +74,7 @@ export default function Posts({ loaderData }: Route.ComponentProps) {
       <Heading>{t('posts.heading')}</Heading>
       <HeaderAdd label={t('posts.add')} />
       {count > 0 && <Message param="deleted" text={t('posts.deleted', { count })} />}
+      <Search placeholder={t('posts.search')} />
       <ListTable columns={columns} data={loaderData.posts!} />
     </>
   );
@@ -93,7 +101,7 @@ const postsQuery = gql`
 `;
 
 const postsMutation = gql`
-  mutation DeletePost($ids: [ObjID]!) {
+  mutation DeletePost($ids: [String]!) {
     removePost(ids: $ids)
   }
 `;

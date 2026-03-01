@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 import { createRequestHandler } from '@react-router/express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
@@ -85,12 +83,12 @@ app.use('/upload', proxy);
 app.use('/uploads', proxy);
 
 // handle SSR requests
-app.all('*', async (_, res, next) => {
+app.all('/{*splat}', async (_, res, next) => {
   // determine locale here
   res.locals.i18n = await createI18n('en');
   next();
 });
-app.all('*', reactRouterHandler);
+app.all('/{*splat}', reactRouterHandler);
 
 app.listen(serverPort, async () => {
   console.log(`Server running at http://localhost:${serverPort}`);

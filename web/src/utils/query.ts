@@ -1,8 +1,9 @@
-import type { ApolloError, OperationVariables, QueryOptions, ServerError } from '@apollo/client';
+import type { OperationVariables, QueryOptions } from '@apollo/client';
+import { ServerError } from '@apollo/client/errors';
 import type { AppLoadContext } from 'react-router';
 
-import { isAuthenticated } from '~/auth';
-import { PER_PAGE } from '~/constants';
+import { isAuthenticated } from '#/auth';
+import { PER_PAGE } from '#/constants';
 
 import { offsetToCursor } from './connection';
 
@@ -28,25 +29,19 @@ export default async function query<T = unknown>({
     headers.Authorization = `Bearer ${authToken}`;
   }
   try {
-    ({ data } = await apolloClient.query<T>({
+    ({ data } = (await apolloClient.query<T>({
       query,
       variables,
       context: {
         headers,
       },
-    }));
+    })) as { data: T });
   } catch (e) {
-    const error = e as ApolloError;
-    if (error.graphQLErrors) {
-      error.graphQLErrors.forEach((err) => {
-        console.error(err.message);
-      });
+    const error = e as Error;
+    if (ServerError.is(error)) {
+      console.error(error.bodyText);
     }
-    if (error.networkError) {
-      console.error((error.networkError as ServerError)?.result);
-    } else {
-      console.error(e);
-    }
+    console.error(error.message);
   }
   return data;
 }

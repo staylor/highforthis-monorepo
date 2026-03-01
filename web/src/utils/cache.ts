@@ -1,6 +1,6 @@
 import type { ClientLoaderFunctionArgs } from 'react-router';
 
-export const ONE_MINUTE = 60 * 1000;
+const ONE_MINUTE = 60 * 1000;
 
 interface CacheWithExpiry {
   data: any;

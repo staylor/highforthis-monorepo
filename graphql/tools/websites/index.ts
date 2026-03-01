@@ -2,28 +2,21 @@ import fs from 'fs';
 import path from 'path';
 
 import { JSDOM } from 'jsdom';
-import type { WithId } from 'mongodb';
 
-import database from '~/database';
-import Artist from '~/models/Artist';
-import Venue from '~/models/Venue';
+import prisma from '#/database';
 
 const omrHost = 'https://www.ohmyrockness.com';
 const filename = (name: string) => path.join(process.cwd(), 'tools', 'websites', 'responses', name);
 
-const { db } = await database();
-const artist = new Artist({ db });
-const venue = new Venue({ db });
-
-async function readOrFetch(url: string, filename: string) {
+async function readOrFetch(url: string, fname: string) {
   let html: string;
-  if (fs.existsSync(filename)) {
+  if (fs.existsSync(fname)) {
     console.log('Reading saved HTML output of', url);
-    html = fs.readFileSync(filename, { encoding: 'utf-8' });
+    html = fs.readFileSync(fname, { encoding: 'utf-8' });
   } else {
     html = await fetch(url).then((response) => response.text());
     console.log('Saving HTML output of', url);
-    fs.writeFileSync(filename, html);
+    fs.writeFileSync(fname, html);
   }
   return html;
 }
@@ -56,20 +49,21 @@ interface Match {
 }
 
 async function parseTerms(
-  model: any,
-  terms: WithId<any>[],
+  modelName: 'artist' | 'venue',
+  terms: any[],
   index: Map<string, Match>,
   selector: string
 ) {
   for (const item of terms) {
-    const id = String(item._id);
+    const { id } = item;
     const websiteFilename = filename(`${id}-website.json`);
     if (fs.existsSync(websiteFilename)) {
       if (!item.website) {
         console.log('Saving website to:', id);
         const { default: website } = await import(websiteFilename);
-        await model.updateById(id, {
-          website,
+        await (prisma[modelName] as any).update({
+          where: { id },
+          data: { website },
         });
       }
       continue;
@@ -93,8 +87,9 @@ async function parseTerms(
       console.log(`Found match for ${item.name}:`, website);
       fs.writeFileSync(websiteFilename, JSON.stringify(website) + '\n');
       console.log('Saving website to:', id);
-      await model.updateById(id, {
-        website,
+      await (prisma[modelName] as any).update({
+        where: { id },
+        data: { website },
       });
     }
   }
@@ -107,9 +102,9 @@ async function fetchArtists() {
   const allArtistsHTML = await readOrFetch(allArtistsURL, allFilename);
   const dom = new JSDOM(allArtistsHTML);
   const index = getIndex(dom);
-  const terms = await artist.all({ limit: 200 });
+  const terms = await prisma.artist.findMany({ take: 200 });
 
-  await parseTerms(artist, terms, index, '#url .omrlink');
+  await parseTerms('artist', terms, index, '#url .omrlink');
 }
 
 async function fetchVenues() {
@@ -119,9 +114,9 @@ async function fetchVenues() {
   const allVenuesHTML = await readOrFetch(allVenuesURL, allFilename);
   const dom = new JSDOM(allVenuesHTML);
   const index = getIndex(dom);
-  const terms = await venue.all({ limit: 200 });
+  const terms = await prisma.venue.findMany({ take: 200 });
 
-  await parseTerms(venue, terms, index, '.venue-link');
+  await parseTerms('venue', terms, index, '.venue-link');
 }
 
 await Promise.all([fetchArtists(), fetchVenues()]);

@@ -12,5 +12,6 @@ export default [
   'node_modules',
   'web/.react-router',
   'web/build',
+  '**/*.config.cjs',
   'xcode/**/*.json',
 ];

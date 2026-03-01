@@ -2,10 +2,10 @@ import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Button from '~/components/Button';
-import Link from '~/components/Link';
-import { formatArtists, formatDate } from '~/components/Shows/utils';
-import type { ShowConnection } from '~/types/graphql';
+import Button from '#/components/Button';
+import Link from '#/components/Link';
+import { formatArtists, formatDate } from '#/components/Shows/utils';
+import type { ShowConnection } from '#/types/graphql';
 
 function Shows({ shows, dataKey }: { shows: ShowConnection; dataKey: 'artists' | 'venue' }) {
   const { t } = useTranslation();

@@ -2,8 +2,8 @@ import type { SyntheticEvent } from 'react';
 import { useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-import Loading from '~/components/Loading';
-import type { Video, VideoConnection, VideoThumbnail } from '~/types/graphql';
+import Loading from '#/components/Loading';
+import type { Video, VideoConnection, VideoThumbnail } from '#/types/graphql';
 
 import CloseButton from './CloseButton';
 import { modalClass, frameClass, itemTitleClass } from './styles';
@@ -30,7 +30,7 @@ function VideoModal({ selectVideo, onClose }: VideoModalProps) {
   const basePath = `/modals/video`;
   const frameRef = useRef(null);
   const { fetcher, connection } = useInfiniteScroll<Video>(frameRef, basePath);
-  const videos = connection as VideoConnection;
+  const videos = connection as unknown as VideoConnection;
 
   const portal = document.getElementById('portal');
   if (!portal) {
@@ -47,6 +47,14 @@ function VideoModal({ selectVideo, onClose }: VideoModalProps) {
             <div
               className="float-left m-1.5 h-28 w-30 cursor-pointer overflow-hidden"
               key={node.id}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  (e.target as HTMLElement).click();
+                }
+              }}
               onClick={(e) => {
                 e.preventDefault();
 

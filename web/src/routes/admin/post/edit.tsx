@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import PostForm from '~/components/Admin/Post/Form';
-import type { Post, PostQuery } from '~/types/graphql';
-import { handleSubmission } from '~/utils/action';
-import query from '~/utils/query';
+import PostForm from '#/components/Admin/Post/Form';
+import type { Post, PostQuery } from '#/types/graphql';
+import { handleSubmission } from '#/utils/action';
+import query from '#/utils/query';
 
 import type { Route } from './+types/edit';
 
@@ -32,7 +32,7 @@ export default function PostEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const postQuery = gql`
-  query PostEdit($id: ObjID!) {
+  query PostEdit($id: String!) {
     post(id: $id) {
       ...PostForm_post
     }
@@ -41,7 +41,7 @@ const postQuery = gql`
 `;
 
 const postMutation = gql`
-  mutation UpdatePost($id: ObjID!, $input: UpdatePostInput!) {
+  mutation UpdatePost($id: String!, $input: UpdatePostInput!) {
     updatePost(id: $id, input: $input) {
       ...PostForm_post
     }

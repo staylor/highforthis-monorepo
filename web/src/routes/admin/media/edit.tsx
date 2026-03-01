@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import MediaForm from '~/components/Admin/Media/Form';
-import type { MediaAdminQuery, MediaUpload } from '~/types/graphql';
-import { handleSubmission } from '~/utils/action';
-import query from '~/utils/query';
+import MediaForm from '#/components/Admin/Media/Form';
+import type { MediaAdminQuery, MediaUpload } from '#/types/graphql';
+import { handleSubmission } from '#/utils/action';
+import query from '#/utils/query';
 
 import type { Route } from './+types/edit';
 
@@ -43,7 +43,7 @@ export default function MediaEdit({ loaderData }: Route.ComponentProps) {
 }
 
 const mediaQuery = gql`
-  query MediaAdmin($id: ObjID!) {
+  query MediaAdmin($id: String!) {
     media(id: $id) {
       ...MediaForm_media
     }
@@ -52,7 +52,7 @@ const mediaQuery = gql`
 `;
 
 const mediaMutation = gql`
-  mutation UpdateMedia($id: ObjID!, $input: UpdateMediaUploadInput!) {
+  mutation UpdateMedia($id: String!, $input: UpdateMediaUploadInput!) {
     updateMediaUpload(id: $id, input: $input) {
       ...MediaForm_media
     }

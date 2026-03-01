@@ -11,7 +11,7 @@ function BlockButton({ active, onMouseDown, ref }: Props) {
     <div
       className={cn(
         'text-detail hover:text-detail-dark text-2xl',
-        'absolute -left-7.5 block scale-0 cursor-pointer transition-transform',
+        'toolbar-hidden absolute -left-7.5 block cursor-pointer transition-[scale]',
         'dashicons',
         {
           'dashicons-plus-alt': !active,
@@ -19,6 +19,8 @@ function BlockButton({ active, onMouseDown, ref }: Props) {
         }
       )}
       ref={ref as any}
+      role="button"
+      tabIndex={0}
       onMouseDown={(e) => {
         e.preventDefault();
         e.stopPropagation();

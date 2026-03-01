@@ -5,7 +5,7 @@ const Post = `#graphql
   }
 
   type Post {
-    id: ObjID!
+    id: String!
     title: String!
     slug: String!
     editorState: EditorState
@@ -57,13 +57,13 @@ const Post = `#graphql
       status: PostStatus
       search: String
     ): PostConnection
-    post(id: ObjID, slug: String): Post
+    post(id: String, slug: String): Post
   }
 
   extend type Mutation {
     createPost(input: CreatePostInput!): Post
-    updatePost(id: ObjID!, input: UpdatePostInput!): Post
-    removePost(ids: [ObjID]!): Boolean
+    updatePost(id: String!, input: UpdatePostInput!): Post
+    removePost(ids: [String]!): Boolean
   }
 `;
 

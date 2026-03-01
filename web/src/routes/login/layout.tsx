@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router';
 import type { LinksFunction } from 'react-router';
 
-import Message from '~/components/Form/Message';
+import Message from '#/components/Form/Message';
 
 import Wrapper from './Wrapper';
 

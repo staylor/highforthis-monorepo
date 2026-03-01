@@ -1,12 +1,12 @@
 import { $applyNodeReplacement, DecoratorNode } from 'lexical';
-import type { LexicalNode, NodeKey, SerializedLexicalNode, Spread } from 'lexical';
+import type { NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 import type { ReactNode } from 'react';
 
-import VideoComponent from '~/components/Videos/Video';
-import type { Video } from '~/types/graphql';
+import VideoComponent from '#/components/Videos/Video';
+import type { Video } from '#/types/graphql';
 
 // this data gets saved
-export type SerializedVideoNode = Spread<{ videoId: string }, SerializedLexicalNode>;
+type SerializedVideoNode = Spread<{ videoId: string }, SerializedLexicalNode>;
 
 // this data gets sent by GraphQL
 type SerializedVideoInput = Spread<{ video: Video }, SerializedLexicalNode>;
@@ -58,8 +58,4 @@ export default class VideoNode extends DecoratorNode<ReactNode> {
 
 export function $createVideoNode(video: Video): VideoNode {
   return $applyNodeReplacement(new VideoNode(video));
-}
-
-export function $isVideoNode(node: LexicalNode | null | undefined): node is VideoNode {
-  return node instanceof VideoNode;
 }

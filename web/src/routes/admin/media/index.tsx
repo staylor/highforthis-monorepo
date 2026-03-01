@@ -1,19 +1,18 @@
 import { gql } from 'graphql-tag';
-import debounce from 'lodash.debounce';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
-import ListTable, { Thumbnail, RowTitle, RowActions } from '~/components/Admin/ListTable';
-import { useUpdateQuery } from '~/components/Admin/ListTable/utils';
-import { Heading, HeaderAdd } from '~/components/Admin/styles';
-import Input from '~/components/Form/Input';
-import Message from '~/components/Form/Message';
-import Select from '~/components/Form/Select';
-import Link from '~/components/Link';
-import type { Columns } from '~/types';
-import type { MediaUpload, UploadsAdminQuery } from '~/types/graphql';
-import { handleDelete } from '~/utils/action';
-import query, { addPageOffset } from '~/utils/query';
+import ListTable, { Thumbnail, RowTitle, RowActions } from '#/components/Admin/ListTable';
+import Search from '#/components/Admin/ListTable/Search';
+import { useUpdateQuery } from '#/components/Admin/ListTable/utils';
+import { Heading, HeaderAdd } from '#/components/Admin/styles';
+import Message from '#/components/Form/Message';
+import Select from '#/components/Form/Select';
+import Link from '#/components/Link';
+import type { Columns } from '#/types';
+import type { MediaUpload, UploadsAdminQuery } from '#/types/graphql';
+import { handleDelete } from '#/utils/action';
+import query, { addPageOffset } from '#/utils/query';
 
 import type { Route } from './+types/index';
 
@@ -39,8 +38,6 @@ export default function Media({ loaderData }: Route.ComponentProps) {
   const location = useLocation();
   const { updateQuery, searchParams } = useUpdateQuery();
   const count = Number(searchParams.get('deleted') || 0);
-  const querySearch = updateQuery('search');
-  const updateSearch = debounce(querySearch, 600);
   const columns: Columns = [
     {
       className: 'w-16',
@@ -125,13 +122,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       <Heading>{t('media.heading')}</Heading>
       <HeaderAdd label={t('media.add')} to={`${location.pathname}/upload`} />
       {count > 0 && <Message param="deleted" text={t('media.deleted', { count })} />}
-      <div className="float-right">
-        <Input
-          value={searchParams.get('search') || ''}
-          placeholder={t('media.search')}
-          onChange={updateSearch}
-        />
-      </div>
+      <Search placeholder={t('media.search')} />
       <ListTable columns={columns} filters={filters} data={uploads!} />
     </>
   );
@@ -180,7 +171,7 @@ const uploadsQuery = gql`
 `;
 
 const uploadsMutation = gql`
-  mutation DeleteMedia($ids: [ObjID]!) {
+  mutation DeleteMedia($ids: [String]!) {
     removeMediaUpload(ids: $ids)
   }
 `;

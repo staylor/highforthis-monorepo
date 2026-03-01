@@ -2,9 +2,9 @@ import type { PropsWithChildren, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
-import { FormWrap } from '~/components/Admin/styles';
-import Button from '~/components/Button';
-import type { Fields, FieldUnion } from '~/types';
+import { FormWrap } from '#/components/Admin/styles';
+import Button from '#/components/Button';
+import type { Fields, FieldUnion } from '#/types';
 
 import EditableField from './EditableField';
 import InfoColumn from './InfoColumn';

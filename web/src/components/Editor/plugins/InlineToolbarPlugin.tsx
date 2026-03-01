@@ -5,15 +5,14 @@ import { $getSelection, FORMAT_TEXT_COMMAND, SELECTION_CHANGE_COMMAND } from 'le
 import type { ReactNode } from 'react';
 import { useRef, useEffect, useCallback, useReducer, useMemo } from 'react';
 
-import Controls from '~/components/Editor/Controls';
-import StyleButton from '~/components/Editor/Controls/StyleButton';
-import Toolbar from '~/components/Editor/Toolbar';
+import Controls from '#/components/Editor/Controls';
+import StyleButton from '#/components/Editor/Controls/StyleButton';
+import Toolbar from '#/components/Editor/Toolbar';
 
 import { setStyle } from './utils';
 
 const LowPriority = 1;
 
-const TOOLBAR_WIDTH = 250;
 const TOOLBAR_HEIGHT = 32;
 const TOOLBAR_OFFSET = 10;
 
@@ -102,7 +101,7 @@ export default function InlineToolbarPlugin() {
     // empty selection
     if (anchorOffset === focusOffset) {
       setStyle(inlineToolbarRef, {
-        transform: 'scale(0)',
+        scale: '0',
       });
       return;
     }
@@ -114,10 +113,11 @@ export default function InlineToolbarPlugin() {
     }
 
     const toolbar = inlineToolbarRef.current as HTMLElement;
+    const toolbarWidth = toolbar.offsetWidth;
     const selected = window.getSelection() as Selection;
     const selectionBoundary = selected.getRangeAt(0).getBoundingClientRect();
 
-    const widthDiff = selectionBoundary.width - TOOLBAR_WIDTH;
+    const widthDiff = selectionBoundary.width - toolbarWidth;
     let leftOffset;
     if (widthDiff >= 0) {
       leftOffset = Math.max(widthDiff / 2, 0);
@@ -134,13 +134,12 @@ export default function InlineToolbarPlugin() {
     setStyle(inlineToolbarRef, {
       left: `${leftOffset}px`,
       top: `${selectionBoundary.top - editorBoundary.top - TOOLBAR_HEIGHT - TOOLBAR_OFFSET}px`,
-      transform: 'scale(1)',
-      width: `${TOOLBAR_WIDTH}px`,
+      scale: '1',
     });
   }, [editor]);
 
   useEffect(() => {
-    mergeRegister(
+    const unregister = mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           $updateToolbar();
@@ -155,6 +154,7 @@ export default function InlineToolbarPlugin() {
         LowPriority
       )
     );
+    return unregister;
   }, [editor, $updateToolbar]);
 
   return (

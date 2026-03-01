@@ -1,5 +1,3 @@
-import type { Document } from 'mongodb';
-import { ObjectId } from 'mongodb';
 import type {
   MutationCreateShowArgs,
   MutationRemoveShowArgs,
@@ -10,108 +8,206 @@ import type {
   UpdateShowInput,
 } from 'types/graphql';
 
-import type Artist from '~/models/Artist';
-import type Show from '~/models/Show';
-import type Venue from '~/models/Venue';
+import prisma from '#/database';
 
 import { parseConnection, emptyConnection } from './utils/collection';
 
+const showIncludes = {
+  artists: { include: { artist: true } },
+  venue: true,
+};
+
 const resolvers = {
   Show: {
-    id(show: Document) {
-      return show._id;
+    date(show: any) {
+      return new Date(show.date).getTime();
     },
-    artists(show: Document, _: unknown, { Artist }: { Artist: Artist }) {
-      return Artist.findByIds(show.artists);
+    artists(show: any) {
+      if ('artists' in show && Array.isArray(show.artists)) {
+        return show.artists.map((r: any) => r.artist || r);
+      }
+      return prisma.showArtist
+        .findMany({ where: { showId: show.id }, include: { artist: true } })
+        .then((records: any[]) => records.map((r) => r.artist));
     },
-    venue(show: Document, _: unknown, { Venue }: { Venue: Venue }) {
-      return Venue.findOneById(show.venue);
+    venue(show: any) {
+      if ('venue' in show && show.venue && typeof show.venue === 'object') {
+        return show.venue;
+      }
+      return prisma.venue.findUnique({ where: { id: show.venueId } });
     },
   },
   ShowEntity: {
-    __resolveType(entity: Document) {
-      if (entity.type === 'artist') {
-        return 'Artist';
-      }
-      if (entity.type === 'venue') {
-        return 'Venue';
-      }
+    __resolveType(entity: any) {
+      if (entity.type === 'artist') return 'Artist';
+      if (entity.type === 'venue') return 'Venue';
     },
   },
   ShowConnection: {
-    async years(_0: unknown, args: QueryShowsArgs, { Show }: { Show: Show }) {
-      return Show.years(!!args.attended);
+    async years(_0: unknown, args: QueryShowsArgs) {
+      const where: any = {};
+      if (args.attended) {
+        where.attended = true;
+      }
+      const results = await prisma.show.findMany({
+        where,
+        select: { date: true },
+      });
+      const yearSet = new Set(results.map((r: any) => new Date(r.date).getFullYear()));
+      return Array.from(yearSet).sort((a, b) => b - a);
     },
   },
   Query: {
-    async shows(
-      _: unknown,
-      args: QueryShowsArgs,
-      { Show, Artist, Venue }: { Show: Show; Artist: Artist; Venue: Venue }
-    ) {
-      const { artist, venue, ...rest } = args;
-      const connectionArgs: Document = rest;
+    async shows(_: unknown, args: QueryShowsArgs) {
+      const { artist, venue, latest, attended, year, search, order, ...connectionArgs } = args;
+      const where: any = {};
+
+      if (attended) {
+        where.attended = true;
+      } else if (latest) {
+        where.date = { gte: new Date() };
+      }
+
+      if (year) {
+        const startDate = new Date(`${year}-01-01T00:00:00Z`);
+        const endDate = new Date(`${year + 1}-01-01T00:00:00Z`);
+        where.date = { gte: startDate, lt: endDate };
+      }
 
       if (artist?.id) {
-        connectionArgs.artist = new ObjectId(String(artist.id));
-      } else if (venue?.id) {
-        connectionArgs.venue = new ObjectId(String(venue.id));
+        where.artists = { some: { artistId: artist.id } };
       } else if (artist?.slug) {
-        const node = await Artist.findOneBySlug(artist.slug);
+        const node = await prisma.artist.findUnique({ where: { slug: artist.slug } });
         if (node) {
-          connectionArgs.artist = node._id;
+          where.artists = { some: { artistId: node.id } };
         } else {
           return emptyConnection();
         }
+      }
+
+      if (venue?.id) {
+        where.venueId = venue.id;
       } else if (venue?.slug) {
-        const node = await Venue.findOneBySlug(venue.slug);
+        const node = await prisma.venue.findUnique({ where: { slug: venue.slug } });
         if (node) {
-          connectionArgs.venue = node._id;
+          where.venueId = node.id;
         } else {
           return emptyConnection();
         }
       }
-      return parseConnection(Show, connectionArgs);
+
+      if (search) {
+        where.OR = [
+          { title: { contains: search, mode: 'insensitive' } },
+          { venue: { name: { contains: search, mode: 'insensitive' } } },
+          { artists: { some: { artist: { name: { contains: search, mode: 'insensitive' } } } } },
+        ];
+      }
+
+      return parseConnection(prisma.show, connectionArgs, {
+        where,
+        orderBy: { date: order === 'ASC' ? 'asc' : 'desc' },
+        include: showIncludes,
+      });
     },
 
-    async show(_: unknown, { id, slug, lastAdded }: QueryShowArgs, { Show }: { Show: Show }) {
+    async show(_: unknown, { id, lastAdded }: QueryShowArgs) {
       if (lastAdded) {
-        return Show.lastAdded();
+        return prisma.show.findFirst({ orderBy: { createdAt: 'desc' }, include: showIncludes });
       }
-
       if (id) {
-        return Show.findOneById(id);
+        return prisma.show.findUnique({ where: { id }, include: showIncludes });
       }
-      if (slug) {
-        return Show.findOneBySlug(slug);
-      }
+      return null;
     },
 
-    async showStats(_: unknown, { entity }: QueryShowStatsArgs, { Show }: { Show: Show }) {
-      return Show.stats(entity.toLowerCase());
+    async showStats(_: unknown, { entity }: QueryShowStatsArgs) {
+      const entityType = entity.toLowerCase();
+      if (entityType === 'artist') {
+        const results = await prisma.showArtist.groupBy({
+          by: ['artistId'],
+          where: { show: { attended: true } },
+          _count: { artistId: true },
+        });
+        const artistIds = results.map((r: any) => r.artistId);
+        const artists = await prisma.artist.findMany({ where: { id: { in: artistIds } } });
+        const artistMap = new Map(artists.map((a: any) => [a.id, a]));
+        return results
+          .map((r: any) => ({
+            count: r._count.artistId,
+            entity: { ...artistMap.get(r.artistId), type: 'artist' },
+          }))
+          .sort(
+            (a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? '')
+          );
+      } else {
+        const results = await prisma.show.groupBy({
+          by: ['venueId'],
+          where: { attended: true },
+          _count: { venueId: true },
+        });
+        const venueIds = results.map((r: any) => r.venueId);
+        const venues = await prisma.venue.findMany({ where: { id: { in: venueIds } } });
+        const venueMap = new Map(venues.map((v: any) => [v.id, v]));
+        return results
+          .map((r: any) => ({
+            count: r._count.venueId,
+            entity: { ...venueMap.get(r.venueId), type: 'venue' },
+          }))
+          .sort(
+            (a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? '')
+          );
+      }
     },
   },
   Mutation: {
-    async createShow(_: unknown, { input }: MutationCreateShowArgs, { Show }: { Show: Show }) {
-      const id = await Show.insert(input);
-      return Show.findOneById(id);
+    async createShow(_: unknown, { input }: MutationCreateShowArgs) {
+      const { artists, venue, date, ...data } = input as any;
+      return prisma.show.create({
+        data: {
+          ...data,
+          date: new Date(date),
+          venueId: venue,
+          artists: artists?.length
+            ? { create: artists.map((artistId: string) => ({ artistId })) }
+            : undefined,
+        },
+        include: showIncludes,
+      });
     },
 
-    async updateShow(_: unknown, { id, input }: MutationUpdateShowArgs, { Show }: { Show: Show }) {
-      const values: Document = { ...input };
+    async updateShow(_: unknown, { id, input }: MutationUpdateShowArgs) {
+      const { artists, venue, date, ...data } = input as any;
+      const values: any = { ...data };
+
       for (const key of ['title', 'notes', 'url']) {
         if (!input[key as keyof UpdateShowInput]) {
           values[key] = null;
         }
       }
-      await Show.updateById(id, values);
-      return Show.findOneById(id);
+
+      if (date) values.date = new Date(date);
+      if (venue) values.venueId = venue;
+
+      if (typeof artists !== 'undefined') {
+        await prisma.showArtist.deleteMany({ where: { showId: id } });
+        if (artists?.length) {
+          await prisma.showArtist.createMany({
+            data: artists.map((artistId: string) => ({ showId: id, artistId })),
+          });
+        }
+      }
+
+      return prisma.show.update({ where: { id }, data: values, include: showIncludes });
     },
 
-    async removeShow(_: unknown, { ids }: MutationRemoveShowArgs, { Show }: { Show: Show }) {
-      return Promise.all(ids.map((id: string) => Show.removeById(id)))
-        .then(() => true)
-        .catch(() => false);
+    async removeShow(_: unknown, { ids }: MutationRemoveShowArgs) {
+      try {
+        await prisma.show.deleteMany({ where: { id: { in: ids as string[] } } });
+        return true;
+      } catch {
+        return false;
+      }
     },
   },
 };

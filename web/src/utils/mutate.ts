@@ -1,5 +1,5 @@
-import type { ApolloError, MutationOptions, ServerError } from '@apollo/client';
-import type { GraphQLErrors } from '@apollo/client/errors';
+import type { MutationOptions } from '@apollo/client';
+import { ServerError } from '@apollo/client/errors';
 import qs from 'qs';
 import type { AppLoadContext } from 'react-router';
 
@@ -24,15 +24,16 @@ type MutationData = Pick<MutationOptions, 'mutation' | 'variables'> & { context:
 
 const mutate = async ({ mutation, variables, context }: MutationData) => {
   const { apolloClient } = context;
-  let data = {};
+  let data: Record<string, any> = {};
   try {
-    ({ data } = await apolloClient.mutate({ mutation, variables }));
+    const result = await apolloClient.mutate({ mutation, variables });
+    data = (result.data ?? {}) as Record<string, any>;
   } catch (e) {
-    const error = e as ApolloError;
-    console.error((error.networkError as ServerError)?.result);
-    (error.graphQLErrors as GraphQLErrors).forEach((err) => {
-      console.error(err.message);
-    });
+    const error = e as Error;
+    if (ServerError.is(error)) {
+      console.error(error.bodyText);
+    }
+    console.error(error.message);
   }
   return data;
 };

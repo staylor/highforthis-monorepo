@@ -1,8 +1,5 @@
-import database from '~/database';
-import shows from '~/jobs/shows';
+import shows from '#/jobs/shows';
 
-const { db } = await database();
-
-await shows(db);
+await shows();
 
 process.exit(0);

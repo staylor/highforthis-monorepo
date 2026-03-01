@@ -2,11 +2,11 @@ import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Form from '~/components/Admin/Form';
-import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
-import { HeaderAdd, Heading } from '~/components/Admin/styles';
-import Message from '~/components/Form/Message';
-import type { Fields } from '~/types';
+import Form from '#/components/Admin/Form';
+import FeaturedMedia from '#/components/Admin/Form/FeaturedMedia';
+import { HeaderAdd, Heading } from '#/components/Admin/styles';
+import Message from '#/components/Form/Message';
+import type { Fields } from '#/types';
 
 import {
   name,
@@ -63,7 +63,7 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
     <>
       <Heading>{heading}</Heading>
       <HeaderAdd label={t('artists.all')} to="/admin/artist" />
-      {data.artist && <PageLink url={`/artist/${data.artist.slug}`}>{t('artist.view')}</PageLink>}
+      {data.artist && <PageLink url={`/artist/${data.artist.slug}`}>{t('artists.view')}</PageLink>}
       <Message text={t('artists.updated')} />
       <Form data={data} fields={fields} buttonLabel={buttonLabel} />
     </>

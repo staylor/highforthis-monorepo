@@ -7,7 +7,7 @@ public class PostsQuery: GraphQLQuery {
   public static let operationName: String = "Posts"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Posts { posts(first: 20, status: PUBLISH) { __typename edges { __typename node { __typename featuredMedia { __typename destination id ... on ImageUpload { crops { __typename fileName width } } } id slug summary title } } } }"#
+      #"query Posts { posts(first: 20, status: PUBLISH) { __typename edges { __typename node { __typename id slug summary title featuredMedia { __typename id destination ... on ImageUpload { crops { __typename fileName width } } } } } } }"#
     ))
 
   public init() {}
@@ -66,18 +66,18 @@ public class PostsQuery: GraphQLQuery {
           public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Post }
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
-            .field("featuredMedia", [FeaturedMedium]?.self),
-            .field("id", HighForThisAPI.ObjID.self),
+            .field("id", String.self),
             .field("slug", String.self),
             .field("summary", String?.self),
             .field("title", String.self),
+            .field("featuredMedia", [FeaturedMedium]?.self),
           ] }
 
-          public var featuredMedia: [FeaturedMedium]? { __data["featuredMedia"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
+          public var id: String { __data["id"] }
           public var slug: String { __data["slug"] }
           public var summary: String? { __data["summary"] }
           public var title: String { __data["title"] }
+          public var featuredMedia: [FeaturedMedium]? { __data["featuredMedia"] }
 
           /// Posts.Edge.Node.FeaturedMedium
           ///
@@ -89,13 +89,13 @@ public class PostsQuery: GraphQLQuery {
             public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Interfaces.MediaUpload }
             public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
+              .field("id", String.self),
               .field("destination", String.self),
-              .field("id", HighForThisAPI.ObjID.self),
               .inlineFragment(AsImageUpload.self),
             ] }
 
+            public var id: String { __data["id"] }
             public var destination: String { __data["destination"] }
-            public var id: HighForThisAPI.ObjID { __data["id"] }
 
             public var asImageUpload: AsImageUpload? { _asInlineFragment() }
 
@@ -113,8 +113,8 @@ public class PostsQuery: GraphQLQuery {
               ] }
 
               public var crops: [Crop] { __data["crops"] }
+              public var id: String { __data["id"] }
               public var destination: String { __data["destination"] }
-              public var id: HighForThisAPI.ObjID { __data["id"] }
 
               /// Posts.Edge.Node.FeaturedMedium.AsImageUpload.Crop
               ///

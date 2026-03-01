@@ -1,4 +1,4 @@
-import type { ShowConnection } from '~/types/graphql';
+import type { ShowConnection } from '#/types/graphql';
 
 import ShowsGrid from './Grid';
 import ShowsList from './List';

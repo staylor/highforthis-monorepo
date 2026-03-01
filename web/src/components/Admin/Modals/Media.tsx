@@ -2,10 +2,10 @@ import type { SyntheticEvent } from 'react';
 import { useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-import Loading from '~/components/Loading';
-import type { SelectedImage, SelectedImageData } from '~/types/admin';
-import type { AudioUpload, ImageUpload, MediaUpload, MediaUploadConnection } from '~/types/graphql';
-import { uploadUrl } from '~/utils/media';
+import Loading from '#/components/Loading';
+import type { SelectedImage, SelectedImageData } from '#/types/admin';
+import type { AudioUpload, ImageUpload, MediaUpload, MediaUploadConnection } from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
 
 import CloseButton from './CloseButton';
 import { modalClass, frameClass, itemTitleClass } from './styles';
@@ -22,7 +22,7 @@ function MediaModal({ type = 'image', onClose, selectAudio, selectImage }: Media
   const basePath = `/modals/media/${type}`;
   const frameRef = useRef(null);
   const { fetcher, connection } = useInfiniteScroll<MediaUpload>(frameRef, basePath);
-  const uploads = connection as MediaUploadConnection;
+  const uploads = connection as unknown as MediaUploadConnection;
 
   const portal = document.getElementById('portal');
   if (!portal) {
@@ -41,6 +41,14 @@ function MediaModal({ type = 'image', onClose, selectAudio, selectImage }: Media
             <div
               className="float-left m-1.5 h-28 w-30 cursor-pointer overflow-hidden bg-zinc-50"
               key={node.id}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  (e.target as HTMLElement).click();
+                }
+              }}
               onClick={(e: SyntheticEvent) => {
                 e.preventDefault();
 

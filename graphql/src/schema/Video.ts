@@ -1,6 +1,6 @@
 const Video = `#graphql      
   type Video {
-    id: ObjID!
+    id: String!
     dataId: String!
     slug: String!
     dataType: String!
@@ -66,13 +66,13 @@ const Video = `#graphql
       year: Int
       search: String
     ): VideoConnection
-    video(id: ObjID, slug: String): Video
+    video(id: String, slug: String): Video
   }
 
   extend type Mutation {
     createVideo(input: CreateVideoInput!): Video
-    updateVideo(id: ObjID!, input: UpdateVideoInput!): Video
-    removeVideo(ids: [ObjID]!): Boolean
+    updateVideo(id: String!, input: UpdateVideoInput!): Video
+    removeVideo(ids: [String]!): Boolean
   }
 `;
 

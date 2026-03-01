@@ -1,6 +1,6 @@
-import type { ImageUpload, SiteSettings } from '~/types/graphql';
-import { uploadUrl } from '~/utils/media';
-import titleTemplate from '~/utils/title';
+import type { ImageUpload, SiteSettings } from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
+import titleTemplate from '#/utils/title';
 
 interface MetaTags {
   title: string;
@@ -11,7 +11,7 @@ interface MetaTags {
 }
 
 export const metaTags = ({ title, description, url, image, siteSettings }: MetaTags) => {
-  const featuredImage = uploadUrl(image.destination, image.fileName);
+  const featuredImage = image ? uploadUrl(image.destination, image.fileName) : undefined;
 
   return [
     { title: titleTemplate({ title, siteSettings }) },

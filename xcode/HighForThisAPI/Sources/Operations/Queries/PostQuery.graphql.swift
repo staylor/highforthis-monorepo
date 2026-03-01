@@ -7,7 +7,7 @@ public class PostQuery: GraphQLQuery {
   public static let operationName: String = "Post"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Post($slug: String!) { post(slug: $slug) { __typename editorState { __typename root { __typename children { __typename ... on ElementNodeType { direction format indent type version } ... on HeadingNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } tag } ... on ImageNode { image { __typename crops { __typename fileName height width } destination id } } ... on VideoNode { video { __typename ...Video_video } } ... on ElementNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } } direction format indent type version } } featuredMedia { __typename destination id ... on ImageUpload { crops { __typename fileName width } } } id slug summary title } }"#,
+      #"query Post($slug: String!) { post(slug: $slug) { __typename id slug summary title editorState { __typename root { __typename direction format indent type version children { __typename ... on ElementNodeType { direction format indent type version } ... on HeadingNode { tag children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on ImageNode { image { __typename id destination crops { __typename fileName height width } } } ... on VideoNode { video { __typename ...Video_video } } ... on ElementNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } } } } featuredMedia { __typename id destination ... on ImageUpload { crops { __typename fileName width } } } } }"#,
       fragments: [TextNodes_linebreakNode.self, TextNodes_textNode.self, Video_video.self]
     ))
 
@@ -40,20 +40,20 @@ public class PostQuery: GraphQLQuery {
       public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Post }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("editorState", EditorState?.self),
-        .field("featuredMedia", [FeaturedMedium]?.self),
-        .field("id", HighForThisAPI.ObjID.self),
+        .field("id", String.self),
         .field("slug", String.self),
         .field("summary", String?.self),
         .field("title", String.self),
+        .field("editorState", EditorState?.self),
+        .field("featuredMedia", [FeaturedMedium]?.self),
       ] }
 
-      public var editorState: EditorState? { __data["editorState"] }
-      public var featuredMedia: [FeaturedMedium]? { __data["featuredMedia"] }
-      public var id: HighForThisAPI.ObjID { __data["id"] }
+      public var id: String { __data["id"] }
       public var slug: String { __data["slug"] }
       public var summary: String? { __data["summary"] }
       public var title: String { __data["title"] }
+      public var editorState: EditorState? { __data["editorState"] }
+      public var featuredMedia: [FeaturedMedium]? { __data["featuredMedia"] }
 
       /// Post.EditorState
       ///
@@ -80,20 +80,20 @@ public class PostQuery: GraphQLQuery {
           public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.ElementNode }
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
-            .field("children", [Child?]?.self),
             .field("direction", GraphQLEnum<HighForThisAPI.ElementDirection>?.self),
             .field("format", Int?.self),
             .field("indent", Int?.self),
             .field("type", String?.self),
             .field("version", Int?.self),
+            .field("children", [Child?]?.self),
           ] }
 
-          public var children: [Child?]? { __data["children"] }
           public var direction: GraphQLEnum<HighForThisAPI.ElementDirection>? { __data["direction"] }
           public var format: Int? { __data["format"] }
           public var indent: Int? { __data["indent"] }
           public var type: String? { __data["type"] }
           public var version: Int? { __data["version"] }
+          public var children: [Child?]? { __data["children"] }
 
           /// Post.EditorState.Root.Child
           ///
@@ -152,12 +152,12 @@ public class PostQuery: GraphQLQuery {
               public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child
               public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.HeadingNode }
               public static var __selections: [ApolloAPI.Selection] { [
-                .field("children", [Child?]?.self),
                 .field("tag", GraphQLEnum<HighForThisAPI.HeadingTag>?.self),
+                .field("children", [Child?]?.self),
               ] }
 
-              public var children: [Child?]? { __data["children"] }
               public var tag: GraphQLEnum<HighForThisAPI.HeadingTag>? { __data["tag"] }
+              public var children: [Child?]? { __data["children"] }
               public var direction: GraphQLEnum<HighForThisAPI.ElementDirection>? { __data["direction"] }
               public var format: Int? { __data["format"] }
               public var indent: Int? { __data["indent"] }
@@ -266,14 +266,14 @@ public class PostQuery: GraphQLQuery {
                 public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.ImageUpload }
                 public static var __selections: [ApolloAPI.Selection] { [
                   .field("__typename", String.self),
-                  .field("crops", [Crop].self),
+                  .field("id", String.self),
                   .field("destination", String.self),
-                  .field("id", HighForThisAPI.ObjID.self),
+                  .field("crops", [Crop].self),
                 ] }
 
-                public var crops: [Crop] { __data["crops"] }
+                public var id: String { __data["id"] }
                 public var destination: String { __data["destination"] }
-                public var id: HighForThisAPI.ObjID { __data["id"] }
+                public var crops: [Crop] { __data["crops"] }
 
                 /// Post.EditorState.Root.Child.AsImageNode.Image.Crop
                 ///
@@ -330,11 +330,11 @@ public class PostQuery: GraphQLQuery {
                   .fragment(Video_video.self),
                 ] }
 
+                public var id: String { __data["id"] }
                 public var dataId: String { __data["dataId"] }
-                public var id: HighForThisAPI.ObjID { __data["id"] }
                 public var slug: String { __data["slug"] }
-                public var thumbnails: [Thumbnail] { __data["thumbnails"] }
                 public var title: String { __data["title"] }
+                public var thumbnails: [Thumbnail] { __data["thumbnails"] }
 
                 public struct Fragments: FragmentContainer {
                   public let __data: DataDict
@@ -452,13 +452,13 @@ public class PostQuery: GraphQLQuery {
         public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Interfaces.MediaUpload }
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
+          .field("id", String.self),
           .field("destination", String.self),
-          .field("id", HighForThisAPI.ObjID.self),
           .inlineFragment(AsImageUpload.self),
         ] }
 
+        public var id: String { __data["id"] }
         public var destination: String { __data["destination"] }
-        public var id: HighForThisAPI.ObjID { __data["id"] }
 
         public var asImageUpload: AsImageUpload? { _asInlineFragment() }
 
@@ -476,8 +476,8 @@ public class PostQuery: GraphQLQuery {
           ] }
 
           public var crops: [Crop] { __data["crops"] }
+          public var id: String { __data["id"] }
           public var destination: String { __data["destination"] }
-          public var id: HighForThisAPI.ObjID { __data["id"] }
 
           /// Post.FeaturedMedium.AsImageUpload.Crop
           ///

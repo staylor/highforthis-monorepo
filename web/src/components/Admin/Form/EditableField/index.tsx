@@ -1,12 +1,19 @@
-import { lazy } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 
-import Date from '~/components/Admin/Form/Date';
-import Input from '~/components/Form/Input';
-import Select from '~/components/Form/Select';
-import Textarea from '~/components/Form/Textarea';
-import type { Field } from '~/types';
+import Date from '#/components/Admin/Form/Date';
+import Input from '#/components/Form/Input';
+import Select from '#/components/Form/Select';
+import Textarea from '#/components/Form/Textarea';
+import type { Field } from '#/types';
 
-const Editor = lazy(() => import('~/components/Editor'));
+const Editor = lazy(() => import('#/components/Editor'));
+
+function ClientOnly({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return children;
+}
 
 interface FieldProps {
   field: Field;
@@ -28,7 +35,25 @@ export default function EditableField({ field, data }: FieldProps) {
   };
 
   if (field.type === 'editor') {
-    return <Editor editorState={value as any} />;
+    return (
+      <ClientOnly>
+        <Suspense
+          fallback={
+            <div className="editor-container relative -left-6">
+              <div className="editor-inner mt-6 min-h-[150px] space-y-3 p-4">
+                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
+                <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
+                <div className="h-4 w-5/6 animate-pulse rounded bg-gray-200" />
+                <div className="h-4 w-2/3 animate-pulse rounded bg-gray-200" />
+                <div className="h-4 w-4/5 animate-pulse rounded bg-gray-200" />
+              </div>
+            </div>
+          }
+        >
+          <Editor editorState={value as any} />
+        </Suspense>
+      </ClientOnly>
+    );
   }
 
   if (field.type === 'hidden') {

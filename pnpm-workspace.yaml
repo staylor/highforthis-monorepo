@@ -4,8 +4,11 @@ packages:
 
 onlyBuiltDependencies:
   - '@apollo/protobufjs'
+  - '@prisma/client'
+  - '@prisma/engines'
   - '@tailwindcss/oxide'
   - bcrypt
   - esbuild
+  - prisma
   - sharp
   - unrs-resolver

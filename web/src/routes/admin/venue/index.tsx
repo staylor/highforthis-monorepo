@@ -2,17 +2,17 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
-import { name, slug, excludeFromSearch, website } from '~/components/Admin/Entity/ListTable';
-import ListTable, { Thumbnail } from '~/components/Admin/ListTable';
-import Search from '~/components/Admin/ListTable/Search';
-import PermanentlyClosed from '~/components/Admin/Venue/PermanentlyClosed';
-import { Heading, HeaderAdd } from '~/components/Admin/styles';
-import Message from '~/components/Form/Message';
-import type { Columns } from '~/types';
-import type { VenuesAdminQuery } from '~/types/graphql';
-import { handleDelete } from '~/utils/action';
-import mutate, { parseFormData } from '~/utils/mutate';
-import query, { addPageOffset, addSearchParam } from '~/utils/query';
+import { name, slug, excludeFromSearch, website } from '#/components/Admin/Entity/ListTable';
+import ListTable, { Thumbnail } from '#/components/Admin/ListTable';
+import Search from '#/components/Admin/ListTable/Search';
+import PermanentlyClosed from '#/components/Admin/Venue/PermanentlyClosed';
+import { Heading, HeaderAdd } from '#/components/Admin/styles';
+import Message from '#/components/Form/Message';
+import type { Columns } from '#/types';
+import type { VenuesAdminQuery } from '#/types/graphql';
+import { handleDelete } from '#/utils/action';
+import mutate, { parseFormData } from '#/utils/mutate';
+import query, { addPageOffset, addSearchParam } from '#/utils/query';
 
 import type { Route } from './+types/index';
 
@@ -130,7 +130,7 @@ const venuesQuery = gql`
 `;
 
 const updateMutation = gql`
-  mutation UpdateVenueExclude($id: ObjID!, $input: UpdateVenueInput!) {
+  mutation UpdateVenueExclude($id: String!, $input: UpdateVenueInput!) {
     updateVenue(id: $id, input: $input) {
       id
     }
@@ -138,7 +138,7 @@ const updateMutation = gql`
 `;
 
 const deleteMutation = gql`
-  mutation DeleteVenue($ids: [ObjID]!) {
+  mutation DeleteVenue($ids: [String]!) {
     removeVenue(ids: $ids)
   }
 `;

@@ -7,12 +7,12 @@ public class PodcastQuery: GraphQLQuery {
   public static let operationName: String = "Podcast"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Podcast($id: ObjID!) { podcast(id: $id) { __typename audio { __typename destination duration fileName id } date description id title } }"#
+      #"query Podcast($id: String!) { podcast(id: $id) { __typename id date description title audio { __typename id destination duration fileName } } }"#
     ))
 
-  public var id: ObjID
+  public var id: String
 
-  public init(id: ObjID) {
+  public init(id: String) {
     self.id = id
   }
 
@@ -39,18 +39,18 @@ public class PodcastQuery: GraphQLQuery {
       public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Podcast }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("audio", Audio?.self),
+        .field("id", String.self),
         .field("date", Double?.self),
         .field("description", String.self),
-        .field("id", HighForThisAPI.ObjID.self),
         .field("title", String.self),
+        .field("audio", Audio?.self),
       ] }
 
-      public var audio: Audio? { __data["audio"] }
+      public var id: String { __data["id"] }
       public var date: Double? { __data["date"] }
       public var description: String { __data["description"] }
-      public var id: HighForThisAPI.ObjID { __data["id"] }
       public var title: String { __data["title"] }
+      public var audio: Audio? { __data["audio"] }
 
       /// Podcast.Audio
       ///
@@ -62,16 +62,16 @@ public class PodcastQuery: GraphQLQuery {
         public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.AudioUpload }
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
+          .field("id", String.self),
           .field("destination", String.self),
           .field("duration", Double?.self),
           .field("fileName", String.self),
-          .field("id", HighForThisAPI.ObjID.self),
         ] }
 
+        public var id: String { __data["id"] }
         public var destination: String { __data["destination"] }
         public var duration: Double? { __data["duration"] }
         public var fileName: String { __data["fileName"] }
-        public var id: HighForThisAPI.ObjID { __data["id"] }
       }
     }
   }

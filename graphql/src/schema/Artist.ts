@@ -1,6 +1,6 @@
 const Artist = `#graphql      
   type Artist {
-    id: ObjID!
+    id: String!
     name: String!
     slug: String!
     description: String
@@ -49,13 +49,13 @@ const Artist = `#graphql
       search: String
       filtered: Boolean
     ): ArtistConnection
-    artist(id: ObjID, slug: String): Artist
+    artist(id: String, slug: String): Artist
   }
 
   extend type Mutation {
     createArtist(input: CreateArtistInput!): Artist
-    updateArtist(id: ObjID!, input: UpdateArtistInput!): Artist
-    removeArtist(ids: [ObjID]!): Boolean
+    updateArtist(id: String!, input: UpdateArtistInput!): Artist
+    removeArtist(ids: [String]!): Boolean
   }
 `;
 

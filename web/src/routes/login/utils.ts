@@ -5,9 +5,9 @@ import {
   type LoaderFunctionArgs,
 } from 'react-router';
 
-import { isAuthenticated } from '~/auth';
-import { sessionStorage } from '~/session';
-import { post } from '~/utils/action';
+import { isAuthenticated } from '#/auth';
+import { sessionStorage } from '#/session';
+import { post } from '#/utils/action';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const session = await sessionStorage.getSession(request.headers.get('cookie'));

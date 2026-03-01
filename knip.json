@@ -1,0 +1,33 @@
+{
+  "workspaces": {
+    ".": {
+      "ignoreDependencies": [
+        "esbuild",
+        "npm-run-all",
+        "react",
+        "react-dom",
+        "rimraf",
+        "tsconfig-paths",
+        "tsx",
+        "eslint-plugin-tailwindcss",
+        "pm2"
+      ]
+    },
+    "graphql": {
+      "entry": ["tools/**/*.ts"],
+      "project": ["src/**/*.ts", "tools/**/*.ts"]
+    },
+    "web": {
+      "project": ["src/**/*.{ts,tsx}"],
+      "ignore": ["src/types/graphql.ts"],
+      "ignoreDependencies": [
+        "i18next-fs-backend",
+        "i18next-http-backend",
+        "postcss",
+        "tailwindcss",
+        "@tailwindcss/forms"
+      ]
+    }
+  },
+  "ignoreBinaries": ["typecheck", "gsutil"]
+}

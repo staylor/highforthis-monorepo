@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import UserForm from '~/components/Admin/User/Form';
-import { handleSubmission } from '~/utils/action';
+import UserForm from '#/components/Admin/User/Form';
+import { handleSubmission } from '#/utils/action';
 
 import type { Route } from './+types/add';
 

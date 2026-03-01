@@ -1,46 +1,27 @@
-import type { Document } from 'mongodb';
-
-import type Media from '~/models/Media';
-import type Video from '~/models/Video';
+import prisma from '#/database';
 
 const resolvers = {
   EditorNode: {
-    __resolveType(node: Document) {
-      if (node.type === 'code') {
-        return 'CodeNode';
-      }
-      if (node.type === 'heading') {
-        return 'HeadingNode';
-      }
-      if (node.type === 'image') {
-        return 'ImageNode';
-      }
-      if (node.type === 'linebreak') {
-        return 'LinebreakNode';
-      }
-      if (node.type === 'list') {
-        return 'ListNode';
-      }
-      if (node.type === 'quote') {
-        return 'QuoteNode';
-      }
-      if (node.type === 'text') {
-        return 'TextNode';
-      }
-      if (node.type === 'video') {
-        return 'VideoNode';
-      }
+    __resolveType(node: any) {
+      if (node.type === 'code') return 'CodeNode';
+      if (node.type === 'heading') return 'HeadingNode';
+      if (node.type === 'image') return 'ImageNode';
+      if (node.type === 'linebreak') return 'LinebreakNode';
+      if (node.type === 'list') return 'ListNode';
+      if (node.type === 'quote') return 'QuoteNode';
+      if (node.type === 'text') return 'TextNode';
+      if (node.type === 'video') return 'VideoNode';
       return 'ElementNode';
     },
   },
   ImageNode: {
-    image(data: Document, _: unknown, { Media }: { Media: Media }) {
-      return Media.findOneById(data.imageId);
+    image(data: any) {
+      return prisma.mediaUpload.findUnique({ where: { id: data.imageId } });
     },
   },
   VideoNode: {
-    video(data: Document, _: unknown, { Video }: { Video: Video }) {
-      return Video.findOneById(data.videoId);
+    video(data: any) {
+      return prisma.video.findUnique({ where: { id: data.videoId } });
     },
   },
 };

@@ -3,12 +3,12 @@ import type { HtmlHTMLAttributes, HTMLAttributes, PropsWithChildren } from 'reac
 import { useTranslation } from 'react-i18next';
 import { useMatches } from 'react-router';
 
-import Link from '~/components/Link';
-import Navigation from '~/components/Nav';
-import Sidebar from '~/components/Sidebar';
-import useSSE from '~/hooks/useSSE';
-import type { ShowConnection } from '~/types/graphql';
-import { useRootData } from '~/utils/rootData';
+import Link from '#/components/Link';
+import Navigation from '#/components/Nav';
+import Sidebar from '#/components/Sidebar';
+import useSSE from '#/hooks/useSSE';
+import type { ShowConnection } from '#/types/graphql';
+import { useRootData } from '#/utils/rootData';
 
 import DarkMode from './DarkMode';
 import SocialIcons from './SocialIcons';
@@ -38,7 +38,7 @@ export const Body = (props: HTMLAttributes<HTMLBodyElement>) => (
   <body {...props} className="font-body h-full" />
 );
 
-export const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       'mx-auto max-w-screen-xl bg-white p-6 dark:bg-black',
@@ -49,7 +49,7 @@ export const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>)
   />
 );
 
-export const Layout = ({ children }: PropsWithChildren) => {
+const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation();
   const { siteSettings, shows } = useRootData();
 

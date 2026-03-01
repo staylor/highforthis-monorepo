@@ -50,7 +50,7 @@ type Artist {
   description: String
   excludeFromSearch: Boolean
   featuredMedia: [MediaUpload!]
-  id: ObjID!
+  id: String!
   name: String!
   slug: String!
   website: String
@@ -77,7 +77,7 @@ type AudioUpload implements MediaUpload {
   fileName: String!
   fileSize: Int!
   genre: [String]
-  id: ObjID!
+  id: String!
   images: [ImageUploadCrop]
   mimeType: String!
   originalName: String!
@@ -106,10 +106,10 @@ input CreateArtistInput {
 }
 
 input CreatePodcastInput {
-  audio: ObjID
+  audio: String
   date: Float
   description: String
-  image: ObjID
+  image: String
   title: String!
 }
 
@@ -124,13 +124,13 @@ input CreatePostInput {
 }
 
 input CreateShowInput {
-  artists: [ObjID!]!
+  artists: [String!]!
   attended: Boolean
   date: Float!
   notes: String
   title: String
   url: String
-  venue: ObjID!
+  venue: String!
 }
 
 input CreateUserInput {
@@ -243,7 +243,7 @@ interface ElementNodeType implements LexicalNode {
 }
 
 input EntityArg {
-  id: ObjID
+  id: String
   slug: String
 }
 
@@ -252,7 +252,7 @@ type FileUpload implements MediaUpload {
   destination: String!
   fileName: String!
   fileSize: Int!
-  id: ObjID!
+  id: String!
   mimeType: String!
   originalName: String!
   title: String
@@ -297,7 +297,7 @@ type ImageUpload implements MediaUpload {
   fileName: String!
   fileSize: Int!
   height: Int
-  id: ObjID!
+  id: String!
   mimeType: String!
   originalName: String!
   title: String
@@ -354,7 +354,7 @@ interface MediaUpload {
   destination: String!
   fileName: String!
   fileSize: Int!
-  id: ObjID!
+  id: String!
   mimeType: String!
   originalName: String!
   title: String
@@ -382,30 +382,27 @@ type Mutation {
   createUser(input: CreateUserInput!): User
   createVenue(input: CreateVenueInput!): Venue
   createVideo(input: CreateVideoInput!): Video
-  removeArtist(ids: [ObjID]!): Boolean
-  removeMediaUpload(ids: [ObjID]!): Boolean
-  removePodcast(ids: [ObjID]!): Boolean
-  removePost(ids: [ObjID]!): Boolean
-  removeShow(ids: [ObjID]!): Boolean
-  removeUser(ids: [ObjID]!): Boolean
-  removeVenue(ids: [ObjID]!): Boolean
-  removeVideo(ids: [ObjID]!): Boolean
-  updateArtist(id: ObjID!, input: UpdateArtistInput!): Artist
+  removeArtist(ids: [String]!): Boolean
+  removeMediaUpload(ids: [String]!): Boolean
+  removePodcast(ids: [String]!): Boolean
+  removePost(ids: [String]!): Boolean
+  removeShow(ids: [String]!): Boolean
+  removeUser(ids: [String]!): Boolean
+  removeVenue(ids: [String]!): Boolean
+  removeVideo(ids: [String]!): Boolean
+  updateArtist(id: String!, input: UpdateArtistInput!): Artist
   updateDashboardSettings(id: String!, input: DashboardSettingsInput!): DashboardSettings
   updateMediaSettings(id: String!, input: MediaSettingsInput!): MediaSettings
-  updateMediaUpload(id: ObjID!, input: UpdateMediaUploadInput!): MediaUpload
-  updatePodcast(id: ObjID!, input: UpdatePodcastInput!): Podcast
+  updateMediaUpload(id: String!, input: UpdateMediaUploadInput!): MediaUpload
+  updatePodcast(id: String!, input: UpdatePodcastInput!): Podcast
   updatePodcastSettings(id: String!, input: PodcastSettingsInput!): PodcastSettings
-  updatePost(id: ObjID!, input: UpdatePostInput!): Post
-  updateShow(id: ObjID!, input: UpdateShowInput!): Show
+  updatePost(id: String!, input: UpdatePostInput!): Post
+  updateShow(id: String!, input: UpdateShowInput!): Show
   updateSiteSettings(id: String!, input: SiteSettingsInput!): SiteSettings
-  updateUser(id: ObjID!, input: UpdateUserInput!): User
-  updateVenue(id: ObjID!, input: UpdateVenueInput!): Venue
-  updateVideo(id: ObjID!, input: UpdateVideoInput!): Video
+  updateUser(id: String!, input: UpdateUserInput!): User
+  updateVenue(id: String!, input: UpdateVenueInput!): Venue
+  updateVideo(id: String!, input: UpdateVideoInput!): Video
 }
-
-"""Id representation, based on Mongo Object Ids"""
-scalar ObjID
 
 type PageInfo {
   endCursor: String
@@ -418,7 +415,7 @@ type Podcast {
   audio: AudioUpload
   date: Float
   description: String!
-  id: ObjID!
+  id: String!
   image: ImageUpload
   title: String!
 }
@@ -463,7 +460,7 @@ input PodcastSettingsInput {
   explicit: String
   feedLink: String
   generator: String
-  image: ObjID
+  image: String
   itunesEmail: String
   itunesName: String
   language: String
@@ -477,7 +474,7 @@ type Post {
   date: Float
   editorState: EditorState
   featuredMedia: [MediaUpload!]
-  id: ObjID!
+  id: String!
   slug: String!
   status: PostStatus
   summary: String
@@ -502,26 +499,26 @@ enum PostStatus {
 
 type Query {
   apiKeys: APIKeys
-  artist(id: ObjID, slug: String): Artist
+  artist(id: String, slug: String): Artist
   artists(after: String, before: String, filtered: Boolean, first: Int, last: Int, search: String): ArtistConnection
   dashboardSettings: DashboardSettings!
-  media(id: ObjID): MediaUpload
+  media(id: String): MediaUpload
   mediaSettings: MediaSettings!
-  podcast(id: ObjID, slug: String): Podcast
+  podcast(id: String, slug: String): Podcast
   podcastSettings: PodcastSettings!
   podcasts(after: String, before: String, first: Int, last: Int, order: PodcastOrder, search: String): PodcastConnection
-  post(id: ObjID, slug: String): Post
+  post(id: String, slug: String): Post
   posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus, year: Int): PostConnection
-  show(id: ObjID, lastAdded: Boolean, slug: String): Show
+  show(id: String, lastAdded: Boolean, slug: String): Show
   showStats(entity: ShowEntityType!): [ShowStat!]!
   shows(after: String, artist: EntityArg, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, venue: EntityArg, year: Int): ShowConnection
   siteSettings: SiteSettings!
   uploads(after: String, before: String, first: Int, last: Int, mimeType: String, search: String, type: String): MediaUploadConnection
-  user(id: ObjID!): User
+  user(id: String!): User
   users(after: String, before: String, first: Int, last: Int, search: String): UserConnection
-  venue(id: ObjID, slug: String): Venue
+  venue(id: String, slug: String): Venue
   venues(after: String, before: String, filtered: Boolean, first: Int, last: Int, search: String): VenueConnection
-  video(id: ObjID, slug: String): Video
+  video(id: String, slug: String): Video
   videos(after: String, before: String, first: Int, last: Int, search: String, year: Int): VideoConnection
 }
 
@@ -547,7 +544,7 @@ type Show {
   artists: [Artist!]!
   attended: Boolean
   date: Float!
-  id: ObjID!
+  id: String!
   notes: String
   title: String
   url: String
@@ -638,10 +635,10 @@ input UpdateMediaUploadInput {
 }
 
 input UpdatePodcastInput {
-  audio: ObjID
+  audio: String
   date: Float
   description: String
-  image: ObjID
+  image: String
   title: String!
 }
 
@@ -656,13 +653,13 @@ input UpdatePostInput {
 }
 
 input UpdateShowInput {
-  artists: [ObjID]
+  artists: [String]
   attended: Boolean
   date: Float
   notes: String
   title: String
   url: String
-  venue: ObjID
+  venue: String
 }
 
 input UpdateUserInput {
@@ -704,7 +701,7 @@ input UpdateVideoInput {
 type User {
   bio: String
   email: String!
-  id: ObjID!
+  id: String!
   name: String
   roles: [String]
 }
@@ -728,7 +725,7 @@ type Venue {
   description: String
   excludeFromSearch: Boolean
   featuredMedia: [MediaUpload!]
-  id: ObjID!
+  id: String!
   name: String!
   permanentlyClosed: Boolean
   postalCode: String
@@ -764,7 +761,7 @@ type Video {
   dataId: String!
   dataPlaylistId: String!
   dataType: String!
-  id: ObjID!
+  id: String!
   position: Int!
   publishedAt: Float!
   publishedISO: String!
@@ -810,7 +807,7 @@ type VideoUpload implements MediaUpload {
   fileName: String!
   fileSize: Int!
   height: Int
-  id: ObjID!
+  id: String!
   mimeType: String!
   originalName: String!
   title: String

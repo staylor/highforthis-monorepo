@@ -43,11 +43,11 @@ public class VideoQuery: GraphQLQuery {
         .fragment(Video_video.self),
       ] }
 
+      public var id: String { __data["id"] }
       public var dataId: String { __data["dataId"] }
-      public var id: HighForThisAPI.ObjID { __data["id"] }
       public var slug: String { __data["slug"] }
-      public var thumbnails: [Thumbnail] { __data["thumbnails"] }
       public var title: String { __data["title"] }
+      public var thumbnails: [Thumbnail] { __data["thumbnails"] }
 
       public struct Fragments: FragmentContainer {
         public let __data: DataDict

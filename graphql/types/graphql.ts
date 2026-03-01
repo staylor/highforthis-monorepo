@@ -16,7 +16,6 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
-  ObjID: { input: any; output: any };
 };
 
 export type ApiKeys = {
@@ -68,7 +67,7 @@ export type Artist = {
   description?: Maybe<Scalars['String']['output']>;
   excludeFromSearch?: Maybe<Scalars['Boolean']['output']>;
   featuredMedia?: Maybe<Array<MediaUpload>>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   name: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   website?: Maybe<Scalars['String']['output']>;
@@ -98,7 +97,7 @@ export type AudioUpload = MediaUpload & {
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
   genre?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   images?: Maybe<Array<Maybe<ImageUploadCrop>>>;
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
@@ -129,10 +128,10 @@ export type CreateArtistInput = {
 };
 
 export type CreatePodcastInput = {
-  audio?: InputMaybe<Scalars['ObjID']['input']>;
+  audio?: InputMaybe<Scalars['String']['input']>;
   date?: InputMaybe<Scalars['Float']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  image?: InputMaybe<Scalars['ObjID']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
 
@@ -147,13 +146,13 @@ export type CreatePostInput = {
 };
 
 export type CreateShowInput = {
-  artists: Array<Scalars['ObjID']['input']>;
+  artists: Array<Scalars['String']['input']>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
   date: Scalars['Float']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
-  venue: Scalars['ObjID']['input'];
+  venue: Scalars['String']['input'];
 };
 
 export type CreateUserInput = {
@@ -278,7 +277,7 @@ export type ElementNodeType = {
 };
 
 export type EntityArg = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -288,7 +287,7 @@ export type FileUpload = MediaUpload & {
   destination: Scalars['String']['output'];
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
   title?: Maybe<Scalars['String']['output']>;
@@ -338,7 +337,7 @@ export type ImageUpload = MediaUpload & {
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
   height?: Maybe<Scalars['Int']['output']>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
   title?: Maybe<Scalars['String']['output']>;
@@ -399,7 +398,7 @@ export type MediaUpload = {
   destination: Scalars['String']['output'];
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
   title?: Maybe<Scalars['String']['output']>;
@@ -481,39 +480,39 @@ export type MutationCreateVideoArgs = {
 };
 
 export type MutationRemoveArtistArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 export type MutationRemoveMediaUploadArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 export type MutationRemovePodcastArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 export type MutationRemovePostArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 export type MutationRemoveShowArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 export type MutationRemoveUserArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 export type MutationRemoveVenueArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 export type MutationRemoveVideoArgs = {
-  ids: Array<InputMaybe<Scalars['ObjID']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']['input']>>;
 };
 
 export type MutationUpdateArtistArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateArtistInput;
 };
 
@@ -528,12 +527,12 @@ export type MutationUpdateMediaSettingsArgs = {
 };
 
 export type MutationUpdateMediaUploadArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateMediaUploadInput;
 };
 
 export type MutationUpdatePodcastArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdatePodcastInput;
 };
 
@@ -543,12 +542,12 @@ export type MutationUpdatePodcastSettingsArgs = {
 };
 
 export type MutationUpdatePostArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdatePostInput;
 };
 
 export type MutationUpdateShowArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateShowInput;
 };
 
@@ -558,17 +557,17 @@ export type MutationUpdateSiteSettingsArgs = {
 };
 
 export type MutationUpdateUserArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateUserInput;
 };
 
 export type MutationUpdateVenueArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateVenueInput;
 };
 
 export type MutationUpdateVideoArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
   input: UpdateVideoInput;
 };
 
@@ -585,7 +584,7 @@ export type Podcast = {
   audio?: Maybe<AudioUpload>;
   date?: Maybe<Scalars['Float']['output']>;
   description: Scalars['String']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   image?: Maybe<ImageUpload>;
   title: Scalars['String']['output'];
 };
@@ -633,7 +632,7 @@ export type PodcastSettingsInput = {
   explicit?: InputMaybe<Scalars['String']['input']>;
   feedLink?: InputMaybe<Scalars['String']['input']>;
   generator?: InputMaybe<Scalars['String']['input']>;
-  image?: InputMaybe<Scalars['ObjID']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   itunesEmail?: InputMaybe<Scalars['String']['input']>;
   itunesName?: InputMaybe<Scalars['String']['input']>;
   language?: InputMaybe<Scalars['String']['input']>;
@@ -648,7 +647,7 @@ export type Post = {
   date?: Maybe<Scalars['Float']['output']>;
   editorState?: Maybe<EditorState>;
   featuredMedia?: Maybe<Array<MediaUpload>>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   status?: Maybe<PostStatus>;
   summary?: Maybe<Scalars['String']['output']>;
@@ -700,7 +699,7 @@ export type Query = {
 };
 
 export type QueryArtistArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -714,11 +713,11 @@ export type QueryArtistsArgs = {
 };
 
 export type QueryMediaArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryPodcastArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -732,7 +731,7 @@ export type QueryPodcastsArgs = {
 };
 
 export type QueryPostArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -747,7 +746,7 @@ export type QueryPostsArgs = {
 };
 
 export type QueryShowArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   lastAdded?: InputMaybe<Scalars['Boolean']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
@@ -782,7 +781,7 @@ export type QueryUploadsArgs = {
 };
 
 export type QueryUserArgs = {
-  id: Scalars['ObjID']['input'];
+  id: Scalars['String']['input'];
 };
 
 export type QueryUsersArgs = {
@@ -794,7 +793,7 @@ export type QueryUsersArgs = {
 };
 
 export type QueryVenueArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -808,7 +807,7 @@ export type QueryVenuesArgs = {
 };
 
 export type QueryVideoArgs = {
-  id?: InputMaybe<Scalars['ObjID']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -846,7 +845,7 @@ export type Show = {
   artists: Array<Artist>;
   attended?: Maybe<Scalars['Boolean']['output']>;
   date: Scalars['Float']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
@@ -942,10 +941,10 @@ export type UpdateMediaUploadInput = {
 };
 
 export type UpdatePodcastInput = {
-  audio?: InputMaybe<Scalars['ObjID']['input']>;
+  audio?: InputMaybe<Scalars['String']['input']>;
   date?: InputMaybe<Scalars['Float']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  image?: InputMaybe<Scalars['ObjID']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
 
@@ -960,13 +959,13 @@ export type UpdatePostInput = {
 };
 
 export type UpdateShowInput = {
-  artists?: InputMaybe<Array<InputMaybe<Scalars['ObjID']['input']>>>;
+  artists?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
   date?: InputMaybe<Scalars['Float']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
-  venue?: InputMaybe<Scalars['ObjID']['input']>;
+  venue?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -1009,7 +1008,7 @@ export type User = {
   __typename?: 'User';
   bio?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   name?: Maybe<Scalars['String']['output']>;
   roles?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
@@ -1036,7 +1035,7 @@ export type Venue = {
   description?: Maybe<Scalars['String']['output']>;
   excludeFromSearch?: Maybe<Scalars['Boolean']['output']>;
   featuredMedia?: Maybe<Array<MediaUpload>>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   name: Scalars['String']['output'];
   permanentlyClosed?: Maybe<Scalars['Boolean']['output']>;
   postalCode?: Maybe<Scalars['String']['output']>;
@@ -1076,7 +1075,7 @@ export type Video = {
   dataId: Scalars['String']['output'];
   dataPlaylistId: Scalars['String']['output'];
   dataType: Scalars['String']['output'];
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   position: Scalars['Int']['output'];
   publishedAt: Scalars['Float']['output'];
   publishedISO: Scalars['String']['output'];
@@ -1128,7 +1127,7 @@ export type VideoUpload = MediaUpload & {
   fileName: Scalars['String']['output'];
   fileSize: Scalars['Int']['output'];
   height?: Maybe<Scalars['Int']['output']>;
-  id: Scalars['ObjID']['output'];
+  id: Scalars['String']['output'];
   mimeType: Scalars['String']['output'];
   originalName: Scalars['String']['output'];
   title?: Maybe<Scalars['String']['output']>;

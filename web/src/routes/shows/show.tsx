@@ -2,12 +2,12 @@ import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import Artwork from '~/components/Artist/Artwork';
-import { Heading1, Heading2 } from '~/components/Heading';
-import Link from '~/components/Link';
-import { formatDate } from '~/components/Shows/utils';
-import type { ShowQuery } from '~/types/graphql';
-import query from '~/utils/query';
+import Artwork from '#/components/Artist/Artwork';
+import { Heading1, Heading2 } from '#/components/Heading';
+import Link from '#/components/Link';
+import { formatDate } from '#/components/Shows/utils';
+import type { ShowQuery } from '#/types/graphql';
+import query from '#/utils/query';
 
 import type { Route } from './+types/show';
 
@@ -75,7 +75,7 @@ export default function ShowRoute({ loaderData }: Route.ComponentProps) {
 }
 
 const showQuery = gql`
-  query Show($id: ObjID) {
+  query Show($id: String) {
     show(id: $id) {
       artists {
         appleMusic {

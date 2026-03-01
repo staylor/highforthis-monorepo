@@ -9,21 +9,21 @@ import {
   $createParagraphNode,
   $getSelection,
   $getNearestNodeFromDOMNode,
+  $isParagraphNode,
   $isRangeSelection,
-  $setSelection,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
 import type { LexicalNode, RangeSelection } from 'lexical';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 
-import MediaModal from '~/components/Admin/Modals/Media';
-import VideoModal from '~/components/Admin/Modals/Video';
-import Controls from '~/components/Editor/Controls';
-import BlockButton from '~/components/Editor/Controls/BlockButton';
-import StyleButton from '~/components/Editor/Controls/StyleButton';
-import Toolbar from '~/components/Editor/Toolbar';
-import type { ImageUpload, Video } from '~/types/graphql';
+import MediaModal from '#/components/Admin/Modals/Media';
+import VideoModal from '#/components/Admin/Modals/Video';
+import Controls from '#/components/Editor/Controls';
+import BlockButton from '#/components/Editor/Controls/BlockButton';
+import StyleButton from '#/components/Editor/Controls/StyleButton';
+import Toolbar from '#/components/Editor/Toolbar';
+import type { ImageUpload, Video } from '#/types/graphql';
 
 import { $createImageNode } from './ImageNode';
 import { $createVideoNode } from './VideoNode';
@@ -37,7 +37,7 @@ interface BlockType {
   onToggle?: () => void;
 }
 
-const BLOCK_OFFSET = 7;
+const BLOCK_OFFSET = 0;
 const BLOCK_TOOLBAR_OFFSET = 40;
 
 const LowPriority = 1;
@@ -49,32 +49,14 @@ const reducer = (_prev: Modals, action: Modals) => ({ ...allModals(), ...action 
 
 export default function BlockToolbarPlugin() {
   const [activeStyle, setActiveStyle] = useState('');
-  const [toolbarActive, setToolbarActive] = useState(false);
   const [modals, setModals] = useReducer(reducer, allModals());
-  const selectionRef = useRef<RangeSelection>(null);
+  const toolbarOpenRef = useRef(false);
   const blockButtonRef = useRef(null);
   const blockToolbarRef = useRef(null);
+  // Track whether the button is currently shown (cursor on empty line)
+  const buttonVisibleRef = useRef(false);
+  const [buttonActive, setButtonActive] = useState(false);
   const [editor] = useLexicalComposerContext();
-
-  const saveSelection = useCallback(() => {
-    editor.getEditorState().read(() => {
-      selectionRef.current = $getSelection()?.clone() as RangeSelection;
-    });
-  }, [editor]);
-
-  const restoreSelection = useCallback(
-    (cb?: (selection: RangeSelection) => void) => {
-      editor.update(() => {
-        if (selectionRef.current) {
-          $setSelection(selectionRef.current);
-          if (cb) {
-            cb(selectionRef.current);
-          }
-        }
-      });
-    },
-    [editor]
-  );
 
   const BLOCK_TYPES: BlockType[] = useMemo(
     () => [
@@ -85,7 +67,6 @@ export default function BlockToolbarPlugin() {
         style: 'atomic-image',
         className: 'dashicons dashicons-format-image',
         onToggle: () => {
-          saveSelection();
           setModals({ media: true });
         },
       },
@@ -95,7 +76,6 @@ export default function BlockToolbarPlugin() {
         style: 'video',
         className: 'dashicons dashicons-format-video',
         onToggle: () => {
-          saveSelection();
           setModals({ video: true });
         },
       },
@@ -124,7 +104,7 @@ export default function BlockToolbarPlugin() {
         className: 'dashicons dashicons-editor-code',
       },
     ],
-    [setModals, saveSelection]
+    [setModals]
   );
   const ALL_TYPES = useMemo(
     () => BLOCK_TYPES.map((type) => type.nodeType).filter(Boolean),
@@ -162,17 +142,19 @@ export default function BlockToolbarPlugin() {
   }, [editor]);
 
   const hideToolbar = useCallback(() => {
+    toolbarOpenRef.current = false;
     setStyle(blockToolbarRef, {
-      transform: 'scale(0)',
+      scale: '0',
     });
   }, []);
 
   const showToolbar = useCallback(() => {
     const offset = getTopOffset();
-    if (offset) {
+    if (offset !== undefined) {
+      toolbarOpenRef.current = true;
       setStyle(blockToolbarRef, {
         top: `${offset - BLOCK_TOOLBAR_OFFSET}px`,
-        transform: 'scale(1)',
+        scale: '1',
       });
     } else {
       hideToolbar();
@@ -180,78 +162,91 @@ export default function BlockToolbarPlugin() {
   }, [getTopOffset, hideToolbar]);
 
   const hideButton = useCallback(() => {
+    buttonVisibleRef.current = false;
     setStyle(blockButtonRef, {
-      transform: 'scale(0)',
+      scale: '0',
     });
-    setToolbarActive(false);
+    if (toolbarOpenRef.current) {
+      hideToolbar();
+    }
+    setButtonActive(false);
     setActiveStyle('');
-  }, [setToolbarActive, setActiveStyle]);
+  }, [hideToolbar]);
 
   const showButton = useCallback(() => {
+    buttonVisibleRef.current = true;
     const topOffset = getTopOffset();
-    if (topOffset) {
+    if (topOffset !== undefined) {
       setStyle(blockButtonRef, {
         top: `${topOffset}px`,
-        transform: 'scale(1)',
+        scale: '1',
       });
     } else {
       hideButton();
     }
   }, [getTopOffset, hideButton]);
 
-  const $updateButton = useCallback(() => {
-    const selection = $getSelection() as RangeSelection;
-    if (!selection) {
-      hideButton();
-      return;
-    }
-
-    const range = selection as RangeSelection;
-    const anchorOffset = range.anchor.offset;
-    const focusOffset = range.focus.offset;
-
-    if (anchorOffset === 0 && focusOffset === 0) {
-      showButton();
-
-      editor.update(() => {
-        const selectedNode = getNodeFromSelection();
-        if (!selectedNode) {
-          return;
-        }
-
-        const node = $getNearestNodeFromDOMNode(selectedNode) as LexicalNode;
-        if (!node) {
-          return;
-        }
-        if (ALL_TYPES.includes(node.__type)) {
-          const style = getStyleFromNode(node) as string;
-
-          setToolbarActive(true);
-          setActiveStyle(style);
-        } else {
-          setToolbarActive(false);
-          setActiveStyle('');
-        }
-      });
-    } else {
-      hideButton();
-    }
-  }, [editor, showButton, hideButton, ALL_TYPES]);
-
-  useEffect(() => {
-    if (!blockToolbarRef.current) {
-      return;
-    }
-
-    if (toolbarActive) {
-      showToolbar();
-    } else {
+  const toggleToolbar = useCallback(() => {
+    if (toolbarOpenRef.current) {
       hideToolbar();
+      setButtonActive(false);
+    } else {
+      showToolbar();
+      setButtonActive(true);
     }
-  }, [toolbarActive, blockToolbarRef, showToolbar, hideToolbar]);
+  }, [showToolbar, hideToolbar]);
+
+  const showButtonRef = useRef(showButton);
+  showButtonRef.current = showButton;
+  const hideButtonRef = useRef(hideButton);
+  hideButtonRef.current = hideButton;
+  const showToolbarRef = useRef(showToolbar);
+  showToolbarRef.current = showToolbar;
+  const hideToolbarRef = useRef(hideToolbar);
+  hideToolbarRef.current = hideToolbar;
 
   useEffect(() => {
-    mergeRegister(
+    const $updateButton = () => {
+      const selection = $getSelection() as RangeSelection;
+      if (!selection) {
+        hideButtonRef.current();
+        return;
+      }
+
+      const range = selection as RangeSelection;
+      const anchorOffset = range.anchor.offset;
+      const focusOffset = range.focus.offset;
+
+      if (anchorOffset === 0 && focusOffset === 0) {
+        showButtonRef.current();
+
+        editor.update(() => {
+          const selectedNode = getNodeFromSelection();
+          if (!selectedNode) {
+            return;
+          }
+
+          const node = $getNearestNodeFromDOMNode(selectedNode) as LexicalNode;
+          if (!node) {
+            return;
+          }
+          if (ALL_TYPES.includes(node.__type)) {
+            const style = getStyleFromNode(node) as string;
+            setButtonActive(true);
+            showToolbarRef.current();
+            setActiveStyle(style);
+          } else {
+            setButtonActive(false);
+            hideToolbarRef.current();
+            setActiveStyle('');
+          }
+        });
+      } else {
+        hideButtonRef.current();
+      }
+    };
+
+    const unregister = mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           $updateButton();
@@ -266,7 +261,8 @@ export default function BlockToolbarPlugin() {
         LowPriority
       )
     );
-  }, [editor, $updateButton]);
+    return unregister;
+  }, [editor, ALL_TYPES]);
 
   const onToggle = useCallback(
     (type: BlockType) => {
@@ -310,13 +306,7 @@ export default function BlockToolbarPlugin() {
 
   return (
     <>
-      <BlockButton
-        ref={blockButtonRef as any}
-        active={toolbarActive}
-        onMouseDown={() => {
-          setToolbarActive(!toolbarActive);
-        }}
-      />
+      <BlockButton ref={blockButtonRef as any} active={buttonActive} onMouseDown={toggleToolbar} />
       <Toolbar ref={blockToolbarRef} className="-left-7 after:right-auto after:left-1">
         <Controls>
           {BLOCK_TYPES.map((type) => (
@@ -340,15 +330,30 @@ export default function BlockToolbarPlugin() {
       {modals.media && (
         <MediaModal
           selectImage={({ image, size }) => {
-            restoreSelection(() => {
+            hideToolbar();
+            hideButton();
+            editor.update(() => {
               const node = $createImageNode(image as ImageUpload, size);
-              $insertNodeToNearestRoot(node);
+              const selection = $getSelection();
+              if ($isRangeSelection(selection)) {
+                const anchor = selection.anchor.getNode();
+                const parent = anchor.getTopLevelElementOrThrow();
+                if ($isParagraphNode(parent) && parent.getTextContentSize() === 0) {
+                  parent.replace(node);
+                } else {
+                  $insertNodeToNearestRoot(node);
+                }
+              } else {
+                $insertNodeToNearestRoot(node);
+              }
+              const paragraph = $createParagraphNode();
+              node.insertAfter(paragraph);
+              paragraph.select();
             });
           }}
           selectAudio={() => {}}
           onClose={(e) => {
             e.preventDefault();
-            restoreSelection();
             setModals({});
           }}
         />
@@ -356,14 +361,29 @@ export default function BlockToolbarPlugin() {
       {modals.video && (
         <VideoModal
           selectVideo={({ video }) => {
-            restoreSelection(() => {
+            hideToolbar();
+            hideButton();
+            editor.update(() => {
               const node = $createVideoNode(video as Video);
-              $insertNodeToNearestRoot(node);
+              const selection = $getSelection();
+              if ($isRangeSelection(selection)) {
+                const anchor = selection.anchor.getNode();
+                const parent = anchor.getTopLevelElementOrThrow();
+                if ($isParagraphNode(parent) && parent.getTextContentSize() === 0) {
+                  parent.replace(node);
+                } else {
+                  $insertNodeToNearestRoot(node);
+                }
+              } else {
+                $insertNodeToNearestRoot(node);
+              }
+              const paragraph = $createParagraphNode();
+              node.insertAfter(paragraph);
+              paragraph.select();
             });
           }}
           onClose={(e: SyntheticEvent) => {
             e.preventDefault();
-            restoreSelection();
             setModals({});
           }}
         />

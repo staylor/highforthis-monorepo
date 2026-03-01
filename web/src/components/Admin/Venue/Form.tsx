@@ -2,13 +2,13 @@ import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Form from '~/components/Admin/Form';
-import FeaturedMedia from '~/components/Admin/Form/FeaturedMedia';
-import { HeaderAdd, Heading } from '~/components/Admin/styles';
-import Checkbox from '~/components/Form/Checkbox';
-import Input from '~/components/Form/Input';
-import Message from '~/components/Form/Message';
-import type { Fields } from '~/types';
+import Form from '#/components/Admin/Form';
+import FeaturedMedia from '#/components/Admin/Form/FeaturedMedia';
+import { HeaderAdd, Heading } from '#/components/Admin/styles';
+import Checkbox from '#/components/Form/Checkbox';
+import Input from '#/components/Form/Input';
+import Message from '#/components/Form/Message';
+import type { Fields } from '#/types';
 
 import {
   name,
