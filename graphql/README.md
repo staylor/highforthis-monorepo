@@ -7,7 +7,7 @@ GraphQL API server for High For This, built with Apollo Server, Express, and Pri
 - **[Apollo Server](https://www.apollographql.com/docs/apollo-server/)** — GraphQL server
 - **[Express](https://expressjs.com/)** — HTTP server
 - **[Prisma](https://www.prisma.io/)** — ORM with PostgreSQL adapter (`@prisma/adapter-pg`)
-- **[Passport](http://www.passportjs.org/)** — JWT authentication
+- **JWT** — Authentication via `jsonwebtoken` and `bcryptjs`
 
 ## Setup
 
@@ -136,8 +136,7 @@ This runs the following steps in sequence:
 | `pnpm db:migrate` | Run Prisma migrations |
 | `pnpm db:push` | Push schema to database |
 | `pnpm db:studio` | Open Prisma Studio |
-| `pnpm db:migrate-from-mongo` | Import data from MongoDB BSON dump into PostgreSQL |
-| `pnpm db:fix-editor-state` | Fix MongoDB extended JSON in post editor state |
+| `pnpm db:migrate-from-mongo` | Import data from MongoDB dump into PostgreSQL |
 | `pnpm typecheck` | Type-check with TypeScript |
 
 ## Data Migration (MongoDB → PostgreSQL)
@@ -146,8 +145,8 @@ The `dump/` directory contains data for migrating from the original MongoDB data
 
 ```
 dump/
-├── highforthis-prod/   # Raw BSON files from mongodump
-├── json/               # JSONL files converted from BSON (used by import script)
+├── highforthis-prod/      # Raw BSON files from mongodump
+├── json/                  # JSONL files converted from BSON (used by import script)
 └── highforthis-seed.dump  # pg_dump for seeding a fresh PostgreSQL database
 ```
 
@@ -163,7 +162,7 @@ done
 # 2. Reset database and push schema
 pnpm db:push
 
-# 3. Run migration (includes editor state fix)
+# 3. Run migration (includes editor state fix and content body backfill)
 pnpm db:migrate-from-mongo
 ```
 
@@ -229,19 +228,20 @@ psql -U highforthis -d highforthis -c "SELECT count(*) FROM \"Artist\";"
 ```
 src/
 ├── index.ts          # Express + Apollo Server entry point
-├── authentication.ts # Passport JWT setup
+├── authentication.ts # JWT authentication middleware
 ├── database/         # Prisma client
 ├── models/           # Data access layer
 ├── resolvers/        # GraphQL resolvers
 ├── schema/           # GraphQL type definitions
 ├── uploads/          # Media upload handling
+├── utils/            # Utility functions
 └── jobs/             # Scheduled tasks (cron)
 tools/
 ├── migrate-from-mongo.ts  # MongoDB → PostgreSQL migration
-├── fix-editor-state.ts    # Fix editor state JSON references
 ├── youtube.ts             # YouTube data tools
 ├── shows.ts               # Show data tools
 └── addresses.ts           # Venue address tools
 prisma/
-└── schema.prisma          # Database schema
+├── schema.prisma          # Database schema
+prisma.config.ts           # Prisma configuration
 ```

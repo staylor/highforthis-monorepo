@@ -40,6 +40,7 @@ pnpm web:dev       # http://localhost:3000
 | `pnpm codegen` | Run GraphQL Codegen (TypeScript types, schema, Apollo iOS) |
 | `pnpm lint` | Lint all workspaces with ESLint |
 | `pnpm lint-fix` | Lint and auto-fix |
+| `pnpm knip` | Find unused files, exports, and dependencies |
 | `pnpm test:web` | Run web workspace tests |
 | `pnpm typecheck:graphql` | Type-check the GraphQL workspace |
 | `pnpm typecheck:web` | Type-check the web workspace |
