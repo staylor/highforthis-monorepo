@@ -106,7 +106,7 @@ const resolvers = {
 
       return parseConnection(prisma.show, connectionArgs, {
         where,
-        orderBy: { date: order === 'ASC' ? 'asc' : 'desc' },
+        orderBy: { date: order === 'ASC' || (!order && latest) ? 'asc' : 'desc' },
         include: showIncludes,
       });
     },
