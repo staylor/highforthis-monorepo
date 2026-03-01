@@ -53,6 +53,7 @@
     "db:migrate": "dotenv -e .env -- prisma migrate dev",
     "db:push": "dotenv -e .env -- prisma db push",
     "db:studio": "dotenv -e .env -- prisma studio",
+    "db:reset": "dotenv -e .env -- bash tools/database/reset",
     "db:migrate-from-mongo": "tsx --env-file=.env tools/migrate-from-mongo.ts",
     "tools:script:dev": "tsx --env-file=.env",
     "tools:script:prod": "tsx --env-file=.env.production",

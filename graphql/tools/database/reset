@@ -1,0 +1,44 @@
+#!/bin/bash
+set -e
+
+if [ -z "$DATABASE_URL" ]; then
+  echo "ERROR: DATABASE_URL is not set"
+  exit 1
+fi
+
+# Parse DATABASE_URL: postgresql://[user[:pass]@]host:port/dbname
+DB_NAME=$(echo "$DATABASE_URL" | sed -E 's|.*\/([^?]+).*|\1|')
+DB_USER=$(echo "$DATABASE_URL" | sed -E 's|.*://([^:@]+)[@:].*|\1|')
+DUMP_FILE="dump/highforthis-seed.dump"
+
+OWNER_FLAG=""
+USER_FLAG=""
+if [ -n "$DB_USER" ]; then
+  OWNER_FLAG="-O $DB_USER"
+  USER_FLAG="-U $DB_USER"
+fi
+
+echo "Dropping database $DB_NAME..."
+dropdb --if-exists "$DB_NAME"
+
+echo "Creating database $DB_NAME..."
+createdb $OWNER_FLAG "$DB_NAME"
+
+echo "Pushing Prisma schema..."
+pnpm db:push
+
+if [ -n "$DB_USER" ]; then
+  echo "Granting superuser to $DB_USER..."
+  psql postgres -c "ALTER USER $DB_USER WITH SUPERUSER;"
+fi
+
+echo "Restoring seed data..."
+pg_restore --no-owner --no-privileges --data-only --disable-triggers \
+  $USER_FLAG -d "$DB_NAME" "$DUMP_FILE" || true
+
+if [ -n "$DB_USER" ]; then
+  echo "Revoking superuser from $DB_USER..."
+  psql postgres -c "ALTER USER $DB_USER WITH NOSUPERUSER;"
+fi
+
+echo "Done! Database $DB_NAME has been reset and seeded."

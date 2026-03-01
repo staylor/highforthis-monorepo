@@ -136,6 +136,7 @@ This runs the following steps in sequence:
 | `pnpm db:migrate` | Run Prisma migrations |
 | `pnpm db:push` | Push schema to database |
 | `pnpm db:studio` | Open Prisma Studio |
+| `pnpm db:reset` | Drop, recreate, and seed the database |
 | `pnpm db:migrate-from-mongo` | Import data from MongoDB dump into PostgreSQL |
 | `pnpm typecheck` | Type-check with TypeScript |
 
