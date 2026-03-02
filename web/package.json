@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@apollo/client": "4.1.6",
+    "@google-cloud/storage": "7.19.0",
     "@lexical/code": "0.41.0",
     "@lexical/list": "0.41.0",
     "@lexical/react": "0.41.0",
@@ -60,7 +61,7 @@
   "scripts": {
     "dev": "node --env-file-if-exists=.env server.js",
     "build": "rm -rf build node_modules/.vite && NODE_ENV=production react-router build",
-    "prod:upload": "gsutil -m -h 'Cache-control:public, max-age=259200' rsync -r build/client gs://wonderboymusic/highforthis",
+    "prod:upload": "tsx tools/upload-assets.ts",
     "start": "node --env-file-if-exists=.env.production server.js",
     "test": "vitest run",
     "test:watch": "vitest",
