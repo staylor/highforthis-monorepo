@@ -10,7 +10,7 @@ import createI18n from './src/i18n.js';
 
 process.env.TZ = 'America/New_York';
 
-const serverPort = (process.env.SERVER_PORT && parseInt(process.env.SERVER_PORT, 10)) || 3000;
+const serverPort = parseInt(process.env.PORT || process.env.SERVER_PORT || '3000', 10);
 
 // use a local GQL server by default
 const gqlHost = process.env.GQL_HOST || 'http://localhost:8080';
