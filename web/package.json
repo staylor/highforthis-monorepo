@@ -61,7 +61,7 @@
   },
   "scripts": {
     "dev": "node --env-file-if-exists=.env server.js",
-    "build": "rm -rf build node_modules/.vite && NODE_ENV=production react-router build",
+    "build": "NODE_ENV=production react-router build",
     "prod:upload": "tsx tools/upload-assets.ts",
     "start": "node --env-file-if-exists=.env.production server.js",
     "test": "vitest run",
