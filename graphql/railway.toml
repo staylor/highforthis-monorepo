@@ -1,4 +1,5 @@
 [build]
+installCommand = "corepack enable && pnpm install"
 buildCommand = "pnpm build"
 
 [deploy]
