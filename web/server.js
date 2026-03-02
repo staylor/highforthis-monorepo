@@ -33,10 +33,10 @@ const viteDevServer =
   process.env.NODE_ENV === 'production'
     ? undefined
     : await import('vite').then((vite) =>
-        vite.createServer({
-          server: { middlewareMode: true },
-        })
-      );
+      vite.createServer({
+        server: { middlewareMode: true },
+      })
+    );
 
 const reactRouterHandler = createRequestHandler({
   build: viteDevServer
@@ -76,6 +76,10 @@ app.use('/build', express.static('public/build', { immutable: true, maxAge: '1y'
 // Everything else (like favicon.ico) is cached for an hour. You may want to be
 // more aggressive with this caching.
 app.use(express.static('build/client', { maxAge: '1h' }));
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok' });
+});
 
 // proxy to the graphql server for client fetch requests
 app.use('/graphql', proxy);
