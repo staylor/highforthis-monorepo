@@ -1,4 +1,5 @@
 [build]
+watchPatterns = ["graphql/**"]
 installCommand = "corepack enable && pnpm install"
 buildCommand = "pnpm build"
 
