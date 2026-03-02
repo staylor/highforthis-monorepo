@@ -57,7 +57,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
         'relative inline-block max-w-full overflow-hidden',
         'before:bg-pink before:absolute before:z-20 before:rounded-xl hover:before:bg-black',
         'before:top-1/2 before:left-1/2 before:-mt-5 before:-ml-12.5 before:h-13 before:w-19',
-        'after:border-y-[10px] after:border-l-[20px] after:border-y-transparent after:border-l-white',
+        'after:border-y-10 after:border-l-20 after:border-y-transparent after:border-l-white',
         'after:absolute after:top-1/2 after:left-1/2 after:z-30 after:-mt-1 after:-ml-5 after:h-0 after:w-0'
       )}
     >
@@ -74,7 +74,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
         <VideoLink to={`/video/${video.slug}`} onClick={onClick} className="m-0">
           {placeholder}
         </VideoLink>
-        <h3 className="mb-6 text-base tracking-wide">
+        <h3 className="mb-6 text-base">
           {single ? video.title : <Link to={`/video/${video.slug}`}>{video.title}</Link>}
         </h3>
       </>
@@ -82,11 +82,11 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
   }
 
   return (
-    <article className="max-w-screen-sm">
+    <article className="max-w-160">
       {single ? (
         <TextTitle>{video.title}</TextTitle>
       ) : (
-        <h1 className="font-text xs:text-xl mb-2.5 text-base font-semibold">
+        <h1 className="font-text xs:text-xl mb-2.5 text-base">
           <Link to={`/video/${video.slug}`}>{video.title}</Link>
         </h1>
       )}

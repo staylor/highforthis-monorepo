@@ -14,7 +14,7 @@ function Sidebar({ shows }: { shows: ShowConnection }) {
 
   return (
     <aside className="lg:w-60">
-      <Heading2>{t('shows.upcoming')}</Heading2>
+      <Heading2 className="uppercase">{t('shows.upcoming')}</Heading2>
       <div className="md:columns-3 lg:columns-1">
         {shows.edges.length === 0 && (
           <div className="mb-3 ml-3 text-sm">{t('shows.noRecommended')}</div>
@@ -22,8 +22,8 @@ function Sidebar({ shows }: { shows: ShowConnection }) {
         {shows.edges.map(({ node }) => {
           const d = formatDate(node.date);
           return (
-            <div className="mb-3 ml-3 text-base" key={node.id}>
-              <time className="block font-bold">{`${d.formatted}/${d.year}`}</time>
+            <div className="mb-5 text-base" key={node.id}>
+              <time className="block font-semibold">{`${d.formatted}/${d.year}`}</time>
               <Link to={formatShowLink(node)}>{formatArtists(node)}</Link>
               <br />
               <Link to={`/venue/${node.venue.slug}`}>{node.venue.name}</Link>

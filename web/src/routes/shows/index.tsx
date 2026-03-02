@@ -45,7 +45,7 @@ function ShowsRoute({ loaderData }: Route.ComponentProps) {
   const date = formatDate();
   return (
     <article>
-      <Heading2>{t('shows.recommended')}</Heading2>
+      <Heading2 className="uppercase">{t('shows.recommended')}</Heading2>
       <p className="mb-6 text-xl">
         {t('shows.todaysDate')}: <strong>{date.formatted}</strong>
       </p>

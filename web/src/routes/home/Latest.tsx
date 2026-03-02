@@ -7,7 +7,7 @@ function Latest({ posts }: { posts: PostConnection }) {
     <div className="mr-8 w-full md:w-72">
       {posts.edges.map(({ node }) => (
         <article className="mb-8 overflow-hidden" key={node.id}>
-          <h1 className="mb-2.5 text-xl font-semibold">
+          <h1 className="mb-2.5 text-xl">
             <Link to={`/post/${node.slug}`}>{node.title}</Link>
           </h1>
           {node.featuredMedia &&

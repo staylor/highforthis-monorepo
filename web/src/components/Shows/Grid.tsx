@@ -50,7 +50,7 @@ export default function ShowsGrid({
                     {formatArtists(node)}
                   </Link>
                 </Cell>
-                <Cell className="text-base font-medium uppercase">
+                <Cell className="text-base uppercase">
                   <Link
                     className="dark:hover:text-pink hover:text-neutral-800 hover:underline"
                     to={`/venue/${node.venue.slug}`}
