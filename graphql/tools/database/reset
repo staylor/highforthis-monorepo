@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# Load .env if DATABASE_URL is not already set
+if [ -z "$DATABASE_URL" ] && [ -f .env ]; then
+  export $(grep -E '^DATABASE_URL=' .env | xargs)
+fi
+
 if [ -z "$DATABASE_URL" ]; then
   echo "ERROR: DATABASE_URL is not set"
   exit 1
