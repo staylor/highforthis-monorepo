@@ -1,7 +1,12 @@
 {
   "typescript.preferences.preferTypeOnlyAutoImports": true,
-  "eslint.validate": ["javascript", "javascriptreact", "json", "typescript", "typescriptreact"],
-  "editor.formatOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "json",
+    "typescript",
+    "typescriptreact"
+  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
