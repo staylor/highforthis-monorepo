@@ -63,7 +63,7 @@
     "dev": "node --env-file-if-exists=.env server.js",
     "build": "NODE_ENV=production react-router build",
     "prod:upload": "tsx tools/upload-assets.ts",
-    "start": "node --env-file-if-exists=.env.production server.js",
+    "start": "node server.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:update": "vitest -u run",
