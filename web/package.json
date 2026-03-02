@@ -61,7 +61,7 @@
     "vitest": "4.0.18"
   },
   "scripts": {
-    "dev": "node --env-file=.env server.js",
+    "dev": "node --env-file-if-exists=.env server.js",
     "prod": "run-s prod:*",
     "prod:clean": "rimraf build node_modules/.vite",
     "prod:build": "NODE_ENV=production react-router build",

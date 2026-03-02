@@ -41,7 +41,7 @@
     "typescript": "5.9.3"
   },
   "scripts": {
-    "dev": "NODE_OPTIONS='--disable-warning=DEP0040' tsx watch --env-file=.env src/index.ts",
+    "dev": "NODE_OPTIONS='--disable-warning=DEP0040' tsx watch --env-file-if-exists=.env src/index.ts",
     "prod": "run-s prod:*",
     "prod:stop": "pm2 stop pm2.config.cjs",
     "prod:clean": "rimraf lib",
@@ -54,9 +54,9 @@
     "db:studio": "prisma studio",
     "db:dump": "bash tools/database/dump",
     "db:reset": "bash tools/database/reset",
-    "db:migrate-from-mongo": "tsx --env-file=.env tools/migrate-from-mongo.ts",
-    "tools:script:dev": "tsx --env-file=.env",
-    "tools:script:prod": "tsx --env-file=.env.production",
+    "db:migrate-from-mongo": "tsx --env-file-if-exists=.env tools/migrate-from-mongo.ts",
+    "tools:script:dev": "tsx --env-file-if-exists=.env",
+    "tools:script:prod": "tsx --env-file-if-exists=.env.production",
     "typecheck": "tsc"
   }
 }
