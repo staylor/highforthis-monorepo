@@ -44,12 +44,10 @@
     "eslint-plugin-tailwindcss": "4.0.0-beta.0",
     "graphql": "16.13.0",
     "knip": "5.85.0",
-    "npm-run-all": "4.1.5",
     "prettier": "3.8.1",
     "prettier-plugin-tailwindcss": "0.7.2",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "rimraf": "6.1.3",
     "tsconfig-paths": "4.2.0",
     "tsx": "4.21.0",
     "typescript": "5.9.3"
@@ -57,20 +55,14 @@
   "scripts": {
     "codegen": "graphql-codegen && pnpm lint-fix && ./apollo-ios-cli generate",
     "graphql:dev": "pnpm --filter @highforthis/graphql dev",
-    "graphql:prod": "pnpm --filter @highforthis/graphql prod",
     "web:dev": "pnpm --filter @highforthis/web dev",
-    "web:prod": "pnpm --filter @highforthis/web prod",
-    "prod": "pnpm -r prod",
+    "build": "pnpm -r build",
     "knip": "knip",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint --report-unused-disable-directives .",
     "lint-fix": "pnpm lint --fix",
     "test:web": "pnpm --filter @highforthis/web test",
     "test:web:watch": "pnpm --filter @highforthis/web test:watch",
     "test:web:update": "pnpm --filter @highforthis/web test:update",
-    "typecheck:graphql": "pnpm --filter @highforthis/graphql typecheck",
-    "typecheck:web": "pnpm --filter @highforthis/web typecheck"
-  },
-  "dependencies": {
-    "pm2": "6.0.14"
+    "typecheck": "pnpm -r typecheck"
   }
 }

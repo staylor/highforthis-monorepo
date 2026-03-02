@@ -30,20 +30,17 @@ pnpm web:dev       # http://localhost:3000
 
 ## Scripts
 
-| Script | Description |
-| --- | --- |
-| `pnpm graphql:dev` | Start GraphQL server in development (watch mode) |
-| `pnpm graphql:prod` | Build and start GraphQL server for production |
-| `pnpm web:dev` | Start web app in development |
-| `pnpm web:prod` | Build, upload assets, and start web app for production |
-| `pnpm prod` | Build and start all workspaces for production |
-| `pnpm codegen` | Run GraphQL Codegen (TypeScript types, schema, Apollo iOS) |
-| `pnpm lint` | Lint all workspaces with ESLint |
-| `pnpm lint-fix` | Lint and auto-fix |
-| `pnpm knip` | Find unused files, exports, and dependencies |
-| `pnpm test:web` | Run web workspace tests |
-| `pnpm typecheck:graphql` | Type-check the GraphQL workspace |
-| `pnpm typecheck:web` | Type-check the web workspace |
+| Script            | Description                                              |
+| ----------------- | -------------------------------------------------------- |
+| `pnpm graphql:dev` | Start GraphQL server in development (watch mode)        |
+| `pnpm web:dev`    | Start web app in development                             |
+| `pnpm build`      | Build all workspaces for production                      |
+| `pnpm codegen`    | Run GraphQL Codegen (TypeScript types, schema, Apollo iOS) |
+| `pnpm lint`       | Lint all workspaces with ESLint                          |
+| `pnpm lint-fix`   | Lint and auto-fix                                        |
+| `pnpm knip`       | Find unused files, exports, and dependencies             |
+| `pnpm test:web`   | Run web workspace tests                                  |
+| `pnpm typecheck`  | Type-check all workspaces                                |
 
 ## GraphQL Codegen
 
@@ -65,7 +62,16 @@ pnpm codegen
 
 ## Production
 
-Both `graphql` and `web` use [PM2](https://pm2.keymetrics.io/) for process management in production. Each workspace has a `pm2.config.cjs` that loads environment variables from `.env.production`.
+Each workspace has `build` and `start` scripts. Build bundles the app, start runs it with Node. Environment variables are loaded from `.env.production` via `--env-file-if-exists` (or set directly in the hosting platform).
+
+```bash
+# Build all workspaces
+pnpm build
+
+# Start each workspace
+pnpm --filter @highforthis/graphql start
+pnpm --filter @highforthis/web start
+```
 
 ## License
 

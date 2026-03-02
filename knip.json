@@ -3,14 +3,11 @@
     ".": {
       "ignoreDependencies": [
         "esbuild",
-        "npm-run-all",
         "react",
         "react-dom",
-        "rimraf",
         "tsconfig-paths",
         "tsx",
-        "eslint-plugin-tailwindcss",
-        "pm2"
+        "eslint-plugin-tailwindcss"
       ]
     },
     "graphql": {
@@ -29,5 +26,5 @@
       ]
     }
   },
-  "ignoreBinaries": ["typecheck", "gsutil"]
+  "ignoreBinaries": ["gsutil"]
 }

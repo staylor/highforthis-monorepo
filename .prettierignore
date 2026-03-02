@@ -3,7 +3,7 @@
 
 node_modules
 
-graphql/lib/**
+graphql/dist/**
 graphql/public/**
 
 web/build

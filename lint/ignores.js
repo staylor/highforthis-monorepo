@@ -5,7 +5,7 @@ export default [
   '.cache',
   '.vscode',
   'apollo-codegen-config.json',
-  'graphql/lib/',
+  'graphql/dist/',
   'graphql/public/',
   'graphql/generated/',
   'graphql/**/*.json',

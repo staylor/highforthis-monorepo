@@ -41,27 +41,30 @@ The dev server proxies `/graphql` and `/upload` requests to the GraphQL server.
 ## Production
 
 ```bash
-pnpm prod
+# Build
+pnpm build
+
+# Upload static assets to CDN
+pnpm prod:upload
+
+# Start
+pnpm start
 ```
 
-This runs the following steps in sequence:
-
-1. `prod:clean` — Remove `build/` and Vite cache
-2. `prod:build` — Build with React Router / Vite (`NODE_ENV=production`)
-3. `prod:upload` — Upload client assets to Google Cloud Storage
-4. `prod:stop` — Stop the existing PM2 process
-5. `prod:start` — Start via PM2
+`build` cleans the build directory and builds with React Router / Vite. `prod:upload` syncs client assets to Google Cloud Storage. `start` runs the production server with Node.
 
 ## Scripts
 
-| Script | Description |
-| --- | --- |
-| `pnpm dev` | Start in development |
-| `pnpm prod` | Build and start for production |
-| `pnpm test` | Run tests with Vitest |
-| `pnpm test:watch` | Run tests in watch mode |
-| `pnpm test:update` | Update test snapshots |
-| `pnpm typecheck` | Generate route types and type-check |
+| Script             | Description                                      |
+| ------------------ | ------------------------------------------------ |
+| `pnpm dev`         | Start in development                             |
+| `pnpm build`       | Clean and build for production                   |
+| `pnpm prod:upload` | Upload client assets to Google Cloud Storage     |
+| `pnpm start`       | Start the production server                      |
+| `pnpm test`        | Run tests with Vitest                            |
+| `pnpm test:watch`  | Run tests in watch mode                          |
+| `pnpm test:update` | Update test snapshots                            |
+| `pnpm typecheck`   | Generate route types and type-check              |
 
 ## Project Structure
 
