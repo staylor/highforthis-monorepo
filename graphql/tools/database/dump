@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+# Load .env if DATABASE_URL is not already set
+if [ -z "$DATABASE_URL" ] && [ -f .env ]; then
+  export $(grep -E '^DATABASE_URL=' .env | xargs)
+fi
+
+if [ -z "$DATABASE_URL" ]; then
+  echo "ERROR: DATABASE_URL is not set"
+  exit 1
+fi
+
+DB_NAME=$(echo "$DATABASE_URL" | sed -E 's|.*\/([^?]+).*|\1|')
+DB_USER=$(echo "$DATABASE_URL" | sed -E 's|.*://([^:@]+)[@:].*|\1|')
+DUMP_FILE="dump/highforthis-seed.dump"
+
+USER_FLAG=""
+if [ -n "$DB_USER" ]; then
+  USER_FLAG="-U $DB_USER"
+fi
+
+echo "Dumping database $DB_NAME to $DUMP_FILE..."
+pg_dump --no-owner --no-privileges --data-only --format=custom \
+  $USER_FLAG "$DB_NAME" -f "$DUMP_FILE"
+
+echo "Done! Seed file updated: $DUMP_FILE"
