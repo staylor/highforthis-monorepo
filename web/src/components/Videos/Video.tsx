@@ -86,7 +86,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
       {single ? (
         <TextTitle>{video.title}</TextTitle>
       ) : (
-        <h1 className="font-text xs:text-xl mb-2.5 text-base">
+        <h1 className="xs:text-xl mb-2.5 font-sans text-base">
           <Link to={`/video/${video.slug}`}>{video.title}</Link>
         </h1>
       )}

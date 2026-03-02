@@ -22,7 +22,7 @@ function Sidebar({ shows }: { shows: ShowConnection }) {
         {shows.edges.map(({ node }) => {
           const d = formatDate(node.date);
           return (
-            <div className="mb-5 text-base" key={node.id}>
+            <div className="mb-5 font-sans text-base" key={node.id}>
               <time className="block font-semibold">{`${d.formatted}/${d.year}`}</time>
               <Link to={formatShowLink(node)}>{formatArtists(node)}</Link>
               <br />

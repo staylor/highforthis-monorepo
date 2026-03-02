@@ -43,7 +43,7 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
             <Link to={`/podcast/${node.id}`} className="text-pink dark:text-pink block">
               {node.title}
             </Link>
-            <p>{node.description}</p>
+            <p className="font-sans">{node.description}</p>
           </figcaption>
         </figure>
       ))}

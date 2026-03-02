@@ -14,7 +14,7 @@ export default function Podcast({ title, description, children }: PodcastProps) 
   return (
     <article className="mx-auto my-0 w-auto md:w-4/5 lg:mx-0 lg:w-2/3">
       <Heading1>{title}</Heading1>
-      <p className="mb-6">{description}</p>
+      <p className="mb-6 font-sans">{description}</p>
       {children}
       <footer className="mt-10 sm:flex">
         <a
