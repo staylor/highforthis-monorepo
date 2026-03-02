@@ -39,6 +39,10 @@ async function startServer(): Promise<void> {
     next();
   });
 
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'ok' });
+  });
+
   app.use('/graphql', jwtMiddleware);
 
   app.post('/auth', express.json(), authMiddleware);
