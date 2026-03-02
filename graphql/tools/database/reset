@@ -29,6 +29,9 @@ dropdb --if-exists "$DB_NAME"
 echo "Creating database $DB_NAME..."
 createdb $OWNER_FLAG "$DB_NAME"
 
+echo "Generating Prisma client..."
+pnpm db:generate
+
 echo "Pushing Prisma schema..."
 pnpm db:push
 
