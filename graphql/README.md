@@ -71,21 +71,13 @@ Set `DATABASE_URL` in your `.env` file:
 DATABASE_URL="postgresql://hft_user:hft_pass@localhost:5432/highforthis"
 ```
 
-Push the Prisma schema to create tables, then restore the seed data:
+Push the schema and seed the database:
 
 ```bash
-pnpm db:push
-pg_restore --no-owner --no-privileges --data-only --disable-triggers \
-  -U hft_user -d highforthis dump/highforthis-seed.dump
+pnpm db:reset
 ```
 
-The `--disable-triggers` flag disables foreign key checks during restore so tables can be loaded in any order. This requires the user to have superuser privileges — grant them before restoring, then revoke after:
-
-```bash
-psql postgres -c "ALTER USER hft_user WITH SUPERUSER;"
-# run pg_restore above
-psql postgres -c "ALTER USER hft_user WITH NOSUPERUSER;"
-```
+This drops and recreates the database, pushes the Prisma schema, and restores the seed data (temporarily granting superuser to disable foreign key triggers during restore).
 
 ### Database
 
@@ -199,26 +191,13 @@ SQL
 DATABASE_URL="postgresql://highforthis:your_secure_password@localhost:5432/highforthis"
 ```
 
-#### 5. Push the Prisma schema to create tables
+#### 5. Push schema and seed the database
 
 ```bash
-pnpm db:push
+pnpm db:reset
 ```
 
-#### 6. Restore the seed data
-
-```bash
-pg_restore --no-owner --no-privileges --data-only \
-  -U highforthis -d highforthis dump/highforthis-seed.dump
-```
-
-If you get a password prompt, you can add the connection to `~/.pgpass`:
-
-```
-localhost:5432:highforthis:highforthis:your_secure_password
-```
-
-#### 7. Verify
+#### 6. Verify
 
 ```bash
 psql -U highforthis -d highforthis -c "SELECT count(*) FROM \"Artist\";"
@@ -239,10 +218,11 @@ src/
 └── jobs/             # Scheduled tasks (cron)
 tools/
 ├── migrate-from-mongo.ts  # MongoDB → PostgreSQL migration
+├── database/              # Database dump and reset scripts
 ├── youtube.ts             # YouTube data tools
 ├── shows.ts               # Show data tools
 └── addresses.ts           # Venue address tools
 prisma/
-├── schema.prisma          # Database schema
+└── schema.prisma          # Database schema
 prisma.config.ts           # Prisma configuration
 ```
