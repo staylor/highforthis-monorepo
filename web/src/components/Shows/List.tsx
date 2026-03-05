@@ -1,6 +1,7 @@
+import Link from '#/components/Link';
 import type { ShowConnection } from '#/types/graphql';
 
-import { formatArtists, formatDate } from './utils';
+import { formatArtists, formatDate, formatShowLink } from './utils';
 
 export default function ShowsList({
   shows,
@@ -18,12 +19,14 @@ export default function ShowsList({
         const d = formatDate(node.date);
 
         const showRow = (
-          <p className="mb-2">
-            <strong>{d.formatted}</strong>
+          <p className="mb-2 text-sm">
+            <strong className="tabular-nums">{d.formatted}</strong>
             <br />
-            {formatArtists(node)}
+            <Link className="text-pink" to={formatShowLink(node)}>
+              {formatArtists(node)}
+            </Link>
             <br />
-            {node.venue.name}
+            <span className="text-muted dark:text-muted-dark">{node.venue.name}</span>
           </p>
         );
 
@@ -32,11 +35,11 @@ export default function ShowsList({
           months[`${d.year}${d.month}`] = 1;
           return (
             <div key={node.id}>
-              <p className="mb-2.5">
-                <strong className="text-xl">{d.year}</strong>
+              <p className="font-display mt-4 mb-1 first:mt-0">
+                <strong className="text-lg">{d.year}</strong>
               </p>
-              <p className="mb-3 uppercase">
-                <strong>{d.monthName}</strong>
+              <p className="text-muted dark:text-muted-dark mb-1 text-xs font-semibold tracking-wider uppercase">
+                {d.monthName}
               </p>
               {showRow}
             </div>
@@ -46,8 +49,8 @@ export default function ShowsList({
           months[`${d.year}${d.month}`] = 1;
           return (
             <div key={node.id}>
-              <p className="mb-1">
-                <strong>{d.monthName}</strong>
+              <p className="text-muted dark:text-muted-dark mt-3 mb-1 text-xs font-semibold tracking-wider uppercase">
+                {d.monthName}
               </p>
               {showRow}
             </div>

@@ -90,6 +90,7 @@
     "collapse": "Collapse menu",
     "darkMode": "Enable Dark Mode!",
     "home": "Home",
+    "menu": "Menu",
     "podcast": "Podcast",
     "shows": "Shows",
     "videos": "Videos",
@@ -140,7 +141,10 @@
     "title": "Title",
     "update": "Update Post",
     "updated": "Post updated.",
-    "view": "View Post"
+    "view": "View Post",
+    "viewAll": "All Posts →",
+    "featured": "Featured",
+    "latest": "Latest Posts"
   },
   "settings": {
     "dashboard": {

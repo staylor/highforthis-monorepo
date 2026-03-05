@@ -7,7 +7,7 @@ import TextTitle from '#/components/TextTitle';
 import type { VideoThumbnail, Video } from '#/types/graphql';
 
 const VideoLink = ({ className, children, ...props }: CustomLinkProps) => (
-  <Link {...props} className={cn('mb-6 block max-w-full', className)}>
+  <Link {...props} className={cn('block', className)}>
     {children}
   </Link>
 );
@@ -41,9 +41,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
     e.preventDefault();
 
     const iframe = document.createElement('iframe');
-    //iframe.type = 'text/html';
     iframe.className = 'w-full aspect-video';
-    //iframe.border = '0';
     iframe.src = `https://www.youtube.com/embed/${video.dataId}?autoplay=1`;
 
     e.currentTarget.innerHTML = iframe.outerHTML;
@@ -52,18 +50,22 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
   const thumb = findThumb(video.thumbnails);
 
   const placeholder = (
-    <figure
-      className={cn(
-        'relative inline-block max-w-full overflow-hidden',
-        'before:bg-pink before:absolute before:z-20 before:rounded-xl hover:before:bg-black',
-        'before:top-1/2 before:left-1/2 before:-mt-5 before:-ml-12.5 before:h-13 before:w-19',
-        'after:border-y-10 after:border-l-20 after:border-y-transparent after:border-l-white',
-        'after:absolute after:top-1/2 after:left-1/2 after:z-30 after:-mt-1 after:-ml-5 after:h-0 after:w-0'
-      )}
-    >
+    <figure className="group/thumb relative overflow-hidden rounded-xl">
       {thumb && (
-        <img src={thumb.url} alt={video.title} className="relative z-10 my-[-9.375%] w-160" />
+        <img
+          src={thumb.url}
+          alt={video.title}
+          className="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
       )}
+      {/* Play button overlay */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="bg-pink/90 flex h-14 w-14 items-center justify-center rounded-full backdrop-blur-sm">
+          <svg className="ml-0.5 h-7 w-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+      </div>
       <figcaption className="hidden">{video.title}</figcaption>
     </figure>
   );
@@ -82,18 +84,17 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
   }
 
   return (
-    <article className="max-w-160">
+    <article className="group">
+      <VideoLink to={`/video/${video.slug}`} onClick={onClick} className="mb-3">
+        {placeholder}
+      </VideoLink>
       {single ? (
         <TextTitle>{video.title}</TextTitle>
       ) : (
-        <h1 className="xs:text-xl mb-2.5 font-sans text-base">
+        <h1 className="font-display group-hover:text-pink text-base leading-snug font-semibold transition-colors">
           <Link to={`/video/${video.slug}`}>{video.title}</Link>
         </h1>
       )}
-
-      <VideoLink to={`/video/${video.slug}`} onClick={onClick}>
-        {placeholder}
-      </VideoLink>
     </article>
   );
 }

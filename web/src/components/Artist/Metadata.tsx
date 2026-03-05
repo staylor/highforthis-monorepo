@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -16,11 +17,16 @@ function ArtistLink({ url, children }: PropsWithChildren<{ url: string }>) {
   return (
     <a
       href={url}
-      className="text-pink mb-2 block text-lg underline"
+      className={cn(
+        'mr-3 inline-block rounded-lg px-4 py-2 text-sm font-medium transition-all',
+        'border-pink/20 bg-pink/5 text-pink border',
+        'hover:bg-pink/10',
+        'dark:border-pink/30 dark:bg-pink/10 dark:hover:bg-pink/20'
+      )}
       target="_blank"
       rel="noreferrer"
     >
-      {children} &rarr;
+      {children} →
     </a>
   );
 }
@@ -49,9 +55,9 @@ export default function Metadata({
   }
 
   return (
-    <div className="mt-4 mb-8 md:mt-8 md:mb-12 md:flex">
+    <div className="mt-4 mb-8 items-center md:mt-6 md:mb-10 md:flex">
       {image}
-      <div className="md:mt-4">
+      <div className="mt-3 flex flex-wrap gap-2 md:mt-0">
         {site}
         {listen}
       </div>

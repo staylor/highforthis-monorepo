@@ -2,7 +2,7 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import type { MetaFunction } from 'react-router';
 
-import { Heading2 } from '#/components/Heading';
+import { Heading1 } from '#/components/Heading';
 import Shows from '#/components/Shows';
 import ShowsGrid from '#/components/Shows/Grid';
 import { formatDate } from '#/components/Shows/utils';
@@ -45,9 +45,10 @@ function ShowsRoute({ loaderData }: Route.ComponentProps) {
   const date = formatDate();
   return (
     <article>
-      <Heading2 className="uppercase">{t('shows.recommended')}</Heading2>
-      <p className="mb-6 text-xl">
-        {t('shows.todaysDate')}: <strong>{date.formatted}</strong>
+      <Heading1>{t('shows.recommended')}</Heading1>
+      <p className="text-muted dark:text-muted-dark mb-8 text-base">
+        {t('shows.todaysDate')}:{' '}
+        <strong className="text-neutral-900 dark:text-white">{date.formatted}</strong>
       </p>
       <Shows shows={loaderData.shows!} />
     </article>
