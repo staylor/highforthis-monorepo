@@ -32,14 +32,10 @@ const Link = ({ to, children = null, isActive: isActiveProp = undefined }: LinkP
   const location = useLocation();
   const activeProp = isActiveProp && isActiveProp(path as string, location);
   const active = activeProp || isActive(path as string, location);
-  const className = cn(
-    'text-base xs:text-xl sm:text-2xl md:text-3xl align-middle inline-block uppercase font-bold',
-    'my-1 mx-1 xs:mx-1.5 md:mx-2.5 first:ml-0 last:mr-0 md:my-0 md:ml-0 md:mr-5',
-    {
-      'text-pink dark:text-pink': active,
-      'text-gray-400 dark:text-gray-400': !active,
-    }
-  );
+  const className = cn('text-sm font-medium tracking-wide uppercase transition-colors', {
+    'text-pink dark:text-pink': active,
+    'text-muted hover:text-neutral-900 dark:text-muted-dark dark:hover:text-white': !active,
+  });
 
   return (
     <NavLink className={className} to={to}>

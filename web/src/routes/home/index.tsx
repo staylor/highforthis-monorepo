@@ -1,6 +1,6 @@
 import { gql } from 'graphql-tag';
 
-import Divider from '#/components/Divider';
+import SectionHeader, { AccentLine } from '#/components/SectionHeader';
 import Videos from '#/components/Videos';
 import { videosQuery } from '#/components/Videos/graphql';
 import type { HomeQuery } from '#/types/graphql';
@@ -11,24 +11,11 @@ import type { Route } from './+types';
 import Latest from './Latest';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const variables = { cacheKey: 'home-videos' } as any;
-  const after = url.searchParams.get('after');
-  const before = url.searchParams.get('before');
-  if (after) {
-    variables.first = 10;
-    variables.after = after;
-  } else if (before) {
-    variables.last = 10;
-    variables.before = before;
-  } else {
-    variables.first = 10;
-  }
   return query<HomeQuery>({
     request,
     context,
     query: homeQuery,
-    variables,
+    variables: { cacheKey: 'home-videos', first: 9 },
   });
 }
 
@@ -36,12 +23,14 @@ export const clientLoader = createClientCache();
 
 function Home({ loaderData }: Route.ComponentProps) {
   return (
-    <div className="flex flex-col-reverse md:mx-auto md:my-0 md:flex-row lg:m-0">
+    <>
+      <section>
+        <SectionHeader label="Videos" viewAllLink="/videos" />
+        <Videos videos={loaderData.videos} paginate={false} />
+      </section>
+      <AccentLine />
       <Latest posts={loaderData.posts} />
-      <Divider>
-        <Videos videos={loaderData.videos} />
-      </Divider>
-    </div>
+    </>
   );
 }
 

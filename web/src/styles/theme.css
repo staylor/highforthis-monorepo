@@ -12,10 +12,26 @@
   --color-detail: #d1d5db;
   --color-detail-dark: #4b5563;
 
+  --color-surface: #fafafa;
+  --color-surface-elevated: #ffffff;
+  --color-surface-card: #ffffff;
+  --color-surface-hover: #f5f5f5;
+
+  --color-surface-dark: #0a0a0a;
+  --color-surface-dark-elevated: #141414;
+  --color-surface-dark-card: #1a1a1a;
+  --color-surface-dark-hover: #222222;
+
+  --color-muted: #737373;
+  --color-muted-dark: #888888;
+
+  --font-display:
+    'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
   --font-body:
-    'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  --font-text: 'Poppins', sans-serif;
+  --font-text: 'Inter', sans-serif;
   --font-georgia: Georgia, serif;
   --font-dashicons: dashicons;
   --font-icons: icons;

@@ -43,6 +43,7 @@ export default [
   route('podcast.xml', 'routes/podcast/xml/loader.tsx'),
   route('podcast/:id', 'routes/podcast/podcast.tsx'),
   route('podcast', 'routes/podcast/index.tsx'),
+  route('posts', 'routes/post/index.tsx'),
   route('post/:slug', 'routes/post/post.tsx'),
   ...prefix('shows', [
     index('routes/shows/index.tsx'),

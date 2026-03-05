@@ -35,11 +35,11 @@ export default function DarkMode() {
   }, []);
 
   return (
-    <div className="mx-5 my-2 flex items-center justify-center">
+    <div className="flex items-center">
       <label
-        className="relative inline-block h-9 w-16"
+        className="relative inline-block h-6 w-12"
         htmlFor="checkbox"
-        aria-label="Toggle dark mode"
+        aria-label={t('nav.darkMode')}
       >
         <input
           type="checkbox"
@@ -51,9 +51,13 @@ export default function DarkMode() {
         />
         <div
           className={cn(
-            'bg-detail peer-checked:bg-detail-dark absolute inset-0 cursor-pointer rounded-full duration-500',
-            'before:absolute before:bottom-1 before:left-1 before:h-7 before:w-7 before:rounded-full before:bg-white before:duration-500',
-            'peer-checked:before:translate-x-7'
+            'absolute inset-0 cursor-pointer rounded-full border transition-colors duration-300',
+            'border-neutral-200 bg-neutral-200',
+            'dark:bg-surface-dark-card dark:border-white/10',
+            'before:absolute before:bottom-0.5 before:left-0.5 before:h-5 before:w-5',
+            'before:rounded-full before:bg-white before:shadow-sm before:transition-transform before:duration-300',
+            'peer-checked:before:translate-x-6',
+            'peer-checked:before:bg-pink'
           )}
         />
       </label>

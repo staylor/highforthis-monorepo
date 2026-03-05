@@ -12,24 +12,27 @@ type PodcastProps = PropsWithChildren<{
 
 export default function Podcast({ title, description, children }: PodcastProps) {
   return (
-    <article className="mx-auto my-0 w-auto md:w-4/5 lg:mx-0 lg:w-2/3">
+    <article className="mx-auto my-0 w-auto lg:mx-0 lg:w-3/4">
       <Heading1>{title}</Heading1>
-      <p className="mb-6 font-sans">{description}</p>
-      {children}
-      <footer className="mt-10 sm:flex">
+      <p
+        className="text-muted dark:text-muted-dark mb-8 text-base leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, '<br />') }}
+      />
+      <div className="mb-8 flex gap-3">
         <a
           href="https://podcasts.apple.com/us/podcast/high-for-this/id1461883255"
-          className="mb-3 sm:mr-3 sm:mb-0"
+          className="transition-opacity hover:opacity-80"
         >
-          <AppleLogo className="h-12 w-auto" />
+          <AppleLogo className="h-10 w-auto" />
         </a>
         <a
           href="https://open.spotify.com/show/7FDueRQTovjtNdcqEzfGgV"
-          className="mb-3 sm:mr-3 sm:mb-0"
+          className="transition-opacity hover:opacity-80"
         >
-          <SpotifyLogo className="h-12 w-auto" />
+          <SpotifyLogo className="h-10 w-auto" />
         </a>
-      </footer>
+      </div>
+      <div className="space-y-0">{children}</div>
     </article>
   );
 }

@@ -10,7 +10,7 @@ export default function TextTitle({
     <h2
       {...props}
       className={cn(
-        'mb-2 block text-3xl font-semibold text-neutral-800 lg:mb-3 dark:text-white',
+        'font-display mb-2 block text-3xl font-semibold lg:mb-3 dark:text-white',
         className
       )}
     >

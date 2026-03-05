@@ -1397,7 +1397,11 @@ export type UpdatePodcastMutationVariables = Exact<{
 
 export type UpdatePodcastMutation = { __typename?: 'Mutation', updatePodcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
 
-export type PodcastsAdminQueryVariables = Exact<{ [key: string]: never; }>;
+export type PodcastsAdminQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
 export type PodcastsAdminQuery = { __typename?: 'Query', podcasts?: { __typename?: 'PodcastConnection', count: number, edges: Array<{ __typename?: 'PodcastEdge', node: { __typename?: 'Podcast', id: string, title: string, audio?: { __typename?: 'AudioUpload', destination: string, id: string, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null } | null, image?: { __typename?: 'ImageUpload', destination: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
@@ -1672,7 +1676,11 @@ export type UpdateUserMutationVariables = Exact<{
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', bio?: string | null, email: string, id: string, name?: string | null, roles?: Array<string | null> | null } | null };
 
-export type UsersAdminQueryVariables = Exact<{ [key: string]: never; }>;
+export type UsersAdminQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
 export type UsersAdminQuery = { __typename?: 'Query', users?: { __typename?: 'UserConnection', count: number, edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', id: string, name?: string | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
@@ -1847,6 +1855,18 @@ export type PodcastFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PodcastFeedQuery = { __typename?: 'Query', podcasts?: { __typename?: 'PodcastConnection', edges: Array<{ __typename?: 'PodcastEdge', node: { __typename?: 'Podcast', date?: number | null, description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', destination: string, duration?: number | null, fileName: string, fileSize: number, id: string } | null } }> } | null, podcastSettings: { __typename?: 'PodcastSettings', category?: string | null, copyrightText?: string | null, description?: string | null, explicit?: string | null, feedLink?: string | null, generator?: string | null, id: string, itunesEmail?: string | null, itunesName?: string | null, language?: string | null, managingEditor?: string | null, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: string } | null } };
+
+export type PostsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: string, slug: string, summary?: string | null, title: string, featuredMedia?: Array<
+          | { __typename?: 'AudioUpload', destination: string, id: string }
+          | { __typename?: 'FileUpload', destination: string, id: string }
+          | { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+          | { __typename?: 'VideoUpload', destination: string, id: string }
+        > | null } }> } | null };
 
 export type PostQueryVariables = Exact<{
   slug?: InputMaybe<Scalars['String']['input']>;

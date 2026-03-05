@@ -3,30 +3,18 @@
 
 @layer base {
   body {
-    background-attachment: fixed;
-    background-color: #fff;
-    background-image: repeating-linear-gradient(
-      -55deg,
-      transparent,
-      transparent 20px,
-      #d1d5db 20px,
-      #d1d5db 23px
-    );
-    background-repeat: no-repeat;
+    background-color: var(--color-surface);
     text-rendering: optimizeLegibility;
-    transition: background-color 300ms linear;
+    transition:
+      background-color 300ms linear,
+      color 300ms linear;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   html.dark body {
     color: #fff;
-    background-color: #000;
-    background-image: repeating-linear-gradient(
-      -55deg,
-      transparent,
-      transparent 20px,
-      #333 20px,
-      #333 23px
-    );
+    background-color: var(--color-surface-dark);
   }
 
   iframe {
@@ -35,7 +23,7 @@
 
   a {
     color: #262626;
-    transition: color 300ms linear;
+    transition: color 200ms ease;
   }
 
   html.dark a {

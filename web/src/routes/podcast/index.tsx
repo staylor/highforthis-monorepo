@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import type { MetaFunction } from 'react-router';
 
@@ -38,14 +39,28 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
   return (
     <Podcast title={`Podcast: ${title}`} description={summary as string}>
       {podcasts.edges.map(({ node }: PodcastEdge) => (
-        <figure className="mb-6" key={node.id}>
-          <figcaption className="mb-3">
-            <Link to={`/podcast/${node.id}`} className="text-pink dark:text-pink block">
-              {node.title}
-            </Link>
-            <p className="font-sans">{node.description}</p>
-          </figcaption>
-        </figure>
+        <Link
+          to={`/podcast/${node.id}`}
+          key={node.id}
+          className={cn(
+            'group -mx-4 block rounded-lg px-4 py-5',
+            'border-b border-neutral-100 dark:border-white/5',
+            'dark:hover:bg-surface-dark-elevated/50 transition-colors hover:bg-neutral-50',
+            'last:border-b-0'
+          )}
+        >
+          <h3 className="font-display group-hover:text-pink mb-2 text-lg font-semibold transition-colors">
+            {node.title}
+          </h3>
+          {node.description && (
+            <p
+              className="text-muted dark:text-muted-dark line-clamp-3 text-sm leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: (node.description || '').replace(/\n/g, '<br />'),
+              }}
+            />
+          )}
+        </Link>
       ))}
     </Podcast>
   );

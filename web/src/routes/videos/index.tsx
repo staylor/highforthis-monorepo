@@ -31,13 +31,13 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
   const after = url.searchParams.get('after');
   const before = url.searchParams.get('before');
   if (after) {
-    variables.first = 10;
+    variables.first = 9;
     variables.after = after;
   } else if (before) {
-    variables.last = 10;
+    variables.last = 9;
     variables.before = before;
   } else {
-    variables.first = 10;
+    variables.first = 9;
   }
   if (params.year) {
     variables.year = parseInt(params.year, 10);

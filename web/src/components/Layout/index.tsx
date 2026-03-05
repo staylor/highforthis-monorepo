@@ -1,10 +1,11 @@
 import cn from 'classnames';
 import type { HtmlHTMLAttributes, HTMLAttributes, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMatches } from 'react-router';
+import { useMatches, useLocation } from 'react-router';
 
 import Link from '#/components/Link';
-import Navigation from '#/components/Nav';
+import Navigation, { MobileMenuProvider } from '#/components/Nav';
+import { AccentLine } from '#/components/SectionHeader';
 import Sidebar from '#/components/Sidebar';
 import useSSE from '#/hooks/useSSE';
 import type { ShowConnection } from '#/types/graphql';
@@ -52,34 +53,81 @@ const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
 const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation();
   const { siteSettings, shows } = useRootData();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useSSE();
 
-  const social = <SocialIcons />;
   return (
-    <Wrapper className="lg:my-6">
-      <header className="relative md:mb-6">
-        <div className="md:flex md:justify-between">
-          <h1 className="xs:text-5xl text-center text-4xl font-black uppercase lg:text-left lg:text-7xl">
-            <Link to="/">{siteSettings?.siteTitle || t('title')}</Link>
-          </h1>
-          <div className="top-6 right-0 flex items-center justify-center lg:absolute lg:flex-none">
-            <DarkMode />
-            <nav className="mt-1.5 text-center">{social}</nav>
+    <MobileMenuProvider>
+      <div className="flex min-h-full flex-col">
+        {/* Sticky Header */}
+        <header
+          className={cn(
+            'sticky top-0 z-40',
+            'border-b border-neutral-200/60 bg-white/80 backdrop-blur-xl',
+            'dark:bg-surface-dark/80 dark:border-white/5'
+          )}
+        >
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+            {/* Logo */}
+            <Link
+              to="/"
+              className="font-display hover:text-pink text-2xl font-black tracking-tight uppercase"
+            >
+              {siteSettings?.siteTitle || t('title')}
+            </Link>
+
+            {/* Nav (hidden on mobile, shown md+) */}
+            <Navigation />
+
+            {/* Right side controls */}
+            <div className="flex items-center gap-4">
+              <div className="hidden lg:block">
+                <DarkMode />
+              </div>
+              <div className="text-muted dark:text-muted-dark hidden items-center gap-3 lg:flex">
+                <SocialIcons />
+              </div>
+              <Navigation.MobileToggle />
+            </div>
           </div>
-        </div>
-        <Navigation />
-      </header>
-      <div className="my-8 justify-between md:my-0 lg:flex">
-        <section className="mb-12 grow lg:mr-12">{children}</section>
-        <section>
-          <Sidebar shows={shows as ShowConnection} />
-        </section>
+        </header>
+
+        {/* Main content */}
+        <main className="mx-auto w-full max-w-7xl grow px-6 py-12">
+          {/* Show the upcoming shows section on the homepage, above other content */}
+          {isHome && shows && (
+            <>
+              <Sidebar shows={shows as ShowConnection} />
+              <AccentLine />
+            </>
+          )}
+
+          {children}
+        </main>
+
+        {/* Footer */}
+        <footer
+          className={cn(
+            'border-t border-neutral-200 bg-white',
+            'dark:bg-surface-dark dark:border-white/5'
+          )}
+        >
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 py-10 md:flex-row">
+            <div className="font-display text-lg font-bold tracking-tight text-neutral-300 dark:text-white/30">
+              {siteSettings?.siteTitle || t('title')}
+            </div>
+            <div className="text-muted dark:text-muted-dark flex items-center gap-6">
+              <SocialIcons />
+            </div>
+            <div
+              className="text-muted dark:text-muted-dark text-center text-xs"
+              dangerouslySetInnerHTML={{ __html: siteSettings?.copyrightText as string }}
+            />
+          </div>
+        </footer>
       </div>
-      <nav className="my-2.5 text-center">{social}</nav>
-      <footer className="overflow-hidden text-center text-sm">
-        <section dangerouslySetInnerHTML={{ __html: siteSettings?.copyrightText as string }} />
-      </footer>
-    </Wrapper>
+    </MobileMenuProvider>
   );
 };

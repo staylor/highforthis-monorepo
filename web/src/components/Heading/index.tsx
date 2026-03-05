@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import type { HTMLAttributes } from 'react';
 
-export const headingBase = 'block font-bold mb-2 lg:mb-3 text-neutral-800 dark:text-white';
+export const headingBase = 'block font-display font-bold mb-2 lg:mb-3 dark:text-white';
 
 const heading1 = 'text-3xl lg:text-4xl';
 

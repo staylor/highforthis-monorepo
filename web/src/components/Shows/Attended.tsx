@@ -1,10 +1,11 @@
+import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import { Trans } from 'react-i18next';
 
 import Link from '#/components/Link';
 import type { ShowConnection } from '#/types/graphql';
 
-import { Cell } from './Cell';
+import { cellBase, rowBorder, rowHover } from './styles';
 import { formatArtists, formatDate, formatShowLink } from './utils';
 
 export default function Attended({
@@ -21,9 +22,9 @@ export default function Attended({
   }
 
   return (
-    <article className={className || 'mt-16'}>
-      <p className="mb-2">
-        <Link to={`/shows/stats/${relation}`}>
+    <article className={className || 'mt-12'}>
+      <p className="mb-3 text-sm">
+        <Link to={`/shows/stats/${relation}`} className="text-pink hover:underline">
           <Trans
             i18nKey={`shows.attended.${relation}`}
             count={shows.edges.length}
@@ -40,22 +41,37 @@ export default function Attended({
             const d = formatDate(node.date);
 
             return (
-              <tr key={node.id}>
-                <Cell className="w-36 text-right text-sm">
+              <tr key={node.id} className={cn(rowHover, rowBorder)}>
+                <td
+                  className={cn(
+                    cellBase,
+                    'text-muted dark:text-muted-dark w-16 tabular-nums md:w-24'
+                  )}
+                >
                   {d.formatted}/{d.year}
-                </Cell>
-                <Cell className="text-base font-medium uppercase">
+                </td>
+                <td className={cellBase}>
                   <Link
-                    className="dark:hover:text-pink hover:text-neutral-800 hover:underline"
+                    className="hover:text-pink transition-colors hover:underline"
                     to={relation === 'artist' ? `/venue/${node.venue.slug}` : formatShowLink(node)}
                   >
                     {relation === 'artist' ? node.venue.name : formatArtists(node)}
                   </Link>
-                </Cell>
+                  {relation === 'artist' && (
+                    <span className="text-muted dark:text-muted-dark block text-xs sm:hidden">
+                      {node.venue.city}, {node.venue.state}
+                    </span>
+                  )}
+                </td>
                 {relation === 'artist' && (
-                  <Cell className="text-base font-medium uppercase">
+                  <td
+                    className={cn(
+                      cellBase,
+                      'text-muted dark:text-muted-dark hidden uppercase sm:table-cell'
+                    )}
+                  >
                     {node.venue.city}, {node.venue.state}
-                  </Cell>
+                  </td>
                 )}
               </tr>
             );

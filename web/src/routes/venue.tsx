@@ -31,17 +31,18 @@ export default function Venue({ loaderData }: Route.ComponentProps) {
     <>
       <FeaturedMedia featuredMedia={venue.featuredMedia as ImageUpload[]} />
       <Heading1>{venue.name}</Heading1>
-      <div className="mb-4 justify-between md:my-10 md:flex">
+      <div className="mb-6 justify-between md:my-8 md:flex">
         <div className="my-4 md:my-0 md:mr-4">
           {venue.address && (
             <p
-              className="mb-3"
+              className="text-muted dark:text-muted-dark mb-3 text-sm"
               dangerouslySetInnerHTML={{ __html: venue.address.replace(/\n/g, '<br />') }}
             />
           )}
           {venue.capacity && (
-            <p className="mb-5">
-              <strong>{t('venues.capacity')}:</strong> {venue.capacity}
+            <p className="mb-4 text-sm">
+              <strong>{t('venues.capacity')}:</strong>{' '}
+              <span className="text-muted dark:text-muted-dark">{venue.capacity}</span>
             </p>
           )}
           {venue.website && (
@@ -49,13 +50,13 @@ export default function Venue({ loaderData }: Route.ComponentProps) {
               href={venue.website}
               target="_blank"
               rel="noreferrer"
-              className="text-pink underline"
+              className="text-pink text-sm underline"
             >
               {t('venues.website')} &rarr;
             </a>
           )}
           {venue.permanentlyClosed && (
-            <p className="bg-pink rounded-lg p-2 font-bold text-white">
+            <p className="bg-pink mt-4 rounded-lg p-2 text-sm font-bold text-white">
               {t('venues.permanentlyClosed')}.
             </p>
           )}
