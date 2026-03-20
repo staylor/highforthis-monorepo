@@ -25,6 +25,7 @@
   --color-muted: #737373;
   --color-muted-dark: #888888;
 
+  --font-title: 'Bungee Shade', 'Space Grotesk', sans-serif;
   --font-display:
     'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
     sans-serif;

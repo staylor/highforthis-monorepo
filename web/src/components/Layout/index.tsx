@@ -73,7 +73,7 @@ const Layout = ({ children }: PropsWithChildren) => {
             {/* Logo */}
             <Link
               to="/"
-              className="font-display hover:text-pink text-2xl font-black tracking-tight uppercase"
+              className="font-title hover:text-pink text-2xl font-black tracking-tight uppercase"
             >
               {siteSettings?.siteTitle || t('title')}
             </Link>
@@ -115,7 +115,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           )}
         >
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 py-10 md:flex-row">
-            <div className="font-display text-lg font-bold tracking-tight text-neutral-300 dark:text-white/30">
+            <div className="font-title text-lg font-bold tracking-tight text-neutral-300 dark:text-white/30">
               {siteSettings?.siteTitle || t('title')}
             </div>
             <div className="text-muted dark:text-muted-dark flex items-center gap-6">

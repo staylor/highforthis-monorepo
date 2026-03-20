@@ -28,7 +28,7 @@ export const links: LinksFunction = () => {
     { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
     {
       rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
+      href: 'https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
     },
     { rel: 'shortcut icon', href: '/favicon.png', type: 'image/png' },
     { rel: 'stylesheet', href: '/fonts/icons/icons.css' },
