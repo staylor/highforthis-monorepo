@@ -17,8 +17,8 @@ struct PodcastDetail: View {
                 let posted = L10N("posted \(parseDate(podcast.date!))")
                 TextBlock {
                     VStack(alignment: .leading) {
-                        Text(podcast.title).foregroundColor(.black).font(.title).fontWeight(.bold)
-                        Text(posted).foregroundColor(.gray).padding(.bottom)
+                        Text(podcast.title).foregroundColor(.primary).font(.title).fontWeight(.bold)
+                        Text(posted).foregroundColor(.secondary).padding(.bottom)
                         Text(podcast.description)
                     }.padding(.vertical, 24)
                     HStack {

@@ -6,12 +6,10 @@ struct AppWrapper <Content: View>: View {
     init(@ViewBuilder content: @escaping () -> Content) { self.content = content }
     
     var body: some View {
-        NavigationStack {
-            content()
-        }
+        content()
         #if os(macOS)
         .frame(minWidth: 640, minHeight: 640)
-        .background(.white)
+        .background(Color(.systemBackground))
         #endif
     }
 }

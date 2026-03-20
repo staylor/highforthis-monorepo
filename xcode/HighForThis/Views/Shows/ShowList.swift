@@ -29,7 +29,7 @@ struct ShowList: View {
                                     HStack {
                                         VStack(alignment: .leading) {
                                             Text(label).foregroundColor(.accentColor)
-                                            Text(show.venue.name).foregroundColor(.gray)
+                                            Text(show.venue.name).foregroundColor(.secondary)
                                         }
                                         
                                         Spacer()
@@ -38,7 +38,7 @@ struct ShowList: View {
                             }
                         } header: {
                             Text(group.dateFormatted())
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                                 .fontWeight(.bold)
                         }
                     }
@@ -54,31 +54,27 @@ struct ShowList: View {
                 .listStyle(.plain)
                 .navigationTitle(title)
                 .toolbar {
-                    let _ = print("\(attended)")
                     if attended == .some(true) {
                         let filterByYear = L10N("filterByYear")
                         ToolbarItem {
-                            Picker(filterByYear, selection: $year) {
-                                #if os(macOS)
-                                Text(verbatim: "--").tag(0)
-                                #elseif os(iOS)
-                                Text(filterByYear).tag(0)
-                                #endif
-                                ForEach(model.connection!.years!, id: \.self) {
-                                    Text(String($0)).tag($0)
+                            Menu {
+                                Picker(filterByYear, selection: $year) {
+                                    Text(filterByYear).tag(0)
+                                    ForEach(model.connection!.years!, id: \.self) {
+                                        Text(String($0)).tag($0)
+                                    }
                                 }
+                                .onChange(of: year) {
+                                    model.fetchShows(
+                                        first: first,
+                                        latest: latest,
+                                        attended: attended,
+                                        year: .some(year)
+                                    )
+                                }
+                            } label: {
+                                Label(filterByYear, systemImage: "line.3.horizontal.decrease.circle")
                             }
-                            .onChange(of: year) {
-                                model.fetchShows(
-                                    first: first,
-                                    latest: latest,
-                                    attended: attended,
-                                    year: .some(year)
-                                )
-                            }
-                            #if os(macOS)
-                            .frame(maxWidth: 160)
-                            #endif
                         }
                     }
                 }

@@ -3,18 +3,26 @@ import SwiftUI
 struct ImageLoading: View {
     var width: CGFloat?
     var height: CGFloat?
-    @State private var blinking: Bool = false
-    
+    @State private var animating = false
+
     var body: some View {
-        Stripes(config: StripesConfig(
-            background: Color.gray.opacity(0.25),
-            foreground: Color.black.opacity(0.55)
-        ))
-            .opacity(blinking ? 0.3 : 1)
-            .animation(.easeInOut(duration: 0.75).repeatForever(), value: blinking)
-            .onAppear {
-                blinking.toggle()
-            }
+        RoundedRectangle(cornerRadius: 8)
+            .fill(Color(.systemGray5))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(
+                        LinearGradient(
+                            colors: [.clear, Color(.systemGray4), .clear],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .offset(x: animating ? 200 : -200)
+            )
+            .clipped()
+            .opacity(animating ? 1 : 0.7)
+            .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: animating)
+            .onAppear { animating = true }
             .frame(width: width, height: height)
     }
 }

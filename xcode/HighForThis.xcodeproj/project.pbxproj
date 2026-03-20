@@ -42,7 +42,6 @@
 		D2E644112BAB6E20001B5DC2 /* ArtistArtwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644102BAB6E20001B5DC2 /* ArtistArtwork.swift */; };
 		D2E644142BAB7D1A001B5DC2 /* TextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644132BAB7D1A001B5DC2 /* TextBlock.swift */; };
 		D2E644162BABC872001B5DC2 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644152BABC872001B5DC2 /* Network.swift */; };
-		D2E6441D2BABE478001B5DC2 /* Stripes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E6441C2BABE478001B5DC2 /* Stripes.swift */; };
 		D2E6441F2BAC86D0001B5DC2 /* Paragraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E6441E2BAC86D0001B5DC2 /* Paragraph.swift */; };
 		D2E644222BAC8C0D001B5DC2 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = D2E644212BAC8C0D001B5DC2 /* CachedAsyncImage */; };
 		D2E644252BAD3ADB001B5DC2 /* ImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E644242BAD3ADB001B5DC2 /* ImageLoading.swift */; };
@@ -92,7 +91,6 @@
 		D2E644102BAB6E20001B5DC2 /* ArtistArtwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistArtwork.swift; sourceTree = "<group>"; };
 		D2E644132BAB7D1A001B5DC2 /* TextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBlock.swift; sourceTree = "<group>"; };
 		D2E644152BABC872001B5DC2 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
-		D2E6441C2BABE478001B5DC2 /* Stripes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stripes.swift; sourceTree = "<group>"; };
 		D2E6441E2BAC86D0001B5DC2 /* Paragraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paragraph.swift; sourceTree = "<group>"; };
 		D2E644242BAD3ADB001B5DC2 /* ImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoading.swift; sourceTree = "<group>"; };
 		D2E644262BADDC45001B5DC2 /* VideoListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListModel.swift; sourceTree = "<group>"; };
@@ -138,7 +136,6 @@
 				D2A1168A2B84F2D300CA5EFD /* Podcasts */,
 				D2E644282BAE5A10001B5DC2 /* Posts */,
 				D2A116892B84F2C200CA5EFD /* Shows */,
-				D2E6441C2BABE478001B5DC2 /* Stripes.swift */,
 				D2E644132BAB7D1A001B5DC2 /* TextBlock.swift */,
 				D2E644122BAB6F11001B5DC2 /* Venue */,
 				D2E644232BAD393E001B5DC2 /* Videos */,
@@ -204,7 +201,6 @@
 				D25099CE2BE18D9B003904A8 /* Localizable.xcstrings */,
 				D22BA1182B6B37C20037E129 /* Models */,
 				D2E644152BABC872001B5DC2 /* Network.swift */,
-				D2E644172BABCB3F001B5DC2 /* Preview Content */,
 				D22BA1152B6B37800037E129 /* Views */,
 				D2EB6E322C331CC000D8CC29 /* Environment.swift */,
 			);
@@ -232,13 +228,6 @@
 				D27CC0822C24C9B30075997D /* VenueModel.swift */,
 			);
 			path = Venue;
-			sourceTree = "<group>";
-		};
-		D2E644172BABCB3F001B5DC2 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		D2E644232BAD393E001B5DC2 /* Videos */ = {
@@ -380,7 +369,6 @@
 				D2E644252BAD3ADB001B5DC2 /* ImageLoading.swift in Sources */,
 				D273C9212BE5C256005E0D9A /* ShowsSectionHeader.swift in Sources */,
 				D25099C92BBBBC06003904A8 /* ExternalLink.swift in Sources */,
-				D2E6441D2BABE478001B5DC2 /* Stripes.swift in Sources */,
 				D2A116792B814C5800CA5EFD /* AudioPlayerViewModel.swift in Sources */,
 				D2E644302BAE6CD0001B5DC2 /* PostHelpers.swift in Sources */,
 				D2E6441F2BAC86D0001B5DC2 /* Paragraph.swift in Sources */,
@@ -551,7 +539,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.4;
@@ -580,7 +568,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"HighForThis/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = LQR2VDPY65;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -601,7 +589,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.4;

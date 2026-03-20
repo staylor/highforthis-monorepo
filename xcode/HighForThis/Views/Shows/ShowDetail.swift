@@ -26,7 +26,7 @@ struct ShowDetail: View {
                         Text(verbatim: " - ") +
                         Text(parseDate(show.date, format: "h:mma"))
                     }
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .font(.subheadline)
                     .padding(.bottom, 8)
                     

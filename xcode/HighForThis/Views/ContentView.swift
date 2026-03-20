@@ -4,30 +4,30 @@ struct ContentView: View {
     var body: some View {
         AppWrapper {
             TabView {
-                NavigationView {
-                    ShowList(title: L10N("recommendedShows"), latest: true)
-                }.tabItem {
-                    Label(L10N("shows"), systemImage: "calendar")
+                Tab(L10N("shows"), systemImage: "calendar") {
+                    NavigationStack {
+                        ShowList(title: L10N("recommendedShows"), latest: true)
+                    }
                 }
-                NavigationView {
-                    PodcastList()
-                }.tabItem {
-                    Label(L10N("podcast"), systemImage: "mic.circle")
+                Tab(L10N("podcast"), systemImage: "mic.circle") {
+                    NavigationStack {
+                        PodcastList()
+                    }
                 }
-                NavigationView {
-                    VideoList()
-                }.tabItem {
-                    Label(L10N("videos"), systemImage: "video")
+                Tab(L10N("videos"), systemImage: "video") {
+                    NavigationStack {
+                        VideoList()
+                    }
                 }
-                NavigationView {
-                    PostList()
-                }.tabItem {
-                    Label(L10N("posts"), systemImage: "note.text")
+                Tab(L10N("posts"), systemImage: "note.text") {
+                    NavigationStack {
+                        PostList()
+                    }
                 }
-                NavigationView {
-                    ShowList(title: L10N("showHistory"), attended: true)
-                }.tabItem {
-                    Label(L10N("showHistory"), systemImage: "calendar")
+                Tab(L10N("showHistory"), systemImage: "calendar") {
+                    NavigationStack {
+                        ShowList(title: L10N("showHistory"), attended: true)
+                    }
                 }
             }
             #if os(macOS)

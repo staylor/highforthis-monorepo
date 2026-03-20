@@ -5,7 +5,7 @@ struct InternalLink <Content: View>: View {
     var color: Color
     var content: () -> Content
     
-    init(_ label: String, color: Color = .black, @ViewBuilder content: @escaping () -> Content) {
+    init(_ label: String, color: Color = .primary, @ViewBuilder content: @escaping () -> Content) {
         self.label = label
         self.color = color
         self.content = content

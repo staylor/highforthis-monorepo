@@ -13,7 +13,7 @@ struct ShowSectionItem: View {
             } label: {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text(parseDate(date)).foregroundColor(.gray)
+                        Text(parseDate(date)).foregroundColor(.secondary)
                         Text(name).foregroundColor(.accentColor)
                     }
                     

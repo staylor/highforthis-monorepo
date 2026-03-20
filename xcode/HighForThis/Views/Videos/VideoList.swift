@@ -58,22 +58,19 @@ struct VideoList: View {
                 .navigationTitle(L10N("videos"))
                 .toolbar {
                     ToolbarItem {
-                        Picker(filterByYear, selection: $year) {
-                            #if os(macOS)
-                            Text(verbatim: "--").tag(0)
-                            #elseif os(iOS)
-                            Text(filterByYear).tag(0)
-                            #endif
-                            ForEach(model.connection!.years!, id: \.self) {
-                                Text(String($0)).tag($0)
+                        Menu {
+                            Picker(filterByYear, selection: $year) {
+                                Text(filterByYear).tag(0)
+                                ForEach(model.connection!.years!, id: \.self) {
+                                    Text(String($0)).tag($0)
+                                }
                             }
+                            .onChange(of: year) {
+                                model.fetchYear(year)
+                            }
+                        } label: {
+                            Label(filterByYear, systemImage: "line.3.horizontal.decrease.circle")
                         }
-                        .onChange(of: year) {
-                            model.fetchYear(year)
-                        }
-                        #if os(macOS)
-                        .frame(maxWidth: 160)
-                        #endif
                     }
                 }
             }

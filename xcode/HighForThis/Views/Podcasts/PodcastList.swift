@@ -21,8 +21,8 @@ struct PodcastList: View {
                             PodcastDetail(id: podcast.id)
                         } label: {
                             VStack(alignment: .leading) {
-                                Text(posted).foregroundColor(.gray).padding(.bottom, 1)
-                                Text(podcast.title).font(.title3).foregroundColor(.pink)
+                                Text(posted).foregroundColor(.secondary).padding(.bottom, 1)
+                                Text(podcast.title).font(.title3).foregroundColor(.accentColor)
                             }
                         }
                     }

@@ -25,12 +25,12 @@ struct VenueMain: View {
                             Text(name).font(.title).bold().padding(.bottom, 2)
                             if let address = venue.address {
                                 Paragraph(address)
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(.secondary)
                                     .padding(.bottom, 2)
                             }
                             if let capacity = venue.capacity {
                                 Text(L10N("capacity \(capacity)"))
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(.secondary)
                                     .padding(.bottom, 2)
                             }
                             if let website = venue.website {
