@@ -3,17 +3,11 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Location } from 'react-router';
-import { useLocation, useNavigate } from 'react-router';
-
-import Select from '#/components/Form/Select';
+import { useLocation } from 'react-router';
 
 import DarkMode from '../Layout/DarkMode';
 
 import Link from './Link';
-
-const year = new Date().getFullYear() + 1;
-const yearChoices = (start: number, end: number) =>
-  [...Array(end - start).keys()].map((i) => start + i);
 
 const showsIsActive = (_: string, location: Location) =>
   !!location.pathname.match(/^\/(shows|venue|artist)/);
@@ -39,16 +33,7 @@ export function MobileMenuProvider({ children }: PropsWithChildren) {
 
 const Navigation = () => {
   const { t } = useTranslation();
-  const location = useLocation();
-  const navigate = useNavigate();
   const { isOpen } = useContext(MobileMenuContext);
-
-  const onChange = (value: string) => {
-    navigate({
-      pathname: `/videos/${value}`,
-    });
-  };
-  const showYears = location.pathname === '/' || location.pathname.match(/^\/video/);
 
   return (
     <>
@@ -60,15 +45,6 @@ const Navigation = () => {
           {t('nav.shows')}
         </Link>
         <Link to="/videos">{t('nav.videos')}</Link>
-        {showYears && (
-          <Select
-            value=""
-            className={cn('dark:text-dark mx-auto my-0 md:mx-0')}
-            placeholder={t('nav.videosByYear')}
-            choices={yearChoices(2011, year).reverse()}
-            onChange={onChange}
-          />
-        )}
       </nav>
 
       {/* Mobile nav overlay */}
@@ -87,15 +63,6 @@ const Navigation = () => {
               {t('nav.shows')}
             </Link>
             <Link to="/videos">{t('nav.videos')}</Link>
-            {showYears && (
-              <Select
-                value=""
-                className="dark:text-dark mt-2"
-                placeholder={t('nav.videosByYear')}
-                choices={yearChoices(2011, year).reverse()}
-                onChange={onChange}
-              />
-            )}
             <div className="mt-2">
               <DarkMode />
             </div>

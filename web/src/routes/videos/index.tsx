@@ -1,6 +1,8 @@
 import { gql } from 'graphql-tag';
-import { useParams, type MetaFunction } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { useParams, useNavigate, type MetaFunction } from 'react-router';
 
+import Select from '#/components/Form/Select';
 import TextTitle from '#/components/TextTitle';
 import Videos from '#/components/Videos';
 import { videosQuery as queryFragment } from '#/components/Videos/graphql';
@@ -62,8 +64,13 @@ export const meta: MetaFunction = ({ matches, params }) => {
   ];
 };
 
+const currentYear = new Date().getFullYear() + 1;
+const yearChoices = [...Array(currentYear - 2011).keys()].map((i) => 2011 + i).reverse();
+
 export default function VideosIndex({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
   const params = useParams();
+  const navigate = useNavigate();
   const { videos } = loaderData;
   if (!videos) {
     return null;
@@ -71,7 +78,16 @@ export default function VideosIndex({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      {params.year && <TextTitle>{params.year}</TextTitle>}
+      <div className="mb-6 flex items-center justify-between">
+        {params.year ? <TextTitle>{params.year}</TextTitle> : <div />}
+        <Select
+          value={params.year || ''}
+          className="dark:text-dark text-sm"
+          placeholder={t('nav.videosByYear')}
+          choices={yearChoices}
+          onChange={(value: string) => navigate(`/videos/${value}`)}
+        />
+      </div>
       <Videos videos={videos as VideoConnection} />
     </>
   );
