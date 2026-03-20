@@ -10,6 +10,7 @@ import type {
 import prisma from '#/database';
 
 import { parseConnection } from './utils/collection';
+import { removeEntities, resolveJoin } from './utils/helpers';
 
 const SALT_ROUNDS = 10;
 
@@ -18,12 +19,9 @@ const userIncludes = { roles: true };
 const resolvers = {
   User: {
     roles(user: any) {
-      if ('roles' in user && Array.isArray(user.roles)) {
-        return user.roles.map((r: any) => r.name || r);
-      }
-      return prisma.userRole
-        .findMany({ where: { userId: user.id } })
-        .then((records: any[]) => records.map((r) => r.name));
+      return resolveJoin(user, 'roles', 'name', () =>
+        prisma.userRole.findMany({ where: { userId: user.id } })
+      );
     },
   },
   Query: {
@@ -99,12 +97,7 @@ const resolvers = {
     },
 
     async removeUser(_: unknown, { ids }: MutationRemoveUserArgs) {
-      try {
-        await prisma.user.deleteMany({ where: { id: { in: ids as string[] } } });
-        return true;
-      } catch {
-        return false;
-      }
+      return removeEntities(prisma.user, ids);
     },
   },
 };

@@ -30,23 +30,21 @@ export default class Upload {
 
   setDestination() {
     const d = new Date();
-    const month = d.getMonth() + 1;
-    const monthStr = month < 10 ? `0${month}` : `${month}`;
-    const uploadsFolder = path.join(this.uploadDir, `${d.getFullYear()}`, monthStr);
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const uploadsFolder = path.join(this.uploadDir, `${d.getFullYear()}`, month);
     mkdirp.sync(uploadsFolder);
     this.destination = uploadsFolder;
   }
 
   setFileProps(file: Express.Multer.File): Promise<void> {
     this.setDestination();
-    this.ext = file.originalname.substring(file.originalname.lastIndexOf('.'));
+    this.ext = path.extname(file.originalname);
     return new Promise((resolve, reject) => {
-      crypto.pseudoRandomBytes(8, (err, raw) => {
+      crypto.randomBytes(8, (err, raw) => {
         if (err) {
           reject(err);
         } else {
-          const filename = raw.toString('hex');
-          this.basename = filename;
+          this.basename = raw.toString('hex');
           this.fileName = `${this.basename}${this.ext}`;
           resolve();
         }
@@ -78,15 +76,7 @@ export default class Upload {
   }
 
   async process(adapter: StorageAdapter) {
-    if (!adapter) {
-      return Promise.resolve();
-    }
-
     const files = this.toArray();
-    if (!files || !files.length) {
-      return Promise.resolve();
-    }
-
     return adapter.run(files);
   }
 }

@@ -11,24 +11,39 @@ import type {
 import prisma from '#/database';
 
 import { parseConnection, emptyConnection } from './utils/collection';
+import { removeEntities, resolveJoin, timestampResolver } from './utils/helpers';
 
 const showIncludes = {
   artists: { include: { artist: true } },
   venue: true,
 };
 
+async function getEntityStats(
+  counts: { id: string; count: number }[],
+  lookup: (ids: string[]) => Promise<any[]>,
+  type: string
+) {
+  const ids = counts.map((c) => c.id);
+  const entities = await lookup(ids);
+  const entityMap = new Map(entities.map((e: any) => [e.id, e]));
+  return counts
+    .map(({ id, count }) => ({
+      count,
+      entity: { ...entityMap.get(id), type },
+    }))
+    .sort((a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? ''));
+}
+
 const resolvers = {
   Show: {
-    date(show: any) {
-      return new Date(show.date).getTime();
-    },
+    date: timestampResolver('date'),
     artists(show: any) {
-      if ('artists' in show && Array.isArray(show.artists)) {
-        return show.artists.map((r: any) => r.artist || r);
-      }
-      return prisma.showArtist
-        .findMany({ where: { showId: show.id }, include: { artist: true } })
-        .then((records: any[]) => records.map((r) => r.artist));
+      return resolveJoin(show, 'artists', 'artist', () =>
+        prisma.showArtist.findMany({
+          where: { showId: show.id },
+          include: { artist: true },
+        })
+      );
     },
     venue(show: any) {
       if ('venue' in show && show.venue && typeof show.venue === 'object') {
@@ -122,42 +137,29 @@ const resolvers = {
     },
 
     async showStats(_: unknown, { entity }: QueryShowStatsArgs) {
-      const entityType = entity.toLowerCase();
-      if (entityType === 'artist') {
+      if (entity.toLowerCase() === 'artist') {
         const results = await prisma.showArtist.groupBy({
           by: ['artistId'],
           where: { show: { attended: true } },
           _count: { artistId: true },
         });
-        const artistIds = results.map((r: any) => r.artistId);
-        const artists = await prisma.artist.findMany({ where: { id: { in: artistIds } } });
-        const artistMap = new Map(artists.map((a: any) => [a.id, a]));
-        return results
-          .map((r: any) => ({
-            count: r._count.artistId,
-            entity: { ...artistMap.get(r.artistId), type: 'artist' },
-          }))
-          .sort(
-            (a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? '')
-          );
-      } else {
-        const results = await prisma.show.groupBy({
-          by: ['venueId'],
-          where: { attended: true },
-          _count: { venueId: true },
-        });
-        const venueIds = results.map((r: any) => r.venueId);
-        const venues = await prisma.venue.findMany({ where: { id: { in: venueIds } } });
-        const venueMap = new Map(venues.map((v: any) => [v.id, v]));
-        return results
-          .map((r: any) => ({
-            count: r._count.venueId,
-            entity: { ...venueMap.get(r.venueId), type: 'venue' },
-          }))
-          .sort(
-            (a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? '')
-          );
+        return getEntityStats(
+          results.map((r: any) => ({ id: r.artistId, count: r._count.artistId })),
+          (ids) => prisma.artist.findMany({ where: { id: { in: ids } } }),
+          'artist'
+        );
       }
+
+      const results = await prisma.show.groupBy({
+        by: ['venueId'],
+        where: { attended: true },
+        _count: { venueId: true },
+      });
+      return getEntityStats(
+        results.map((r: any) => ({ id: r.venueId, count: r._count.venueId })),
+        (ids) => prisma.venue.findMany({ where: { id: { in: ids } } }),
+        'venue'
+      );
     },
   },
   Mutation: {
@@ -202,12 +204,7 @@ const resolvers = {
     },
 
     async removeShow(_: unknown, { ids }: MutationRemoveShowArgs) {
-      try {
-        await prisma.show.deleteMany({ where: { id: { in: ids as string[] } } });
-        return true;
-      } catch {
-        return false;
-      }
+      return removeEntities(prisma.show, ids);
     },
   },
 };

@@ -1,5 +1,3 @@
-import { URL } from 'node:url';
-
 import prisma from '#/database';
 import { slugify } from '#/models/utils';
 
@@ -14,41 +12,77 @@ if (!API_KEY) {
   throw new Error('Must set YOUTUBE_API_KEY on process.env');
 }
 
-function getPlaylistsUrl() {
-  const requestURL = new URL(PLAYLISTS_PATH, API_HOST);
-  requestURL.searchParams.set('maxResults', PER_PAGE);
-  requestURL.searchParams.set('part', 'snippet');
-  requestURL.searchParams.set('key', API_KEY);
-  requestURL.searchParams.set('channelId', CHANNEL_ID);
-  return requestURL.href;
+interface YouTubeThumbnail {
+  url: string;
+  width: number;
+  height: number;
 }
 
-function getPlaylistUrl(playlistId: string, pageToken?: string): string {
-  const requestURL = new URL(PLAYLIST_PATH, API_HOST);
-  requestURL.searchParams.set('playlistId', playlistId);
-  requestURL.searchParams.set('maxResults', PER_PAGE);
-  requestURL.searchParams.set('part', 'snippet,contentDetails');
-  requestURL.searchParams.set('key', API_KEY);
-  if (pageToken) {
-    requestURL.searchParams.set('pageToken', pageToken);
+interface YouTubeSnippet {
+  title: string;
+  position: number;
+  thumbnails?: Record<string, YouTubeThumbnail>;
+}
+
+interface YouTubeContentDetails {
+  videoId: string;
+  videoPublishedAt: string;
+}
+
+interface YouTubePlaylistItem {
+  snippet: YouTubeSnippet;
+  contentDetails: YouTubeContentDetails;
+}
+
+interface YouTubePlaylist {
+  id: string;
+  snippet: { title: string };
+}
+
+interface YouTubeListResponse<T> {
+  items: T[];
+  nextPageToken?: string;
+}
+
+function buildUrl(path: string, params: Record<string, string>) {
+  const url = new URL(path, API_HOST);
+  url.searchParams.set('maxResults', PER_PAGE);
+  url.searchParams.set('key', API_KEY);
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value);
   }
-  return requestURL.href;
+  return url.href;
 }
 
-async function fetchPlaylists() {
+function getPlaylistsUrl() {
+  return buildUrl(PLAYLISTS_PATH, { part: 'snippet', channelId: CHANNEL_ID });
+}
+
+function getPlaylistUrl(playlistId: string, pageToken?: string) {
+  const params: Record<string, string> = {
+    part: 'snippet,contentDetails',
+    playlistId,
+  };
+  if (pageToken) {
+    params.pageToken = pageToken;
+  }
+  return buildUrl(PLAYLIST_PATH, params);
+}
+
+async function fetchPlaylists(): Promise<YouTubeListResponse<YouTubePlaylist>> {
   const response = await fetch(getPlaylistsUrl());
   return response.json();
 }
 
-async function fetchPlaylistItems(playlistId: string): Promise<any[]> {
-  let items: any[] = [];
+async function fetchPlaylistItems(playlistId: string): Promise<YouTubePlaylistItem[]> {
+  let items: YouTubePlaylistItem[] = [];
   let pageToken: string | undefined;
 
   do {
     const playlistUrl = getPlaylistUrl(playlistId, pageToken);
     try {
       const response = await fetch(playlistUrl);
-      const result: any = await response.json();
+      const result: YouTubeListResponse<YouTubePlaylistItem> = await response.json();
       items = items.concat(result.items);
       pageToken = result.nextPageToken;
     } catch (e) {
@@ -63,89 +97,75 @@ async function fetchPlaylistItems(playlistId: string): Promise<any[]> {
 }
 
 async function updateVideo(
-  { contentDetails, snippet }: Record<string, any>,
+  { contentDetails, snippet }: YouTubePlaylistItem,
   year: string,
   playlistId: string
 ) {
-  const thumbnails =
-    snippet && snippet.thumbnails
-      ? Object.keys(snippet.thumbnails).map((thumb: string) => ({
-          url: snippet.thumbnails[thumb].url,
-          width: snippet.thumbnails[thumb].width,
-          height: snippet.thumbnails[thumb].height,
-        }))
-      : [];
+  const thumbnails = snippet.thumbnails
+    ? Object.values(snippet.thumbnails).map(({ url, width, height }) => ({
+        url,
+        width,
+        height,
+      }))
+    : [];
 
-  const date = new Date(contentDetails.videoPublishedAt);
+  const slug = slugify(snippet.title);
   const data = {
     dataId: contentDetails.videoId,
     dataType: 'youtube',
     dataPlaylistId: playlistId,
     year: parseInt(year, 10),
     publishedISO: contentDetails.videoPublishedAt,
-    publishedAt: date,
+    publishedAt: new Date(contentDetails.videoPublishedAt),
     title: snippet.title,
     position: snippet.position,
-    slug: slugify(snippet.title),
   };
 
-  try {
-    const video = await prisma.video.upsert({
-      where: { dataId: data.dataId },
-      create: data,
-      update: {
-        ...data,
-        slug: undefined,
-      },
+  const video = await prisma.video.upsert({
+    where: { dataId: data.dataId },
+    create: { ...data, slug },
+    update: data,
+  });
+
+  // Replace thumbnails
+  await prisma.videoThumbnail.deleteMany({ where: { videoId: video.id } });
+  if (thumbnails.length) {
+    await prisma.videoThumbnail.createMany({
+      data: thumbnails.map((t) => ({ ...t, videoId: video.id })),
     });
-
-    // Replace thumbnails
-    await prisma.videoThumbnail.deleteMany({ where: { videoId: video.id } });
-    if (thumbnails.length) {
-      await prisma.videoThumbnail.createMany({
-        data: thumbnails.map((t) => ({ ...t, videoId: video.id })),
-      });
-    }
-
-    return data.dataId;
-  } catch (e) {
-    throw e;
   }
+
+  return data.dataId;
 }
 
 async function fetchPlaylist(year: string, playlistId: string): Promise<string[]> {
-  let items;
+  let items: YouTubePlaylistItem[];
   try {
     items = await fetchPlaylistItems(playlistId);
-  } catch (_) {
+  } catch {
     console.log('Fetch playlist', playlistId, 'failed :(');
     return [];
   }
 
-  const newIds = items.filter(Boolean).map((item) => item.contentDetails.videoId);
+  const validItems = items.filter(
+    (item) => item?.snippet.title !== 'Private video' && item?.contentDetails.videoPublishedAt
+  );
+  const invalidCount = items.length - validItems.length;
+  if (invalidCount > 0) {
+    console.log(playlistId, 'has', invalidCount, 'private/unpublished videos');
+  }
+
+  const newIds = new Set(items.filter(Boolean).map((item) => item.contentDetails.videoId));
   const existing = await prisma.video.findMany({
     where: { dataPlaylistId: playlistId },
     select: { dataId: true },
   });
   const existingIds = existing.map(({ dataId }) => dataId);
 
-  const updates = await Promise.all(
-    items.map((item) => {
-      if (
-        !item ||
-        item.snippet.title === 'Private video' ||
-        !item.contentDetails.videoPublishedAt
-      ) {
-        console.log(playlistId, 'has a deletion:', item.contentDetails.videoId);
-        return false;
-      }
-      return updateVideo(item, year, playlistId);
-    })
-  );
+  const updates = await Promise.all(validItems.map((item) => updateVideo(item, year, playlistId)));
 
-  const updated = updates.filter(Boolean);
   if (existingIds.length) {
-    const orphans = existingIds.filter((id: string) => newIds.indexOf(id) < 0);
+    const orphans = existingIds.filter((id) => !newIds.has(id));
     if (orphans.length) {
       console.log('Orphans in:', playlistId, '-', orphans);
       await prisma.video.deleteMany({
@@ -154,30 +174,27 @@ async function fetchPlaylist(year: string, playlistId: string): Promise<string[]
           dataPlaylistId: playlistId,
         },
       });
-    } else if (updated.length > existingIds.length) {
-      console.log('Added', updated.length - existingIds.length, 'items to', playlistId);
+    } else if (updates.length > existingIds.length) {
+      console.log('Added', updates.length - existingIds.length, 'items to', playlistId);
     }
   } else {
-    console.log('Imported', updated.length, 'of', items.length, 'items from', playlistId);
+    console.log('Imported', updates.length, 'of', items.length, 'items from', playlistId);
   }
-  return updated as string[];
+  return updates;
 }
 
 export default async () => {
-  let response: any;
+  let response: YouTubeListResponse<YouTubePlaylist>;
   try {
     response = await fetchPlaylists();
-  } catch (_) {
+  } catch {
     console.log('Fetch playlists failed :(');
     return;
   }
 
   await Promise.all(
-    response?.items?.map((playlist: any) => {
-      if (playlist.snippet.title.match(/^[0-9]{4}$/)) {
-        return fetchPlaylist(playlist.snippet.title, playlist.id);
-      }
-      return Promise.resolve();
-    }) || []
+    response.items
+      .filter((playlist) => /^\d{4}$/.test(playlist.snippet.title))
+      .map((playlist) => fetchPlaylist(playlist.snippet.title, playlist.id))
   );
 };

@@ -1,5 +1,3 @@
-import merge from 'lodash.merge';
-
 import APIKeys from '#/resolvers/APIKeys';
 import Artist from '#/resolvers/Artist';
 import EditorState from '#/resolvers/EditorState';
@@ -12,7 +10,9 @@ import User from '#/resolvers/User';
 import Venue from '#/resolvers/Venue';
 import Video from '#/resolvers/Video';
 
-const modules = {
+type ResolverMap = Record<string, Record<string, unknown>>;
+
+const modules: ResolverMap[] = [
   APIKeys,
   Artist,
   EditorState,
@@ -24,14 +24,13 @@ const modules = {
   User,
   Venue,
   Video,
-} as any;
+];
 
-const resolvers = Object.keys(modules).reduce(
-  (memo, name) => {
-    merge(memo, modules[name]);
-    return memo;
-  },
-  {} as { [key: string]: any }
-);
+const resolvers = modules.reduce<ResolverMap>((merged, mod) => {
+  for (const [key, value] of Object.entries(mod)) {
+    merged[key] = { ...merged[key], ...value };
+  }
+  return merged;
+}, {});
 
 export default resolvers;

@@ -9,6 +9,7 @@ import type {
 import prisma from '#/database';
 
 import { parseConnection } from './utils/collection';
+import { removeEntities, timestampResolver } from './utils/helpers';
 
 const podcastIncludes = {
   audio: true,
@@ -27,9 +28,7 @@ const resolvers = {
       if (!podcast.imageId) return null;
       return prisma.mediaUpload.findUnique({ where: { id: podcast.imageId } });
     },
-    date(podcast: any) {
-      return new Date(podcast.updatedAt).getTime();
-    },
+    date: timestampResolver('updatedAt'),
   },
   Query: {
     async podcasts(_: unknown, args: QueryPodcastsArgs) {
@@ -63,12 +62,7 @@ const resolvers = {
     },
 
     async removePodcast(_: unknown, { ids }: MutationRemovePodcastArgs) {
-      try {
-        await prisma.podcast.deleteMany({ where: { id: { in: ids as string[] } } });
-        return true;
-      } catch {
-        return false;
-      }
+      return removeEntities(prisma.podcast, ids);
     },
   },
 };

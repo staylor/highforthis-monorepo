@@ -39,11 +39,11 @@ class Storage {
       uploadDir: this.opts.uploadDir,
       settings: mediaSettings || { crops: [] },
     };
-    if (file.mimetype.indexOf('image/') === 0) {
+    if (file.mimetype.startsWith('image/')) {
       upload = new Image(uploadOpts);
-    } else if (file.mimetype.indexOf('audio/') === 0) {
+    } else if (file.mimetype.startsWith('audio/')) {
       upload = new Audio(uploadOpts);
-    } else if (file.mimetype.indexOf('video/') === 0) {
+    } else if (file.mimetype.startsWith('video/')) {
       upload = new Video(uploadOpts);
     } else {
       upload = new Upload(uploadOpts);

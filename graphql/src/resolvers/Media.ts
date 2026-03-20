@@ -8,6 +8,7 @@ import type {
 import prisma from '#/database';
 
 import { parseConnection } from './utils/collection';
+import { removeEntities, resolveJoin, resolveType } from './utils/helpers';
 
 const mediaIncludes = {
   crops: true,
@@ -19,12 +20,14 @@ const mediaIncludes = {
 
 const resolvers = {
   MediaUpload: {
-    __resolveType(media: any) {
-      if (media.type === 'image') return 'ImageUpload';
-      if (media.type === 'audio') return 'AudioUpload';
-      if (media.type === 'video') return 'VideoUpload';
-      return 'FileUpload';
-    },
+    __resolveType: resolveType(
+      {
+        image: 'ImageUpload',
+        audio: 'AudioUpload',
+        video: 'VideoUpload',
+      },
+      'FileUpload'
+    ),
   },
   ImageUpload: {
     crops(media: any) {
@@ -34,22 +37,19 @@ const resolvers = {
   },
   AudioUpload: {
     artist(media: any) {
-      if ('audioArtists' in media) return media.audioArtists.map((r: any) => r.name);
-      return prisma.audioArtist
-        .findMany({ where: { mediaId: media.id } })
-        .then((records: any[]) => records.map((r) => r.name));
+      return resolveJoin(media, 'audioArtists', 'name', () =>
+        prisma.audioArtist.findMany({ where: { mediaId: media.id } })
+      );
     },
     albumArtist(media: any) {
-      if ('audioAlbumArtists' in media) return media.audioAlbumArtists.map((r: any) => r.name);
-      return prisma.audioAlbumArtist
-        .findMany({ where: { mediaId: media.id } })
-        .then((records: any[]) => records.map((r) => r.name));
+      return resolveJoin(media, 'audioAlbumArtists', 'name', () =>
+        prisma.audioAlbumArtist.findMany({ where: { mediaId: media.id } })
+      );
     },
     genre(media: any) {
-      if ('audioGenres' in media) return media.audioGenres.map((r: any) => r.name);
-      return prisma.audioGenre
-        .findMany({ where: { mediaId: media.id } })
-        .then((records: any[]) => records.map((r) => r.name));
+      return resolveJoin(media, 'audioGenres', 'name', () =>
+        prisma.audioGenre.findMany({ where: { mediaId: media.id } })
+      );
     },
     images(media: any) {
       if ('audioImages' in media) return media.audioImages;
@@ -103,12 +103,7 @@ const resolvers = {
     },
 
     async removeMediaUpload(_: unknown, { ids }: MutationRemoveMediaUploadArgs) {
-      try {
-        await prisma.mediaUpload.deleteMany({ where: { id: { in: ids as string[] } } });
-        return true;
-      } catch {
-        return false;
-      }
+      return removeEntities(prisma.mediaUpload, ids);
     },
   },
 };

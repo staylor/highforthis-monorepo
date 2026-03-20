@@ -11,16 +11,10 @@ declare global {
   }
 }
 
-const uploadFields = ['fieldname', 'originalname', 'encoding', 'mimetype'];
-
 export default async (_req: Request, res: Response) => {
-  const files: any[] = (_req.files as any[]).map((file) => {
-    const fileCopy = { ...file };
-    uploadFields.forEach((field: string) => {
-      delete fileCopy[field];
-    });
-    return fileCopy;
-  });
+  const files: any[] = (_req.files as any[]).map(
+    ({ fieldname: _, originalname: _o, encoding: _e, mimetype: _m, ...rest }) => rest
+  );
 
   const ids = await Promise.all(
     files.map(async (file) => {

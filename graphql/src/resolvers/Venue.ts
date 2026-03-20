@@ -10,6 +10,7 @@ import prisma from '#/database';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
+import { removeEntities, resolveJoin } from './utils/helpers';
 
 const venueIncludes = {
   featuredMedia: { include: { media: true } },
@@ -25,12 +26,12 @@ const resolvers = {
       return { latitude: venue.latitude, longitude: venue.longitude };
     },
     featuredMedia(venue: any) {
-      if ('featuredMedia' in venue) {
-        return venue.featuredMedia.map((r: any) => r.media);
-      }
-      return prisma.venueFeaturedMedia
-        .findMany({ where: { venueId: venue.id }, include: { media: true } })
-        .then((records: any[]) => records.map((r) => r.media));
+      return resolveJoin(venue, 'featuredMedia', 'media', () =>
+        prisma.venueFeaturedMedia.findMany({
+          where: { venueId: venue.id },
+          include: { media: true },
+        })
+      );
     },
   },
   Query: {
@@ -102,12 +103,7 @@ const resolvers = {
     },
 
     async removeVenue(_: unknown, { ids }: MutationRemoveVenueArgs) {
-      try {
-        await prisma.venue.deleteMany({ where: { id: { in: ids as string[] } } });
-        return true;
-      } catch {
-        return false;
-      }
+      return removeEntities(prisma.venue, ids);
     },
   },
 };

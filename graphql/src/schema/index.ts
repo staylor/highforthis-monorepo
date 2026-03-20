@@ -11,7 +11,7 @@ import User from '#/schema/User';
 import Venue from '#/schema/Venue';
 import Video from '#/schema/Video';
 
-const modules = {
+const modules = [
   APIKeys,
   AppleMusic,
   Artist,
@@ -24,7 +24,7 @@ const modules = {
   User,
   Venue,
   Video,
-} as Record<string, string>;
+];
 
 const typeDefs = `#graphql
   type Query
@@ -42,7 +42,7 @@ const typeDefs = `#graphql
     hasNextPage: Boolean
   }
 
-  ${Object.values(modules).map((node) => `${node.replace('#graphql', '')}\n\n`)}
+  ${modules.map((node) => node.replace('#graphql', '')).join('\n\n')}
 `;
 
 export default typeDefs;

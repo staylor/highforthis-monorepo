@@ -10,6 +10,7 @@ import prisma from '#/database';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
+import { removeEntities, timestampResolver } from './utils/helpers';
 
 const videoIncludes = {
   thumbnails: true,
@@ -17,15 +18,9 @@ const videoIncludes = {
 
 const resolvers = {
   Video: {
-    publishedAt(video: any) {
-      return new Date(video.publishedAt).getTime();
-    },
-    createdAt(video: any) {
-      return new Date(video.createdAt).getTime();
-    },
-    updatedAt(video: any) {
-      return new Date(video.updatedAt).getTime();
-    },
+    publishedAt: timestampResolver('publishedAt'),
+    createdAt: timestampResolver('createdAt'),
+    updatedAt: timestampResolver('updatedAt'),
     thumbnails(video: any) {
       if ('thumbnails' in video && Array.isArray(video.thumbnails)) return video.thumbnails;
       return prisma.videoThumbnail.findMany({ where: { videoId: video.id } });
@@ -86,12 +81,7 @@ const resolvers = {
     },
 
     async removeVideo(_: unknown, { ids }: MutationRemoveVideoArgs) {
-      try {
-        await prisma.video.deleteMany({ where: { id: { in: ids as string[] } } });
-        return true;
-      } catch {
-        return false;
-      }
+      return removeEntities(prisma.video, ids);
     },
   },
 };

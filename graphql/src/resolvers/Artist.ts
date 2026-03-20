@@ -10,6 +10,7 @@ import prisma from '#/database';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
+import { removeEntities, resolveJoin } from './utils/helpers';
 
 const artistIncludes = {
   appleMusic: { include: { genreNames: true, artwork: true } },
@@ -65,12 +66,12 @@ const resolvers = {
       });
     },
     featuredMedia(artist: any) {
-      if ('featuredMedia' in artist) {
-        return artist.featuredMedia.map((r: any) => r.media);
-      }
-      return prisma.artistFeaturedMedia
-        .findMany({ where: { artistId: artist.id }, include: { media: true } })
-        .then((records: any[]) => records.map((r) => r.media));
+      return resolveJoin(artist, 'featuredMedia', 'media', () =>
+        prisma.artistFeaturedMedia.findMany({
+          where: { artistId: artist.id },
+          include: { media: true },
+        })
+      );
     },
   },
   AppleMusicData: {
@@ -143,12 +144,7 @@ const resolvers = {
     },
 
     async removeArtist(_: unknown, { ids }: MutationRemoveArtistArgs) {
-      try {
-        await prisma.artist.deleteMany({ where: { id: { in: ids as string[] } } });
-        return true;
-      } catch {
-        return false;
-      }
+      return removeEntities(prisma.artist, ids);
     },
   },
 };

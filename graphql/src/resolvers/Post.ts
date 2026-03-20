@@ -12,6 +12,7 @@ import { getUniqueSlug } from '#/models/utils';
 import { extractText } from '#/utils/lexical';
 
 import { parseConnection } from './utils/collection';
+import { removeEntities, resolveJoin } from './utils/helpers';
 import resolveTags from './utils/resolveTags';
 
 const postIncludes = {
@@ -25,20 +26,20 @@ const resolvers = {
       return new Date(post.date || post.createdAt).getTime();
     },
     featuredMedia(post: any) {
-      if ('featuredMedia' in post) {
-        return post.featuredMedia.map((r: any) => r.media);
-      }
-      return prisma.postFeaturedMedia
-        .findMany({ where: { postId: post.id }, include: { media: true } })
-        .then((records: any[]) => records.map((r) => r.media));
+      return resolveJoin(post, 'featuredMedia', 'media', () =>
+        prisma.postFeaturedMedia.findMany({
+          where: { postId: post.id },
+          include: { media: true },
+        })
+      );
     },
     artists(post: any) {
-      if ('artists' in post && Array.isArray(post.artists)) {
-        return post.artists.map((r: any) => r.artist || r);
-      }
-      return prisma.postArtist
-        .findMany({ where: { postId: post.id }, include: { artist: true } })
-        .then((records: any[]) => records.map((r) => r.artist));
+      return resolveJoin(post, 'artists', 'artist', () =>
+        prisma.postArtist.findMany({
+          where: { postId: post.id },
+          include: { artist: true },
+        })
+      );
     },
   },
   Query: {
@@ -146,12 +147,7 @@ const resolvers = {
     },
 
     async removePost(_: unknown, { ids }: MutationRemovePostArgs) {
-      try {
-        await prisma.post.deleteMany({ where: { id: { in: ids as string[] } } });
-        return true;
-      } catch {
-        return false;
-      }
+      return removeEntities(prisma.post, ids);
     },
   },
 };
