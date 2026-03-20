@@ -6,6 +6,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import morgan from 'morgan';
 
 import factory from './apollo/client.js';
+import rejectWordPress from './rejectWordPress.js';
 import createI18n from './src/i18n.js';
 
 process.env.TZ = 'America/New_York';
@@ -47,6 +48,7 @@ const reactRouterHandler = createRequestHandler({
 
 const app = express();
 
+app.use(rejectWordPress);
 app.use(compression());
 app.use(
   morgan('tiny', {

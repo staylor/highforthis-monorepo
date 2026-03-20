@@ -11,6 +11,7 @@ import morgan from 'morgan';
 import { authMiddleware, jwtMiddleware } from './authentication';
 import cronJobs from './jobs';
 import type { AppContext } from './models';
+import rejectWordPress from './rejectWordPress';
 import resolvers from './resolvers';
 import typeDefs from './schema';
 import { multerMiddleware, mediaMiddleware } from './uploads';
@@ -20,6 +21,8 @@ const GRAPHQL_PORT = process.env.GRAPHQL_PORT || 8080;
 async function startServer(): Promise<void> {
   const app = express();
   const httpServer = http.createServer(app);
+
+  app.use(rejectWordPress);
 
   app.get('/favicon.ico', (_req, res) => {
     res.sendStatus(204);
