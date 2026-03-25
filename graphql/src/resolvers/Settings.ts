@@ -1,13 +1,22 @@
+import type { MediaSettings, PodcastSettings } from '@prisma/client';
+
 import prisma from '#/database';
+
+import {
+  siteSettingsSchema,
+  dashboardSettingsSchema,
+  mediaSettingsSchema,
+  podcastSettingsSchema,
+} from './validations';
 
 const resolvers = {
   MediaSettings: {
-    async crops(settings: any) {
+    async crops(settings: MediaSettings) {
       return prisma.mediaCropSetting.findMany({ where: { mediaSettingsId: settings.id } });
     },
   },
   PodcastSettings: {
-    async image(settings: any) {
+    async image(settings: PodcastSettings) {
       if (!settings.imageId) return null;
       return prisma.mediaUpload.findUnique({ where: { id: settings.imageId } });
     },
@@ -34,22 +43,24 @@ const resolvers = {
     },
   },
   Mutation: {
-    async updateSiteSettings(_: unknown, { id, input }: { id: string; input: any }) {
+    async updateSiteSettings(_: unknown, { id, input }: { id: string; input: unknown }) {
+      const data = siteSettingsSchema.parse(input);
       return prisma.siteSettings.upsert({
         where: { id },
-        create: { id, ...input },
-        update: input,
+        create: { id, ...data },
+        update: data,
       });
     },
-    async updateDashboardSettings(_: unknown, { id, input }: { id: string; input: any }) {
+    async updateDashboardSettings(_: unknown, { id, input }: { id: string; input: unknown }) {
+      const data = dashboardSettingsSchema.parse(input);
       return prisma.dashboardSettings.upsert({
         where: { id },
-        create: { id, ...input },
-        update: input,
+        create: { id, ...data },
+        update: data,
       });
     },
-    async updateMediaSettings(_: unknown, { id, input }: { id: string; input: any }) {
-      const { crops, ...rest } = input;
+    async updateMediaSettings(_: unknown, { id, input }: { id: string; input: unknown }) {
+      const { crops, ...rest } = mediaSettingsSchema.parse(input);
       const settings = await prisma.mediaSettings.upsert({
         where: { id },
         create: { id, ...rest },
@@ -59,17 +70,18 @@ const resolvers = {
         await prisma.mediaCropSetting.deleteMany({ where: { mediaSettingsId: id } });
         if (crops?.length) {
           await prisma.mediaCropSetting.createMany({
-            data: crops.map((crop: any) => ({ ...crop, mediaSettingsId: id })),
+            data: crops.map((crop) => ({ ...crop, mediaSettingsId: id })),
           });
         }
       }
       return settings;
     },
-    async updatePodcastSettings(_: unknown, { id, input }: { id: string; input: any }) {
+    async updatePodcastSettings(_: unknown, { id, input }: { id: string; input: unknown }) {
+      const { image, ...data } = podcastSettingsSchema.parse(input);
       return prisma.podcastSettings.upsert({
         where: { id },
-        create: { id, ...input },
-        update: input,
+        create: { id, ...data, imageId: image },
+        update: { ...data, imageId: image },
       });
     },
   },

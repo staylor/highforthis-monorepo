@@ -5,7 +5,7 @@ import sharp from 'sharp';
 
 import type { Callback } from '../Storage';
 
-import Upload from './Upload';
+import Upload, { type FileData } from './Upload';
 
 export type CropInfo = {
   fileName: string;
@@ -15,8 +15,8 @@ export type CropInfo = {
 };
 
 export type CropSetting = {
-  width: number;
-  height: number;
+  width: number | null;
+  height: number | null;
 };
 
 export default class Image extends Upload {
@@ -72,18 +72,20 @@ export default class Image extends Upload {
     outStream.on('error', cb);
     outStream.on('finish', async () => {
       const sizes = this.settings.crops.map(({ width, height }: CropSetting) => {
-        if (width < original.width && height > original.height) {
-          return [width];
+        const w = width ?? 0;
+        const h = height ?? 0;
+        if (w < original.width && h > original.height) {
+          return [w];
         }
-        if (height < original.height && width > original.width) {
-          return [null, height];
+        if (h < original.height && w > original.width) {
+          return [null, h];
         }
-        return [width, height];
+        return [w, h];
       });
 
       this.crops = await Promise.all(sizes.map((size) => this.handleCrop(finalPath, size)));
 
-      cb(null, {
+      const fileData: FileData = {
         ...original,
         mimeType: file.mimetype,
         originalName: file.originalname,
@@ -93,7 +95,8 @@ export default class Image extends Upload {
         altText: '',
         type: 'image',
         crops: this.crops,
-      } as any);
+      };
+      cb(null, fileData as Partial<Express.Multer.File>);
     });
 
     file.stream.pipe(imageMeta).pipe(outStream);

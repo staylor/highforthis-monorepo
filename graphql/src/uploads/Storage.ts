@@ -10,11 +10,11 @@ import Image from './types/Image';
 import Upload from './types/Upload';
 import Video from './types/Video';
 
-export type Callback = (error?: any, info?: Partial<Express.Multer.File>) => void;
+export type Callback = (error: Error | null, info?: Partial<Express.Multer.File>) => void;
 
 export interface UploadOpts {
   uploadDir: string;
-  settings: any;
+  settings: { crops: { width: number | null; height: number | null }[] };
 }
 
 interface StorageOpts {
@@ -35,9 +35,12 @@ class Storage {
     });
 
     let upload: Upload;
-    const uploadOpts = {
+    const crops = mediaSettings
+      ? await prisma.mediaCropSetting.findMany({ where: { mediaSettingsId: mediaSettings.id } })
+      : [];
+    const uploadOpts: UploadOpts = {
       uploadDir: this.opts.uploadDir,
-      settings: mediaSettings || { crops: [] },
+      settings: { crops },
     };
     if (file.mimetype.startsWith('image/')) {
       upload = new Image(uploadOpts);
@@ -58,11 +61,6 @@ class Storage {
 
   public _removeFile(_req: Request, file: Express.Multer.File, cb: Callback) {
     const { path: filePath } = file;
-    const f = file as any;
-
-    delete f.destination;
-    delete f.filename;
-    delete f.path;
 
     fs.unlink(filePath, cb);
   }

@@ -7,28 +7,28 @@ import sharp from 'sharp';
 import type { Callback } from '../Storage';
 
 import type { CropInfo } from './Image';
-import Upload from './Upload';
+import Upload, { type FileData } from './Upload';
 
-type Metadata = {
+interface AudioMetadata {
   title: string;
   artist: string[];
   albumArtist: string[];
   genre: string[];
   description: string;
   type: string;
-  images: any[];
-  image?: any;
+  images: CropInfo[];
+  image?: CropInfo[];
   year?: number;
   album?: string;
   duration?: number;
-};
+}
 
 export default class Audio extends Upload {
-  images = [];
+  images: CropInfo[] = [];
 
-  extractCovers(metadata: any): Promise<any> {
+  extractCovers(metadata: MM.Metadata): Promise<CropInfo[]> {
     return Promise.all(
-      metadata.picture.map(
+      (metadata.picture || []).map(
         ({ data, format }: MM.Picture, i: number): Promise<CropInfo> =>
           new Promise((resolve, reject) => {
             const coverName = `${this.basename}-cover-${i}.${format}`;
@@ -65,7 +65,7 @@ export default class Audio extends Upload {
           });
         });
 
-      const meta: Metadata = {
+      const meta: AudioMetadata = {
         title: '',
         artist: [],
         albumArtist: [],
@@ -114,16 +114,16 @@ export default class Audio extends Upload {
       }
 
       cb(error, {
-        ...data,
+        ...(data as FileData),
         ...meta,
-      });
+      } as Partial<Express.Multer.File>);
     };
     super.save(file, callback);
   }
 
   toArray() {
     return super.toArray().concat(
-      this.images.map((image: any) => ({
+      this.images.map((image) => ({
         destination: this.destination,
         fileName: image.fileName,
       }))

@@ -1,6 +1,8 @@
 import type { Bucket } from '@google-cloud/storage';
 import { Storage } from '@google-cloud/storage';
 
+import env from '#/env';
+
 interface FileInfo {
   fileName: string;
   destination: string;
@@ -15,14 +17,11 @@ class StorageAdapter {
     this.uploadDir = uploadDir;
     const storage = new Storage({
       credentials: {
-        client_email: process.env.GCS_CLIENT_EMAIL,
-        private_key: process.env.GCS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        client_email: env.GCS_CLIENT_EMAIL,
+        private_key: env.GCS_PRIVATE_KEY.replace(/\\n/g, '\n'),
       },
     });
-    if (!process.env.GCS_BUCKET) {
-      throw new Error('Must specify GCS_BUCKET on process.env');
-    }
-    this.bucket = storage.bucket(process.env.GCS_BUCKET);
+    this.bucket = storage.bucket(env.GCS_BUCKET);
   }
 
   public async upload({ fileName, destination }: FileInfo): Promise<boolean> {

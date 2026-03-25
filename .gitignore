@@ -8,6 +8,7 @@
 node_modules
 
 graphql/lib
+graphql/dist
 graphql/public/uploads
 web/build
 xcode/HighForThis.xcodeproj/project.xcworkspace/xcuserdata/

@@ -21,18 +21,24 @@ interface ConnectionArgs {
   after?: string | null;
   last?: number | null;
   before?: string | null;
-  [key: string]: any;
+  [key: string]: unknown;
+}
+
+interface FindManyArgs {
+  where?: Record<string, unknown>;
+  orderBy?: Record<string, unknown> | Record<string, unknown>[];
+  include?: Record<string, unknown>;
 }
 
 interface PaginatedDelegate {
-  findMany: (args: any) => Promise<any[]>;
-  count: (args?: any) => Promise<number>;
+  findMany: (args: FindManyArgs & { skip: number; take: number }) => Promise<unknown[]>;
+  count: (args?: { where: Record<string, unknown> }) => Promise<number>;
 }
 
 export async function parseConnection(
   delegate: PaginatedDelegate,
   connectionArgs: ConnectionArgs,
-  findManyArgs: any = {}
+  findManyArgs: FindManyArgs = {}
 ) {
   const { first = 10, after = null, last = 10, before = null, ..._rest } = connectionArgs;
 
@@ -72,7 +78,7 @@ export async function parseConnection(
     endOffset = startOffset + first!;
   }
 
-  const edges = items.map((value: any, index: number) => ({
+  const edges = items.map((value, index) => ({
     cursor: offsetToCursor(startOffset + index),
     node: value,
   }));
