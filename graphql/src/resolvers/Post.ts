@@ -123,8 +123,12 @@ const resolvers = {
     },
 
     async updatePost(_: unknown, { id, input }: MutationUpdatePostArgs) {
-      const { featuredMedia, artists: inputArtists, editorState, ...data } =
-        updatePostSchema.parse(input);
+      const {
+        featuredMedia,
+        artists: inputArtists,
+        editorState,
+        ...data
+      } = updatePostSchema.parse(input);
       const updateData: Record<string, unknown> = { ...data };
       if (data.date) {
         updateData.date = new Date(data.date);

@@ -1,4 +1,10 @@
-import type { Prisma, Artist, AppleMusicData, AppleMusicGenre, AppleMusicArtwork } from '@prisma/client';
+import type {
+  Prisma,
+  Artist,
+  AppleMusicData,
+  AppleMusicGenre,
+  AppleMusicArtwork,
+} from '@prisma/client';
 import type {
   MutationCreateArtistArgs,
   MutationRemoveArtistArgs,

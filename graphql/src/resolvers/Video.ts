@@ -82,7 +82,7 @@ const resolvers = {
         where: { id },
         data: {
           ...rest,
-          ...(publishedAt != null && { publishedAt: new Date(publishedAt) }),
+          ...(publishedAt !== null && { publishedAt: new Date(publishedAt || '') }),
         },
         include: videoIncludes,
       });

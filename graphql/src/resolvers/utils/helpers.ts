@@ -22,7 +22,9 @@ export function resolveJoin<T extends Record<string, unknown>>(
 ) {
   if (field in parent) {
     const value = parent[field];
-    return Array.isArray(value) ? value.map((r) => (r as Record<string, unknown>)[key] ?? r) : value;
+    return Array.isArray(value)
+      ? value.map((r) => (r as Record<string, unknown>)[key] ?? r)
+      : value;
   }
   return query().then((records) => records.map((r) => r[key]));
 }

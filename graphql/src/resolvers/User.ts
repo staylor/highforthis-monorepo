@@ -1,5 +1,5 @@
-import bcrypt from 'bcryptjs';
 import type { Prisma, User } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 import type {
   MutationCreateUserArgs,
   MutationRemoveUserArgs,
