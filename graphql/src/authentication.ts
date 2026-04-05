@@ -1,12 +1,19 @@
 import bcrypt from 'bcryptjs';
 import type { Request, Response, NextFunction } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
+import { z } from 'zod';
 
 import prisma from '#/database';
+import env from '#/env';
 
 type JWTPayload = {
   userId: string;
 };
+
+const authBodySchema = z.object({
+  email: z.string().min(1),
+  password: z.string().min(1),
+});
 
 function extractBearerToken(req: Request): string | null {
   const header = req.headers.authorization;
@@ -18,13 +25,13 @@ function extractBearerToken(req: Request): string | null {
 
 export async function jwtMiddleware(req: Request, _res: Response, next: NextFunction) {
   const token = extractBearerToken(req);
-  if (!token || !process.env.TOKEN_SECRET) {
+  if (!token) {
     next();
     return;
   }
 
   try {
-    const payload = jsonwebtoken.verify(token, process.env.TOKEN_SECRET) as JWTPayload;
+    const payload = jsonwebtoken.verify(token, env.TOKEN_SECRET) as JWTPayload;
     if (payload.userId) {
       const user = await prisma.user.findUnique({
         where: { id: payload.userId },
@@ -43,22 +50,14 @@ export async function jwtMiddleware(req: Request, _res: Response, next: NextFunc
 
 export async function authMiddleware(req: Request, res: Response) {
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      throw new Error('Username or password not set on request');
-    }
+    const { email, password } = authBodySchema.parse(req.body);
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.hash))) {
       throw new Error('User not found matching email/password combination');
     }
 
-    if (!process.env.TOKEN_SECRET) {
-      throw new Error('TOKEN_SECRET does not exist on process.env');
-    }
-
-    const token = jsonwebtoken.sign({ userId: user.id }, process.env.TOKEN_SECRET);
+    const token = jsonwebtoken.sign({ userId: user.id }, env.TOKEN_SECRET);
     res.json({ token });
   } catch (e) {
     res.json({ error: (e as Error).message });

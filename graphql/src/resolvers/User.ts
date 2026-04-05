@@ -1,3 +1,4 @@
+import type { Prisma, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import type {
   MutationCreateUserArgs,
@@ -11,6 +12,7 @@ import prisma from '#/database';
 
 import { parseConnection } from './utils/collection';
 import { removeEntities, resolveJoin } from './utils/helpers';
+import { createUserSchema, updateUserSchema } from './validations';
 
 const SALT_ROUNDS = 10;
 
@@ -18,7 +20,7 @@ const userIncludes = { roles: true };
 
 const resolvers = {
   User: {
-    roles(user: any) {
+    roles(user: User) {
       return resolveJoin(user, 'roles', 'name', () =>
         prisma.userRole.findMany({ where: { userId: user.id } })
       );
@@ -27,7 +29,7 @@ const resolvers = {
   Query: {
     async users(_: unknown, args: QueryUsersArgs) {
       const { search, ...connectionArgs } = args;
-      const where: any = {};
+      const where: Prisma.UserWhereInput = {};
       if (search) {
         where.OR = [
           { name: { contains: search, mode: 'insensitive' } },
@@ -48,7 +50,7 @@ const resolvers = {
   },
   Mutation: {
     async createUser(_: unknown, { input }: MutationCreateUserArgs) {
-      const { password, roles, ...fields } = input as any;
+      const { password, roles, ...fields } = createUserSchema.parse(input);
       if (!fields.email || !password) {
         throw new Error('Email and Password are required.');
       }
@@ -60,15 +62,16 @@ const resolvers = {
       return prisma.user.create({
         data: {
           ...fields,
+          email: fields.email,
           hash,
-          roles: roles?.length ? { create: roles.map((name: string) => ({ name })) } : undefined,
+          roles: roles?.length ? { create: roles.map((name) => ({ name })) } : undefined,
         },
         include: userIncludes,
       });
     },
 
     async updateUser(_: unknown, { id, input }: MutationUpdateUserArgs) {
-      const { password, roles, ...fields } = input as any;
+      const { password, roles, ...fields } = updateUserSchema.parse(input);
       const user = await prisma.user.findUnique({ where: { id } });
       if (!user) throw new Error('User not found');
 
@@ -79,7 +82,7 @@ const resolvers = {
         }
       }
 
-      const data: any = { ...fields };
+      const data: Record<string, unknown> = { ...fields };
       if (password) {
         data.hash = await bcrypt.hash(password, SALT_ROUNDS);
       }
@@ -88,7 +91,7 @@ const resolvers = {
         await prisma.userRole.deleteMany({ where: { userId: id } });
         if (roles?.length) {
           await prisma.userRole.createMany({
-            data: roles.map((name: string) => ({ userId: id, name })),
+            data: roles.map((name) => ({ userId: id, name })),
           });
         }
       }

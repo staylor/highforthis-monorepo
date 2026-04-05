@@ -1,3 +1,4 @@
+import type { Prisma, Venue } from '@prisma/client';
 import type {
   MutationCreateVenueArgs,
   MutationRemoveVenueArgs,
@@ -11,6 +12,7 @@ import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
 import { removeEntities, resolveJoin } from './utils/helpers';
+import { createVenueSchema, updateVenueSchema } from './validations';
 
 const venueIncludes = {
   featuredMedia: { include: { media: true } },
@@ -18,14 +20,14 @@ const venueIncludes = {
 
 const resolvers = {
   Venue: {
-    address(venue: any) {
+    address(venue: Venue) {
       return `${venue.streetAddress}\n${venue.city}, ${venue.state} ${venue.postalCode}`;
     },
-    coordinates(venue: any) {
+    coordinates(venue: Venue) {
       if (venue.latitude === null && venue.longitude === null) return null;
       return { latitude: venue.latitude, longitude: venue.longitude };
     },
-    featuredMedia(venue: any) {
+    featuredMedia(venue: Venue) {
       return resolveJoin(venue, 'featuredMedia', 'media', () =>
         prisma.venueFeaturedMedia.findMany({
           where: { venueId: venue.id },
@@ -37,7 +39,7 @@ const resolvers = {
   Query: {
     async venues(_: unknown, args: QueryVenuesArgs) {
       const { search, filtered, ...connectionArgs } = args;
-      const where: any = {};
+      const where: Prisma.VenueWhereInput = {};
       if (search) {
         where.OR = [
           { name: { contains: search, mode: 'insensitive' } },
@@ -68,7 +70,7 @@ const resolvers = {
   },
   Mutation: {
     async createVenue(_: unknown, { input }: MutationCreateVenueArgs) {
-      const { featuredMedia, coordinates, ...data } = input as any;
+      const { featuredMedia, coordinates, ...data } = createVenueSchema.parse(input);
       const slug = await getUniqueSlug(prisma.venue, data.name);
       return prisma.venue.create({
         data: {
@@ -77,7 +79,7 @@ const resolvers = {
           latitude: coordinates?.latitude,
           longitude: coordinates?.longitude,
           featuredMedia: featuredMedia?.length
-            ? { create: featuredMedia.map((mediaId: string) => ({ mediaId })) }
+            ? { create: featuredMedia.map((mediaId) => ({ mediaId })) }
             : undefined,
         },
         include: venueIncludes,
@@ -85,8 +87,8 @@ const resolvers = {
     },
 
     async updateVenue(_: unknown, { id, input }: MutationUpdateVenueArgs) {
-      const { featuredMedia, coordinates, ...data } = input as any;
-      const updateData: any = { ...data };
+      const { featuredMedia, coordinates, ...data } = updateVenueSchema.parse(input);
+      const updateData: Record<string, unknown> = { ...data };
       if (coordinates) {
         updateData.latitude = coordinates.latitude;
         updateData.longitude = coordinates.longitude;
@@ -95,7 +97,7 @@ const resolvers = {
         await prisma.venueFeaturedMedia.deleteMany({ where: { venueId: id } });
         if (featuredMedia?.length) {
           await prisma.venueFeaturedMedia.createMany({
-            data: featuredMedia.map((mediaId: string) => ({ venueId: id, mediaId })),
+            data: featuredMedia.map((mediaId) => ({ venueId: id, mediaId })),
           });
         }
       }

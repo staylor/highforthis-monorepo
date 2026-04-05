@@ -2,6 +2,11 @@ import prisma from '#/database';
 
 import { resolveType } from './utils/helpers';
 
+interface EditorNodeData {
+  imageId?: string;
+  videoId?: string;
+}
+
 const resolvers = {
   EditorNode: {
     __resolveType: resolveType(
@@ -19,12 +24,12 @@ const resolvers = {
     ),
   },
   ImageNode: {
-    image(data: any) {
+    image(data: EditorNodeData) {
       return prisma.mediaUpload.findUnique({ where: { id: data.imageId } });
     },
   },
   VideoNode: {
-    video(data: any) {
+    video(data: EditorNodeData) {
       return prisma.video.findUnique({ where: { id: data.videoId } });
     },
   },

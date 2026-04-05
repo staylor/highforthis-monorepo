@@ -1,4 +1,5 @@
 import prisma from '#/database';
+import env from '#/env';
 import { slugify } from '#/models/utils';
 
 const API_HOST = 'https://www.googleapis.com';
@@ -7,10 +8,7 @@ const PLAYLIST_PATH = '/youtube/v3/playlistItems';
 const PER_PAGE = '50';
 const CHANNEL_ID = 'UCwQRSPBN5eGmO1nYE40t1hw';
 
-const API_KEY = process.env.YOUTUBE_API_KEY || '';
-if (!API_KEY) {
-  throw new Error('Must set YOUTUBE_API_KEY on process.env');
-}
+const API_KEY = env.YOUTUBE_API_KEY;
 
 interface YouTubeThumbnail {
   url: string;

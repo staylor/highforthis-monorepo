@@ -1,3 +1,4 @@
+import type { Prisma, MediaUpload } from '@prisma/client';
 import type {
   MutationRemoveMediaUploadArgs,
   MutationUpdateMediaUploadArgs,
@@ -9,6 +10,7 @@ import prisma from '#/database';
 
 import { parseConnection } from './utils/collection';
 import { removeEntities, resolveJoin, resolveType } from './utils/helpers';
+import { updateMediaUploadSchema } from './validations';
 
 const mediaIncludes = {
   crops: true,
@@ -30,28 +32,28 @@ const resolvers = {
     ),
   },
   ImageUpload: {
-    crops(media: any) {
+    crops(media: MediaUpload) {
       if ('crops' in media) return media.crops;
       return prisma.imageUploadCrop.findMany({ where: { mediaId: media.id } });
     },
   },
   AudioUpload: {
-    artist(media: any) {
+    artist(media: MediaUpload) {
       return resolveJoin(media, 'audioArtists', 'name', () =>
         prisma.audioArtist.findMany({ where: { mediaId: media.id } })
       );
     },
-    albumArtist(media: any) {
+    albumArtist(media: MediaUpload) {
       return resolveJoin(media, 'audioAlbumArtists', 'name', () =>
         prisma.audioAlbumArtist.findMany({ where: { mediaId: media.id } })
       );
     },
-    genre(media: any) {
+    genre(media: MediaUpload) {
       return resolveJoin(media, 'audioGenres', 'name', () =>
         prisma.audioGenre.findMany({ where: { mediaId: media.id } })
       );
     },
-    images(media: any) {
+    images(media: MediaUpload) {
       if ('audioImages' in media) return media.audioImages;
       return prisma.audioImage.findMany({ where: { mediaId: media.id } });
     },
@@ -63,7 +65,7 @@ const resolvers = {
         select: { type: true },
         orderBy: { type: 'asc' },
       });
-      return results.map((r: any) => r.type);
+      return results.map((r) => r.type);
     },
     async mimeTypes() {
       const results = await prisma.mediaUpload.findMany({
@@ -71,13 +73,13 @@ const resolvers = {
         select: { mimeType: true },
         orderBy: { mimeType: 'asc' },
       });
-      return results.map((r: any) => r.mimeType);
+      return results.map((r) => r.mimeType);
     },
   },
   Query: {
     async uploads(_: unknown, args: QueryUploadsArgs) {
       const { type, mimeType, search, ...connectionArgs } = args;
-      const where: any = {};
+      const where: Prisma.MediaUploadWhereInput = {};
       if (type) where.type = type;
       if (mimeType) where.mimeType = mimeType;
       if (search) {
@@ -99,7 +101,8 @@ const resolvers = {
   },
   Mutation: {
     async updateMediaUpload(_: unknown, { id, input }: MutationUpdateMediaUploadArgs) {
-      return prisma.mediaUpload.update({ where: { id }, data: input, include: mediaIncludes });
+      const data = updateMediaUploadSchema.parse(input);
+      return prisma.mediaUpload.update({ where: { id }, data, include: mediaIncludes });
     },
 
     async removeMediaUpload(_: unknown, { ids }: MutationRemoveMediaUploadArgs) {

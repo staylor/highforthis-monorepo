@@ -9,6 +9,7 @@ import express from 'express';
 import morgan from 'morgan';
 
 import { authMiddleware, jwtMiddleware } from './authentication';
+import env from './env';
 import cronJobs from './jobs';
 import type { AppContext } from './models';
 import rejectWordPress from './rejectWordPress';
@@ -16,7 +17,7 @@ import resolvers from './resolvers';
 import typeDefs from './schema';
 import { multerMiddleware, mediaMiddleware } from './uploads';
 
-const GRAPHQL_PORT = process.env.GRAPHQL_PORT || 8080;
+const GRAPHQL_PORT = env.GRAPHQL_PORT;
 
 async function startServer(): Promise<void> {
   const app = express();
@@ -74,8 +75,8 @@ async function startServer(): Promise<void> {
         search: new URL(req.url, `http://${req.headers.host}`).search ?? '',
         body: req.body,
       },
-      context: async () => ({
-        authUser: (req as any).context?.authUser,
+      context: async (): Promise<AppContext> => ({
+        authUser: req.context?.authUser as AppContext['authUser'],
       }),
     });
 

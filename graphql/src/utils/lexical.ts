@@ -1,13 +1,23 @@
+interface LexicalNode {
+  type?: string;
+  text?: string;
+  children?: LexicalNode[];
+}
+
+interface EditorState {
+  root?: LexicalNode;
+}
+
 /**
  * Extract plain text from a Lexical editor state JSON.
  * Recursively walks the node tree and collects all "text" node values.
  */
-export function extractText(editorState: any): string {
+export function extractText(editorState: EditorState): string {
   if (!editorState) return '';
 
   const parts: string[] = [];
 
-  function walk(node: any) {
+  function walk(node: LexicalNode) {
     if (!node) return;
 
     if (node.type === 'text' && typeof node.text === 'string') {
@@ -19,14 +29,14 @@ export function extractText(editorState: any): string {
         walk(child);
       }
       // Add newline after block-level nodes
-      if (['paragraph', 'heading', 'quote', 'listitem'].includes(node.type)) {
+      if (['paragraph', 'heading', 'quote', 'listitem'].includes(node.type!)) {
         parts.push('\n');
       }
     }
   }
 
   // Start from root
-  const root = editorState.root || editorState;
+  const root = editorState.root || (editorState as LexicalNode);
   walk(root);
 
   return parts.join('').trim();

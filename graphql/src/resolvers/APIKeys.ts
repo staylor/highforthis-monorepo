@@ -1,8 +1,10 @@
+import env from '#/env';
+
 const resolvers = {
   Query: {
     apiKeys() {
       return {
-        googleMaps: process.env.GOOGLE_MAPS_GEOLOCATION_API_KEY,
+        googleMaps: env.GOOGLE_MAPS_GEOLOCATION_API_KEY,
       };
     },
   },

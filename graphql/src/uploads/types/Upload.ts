@@ -9,6 +9,32 @@ import type { StorageAdapter } from '../adapter';
 
 import { type CropSetting } from './Image';
 
+export interface FileData {
+  fileName: string;
+  destination: string;
+  mimeType: string;
+  originalName: string;
+  fileSize: number;
+  type?: string;
+  // Image fields
+  width?: number;
+  height?: number;
+  title?: string;
+  caption?: string;
+  altText?: string;
+  crops?: { fileName: string; fileSize: number; width: number; height: number }[];
+  // Audio fields
+  album?: string;
+  artist?: string[];
+  albumArtist?: string[];
+  genre?: string[];
+  year?: number;
+  duration?: number;
+  description?: string;
+  images?: { fileName: string; fileSize: number; width: number; height: number }[];
+  image?: { fileName: string; fileSize: number; width: number; height: number }[];
+}
+
 export default class Upload {
   uploadDir: string;
   settings: {
@@ -59,13 +85,14 @@ export default class Upload {
     const outStream = fs.createWriteStream(finalPath);
     outStream.on('error', cb);
     outStream.on('finish', () => {
-      cb(null, {
+      const fileData: FileData = {
         fileName: this.fileName,
         destination: this.destination.replace(`${this.uploadDir}/`, ''),
         mimeType: file.mimetype,
         originalName: file.originalname,
         fileSize: outStream.bytesWritten,
-      } as any);
+      };
+      cb(null, fileData as Partial<Express.Multer.File>);
     });
 
     file.stream.pipe(outStream);

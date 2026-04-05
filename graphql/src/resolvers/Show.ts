@@ -1,3 +1,4 @@
+import type { Prisma, Artist, Venue, Show } from '@prisma/client';
 import type {
   MutationCreateShowArgs,
   MutationRemoveShowArgs,
@@ -5,13 +6,19 @@ import type {
   QueryShowArgs,
   QueryShowStatsArgs,
   QueryShowsArgs,
-  UpdateShowInput,
 } from 'types/graphql';
 
 import prisma from '#/database';
 
 import { parseConnection, emptyConnection } from './utils/collection';
 import { removeEntities, resolveJoin, timestampResolver } from './utils/helpers';
+import { createShowSchema, updateShowSchema } from './validations';
+
+interface EntityWithType {
+  type: string;
+  name?: string;
+  [key: string]: unknown;
+}
 
 const showIncludes = {
   artists: { include: { artist: true } },
@@ -20,16 +27,16 @@ const showIncludes = {
 
 async function getEntityStats(
   counts: { id: string; count: number }[],
-  lookup: (ids: string[]) => Promise<any[]>,
+  lookup: (ids: string[]) => Promise<(Artist | Venue)[]>,
   type: string
 ) {
   const ids = counts.map((c) => c.id);
   const entities = await lookup(ids);
-  const entityMap = new Map(entities.map((e: any) => [e.id, e]));
+  const entityMap = new Map(entities.map((e) => [e.id, e]));
   return counts
     .map(({ id, count }) => ({
       count,
-      entity: { ...entityMap.get(id), type },
+      entity: { ...entityMap.get(id), type } as EntityWithType,
     }))
     .sort((a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? ''));
 }
@@ -37,7 +44,7 @@ async function getEntityStats(
 const resolvers = {
   Show: {
     date: timestampResolver('date'),
-    artists(show: any) {
+    artists(show: Show) {
       return resolveJoin(show, 'artists', 'artist', () =>
         prisma.showArtist.findMany({
           where: { showId: show.id },
@@ -45,7 +52,7 @@ const resolvers = {
         })
       );
     },
-    venue(show: any) {
+    venue(show: Show) {
       if ('venue' in show && show.venue && typeof show.venue === 'object') {
         return show.venue;
       }
@@ -53,14 +60,14 @@ const resolvers = {
     },
   },
   ShowEntity: {
-    __resolveType(entity: any) {
+    __resolveType(entity: EntityWithType) {
       if (entity.type === 'artist') return 'Artist';
       if (entity.type === 'venue') return 'Venue';
     },
   },
   ShowConnection: {
     async years(_0: unknown, args: QueryShowsArgs) {
-      const where: any = {};
+      const where: Prisma.ShowWhereInput = {};
       if (args.attended) {
         where.attended = true;
       }
@@ -68,14 +75,14 @@ const resolvers = {
         where,
         select: { date: true },
       });
-      const yearSet = new Set(results.map((r: any) => new Date(r.date).getFullYear()));
+      const yearSet = new Set(results.map((r) => new Date(r.date).getFullYear()));
       return Array.from(yearSet).sort((a, b) => b - a);
     },
   },
   Query: {
     async shows(_: unknown, args: QueryShowsArgs) {
       const { artist, venue, latest, attended, year, search, order, ...connectionArgs } = args;
-      const where: any = {};
+      const where: Prisma.ShowWhereInput = {};
 
       if (attended) {
         where.attended = true;
@@ -144,7 +151,7 @@ const resolvers = {
           _count: { artistId: true },
         });
         return getEntityStats(
-          results.map((r: any) => ({ id: r.artistId, count: r._count.artistId })),
+          results.map((r) => ({ id: r.artistId, count: r._count.artistId })),
           (ids) => prisma.artist.findMany({ where: { id: { in: ids } } }),
           'artist'
         );
@@ -156,7 +163,7 @@ const resolvers = {
         _count: { venueId: true },
       });
       return getEntityStats(
-        results.map((r: any) => ({ id: r.venueId, count: r._count.venueId })),
+        results.map((r) => ({ id: r.venueId, count: r._count.venueId })),
         (ids) => prisma.venue.findMany({ where: { id: { in: ids } } }),
         'venue'
       );
@@ -164,14 +171,14 @@ const resolvers = {
   },
   Mutation: {
     async createShow(_: unknown, { input }: MutationCreateShowArgs) {
-      const { artists, venue, date, ...data } = input as any;
+      const { artists, venue, date, ...data } = createShowSchema.parse(input);
       return prisma.show.create({
         data: {
           ...data,
           date: new Date(date),
           venueId: venue,
           artists: artists?.length
-            ? { create: artists.map((artistId: string) => ({ artistId })) }
+            ? { create: artists.map((artistId) => ({ artistId })) }
             : undefined,
         },
         include: showIncludes,
@@ -179,11 +186,12 @@ const resolvers = {
     },
 
     async updateShow(_: unknown, { id, input }: MutationUpdateShowArgs) {
-      const { artists, venue, date, ...data } = input as any;
-      const values: any = { ...data };
+      const validated = updateShowSchema.parse(input);
+      const { artists, venue, date, ...data } = validated;
+      const values: Record<string, unknown> = { ...data };
 
-      for (const key of ['title', 'notes', 'url']) {
-        if (!input[key as keyof UpdateShowInput]) {
+      for (const key of ['title', 'notes', 'url'] as const) {
+        if (!validated[key]) {
           values[key] = null;
         }
       }
@@ -195,7 +203,7 @@ const resolvers = {
         await prisma.showArtist.deleteMany({ where: { showId: id } });
         if (artists?.length) {
           await prisma.showArtist.createMany({
-            data: artists.map((artistId: string) => ({ showId: id, artistId })),
+            data: artists.map((artistId) => ({ showId: id, artistId })),
           });
         }
       }

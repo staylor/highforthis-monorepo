@@ -1,3 +1,4 @@
+import type { Prisma, Post } from '@prisma/client';
 import type {
   MutationRemovePostArgs,
   MutationUpdatePostArgs,
@@ -14,6 +15,7 @@ import { extractText } from '#/utils/lexical';
 import { parseConnection } from './utils/collection';
 import { removeEntities, resolveJoin } from './utils/helpers';
 import resolveTags from './utils/resolveTags';
+import { createPostSchema, updatePostSchema } from './validations';
 
 const postIncludes = {
   featuredMedia: { include: { media: true } },
@@ -22,10 +24,10 @@ const postIncludes = {
 
 const resolvers = {
   Post: {
-    date(post: any) {
+    date(post: Post) {
       return new Date(post.date || post.createdAt).getTime();
     },
-    featuredMedia(post: any) {
+    featuredMedia(post: Post) {
       return resolveJoin(post, 'featuredMedia', 'media', () =>
         prisma.postFeaturedMedia.findMany({
           where: { postId: post.id },
@@ -33,7 +35,7 @@ const resolvers = {
         })
       );
     },
-    artists(post: any) {
+    artists(post: Post) {
       return resolveJoin(post, 'artists', 'artist', () =>
         prisma.postArtist.findMany({
           where: { postId: post.id },
@@ -45,8 +47,8 @@ const resolvers = {
   Query: {
     async posts(_: unknown, args: QueryPostsArgs, { authUser }: AppContext) {
       const { search, status, ...connectionArgs } = args;
-      const where: any = {};
-      const userCanSee = authUser?.roles?.some?.((r: any) => r.name === 'admin');
+      const where: Prisma.PostWhereInput = {};
+      const userCanSee = authUser?.roles?.some((r) => r.name === 'admin');
       if (!userCanSee) {
         where.status = 'PUBLISH';
       } else if (status) {
@@ -77,7 +79,7 @@ const resolvers = {
 
       if (!post) return null;
 
-      const userCanSee = authUser?.roles?.some?.((r: any) => r.name === 'admin');
+      const userCanSee = authUser?.roles?.some((r) => r.name === 'admin');
       if (post.status === 'DRAFT' && !userCanSee) {
         throw new Error('You do not have permission');
       }
@@ -87,9 +89,15 @@ const resolvers = {
   },
   Mutation: {
     async createPost(_: unknown, { input }: MutationCreatePostArgs) {
-      const { featuredMedia, artists: inputArtists, ...data } = input as any;
-      const slug = await getUniqueSlug(prisma.post, data.title);
-      const contentBody = data.editorState ? extractText(data.editorState) : null;
+      const {
+        featuredMedia,
+        artists: inputArtists,
+        editorState,
+        date,
+        ...rest
+      } = createPostSchema.parse(input);
+      const slug = await getUniqueSlug(prisma.post, rest.title);
+      const contentBody = editorState ? extractText(editorState) : null;
 
       let artistIds: string[] = [];
       if (inputArtists?.length) {
@@ -98,12 +106,13 @@ const resolvers = {
 
       return prisma.post.create({
         data: {
-          ...data,
+          ...rest,
           slug,
           contentBody,
-          date: data.date ? new Date(data.date) : new Date(),
+          editorState: (editorState ?? undefined) as Prisma.InputJsonValue | undefined,
+          date: date ? new Date(date) : new Date(),
           featuredMedia: featuredMedia?.length
-            ? { create: featuredMedia.map((mediaId: string) => ({ mediaId })) }
+            ? { create: featuredMedia.map((mediaId) => ({ mediaId })) }
             : undefined,
           artists: artistIds.length
             ? { create: artistIds.map((artistId) => ({ artistId })) }
@@ -114,20 +123,26 @@ const resolvers = {
     },
 
     async updatePost(_: unknown, { id, input }: MutationUpdatePostArgs) {
-      const { featuredMedia, artists: inputArtists, ...data } = input as any;
-      const updateData: any = { ...data };
+      const {
+        featuredMedia,
+        artists: inputArtists,
+        editorState,
+        ...data
+      } = updatePostSchema.parse(input);
+      const updateData: Record<string, unknown> = { ...data };
       if (data.date) {
         updateData.date = new Date(data.date);
       }
-      if (data.editorState) {
-        updateData.contentBody = extractText(data.editorState);
+      if (editorState) {
+        updateData.editorState = editorState;
+        updateData.contentBody = extractText(editorState);
       }
 
       if (typeof featuredMedia !== 'undefined') {
         await prisma.postFeaturedMedia.deleteMany({ where: { postId: id } });
         if (featuredMedia?.length) {
           await prisma.postFeaturedMedia.createMany({
-            data: featuredMedia.map((mediaId: string) => ({ postId: id, mediaId })),
+            data: featuredMedia.map((mediaId) => ({ postId: id, mediaId })),
           });
         }
       }
