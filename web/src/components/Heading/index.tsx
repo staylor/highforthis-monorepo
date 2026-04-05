@@ -3,7 +3,7 @@ import type { HTMLAttributes } from 'react';
 
 export const headingBase = 'block mb-2 lg:mb-3 dark:text-white';
 
-const heading1 = 'font-black uppercase text-3xl lg:text-4xl';
+const heading1 = 'font-black uppercase text-2xl lg:text-3xl';
 
 export const heading2 = 'font-bold text-2xl';
 

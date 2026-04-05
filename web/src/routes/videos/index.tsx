@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, type MetaFunction } from 'react-router';
 
 import Select from '#/components/Form/Select';
-import TextTitle from '#/components/TextTitle';
 import Videos from '#/components/Videos';
 import { videosQuery as queryFragment } from '#/components/Videos/graphql';
 import type { VideoConnection, VideosQuery } from '#/types/graphql';
@@ -12,6 +11,7 @@ import { rootData } from '#/utils/rootData';
 import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types';
+import { Heading1 } from '#/components/Heading';
 
 const videosQuery = gql`
   query Videos(
@@ -79,7 +79,7 @@ export default function VideosIndex({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
-        {params.year ? <TextTitle>{params.year}</TextTitle> : <div />}
+        <Heading1>{params.year ? `${params.year} Videos` : 'Videos'}</Heading1>
         <Select
           value={params.year || ''}
           className="dark:text-dark text-sm"
