@@ -91,7 +91,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
       {single ? (
         <TextTitle>{video.title}</TextTitle>
       ) : (
-        <h1 className="font-display group-hover:text-pink text-base leading-snug font-semibold transition-colors">
+        <h1 className="group-hover:text-pink text-base leading-snug font-semibold transition-colors">
           <Link to={`/video/${video.slug}`}>{video.title}</Link>
         </h1>
       )}

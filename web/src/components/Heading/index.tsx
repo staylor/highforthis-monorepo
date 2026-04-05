@@ -1,16 +1,16 @@
 import cn from 'classnames';
 import type { HTMLAttributes } from 'react';
 
-export const headingBase = 'block font-display font-bold mb-2 lg:mb-3 dark:text-white';
+export const headingBase = 'block mb-2 lg:mb-3 dark:text-white';
 
-const heading1 = 'text-3xl lg:text-4xl';
+const heading1 = 'font-black uppercase text-3xl lg:text-4xl';
 
-export const heading2 = 'text-2xl';
+export const heading2 = 'font-bold text-2xl';
 
 export const heading3 =
-  'border-pink inline-block border-b-2 border-dashed mt-6 py-1 pl-0.5 pr-6 text-2xl';
+  'font-bold border-pink inline-block border-b-2 border-dashed mt-6 py-1 pl-0.5 pr-6 text-2xl';
 
-export const heading4 = 'text-lg';
+export const heading4 = 'font-bold text-lg';
 
 type HeadingProps = HTMLAttributes<HTMLHeadingElement>;
 

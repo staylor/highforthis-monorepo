@@ -50,7 +50,7 @@ function Latest({ posts }: { posts: PostConnection }) {
             <span className="bg-pink/90 mb-4 inline-block rounded px-3 py-1 text-xs font-bold tracking-wider text-white uppercase">
               {t('posts.featured')}
             </span>
-            <h2 className="font-display mb-3 text-3xl leading-tight font-bold text-white lg:text-4xl">
+            <h2 className="mb-3 text-3xl leading-tight font-bold text-white lg:text-4xl">
               {featured.node.title}
             </h2>
             {featured.node.summary && (
@@ -90,7 +90,7 @@ function Latest({ posts }: { posts: PostConnection }) {
                   </div>
                 )}
                 <div className="flex flex-col justify-center">
-                  <h3 className="font-display group-hover:text-pink mb-1.5 text-lg font-semibold transition-colors">
+                  <h3 className="group-hover:text-pink mb-1.5 text-lg font-semibold transition-colors">
                     {node.title}
                   </h3>
                   {node.summary && (

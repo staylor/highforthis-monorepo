@@ -22,7 +22,7 @@ export const appQuery = gql`
       title
       websiteLink
     }
-    shows(first: 15, latest: true) @cache(key: "sidebar") {
+    shows(first: 30, latest: true) @cache(key: "sidebar") {
       edges {
         node {
           artists {

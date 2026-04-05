@@ -25,10 +25,7 @@
   --color-muted: #737373;
   --color-muted-dark: #888888;
 
-  --font-title: 'Bungee Shade', 'Space Grotesk', sans-serif;
-  --font-display:
-    'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
+  --font-title: 'Bungee Shade', sans-serif;
   --font-body:
     'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';

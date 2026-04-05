@@ -49,7 +49,7 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
             'last:border-b-0'
           )}
         >
-          <h3 className="font-display group-hover:text-pink mb-2 text-lg font-semibold transition-colors">
+          <h3 className="group-hover:text-pink mb-2 text-lg font-semibold transition-colors">
             {node.title}
           </h3>
           {node.description && (

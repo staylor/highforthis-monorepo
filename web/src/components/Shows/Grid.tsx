@@ -37,7 +37,7 @@ export default function ShowsGrid({
     return showA.date < showB.date ? -1 : 1;
   });
 
-  const headerCell = cn(cellBase, 'font-display font-bold text-neutral-900 dark:text-white');
+  const headerCell = cn(cellBase, 'font-bold text-neutral-900 dark:text-white');
 
   return (
     <div className={className}>

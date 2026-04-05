@@ -15,7 +15,7 @@ export default function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className="mb-6 flex items-center justify-between md:mb-10">
-      <h2 className="font-display text-xl font-bold md:text-2xl dark:text-white">{label}</h2>
+      <h2 className="text-xl font-black uppercase md:text-2xl dark:text-white">{label}</h2>
       {viewAllLink && (
         <Link
           to={viewAllLink}

@@ -73,7 +73,7 @@ export default function Posts({ loaderData }: Route.ComponentProps) {
                 </div>
               )}
               <div className="p-4">
-                <h2 className="font-display group-hover:text-pink mb-1.5 text-base font-semibold transition-colors">
+                <h2 className="group-hover:text-pink mb-1.5 text-base font-semibold transition-colors">
                   {node.title}
                 </h2>
                 {node.summary && (
