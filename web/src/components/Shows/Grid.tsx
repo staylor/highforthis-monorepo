@@ -80,10 +80,18 @@ export default function ShowsGrid({
             );
 
             if (showYears && !years[d.year]) {
+              const firstYear = Object.keys(years).length === 0;
               years[d.year] = 1;
               months[`${d.year}${d.month}`] = 1;
               return (
                 <Fragment key={`${d.year}${d.month}`}>
+                  {!firstYear && (
+                    <tr>
+                      <td colSpan={3}>
+                        <div className="mt-4 h-2" />
+                      </td>
+                    </tr>
+                  )}
                   <tr>
                     <td colSpan={3} className={cn(headerCell, 'pt-6 text-lg first:pt-0')}>
                       {d.year}
