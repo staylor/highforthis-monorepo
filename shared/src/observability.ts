@@ -68,7 +68,9 @@ export function startObservability({
           ignoreTrivialResolveSpans: true,
           mergeItems: true,
         },
-        '@opentelemetry/instrumentation-host-metrics': { enabled: true },
+        // systeminformation's network probe can emit unhandled EPIPE errors in
+        // restricted containers. Railway already exposes host-level metrics.
+        '@opentelemetry/instrumentation-host-metrics': { enabled: false },
         '@opentelemetry/instrumentation-pino': { enabled: false },
       }),
     ],
