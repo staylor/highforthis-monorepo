@@ -1,10 +1,10 @@
 [build]
-watchPatterns = ["web/**"]
+watchPatterns = ["shared/**", "web/**"]
 installCommand = "corepack enable && pnpm install"
-buildCommand = "pnpm build && pnpm prod:upload"
+buildCommand = "pnpm --filter @highforthis/web build && pnpm --filter @highforthis/web prod:upload"
 
 [deploy]
-startCommand = "pnpm start"
+startCommand = "pnpm --filter @highforthis/web start"
 healthcheckPath = "/health"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3

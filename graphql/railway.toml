@@ -1,10 +1,10 @@
 [build]
-watchPatterns = ["graphql/**"]
+watchPatterns = ["graphql/**", "shared/**"]
 installCommand = "corepack enable && pnpm install"
-buildCommand = "pnpm build"
+buildCommand = "pnpm --filter @highforthis/graphql build"
 
 [deploy]
-startCommand = "pnpm start"
+startCommand = "pnpm --filter @highforthis/graphql start"
 healthcheckPath = "/health"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3

@@ -14,8 +14,12 @@
       "entry": ["tools/**/*.ts"],
       "project": ["src/**/*.ts", "tools/**/*.ts"]
     },
+    "shared": {
+      "entry": ["src/logger.ts", "src/observability.ts"],
+      "project": ["src/**/*.ts"]
+    },
     "web": {
-      "project": ["src/**/*.{ts,tsx}"],
+      "project": ["app.js", "src/**/*.{ts,tsx}"],
       "ignore": ["src/types/graphql.ts"],
       "ignoreDependencies": [
         "i18next-fs-backend",

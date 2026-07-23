@@ -10,6 +10,7 @@
   "dependencies": {
     "@apollo/client": "4.1.6",
     "@google-cloud/storage": "7.19.0",
+    "@highforthis/shared": "workspace:*",
     "@lexical/code": "0.41.0",
     "@lexical/list": "0.41.0",
     "@lexical/react": "0.41.0",
@@ -33,7 +34,6 @@
     "isbot": "5.1.35",
     "lexical": "0.41.0",
     "lodash.debounce": "4.0.8",
-    "morgan": "1.10.1",
     "qs": "6.15.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -60,8 +60,9 @@
     "vitest": "4.0.18"
   },
   "scripts": {
-    "dev": "node --env-file-if-exists=.env server.js",
-    "build": "NODE_ENV=production react-router build",
+    "dev": "pnpm --filter @highforthis/shared build && node --env-file-if-exists=.env server.js",
+    "build": "pnpm --filter @highforthis/shared build && pnpm build:service",
+    "build:service": "NODE_ENV=production react-router build",
     "prod:upload": "tsx tools/upload-assets.ts",
     "start": "node server.js",
     "test": "vitest run",

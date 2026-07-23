@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, type MetaFunction } from 'react-router';
 
 import Select from '#/components/Form/Select';
+import { Heading1 } from '#/components/Heading';
 import Videos from '#/components/Videos';
 import { videosQuery as queryFragment } from '#/components/Videos/graphql';
 import type { VideoConnection, VideosQuery } from '#/types/graphql';
@@ -11,7 +12,6 @@ import { rootData } from '#/utils/rootData';
 import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types';
-import { Heading1 } from '#/components/Heading';
 
 const videosQuery = gql`
   query Videos(

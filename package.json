@@ -29,7 +29,6 @@
     "@types/ffprobe-static": "2.0.3",
     "@types/html-escape": "2.0.2",
     "@types/lodash.debounce": "4.0.9",
-    "@types/morgan": "1.9.10",
     "@types/multer": "2.0.0",
     "@types/musicmetadata": "2.0.9",
     "@types/node": "25.3.2",
@@ -55,13 +54,16 @@
     "codegen": "graphql-codegen && pnpm lint-fix && ./apollo-ios-cli generate",
     "graphql:dev": "pnpm --filter @highforthis/graphql dev",
     "web:dev": "pnpm --filter @highforthis/web dev",
-    "build": "pnpm -r build",
+    "observability:dev": "pnpm observability:dev:docker",
+    "observability:dev:docker": "bash observability/dev.sh docker",
+    "observability:dev:podman": "bash observability/dev.sh podman",
+    "build": "pnpm --filter @highforthis/shared build && pnpm --filter @highforthis/graphql build:service && pnpm --filter @highforthis/web build:service",
     "knip": "knip",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint --report-unused-disable-directives .",
     "lint-fix": "pnpm lint --fix",
     "test:web": "pnpm --filter @highforthis/web test",
     "test:web:watch": "pnpm --filter @highforthis/web test:watch",
     "test:web:update": "pnpm --filter @highforthis/web test:update",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm --filter @highforthis/shared build && pnpm -r typecheck"
   }
 }

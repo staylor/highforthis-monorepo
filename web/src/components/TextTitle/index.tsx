@@ -9,10 +9,7 @@ export default function TextTitle({
   return (
     <h2
       {...props}
-      className={cn(
-        'mb-2 block text-3xl font-semibold lg:mb-3 dark:text-white',
-        className
-      )}
+      className={cn('mb-2 block text-3xl font-semibold lg:mb-3 dark:text-white', className)}
     >
       {children}
     </h2>

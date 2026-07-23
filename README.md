@@ -8,6 +8,8 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 | --- | --- |
 | [`graphql`](./graphql) | GraphQL API server (Apollo Server, Prisma, PostgreSQL) |
 | [`web`](./web) | Web application (React Router v7, Vite, Tailwind CSS) |
+| [`shared`](./shared) | Shared structured logging and OpenTelemetry utilities |
+| [`observability`](./observability) | OpenObserve backend and GUI deployment |
 | [`xcode`](./xcode) | iOS app (Swift, Apollo iOS) |
 
 ## Requirements
@@ -28,12 +30,16 @@ pnpm graphql:dev   # http://localhost:8080/graphql
 pnpm web:dev       # http://localhost:3000
 ```
 
+Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOINT` is configured, they also export correlated logs, traces, HTTP/GraphQL spans, and runtime metrics through OTLP. See [`observability/README.md`](./observability/README.md) for OpenObserve and Railway setup.
+
 ## Scripts
 
 | Script            | Description                                              |
 | ----------------- | -------------------------------------------------------- |
 | `pnpm graphql:dev` | Start GraphQL server in development (watch mode)        |
 | `pnpm web:dev`    | Start web app in development                             |
+| `pnpm observability:dev` | Start OpenObserve with Docker                    |
+| `pnpm observability:dev:podman` | Start OpenObserve with Podman             |
 | `pnpm build`      | Build all workspaces for production                      |
 | `pnpm codegen`    | Run GraphQL Codegen (TypeScript types, schema, Apollo iOS) |
 | `pnpm lint`       | Lint all workspaces with ESLint                          |
@@ -59,6 +65,12 @@ Requires the GraphQL server to be running locally:
 pnpm graphql:dev
 pnpm codegen
 ```
+
+## Observability
+
+The shared [`@highforthis/shared`](./shared) workspace initializes OpenTelemetry before either application loads, allowing automatic HTTP, Express, GraphQL, and runtime instrumentation plus structured Pino logging. Requests receive an `x-request-id`; logs produced inside a trace also contain OpenTelemetry trace and span IDs.
+
+OpenObserve runs as a separate Railway service using the pinned image and configuration in [`observability`](./observability). A persistent Railway volume mounted at `/data` is required.
 
 ## Production
 

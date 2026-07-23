@@ -10,6 +10,7 @@
   "dependencies": {
     "@apollo/server": "5.4.0",
     "@google-cloud/storage": "7.19.0",
+    "@highforthis/shared": "workspace:*",
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "7.4.1",
     "bcryptjs": "^3.0.3",
@@ -22,7 +23,6 @@
     "graphql": "16.13.0",
     "jsonwebtoken": "^9.0.3",
     "mkdirp": "3.0.1",
-    "morgan": "1.10.1",
     "multer": "2.0.2",
     "musicmetadata": "2.0.5",
     "sharp": "0.34.5",
@@ -39,8 +39,9 @@
     "typescript": "5.9.3"
   },
   "scripts": {
-    "dev": "NODE_OPTIONS='--disable-warning=DEP0040' tsx watch --env-file-if-exists=.env src/index.ts",
-    "build": "prisma generate && esbuild src/index.ts --packages=external --bundle --platform=node --target=node24 --format=esm --outfile=dist/index.js",
+    "dev": "pnpm --filter @highforthis/shared build && NODE_OPTIONS='--disable-warning=DEP0040' tsx watch --env-file-if-exists=.env src/index.ts",
+    "build": "pnpm --filter @highforthis/shared build && pnpm build:service",
+    "build:service": "prisma generate && esbuild src/index.ts --packages=external --bundle --platform=node --target=node24 --format=esm --outfile=dist/index.js",
     "start": "node dist/index.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

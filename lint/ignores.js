@@ -10,6 +10,7 @@ export default [
   'graphql/generated/',
   'graphql/**/*.json',
   'node_modules',
+  'shared/dist/',
   'web/.react-router',
   'web/build',
   '**/*.config.cjs',

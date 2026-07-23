@@ -4,12 +4,14 @@
 .env.*
 .nyc_output
 .react-router/
+.openobserve-data/
 
 node_modules
 
 graphql/lib
 graphql/dist
 graphql/public/uploads
+shared/dist
 web/build
 xcode/HighForThis.xcodeproj/project.xcworkspace/xcuserdata/
 
