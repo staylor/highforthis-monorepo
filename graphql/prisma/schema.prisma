@@ -217,14 +217,45 @@ model ShowArtist {
 // --- User ---
 
 model User {
-  id        String     @id @default(cuid())
-  name      String?
-  email     String     @unique
-  bio       String?
-  hash      String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  roles     UserRole[]
+  id                 String              @id @default(cuid())
+  name               String?
+  email              String              @unique
+  bio                String?
+  hash               String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  roles              UserRole[]
+  passkeys           Passkey[]
+  webAuthnChallenges WebAuthnChallenge[]
+}
+
+model Passkey {
+  id         String    @id
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  publicKey  Bytes
+  counter    BigInt    @default(0)
+  transports String[]
+  deviceType String
+  backedUp   Boolean
+  name       String?
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime?
+
+  @@index([userId])
+}
+
+model WebAuthnChallenge {
+  id        String   @id @default(cuid())
+  challenge String   @unique
+  type      String
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+  @@index([userId])
 }
 
 model UserRole {

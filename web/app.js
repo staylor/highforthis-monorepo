@@ -14,8 +14,9 @@ process.env.TZ = 'America/New_York';
 const serverPort = parseInt(process.env.PORT || process.env.SERVER_PORT || '3000', 10);
 const logger = createLogger({ serviceName: 'web' });
 
-// use a local GQL server by default
-const gqlHost = process.env.GQL_HOST || 'http://localhost:8080';
+// use a local GQL server by default; accept either a base URL or a legacy /graphql URL
+const configuredGqlHost = process.env.GQL_HOST || 'http://localhost:8080';
+const gqlHost = configuredGqlHost.replace(/\/graphql\/?$/, '').replace(/\/$/, '');
 const getClient = factory(`${gqlHost}/graphql`);
 
 function getLoadContext(_, res) {
@@ -29,6 +30,7 @@ function getLoadContext(_, res) {
 const proxy = createProxyMiddleware({
   target: gqlHost,
   changeOrigin: true,
+  pathFilter: ['/auth/passkeys', '/graphql', '/upload', '/uploads'],
 });
 
 const viteDevServer =
@@ -57,6 +59,9 @@ app.use(cookieParser());
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable('x-powered-by');
 
+// Proxy API requests before Vite's development middleware can serve an HTML fallback.
+app.use(proxy);
+
 // handle asset requests
 if (viteDevServer) {
   app.use(viteDevServer.middlewares);
@@ -79,11 +84,6 @@ app.use(express.static('build/client', { maxAge: '1h' }));
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
-
-// proxy to the graphql server for client fetch requests
-app.use('/graphql', proxy);
-app.use('/upload', proxy);
-app.use('/uploads', proxy);
 
 // handle SSR requests
 app.all('/{*splat}', async (_, res, next) => {

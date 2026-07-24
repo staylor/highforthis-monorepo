@@ -72,6 +72,21 @@ The shared [`@highforthis/shared`](./shared) workspace initializes OpenTelemetry
 
 OpenObserve runs as a separate Railway service using the pinned image and configuration in [`observability`](./observability). A persistent Railway volume mounted at `/data` is required.
 
+## Passkey authentication
+
+Admin users can register passkeys at `/admin/passkeys` and sign in with Face ID, Touch ID, a security key, or a nearby device. Registration is restricted to an existing authenticated admin session. The canonical production WebAuthn configuration is:
+
+```text
+WEBAUTHN_RP_ID=highforthis.com
+WEBAUTHN_ORIGIN=https://highforthis.com
+WEBAUTHN_RP_NAME=High For This Admin
+PASSWORD_LOGIN_ENABLED=true
+```
+
+Set the WebAuthn variables on `graphql` and `PASSWORD_LOGIN_ENABLED` on both Node services. Keep password login enabled until at least two passkeys have been registered and tested, then set `PASSWORD_LOGIN_ENABLED=false` on both services. For local registration, override the relying party values with `WEBAUTHN_RP_ID=localhost` and `WEBAUTHN_ORIGIN=http://localhost:3000`.
+
+The GraphQL Railway pre-deploy command runs `prisma db push` so the passkey tables exist before the new application starts.
+
 ## Production
 
 Each workspace has `build` and `start` scripts. Build bundles the app, start runs it with Node. Environment variables are loaded from `.env.production` via `--env-file-if-exists` (or set directly in the hosting platform).

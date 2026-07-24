@@ -4,6 +4,7 @@ installCommand = "corepack enable && pnpm install"
 buildCommand = "pnpm --filter @highforthis/graphql build"
 
 [deploy]
+preDeployCommand = "pnpm --filter @highforthis/graphql db:push"
 startCommand = "pnpm --filter @highforthis/graphql start"
 healthcheckPath = "/health"
 restartPolicyType = "ON_FAILURE"

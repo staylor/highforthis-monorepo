@@ -5,6 +5,7 @@ import { redirect, Outlet } from 'react-router';
 
 import { isAuthenticated } from '#/auth';
 import NavMenu from '#/components/Admin/NavMenu';
+import { sessionStorage } from '#/session';
 import adminCss from '#/styles/admin.css?url';
 import { rootData } from '#/utils/rootData';
 import titleTemplate from '#/utils/title';
@@ -29,12 +30,26 @@ export const meta: MetaFunction = ({ matches }) => {
   ];
 };
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const user = await isAuthenticated(request);
-  if (!user) {
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const token = await isAuthenticated(request);
+  if (!token) {
     return redirect('/login/unauthorized');
   }
-  return {};
+
+  const response = await fetch(`${context.graphqlHost}/auth/session`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (response.ok) {
+    return {};
+  }
+  if (response.status !== 401 && response.status !== 403) {
+    throw new Response('Unable to validate the admin session', { status: 503 });
+  }
+
+  const session = await sessionStorage.getSession(request.headers.get('cookie'));
+  return redirect('/login/unauthorized', {
+    headers: { 'Set-Cookie': await sessionStorage.destroySession(session) },
+  });
 }
 
 export default function Admin() {

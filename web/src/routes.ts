@@ -11,6 +11,7 @@ export default [
   index('routes/home/index.tsx'),
   route('admin', 'routes/admin/layout.tsx', [
     index('routes/admin/index.tsx'),
+    route('logout', 'routes/admin/logout.ts'),
     ...adminRoutes('artist'),
     ...prefix('media', [
       index('routes/admin/media/index.tsx'),
@@ -18,6 +19,11 @@ export default [
       route(':id', 'routes/admin/media/edit.tsx'),
     ]),
     ...adminRoutes('podcast'),
+    ...prefix('passkeys', [
+      index('routes/admin/passkeys/index.tsx'),
+      route('options', 'routes/admin/passkeys/options.ts'),
+      route('verify', 'routes/admin/passkeys/verify.ts'),
+    ]),
     ...adminRoutes('post'),
     ...prefix('settings', [
       route('dashboard', 'routes/admin/settings/dashboard.tsx'),

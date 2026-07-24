@@ -5,10 +5,15 @@ import { z } from 'zod';
 
 import prisma from '#/database';
 import env from '#/env';
+import type { UserWithRoles } from '#/models';
 
 type JWTPayload = {
   userId: string;
 };
+
+export function issueToken(userId: string): string {
+  return jsonwebtoken.sign({ userId }, env.TOKEN_SECRET, { expiresIn: '12h' });
+}
 
 const authBodySchema = z.object({
   email: z.string().min(1),
@@ -48,8 +53,23 @@ export async function jwtMiddleware(req: Request, _res: Response, next: NextFunc
   next();
 }
 
+export function sessionHandler(req: Request, res: Response): void {
+  const user = req.context?.authUser as UserWithRoles | undefined;
+  if (!user?.roles.some((role) => role.name === 'admin')) {
+    res.status(401).json({ error: 'Authentication required' });
+    return;
+  }
+
+  res.json({ user: { id: user.id, email: user.email, name: user.name } });
+}
+
 export async function authMiddleware(req: Request, res: Response) {
   try {
+    if (!env.PASSWORD_LOGIN_ENABLED) {
+      res.status(403).json({ error: 'Password login is disabled' });
+      return;
+    }
+
     const { email, password } = authBodySchema.parse(req.body);
 
     const user = await prisma.user.findUnique({ where: { email } });
@@ -57,8 +77,7 @@ export async function authMiddleware(req: Request, res: Response) {
       throw new Error('User not found matching email/password combination');
     }
 
-    const token = jsonwebtoken.sign({ userId: user.id }, env.TOKEN_SECRET);
-    res.json({ token });
+    res.json({ token: issueToken(user.id) });
   } catch (e) {
     res.json({ error: (e as Error).message });
   }

@@ -19,6 +19,11 @@ const useRouteConfig = () => {
         dashicon: 'desktop',
         external: true,
       },
+      {
+        path: '/logout',
+        label: t('login.logout'),
+        dashicon: 'exit',
+      },
     ],
     [
       {
@@ -136,6 +141,11 @@ const useRouteConfig = () => {
             label: t('users.add'),
           },
         ],
+      },
+      {
+        path: '/passkeys',
+        label: t('passkeys.heading'),
+        dashicon: 'lock',
       },
       {
         path: '/settings',

@@ -8,10 +8,18 @@ import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
 
-import { authMiddleware, jwtMiddleware } from './authentication';
+import { authMiddleware, jwtMiddleware, sessionHandler } from './authentication';
 import env from './env';
 import cronJobs from './jobs';
 import type { AppContext } from './models';
+import {
+  authenticationOptionsHandler,
+  authenticationVerificationHandler,
+  deletePasskeyHandler,
+  listPasskeysHandler,
+  registrationOptionsHandler,
+  registrationVerificationHandler,
+} from './passkeys';
 import rejectWordPress from './rejectWordPress';
 import resolvers from './resolvers';
 import typeDefs from './schema';
@@ -50,6 +58,14 @@ async function startServer(): Promise<void> {
 
   app.use('/graphql', jwtMiddleware);
 
+  app.use('/auth/passkeys', jwtMiddleware, express.json());
+  app.post('/auth/passkeys/authenticate/options', authenticationOptionsHandler);
+  app.post('/auth/passkeys/authenticate/verify', authenticationVerificationHandler);
+  app.post('/auth/passkeys/register/options', registrationOptionsHandler);
+  app.post('/auth/passkeys/register/verify', registrationVerificationHandler);
+  app.get('/auth/passkeys', listPasskeysHandler);
+  app.delete('/auth/passkeys/:credentialId', deletePasskeyHandler);
+  app.get('/auth/session', jwtMiddleware, sessionHandler);
   app.post('/auth', express.json(), authMiddleware);
 
   app.post('/upload', jwtMiddleware, multerMiddleware(uploadDir), mediaMiddleware);
