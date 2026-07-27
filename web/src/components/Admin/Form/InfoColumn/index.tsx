@@ -24,8 +24,12 @@ export default function InfoColumn({
   label = '',
   button = null,
 }: InfoColumnProps) {
+  if (infoFields.length === 0 && metaFields.length === 0) {
+    return null;
+  }
+
   return (
-    <section className="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70">
+    <section className="w-full shrink-0 lg:sticky lg:top-4 lg:w-70">
       {infoFields.length > 0 ? (
         <InfoBox>
           <h3 className={cn(border, 'text-dark px-3 py-2 text-sm font-bold select-none')}>

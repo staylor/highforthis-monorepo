@@ -15,7 +15,7 @@ import {
 } from 'lexical';
 import type { LexicalNode, RangeSelection } from 'lexical';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import type { SyntheticEvent } from 'react';
+import type { ReactNode, SyntheticEvent } from 'react';
 
 import MediaModal from '#/components/Admin/Modals/Media';
 import VideoModal from '#/components/Admin/Modals/Video';
@@ -23,6 +23,7 @@ import Controls from '#/components/Editor/Controls';
 import BlockButton from '#/components/Editor/Controls/BlockButton';
 import StyleButton from '#/components/Editor/Controls/StyleButton';
 import Toolbar from '#/components/Editor/Toolbar';
+import Icon from '#/components/Icon';
 import type { ImageUpload, Video } from '#/types/graphql';
 
 import { $createImageNode } from './ImageNode';
@@ -30,12 +31,14 @@ import { $createVideoNode } from './VideoNode';
 import { getNodeFromSelection, getStyleFromNode, setStyle } from './utils';
 
 interface BlockType {
-  label: string;
+  label: ReactNode;
   nodeType?: string;
   style: string;
   className?: string;
   onToggle?: () => void;
 }
+
+const iconClass = 'h-4 w-4';
 
 const BLOCK_OFFSET = 0;
 const BLOCK_TOOLBAR_OFFSET = 40;
@@ -63,45 +66,39 @@ export default function BlockToolbarPlugin() {
       { label: 'H2', nodeType: 'heading', style: 'h2' },
       { label: 'H3', nodeType: 'heading', style: 'h3' },
       {
-        label: '',
+        label: <Icon name="media" className={iconClass} />,
         style: 'atomic-image',
-        className: 'dashicons dashicons-format-image',
         onToggle: () => {
           setModals({ media: true });
         },
       },
       {
-        label: '',
+        label: <Icon name="video" className={iconClass} />,
         nodeType: 'video',
         style: 'video',
-        className: 'dashicons dashicons-format-video',
         onToggle: () => {
           setModals({ video: true });
         },
       },
       {
-        label: '',
+        label: <Icon name="quote" className={iconClass} />,
         nodeType: 'quote',
         style: 'blockquote',
-        className: 'dashicons dashicons-editor-quote',
       },
       {
-        label: '',
+        label: <Icon name="listBullet" className={iconClass} />,
         nodeType: 'list',
         style: 'bullet',
-        className: 'dashicons dashicons-editor-ul',
       },
       {
-        label: '',
+        label: <Icon name="listOrdered" className={iconClass} />,
         nodeType: 'list',
         style: 'number',
-        className: 'dashicons dashicons-editor-ol',
       },
       {
-        label: '',
+        label: <Icon name="code" className={iconClass} />,
         nodeType: 'code',
         style: 'code',
-        className: 'dashicons dashicons-editor-code',
       },
     ],
     [setModals]

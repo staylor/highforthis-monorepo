@@ -1,39 +1,39 @@
 import cn from 'classnames';
-import type { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import Icon from '#/components/Icon';
 
 interface CollapseButtonProps {
   isCollapsed: boolean;
-  onClick: (e: SyntheticEvent) => void;
+  onClick: () => void;
 }
 
 function CollapseButton({ isCollapsed, onClick }: CollapseButtonProps) {
   const { t } = useTranslation();
+  const label = isCollapsed ? t('nav.expand') : t('nav.collapse');
   return (
-    <button
-      onClick={onClick}
-      className={cn(
-        'relative m-0 block h-9 w-full cursor-pointer overflow-visible p-0',
-        'border-none bg-none outline-0 transition-colors hover:text-black',
-        'text-sm leading-9'
-      )}
-      aria-expanded={!isCollapsed}
-      aria-label={isCollapsed ? 'Expand menu' : 'Collapse menu'}
-    >
-      <span
+    <div className="shrink-0 border-t border-neutral-200/80 p-2 dark:border-white/10">
+      <button
+        type="button"
+        onClick={onClick}
+        aria-expanded={!isCollapsed}
+        aria-label={label}
+        title={isCollapsed ? label : undefined}
         className={cn(
-          'absolute top-0 left-0 block h-9 w-9 leading-9',
-          'before:relative before:top-2',
-          'dashicons-before before:content-collapse',
-          {
-            'rotate-180': isCollapsed,
-          }
+          'flex items-center rounded-lg text-sm font-medium text-neutral-500 transition-colors',
+          'hover:bg-neutral-100 hover:text-neutral-900',
+          'focus-visible:ring-pink/50 focus-visible:ring-2 focus-visible:outline-none',
+          'dark:text-neutral-400 dark:hover:bg-white/5 dark:hover:text-white',
+          isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-3 px-2.5 py-2'
         )}
-      />
-      {!isCollapsed && (
-        <span className="absolute top-0 left-0 block pl-9 leading-9">{t('nav.collapse')}</span>
-      )}
-    </button>
+      >
+        <Icon
+          name="chevronLeft"
+          className={cn('h-4 w-4 transition-transform duration-200', { 'rotate-180': isCollapsed })}
+        />
+        {!isCollapsed && <span className="truncate">{label}</span>}
+      </button>
+    </div>
   );
 }
 

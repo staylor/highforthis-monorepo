@@ -31,7 +31,7 @@ function MediaModal({ type = 'image', onClose, selectAudio, selectImage }: Media
 
   return ReactDOM.createPortal(
     <div className={modalClass} id="media-modal">
-      <CloseButton className="dashicons dashicons-no" onClick={onClose} />
+      <CloseButton onClick={onClose} />
       <div className={frameClass} ref={frameRef}>
         {uploads.edges?.map(({ node }) => {
           const crops =

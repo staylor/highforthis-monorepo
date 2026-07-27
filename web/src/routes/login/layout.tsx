@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router';
-import type { LinksFunction } from 'react-router';
 
 import Message from '#/components/Form/Message';
 
@@ -9,8 +8,6 @@ import Wrapper from './Wrapper';
 export const handle = {
   layout: 'login',
 };
-
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/css/dashicons.min.css' }];
 
 export default function Login() {
   const { t } = useTranslation();

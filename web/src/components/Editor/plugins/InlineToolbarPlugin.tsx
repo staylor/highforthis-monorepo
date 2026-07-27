@@ -8,6 +8,7 @@ import { useRef, useEffect, useCallback, useReducer, useMemo } from 'react';
 import Controls from '#/components/Editor/Controls';
 import StyleButton from '#/components/Editor/Controls/StyleButton';
 import Toolbar from '#/components/Editor/Toolbar';
+import Icon from '#/components/Icon';
 
 import { setStyle } from './utils';
 
@@ -19,25 +20,24 @@ const TOOLBAR_OFFSET = 10;
 interface InlineStyle {
   label: ReactNode;
   style: TextFormatType;
-  className: string;
+  className?: string;
 }
 
+const iconClass = 'h-4 w-4';
+
 const INLINE_STYLES: InlineStyle[] = [
-  { label: '', style: 'bold', className: 'dashicons dashicons-editor-bold' },
+  { label: <Icon name="bold" className={iconClass} />, style: 'bold' },
   {
-    label: '',
+    label: <Icon name="italic" className={iconClass} />,
     style: 'italic',
-    className: 'dashicons dashicons-editor-italic',
   },
   {
-    label: '',
+    label: <Icon name="underline" className={iconClass} />,
     style: 'underline',
-    className: 'dashicons dashicons-editor-underline',
   },
   {
-    label: '',
+    label: <Icon name="strikethrough" className={iconClass} />,
     style: 'strikethrough',
-    className: 'dashicons dashicons-editor-strikethrough',
   },
   {
     label: (
@@ -46,7 +46,6 @@ const INLINE_STYLES: InlineStyle[] = [
       </>
     ),
     style: 'superscript',
-    className: '',
   },
   {
     label: (
@@ -55,9 +54,8 @@ const INLINE_STYLES: InlineStyle[] = [
       </>
     ),
     style: 'subscript',
-    className: '',
   },
-  { label: '', style: 'code', className: 'dashicons dashicons-editor-code' },
+  { label: <Icon name="code" className={iconClass} />, style: 'code' },
 ];
 
 type Formats = Record<TextFormatType, boolean>;

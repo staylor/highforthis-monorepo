@@ -39,7 +39,7 @@ export default function EditableField({ field, data }: FieldProps) {
       <ClientOnly>
         <Suspense
           fallback={
-            <div className="editor-container relative -left-6">
+            <div className="editor-container relative left-0 lg:-left-6">
               <div className="editor-inner mt-6 min-h-[150px] space-y-3 p-4">
                 <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
                 <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
@@ -78,8 +78,21 @@ export default function EditableField({ field, data }: FieldProps) {
     );
   }
 
+  // a wrapping, auto-growing single line field — for big title inputs
+  if (field.type === 'heading') {
+    return (
+      <Textarea
+        rows={1}
+        autoGrow
+        singleLine
+        placeholder={field.placeholder || ''}
+        {...defaultProps}
+      />
+    );
+  }
+
   if (field.type === 'textarea') {
-    return <Textarea rows={5} {...defaultProps} />;
+    return <Textarea rows={5} placeholder={field.placeholder || ''} {...defaultProps} />;
   }
 
   return (

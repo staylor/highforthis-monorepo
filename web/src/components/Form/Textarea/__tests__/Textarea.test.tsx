@@ -19,6 +19,39 @@ describe('textarea', () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 
+  describe('singleLine', () => {
+    it('blocks line breaks from the keyboard', async () => {
+      const user = userEvent.setup();
+      render(<Textarea singleLine autoGrow value="Title" />);
+
+      const input = screen.getByRole('textbox');
+      await user.type(input, '{Enter}more');
+
+      expect(input).toHaveValue('Titlemore');
+    });
+
+    it('flattens pasted line breaks', async () => {
+      const user = userEvent.setup();
+      render(<Textarea singleLine autoGrow />);
+
+      const input = screen.getByRole('textbox');
+      await user.click(input);
+      await user.paste('One\nTwo');
+
+      expect(input).toHaveValue('One Two');
+    });
+
+    it('allows line breaks without the prop', async () => {
+      const user = userEvent.setup();
+      render(<Textarea />);
+
+      const input = screen.getByRole('textbox');
+      await user.type(input, 'One{Enter}Two');
+
+      expect(input).toHaveValue('One\nTwo');
+    });
+  });
+
   describe('onChange', () => {
     it('adding text', async () => {
       const user = userEvent.setup();

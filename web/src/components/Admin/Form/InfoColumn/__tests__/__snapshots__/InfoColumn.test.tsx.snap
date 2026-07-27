@@ -2,7 +2,7 @@
 
 exports[`infoColumn > no button 1`] = `
 <section
-  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
+  class="w-full shrink-0 lg:sticky lg:top-4 lg:w-70"
 >
   <aside
     class="border border-detail mb-5 box-border block shadow-sm"
@@ -38,15 +38,11 @@ exports[`infoColumn > no button 1`] = `
 </section>
 `;
 
-exports[`infoColumn > no props 1`] = `
-<section
-  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
-/>
-`;
+exports[`infoColumn > no props 1`] = `null`;
 
 exports[`infoColumn > with button 1`] = `
 <section
-  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
+  class="w-full shrink-0 lg:sticky lg:top-4 lg:w-70"
 >
   <aside
     class="border border-detail mb-5 box-border block shadow-sm"
@@ -89,7 +85,7 @@ exports[`infoColumn > with button 1`] = `
 
 exports[`infoColumn > with info and meta fields 1`] = `
 <section
-  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
+  class="w-full shrink-0 lg:sticky lg:top-4 lg:w-70"
 >
   <aside
     class="border border-detail mb-5 box-border block shadow-sm"
@@ -125,7 +121,7 @@ exports[`infoColumn > with info and meta fields 1`] = `
 
 exports[`infoColumn > with infoFields 1`] = `
 <section
-  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
+  class="w-full shrink-0 lg:sticky lg:top-4 lg:w-70"
 >
   <aside
     class="border border-detail mb-5 box-border block shadow-sm"
@@ -148,7 +144,7 @@ exports[`infoColumn > with infoFields 1`] = `
 
 exports[`infoColumn > with metaFields 1`] = `
 <section
-  class="sticky top-2.5 mt-2.5 mr-0 w-full md:float-right md:-mr-75 md:w-70"
+  class="w-full shrink-0 lg:sticky lg:top-4 lg:w-70"
 >
   <aside
     class="border border-detail mb-5 box-border block shadow-sm"

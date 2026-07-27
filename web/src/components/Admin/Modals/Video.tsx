@@ -39,7 +39,7 @@ function VideoModal({ selectVideo, onClose }: VideoModalProps) {
 
   return ReactDOM.createPortal(
     <div className={modalClass}>
-      <CloseButton className="dashicons dashicons-no" onClick={onClose} />
+      <CloseButton onClick={onClose} />
       <div className={frameClass} ref={frameRef}>
         {videos.edges?.map(({ node }) => {
           const crop = node.thumbnails.find((c) => c.width === 120) as VideoThumbnail;

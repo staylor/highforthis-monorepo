@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Input from '#/components/Form/Input';
+import Icon from '#/components/Icon';
 
 interface TagsProps {
   name: string;
@@ -45,14 +46,16 @@ export default function Tags({ name, tags }: TagsProps) {
           >
             <input type="hidden" name={name} value={tag} />
             <button
+              type="button"
+              aria-label={t('tags.remove', { tag })}
               className={cn(
-                'float-left h-5 w-6 cursor-pointer',
-                'before:block before:rounded-full before:text-center before:antialiased',
-                'dashicons-before before:h-5 before:w-5 before:text-base',
-                'before:content-dismiss before:text-dark before:ml-0.5'
+                'float-left mr-0.5 flex h-5 w-5 cursor-pointer items-center justify-center',
+                'text-dark rounded-full transition-colors hover:bg-neutral-200'
               )}
               onClick={bindClick(i)}
-            />{' '}
+            >
+              <Icon name="close" className="h-3.5 w-3.5" />
+            </button>{' '}
             {tag}
           </div>
         ))}

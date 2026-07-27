@@ -10,7 +10,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const updateSearch = debounce(querySearch, 600);
 
   return (
-    <div className="float-right">
+    <div className="mb-2 w-full sm:float-right sm:w-64">
       <Input
         value={searchParams.get('search') || ''}
         placeholder={placeholder}

@@ -40,7 +40,8 @@ export default function Editor({ editorState }: { editorState: SerializedEditorS
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <HiddenFieldPlugin />
-      <div className="editor-container relative -left-6">
+      {/* the negative offset makes room for the block toolbar handle, which only fits on wide screens */}
+      <div className="editor-container relative left-0 lg:-left-6">
         <div className="editor-inner">
           <RichTextPlugin
             contentEditable={<ContentEditable className="editor-input" />}

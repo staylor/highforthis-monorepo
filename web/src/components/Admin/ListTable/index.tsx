@@ -109,12 +109,12 @@ function ListTable({
   }
 
   const paginationMatrix = <Pagination data={data} perPage={perPage} className="text-right" />;
-  const toolbarClass = cn('flex items-center');
+  const toolbarClass = cn('flex flex-wrap items-center gap-2 clear-both');
 
   return (
     <>
       <section className={cn(toolbarClass, 'my-1.5')}>
-        <div className="flex grow">
+        <div className="flex grow flex-wrap items-center gap-2">
           {deletable && (
             <form method="delete" onChange={handleChange}>
               {state.checked.map((id: string) => (
@@ -132,56 +132,62 @@ function ListTable({
         </div>
         {paginationMatrix}
       </section>
-      <table className="border-detail w-full table-fixed border-spacing-0 border shadow-sm">
-        <thead>
-          <Headers
-            className="border-detail border-b"
-            checkClass="border-b border-detail"
-            columns={columns}
-            checked={state.all}
-            toggleAll={toggleAll}
-          />
-        </thead>
-        <tbody>
-          {data.edges.map(({ node }: Record<string, any>) => (
-            <tr className="even:bg-neutral-50" key={node.id}>
-              <th className={cn(cellHeading, 'px-2.5 py-1.5 align-top')}>
-                <Checkbox
-                  className="align-text-top"
-                  checked={state.checked.includes(node.id)}
-                  value={node.id}
-                  onChange={toggleCheck}
-                />
-              </th>
-              {columns.map((column: Column, i) => {
-                let content = null;
-                if (column.type && column.type === 'date') {
-                  content = column.prop && node[column.prop] ? formatDate(node[column.prop]) : null;
-                } else {
-                  content = column.render ? column.render(node) : column.prop && node[column.prop];
-                }
-                return (
-                  <td
-                    key={`${i.toString(16)}`}
-                    className={cn('px-2.5 py-2 align-top text-sm break-words', column.className)}
-                  >
-                    {content}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <Headers
-            className="border-detail border-t"
-            checkClass="border-t border-detail"
-            columns={columns}
-            checked={state.all}
-            toggleAll={toggleAll}
-          />
-        </tfoot>
-      </table>
+      {/* horizontal scroll instead of unreadable columns on narrow screens */}
+      <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+        <table className="border-detail w-full min-w-160 table-fixed border-spacing-0 border shadow-sm">
+          <thead>
+            <Headers
+              className="border-detail border-b"
+              checkClass="border-b border-detail"
+              columns={columns}
+              checked={state.all}
+              toggleAll={toggleAll}
+            />
+          </thead>
+          <tbody>
+            {data.edges.map(({ node }: Record<string, any>) => (
+              <tr className="even:bg-neutral-50" key={node.id}>
+                <th className={cn(cellHeading, 'px-2.5 py-1.5 align-top')}>
+                  <Checkbox
+                    className="align-text-top"
+                    checked={state.checked.includes(node.id)}
+                    value={node.id}
+                    onChange={toggleCheck}
+                  />
+                </th>
+                {columns.map((column: Column, i) => {
+                  let content = null;
+                  if (column.type && column.type === 'date') {
+                    content =
+                      column.prop && node[column.prop] ? formatDate(node[column.prop]) : null;
+                  } else {
+                    content = column.render
+                      ? column.render(node)
+                      : column.prop && node[column.prop];
+                  }
+                  return (
+                    <td
+                      key={`${i.toString(16)}`}
+                      className={cn('px-2.5 py-2 align-top text-sm break-words', column.className)}
+                    >
+                      {content}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <Headers
+              className="border-detail border-t"
+              checkClass="border-t border-detail"
+              columns={columns}
+              checked={state.all}
+              toggleAll={toggleAll}
+            />
+          </tfoot>
+        </table>
+      </div>
       <section className={cn(toolbarClass, 'my-4 justify-end')}>{paginationMatrix}</section>
     </>
   );

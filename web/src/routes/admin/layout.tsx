@@ -1,10 +1,10 @@
 import cn from 'classnames';
-import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { LinksFunction, MetaFunction } from 'react-router';
 import { redirect, Outlet } from 'react-router';
 
 import { isAuthenticated } from '#/auth';
-import NavMenu from '#/components/Admin/NavMenu';
+import NavMenu, { AdminNavProvider, useAdminNav } from '#/components/Admin/NavMenu';
 import { sessionStorage } from '#/session';
 import adminCss from '#/styles/admin.css?url';
 import { rootData } from '#/utils/rootData';
@@ -16,10 +16,7 @@ export const handle = {
   layout: 'admin',
 };
 
-export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: '/css/dashicons.min.css' },
-  { rel: 'stylesheet', href: adminCss },
-];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: adminCss }];
 
 export const meta: MetaFunction = ({ matches }) => {
   const { siteSettings } = rootData(matches);
@@ -52,23 +49,45 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   });
 }
 
-export default function Admin() {
-  const [isCollapsed, setCollapsed] = useState(false);
+function AdminShell() {
+  const { t } = useTranslation();
+  const { isCollapsed } = useAdminNav();
   return (
-    <div className="mx-auto min-h-[calc(100vh-48px)] bg-white px-12 py-6">
-      <section>
-        <div id="portal" />
-        <div className="absolute" id="atomicToolbar" />
-        <NavMenu toggleCollapse={() => setCollapsed(!isCollapsed)} isCollapsed={isCollapsed} />
-        <section
-          className={cn('relative z-30 h-full px-5 pb-16', {
-            'ml-9 lg:ml-40': !isCollapsed,
-            'ml-9 lg:ml-9': isCollapsed,
-          })}
+    <div className="dark:bg-surface-dark min-h-screen bg-white">
+      <div id="portal" />
+      <div className="absolute" id="atomicToolbar" />
+      <NavMenu />
+      <div
+        className={cn('transition-[margin] duration-200 ease-out', {
+          'lg:ml-64': !isCollapsed,
+          'lg:ml-16': isCollapsed,
+        })}
+      >
+        {/* Mobile header with the hamburger toggle */}
+        <header
+          className={cn(
+            'sticky top-0 z-30 flex h-14 items-center gap-2 px-2 lg:hidden',
+            'border-b border-neutral-200/80 bg-white/90 backdrop-blur-xl',
+            'dark:bg-surface-dark/90 dark:border-white/10'
+          )}
         >
+          <NavMenu.MobileToggle />
+          <span className="font-title truncate text-base tracking-tight text-neutral-900 uppercase dark:text-white">
+            {t('title')}
+          </span>
+        </header>
+        <main className="relative z-20 px-4 pt-6 pb-16 sm:px-6 lg:px-8">
           <Outlet />
-        </section>
-      </section>
+        </main>
+      </div>
     </div>
+  );
+}
+
+export default function Admin() {
+  return (
+    <AdminNavProvider>
+      <AdminShell />
+    </AdminNavProvider>
   );
 }
