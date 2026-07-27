@@ -84,6 +84,9 @@ export default function AdminForm({ data = {}, fields, boxLabel, buttonLabel }: 
   );
 
   const hasInfoColumn = infoFields.length > 0 || metaFields.length > 0;
+  // when the info column owns the button it ends up below a long stack of fields on mobile,
+  // so it gets a sticky action bar instead
+  const buttonInInfoColumn = infoFields.length > 0;
 
   return (
     <FormWrap>
@@ -95,15 +98,26 @@ export default function AdminForm({ data = {}, fields, boxLabel, buttonLabel }: 
         >
           <div className="w-full max-w-2xl min-w-0">
             {primaryFields}
-            {infoFields.length === 0 ? button : null}
+            {buttonInInfoColumn ? null : button}
           </div>
           <InfoColumn
             infoFields={infoFields}
             metaFields={metaFields}
-            button={button}
+            button={<span className="hidden lg:inline-block">{button}</span>}
             label={boxLabel || t('admin.details')}
           />
         </fieldset>
+        {buttonInInfoColumn && (
+          <div
+            className={cn(
+              'sticky bottom-0 z-30 mt-6 flex justify-end lg:hidden',
+              '-mx-4 px-4 py-3 sm:-mx-6 sm:px-6',
+              'border-t border-neutral-200/80 bg-white/90 backdrop-blur-xl'
+            )}
+          >
+            {button}
+          </div>
+        )}
       </form>
     </FormWrap>
   );

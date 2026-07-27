@@ -28,6 +28,10 @@ export default function Textarea({
     if (!autoGrow || !el) {
       return;
     }
+    // browsers with `field-sizing: content` size the field for us
+    if (typeof CSS !== 'undefined' && CSS.supports?.('field-sizing', 'content')) {
+      return;
+    }
     el.style.height = 'auto';
     el.style.height = `${el.scrollHeight}px`;
   }, [autoGrow]);
@@ -73,7 +77,14 @@ export default function Textarea({
       onInput={autoGrow || singleLine ? onInput : undefined}
       onKeyDown={singleLine || onKeyDown ? inputOnKeyDown : undefined}
       onChange={onChange ? inputOnChange : undefined}
-      className={cn(inputBase, 'w-full', { 'resize-none overflow-hidden': autoGrow }, className)}
+      className={cn(
+        inputBase,
+        'w-full',
+        // `field-sizing-content` sizes the field before JS runs, so a long value never
+        // paints on one clipped line first; the effect above is the fallback
+        { 'field-sizing-content resize-none overflow-hidden': autoGrow },
+        className
+      )}
       defaultValue={value}
     />
   );
