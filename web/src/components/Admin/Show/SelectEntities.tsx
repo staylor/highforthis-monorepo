@@ -1,7 +1,7 @@
-import cn from 'classnames';
 import { useState } from 'react';
 
 import Select from '#/components/Form/Select';
+import Icon from '#/components/Icon';
 
 import { sortNodes, type EntityNode } from './utils';
 
@@ -41,15 +41,12 @@ export default function SelectEntities({ name, nodes, filtered }: SelectEntityPr
             <span className="ml-2" key={`span-${id}`}>
               {entityMap[id].name}
               <button
+                type="button"
+                aria-label={`Remove ${entityMap[id].name}`}
                 onClick={removeId(id)}
-                className={cn(
-                  'relative top-1',
-                  'before:block before:rounded-full before:text-center before:antialiased',
-                  'dashicons-before before:h-5 before:w-5 before:text-base',
-                  'before:content-dismiss before:text-pink before:ml-0.5'
-                )}
+                className="text-pink relative top-1 ml-0.5 inline-flex h-5 w-5 items-center justify-center"
               >
-                {' '}
+                <Icon name="close" className="h-3.5 w-3.5" />
               </button>
               <input key={id} type="hidden" name={`${name}[${i}]`} value={id} />
             </span>

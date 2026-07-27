@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import type { Choice } from '#/components/Form/Select';
+import type { IconName } from '#/components/Icon';
 
 export interface Column {
   className?: string;
@@ -33,7 +34,7 @@ export interface Field {
   position?: 'info' | 'meta' | 'primary';
   prop?: string;
   render?: (data: any) => ReactNode;
-  type?: 'custom' | 'date' | 'editor' | 'select' | 'textarea' | 'hidden';
+  type?: 'custom' | 'date' | 'editor' | 'heading' | 'select' | 'textarea' | 'hidden';
 }
 
 export interface AdminRoute {
@@ -42,7 +43,7 @@ export interface AdminRoute {
 }
 
 export interface AdminTopLevelRoute extends AdminRoute {
-  dashicon: string;
+  icon: IconName;
   external?: boolean;
   routes?: AdminRoute[];
 }

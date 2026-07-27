@@ -2,6 +2,8 @@ import cn from 'classnames';
 import type { SyntheticEvent } from 'react';
 import { useSearchParams } from 'react-router';
 
+import Icon from '#/components/Icon';
+
 interface MessageProps {
   dismissable?: boolean;
   text?: string;
@@ -37,14 +39,15 @@ export default function Message({
       {dismissable && (
         <button
           type="button"
+          aria-label="Dismiss"
           className={cn(
             'm-0 cursor-pointer border-none bg-none p-2',
-            'absolute top-0 right-1',
-            'dashicons-before before:content-dismiss before:text-base',
-            'before:block before:h-5 before:w-5 before:bg-none'
+            'absolute top-0 right-1 text-neutral-400 transition-colors hover:text-neutral-900'
           )}
           onClick={onClick}
-        />
+        >
+          <Icon name="close" className="h-4 w-4" />
+        </button>
       )}
     </div>
   );

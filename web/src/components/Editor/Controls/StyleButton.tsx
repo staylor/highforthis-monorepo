@@ -4,7 +4,7 @@ import type { ReactNode, SyntheticEvent } from 'react';
 interface StyleButtonProps {
   style: string;
   onToggle: (prop: string) => void;
-  className: string;
+  className?: string;
   active: boolean;
   label: ReactNode;
 }

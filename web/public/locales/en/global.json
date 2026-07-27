@@ -112,8 +112,10 @@
   },
   "nav": {
     "addNew": "Add New",
+    "closeMenu": "Close menu",
     "collapse": "Collapse menu",
     "darkMode": "Enable Dark Mode!",
+    "expand": "Expand menu",
     "home": "Home",
     "menu": "Menu",
     "podcast": "Podcast",
@@ -289,7 +291,8 @@
   },
   "tagline": "Music as it happens.",
   "tags": {
-    "placeholder": "Type tag then press ENTER"
+    "placeholder": "Type tag then press ENTER",
+    "remove": "Remove {{tag}}"
   },
   "title": "High for This",
   "users": {

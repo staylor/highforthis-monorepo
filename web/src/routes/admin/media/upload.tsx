@@ -84,7 +84,7 @@ export default function Media() {
     <>
       <Heading>{t('media.upload')}</Heading>
       <div
-        className="border-dark my-5 block h-50 w-150 border-4 border-dashed"
+        className="border-dark my-5 block h-50 w-full max-w-150 border-4 border-dashed"
         onDrop={onDrop}
         onDragOver={(e) => e.preventDefault()}
         onDragEnd={() => false}
@@ -94,7 +94,7 @@ export default function Media() {
       {Object.keys(uploads).map((key) => {
         const upload = uploads[key];
         return (
-          <div className="relative my-2.5 box-border h-7.5 w-150 text-sm" key={key}>
+          <div className="relative my-2.5 box-border h-7.5 w-full max-w-150 text-sm" key={key}>
             <div className="relative z-20">
               {upload.name}{' '}
               {upload.id ? <Link to={`/admin/media/${upload.id}`}>{t('media.edit')}</Link> : null}

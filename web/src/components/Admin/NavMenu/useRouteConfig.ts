@@ -11,25 +11,25 @@ const useRouteConfig = () => {
       {
         path: '/',
         label: t('settings.dashboard.label'),
-        dashicon: 'dashboard',
+        icon: 'dashboard',
       },
       {
         path: `${siteSettings.siteUrl}`,
         label: t('admin.viewSite'),
-        dashicon: 'desktop',
+        icon: 'external',
         external: true,
       },
       {
         path: '/logout',
         label: t('login.logout'),
-        dashicon: 'exit',
+        icon: 'logout',
       },
     ],
     [
       {
         path: '/post',
         label: t('posts.heading'),
-        dashicon: 'admin-post',
+        icon: 'post',
         routes: [
           {
             path: '/post',
@@ -44,7 +44,7 @@ const useRouteConfig = () => {
       {
         path: '/media',
         label: t('media.heading'),
-        dashicon: 'admin-media',
+        icon: 'media',
         routes: [
           {
             path: '/media',
@@ -61,12 +61,12 @@ const useRouteConfig = () => {
       {
         path: '/video',
         label: t('videos.heading'),
-        dashicon: 'video-alt',
+        icon: 'video',
       },
       {
         path: '/show',
         label: t('shows.heading'),
-        dashicon: 'calendar',
+        icon: 'calendar',
         routes: [
           {
             path: '/show',
@@ -81,7 +81,7 @@ const useRouteConfig = () => {
       {
         path: '/podcast',
         label: t('podcasts.heading'),
-        dashicon: 'microphone',
+        icon: 'podcast',
         routes: [
           {
             path: '/podcast',
@@ -98,7 +98,7 @@ const useRouteConfig = () => {
       {
         path: '/artist',
         label: t('artists.heading'),
-        dashicon: 'tag',
+        icon: 'artist',
         routes: [
           {
             path: '/artist',
@@ -113,7 +113,7 @@ const useRouteConfig = () => {
       {
         path: '/venue',
         label: t('venues.heading'),
-        dashicon: 'tag',
+        icon: 'venue',
         routes: [
           {
             path: '/venue',
@@ -130,7 +130,7 @@ const useRouteConfig = () => {
       {
         path: '/user',
         label: t('users.heading'),
-        dashicon: 'admin-users',
+        icon: 'users',
         routes: [
           {
             path: '/user',
@@ -145,12 +145,12 @@ const useRouteConfig = () => {
       {
         path: '/passkeys',
         label: t('passkeys.heading'),
-        dashicon: 'lock',
+        icon: 'key',
       },
       {
         path: '/settings',
         label: t('settings.label'),
-        dashicon: 'admin-settings',
+        icon: 'settings',
         routes: [
           {
             path: '/settings/site',

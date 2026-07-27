@@ -1,53 +1,62 @@
 import cn from 'classnames';
-import { useLocation, NavLink } from 'react-router';
+import { NavLink } from 'react-router';
 
 import type { AdminTopLevelRoute } from '#/types';
 
+import { adminPath } from '../utils';
+
 interface SubNavProps {
-  isHovered: boolean;
-  isCollapsed: boolean;
   item: AdminTopLevelRoute;
+  isCollapsed: boolean;
+  isExpanded: boolean;
+  isHovered: boolean;
 }
 
-function SubNav({ isHovered, isCollapsed, item }: SubNavProps) {
-  const location = useLocation();
-  const adminPath = item.path === '/' ? '/admin' : `/admin${item.path}`;
-  const active = location.pathname.indexOf(adminPath) === 0;
+const linkClassName = ({ isActive }: { isActive: boolean }) =>
+  cn(
+    'block truncate rounded-md px-2.5 py-1.5 text-[13px] no-underline transition-colors',
+    isActive
+      ? 'text-pink visited:text-pink font-semibold'
+      : cn(
+          'text-neutral-500 visited:text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900',
+          'dark:text-neutral-400 dark:visited:text-neutral-400 dark:hover:bg-white/5 dark:hover:text-white'
+        )
+  );
 
-  const flyout = isCollapsed ? isHovered : isHovered && !active;
-  const isHidden = isCollapsed ? !flyout : !isHovered && !active;
+function SubNav({ item, isCollapsed, isExpanded, isHovered }: SubNavProps) {
+  // collapsed rail: show a flyout panel on hover/focus. expanded: inline accordion.
+  const isFlyout = isCollapsed;
+  const isVisible = isFlyout ? isHovered : isExpanded;
+
+  if (!isVisible) {
+    return null;
+  }
+
   return (
-    <nav
-      className={cn('py-2', isHidden ? 'hidden' : 'block', {
-        'left-9 lg:left-9': isCollapsed,
-        'left-9 lg:left-40': !isCollapsed,
-        'bg-white': !flyout,
-        'z-top bg-dark min-w-nav absolute top-0 block w-auto shadow-md': flyout,
-      })}
+    <div
+      className={cn(
+        isFlyout
+          ? cn(
+              'absolute top-0 left-full z-50 ml-2 min-w-44 rounded-xl p-2 shadow-xl',
+              'dark:bg-surface-dark-card border border-neutral-200/80 bg-white dark:border-white/10'
+            )
+          : 'mt-0.5 mb-1 ml-5 border-l border-neutral-200 pl-2 dark:border-white/10'
+      )}
     >
+      {isFlyout && (
+        <div className="px-2.5 pt-1 pb-2 text-xs font-semibold tracking-wide text-neutral-900 uppercase dark:text-white">
+          {item.label}
+        </div>
+      )}
       {item.routes?.map((route) => {
-        const itemPath = `/admin${route.path}`;
-        const isRoute = location.pathname === itemPath;
-        const className = cn(
-          'block text-[13px] tracking-wide no-underline py-1 px-3',
-          // these colors can't co-exist
-          flyout
-            ? 'text-white visited:text-white'
-            : active
-              ? 'text-black hover:text-black active:text-black'
-              : 'text-dark',
-          {
-            'font-bold': active && isRoute,
-            'hover:text-pink active:text-pink': !isRoute || flyout,
-          }
-        );
+        const path = adminPath(route);
         return (
-          <NavLink className={className} key={itemPath} to={itemPath}>
+          <NavLink className={linkClassName} end key={path} to={path}>
             {route.label}
           </NavLink>
         );
       })}
-    </nav>
+    </div>
   );
 }
 

@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import type { PropsWithChildren, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
@@ -82,11 +83,17 @@ export default function AdminForm({ data = {}, fields, boxLabel, buttonLabel }: 
     </Button>
   );
 
+  const hasInfoColumn = infoFields.length > 0 || metaFields.length > 0;
+
   return (
     <FormWrap>
-      <form method="post" className="before:clear-both before:table">
-        <fieldset className="mr-75 block">
-          <div className="w-full max-w-2xl md:float-left">
+      <form method="post">
+        <fieldset
+          className={cn('flex w-full flex-col gap-6', {
+            'lg:flex-row lg:items-start lg:gap-8': hasInfoColumn,
+          })}
+        >
+          <div className="w-full max-w-2xl min-w-0">
             {primaryFields}
             {infoFields.length === 0 ? button : null}
           </div>

@@ -41,8 +41,11 @@ export default function PostForm({ data = {} as Post, heading, buttonLabel }: Po
     },
     {
       prop: 'title',
+      // a wrapping field, so long titles are fully visible instead of scrolling sideways
+      type: 'heading',
       className: cn(
-        'block font-black tracking-wide mb-2.5 lg:mb-6 text-4xl lg:text-5xl m-0 p-0 shadow-none border-0 h-12'
+        'block font-black tracking-wide mb-2.5 lg:mb-6 text-4xl lg:text-5xl',
+        'm-0 p-0 shadow-none border-0 leading-tight break-words'
       ),
       placeholder: t('posts.addTitle'),
     },

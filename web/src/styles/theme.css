@@ -5,8 +5,6 @@
 @theme {
   --breakpoint-xs: 320px;
 
-  --container-nav: 10rem; /* 160px */
-
   --color-dark: #262626;
   --color-pink: #e50082;
   --color-detail: #d1d5db;
@@ -31,7 +29,6 @@
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   --font-text: 'Inter', sans-serif;
   --font-georgia: Georgia, serif;
-  --font-dashicons: dashicons;
   --font-icons: icons;
   --font-code: Inconsolata, Menlo, Consolas, monospace;
 
@@ -71,16 +68,4 @@
 
 @utility z-close {
   z-index: 100001;
-}
-
-@utility content-checkmark {
-  content: '\f147';
-}
-
-@utility content-collapse {
-  content: '\f148';
-}
-
-@utility content-dismiss {
-  content: '\f153';
 }
