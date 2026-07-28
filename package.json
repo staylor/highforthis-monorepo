@@ -59,7 +59,7 @@
     "observability:dev:podman": "bash observability/dev.sh podman",
     "build": "pnpm --filter @highforthis/shared build && pnpm --filter @highforthis/graphql build:service && pnpm --filter @highforthis/web build:service",
     "knip": "knip",
-    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint --report-unused-disable-directives .",
+    "lint": "eslint --cache --cache-strategy content --cache-location ./node_modules/.cache/eslint --report-unused-disable-directives .",
     "lint-fix": "pnpm lint --fix",
     "test:web": "pnpm --filter @highforthis/web test",
     "test:web:watch": "pnpm --filter @highforthis/web test:watch",
