@@ -98,7 +98,6 @@ export default function Media({ loaderData }: Route.ComponentProps) {
     <>
       <Select
         key="type"
-        className="mx-2"
         placeholder={t('media.selectMediaType')}
         value={searchParams.get('type') || ''}
         choices={uploads?.types?.map((type: string) => ({
@@ -109,7 +108,6 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       />
       <Select
         key="mimeType"
-        className="mx-2"
         placeholder={t('media.selectMimeType')}
         value={searchParams.get('mimeType') || ''}
         choices={uploads?.mimeTypes || []}

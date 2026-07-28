@@ -1,5 +1,5 @@
-import cn from 'classnames';
 import type { SelectHTMLAttributes, ChangeEvent } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 import { inputBase } from '#/components/Form/styles';
 
@@ -56,7 +56,12 @@ export default function Select({
       onChange={onChange}
       defaultValue={value}
       multiple={multipleProp ? Boolean(multipleProp) : false}
-      className={cn(inputBase, className)}
+      className={twMerge(
+        inputBase,
+        'h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs',
+        'dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white',
+        className
+      )}
     >
       {placeholder && (
         <option key={placeholder} value="">
