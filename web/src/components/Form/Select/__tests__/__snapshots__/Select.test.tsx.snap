@@ -2,13 +2,13 @@
 
 exports[`select > add className 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors foo"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white foo"
 />
 `;
 
 exports[`select > child nodes > children 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <option
     value="meximelt"
@@ -20,7 +20,7 @@ exports[`select > child nodes > children 1`] = `
 
 exports[`select > child nodes > children with choices 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <option
     value="mild"
@@ -47,7 +47,7 @@ exports[`select > child nodes > children with choices 1`] = `
 
 exports[`select > choices > choice 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <option
     value="mild"
@@ -69,7 +69,7 @@ exports[`select > choices > choice 1`] = `
 
 exports[`select > choices > choices 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <option
     value="Mild"
@@ -91,7 +91,7 @@ exports[`select > choices > choices 1`] = `
 
 exports[`select > choices > choices as objects 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <option
     value="mild"
@@ -113,13 +113,13 @@ exports[`select > choices > choices as objects 1`] = `
 
 exports[`select > empty 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 />
 `;
 
 exports[`select > groups > no value 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <optgroup
     label="Tacos"
@@ -159,7 +159,7 @@ exports[`select > groups > no value 1`] = `
 
 exports[`select > groups > value 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <optgroup
     label="Tacos"
@@ -199,7 +199,7 @@ exports[`select > groups > value 1`] = `
 
 exports[`select > groups > values 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
   multiple=""
 >
   <optgroup
@@ -240,41 +240,41 @@ exports[`select > groups > values 1`] = `
 
 exports[`select > multiple > false 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 />
 `;
 
 exports[`select > multiple > falsey 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
   multiple=""
 />
 `;
 
 exports[`select > multiple > string 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
   multiple=""
 />
 `;
 
 exports[`select > multiple > true 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
   multiple=""
 />
 `;
 
 exports[`select > multiple > truthy 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
   multiple=""
 />
 `;
 
 exports[`select > placeholder > choices 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <option
     value=""
@@ -301,7 +301,7 @@ exports[`select > placeholder > choices 1`] = `
 
 exports[`select > placeholder > choices as objects 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <option
     value=""
@@ -328,7 +328,7 @@ exports[`select > placeholder > choices as objects 1`] = `
 
 exports[`select > placeholder > no choices 1`] = `
 <select
-  class="my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 focus:ring-opacity-50 transition-colors"
+  class="my-1 mr-1 last:mr-0 focus:border-pink focus:ring-3 focus:ring-opacity-50 transition-colors h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs dark:bg-surface-dark-elevated hover:border-neutral-400 dark:border-white/10 dark:text-white"
 >
   <option
     value=""
