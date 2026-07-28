@@ -162,7 +162,7 @@ function Brand({ isCollapsed }: { isCollapsed: boolean }) {
           {t('title').charAt(0)}
         </span>
       ) : (
-        <span className="font-title truncate text-base tracking-tight text-neutral-900 uppercase dark:text-white">
+        <span className="font-title truncate text-2xl tracking-tight text-neutral-900 uppercase dark:text-white">
           {t('title')}
         </span>
       )}
