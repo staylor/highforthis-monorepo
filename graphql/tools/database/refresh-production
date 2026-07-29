@@ -1,0 +1,117 @@
+#!/bin/bash
+set -euo pipefail
+
+DUMP_FILE="${PRODUCTION_DUMP_FILE:-dump/latest-production.dump}"
+RAILWAY_DATABASE_SERVICE="${RAILWAY_DATABASE_SERVICE:-Postgres}"
+RAILWAY_ENVIRONMENT="${RAILWAY_ENVIRONMENT:-production}"
+
+fail() {
+  echo "ERROR: $*" >&2
+  exit 1
+}
+
+require_command() {
+  command -v "$1" >/dev/null 2>&1 || fail "$1 is required but was not found in PATH"
+}
+
+url_parts() {
+  node -e '
+    const url = new URL(process.argv[1]);
+    if (url.protocol !== "postgres:" && url.protocol !== "postgresql:") {
+      throw new Error(`Expected a PostgreSQL URL, received ${url.protocol}`);
+    }
+
+    const database = decodeURIComponent(url.pathname.slice(1));
+    if (!database) throw new Error("Database URL does not include a database name");
+
+    process.stdout.write(`${[
+      url.hostname,
+      url.port || "5432",
+      database,
+    ].join("\t")}\n`);
+  ' "$1"
+}
+
+require_command node
+require_command pg_dump
+require_command pg_restore
+require_command psql
+require_command pnpm
+
+if [ -z "${DATABASE_URL:-}" ] && [ -f .env ]; then
+  DATABASE_URL="$(node --env-file=.env -e 'process.stdout.write(process.env.DATABASE_URL ?? "")')"
+fi
+
+[ -n "${DATABASE_URL:-}" ] || fail "DATABASE_URL is not set and was not found in graphql/.env"
+
+if [ -z "${PRODUCTION_DATABASE_URL:-}" ]; then
+  require_command railway
+
+  echo "Reading production database URL from Railway service ${RAILWAY_DATABASE_SERVICE}..."
+  railway_variables="$({ railway variable \
+    --service "$RAILWAY_DATABASE_SERVICE" \
+    --environment "$RAILWAY_ENVIRONMENT" \
+    --json; } 2>/dev/null)" || fail "Could not read Railway variables. Run 'railway login' and 'railway link', then verify RAILWAY_DATABASE_SERVICE."
+
+  PRODUCTION_DATABASE_URL="$(printf '%s' "$railway_variables" | node -e '
+    let input = "";
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("data", (chunk) => { input += chunk; });
+    process.stdin.on("end", () => {
+      const variables = JSON.parse(input);
+      process.stdout.write(variables.DATABASE_PUBLIC_URL ?? "");
+    });
+  ')"
+
+  [ -n "$PRODUCTION_DATABASE_URL" ] || fail "Railway service ${RAILWAY_DATABASE_SERVICE} does not expose DATABASE_PUBLIC_URL"
+fi
+
+IFS=$'\t' read -r local_host local_port local_database < <(url_parts "$DATABASE_URL")
+IFS=$'\t' read -r production_host production_port production_database < <(url_parts "$PRODUCTION_DATABASE_URL")
+
+case "$local_host" in
+  localhost | 127.* | ::1 | \[::1\]) ;;
+  *) fail "Refusing to reset non-local DATABASE_URL host: ${local_host}" ;;
+esac
+
+if [ "$local_host" = "$production_host" ] && \
+  [ "$local_port" = "$production_port" ] && \
+  [ "$local_database" = "$production_database" ]; then
+  fail "Production and local database URLs target the same database"
+fi
+
+mkdir -p "$(dirname "$DUMP_FILE")"
+dump_temp="$(mktemp "${DUMP_FILE}.tmp.XXXXXX")"
+trap 'rm -f "$dump_temp"' EXIT
+
+echo "Dumping ${production_host}/${production_database} to ${DUMP_FILE}..."
+pg_dump \
+  --dbname="$PRODUCTION_DATABASE_URL" \
+  --schema=public \
+  --no-owner \
+  --no-privileges \
+  --format=custom \
+  --file="$dump_temp"
+
+pg_restore --list "$dump_temp" >/dev/null
+mv "$dump_temp" "$DUMP_FILE"
+
+echo "Resetting local database ${local_database}..."
+psql \
+  --dbname="$DATABASE_URL" \
+  --set=ON_ERROR_STOP=1 \
+  --command='DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public AUTHORIZATION CURRENT_USER;'
+
+pg_restore \
+  --dbname="$DATABASE_URL" \
+  --clean \
+  --if-exists \
+  --no-owner \
+  --no-privileges \
+  --exit-on-error \
+  "$DUMP_FILE"
+
+echo "Applying the current Prisma schema..."
+pnpm db:push --accept-data-loss
+
+echo "Done. Local database ${local_database} now contains the latest production data."

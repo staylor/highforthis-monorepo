@@ -93,6 +93,35 @@ pnpm db:migrate
 
 # Open Prisma Studio
 pnpm db:studio
+
+```
+
+### Refresh from production
+
+Replace the local database with a fresh production snapshot:
+
+```bash
+# One-time Railway CLI setup
+railway login
+railway link
+
+# From the monorepo root
+pnpm db:refresh
+```
+
+The command reads the public database URL from the Railway `Postgres` service in
+the `production` environment, writes an ignored snapshot to
+`graphql/dump/latest-production.dump`, replaces the local `public` schema, and
+applies the current Prisma schema. It refuses to reset a `DATABASE_URL` whose
+host is not loopback.
+
+If the Railway database service has a different name, set
+`RAILWAY_DATABASE_SERVICE`. You can bypass Railway discovery with an explicit
+`PRODUCTION_DATABASE_URL`:
+
+```bash
+RAILWAY_DATABASE_SERVICE=database pnpm db:refresh
+PRODUCTION_DATABASE_URL='postgresql://…' pnpm db:refresh
 ```
 
 ## Development
@@ -118,19 +147,20 @@ pnpm start
 
 ## Scripts
 
-| Script                       | Description                                   |
-| ---------------------------- | --------------------------------------------- |
-| `pnpm dev`                   | Start in development with watch mode          |
-| `pnpm build`                 | Generate Prisma client and bundle for production |
-| `pnpm start`                 | Start the production server                   |
-| `pnpm db:generate`           | Generate Prisma client                        |
-| `pnpm db:migrate`            | Run Prisma migrations                         |
-| `pnpm db:push`               | Push schema to database                       |
-| `pnpm db:studio`             | Open Prisma Studio                            |
-| `pnpm db:dump`               | Dump database to seed file                    |
-| `pnpm db:reset`              | Drop, recreate, and seed the database         |
-| `pnpm db:migrate-from-mongo` | Import data from MongoDB dump into PostgreSQL |
-| `pnpm typecheck`             | Type-check with TypeScript                    |
+| Script                       | Description                                         |
+| ---------------------------- | --------------------------------------------------- |
+| `pnpm dev`                   | Start in development with watch mode                |
+| `pnpm build`                 | Generate Prisma client and bundle for production    |
+| `pnpm start`                 | Start the production server                         |
+| `pnpm db:generate`           | Generate Prisma client                              |
+| `pnpm db:migrate`            | Run Prisma migrations                               |
+| `pnpm db:push`               | Push schema to database                             |
+| `pnpm db:studio`             | Open Prisma Studio                                  |
+| `pnpm db:dump`               | Dump database to seed file                          |
+| `pnpm db:refresh`            | Replace local data with a fresh production snapshot |
+| `pnpm db:reset`              | Drop, recreate, and seed the database               |
+| `pnpm db:migrate-from-mongo` | Import data from MongoDB dump into PostgreSQL       |
+| `pnpm typecheck`             | Type-check with TypeScript                          |
 
 ## Data Migration (MongoDB → PostgreSQL)
 

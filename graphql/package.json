@@ -49,6 +49,7 @@
     "db:push": "node --env-file-if-exists=.env node_modules/prisma/build/index.js db push",
     "db:studio": "prisma studio",
     "db:dump": "bash tools/database/dump",
+    "db:refresh": "bash tools/database/refresh-production",
     "db:reset": "bash tools/database/reset",
     "db:reset-admin-password": "tsx --env-file-if-exists=.env tools/database/reset-admin-password.ts",
     "db:migrate-from-mongo": "tsx --env-file-if-exists=.env tools/migrate-from-mongo.ts",

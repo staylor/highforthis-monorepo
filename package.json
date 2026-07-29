@@ -52,6 +52,7 @@
   },
   "scripts": {
     "codegen": "graphql-codegen && pnpm lint-fix && ./apollo-ios-cli generate",
+    "db:refresh": "pnpm --filter @highforthis/graphql db:refresh",
     "graphql:dev": "pnpm --filter @highforthis/graphql dev",
     "web:dev": "pnpm --filter @highforthis/web dev",
     "observability:dev": "pnpm observability:dev:docker",

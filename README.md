@@ -4,13 +4,13 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 
 ## Workspaces
 
-| Workspace | Description |
-| --- | --- |
-| [`graphql`](./graphql) | GraphQL API server (Apollo Server, Prisma, PostgreSQL) |
-| [`web`](./web) | Web application (React Router v7, Vite, Tailwind CSS) |
-| [`shared`](./shared) | Shared structured logging and OpenTelemetry utilities |
-| [`observability`](./observability) | OpenObserve backend and GUI deployment |
-| [`xcode`](./xcode) | iOS app (Swift, Apollo iOS) |
+| Workspace                          | Description                                            |
+| ---------------------------------- | ------------------------------------------------------ |
+| [`graphql`](./graphql)             | GraphQL API server (Apollo Server, Prisma, PostgreSQL) |
+| [`web`](./web)                     | Web application (React Router v7, Vite, Tailwind CSS)  |
+| [`shared`](./shared)               | Shared structured logging and OpenTelemetry utilities  |
+| [`observability`](./observability) | OpenObserve backend and GUI deployment                 |
+| [`xcode`](./xcode)                 | iOS app (Swift, Apollo iOS)                            |
 
 ## Requirements
 
@@ -34,19 +34,20 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 
 ## Scripts
 
-| Script            | Description                                              |
-| ----------------- | -------------------------------------------------------- |
-| `pnpm graphql:dev` | Start GraphQL server in development (watch mode)        |
-| `pnpm web:dev`    | Start web app in development                             |
-| `pnpm observability:dev` | Start OpenObserve with Docker                    |
-| `pnpm observability:dev:podman` | Start OpenObserve with Podman             |
-| `pnpm build`      | Build all workspaces for production                      |
-| `pnpm codegen`    | Run GraphQL Codegen (TypeScript types, schema, Apollo iOS) |
-| `pnpm lint`       | Lint all workspaces with ESLint                          |
-| `pnpm lint-fix`   | Lint and auto-fix                                        |
-| `pnpm knip`       | Find unused files, exports, and dependencies             |
-| `pnpm test:web`   | Run web workspace tests                                  |
-| `pnpm typecheck`  | Type-check all workspaces                                |
+| Script                          | Description                                                |
+| ------------------------------- | ---------------------------------------------------------- |
+| `pnpm graphql:dev`              | Start GraphQL server in development (watch mode)           |
+| `pnpm web:dev`                  | Start web app in development                               |
+| `pnpm observability:dev`        | Start OpenObserve with Docker                              |
+| `pnpm observability:dev:podman` | Start OpenObserve with Podman                              |
+| `pnpm build`                    | Build all workspaces for production                        |
+| `pnpm codegen`                  | Run GraphQL Codegen (TypeScript types, schema, Apollo iOS) |
+| `pnpm db:refresh`               | Replace the local database with the latest production data |
+| `pnpm lint`                     | Lint all workspaces with ESLint                            |
+| `pnpm lint-fix`                 | Lint and auto-fix                                          |
+| `pnpm knip`                     | Find unused files, exports, and dependencies               |
+| `pnpm test:web`                 | Run web workspace tests                                    |
+| `pnpm typecheck`                | Type-check all workspaces                                  |
 
 ## GraphQL Codegen
 
