@@ -48,7 +48,7 @@ if [ -z "${PRODUCTION_DATABASE_URL:-}" ]; then
   require_command railway
 
   echo "Reading production database URL from Railway service ${RAILWAY_DATABASE_SERVICE}..."
-  railway_variables="$({ railway variable \
+  railway_variables="$({ railway variable list \
     --service "$RAILWAY_DATABASE_SERVICE" \
     --environment "$RAILWAY_ENVIRONMENT" \
     --json; } 2>/dev/null)" || fail "Could not read Railway variables. Run 'railway login' and 'railway link', then verify RAILWAY_DATABASE_SERVICE."
