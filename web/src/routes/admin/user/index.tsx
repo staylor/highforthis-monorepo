@@ -12,9 +12,8 @@ import query, { addPageOffset } from '#/utils/query';
 
 import type { Route } from './+types/index';
 
-export async function loader({ request, context }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const variables = addPageOffset(request);
+export async function loader({ request, context, url }: Route.LoaderArgs) {
+  const variables = addPageOffset(url);
   const search = url.searchParams.get('search');
   if (search) {
     variables.search = search;
@@ -22,8 +21,8 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return query<UsersAdminQuery>({ request, context, query: usersQuery, variables });
 }
 
-export async function action({ request, context }: Route.ActionArgs) {
-  return handleDelete({ request, context, mutation: usersMutation });
+export async function action({ request, context, url }: Route.ActionArgs) {
+  return handleDelete({ request, url, context, mutation: usersMutation });
 }
 
 export default function Users({ loaderData }: Route.ComponentProps) {

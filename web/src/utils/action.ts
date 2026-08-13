@@ -23,11 +23,12 @@ export const post = async (url: string, data: Record<string, any>) =>
 export const handleSubmission = async ({
   context,
   request,
+  url,
   mutation,
   variables,
   createMutation,
   parseFormDataArgs,
-}: Pick<ActionFunctionArgs, 'request' | 'context'> & {
+}: Pick<ActionFunctionArgs, 'request' | 'url' | 'context'> & {
   mutation: DocumentNode;
   variables?: OperationVariables;
   createMutation?: string;
@@ -57,23 +58,22 @@ export const handleSubmission = async ({
     mutation,
     variables: mergedVariables,
   });
-  let editUrl = request.url;
+  const redirectUrl = new URL(url);
   if (createMutation) {
-    editUrl = request.url.replace('/add', `/${result[createMutation].id}`);
+    redirectUrl.pathname = redirectUrl.pathname.replace('/add', `/${result[createMutation].id}`);
   }
+  redirectUrl.searchParams.set('message', 'updated');
 
-  const url = new URL(editUrl);
-  url.searchParams.set('message', 'updated');
-
-  return redirect(url.toString());
+  return redirect(redirectUrl.toString());
 };
 
 export const handleDelete = async ({
   request,
+  url,
   context,
   mutation,
-}: Pick<ActionFunctionArgs, 'request' | 'context'> & { mutation: DocumentNode }) => {
-  const url = new URL(request.url);
+}: Pick<ActionFunctionArgs, 'request' | 'url' | 'context'> & { mutation: DocumentNode }) => {
+  const redirectUrl = new URL(url);
   if (request.method === 'DELETE') {
     const formData = await request.formData();
     const ids = formData.getAll('ids');
@@ -87,7 +87,7 @@ export const handleDelete = async ({
         },
       });
     }
-    url.searchParams.set('deleted', ids.length.toString());
+    redirectUrl.searchParams.set('deleted', ids.length.toString());
   }
-  return redirect(url.toString());
+  return redirect(redirectUrl.toString());
 };

@@ -6,9 +6,10 @@ import { handleSubmission } from '#/utils/action';
 
 import type { Route } from './+types/add';
 
-export async function action({ request, context }: Route.ActionArgs) {
+export async function action({ request, context, url }: Route.ActionArgs) {
   return handleSubmission({
     request,
+    url,
     context,
     mutation: userMutation,
     createMutation: 'createUser',

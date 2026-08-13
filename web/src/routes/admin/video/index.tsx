@@ -15,9 +15,8 @@ import query, { addPageOffset } from '#/utils/query';
 
 import type { Route } from './+types/index';
 
-export async function loader({ request, context }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const variables = addPageOffset(request);
+export async function loader({ request, context, url }: Route.LoaderArgs) {
+  const variables = addPageOffset(url);
   ['search', 'year'].forEach((key) => {
     const value = url.searchParams.get(key);
     if (value) {
@@ -28,8 +27,8 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return query<VideosAdminQuery>({ request, context, query: videosQuery, variables });
 }
 
-export async function action({ request, context }: Route.ActionArgs) {
-  return handleDelete({ request, context, mutation: videoMutation });
+export async function action({ request, context, url }: Route.ActionArgs) {
+  return handleDelete({ request, url, context, mutation: videoMutation });
 }
 
 export default function Videos({ loaderData }: Route.ComponentProps) {

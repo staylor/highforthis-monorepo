@@ -2,9 +2,9 @@ import { useRouteLoaderData } from 'react-router';
 
 import type { AppQuery } from '#/types/graphql';
 
-export function rootData(matches: { id: string; data?: any }[]) {
+export function rootData(matches: { id: string; loaderData?: any }[]) {
   const root = matches.find((match) => match.id === 'root');
-  return root?.data?.data || {};
+  return root?.loaderData?.data || {};
 }
 
 export function useRootData() {

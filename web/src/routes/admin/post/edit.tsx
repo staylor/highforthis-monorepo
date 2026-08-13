@@ -12,9 +12,10 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   return query<PostQuery>({ request, context, query: postQuery, variables: { id: params.id } });
 }
 
-export async function action({ request, context, params }: Route.ActionArgs) {
+export async function action({ request, context, params, url }: Route.ActionArgs) {
   return handleSubmission({
     request,
+    url,
     context,
     mutation: postMutation,
     variables: { id: params.id },

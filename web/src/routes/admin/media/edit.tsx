@@ -17,9 +17,10 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
   });
 }
 
-export async function action({ request, context, params }: Route.ActionArgs) {
+export async function action({ request, context, params, url }: Route.ActionArgs) {
   return handleSubmission({
     request,
+    url,
     context,
     mutation: mediaMutation,
     variables: { id: params.id },

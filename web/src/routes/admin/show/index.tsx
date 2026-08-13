@@ -15,12 +15,12 @@ import query, { addPageOffset, addSearchParam } from '#/utils/query';
 
 import type { Route } from './+types';
 
-export async function loader({ request, context }: Route.LoaderArgs) {
-  const variables = addSearchParam(request, addPageOffset(request, { order: 'DESC' }));
+export async function loader({ request, context, url }: Route.LoaderArgs) {
+  const variables = addSearchParam(url, addPageOffset(url, { order: 'DESC' }));
   return query<ShowsAdminQuery>({ request, context, query: showsQuery, variables });
 }
 
-export async function action({ request, context }: Route.ActionArgs) {
+export async function action({ request, context, url }: Route.ActionArgs) {
   if (request.method === 'POST') {
     const { id, attended } = await parseFormData(request);
     return mutate({
@@ -34,7 +34,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       },
     });
   }
-  return handleDelete({ request, context, mutation: deleteMutation });
+  return handleDelete({ request, url, context, mutation: deleteMutation });
 }
 
 export default function Shows({ loaderData }: Route.ComponentProps) {

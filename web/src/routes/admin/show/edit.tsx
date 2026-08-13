@@ -12,9 +12,10 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   return query<ShowEditQuery>({ request, context, query: showQuery, variables: { id: params.id } });
 }
 
-export async function action({ request, context, params }: Route.ActionArgs) {
+export async function action({ request, context, params, url }: Route.ActionArgs) {
   return handleSubmission({
     request,
+    url,
     context,
     mutation: showMutation,
     variables: { id: params.id, input: { attended: false } },

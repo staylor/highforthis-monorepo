@@ -13,10 +13,11 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return query<SiteSettingsQuery>({ request, context, query: settingsQuery });
 }
 
-export async function action({ request, context }: Route.ActionArgs) {
+export async function action({ request, context, url }: Route.ActionArgs) {
   return handleSubmission({
     context,
     request,
+    url,
     mutation: settingsMutation,
     variables: { id: 'site' },
   });

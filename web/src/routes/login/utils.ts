@@ -1,11 +1,7 @@
-import {
-  redirect,
-  type ActionFunctionArgs,
-  type AppLoadContext,
-  type LoaderFunctionArgs,
-} from 'react-router';
+import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 
 import { isAuthenticated } from '#/auth';
+import { graphqlHostContext } from '#/context.js';
 import { sessionStorage } from '#/session';
 import { post } from '#/utils/action';
 
@@ -13,7 +9,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
   const session = await sessionStorage.getSession(request.headers.get('cookie'));
   const form = await request.formData();
   const intent = form.get('intent');
-  const graphqlHost = (context as AppLoadContext).graphqlHost;
+  const graphqlHost = context.get(graphqlHostContext);
   let user;
 
   if (intent === 'passkey') {

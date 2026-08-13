@@ -16,9 +16,8 @@ import query, { addPageOffset } from '#/utils/query';
 
 import type { Route } from './+types/index';
 
-export async function loader({ request, context }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const variables = addPageOffset(request);
+export async function loader({ request, context, url }: Route.LoaderArgs) {
+  const variables = addPageOffset(url);
   ['type', 'mimeType', 'search'].forEach((key) => {
     const value = url.searchParams.get(key);
     if (value) {
@@ -28,8 +27,8 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return query<UploadsAdminQuery>({ request, context, query: uploadsQuery, variables });
 }
 
-export async function action({ request, context }: Route.ActionArgs) {
-  return handleDelete({ request, context, mutation: uploadsMutation });
+export async function action({ request, context, url }: Route.ActionArgs) {
+  return handleDelete({ request, url, context, mutation: uploadsMutation });
 }
 
 export default function Media({ loaderData }: Route.ComponentProps) {

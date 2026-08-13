@@ -15,6 +15,7 @@ import type { Route } from './+types/root';
 import { isAuthenticated } from './auth';
 import { Html, Body, Boundary, useLayout } from './components/Layout';
 import { TWITTER_USERNAME } from './constants';
+import { graphqlHostContext } from './context.js';
 import { appQuery } from './root.graphql';
 import type { AppQuery } from './types/graphql';
 import { createClientCache } from './utils/cache';
@@ -35,8 +36,8 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const meta: MetaFunction = ({ data }) => {
-  return [{ title: titleTemplate(data as TitleProps) }];
+export const meta: MetaFunction = ({ loaderData }) => {
+  return [{ title: titleTemplate(loaderData as TitleProps) }];
 };
 
 export async function loader({ request, context }: Route.LoaderArgs) {
@@ -45,7 +46,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return {
     data,
     isAuthenticated: Boolean(user),
-    graphqlHost: context.graphqlHost,
+    graphqlHost: context.get(graphqlHostContext),
   };
 }
 

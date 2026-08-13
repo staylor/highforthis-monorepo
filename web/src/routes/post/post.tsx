@@ -19,8 +19,8 @@ import type { Route } from './+types/post';
 import Content from './Content';
 import PostTitle from './PostTitle';
 
-export const meta: MetaFunction = ({ data, matches }) => {
-  const { post } = data as PostQuery;
+export const meta: MetaFunction = ({ loaderData, matches }) => {
+  const { post } = loaderData as PostQuery;
   const { siteSettings } = rootData(matches);
   const { title, featuredMedia, summary, slug } = post as PostType;
   const url = `${siteSettings.siteUrl}/post/${slug}`;

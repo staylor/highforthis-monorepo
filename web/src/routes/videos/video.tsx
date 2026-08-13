@@ -10,9 +10,9 @@ import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types/video';
 
-export const meta: MetaFunction = ({ data, matches }) => {
+export const meta: MetaFunction = ({ loaderData, matches }) => {
   const { siteSettings } = rootData(matches);
-  const { video } = data as VideoQuery;
+  const { video } = loaderData as VideoQuery;
   return [
     {
       title: titleTemplate({ title: video?.title, siteSettings }),

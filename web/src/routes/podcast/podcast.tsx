@@ -11,9 +11,9 @@ import { rootData } from '#/utils/rootData';
 
 import type { Route } from './+types/podcast';
 
-export const meta: MetaFunction = ({ data, matches }) => {
+export const meta: MetaFunction = ({ loaderData, matches }) => {
   const { siteSettings, podcastSettings } = rootData(matches);
-  const { podcast } = data as PodcastQuery;
+  const { podcast } = loaderData as PodcastQuery;
   if (!podcast) {
     return [];
   }
