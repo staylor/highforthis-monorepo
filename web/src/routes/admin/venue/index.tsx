@@ -16,8 +16,8 @@ import query, { addPageOffset, addSearchParam } from '#/utils/query';
 
 import type { Route } from './+types/index';
 
-export async function loader({ request, context }: Route.LoaderArgs) {
-  const variables = addSearchParam(request, addPageOffset(request));
+export async function loader({ request, context, url }: Route.LoaderArgs) {
+  const variables = addSearchParam(url, addPageOffset(url));
   return query<VenuesAdminQuery>({
     request,
     context,
@@ -26,7 +26,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   });
 }
 
-export async function action({ request, context }: Route.ActionArgs) {
+export async function action({ request, context, url }: Route.ActionArgs) {
   if (request.method === 'POST') {
     const { id, excludeFromSearch, permanentlyClosed, formAction } = await parseFormData(request);
     let input;
@@ -45,7 +45,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       },
     });
   }
-  return handleDelete({ request, context, mutation: deleteMutation });
+  return handleDelete({ request, url, context, mutation: deleteMutation });
 }
 
 export default function Venues({ loaderData }: Route.ComponentProps) {

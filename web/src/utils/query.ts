@@ -1,15 +1,16 @@
 import type { OperationVariables, QueryOptions } from '@apollo/client';
 import { ServerError } from '@apollo/client/errors';
-import type { AppLoadContext } from 'react-router';
+import type { RouterContextProvider } from 'react-router';
 
 import { isAuthenticated } from '#/auth';
 import { PER_PAGE } from '#/constants';
+import { apolloClientContext } from '#/context.js';
 
 import { offsetToCursor } from './connection';
 
 type QueryData = Pick<QueryOptions, 'query' | 'variables'> & {
   request: Request;
-  context: AppLoadContext;
+  context: Readonly<RouterContextProvider>;
 };
 
 export default async function query<T = unknown>({
@@ -18,7 +19,7 @@ export default async function query<T = unknown>({
   context,
   request,
 }: QueryData) {
-  const { apolloClient } = context;
+  const apolloClient = context.get(apolloClientContext);
   let data = {} as T;
   const headers: Record<string, string> = {};
   let authToken;
@@ -46,8 +47,8 @@ export default async function query<T = unknown>({
   return data;
 }
 
-export const addPageOffset = (request: Request, listVariables?: OperationVariables) => {
-  const params = new URL(request.url).searchParams;
+export const addPageOffset = (url: URL, listVariables?: OperationVariables) => {
+  const params = url.searchParams;
   const variables = listVariables || {};
   if (!variables.first) {
     variables.first = PER_PAGE;
@@ -61,8 +62,7 @@ export const addPageOffset = (request: Request, listVariables?: OperationVariabl
   return variables;
 };
 
-export const addSearchParam = (request: Request, listVariables?: OperationVariables) => {
-  const url = new URL(request.url);
+export const addSearchParam = (url: URL, listVariables?: OperationVariables) => {
   const variables = listVariables || {};
   const value = url.searchParams.get('search');
   if (value) {

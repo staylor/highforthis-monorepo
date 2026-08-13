@@ -1,7 +1,6 @@
 import type { Route } from './+types/oembed';
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const requested = new URL(request.url);
+export async function loader({ url: requested }: Route.LoaderArgs) {
   if (!requested) {
     return null;
   }

@@ -27,8 +27,7 @@ const videosQuery = gql`
   ${queryFragment}
 `;
 
-export async function loader({ params, request, context }: Route.LoaderArgs) {
-  const url = new URL(request.url);
+export async function loader({ params, request, context, url }: Route.LoaderArgs) {
   const variables = { cacheKey: 'videos' } as any;
   const after = url.searchParams.get('after');
   const before = url.searchParams.get('before');

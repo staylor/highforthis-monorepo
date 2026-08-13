@@ -1,6 +1,7 @@
-import type { AppLoadContext } from 'react-router';
+import type { RouterContextProvider } from 'react-router';
 
 import { isAuthenticated } from '#/auth';
+import { graphqlHostContext } from '#/context.js';
 
 export async function passkeyApi<T>({
   request,
@@ -9,7 +10,7 @@ export async function passkeyApi<T>({
   init,
 }: {
   request: Request;
-  context: AppLoadContext;
+  context: Readonly<RouterContextProvider>;
   path: string;
   init?: RequestInit;
 }): Promise<T> {
@@ -18,7 +19,7 @@ export async function passkeyApi<T>({
     throw new Response('Authentication required', { status: 401 });
   }
 
-  const response = await fetch(`${context.graphqlHost}/auth/passkeys${path}`, {
+  const response = await fetch(`${context.get(graphqlHostContext)}/auth/passkeys${path}`, {
     ...init,
     headers: {
       Authorization: `Bearer ${token}`,

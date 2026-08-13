@@ -12,9 +12,10 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return query<ShowEntitiesQuery>({ request, context, query: showQuery });
 }
 
-export async function action({ request, context }: Route.ActionArgs) {
+export async function action({ request, context, url }: Route.ActionArgs) {
   return handleSubmission({
     request,
+    url,
     context,
     mutation: showMutation,
     createMutation: 'createShow',

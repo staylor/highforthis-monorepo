@@ -4,9 +4,11 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { RouterContextProvider } from 'react-router';
 
 import factory from './apollo/client.js';
 import rejectWordPress from './rejectWordPress.js';
+import { apolloClientContext, graphqlHostContext, i18nContext } from './src/context.js';
 import createI18n from './src/i18n.js';
 
 process.env.TZ = 'America/New_York';
@@ -20,11 +22,11 @@ const gqlHost = configuredGqlHost.replace(/\/graphql\/?$/, '').replace(/\/$/, ''
 const getClient = factory(`${gqlHost}/graphql`);
 
 function getLoadContext(_, res) {
-  return {
-    i18n: res.locals.i18n,
-    apolloClient: getClient(),
-    graphqlHost: gqlHost,
-  };
+  const context = new RouterContextProvider();
+  context.set(i18nContext, res.locals.i18n);
+  context.set(apolloClientContext, getClient());
+  context.set(graphqlHostContext, gqlHost);
+  return context;
 }
 
 const proxy = createProxyMiddleware({

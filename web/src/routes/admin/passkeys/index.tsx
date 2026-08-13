@@ -1,7 +1,7 @@
 import { startRegistration } from '@simplewebauthn/browser';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ActionFunctionArgs, AppLoadContext, LoaderFunctionArgs } from 'react-router';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { useFetcher, useLoaderData, useRevalidator } from 'react-router';
 
 import { Heading1, Heading2 } from '#/components/Heading';
@@ -16,7 +16,7 @@ import type {
 export async function loader({ request, context }: LoaderFunctionArgs) {
   return passkeyApi<PasskeyListResponse>({
     request,
-    context: context as AppLoadContext,
+    context,
     path: '',
   });
 }
@@ -30,7 +30,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
   await passkeyApi({
     request,
-    context: context as AppLoadContext,
+    context,
     path: `/${encodeURIComponent(credentialId)}`,
     init: { method: 'DELETE' },
   });

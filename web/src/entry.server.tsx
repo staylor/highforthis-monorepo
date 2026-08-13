@@ -5,14 +5,16 @@ import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
 import { ServerRouter } from 'react-router';
-import type { AppLoadContext, EntryContext } from 'react-router';
+import type { EntryContext, RouterContextProvider } from 'react-router';
+
+import { i18nContext } from './context.js';
 
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   reactRouterContext: EntryContext,
-  loadContext: AppLoadContext
+  loadContext: Readonly<RouterContextProvider>
 ) {
   const params = {
     request,
@@ -33,7 +35,7 @@ function handle(
     responseStatusCode: number;
     responseHeaders: Headers;
     reactRouterContext: EntryContext;
-    loadContext: AppLoadContext;
+    loadContext: Readonly<RouterContextProvider>;
   }
 ) {
   let { responseStatusCode } = params;
@@ -41,7 +43,7 @@ function handle(
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <I18nextProvider i18n={loadContext.i18n}>
+      <I18nextProvider i18n={loadContext.get(i18nContext)}>
         <ServerRouter context={reactRouterContext} url={request.url} />
       </I18nextProvider>,
       {

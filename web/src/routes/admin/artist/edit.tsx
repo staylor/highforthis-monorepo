@@ -17,9 +17,10 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   });
 }
 
-export async function action({ request, context, params }: Route.ActionArgs) {
+export async function action({ request, context, params, url }: Route.ActionArgs) {
   return handleSubmission({
     request,
+    url,
     context,
     mutation: artistMutation,
     variables: { id: params.id, input: { excludeFromSearch: false } },

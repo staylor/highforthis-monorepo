@@ -12,10 +12,11 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return query<DashboardSettingsQuery>({ request, context, query: settingsQuery });
 }
 
-export async function action({ context, request }: Route.ActionArgs) {
+export async function action({ context, request, url }: Route.ActionArgs) {
   return handleSubmission({
     context,
     request,
+    url,
     mutation: settingsMutation,
     variables: { id: 'dashboard' },
   });

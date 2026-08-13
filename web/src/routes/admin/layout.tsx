@@ -5,6 +5,7 @@ import { redirect, Outlet } from 'react-router';
 
 import { isAuthenticated } from '#/auth';
 import NavMenu, { AdminNavProvider, useAdminNav } from '#/components/Admin/NavMenu';
+import { graphqlHostContext } from '#/context.js';
 import { sessionStorage } from '#/session';
 import adminCss from '#/styles/admin.css?url';
 import { rootData } from '#/utils/rootData';
@@ -33,7 +34,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     return redirect('/login/unauthorized');
   }
 
-  const response = await fetch(`${context.graphqlHost}/auth/session`, {
+  const response = await fetch(`${context.get(graphqlHostContext)}/auth/session`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (response.ok) {
