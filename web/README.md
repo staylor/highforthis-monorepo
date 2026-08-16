@@ -28,6 +28,16 @@ pnpm graphql:dev
 | --- | --- |
 | `SERVER_PORT` | Web server port (default: `3000`) |
 | `GQL_HOST` | GraphQL server URL (default: `http://localhost:8081`) |
+| `OPENOBSERVE_RUM_APPLICATION_ID` | OpenObserve RUM application ID; setting any required RUM variable enables browser monitoring |
+| `OPENOBSERVE_RUM_CLIENT_TOKEN` | Browser ingestion token from OpenObserve's RUM setup (this token is intentionally sent to browsers) |
+| `OPENOBSERVE_RUM_SITE` | OpenObserve host or URL, such as `https://openobserve.example.com` |
+| `OPENOBSERVE_RUM_ORGANIZATION_IDENTIFIER` | OpenObserve organization (default: `default`) |
+| `OPENOBSERVE_RUM_SESSION_SAMPLE_RATE` | Percentage of sessions monitored (default: `100`) |
+| `OPENOBSERVE_RUM_REPLAY_SAMPLE_RATE` | Percentage of sessions recorded for replay; use `0` to disable replay (default: `20`) |
+| `OPENOBSERVE_RUM_TRACE_SAMPLE_RATE` | Percentage of same-origin requests correlated with backend traces (default: `100`) |
+| `OPENOBSERVE_RUM_SERVICE` | RUM service name (default: `web`) |
+| `OPENOBSERVE_RUM_ENVIRONMENT` | Deployment environment (defaults to the Railway environment or `NODE_ENV`) |
+| `OPENOBSERVE_RUM_VERSION` | Deployed version (defaults to the Railway Git SHA) |
 
 ## Development
 

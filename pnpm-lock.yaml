@@ -276,6 +276,12 @@ importers:
       '@lexical/utils':
         specifier: 0.41.0
         version: 0.41.0
+      '@openobserve/browser-logs':
+        specifier: 0.4.1
+        version: 0.4.1(@openobserve/browser-rum@0.4.1)
+      '@openobserve/browser-rum':
+        specifier: 0.4.1
+        version: 0.4.1(@openobserve/browser-logs@0.4.1)
       '@react-router/express':
         specifier: 8.3.0
         version: 8.3.0(express@5.2.1)(react-router@8.3.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(typescript@5.9.3)
@@ -1837,6 +1843,31 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@openobserve/browser-core@0.4.1':
+    resolution: {integrity: sha512-mpotVs/YwFdyqK9DPK5doxQeNtw28N49wW8dsjbhVzoDEDOU1DHfTNiXeb6y7KmK5+UHPM4tsbJ70nbFqByg3Q==, tarball: https://registry.npmjs.org/@openobserve/browser-core/-/browser-core-0.4.1.tgz}
+
+  '@openobserve/browser-logs@0.4.1':
+    resolution: {integrity: sha512-wmPN0IsoghIx3a07Hg6YMz4tmZ95G4zw/9e39l19P32wEVMryErXkMKcEy9XYcmstQKrk2StKYi8x+OEwCTnNg==, tarball: https://registry.npmjs.org/@openobserve/browser-logs/-/browser-logs-0.4.1.tgz}
+    peerDependencies:
+      '@openobserve/browser-rum': 0.4.1
+    peerDependenciesMeta:
+      '@openobserve/browser-rum':
+        optional: true
+
+  '@openobserve/browser-rum-core@0.4.1':
+    resolution: {integrity: sha512-owO27fFiSJHLE7gH0HVTihPWnv1ZMFhym+w/yLikB96Sne+2PNUY5SAAZco56+9309I6H/PqFRRnxpUjGKA+xA==, tarball: https://registry.npmjs.org/@openobserve/browser-rum-core/-/browser-rum-core-0.4.1.tgz}
+
+  '@openobserve/browser-rum@0.4.1':
+    resolution: {integrity: sha512-X+/tcCh6BGzExoy2yT3knGgd0AF+9jODlf0BHdOxhdzieJu05SXm1EbKCHdMZFqLiWUAXXc5Yq4G08Lvmbonvw==, tarball: https://registry.npmjs.org/@openobserve/browser-rum/-/browser-rum-0.4.1.tgz}
+    peerDependencies:
+      '@openobserve/browser-logs': 0.4.1
+    peerDependenciesMeta:
+      '@openobserve/browser-logs':
+        optional: true
+
+  '@openobserve/js-core@0.4.1':
+    resolution: {integrity: sha512-/fZZClT7JmrhENWdtKdYQXF9jBI+2i+SZt+gatJnkov3e1ho88LuOqE4Kt5p72PT7Z4wv/r56fcYWdV20YjKxA==, tarball: https://registry.npmjs.org/@openobserve/js-core/-/js-core-0.4.1.tgz}
 
   '@opentelemetry/api-logs@0.220.0':
     resolution: {integrity: sha512-CmVa4ImJ+ynfrPMNaAXHET6Bhb44SwzmfyVJFq9ni2jgXJR/l7C6gfVFddNmHP+ZOkP9cf4f9DBe68qVLTHc9w==, tarball: https://registry.npmjs.org/@opentelemetry/api-logs/-/api-logs-0.220.0.tgz}
@@ -8564,6 +8595,32 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
+
+  '@openobserve/browser-core@0.4.1':
+    dependencies:
+      '@openobserve/js-core': 0.4.1
+
+  '@openobserve/browser-logs@0.4.1(@openobserve/browser-rum@0.4.1)':
+    dependencies:
+      '@openobserve/browser-core': 0.4.1
+      '@openobserve/js-core': 0.4.1
+    optionalDependencies:
+      '@openobserve/browser-rum': 0.4.1(@openobserve/browser-logs@0.4.1)
+
+  '@openobserve/browser-rum-core@0.4.1':
+    dependencies:
+      '@openobserve/browser-core': 0.4.1
+      '@openobserve/js-core': 0.4.1
+
+  '@openobserve/browser-rum@0.4.1(@openobserve/browser-logs@0.4.1)':
+    dependencies:
+      '@openobserve/browser-core': 0.4.1
+      '@openobserve/browser-rum-core': 0.4.1
+      '@openobserve/js-core': 0.4.1
+    optionalDependencies:
+      '@openobserve/browser-logs': 0.4.1(@openobserve/browser-rum@0.4.1)
+
+  '@openobserve/js-core@0.4.1': {}
 
   '@opentelemetry/api-logs@0.220.0':
     dependencies:
