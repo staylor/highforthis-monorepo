@@ -1,5 +1,6 @@
 import type { Prisma, Artist, Venue, Show } from '@prisma/client';
 import type {
+  MutationBulkCreateShowsArgs,
   MutationCreateShowArgs,
   MutationRemoveShowArgs,
   MutationUpdateShowArgs,
@@ -9,10 +10,11 @@ import type {
 } from 'types/graphql';
 
 import prisma from '#/database';
+import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection, emptyConnection } from './utils/collection';
 import { removeEntities, resolveJoin, timestampResolver } from './utils/helpers';
-import { createShowSchema, updateShowSchema } from './validations';
+import { bulkCreateShowsSchema, createShowSchema, updateShowSchema } from './validations';
 
 interface EntityWithType {
   type: string;
@@ -170,6 +172,88 @@ const resolvers = {
     },
   },
   Mutation: {
+    async bulkCreateShows(_: unknown, { input }: MutationBulkCreateShowsArgs) {
+      const shows = bulkCreateShowsSchema.parse(input);
+
+      return prisma.$transaction(
+        async (transaction) => {
+          const artists = new Map<string, string>();
+          const venues = new Map<string, string>();
+          let artistsCreated = 0;
+          let venuesCreated = 0;
+
+          const findOrCreateArtist = async (name: string) => {
+            const key = name.toLocaleLowerCase();
+            const cached = artists.get(key);
+            if (cached) return cached;
+
+            let artist = await transaction.artist.findFirst({
+              where: { name: { equals: name, mode: 'insensitive' } },
+            });
+            if (!artist) {
+              artist = await transaction.artist.create({
+                data: {
+                  name,
+                  slug: await getUniqueSlug(transaction.artist, name),
+                },
+              });
+              artistsCreated += 1;
+            }
+            artists.set(key, artist.id);
+            return artist.id;
+          };
+
+          const findOrCreateVenue = async (name: string) => {
+            const key = name.toLocaleLowerCase();
+            const cached = venues.get(key);
+            if (cached) return cached;
+
+            let venue = await transaction.venue.findFirst({
+              where: { name: { equals: name, mode: 'insensitive' } },
+            });
+            if (!venue) {
+              venue = await transaction.venue.create({
+                data: {
+                  name,
+                  slug: await getUniqueSlug(transaction.venue, name),
+                },
+              });
+              venuesCreated += 1;
+            }
+            venues.set(key, venue.id);
+            return venue.id;
+          };
+
+          for (const show of shows) {
+            const venueId = await findOrCreateVenue(show.venue);
+            const artistIds: string[] = [];
+            for (const artistName of show.artists) {
+              artistIds.push(await findOrCreateArtist(artistName));
+            }
+            const uniqueArtistIds = [...new Set(artistIds)];
+
+            await transaction.show.create({
+              data: {
+                attended: show.attended ?? false,
+                date: new Date(show.date),
+                venueId,
+                artists: {
+                  create: uniqueArtistIds.map((artistId) => ({ artistId })),
+                },
+              },
+            });
+          }
+
+          return {
+            artistsCreated,
+            showsCreated: shows.length,
+            venuesCreated,
+          };
+        },
+        { timeout: 30_000 }
+      );
+    },
+
     async createShow(_: unknown, { input }: MutationCreateShowArgs) {
       const { artists, venue, date, ...data } = createShowSchema.parse(input);
       return prisma.show.create({

@@ -42,7 +42,10 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
   const fetcher = useFetcher();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const count = Number(searchParams.get('deleted') || 0);
+  const deletedCount = Number(searchParams.get('deleted') || 0);
+  const importedCount = Number(searchParams.get('imported') || 0);
+  const artistsCreated = Number(searchParams.get('artistsCreated') || 0);
+  const venuesCreated = Number(searchParams.get('venuesCreated') || 0);
   const { shows } = loaderData;
 
   const columns = [
@@ -136,7 +139,20 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
     <>
       <Heading>{t('shows.heading')}</Heading>
       <HeaderAdd label={t('shows.add')} />
-      {count > 0 && <Message param="deleted" text={t('shows.deleted', { count })} />}
+      <HeaderAdd label={t('shows.bulk.nav')} to="/admin/show/bulk" />
+      {deletedCount > 0 && (
+        <Message param="deleted" text={t('shows.deleted', { count: deletedCount })} />
+      )}
+      {importedCount > 0 && (
+        <Message
+          param="imported"
+          text={t('shows.bulk.success', {
+            artistsCreated,
+            count: importedCount,
+            venuesCreated,
+          })}
+        />
+      )}
       <Search placeholder={t('shows.search')} />
       <ListTable columns={columns} data={shows!} />
     </>

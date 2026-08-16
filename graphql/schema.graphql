@@ -86,6 +86,19 @@ type AudioUpload implements MediaUpload {
   year: Int
 }
 
+input BulkCreateShowInput {
+  artists: [String!]!
+  attended: Boolean
+  date: Float!
+  venue: String!
+}
+
+type BulkCreateShowsResult {
+  artistsCreated: Int!
+  showsCreated: Int!
+  venuesCreated: Int!
+}
+
 type CodeNode implements ElementNodeType & LexicalNode {
   children: [EditorNode]
   direction: ElementDirection
@@ -375,6 +388,7 @@ type MediaUploadEdge {
 }
 
 type Mutation {
+  bulkCreateShows(input: [BulkCreateShowInput!]!): BulkCreateShowsResult!
   createArtist(input: CreateArtistInput!): Artist
   createPodcast(input: CreatePodcastInput!): Podcast
   createPost(input: CreatePostInput!): Post

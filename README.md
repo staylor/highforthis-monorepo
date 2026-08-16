@@ -26,7 +26,7 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 pnpm install
 
 # Start both GraphQL and Web in development
-pnpm graphql:dev   # http://localhost:8080/graphql
+pnpm graphql:dev   # http://localhost:8081/graphql
 pnpm web:dev       # http://localhost:3000
 ```
 

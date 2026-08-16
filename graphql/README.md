@@ -128,7 +128,7 @@ PRODUCTION_DATABASE_URL='postgresql://…' pnpm db:refresh
 
 ```bash
 pnpm dev
-# Server starts at http://localhost:8080/graphql
+# Server starts at http://localhost:8081/graphql
 ```
 
 Uses `tsx watch` for hot reloading.

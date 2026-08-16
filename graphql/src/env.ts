@@ -3,7 +3,7 @@ import { z } from 'zod';
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
   TOKEN_SECRET: z.string().min(1),
-  GRAPHQL_PORT: z.coerce.number().int().positive().optional().default(8080),
+  GRAPHQL_PORT: z.coerce.number().int().positive().optional().default(8081),
 
   // Authentication
   PASSWORD_LOGIN_ENABLED: z
