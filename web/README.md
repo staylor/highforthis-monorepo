@@ -27,7 +27,7 @@ pnpm graphql:dev
 | Variable | Description |
 | --- | --- |
 | `SERVER_PORT` | Web server port (default: `3000`) |
-| `GQL_HOST` | GraphQL server URL (default: `http://localhost:8080`) |
+| `GQL_HOST` | GraphQL server URL (default: `http://localhost:8081`) |
 
 ## Development
 

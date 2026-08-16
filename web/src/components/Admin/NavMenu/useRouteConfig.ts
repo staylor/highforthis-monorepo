@@ -76,6 +76,10 @@ const useRouteConfig = () => {
             path: '/show/add',
             label: t('nav.addNew'),
           },
+          {
+            path: '/show/bulk',
+            label: t('shows.bulk.nav'),
+          },
         ],
       },
       {

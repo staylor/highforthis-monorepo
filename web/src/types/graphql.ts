@@ -102,6 +102,20 @@ export type AudioUpload = MediaUpload & {
   year?: Maybe<Scalars['Int']['output']>;
 };
 
+export type BulkCreateShowInput = {
+  artists: Array<Scalars['String']['input']>;
+  attended?: InputMaybe<Scalars['Boolean']['input']>;
+  date: Scalars['Float']['input'];
+  venue: Scalars['String']['input'];
+};
+
+export type BulkCreateShowsResult = {
+  __typename?: 'BulkCreateShowsResult';
+  artistsCreated: Scalars['Int']['output'];
+  showsCreated: Scalars['Int']['output'];
+  venuesCreated: Scalars['Int']['output'];
+};
+
 export type CodeNode = ElementNodeType & LexicalNode & {
   __typename?: 'CodeNode';
   children?: Maybe<Array<Maybe<EditorNode>>>;
@@ -406,6 +420,7 @@ export type MediaUploadEdge = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  bulkCreateShows: BulkCreateShowsResult;
   createArtist?: Maybe<Artist>;
   createPodcast?: Maybe<Podcast>;
   createPost?: Maybe<Post>;
@@ -433,6 +448,11 @@ export type Mutation = {
   updateUser?: Maybe<User>;
   updateVenue?: Maybe<Venue>;
   updateVideo?: Maybe<Video>;
+};
+
+
+export type MutationBulkCreateShowsArgs = {
+  input: Array<BulkCreateShowInput>;
 };
 
 
@@ -1610,6 +1630,13 @@ export type CreateShowMutationVariables = Exact<{
 
 
 export type CreateShowMutation = { __typename?: 'Mutation', createShow?: { __typename?: 'Show', id: string } | null };
+
+export type BulkCreateShowsMutationVariables = Exact<{
+  input: Array<BulkCreateShowInput> | BulkCreateShowInput;
+}>;
+
+
+export type BulkCreateShowsMutation = { __typename?: 'Mutation', bulkCreateShows: { __typename?: 'BulkCreateShowsResult', artistsCreated: number, showsCreated: number, venuesCreated: number } };
 
 export type ShowEditQueryVariables = Exact<{
   id: Scalars['String']['input'];

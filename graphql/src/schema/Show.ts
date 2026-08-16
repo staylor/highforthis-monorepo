@@ -32,6 +32,19 @@ const Show = `#graphql
     venue: String!
   }
 
+  input BulkCreateShowInput {
+    artists: [String!]!
+    attended: Boolean
+    date: Float!
+    venue: String!
+  }
+
+  type BulkCreateShowsResult {
+    artistsCreated: Int!
+    showsCreated: Int!
+    venuesCreated: Int!
+  }
+
   input UpdateShowInput {
     title: String
     notes: String
@@ -84,6 +97,7 @@ const Show = `#graphql
   }
 
   extend type Mutation {
+    bulkCreateShows(input: [BulkCreateShowInput!]!): BulkCreateShowsResult!
     createShow(input: CreateShowInput!): Show
     updateShow(id: String!, input: UpdateShowInput!): Show
     removeShow(ids: [String]!): Boolean

@@ -17,7 +17,7 @@ const serverPort = parseInt(process.env.PORT || process.env.SERVER_PORT || '3000
 const logger = createLogger({ serviceName: 'web' });
 
 // use a local GQL server by default; accept either a base URL or a legacy /graphql URL
-const configuredGqlHost = process.env.GQL_HOST || 'http://localhost:8080';
+const configuredGqlHost = process.env.GQL_HOST || 'http://localhost:8081';
 const gqlHost = configuredGqlHost.replace(/\/graphql\/?$/, '').replace(/\/$/, '');
 const getClient = factory(`${gqlHost}/graphql`);
 

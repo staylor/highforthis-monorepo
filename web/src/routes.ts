@@ -31,7 +31,12 @@ export default [
       route('podcast', 'routes/admin/settings/podcast.tsx'),
       route('site?', 'routes/admin/settings/site.tsx'),
     ]),
-    ...adminRoutes('show'),
+    ...prefix('show', [
+      index('routes/admin/show/index.tsx'),
+      route('add', 'routes/admin/show/add.tsx'),
+      route('bulk', 'routes/admin/show/bulk.tsx'),
+      route(':id', 'routes/admin/show/edit.tsx'),
+    ]),
     ...adminRoutes('user'),
     ...adminRoutes('venue'),
     ...prefix('video', [

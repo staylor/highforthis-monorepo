@@ -108,6 +108,17 @@ export const createShowSchema = z.object({
   venue: z.string(),
 });
 
+export const bulkCreateShowsSchema = z
+  .array(
+    z.object({
+      artists: z.array(z.string().trim().min(1)).min(1),
+      attended: z.boolean().nullish(),
+      date: z.number(),
+      venue: z.string().trim().min(1),
+    })
+  )
+  .min(1);
+
 export const updateShowSchema = z.object({
   artists: z.array(z.string()).nullish(),
   attended: z.boolean().optional(),
