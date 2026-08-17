@@ -34,7 +34,6 @@ export const links: LinksFunction = () => {
       href: 'https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
     },
     { rel: 'shortcut icon', href: '/favicon.png', type: 'image/png' },
-    { rel: 'stylesheet', href: '/fonts/icons/icons.css' },
   ];
 };
 
