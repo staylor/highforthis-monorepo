@@ -43,6 +43,29 @@ OTEL_SDK_DISABLED=false
 
 If `OTEL_EXPORTER_OTLP_ENDPOINT` is absent, the services continue to emit structured JSON logs to stdout but do not initialize OpenTelemetry exporters. Set `OTEL_SDK_DISABLED=true` to explicitly disable exporting.
 
+## Configure browser RUM
+
+In OpenObserve, open the RUM ingestion setup and create an application for the web frontend. Configure the following variables on the Railway `web` service using the values from the generated browser SDK configuration:
+
+```text
+OPENOBSERVE_RUM_APPLICATION_ID=<application ID>
+OPENOBSERVE_RUM_CLIENT_TOKEN=<browser client token>
+OPENOBSERVE_RUM_SITE=https://<openobserve-domain>
+OPENOBSERVE_RUM_ORGANIZATION_IDENTIFIER=default
+```
+
+The browser client token is public by design. Use a dedicated browser ingestion token; never reuse the root account or the server-side `OTEL_EXPORTER_OTLP_HEADERS` credential. The site may be a hostname or URL, but should point to the OpenObserve server rather than its `/api/...` OTLP endpoint.
+
+RUM collects resources, long tasks, user interactions, browser errors, and same-origin distributed traces. Session replay masks user input and samples 20% of monitored sessions by default. Sampling can be changed independently:
+
+```text
+OPENOBSERVE_RUM_SESSION_SAMPLE_RATE=100
+OPENOBSERVE_RUM_REPLAY_SAMPLE_RATE=20
+OPENOBSERVE_RUM_TRACE_SAMPLE_RATE=100
+```
+
+Each rate must be between `0` and `100`; set the replay rate to `0` to disable session replay. RUM remains disabled when none of its required variables are present, and startup reports an incomplete configuration when only some are set.
+
 ## Run locally
 
 Docker is the default:

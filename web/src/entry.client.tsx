@@ -5,8 +5,22 @@ import { HydratedRouter } from 'react-router/dom';
 
 import createI18n from './i18n.js';
 
+async function startOpenObserveRum() {
+  const config = window.__OPENOBSERVE_RUM__;
+  if (!config) {
+    return;
+  }
+
+  try {
+    const { initializeOpenObserveRum } = await import('./rum.client');
+    initializeOpenObserveRum(config);
+  } catch (error) {
+    console.error('OpenObserve RUM failed to initialize', error);
+  }
+}
+
 (async () => {
-  const i18n = await createI18n('en', false);
+  const [i18n] = await Promise.all([createI18n('en', false), startOpenObserveRum()]);
 
   startTransition(() => {
     hydrateRoot(

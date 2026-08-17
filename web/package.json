@@ -17,6 +17,8 @@
     "@lexical/rich-text": "0.41.0",
     "@lexical/selection": "0.41.0",
     "@lexical/utils": "0.41.0",
+    "@openobserve/browser-logs": "0.4.1",
+    "@openobserve/browser-rum": "0.4.1",
     "@react-router/express": "8.3.0",
     "@react-router/node": "8.3.0",
     "@simplewebauthn/browser": "13.3.0",

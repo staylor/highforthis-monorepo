@@ -17,6 +17,8 @@ import { Html, Body, Boundary, useLayout } from './components/Layout';
 import { TWITTER_USERNAME } from './constants';
 import { graphqlHostContext } from './context.js';
 import { appQuery } from './root.graphql';
+import type { OpenObserveRumConfig } from './rum';
+import { getOpenObserveRumConfig } from './rum.server';
 import type { AppQuery } from './types/graphql';
 import { createClientCache } from './utils/cache';
 import query from './utils/query';
@@ -47,6 +49,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     data,
     isAuthenticated: Boolean(user),
     graphqlHost: context.get(graphqlHostContext),
+    openObserveRum: getOpenObserveRumConfig(),
   };
 }
 
@@ -85,8 +88,23 @@ const AppLinks = ({ data }: { data: AppQuery }) => {
   );
 };
 
+const OpenObserveRumConfigScript = ({ config }: { config?: OpenObserveRumConfig }) => {
+  if (!config) {
+    return null;
+  }
+
+  const serializedConfig = JSON.stringify(config).replace(/</g, '\\u003c');
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `window.__OPENOBSERVE_RUM__=${serializedConfig};`,
+      }}
+    />
+  );
+};
+
 export default function Root({ loaderData }: Route.ComponentProps) {
-  const { data } = loaderData;
+  const { data, openObserveRum } = loaderData;
   const layout = useLayout();
   return (
     <Html>
@@ -97,6 +115,7 @@ export default function Root({ loaderData }: Route.ComponentProps) {
         <meta property="twitter:creator" content={`@${TWITTER_USERNAME}`} />
         <Meta />
         <Links />
+        <OpenObserveRumConfigScript config={openObserveRum} />
         {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
         {layout === 'app' && <AppLinks data={data} />}
       </head>
