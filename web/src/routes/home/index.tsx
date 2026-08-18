@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
 
+import PostArtwork from '#/components/PostArtwork';
 import SectionHeader, { AccentLine } from '#/components/SectionHeader';
 import Videos from '#/components/Videos';
 import { videosQuery } from '#/components/Videos/graphql';
@@ -46,16 +47,7 @@ const homeQuery = gql`
     posts(first: 5, status: PUBLISH) @cache(key: "latest") {
       edges {
         node {
-          featuredMedia {
-            destination
-            id
-            ... on ImageUpload {
-              crops {
-                fileName
-                width
-              }
-            }
-          }
+          ...PostArtwork_post
           id
           slug
           summary
@@ -65,6 +57,7 @@ const homeQuery = gql`
     }
     ...Videos_videos
   }
+  ${PostArtwork.fragments.post}
   ${videosQuery}
 `;
 
