@@ -28,31 +28,37 @@ function post(editorImageCount: number): PostArtwork_PostFragment {
 }
 
 describe('postArtwork', () => {
-  it('builds a collage from the first five unique editor images', () => {
-    const data = post(6);
+  it('builds a deterministic randomized collage from five unique editor images', () => {
+    const data = post(10);
     data.editorState?.root?.children?.push(data.editorState.root.children[0]);
-    const { container } = render(<PostArtwork post={data} variant="collage" />);
-    const images = [...container.querySelectorAll('img')];
+    const sourcesForSeed = (seed: string) => {
+      const { container, unmount } = render(
+        <PostArtwork post={data} seed={seed} variant="collage" />
+      );
+      const sources = [...container.querySelectorAll('img')].map(({ src }) => src);
+      unmount();
+      return sources;
+    };
+    const sources = sourcesForSeed('page-a');
 
-    expect(images).toHaveLength(5);
-    expect(images.map(({ src }) => src)).toEqual(
-      Array.from(
-        { length: 5 },
-        (_, index) =>
-          `https://storage.googleapis.com/wonderboymusic/posts/editor-${index + 1}-640.jpg`
-      )
-    );
+    expect(sources).toHaveLength(5);
+    expect(new Set(sources).size).toBe(5);
+    expect(sources.every((src) => src.includes('/editor-'))).toBeTruthy();
+    expect(sourcesForSeed('page-a')).toEqual(sources);
+    expect(sourcesForSeed('page-b')).not.toEqual(sources);
   });
 
   it('uses a fanned stack and shows the number of additional images', () => {
-    const { container } = render(<PostArtwork post={post(6)} variant="stack" />);
+    const { container } = render(<PostArtwork post={post(6)} seed="stack-seed" variant="stack" />);
 
     expect(container.querySelectorAll('img')).toHaveLength(3);
     expect(screen.getByText('+3')).toBeInTheDocument();
   });
 
   it('falls back to featured media when the editor has no images', () => {
-    const { container } = render(<PostArtwork post={post(0)} variant="collage" />);
+    const { container } = render(
+      <PostArtwork post={post(0)} seed="fallback-seed" variant="collage" />
+    );
 
     expect(container.querySelector('img')?.src).toBe(
       'https://storage.googleapis.com/wonderboymusic/posts/featured-640.jpg'

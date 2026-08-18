@@ -12,12 +12,14 @@ import type { Route } from './+types';
 import Latest from './Latest';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  return query<HomeQuery>({
+  const data = await query<HomeQuery>({
     request,
     context,
     query: homeQuery,
     variables: { cacheKey: 'home-videos', first: 9 },
   });
+
+  return { ...data, artworkSeed: crypto.randomUUID() };
 }
 
 export const clientLoader = createClientCache();
@@ -30,7 +32,7 @@ function Home({ loaderData }: Route.ComponentProps) {
         <Videos videos={loaderData.videos} paginate={false} />
       </section>
       <AccentLine />
-      <Latest posts={loaderData.posts} />
+      <Latest artworkSeed={loaderData.artworkSeed} posts={loaderData.posts} />
     </>
   );
 }

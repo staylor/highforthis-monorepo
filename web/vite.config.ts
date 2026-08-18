@@ -11,4 +11,9 @@ if (process.env.NODE_ENV === 'production') {
 export default defineConfig({
   base: publicPath,
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  server: {
+    watch: {
+      ignored: ['**/__tests__/**', '**/*.test.{js,jsx,ts,tsx}'],
+    },
+  },
 });

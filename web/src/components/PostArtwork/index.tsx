@@ -17,6 +17,7 @@ interface DisplayImage extends ArtworkImage {
 interface PostArtworkProps {
   className?: string;
   post: PostArtwork_PostFragment;
+  seed: string;
   variant: 'collage' | 'stack';
 }
 
@@ -47,7 +48,22 @@ function displayImages(images: ArtworkImage[], targetWidth: number) {
   });
 }
 
-function postImages(post: PostArtwork_PostFragment, targetWidth: number) {
+function hashString(value: string) {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function randomizeImages(images: DisplayImage[], seed: string) {
+  return images.toSorted(
+    (first, second) => hashString(`${seed}:${first.id}`) - hashString(`${seed}:${second.id}`)
+  );
+}
+
+function postImages(post: PostArtwork_PostFragment, targetWidth: number, seed: string) {
   const editorImages =
     post.editorState?.root?.children?.flatMap((node) => {
       if (node && 'image' in node && node.image) {
@@ -61,8 +77,9 @@ function postImages(post: PostArtwork_PostFragment, targetWidth: number) {
 
   const uniqueEditorImages = [...new Map(editorImages.map((image) => [image.id, image])).values()];
   const images = displayImages(uniqueEditorImages, targetWidth);
+  const preferredImages = images.length > 0 ? images : displayImages(featuredImages, targetWidth);
 
-  return images.length > 0 ? images : displayImages(featuredImages, targetWidth);
+  return randomizeImages(preferredImages, seed);
 }
 
 function Collage({ className, images }: { className?: string; images: DisplayImage[] }) {
@@ -134,8 +151,8 @@ function Stack({ className, images }: { className?: string; images: DisplayImage
   );
 }
 
-export default function PostArtwork({ className, post, variant }: PostArtworkProps) {
-  const images = postImages(post, variant === 'collage' ? 640 : 300);
+export default function PostArtwork({ className, post, seed, variant }: PostArtworkProps) {
+  const images = postImages(post, variant === 'collage' ? 640 : 300, seed);
 
   if (images.length === 0) {
     return null;

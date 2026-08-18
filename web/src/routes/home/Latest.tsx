@@ -6,7 +6,12 @@ import PostArtwork from '#/components/PostArtwork';
 import SectionHeader from '#/components/SectionHeader';
 import type { PostConnection } from '#/types/graphql';
 
-function Latest({ posts }: { posts: PostConnection }) {
+interface LatestProps {
+  artworkSeed: string;
+  posts: PostConnection;
+}
+
+function Latest({ artworkSeed, posts }: LatestProps) {
   const { t } = useTranslation();
   if (!posts || posts.edges.length === 0) {
     return null;
@@ -34,7 +39,11 @@ function Latest({ posts }: { posts: PostConnection }) {
           )}
         >
           <div className="aspect-[4/3] overflow-hidden bg-neutral-950">
-            <PostArtwork post={featured.node} variant="collage" />
+            <PostArtwork
+              post={featured.node}
+              seed={`${artworkSeed}:${featured.node.id}`}
+              variant="collage"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           </div>
           <div className="absolute right-0 bottom-0 left-0 p-8">
@@ -67,7 +76,7 @@ function Latest({ posts }: { posts: PostConnection }) {
                   'hover:shadow-pink/5 dark:hover:shadow-pink/10 hover:shadow-lg'
                 )}
               >
-                <PostArtwork post={node} variant="stack" />
+                <PostArtwork post={node} seed={`${artworkSeed}:${node.id}`} variant="stack" />
                 <div className="flex flex-col justify-center">
                   <h3 className="group-hover:text-pink mb-1.5 text-lg font-semibold transition-colors">
                     {node.title}
