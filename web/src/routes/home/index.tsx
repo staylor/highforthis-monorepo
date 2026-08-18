@@ -1,5 +1,6 @@
 import { gql } from 'graphql-tag';
 
+import PostArtwork from '#/components/PostArtwork';
 import SectionHeader, { AccentLine } from '#/components/SectionHeader';
 import Videos from '#/components/Videos';
 import { videosQuery } from '#/components/Videos/graphql';
@@ -11,12 +12,14 @@ import type { Route } from './+types';
 import Latest from './Latest';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  return query<HomeQuery>({
+  const data = await query<HomeQuery>({
     request,
     context,
     query: homeQuery,
     variables: { cacheKey: 'home-videos', first: 9 },
   });
+
+  return { ...data, artworkSeed: crypto.randomUUID() };
 }
 
 export const clientLoader = createClientCache();
@@ -29,7 +32,7 @@ function Home({ loaderData }: Route.ComponentProps) {
         <Videos videos={loaderData.videos} paginate={false} />
       </section>
       <AccentLine />
-      <Latest posts={loaderData.posts} />
+      <Latest artworkSeed={loaderData.artworkSeed} posts={loaderData.posts} />
     </>
   );
 }
@@ -46,16 +49,7 @@ const homeQuery = gql`
     posts(first: 5, status: PUBLISH) @cache(key: "latest") {
       edges {
         node {
-          featuredMedia {
-            destination
-            id
-            ... on ImageUpload {
-              crops {
-                fileName
-                width
-              }
-            }
-          }
+          ...PostArtwork_post
           id
           slug
           summary
@@ -65,6 +59,7 @@ const homeQuery = gql`
     }
     ...Videos_videos
   }
+  ${PostArtwork.fragments.post}
   ${videosQuery}
 `;
 

@@ -2,20 +2,22 @@ import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import Link from '#/components/Link';
+import PostArtwork from '#/components/PostArtwork';
 import SectionHeader from '#/components/SectionHeader';
-import type { ImageUpload, PostConnection } from '#/types/graphql';
-import { uploadUrl } from '#/utils/media';
+import type { PostConnection } from '#/types/graphql';
 
-function Latest({ posts }: { posts: PostConnection }) {
+interface LatestProps {
+  artworkSeed: string;
+  posts: PostConnection;
+}
+
+function Latest({ artworkSeed, posts }: LatestProps) {
   const { t } = useTranslation();
   if (!posts || posts.edges.length === 0) {
     return null;
   }
 
   const [featured, ...rest] = posts.edges;
-  const featuredCrop = featured.node.featuredMedia
-    ?.map((media) => (media as ImageUpload).crops?.find((c) => c.width === 640 || c.width === 300))
-    .find(Boolean);
 
   return (
     <section>
@@ -36,14 +38,12 @@ function Latest({ posts }: { posts: PostConnection }) {
             'hover:shadow-pink/5 dark:hover:shadow-pink/10 hover:shadow-lg'
           )}
         >
-          <div className="aspect-[4/3] overflow-hidden">
-            {featuredCrop && featured.node.featuredMedia?.[0] && (
-              <img
-                alt=""
-                src={uploadUrl(featured.node.featuredMedia[0].destination, featuredCrop.fileName)}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            )}
+          <div className="aspect-[4/3] overflow-hidden bg-neutral-950">
+            <PostArtwork
+              post={featured.node}
+              seed={`${artworkSeed}:${featured.node.id}`}
+              variant="collage"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           </div>
           <div className="absolute right-0 bottom-0 left-0 p-8">
@@ -64,10 +64,6 @@ function Latest({ posts }: { posts: PostConnection }) {
         {/* Secondary posts stack */}
         <div className="flex flex-col gap-4">
           {rest.map(({ node }) => {
-            const crop = node.featuredMedia
-              ?.map((media) => (media as ImageUpload).crops?.find((c) => c.width === 300))
-              .find(Boolean);
-
             return (
               <Link
                 to={`/post/${node.slug}`}
@@ -80,15 +76,7 @@ function Latest({ posts }: { posts: PostConnection }) {
                   'hover:shadow-pink/5 dark:hover:shadow-pink/10 hover:shadow-lg'
                 )}
               >
-                {crop && node.featuredMedia?.[0] && (
-                  <div className="h-28 w-28 flex-shrink-0 overflow-hidden rounded-lg">
-                    <img
-                      alt=""
-                      src={uploadUrl(node.featuredMedia[0].destination, crop.fileName)}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                )}
+                <PostArtwork post={node} seed={`${artworkSeed}:${node.id}`} variant="stack" />
                 <div className="flex flex-col justify-center">
                   <h3 className="group-hover:text-pink mb-1.5 text-lg font-semibold transition-colors">
                     {node.title}

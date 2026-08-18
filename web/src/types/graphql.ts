@@ -1273,6 +1273,22 @@ export type TextNodes_LinebreakNodeFragment = { __typename?: 'LinebreakNode', ty
 
 export type TextNodes_TextNodeFragment = { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null };
 
+export type PostArtwork_PostFragment = { __typename?: 'Post', editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', children?: Array<
+        | { __typename?: 'CodeNode' }
+        | { __typename?: 'ElementNode' }
+        | { __typename?: 'HeadingNode' }
+        | { __typename?: 'ImageNode', image?: { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null }
+        | { __typename?: 'LinebreakNode' }
+        | { __typename?: 'QuoteNode' }
+        | { __typename?: 'TextNode' }
+        | { __typename?: 'VideoNode' }
+       | null> | null } | null } | null, featuredMedia?: Array<
+    | { __typename?: 'AudioUpload', destination: string, id: string }
+    | { __typename?: 'FileUpload', destination: string, id: string }
+    | { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+    | { __typename?: 'VideoUpload', destination: string, id: string }
+  > | null };
+
 export type Attended_ShowsFragment = { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', city?: string | null, id: string, name: string, slug: string, state?: string | null } } }> };
 
 export type ShowsGrid_ShowsFragment = { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', cursor: string, node: { __typename?: 'Show', date: number, id: string, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', id: string, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } };
@@ -1835,7 +1851,16 @@ export type HomeQueryVariables = Exact<{
 }>;
 
 
-export type HomeQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: string, slug: string, summary?: string | null, title: string, featuredMedia?: Array<
+export type HomeQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: string, slug: string, summary?: string | null, title: string, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode', image?: { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null }
+              | { __typename?: 'LinebreakNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode' }
+              | { __typename?: 'VideoNode' }
+             | null> | null } | null } | null, featuredMedia?: Array<
           | { __typename?: 'AudioUpload', destination: string, id: string }
           | { __typename?: 'FileUpload', destination: string, id: string }
           | { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
@@ -1888,7 +1913,16 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: string, slug: string, summary?: string | null, title: string, featuredMedia?: Array<
+export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: string, slug: string, summary?: string | null, title: string, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode', image?: { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null }
+              | { __typename?: 'LinebreakNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode' }
+              | { __typename?: 'VideoNode' }
+             | null> | null } | null } | null, featuredMedia?: Array<
           | { __typename?: 'AudioUpload', destination: string, id: string }
           | { __typename?: 'FileUpload', destination: string, id: string }
           | { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
