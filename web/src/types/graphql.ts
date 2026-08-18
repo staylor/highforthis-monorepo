@@ -1913,7 +1913,16 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: string, slug: string, summary?: string | null, title: string, featuredMedia?: Array<
+export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: string, slug: string, summary?: string | null, title: string, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode', image?: { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null }
+              | { __typename?: 'LinebreakNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode' }
+              | { __typename?: 'VideoNode' }
+             | null> | null } | null } | null, featuredMedia?: Array<
           | { __typename?: 'AudioUpload', destination: string, id: string }
           | { __typename?: 'FileUpload', destination: string, id: string }
           | { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
