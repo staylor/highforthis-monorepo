@@ -1,8 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import sharp from 'sharp';
-
 import type { Callback } from '../Storage';
 
 import Upload, { type FileData } from './Upload';
@@ -22,7 +20,8 @@ export type CropSetting = {
 export default class Image extends Upload {
   crops: CropInfo[] = [];
 
-  handleCrop(src: string, size: (number | null)[]): Promise<CropInfo> {
+  async handleCrop(src: string, size: (number | null)[]): Promise<CropInfo> {
+    const { default: sharp } = await import('sharp');
     return new Promise((resolve, reject) => {
       const [width = null, height = null] = size;
       const cropName = `${this.basename}-${width || 0}x${height || 0}${this.ext}`;
@@ -54,6 +53,8 @@ export default class Image extends Upload {
 
   async save(file: Express.Multer.File, cb: Callback) {
     await this.setFileProps(file);
+    // Imported on first use: libvips adds about 13 MB of RSS to every idle process.
+    const { default: sharp } = await import('sharp');
 
     const finalPath = path.join(this.destination, this.fileName);
     const original = {

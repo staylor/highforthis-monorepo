@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import mm from 'musicmetadata';
-import sharp from 'sharp';
 
 import type { Callback } from '../Storage';
 
@@ -26,7 +25,8 @@ interface AudioMetadata {
 export default class Audio extends Upload {
   images: CropInfo[] = [];
 
-  extractCovers(metadata: MM.Metadata): Promise<CropInfo[]> {
+  async extractCovers(metadata: MM.Metadata): Promise<CropInfo[]> {
+    const { default: sharp } = await import('sharp');
     return Promise.all(
       (metadata.picture || []).map(
         ({ data, format }: MM.Picture, i: number): Promise<CropInfo> =>

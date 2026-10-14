@@ -3,12 +3,6 @@ import type {
   AuthenticatorTransportFuture,
   RegistrationResponseJSON,
 } from '@simplewebauthn/server';
-import {
-  generateAuthenticationOptions,
-  generateRegistrationOptions,
-  verifyAuthenticationResponse,
-  verifyRegistrationResponse,
-} from '@simplewebauthn/server';
 import type { Request, Response } from 'express';
 import { z } from 'zod';
 
@@ -108,6 +102,8 @@ function sendError(res: Response, error: unknown, status = 400): void {
 
 export async function authenticationOptionsHandler(_req: Request, res: Response): Promise<void> {
   try {
+    // Imported on first use: the library adds about 5 MB of heap to every idle process.
+    const { generateAuthenticationOptions } = await import('@simplewebauthn/server');
     const options = await generateAuthenticationOptions({
       rpID: env.WEBAUTHN_RP_ID,
       timeout: 60_000,
@@ -144,6 +140,7 @@ export async function authenticationVerificationHandler(
       throw new Error('Passkey authentication failed');
     }
 
+    const { verifyAuthenticationResponse } = await import('@simplewebauthn/server');
     const verification = await verifyAuthenticationResponse({
       response,
       expectedChallenge,
@@ -187,6 +184,7 @@ export async function registrationOptionsHandler(req: Request, res: Response): P
     }
 
     const passkeys = await prisma.passkey.findMany({ where: { userId: user.id } });
+    const { generateRegistrationOptions } = await import('@simplewebauthn/server');
     const options = await generateRegistrationOptions({
       rpName: env.WEBAUTHN_RP_NAME,
       rpID: env.WEBAUTHN_RP_ID,
@@ -231,6 +229,7 @@ export async function registrationVerificationHandler(req: Request, res: Respons
       type: REGISTRATION_CHALLENGE,
       userId: user.id,
     });
+    const { verifyRegistrationResponse } = await import('@simplewebauthn/server');
     const verification = await verifyRegistrationResponse({
       response,
       expectedChallenge,
