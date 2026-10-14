@@ -4,7 +4,7 @@ installCommand = "corepack enable && pnpm install"
 buildCommand = "pnpm --filter @highforthis/web build && pnpm --filter @highforthis/web prod:upload"
 
 [deploy]
-startCommand = "pnpm --filter @highforthis/web start"
+startCommand = "cd web && exec node server.js"
 healthcheckPath = "/health"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
