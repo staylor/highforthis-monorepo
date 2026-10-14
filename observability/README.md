@@ -4,7 +4,7 @@
 
 The image is pinned in [`Dockerfile`](./Dockerfile). OpenObserve listens on port `5080` and stores its standalone-mode data in `/data`.
 
-The Dockerfile keeps three days of data (`ZO_COMPACT_DATA_RETENTION_DAYS`; OpenObserve rejects shorter global retention) and caps the query pool, memtable and footer caches, which OpenObserve otherwise sizes from the container's memory limit (8 GB on Railway). Without a retention limit the 5 GB volume filled up and ingestion stopped.
+The Dockerfile keeps three days of data (`ZO_COMPACT_DATA_RETENTION_DAYS`; OpenObserve rejects shorter global retention) and caps the query pool, memtable and footer caches, which OpenObserve otherwise sizes from the container's memory limit (8 GB on Railway). It also runs one or two threads per pool instead of one per CPU (8 on Railway) and skips the full-text index, so the hourly merge of small files doesn't run eight index builds at once. Without a retention limit the 5 GB volume filled up and ingestion stopped.
 
 ## Deploy to Railway
 
