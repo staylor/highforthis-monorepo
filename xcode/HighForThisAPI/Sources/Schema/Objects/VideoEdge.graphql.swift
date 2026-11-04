@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let VideoEdge = ApolloAPI.Object(
+  nonisolated static let VideoEdge = ApolloAPI.Object(
     typename: "VideoEdge",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

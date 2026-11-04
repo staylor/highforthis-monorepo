@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let PodcastEdge = ApolloAPI.Object(
+  nonisolated static let PodcastEdge = ApolloAPI.Object(
     typename: "PodcastEdge",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

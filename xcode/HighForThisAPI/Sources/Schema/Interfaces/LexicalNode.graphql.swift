@@ -4,5 +4,18 @@
 import ApolloAPI
 
 public extension Interfaces {
-  static let LexicalNode = Interface(name: "LexicalNode")
+  nonisolated static let LexicalNode = ApolloAPI.Interface(
+    name: "LexicalNode",
+    keyFields: nil,
+    implementingObjects: [
+      "CodeNode",
+      "ElementNode",
+      "HeadingNode",
+      "ImageNode",
+      "LinebreakNode",
+      "QuoteNode",
+      "TextNode",
+      "VideoNode"
+    ]
+  )
 }

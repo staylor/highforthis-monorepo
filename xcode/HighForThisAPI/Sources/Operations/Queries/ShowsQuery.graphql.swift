@@ -2,8 +2,9 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+@_spi(Execution) @_spi(Unsafe) import ApolloAPI
 
-public class ShowsQuery: GraphQLQuery {
+nonisolated public struct ShowsQuery: GraphQLQuery {
   public static let operationName: String = "Shows"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
@@ -12,15 +13,15 @@ public class ShowsQuery: GraphQLQuery {
     ))
 
   public var attended: GraphQLNullable<Bool>
-  public var first: Int
+  public var first: Int32
   public var latest: GraphQLNullable<Bool>
-  public var year: GraphQLNullable<Int>
+  public var year: GraphQLNullable<Int32>
 
   public init(
     attended: GraphQLNullable<Bool>,
-    first: Int,
+    first: Int32,
     latest: GraphQLNullable<Bool>,
-    year: GraphQLNullable<Int>
+    year: GraphQLNullable<Int32>
   ) {
     self.attended = attended
     self.first = first
@@ -28,19 +29,19 @@ public class ShowsQuery: GraphQLQuery {
     self.year = year
   }
 
-  public var __variables: Variables? { [
+  @_spi(Unsafe) public var __variables: Variables? { [
     "attended": attended,
     "first": first,
     "latest": latest,
     "year": year
   ] }
 
-  public struct Data: HighForThisAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+  nonisolated public struct Data: HighForThisAPI.SelectionSet {
+    @_spi(Unsafe) public let __data: DataDict
+    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
-    public static var __selections: [ApolloAPI.Selection] { [
+    @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
+    @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
       .field("shows", Shows?.self, arguments: [
         "attended": .variable("attended"),
         "first": .variable("first"),
@@ -48,21 +49,27 @@ public class ShowsQuery: GraphQLQuery {
         "year": .variable("year")
       ]),
     ] }
+    @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+      ShowsQuery.Data.self
+    ] }
 
     public var shows: Shows? { __data["shows"] }
 
     /// Shows
     ///
     /// Parent Type: `ShowConnection`
-    public struct Shows: HighForThisAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
+    nonisolated public struct Shows: HighForThisAPI.SelectionSet {
+      @_spi(Unsafe) public let __data: DataDict
+      @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.ShowConnection }
-      public static var __selections: [ApolloAPI.Selection] { [
+      @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ShowConnection }
+      @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("years", [Int]?.self),
         .field("edges", [Edge].self),
+      ] }
+      @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        ShowsQuery.Data.Shows.self
       ] }
 
       public var years: [Int]? { __data["years"] }
@@ -71,14 +78,17 @@ public class ShowsQuery: GraphQLQuery {
       /// Shows.Edge
       ///
       /// Parent Type: `ShowEdge`
-      public struct Edge: HighForThisAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      nonisolated public struct Edge: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.ShowEdge }
-        public static var __selections: [ApolloAPI.Selection] { [
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ShowEdge }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("node", Node.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          ShowsQuery.Data.Shows.Edge.self
         ] }
 
         public var node: Node { __data["node"] }
@@ -86,14 +96,18 @@ public class ShowsQuery: GraphQLQuery {
         /// Shows.Edge.Node
         ///
         /// Parent Type: `Show`
-        public struct Node: HighForThisAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        nonisolated public struct Node: HighForThisAPI.SelectionSet {
+          @_spi(Unsafe) public let __data: DataDict
+          @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
-          public static var __selections: [ApolloAPI.Selection] { [
+          @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
+          @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .fragment(ShowList_show.self),
+          ] }
+          @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+            ShowsQuery.Data.Shows.Edge.Node.self,
+            ShowList_show.self
           ] }
 
           public var id: String { __data["id"] }
@@ -103,8 +117,8 @@ public class ShowsQuery: GraphQLQuery {
           public var venue: Venue { __data["venue"] }
 
           public struct Fragments: FragmentContainer {
-            public let __data: DataDict
-            public init(_dataDict: DataDict) { __data = _dataDict }
+            @_spi(Unsafe) public let __data: DataDict
+            @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
             public var showList_show: ShowList_show { _toFragment() }
           }

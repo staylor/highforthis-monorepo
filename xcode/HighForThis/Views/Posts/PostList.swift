@@ -1,65 +1,46 @@
-import SwiftUI
-import CachedAsyncImage
 import HighForThisAPI
-
-typealias PostListNode = HighForThisAPI.PostsQuery.Data.Posts.Edge.Node
+import SwiftUI
 
 struct PostList: View {
-    @State var posts: [PostListNode]?
-
     var body: some View {
-        VStack(alignment: .leading) {
-            if posts == nil {
-                Spacer()
-                Loading()
-            } else if posts!.count == 0 {
-                Text(L10N("noPosts"))
+        QueryView(PostsQuery()) { data in
+            let posts = data.posts?.edges.map(\.node) ?? []
+            if posts.isEmpty {
+                ContentUnavailableView(.noPosts, systemImage: "note.text")
             } else {
-                List {
-                    ForEach(posts!, id: \.self) { post in
-                        NavigationLink {
-                            Post(slug: post.slug)
-                        } label: {
-                            HStack {
-                                Text(post.title).font(.title3)
-                                Spacer()
-                                if let thumb = post.featuredMedia!.first?.asImageUpload! {
-                                    let thumbUrl = cdnUrl("\(thumb.destination)/\(thumb.crops.first!.fileName)")
-                                    let url = URL(string: thumbUrl)
-                                    CachedAsyncImage(url: url) { image in
-                                        image.resizable()
-                                            .scaledToFill()
-                                            .frame(width: 120, height: 90, alignment: .center)
-                                            .clipped()
-                                    }  placeholder: {
-                                        ImageLoading(width: 120, height: 90)
-                                    }
-                                } else {
-                                    Rectangle().fill(.pink).frame(width: 120, height: 90)
-                                }
+                List(posts, id: \.id) { post in
+                    NavigationLink(value: Route.post(slug: post.slug, title: post.title)) {
+                        HStack(spacing: 12) {
+                            Text(post.title)
+                                .font(.title3)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            if let thumbnail = post.thumbnailURL {
+                                RemoteImage(url: thumbnail, aspectRatio: 4 / 3, contentMode: .fill)
+                                    .frame(width: 120)
+                                    .clipShape(.rect(cornerRadius: 6))
                             }
                         }
                     }
+                    .accessibilityIdentifier("post-\(post.slug)")
                 }
                 .listStyle(.plain)
-                .navigationTitle(L10N("posts"))
-            }
-            Spacer()
-        }.onAppear() {
-            let query = HighForThisAPI.PostsQuery()
-            getData(query) { data in
-                var nodes = [PostListNode]()
-                for edge in data.posts!.edges {
-                    nodes.append(edge.node)
-                }
-                self.posts = nodes
             }
         }
+        .navigationTitle(.posts)
+    }
+}
+
+extension PostsQuery.Data.Posts.Edge.Node {
+    fileprivate var thumbnailURL: URL? {
+        guard let image = featuredMedia?.lazy.compactMap(\.asImageUpload).first,
+            let crop = image.crops.best(forWidth: 360)
+        else { return nil }
+        return AppConfiguration.uploadURL(destination: image.destination, fileName: crop.fileName)
     }
 }
 
 #Preview {
-    AppWrapper {
+    NavigationStack {
         PostList()
     }
 }

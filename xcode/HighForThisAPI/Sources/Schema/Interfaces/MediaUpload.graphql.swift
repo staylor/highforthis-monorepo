@@ -4,5 +4,14 @@
 import ApolloAPI
 
 public extension Interfaces {
-  static let MediaUpload = Interface(name: "MediaUpload")
+  nonisolated static let MediaUpload = ApolloAPI.Interface(
+    name: "MediaUpload",
+    keyFields: nil,
+    implementingObjects: [
+      "AudioUpload",
+      "FileUpload",
+      "ImageUpload",
+      "VideoUpload"
+    ]
+  )
 }

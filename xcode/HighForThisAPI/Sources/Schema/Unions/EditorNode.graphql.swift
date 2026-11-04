@@ -4,7 +4,7 @@
 import ApolloAPI
 
 public extension Unions {
-  static let EditorNode = Union(
+  nonisolated static let EditorNode = Union(
     name: "EditorNode",
     possibleTypes: [
       Objects.CodeNode.self,

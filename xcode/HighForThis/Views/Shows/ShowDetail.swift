@@ -1,73 +1,54 @@
-import SwiftUI
 import HighForThisAPI
+import SwiftUI
 
 struct ShowDetail: View {
-    var id: String
-    @State private var show: HighForThisAPI.ShowQuery.Data.Show?
-    
+    let id: String
+    let title: String
+
     var body: some View {
-        VStack(alignment: .leading) {
-            if (show == nil) {
-                // Required to make the spinner align in the center
-                Spacer()
-                Loading()
-            } else {
-                let show = show!
-                if let artwork = show.artists[0].appleMusic?.artwork {
-                    ArtistArtwork(
-                        url: artwork.url!,
-                        width: artwork.width!,
-                        height: artwork.height!
-                    )
-                }
-                TextBlock {
-                    Group {
-                        Text(parseDate(show.date, format: "EEEE, MM/dd/yyyy")) +
-                        Text(verbatim: " - ") +
-                        Text(parseDate(show.date, format: "h:mma"))
+        QueryView(ShowQuery(id: id)) { data in
+            if let show = data.show {
+                List {
+                    if let artwork = show.artwork {
+                        ArtworkHeader(artwork: artwork)
                     }
-                    .foregroundColor(.primary)
-                    .font(.subheadline)
-                    .padding(.bottom, 8)
-                    
-                    VStack(alignment: .leading) {
-                        ForEach(show.artists, id: \.self) { artist in
-                            InternalLink(artist.name, color: .accentColor) {
-                                ArtistMain(name: artist.name, slug: artist.slug)
-                            }
+                    Label {
+                        Text(show.startDate, format: .dateTime.weekday(.wide).month(.wide).day().year().hour().minute())
+                    } icon: {
+                        Image(systemName: "calendar")
+                    }
+                    ForEach(show.artists, id: \.id) { artist in
+                        NavigationLink(value: Route.artist(slug: artist.slug, name: artist.name)) {
+                            Label(artist.name, systemImage: "music.mic")
                         }
-
-                        InternalLink(show.venue.name) {
-                            VenueMain(name: show.venue.name, slug: show.venue.slug)
-                        }
-                    }.padding(.bottom, 32)
-                    
-                    // ExternalLink(url: "", label: "Tickets")
-
-                    Spacer()
+                        .accessibilityIdentifier("artist-\(artist.slug)")
+                    }
+                    NavigationLink(value: Route.venue(slug: show.venue.slug, name: show.venue.name)) {
+                        Label(show.venue.name, systemImage: "mappin.and.ellipse")
+                    }
+                    .accessibilityIdentifier("venue-\(show.venue.slug)")
                 }
-            }
-            // Required to make the full bleed image stay at the top
-            Spacer()
-        }
-        #if os(iOS)
-        .ignoresSafeArea()
-        #elseif os(macOS)
-        .padding(.all, 8)
-        #endif
-        .onAppear() {
-            let query = HighForThisAPI.ShowQuery(id: id)
-            getData(query) { data in
-                self.show = data.show!
+                .listStyle(.plain)
+            } else {
+                NotFoundView()
             }
         }
+        .detailTitle(title)
+    }
+}
+
+extension ShowQuery.Data.Show {
+    /// The first artist's artwork that Apple Music has.
+    fileprivate var artwork: Artwork? {
+        artists.lazy
+            .compactMap(\.appleMusic?.artwork)
+            .compactMap { Artwork(template: $0.url, width: $0.width, height: $0.height) }
+            .first
     }
 }
 
 #Preview {
-    AppWrapper {
-        ShowDetail(id: PREVIEW_SHOW_ID)
+    NavigationStack {
+        ShowDetail(id: "cmrim0x9jlu5l0mnsp5kou3nb", title: "Jeff Tweedy")
     }
 }
-
-let PREVIEW_SHOW_ID = String("5a3d8330bf3bd82f73a5ffab")

@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let ImageUpload = ApolloAPI.Object(
+  nonisolated static let ImageUpload = ApolloAPI.Object(
     typename: "ImageUpload",
-    implementedInterfaces: [Interfaces.MediaUpload.self]
+    implementedInterfaces: [Interfaces.MediaUpload.self],
+    keyFields: nil
   )
 }

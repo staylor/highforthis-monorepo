@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let VenueCoordinates = ApolloAPI.Object(
+  nonisolated static let VenueCoordinates = ApolloAPI.Object(
     typename: "VenueCoordinates",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

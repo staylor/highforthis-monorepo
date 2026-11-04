@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let LinebreakNode = ApolloAPI.Object(
+  nonisolated static let LinebreakNode = ApolloAPI.Object(
     typename: "LinebreakNode",
-    implementedInterfaces: [Interfaces.LexicalNode.self]
+    implementedInterfaces: [Interfaces.LexicalNode.self],
+    keyFields: nil
   )
 }

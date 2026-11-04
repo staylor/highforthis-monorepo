@@ -1,100 +1,67 @@
-import SwiftUI
 import HighForThisAPI
+import SwiftUI
 
+/// Upcoming shows we recommend, or the shows we've been to, by day.
 struct ShowList: View {
-    var title: String
-    var first: Int = 200
-    var latest: GraphQLNullable<Bool> = nil
-    var attended: GraphQLNullable<Bool> = nil
-    @State private var year: Int = 0
-    @StateObject var model = ShowListModel()
+    enum Kind {
+        case upcoming
+        case history
+    }
+
+    let kind: Kind
+    @State private var year: Int?
 
     var body: some View {
-        VStack(alignment: .leading) {
-            if (model.groups == nil) {
-                Spacer()
-                Loading()
-            } else if model.groups!.count == 0 {
-                Text(L10N("noRecommendedShows"))
-            } else {
-                List {
-                    ForEach(model.groups!) { group in
+        QueryView(query) { data in
+            let days = ShowDay.days(from: data.shows?.edges.map(\.node.fragments.showList_show) ?? [])
+            Group {
+                if days.isEmpty {
+                    ContentUnavailableView(kind == .upcoming ? .noRecommendedShows : .noShows, systemImage: "music.mic")
+                } else {
+                    List(days) { day in
                         Section {
-                            ForEach(group.shows, id: \.self) { show in
-                                let title = show.title ?? ""
-                                let label = title.isEmpty ? show.artists.map { $0.name }.joined(separator: " / ") : title
-                                NavigationLink {
-                                    ShowDetail(id: show.id)
-                                } label: {
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(label).foregroundColor(.accentColor)
-                                            Text(show.venue.name).foregroundColor(.secondary)
-                                        }
-                                        
-                                        Spacer()
-                                    }
+                            ForEach(day.shows, id: \.id) { show in
+                                NavigationLink(value: Route.show(id: show.id, title: show.headline)) {
+                                    ShowRow(title: show.headline, subtitle: show.venue.name)
                                 }
+                                .accessibilityIdentifier("show-\(show.id)")
                             }
                         } header: {
-                            Text(group.dateFormatted())
-                                .foregroundColor(.primary)
-                                .fontWeight(.bold)
+                            Text(day.date, format: .dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
                         }
                     }
+                    .listStyle(.plain)
                 }
-                .refreshable {
-                    model.fetchShows(
-                        first: first,
-                        latest: latest,
-                        attended: attended,
-                        refresh: true
-                    )
-                }
-                .listStyle(.plain)
-                .navigationTitle(title)
-                .toolbar {
-                    if attended == .some(true) {
-                        let filterByYear = L10N("filterByYear")
-                        ToolbarItem {
-                            Menu {
-                                Picker(filterByYear, selection: $year) {
-                                    Text(filterByYear).tag(0)
-                                    ForEach(model.connection!.years!, id: \.self) {
-                                        Text(String($0)).tag($0)
-                                    }
-                                }
-                                .onChange(of: year) {
-                                    model.fetchShows(
-                                        first: first,
-                                        latest: latest,
-                                        attended: attended,
-                                        year: .some(year)
-                                    )
-                                }
-                            } label: {
-                                Label(filterByYear, systemImage: "line.3.horizontal.decrease.circle")
-                            }
-                        }
+            }
+            .toolbar {
+                if kind == .history, let years = data.shows?.years, !years.isEmpty {
+                    ToolbarItem {
+                        YearFilter(years: years, selection: $year)
                     }
                 }
             }
-            Spacer()
         }
-        .onAppear() {
-            model.fetchShows(first: first, latest: latest, attended: attended)
+        .navigationTitle(kind == .upcoming ? .recommendedShows : .showHistory)
+    }
+
+    private var query: ShowsQuery {
+        switch kind {
+        case .upcoming:
+            ShowsQuery(attended: .none, first: 200, latest: true, year: .none)
+        case .history:
+            ShowsQuery(attended: true, first: 200, latest: .none, year: year.map(Int32.init) ?? .none)
         }
     }
 }
 
-#Preview("Shows") {
-    AppWrapper {
-        ShowList(title: L10N("recommendedShows"), latest: .some(true))
+#Preview("Recommended") {
+    NavigationStack {
+        ShowList(kind: .upcoming)
     }
 }
 
 #Preview("History") {
-    AppWrapper {
-        ShowList(title: L10N("showHistory"), attended: true)
+    NavigationStack {
+        ShowList(kind: .history)
     }
 }

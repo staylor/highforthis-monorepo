@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let Show = ApolloAPI.Object(
+  nonisolated static let Show = ApolloAPI.Object(
     typename: "Show",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

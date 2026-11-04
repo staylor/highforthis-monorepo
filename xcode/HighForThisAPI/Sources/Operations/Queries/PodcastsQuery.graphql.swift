@@ -2,8 +2,9 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+@_spi(Execution) @_spi(Unsafe) import ApolloAPI
 
-public class PodcastsQuery: GraphQLQuery {
+nonisolated public struct PodcastsQuery: GraphQLQuery {
   public static let operationName: String = "Podcasts"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
@@ -12,13 +13,16 @@ public class PodcastsQuery: GraphQLQuery {
 
   public init() {}
 
-  public struct Data: HighForThisAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+  nonisolated public struct Data: HighForThisAPI.SelectionSet {
+    @_spi(Unsafe) public let __data: DataDict
+    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
-    public static var __selections: [ApolloAPI.Selection] { [
+    @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
+    @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
       .field("podcasts", Podcasts?.self, arguments: ["first": 200]),
+    ] }
+    @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+      PodcastsQuery.Data.self
     ] }
 
     public var podcasts: Podcasts? { __data["podcasts"] }
@@ -26,14 +30,17 @@ public class PodcastsQuery: GraphQLQuery {
     /// Podcasts
     ///
     /// Parent Type: `PodcastConnection`
-    public struct Podcasts: HighForThisAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
+    nonisolated public struct Podcasts: HighForThisAPI.SelectionSet {
+      @_spi(Unsafe) public let __data: DataDict
+      @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.PodcastConnection }
-      public static var __selections: [ApolloAPI.Selection] { [
+      @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.PodcastConnection }
+      @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("edges", [Edge].self),
+      ] }
+      @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        PodcastsQuery.Data.Podcasts.self
       ] }
 
       public var edges: [Edge] { __data["edges"] }
@@ -41,14 +48,17 @@ public class PodcastsQuery: GraphQLQuery {
       /// Podcasts.Edge
       ///
       /// Parent Type: `PodcastEdge`
-      public struct Edge: HighForThisAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      nonisolated public struct Edge: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.PodcastEdge }
-        public static var __selections: [ApolloAPI.Selection] { [
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.PodcastEdge }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("node", Node.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          PodcastsQuery.Data.Podcasts.Edge.self
         ] }
 
         public var node: Node { __data["node"] }
@@ -56,16 +66,19 @@ public class PodcastsQuery: GraphQLQuery {
         /// Podcasts.Edge.Node
         ///
         /// Parent Type: `Podcast`
-        public struct Node: HighForThisAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        nonisolated public struct Node: HighForThisAPI.SelectionSet {
+          @_spi(Unsafe) public let __data: DataDict
+          @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Podcast }
-          public static var __selections: [ApolloAPI.Selection] { [
+          @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Podcast }
+          @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .field("id", String.self),
             .field("date", Double?.self),
             .field("title", String.self),
+          ] }
+          @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+            PodcastsQuery.Data.Podcasts.Edge.Node.self
           ] }
 
           public var id: String { __data["id"] }

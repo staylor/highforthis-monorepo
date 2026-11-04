@@ -2,8 +2,9 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+@_spi(Execution) @_spi(Unsafe) import ApolloAPI
 
-public class VideosQuery: GraphQLQuery {
+nonisolated public struct VideosQuery: GraphQLQuery {
   public static let operationName: String = "Videos"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
@@ -12,36 +13,39 @@ public class VideosQuery: GraphQLQuery {
     ))
 
   public var after: GraphQLNullable<String>
-  public var first: GraphQLNullable<Int>
-  public var year: GraphQLNullable<Int>
+  public var first: GraphQLNullable<Int32>
+  public var year: GraphQLNullable<Int32>
 
   public init(
     after: GraphQLNullable<String>,
-    first: GraphQLNullable<Int>,
-    year: GraphQLNullable<Int>
+    first: GraphQLNullable<Int32>,
+    year: GraphQLNullable<Int32>
   ) {
     self.after = after
     self.first = first
     self.year = year
   }
 
-  public var __variables: Variables? { [
+  @_spi(Unsafe) public var __variables: Variables? { [
     "after": after,
     "first": first,
     "year": year
   ] }
 
-  public struct Data: HighForThisAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+  nonisolated public struct Data: HighForThisAPI.SelectionSet {
+    @_spi(Unsafe) public let __data: DataDict
+    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
-    public static var __selections: [ApolloAPI.Selection] { [
+    @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
+    @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
       .field("videos", Videos?.self, arguments: [
         "after": .variable("after"),
         "first": .variable("first"),
         "year": .variable("year")
       ]),
+    ] }
+    @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+      VideosQuery.Data.self
     ] }
 
     public var videos: Videos? { __data["videos"] }
@@ -49,16 +53,19 @@ public class VideosQuery: GraphQLQuery {
     /// Videos
     ///
     /// Parent Type: `VideoConnection`
-    public struct Videos: HighForThisAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
+    nonisolated public struct Videos: HighForThisAPI.SelectionSet {
+      @_spi(Unsafe) public let __data: DataDict
+      @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.VideoConnection }
-      public static var __selections: [ApolloAPI.Selection] { [
+      @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.VideoConnection }
+      @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("years", [Int]?.self),
         .field("edges", [Edge].self),
         .field("pageInfo", PageInfo.self),
+      ] }
+      @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        VideosQuery.Data.Videos.self
       ] }
 
       public var years: [Int]? { __data["years"] }
@@ -68,15 +75,18 @@ public class VideosQuery: GraphQLQuery {
       /// Videos.Edge
       ///
       /// Parent Type: `VideoEdge`
-      public struct Edge: HighForThisAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      nonisolated public struct Edge: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.VideoEdge }
-        public static var __selections: [ApolloAPI.Selection] { [
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.VideoEdge }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("cursor", String.self),
           .field("node", Node.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          VideosQuery.Data.Videos.Edge.self
         ] }
 
         public var cursor: String { __data["cursor"] }
@@ -85,14 +95,18 @@ public class VideosQuery: GraphQLQuery {
         /// Videos.Edge.Node
         ///
         /// Parent Type: `Video`
-        public struct Node: HighForThisAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        nonisolated public struct Node: HighForThisAPI.SelectionSet {
+          @_spi(Unsafe) public let __data: DataDict
+          @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Video }
-          public static var __selections: [ApolloAPI.Selection] { [
+          @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Video }
+          @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .fragment(Video_video.self),
+          ] }
+          @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+            VideosQuery.Data.Videos.Edge.Node.self,
+            Video_video.self
           ] }
 
           public var id: String { __data["id"] }
@@ -102,8 +116,8 @@ public class VideosQuery: GraphQLQuery {
           public var thumbnails: [Thumbnail] { __data["thumbnails"] }
 
           public struct Fragments: FragmentContainer {
-            public let __data: DataDict
-            public init(_dataDict: DataDict) { __data = _dataDict }
+            @_spi(Unsafe) public let __data: DataDict
+            @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
             public var video_video: Video_video { _toFragment() }
           }
@@ -115,15 +129,18 @@ public class VideosQuery: GraphQLQuery {
       /// Videos.PageInfo
       ///
       /// Parent Type: `PageInfo`
-      public struct PageInfo: HighForThisAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      nonisolated public struct PageInfo: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.PageInfo }
-        public static var __selections: [ApolloAPI.Selection] { [
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.PageInfo }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("hasNextPage", Bool?.self),
           .field("hasPreviousPage", Bool?.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          VideosQuery.Data.Videos.PageInfo.self
         ] }
 
         public var hasNextPage: Bool? { __data["hasNextPage"] }

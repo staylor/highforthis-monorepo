@@ -2,8 +2,9 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+@_spi(Execution) @_spi(Unsafe) import ApolloAPI
 
-public class VenueQuery: GraphQLQuery {
+nonisolated public struct VenueQuery: GraphQLQuery {
   public static let operationName: String = "Venue"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
@@ -17,14 +18,14 @@ public class VenueQuery: GraphQLQuery {
     self.slug = slug
   }
 
-  public var __variables: Variables? { ["slug": slug] }
+  @_spi(Unsafe) public var __variables: Variables? { ["slug": slug] }
 
-  public struct Data: HighForThisAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+  nonisolated public struct Data: HighForThisAPI.SelectionSet {
+    @_spi(Unsafe) public let __data: DataDict
+    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
-    public static var __selections: [ApolloAPI.Selection] { [
+    @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
+    @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
       .field("shows", alias: "attended", Attended?.self, arguments: [
         "attended": true,
         "first": 200,
@@ -37,6 +38,9 @@ public class VenueQuery: GraphQLQuery {
       ]),
       .field("venue", Venue?.self, arguments: ["slug": .variable("slug")]),
     ] }
+    @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+      VenueQuery.Data.self
+    ] }
 
     public var attended: Attended? { __data["attended"] }
     public var shows: Shows? { __data["shows"] }
@@ -45,14 +49,17 @@ public class VenueQuery: GraphQLQuery {
     /// Attended
     ///
     /// Parent Type: `ShowConnection`
-    public struct Attended: HighForThisAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
+    nonisolated public struct Attended: HighForThisAPI.SelectionSet {
+      @_spi(Unsafe) public let __data: DataDict
+      @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.ShowConnection }
-      public static var __selections: [ApolloAPI.Selection] { [
+      @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ShowConnection }
+      @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("edges", [Edge].self),
+      ] }
+      @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        VenueQuery.Data.Attended.self
       ] }
 
       public var edges: [Edge] { __data["edges"] }
@@ -60,14 +67,17 @@ public class VenueQuery: GraphQLQuery {
       /// Attended.Edge
       ///
       /// Parent Type: `ShowEdge`
-      public struct Edge: HighForThisAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      nonisolated public struct Edge: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.ShowEdge }
-        public static var __selections: [ApolloAPI.Selection] { [
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ShowEdge }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("node", Node.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          VenueQuery.Data.Attended.Edge.self
         ] }
 
         public var node: Node { __data["node"] }
@@ -75,14 +85,18 @@ public class VenueQuery: GraphQLQuery {
         /// Attended.Edge.Node
         ///
         /// Parent Type: `Show`
-        public struct Node: HighForThisAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        nonisolated public struct Node: HighForThisAPI.SelectionSet {
+          @_spi(Unsafe) public let __data: DataDict
+          @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
-          public static var __selections: [ApolloAPI.Selection] { [
+          @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
+          @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .fragment(ShowList_show.self),
+          ] }
+          @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+            VenueQuery.Data.Attended.Edge.Node.self,
+            ShowList_show.self
           ] }
 
           public var id: String { __data["id"] }
@@ -92,8 +106,8 @@ public class VenueQuery: GraphQLQuery {
           public var venue: Venue { __data["venue"] }
 
           public struct Fragments: FragmentContainer {
-            public let __data: DataDict
-            public init(_dataDict: DataDict) { __data = _dataDict }
+            @_spi(Unsafe) public let __data: DataDict
+            @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
             public var showList_show: ShowList_show { _toFragment() }
           }
@@ -108,14 +122,17 @@ public class VenueQuery: GraphQLQuery {
     /// Shows
     ///
     /// Parent Type: `ShowConnection`
-    public struct Shows: HighForThisAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
+    nonisolated public struct Shows: HighForThisAPI.SelectionSet {
+      @_spi(Unsafe) public let __data: DataDict
+      @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.ShowConnection }
-      public static var __selections: [ApolloAPI.Selection] { [
+      @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ShowConnection }
+      @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("edges", [Edge].self),
+      ] }
+      @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        VenueQuery.Data.Shows.self
       ] }
 
       public var edges: [Edge] { __data["edges"] }
@@ -123,14 +140,17 @@ public class VenueQuery: GraphQLQuery {
       /// Shows.Edge
       ///
       /// Parent Type: `ShowEdge`
-      public struct Edge: HighForThisAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      nonisolated public struct Edge: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.ShowEdge }
-        public static var __selections: [ApolloAPI.Selection] { [
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ShowEdge }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("node", Node.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          VenueQuery.Data.Shows.Edge.self
         ] }
 
         public var node: Node { __data["node"] }
@@ -138,14 +158,18 @@ public class VenueQuery: GraphQLQuery {
         /// Shows.Edge.Node
         ///
         /// Parent Type: `Show`
-        public struct Node: HighForThisAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        nonisolated public struct Node: HighForThisAPI.SelectionSet {
+          @_spi(Unsafe) public let __data: DataDict
+          @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
-          public static var __selections: [ApolloAPI.Selection] { [
+          @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Show }
+          @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .fragment(ShowList_show.self),
+          ] }
+          @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+            VenueQuery.Data.Shows.Edge.Node.self,
+            ShowList_show.self
           ] }
 
           public var id: String { __data["id"] }
@@ -155,8 +179,8 @@ public class VenueQuery: GraphQLQuery {
           public var venue: Venue { __data["venue"] }
 
           public struct Fragments: FragmentContainer {
-            public let __data: DataDict
-            public init(_dataDict: DataDict) { __data = _dataDict }
+            @_spi(Unsafe) public let __data: DataDict
+            @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
             public var showList_show: ShowList_show { _toFragment() }
           }
@@ -171,12 +195,12 @@ public class VenueQuery: GraphQLQuery {
     /// Venue
     ///
     /// Parent Type: `Venue`
-    public struct Venue: HighForThisAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
+    nonisolated public struct Venue: HighForThisAPI.SelectionSet {
+      @_spi(Unsafe) public let __data: DataDict
+      @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
-      public static var __selections: [ApolloAPI.Selection] { [
+      @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Venue }
+      @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("id", String.self),
         .field("address", String?.self),
@@ -185,6 +209,9 @@ public class VenueQuery: GraphQLQuery {
         .field("slug", String.self),
         .field("website", String?.self),
         .field("coordinates", Coordinates?.self),
+      ] }
+      @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        VenueQuery.Data.Venue.self
       ] }
 
       public var id: String { __data["id"] }
@@ -198,15 +225,18 @@ public class VenueQuery: GraphQLQuery {
       /// Venue.Coordinates
       ///
       /// Parent Type: `VenueCoordinates`
-      public struct Coordinates: HighForThisAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      nonisolated public struct Coordinates: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ApolloAPI.ParentType { HighForThisAPI.Objects.VenueCoordinates }
-        public static var __selections: [ApolloAPI.Selection] { [
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.VenueCoordinates }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("latitude", Double?.self),
           .field("longitude", Double?.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          VenueQuery.Data.Venue.Coordinates.self
         ] }
 
         public var latitude: Double? { __data["latitude"] }

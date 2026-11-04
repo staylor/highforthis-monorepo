@@ -10,7 +10,7 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 | [`web`](./web)                     | Web application (React Router v7, Vite, Tailwind CSS)  |
 | [`shared`](./shared)               | Shared structured logging and OpenTelemetry utilities  |
 | [`observability`](./observability) | OpenObserve backend and GUI deployment                 |
-| [`xcode`](./xcode)                 | iOS app (Swift, Apollo iOS)                            |
+| [`xcode`](./xcode)                 | iPhone, iPad and Mac app (SwiftUI, Apollo iOS)         |
 
 ## Requirements
 
@@ -42,6 +42,7 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 | `pnpm observability:dev:podman` | Start OpenObserve with Podman                              |
 | `pnpm build`                    | Build all workspaces for production                        |
 | `pnpm codegen`                  | Run GraphQL Codegen (TypeScript types, schema, Apollo iOS) |
+| `pnpm codegen:ios`              | Regenerate the app's Swift API from the committed schema   |
 | `pnpm db:refresh`               | Replace the local database with the latest production data |
 | `pnpm lint`                     | Lint all workspaces with ESLint                            |
 | `pnpm lint-fix`                 | Lint and auto-fix                                          |
@@ -58,7 +59,7 @@ The root `codegen.ts` generates:
 - `graphql/types/graphql.ts` — TypeScript types for the server
 - `web/src/types/graphql.ts` — TypeScript types + operations for the client
 - `web/apollo/fragmentMatcher.js` — Fragment matcher for Apollo Client
-- `xcode/HighForThisAPI/` — Swift types for the iOS app (via Apollo iOS)
+- `xcode/HighForThisAPI/` — Swift types for the app (via Apollo iOS, from `graphql/schema.graphql`)
 
 Requires the GraphQL server to be running locally:
 
@@ -66,6 +67,8 @@ Requires the GraphQL server to be running locally:
 pnpm graphql:dev
 pnpm codegen
 ```
+
+`pnpm codegen:ios` regenerates only `xcode/HighForThisAPI/`, from the committed schema, so it doesn't need the server. See [`xcode/README.md`](./xcode/README.md).
 
 ## Observability
 

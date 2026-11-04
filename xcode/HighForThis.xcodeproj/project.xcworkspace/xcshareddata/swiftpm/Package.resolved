@@ -1,31 +1,13 @@
 {
-  "originHash" : "e07646410d7623633978d7c122d172c3702e7e2f5dd4f4179978a6328e9c3f9f",
+  "originHash" : "9c52e9e1a708e6cc3fb287f72a85336aebef93546c0841ecb254272b14a5c873",
   "pins" : [
     {
       "identity" : "apollo-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apollographql/apollo-ios.git",
+      "location" : "https://github.com/apollographql/apollo-ios",
       "state" : {
-        "revision" : "7122421c2ba9ce2d252943cef055c74ef56ea431",
-        "version" : "1.15.2"
-      }
-    },
-    {
-      "identity" : "sqlite.swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/stephencelis/SQLite.swift.git",
-      "state" : {
-        "revision" : "a95fc6df17d108bd99210db5e8a9bac90fe984b8",
-        "version" : "0.15.3"
-      }
-    },
-    {
-      "identity" : "swiftui-cached-async-image",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/lorenzofiamingo/swiftui-cached-async-image",
-      "state" : {
-        "revision" : "467a3d17479887943ab917a379e62bbaff60ac8a",
-        "version" : "2.1.1"
+        "revision" : "fea2613e7d69dbf532b5aad897722be638f345be",
+        "version" : "2.5.0"
       }
     }
   ],

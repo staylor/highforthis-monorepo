@@ -4,11 +4,12 @@
 import ApolloAPI
 
 public extension Objects {
-  static let QuoteNode = ApolloAPI.Object(
+  nonisolated static let QuoteNode = ApolloAPI.Object(
     typename: "QuoteNode",
     implementedInterfaces: [
       Interfaces.ElementNodeType.self,
       Interfaces.LexicalNode.self
-    ]
+    ],
+    keyFields: nil
   )
 }

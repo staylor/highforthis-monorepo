@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let VideoThumbnail = ApolloAPI.Object(
+  nonisolated static let VideoThumbnail = ApolloAPI.Object(
     typename: "VideoThumbnail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

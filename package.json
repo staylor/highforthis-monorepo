@@ -51,7 +51,8 @@
     "typescript": "5.9.3"
   },
   "scripts": {
-    "codegen": "graphql-codegen && pnpm lint-fix && ./apollo-ios-cli generate",
+    "codegen": "graphql-codegen && pnpm lint-fix && pnpm codegen:ios",
+    "codegen:ios": "sh xcode/scripts/generate-api.sh",
     "db:refresh": "pnpm --filter @highforthis/graphql db:refresh",
     "graphql:dev": "pnpm --filter @highforthis/graphql dev",
     "web:dev": "pnpm --filter @highforthis/web dev",

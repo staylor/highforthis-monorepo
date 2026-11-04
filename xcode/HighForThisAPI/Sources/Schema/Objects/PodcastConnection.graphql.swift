@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let PodcastConnection = ApolloAPI.Object(
+  nonisolated static let PodcastConnection = ApolloAPI.Object(
     typename: "PodcastConnection",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

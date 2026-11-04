@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let AppleMusicArtwork = ApolloAPI.Object(
+  nonisolated static let AppleMusicArtwork = ApolloAPI.Object(
     typename: "AppleMusicArtwork",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

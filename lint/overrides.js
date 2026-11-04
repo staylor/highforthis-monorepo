@@ -55,7 +55,7 @@ export default [
     },
   },
   {
-    files: ['./xcode/HighForThis/graphql/operations/*.graphql'],
+    files: ['./xcode/graphql/*.graphql'],
     languageOptions: {
       parser: graphql.parser,
     },

@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let TextNode = ApolloAPI.Object(
+  nonisolated static let TextNode = ApolloAPI.Object(
     typename: "TextNode",
-    implementedInterfaces: [Interfaces.LexicalNode.self]
+    implementedInterfaces: [Interfaces.LexicalNode.self],
+    keyFields: nil
   )
 }

@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let Video = ApolloAPI.Object(
+  nonisolated static let Video = ApolloAPI.Object(
     typename: "Video",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

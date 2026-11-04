@@ -1,6 +1,17 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "allYears" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Years"
+          }
+        }
+      }
+    },
     "artistWebsite" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -46,13 +57,24 @@
         }
       }
     },
+    "couldNotLoad" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t Load"
+          }
+        }
+      }
+    },
     "filterByYear" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Filter by year"
+            "value" : "Filter by Year"
           }
         }
       }
@@ -68,13 +90,13 @@
         }
       }
     },
-    "loadMore" : {
+    "missingData" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Load More"
+            "value" : "The server didn’t send anything to show."
           }
         }
       }
@@ -112,6 +134,28 @@
         }
       }
     },
+    "noShows" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No shows."
+          }
+        }
+      }
+    },
+    "notFound" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not Found"
+          }
+        }
+      }
+    },
     "noVideos" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -119,6 +163,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No videos."
+          }
+        }
+      }
+    },
+    "openInMaps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open in Maps"
+          }
+        }
+      }
+    },
+    "pause" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause"
+          }
+        }
+      }
+    },
+    "play" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play"
           }
         }
       }
@@ -196,6 +273,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shows"
+          }
+        }
+      }
+    },
+    "tryAgain" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try Again"
           }
         }
       }
