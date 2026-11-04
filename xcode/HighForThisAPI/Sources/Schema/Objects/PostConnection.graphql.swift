@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let PostConnection = ApolloAPI.Object(
+  nonisolated static let PostConnection = ApolloAPI.Object(
     typename: "PostConnection",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

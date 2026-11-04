@@ -1,0 +1,22 @@
+name: Workflows
+
+on:
+  pull_request:
+    paths: ['.github/**']
+  push:
+    branches: [main]
+    paths: ['.github/**']
+
+jobs:
+  actionlint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install actionlint
+        id: actionlint
+        run: bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.12/scripts/download-actionlint.bash) 1.7.12
+      # The runner has shellcheck, so actionlint checks the run scripts as well.
+      - name: Lint
+        run: ${{ steps.actionlint.outputs.executable }} -color

@@ -1,5 +1,0 @@
-query Video($slug: String!) {
-  video(slug: $slug) {
-    ...Video_video
-  }
-}

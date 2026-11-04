@@ -4,5 +4,16 @@
 import ApolloAPI
 
 public extension Interfaces {
-  static let ElementNodeType = Interface(name: "ElementNodeType")
+  nonisolated static let ElementNodeType = ApolloAPI.Interface(
+    name: "ElementNodeType",
+    keyFields: nil,
+    implementingObjects: [
+      "CodeNode",
+      "ElementNode",
+      "HeadingNode",
+      "ImageNode",
+      "QuoteNode",
+      "VideoNode"
+    ]
+  )
 }

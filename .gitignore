@@ -13,7 +13,6 @@ graphql/dist
 graphql/public/uploads
 shared/dist
 web/build
-xcode/HighForThis.xcodeproj/project.xcworkspace/xcuserdata/
 
 *.log
 *.p8

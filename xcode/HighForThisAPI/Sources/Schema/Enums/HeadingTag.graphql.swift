@@ -1,9 +1,9 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import ApolloAPI
+@_spi(Internal) import ApolloAPI
 
-public enum HeadingTag: String, EnumType {
+nonisolated public enum HeadingTag: String, EnumType {
   case h1 = "h1"
   case h2 = "h2"
   case h3 = "h3"

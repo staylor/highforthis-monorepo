@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let AppleMusicData = ApolloAPI.Object(
+  nonisolated static let AppleMusicData = ApolloAPI.Object(
     typename: "AppleMusicData",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

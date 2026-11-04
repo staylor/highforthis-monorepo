@@ -4,11 +4,12 @@
 import ApolloAPI
 
 public extension Objects {
-  static let ElementNode = ApolloAPI.Object(
+  nonisolated static let ElementNode = ApolloAPI.Object(
     typename: "ElementNode",
     implementedInterfaces: [
       Interfaces.ElementNodeType.self,
       Interfaces.LexicalNode.self
-    ]
+    ],
+    keyFields: nil
   )
 }

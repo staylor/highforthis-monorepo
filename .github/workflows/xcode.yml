@@ -1,0 +1,224 @@
+name: Xcode
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# A push to a pull request cancels its older run, but a run on main that has started is never cut short by the next merge.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
+
+jobs:
+  changes:
+    name: Changes
+    runs-on: ubuntu-latest
+    outputs:
+      xcode: ${{ steps.diff.outputs.xcode }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+      - id: diff
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          # A pull request is checked out as its merge commit, whose first parent is the base branch.
+          base=HEAD^1
+          if [ "$GITHUB_EVENT_NAME" = push ]; then
+            base=$BEFORE
+          fi
+          if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+            echo "xcode=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "$base" HEAD |
+            grep -qE '^(xcode/|apollo-codegen-config\.json$|graphql/schema\.graphql$|\.github/workflows/xcode\.yml$)'; then
+            echo "xcode=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "xcode=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # The check for branch rules to require. Jobs skipped because nothing the app uses changed count as passing, so
+  # this has to run, and fail, when a job it needs fails or the run is cancelled. The step needs always() too,
+  # because a step's condition implicitly includes success(), which is false once the run is cancelled.
+  ci:
+    name: CI
+    if: always()
+    needs: [changes, build, test, generated-code, format]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check results
+        if: always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
+        run: exit 1
+
+  build:
+    name: Build ${{ matrix.name }}
+    needs: changes
+    if: needs.changes.outputs.xcode == 'true'
+    runs-on: ${{ matrix.runner || 'xcode-27' }}
+    timeout-minutes: 30
+    env:
+      DEVELOPER_DIR: ${{ matrix.developer-dir || '/Applications/Xcode_27.1.app/Contents/Developer' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: iOS
+            destination: generic/platform=iOS
+          - name: macOS
+            destination: generic/platform=macOS
+          # Swift 6.2 infers main-actor isolation in places 6.4 doesn't, so check the image's default Xcode 26 too.
+          - name: iOS, Xcode 26
+            destination: generic/platform=iOS
+            runner: macos-26
+            developer-dir: /Applications/Xcode.app/Contents/Developer
+    defaults:
+      run:
+        working-directory: xcode
+    steps:
+      - uses: actions/checkout@v5
+      # The tests build Debug for the simulators, so this archives Release for devices, as an App Store build would.
+      - name: Archive
+        run: |
+          set -o pipefail
+          xcodebuild archive \
+            -project HighForThis.xcodeproj \
+            -scheme HighForThis \
+            -destination "${{ matrix.destination }}" \
+            -archivePath "$RUNNER_TEMP/HighForThis.xcarchive" \
+            -resultBundlePath Build.xcresult \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcbeautify --renderer github-actions
+      # The result bundle counts every warning, from asset catalogs and the linker as well as the compiler, where
+      # SWIFT_TREAT_WARNINGS_AS_ERRORS would only catch Swift's.
+      - name: Check for warnings
+        run: |
+          warnings=$(xcrun xcresulttool get build-results --path Build.xcresult | jq .warningCount)
+          if [ "$warnings" != 0 ]; then
+            echo "::error::The build has $warnings warnings."
+            exit 1
+          fi
+
+  test:
+    name: Test (${{ matrix.name }})
+    needs: changes
+    if: needs.changes.outputs.xcode == 'true'
+    runs-on: xcode-27
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: iPhone
+            platform: iOS
+            device: iPhone 18 Pro
+          # The deployment target is 26.0, and the image only has 27 simulators. This is the 26.5 release's build:
+          # asking for version 26.5 sometimes installs its release candidate.
+          - name: iPhone, iOS 26.5
+            platform: iOS
+            build: 23F77
+            device: iPhone 17 Pro
+          # The UI tests are for iPhone, so the Mac runs the unit tests alone.
+          - name: Mac
+            platform: macOS
+            only-testing: HighForThisTests
+    defaults:
+      run:
+        working-directory: xcode
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install the simulator runtime
+        if: matrix.build
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          BUILD: ${{ matrix.build }}
+        run: |
+          set -o pipefail
+          xcodebuild -downloadPlatform "$PLATFORM" -buildVersion "$BUILD" -architectureVariant arm64
+          # Deferred cleanup of stale runtime registrations can unmount the active simulator mid-test.
+          # Keep the assets shared with their usable replacements, then remount those replacements.
+          xcrun simctl runtime scan-and-mount
+          xcrun simctl runtime list --json | jq -r '.[] | select(.state == "Unusable") | .identifier' |
+            while IFS= read -r runtime; do
+              xcrun simctl runtime delete "$runtime" --keep-asset
+            done
+          xcrun simctl runtime scan-and-mount
+          # A simulator that boots before its runtime's dyld shared cache is built stays several times slower.
+          xcrun simctl runtime dyld_shared_cache update --all
+      - name: Pick a simulator
+        id: simulator
+        if: matrix.device
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          BUILD: ${{ matrix.build }}
+          DEVICE: ${{ matrix.device }}
+        run: |
+          runtimes=$(xcrun simctl list runtimes available --json | jq -c --arg platform "$PLATFORM" --arg build "$BUILD" '
+            [.runtimes[] | select(.platform == $platform and ($build == "" or .buildversion == $build))]
+            | sort_by(.version | split(".") | map(tonumber)) | map(.identifier)')
+          udid=$(xcrun simctl list devices available --json | jq -r --argjson runtimes "$runtimes" --arg device "$DEVICE" '
+            [.devices as $devices | $runtimes[] | $devices[.][]? | select(.name == $device)] | last | .udid // empty')
+          if [ -z "$udid" ]; then
+            udid=$(xcrun simctl create "$DEVICE" "$DEVICE" "$(jq -r last <<< "$runtimes")")
+          fi
+          echo "destination=id=$udid" >> "$GITHUB_OUTPUT"
+          xcrun simctl list devices available | grep "$udid"
+          # The test runner can stall while a cold simulator boots, and then never starts.
+          xcrun simctl bootstatus "$udid" -b
+      - name: Test
+        env:
+          DESTINATION: ${{ steps.simulator.outputs.destination || 'platform=macOS' }}
+          ONLY_TESTING: ${{ matrix.only-testing }}
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project HighForThis.xcodeproj \
+            -scheme HighForThis \
+            -destination "$DESTINATION" \
+            ${ONLY_TESTING:+-only-testing:"$ONLY_TESTING"} \
+            -resultBundlePath Tests.xcresult \
+            -retry-tests-on-failure -test-iterations 3 \
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+            | xcbeautify --renderer github-actions
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tests (${{ matrix.name }}).xcresult
+          path: xcode/Tests.xcresult
+
+  generated-code:
+    name: Generated code
+    needs: changes
+    if: needs.changes.outputs.xcode == 'true'
+    runs-on: xcode-27
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      # Fails when an operation or the schema changed without regenerating HighForThisAPI, or it was edited by hand.
+      - name: Generate HighForThisAPI
+        run: |
+          sh xcode/scripts/generate-api.sh
+          git add --intent-to-add xcode/HighForThisAPI
+          if ! git diff --exit-code --stat xcode/HighForThisAPI; then
+            echo "::error::HighForThisAPI is out of date. Run pnpm codegen:ios and commit the result."
+            exit 1
+          fi
+
+  format:
+    name: Format
+    needs: changes
+    if: needs.changes.outputs.xcode == 'true'
+    runs-on: xcode-27
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: xcode
+    steps:
+      - uses: actions/checkout@v5
+      - name: Lint
+        run: swift format lint --recursive --strict HighForThis HighForThisTests HighForThisUITests

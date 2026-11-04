@@ -1,89 +1,90 @@
-import SwiftUI
+import Apollo
 import HighForThisAPI
-import CachedAsyncImage
+import SwiftUI
 
 struct VideoList: View {
-    @State private var year: Int = 0
-    @StateObject var model = VideoListModel()
-    @Environment(\.openURL) private var openURL
-    
+    @State private var feed = VideoFeed()
+    @State private var year: Int?
+
     var body: some View {
-        VStack(alignment: .leading) {
-            if model.videos == nil {
-                Spacer()
-                Loading()
-            } else if model.videos!.count == 0 {
-                Text(L10N("noVideos"))
-            } else {
-                let filterByYear = L10N("filterByYear")
-                List {
-                    ForEach(model.videos!, id: \.self) { video in
-                        Button(action: {
-                            let url = URL(string: "youtube://v/\(video.dataId)")
-                            openURL(url!)
-                        }, label: {
-                            HStack {
-                                Paragraph(video.title).padding(.trailing).font(.subheadline)
-                                if let thumb = video.thumbnails.first(where: {$0.width != 0}) {
-                                    let url = URL(string: thumb.url)
-                                    Spacer()
-                                    CachedAsyncImage(url: url) { image in
-                                        image.resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(height: 90)
-                                    }  placeholder: {
-                                        ImageLoading(width: 120, height: 90)
-                                    }
-                                }
-                            }
-                        }).buttonStyle(.plain)
-                    }
-                    if model.connection!.pageInfo.hasNextPage!  {
-                        Button(action: {
-                            model.fetchCursor()
-                        }, label: {
-                            Text(L10N("loadMore"))
-                                .font(.title3)
-                                .foregroundColor(.accentColor)
-                                #if os(macOS)
-                                .padding(8)
-                                #endif
-                        })
-                        #if os(macOS)
-                        .padding(.vertical)
-                        #endif
-                    }
-                }
-                .listStyle(.plain)
-                .navigationTitle(L10N("videos"))
-                .toolbar {
+        content
+            .navigationTitle(.videos)
+            .toolbar {
+                if !feed.years.isEmpty {
                     ToolbarItem {
-                        Menu {
-                            Picker(filterByYear, selection: $year) {
-                                Text(filterByYear).tag(0)
-                                ForEach(model.connection!.years!, id: \.self) {
-                                    Text(String($0)).tag($0)
-                                }
-                            }
-                            .onChange(of: year) {
-                                model.fetchYear(year)
-                            }
-                        } label: {
-                            Label(filterByYear, systemImage: "line.3.horizontal.decrease.circle")
-                        }
+                        YearFilter(years: feed.years, selection: $year)
                     }
                 }
             }
-            Spacer()
-        }
-        .onAppear() {
-            model.fetchData()
+            .task(id: year) {
+                await feed.show(year: year)
+            }
+    }
+
+    @ViewBuilder private var content: some View {
+        if !feed.videos.isEmpty {
+            List {
+                ForEach(feed.videos, id: \.id) { video in
+                    VideoLink(video: video)
+                }
+                if let error = feed.error {
+                    LoadFailedView(error: error) {
+                        await feed.loadMore()
+                    }
+                } else if feed.hasNextPage {
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        // Keyed by the count, so it asks for the next page again while it stays on screen.
+                        .task(id: feed.videos.count) {
+                            await feed.loadMore()
+                        }
+                }
+            }
+            .listStyle(.plain)
+            .refreshable {
+                await feed.reload(year: year, cachePolicy: .networkOnly)
+            }
+        } else if let error = feed.error {
+            LoadFailedView(error: error) {
+                await feed.reload(year: year, cachePolicy: .networkOnly)
+            }
+        } else if feed.hasLoaded {
+            ContentUnavailableView(.noVideos, systemImage: "video.slash")
+        } else {
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
 
+/// A video, which plays on YouTube.
+struct VideoLink: View {
+    let video: Video_video
+
+    var body: some View {
+        Link(destination: video.youTubeURL) {
+            HStack(alignment: .top, spacing: 12) {
+                Text(video.title)
+                    .font(.subheadline)
+                    .foregroundStyle(.primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                RemoteImage(url: video.thumbnail(forWidth: 480).flatMap { URL(string: $0.url) }, aspectRatio: 16 / 9, contentMode: .fill)
+                    .frame(width: 160)
+                    .clipShape(.rect(cornerRadius: 6))
+            }
+        }
+        .accessibilityIdentifier("video-\(video.id)")
+    }
+}
+
+extension Video_video {
+    fileprivate func thumbnail(forWidth width: Int) -> Thumbnail? {
+        thumbnails.best(forWidth: width)
+    }
+}
+
 #Preview {
-    AppWrapper {
+    NavigationStack {
         VideoList()
     }
 }

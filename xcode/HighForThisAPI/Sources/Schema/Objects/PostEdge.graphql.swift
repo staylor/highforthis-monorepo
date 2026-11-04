@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let PostEdge = ApolloAPI.Object(
+  nonisolated static let PostEdge = ApolloAPI.Object(
     typename: "PostEdge",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

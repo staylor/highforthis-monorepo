@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let EditorState = ApolloAPI.Object(
+  nonisolated static let EditorState = ApolloAPI.Object(
     typename: "EditorState",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

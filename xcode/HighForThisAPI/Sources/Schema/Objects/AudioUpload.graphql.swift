@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let AudioUpload = ApolloAPI.Object(
+  nonisolated static let AudioUpload = ApolloAPI.Object(
     typename: "AudioUpload",
-    implementedInterfaces: [Interfaces.MediaUpload.self]
+    implementedInterfaces: [Interfaces.MediaUpload.self],
+    keyFields: nil
   )
 }

@@ -4,8 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  static let Post = ApolloAPI.Object(
+  nonisolated static let Post = ApolloAPI.Object(
     typename: "Post",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }
