@@ -36,10 +36,12 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" = push ]; then
             base=$BEFORE
           fi
+          # Documentation and this workflow don't change the app, so changing only them skips the Xcode jobs.
+          # To test a workflow change, run the workflow manually on its branch.
           if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
             echo "xcode=true" >> "$GITHUB_OUTPUT"
           elif git diff --name-only "$base" HEAD |
-            grep -qE '^(xcode/|apollo-codegen-config\.json$|graphql/schema\.graphql$|\.github/workflows/xcode\.yml$)'; then
+            grep -E '^(xcode/|apollo-codegen-config\.json$|graphql/schema\.graphql$)' | grep -qv '\.md$'; then
             echo "xcode=true" >> "$GITHUB_OUTPUT"
           else
             echo "xcode=false" >> "$GITHUB_OUTPUT"
