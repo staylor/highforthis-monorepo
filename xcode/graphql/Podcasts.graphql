@@ -1,11 +1,15 @@
-query Podcasts {
-  podcasts(first: 200) {
+query Podcasts($after: String, $first: Int!) {
+  podcasts(after: $after, first: $first) {
     edges {
       node {
         id
         date
         title
       }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }

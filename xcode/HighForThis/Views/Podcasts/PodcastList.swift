@@ -2,28 +2,24 @@ import HighForThisAPI
 import SwiftUI
 
 struct PodcastList: View {
+    @State private var feed = Feeds.podcasts()
+
     var body: some View {
-        QueryView(PodcastsQuery()) { data in
-            let episodes = data.podcasts?.edges.map(\.node) ?? []
-            if episodes.isEmpty {
-                ContentUnavailableView(.noPodcastEpisodes, systemImage: "mic.slash")
-            } else {
-                List(episodes, id: \.id) { episode in
-                    NavigationLink(value: Route.podcast(id: episode.id, title: episode.title)) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            if let date = episode.date {
-                                Text(.posted(Date(apiTimestamp: date).formatted(date: .abbreviated, time: .omitted)))
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Text(episode.title)
-                                .font(.title3)
-                                .foregroundStyle(.tint)
+        FeedList(feed: feed, filter: .all, emptyTitle: .noPodcastEpisodes, systemImage: "mic.slash") { episodes in
+            ForEach(episodes, id: \.id) { episode in
+                NavigationLink(value: Route.podcast(id: episode.id, title: episode.title)) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(episode.title)
+                            .font(.headline)
+                        if let date = episode.date {
+                            Text(Date(apiTimestamp: date), format: .dateTime.month(.abbreviated).day().year())
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
                         }
                     }
-                    .accessibilityIdentifier("podcast-\(episode.id)")
+                    .padding(.vertical, 4)
                 }
-                .listStyle(.plain)
+                .accessibilityIdentifier("podcast-\(episode.id)")
             }
         }
         .navigationTitle(.podcastEpisodes)
@@ -31,8 +27,5 @@ struct PodcastList: View {
 }
 
 #Preview {
-    NavigationStack {
-        PodcastList()
-    }
-    .environment(PodcastPlayer())
+    NavigationStack { PodcastList() }
 }

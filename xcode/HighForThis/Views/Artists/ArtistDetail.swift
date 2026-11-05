@@ -14,12 +14,12 @@ struct ArtistDetail: View {
                     if let artwork = artist.appleMusic?.artwork.flatMap({ Artwork(template: $0.url, width: $0.width, height: $0.height) }) {
                         ArtworkHeader(artwork: artwork)
                     }
-                    if let website = artist.website.flatMap({ URL(string: $0) }) {
+                    if let website = artist.website.flatMap(URL.webURL) {
                         Link(destination: website) {
                             Label(.artistWebsite, systemImage: "safari")
                         }
                     }
-                    if let appleMusic = artist.appleMusic?.url.flatMap({ URL(string: $0) }) {
+                    if let appleMusic = artist.appleMusic?.url.flatMap(URL.webURL) {
                         Link(destination: appleMusic) {
                             Label(.listenOnAppleMusic, systemImage: "music.note")
                         }
@@ -32,11 +32,17 @@ struct ArtistDetail: View {
                         ForEach(upcoming, id: \.id) { show in
                             DatedShowLink(show: show, title: show.venue.name)
                         }
+                        if data.shows?.pageInfo.hasNextPage == true {
+                            NavigationLink(.viewAllShows, value: Route.shows(ShowFilter(kind: .upcoming, artist: slug)))
+                        }
                     }
                     if !attended.isEmpty {
-                        Section(.artistWeWereThere(attended.count)) {
+                        Section(.artistWeWereThere(data.attended?.count ?? attended.count)) {
                             ForEach(attended, id: \.id) { show in
                                 DatedShowLink(show: show, title: show.venue.name)
+                            }
+                            if data.attended?.pageInfo.hasNextPage == true {
+                                NavigationLink(.viewAllShows, value: Route.shows(ShowFilter(kind: .history, artist: slug)))
                             }
                         }
                     }

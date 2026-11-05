@@ -14,7 +14,6 @@ nonisolated public final class Post: MockObject {
     @Field<[MediaUpload]>("featuredMedia") public var featuredMedia
     @Field<String>("id") public var id
     @Field<String>("slug") public var slug
-    @Field<String>("summary") public var summary
     @Field<String>("title") public var title
   }
 }
@@ -25,7 +24,6 @@ public extension Mock where O == Post {
     featuredMedia: [(any AnyMock)]? = nil,
     id: String = "",
     slug: String = "",
-    summary: String? = nil,
     title: String = ""
   ) {
     self.init()
@@ -33,7 +31,6 @@ public extension Mock where O == Post {
     _setList(featuredMedia, for: \.featuredMedia)
     _setScalar(id, for: \.id)
     _setScalar(slug, for: \.slug)
-    _setScalar(summary, for: \.summary)
     _setScalar(title, for: \.title)
   }
 }

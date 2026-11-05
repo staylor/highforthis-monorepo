@@ -29,9 +29,10 @@ swift format lint --recursive --strict HighForThis HighForThisTests HighForThisU
 - Keep iOS and macOS building without warnings: CI fails on any.
 - Deploy to 26.0, and keep building with Xcode 26 as well as 27. An API that's new in 27 goes behind `if #available`, with a fallback for 26. Check layout changes on both; CI runs the UI tests on both.
 - Xcode 26's Swift 6.2 makes extensions of the generated types, and the string catalog's symbols, main-actor isolated where 6.4 doesn't: mark extensions that pure code uses `nonisolated`.
-- Screens fetch through `QueryView`, or an `@Observable` model that takes its loader as a closure, as `VideoFeed` does, so the tests can replace it.
+- Detail screens fetch through `QueryView` / `QueryState`; lists use `CursorFeed` and `FeedList`. Loaders are injectable. Never publish a cancelled or superseded response, silently discard a refresh error, or truncate a connection without exposing pagination.
 - Put logic that doesn't need SwiftUI in `Models/`, `nonisolated` when it's pure, and test it with Swift Testing, building fixtures from `HighForThisAPITestMocks`.
 - Swift 6 with main-actor default isolation: callbacks from system frameworks that may arrive on other threads are `@Sendable` and hop to the main actor. Use `@Observable`, `os.Logger` and async APIs, not `ObservableObject`, `print` or completion handlers.
 - Add strings to `Localizable.xcstrings` under a symbolic key, and use the generated symbol.
 - Don't edit `HighForThisAPI` by hand, apart from `SchemaConfiguration.swift`. Change the operations in `graphql/` and run `pnpm codegen:ios`; `pnpm lint` checks them against the schema.
-- Give new list rows an accessibility identifier, and add a UI test for new navigation.
+- Give new list rows an accessibility identifier and add a UI test for new navigation. UI tests use `-ui-testing` and the debug-only fixture transport, never production data. Keep fixture code under `#if DEBUG`.
+- Test layout on iPhone and iPad, with accessibility text sizes and dark mode. Use native Liquid Glass for controls, not as a background for reading content. The optional tab accessory API requires iOS 26.1; keep the 26.0 fallback.

@@ -1,10 +1,4 @@
 fragment TextNodes_textNode on TextNode {
-  detail
   format
-  mode
-  style
   text
-  textFormat
-  textStyle
-  type
 }

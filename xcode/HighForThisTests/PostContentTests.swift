@@ -34,7 +34,7 @@ struct PostContentTests {
         let editorState = await PostQuery.Data.Post.EditorState.from(
             Mock<EditorState>(
                 root: Mock<ElementNode>(children: [
-                    Mock<HeadingNode>(children: [Mock<TextNode>(text: "Albums")], tag: .case(.h3), type: "heading"),
+                    Mock<HeadingNode>(children: [Mock<TextNode>(text: "Albums")], tag: .case(.h3)),
                     Mock<ElementNode>(
                         children: [Mock<TextNode>(format: 1, text: "Bold"), Mock<LinebreakNode>(), Mock<TextNode>(text: "next")],
                         type: "paragraph"
@@ -46,11 +46,10 @@ struct PostContentTests {
                                 Mock<ImageUploadCrop>(fileName: "cover-640.jpg", height: 320, width: 640),
                             ],
                             destination: "2023/12"
-                        ),
-                        type: "image"
+                        )
                     ),
-                    Mock<QuoteNode>(children: [Mock<TextNode>(format: 2, text: "Quoted")], type: "quote"),
-                    Mock<VideoNode>(type: "video", video: Mock<Video>(dataId: "fbFeM3QW8Cc", id: "video")),
+                    Mock<QuoteNode>(children: [Mock<TextNode>(format: 2, text: "Quoted")]),
+                    Mock<VideoNode>(video: Mock<Video>(dataId: "fbFeM3QW8Cc", id: "video")),
                 ])
             )
         )
@@ -61,7 +60,8 @@ struct PostContentTests {
             Array(blocks.prefix(4)) == [
                 .heading(level: 3, text: AttributedString("Albums")),
                 .paragraph(AttributedString(lexicalRuns: [.text("Bold", .bold), .lineBreak, .text("next")])),
-                .image(url: URL(string: "https://storage.googleapis.com/wonderboymusic/2023/12/cover-640.jpg")!, aspectRatio: 2),
+                .image(
+                    url: URL(string: "https://storage.googleapis.com/wonderboymusic/2023/12/cover-640.jpg")!, aspectRatio: 2, altText: ""),
                 .quote(AttributedString(lexicalRuns: [.text("Quoted", .italic)])),
             ]
         )
@@ -78,8 +78,8 @@ struct PostContentTests {
                 root: Mock<ElementNode>(children: [
                     Mock<ElementNode>(children: [Mock<TextNode>(text: "  "), Mock<LinebreakNode>()], type: "paragraph"),
                     Mock<ElementNode>(children: [Mock<TextNode>(text: "Item")], type: "list"),
-                    Mock<HeadingNode>(children: [], tag: .case(.h2), type: "heading"),
-                    Mock<ImageNode>(image: Mock<ImageUpload>(crops: []), type: "image"),
+                    Mock<HeadingNode>(children: [], tag: .case(.h2)),
+                    Mock<ImageNode>(image: Mock<ImageUpload>(crops: [])),
                     nil,
                 ])
             )

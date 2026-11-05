@@ -1,24 +1,10 @@
 query Post($slug: String!) {
   post(slug: $slug) {
     id
-    slug
-    summary
     title
     editorState {
       root {
-        direction
-        format
-        indent
-        type
-        version
         children {
-          ... on ElementNodeType {
-            direction
-            format
-            indent
-            type
-            version
-          }
           ... on HeadingNode {
             tag
             children {
@@ -29,6 +15,7 @@ query Post($slug: String!) {
           ... on ImageNode {
             image {
               id
+              altText
               destination
               crops {
                 fileName
@@ -43,6 +30,7 @@ query Post($slug: String!) {
             }
           }
           ... on ElementNode {
+            type
             children {
               ...TextNodes_linebreakNode
               ...TextNodes_textNode
@@ -54,16 +42,12 @@ query Post($slug: String!) {
               ...TextNodes_textNode
             }
           }
-        }
-      }
-    }
-    featuredMedia {
-      id
-      destination
-      ... on ImageUpload {
-        crops {
-          fileName
-          width
+          ... on CodeNode {
+            children {
+              ...TextNodes_linebreakNode
+              ...TextNodes_textNode
+            }
+          }
         }
       }
     }

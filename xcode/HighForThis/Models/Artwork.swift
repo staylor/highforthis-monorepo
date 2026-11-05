@@ -7,14 +7,15 @@ nonisolated struct Artwork: Hashable {
     let aspectRatio: Double
 
     init?(template: String?, width: Int?, height: Int?, maximumWidth: Int = 1500) {
-        guard let template, let width, let height, width > 0, height > 0 else { return nil }
-        let scaledWidth = min(width, maximumWidth)
-        let scaledHeight = Int((Double(height) * Double(scaledWidth) / Double(width)).rounded())
+        guard let template, let width, let height, width > 0, height > 0, maximumWidth > 0 else { return nil }
+        let scale = min(1, Double(maximumWidth) / Double(max(width, height)))
+        let scaledWidth = max(1, Int((Double(width) * scale).rounded()))
+        let scaledHeight = max(1, Int((Double(height) * scale).rounded()))
         let urlString =
             template
             .replacingOccurrences(of: "{w}", with: String(scaledWidth))
             .replacingOccurrences(of: "{h}", with: String(scaledHeight))
-        guard let url = URL(string: urlString) else { return nil }
+        guard let url = URL.webURL(urlString) else { return nil }
         self.url = url
         self.aspectRatio = Double(width) / Double(height)
     }

@@ -42,6 +42,27 @@ struct ImageTests {
         #expect([Rendition]().best(forWidth: 360) == nil)
     }
 
+    @Test func portraitArtworkBoundsBothDimensions() throws {
+        let artwork = try #require(Artwork(template: "https://example.com/{w}x{h}.jpg", width: 1000, height: 4000))
+        #expect(artwork.url.absoluteString == "https://example.com/375x1500.jpg")
+        #expect(artwork.aspectRatio == 0.25)
+    }
+
+    @Test func invalidImageDimensionsAreRejected() {
+        #expect(Artwork(template: "https://example.com/{w}x{h}.jpg", width: 100, height: 100, maximumWidth: 0) == nil)
+        #expect([0, -50].map(Rendition.init).best(forWidth: 300) == nil)
+    }
+
+    @Test(arguments: ["", "relative/path", "javascript:alert(1)", "file:///etc/passwd", "https://user:password@example.com"])
+    func externalLinksRequireWebURLs(_ value: String) {
+        #expect(URL.webURL(value) == nil)
+    }
+
+    @Test func externalLinksAllowHTTPSAndHTTP() {
+        #expect(URL.webURL("https://example.com/artist")?.host == "example.com")
+        #expect(URL.webURL("http://example.com")?.host == "example.com")
+    }
+
     @Test func uploadsAreInTheCMSBucket() {
         let url = AppConfiguration.uploadURL(destination: "2023/12", fileName: "8f0d347b0c91317f-640x0.jpg")
         #expect(url.absoluteString == "https://storage.googleapis.com/wonderboymusic/2023/12/8f0d347b0c91317f-640x0.jpg")

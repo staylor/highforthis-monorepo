@@ -4,26 +4,25 @@ import SwiftUI
 /// `contentMode` is how the image fits that frame.
 struct RemoteImage: View {
     let url: URL?
-    var aspectRatio: Double?
+    var aspectRatio: Double = 1
     var contentMode: ContentMode = .fit
 
     var body: some View {
         Rectangle()
             .fill(.quaternary)
-            .aspectRatio(aspectRatio.map { CGFloat($0) }, contentMode: .fit)
+            .aspectRatio(CGFloat(aspectRatio), contentMode: .fit)
             .overlay {
                 AsyncImage(url: url, transaction: Transaction(animation: .easeIn(duration: 0.2))) { phase in
                     if let image = phase.image {
                         image
                             .resizable()
                             .aspectRatio(contentMode: contentMode)
-                    } else if phase.error != nil {
+                    } else if phase.error != nil || url == nil {
                         Image(systemName: "photo")
                             .foregroundStyle(.secondary)
                     }
                 }
             }
             .clipped()
-            .accessibilityHidden(true)
     }
 }

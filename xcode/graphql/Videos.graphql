@@ -1,15 +1,14 @@
-query Videos($after: String, $first: Int, $year: Int) {
+query Videos($after: String, $first: Int!, $includeYears: Boolean!, $year: Int) {
   videos(after: $after, first: $first, year: $year) {
-    years
+    years @include(if: $includeYears)
     edges {
-      cursor
       node {
         ...Video_video
       }
     }
     pageInfo {
+      endCursor
       hasNextPage
-      hasPreviousPage
     }
   }
 }

@@ -8,10 +8,24 @@ nonisolated public struct PostsQuery: GraphQLQuery {
   public static let operationName: String = "Posts"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Posts { posts(first: 20, status: PUBLISH) { __typename edges { __typename node { __typename id slug summary title featuredMedia { __typename id destination ... on ImageUpload { crops { __typename fileName width } } } } } } }"#
+      #"query Posts($after: String, $first: Int!) { posts(after: $after, first: $first, status: PUBLISH) { __typename edges { __typename node { __typename id slug title featuredMedia { __typename id destination ... on ImageUpload { crops { __typename fileName width } } } } } pageInfo { __typename endCursor hasNextPage } } }"#
     ))
 
-  public init() {}
+  public var after: GraphQLNullable<String>
+  public var first: Int32
+
+  public init(
+    after: GraphQLNullable<String>,
+    first: Int32
+  ) {
+    self.after = after
+    self.first = first
+  }
+
+  @_spi(Unsafe) public var __variables: Variables? { [
+    "after": after,
+    "first": first
+  ] }
 
   nonisolated public struct Data: HighForThisAPI.SelectionSet {
     @_spi(Unsafe) public let __data: DataDict
@@ -20,7 +34,8 @@ nonisolated public struct PostsQuery: GraphQLQuery {
     @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.Query }
     @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
       .field("posts", Posts?.self, arguments: [
-        "first": 20,
+        "after": .variable("after"),
+        "first": .variable("first"),
         "status": "PUBLISH"
       ]),
     ] }
@@ -41,12 +56,14 @@ nonisolated public struct PostsQuery: GraphQLQuery {
       @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("edges", [Edge].self),
+        .field("pageInfo", PageInfo.self),
       ] }
       @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
         PostsQuery.Data.Posts.self
       ] }
 
       public var edges: [Edge] { __data["edges"] }
+      public var pageInfo: PageInfo { __data["pageInfo"] }
 
       /// Posts.Edge
       ///
@@ -78,7 +95,6 @@ nonisolated public struct PostsQuery: GraphQLQuery {
             .field("__typename", String.self),
             .field("id", String.self),
             .field("slug", String.self),
-            .field("summary", String?.self),
             .field("title", String.self),
             .field("featuredMedia", [FeaturedMedium]?.self),
           ] }
@@ -88,7 +104,6 @@ nonisolated public struct PostsQuery: GraphQLQuery {
 
           public var id: String { __data["id"] }
           public var slug: String { __data["slug"] }
-          public var summary: String? { __data["summary"] }
           public var title: String { __data["title"] }
           public var featuredMedia: [FeaturedMedium]? { __data["featuredMedia"] }
 
@@ -159,6 +174,27 @@ nonisolated public struct PostsQuery: GraphQLQuery {
             }
           }
         }
+      }
+
+      /// Posts.PageInfo
+      ///
+      /// Parent Type: `PageInfo`
+      nonisolated public struct PageInfo: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.PageInfo }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("endCursor", String?.self),
+          .field("hasNextPage", Bool?.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          PostsQuery.Data.Posts.PageInfo.self
+        ] }
+
+        public var endCursor: String? { __data["endCursor"] }
+        public var hasNextPage: Bool? { __data["hasNextPage"] }
       }
     }
   }

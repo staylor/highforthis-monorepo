@@ -3,28 +3,39 @@ import ApolloAPI
 import Foundation
 import os
 
-extension ApolloClient {
-    nonisolated static let highForThis = ApolloClient(url: AppConfiguration.graphQLEndpoint)
+nonisolated extension ApolloClient {
+    static let highForThis = makeClient()
 
-    /// The query's data, or an error when there's none to show. Errors alongside data are logged, since the data
-    /// that did resolve is still worth showing.
+    private static func makeClient() -> ApolloClient {
+        #if DEBUG
+        if UITestFixtures.isEnabled { return UITestFixtures.client() }
+        #endif
+        return ApolloClient(url: AppConfiguration.graphQLEndpoint, defaultRequestConfiguration: .init(requestTimeout: 30))
+    }
+
     func data<Query: GraphQLQuery>(
         for query: Query,
         cachePolicy: CachePolicy.Query.SingleResponse = .cacheFirst
     ) async throws -> Query.Data where Query.ResponseFormat == SingleResponseFormat {
-        let response = try await fetch(query: query, cachePolicy: cachePolicy)
-        let errors = response.errors ?? []
-        guard let data = response.data else {
-            throw errors.first ?? MissingDataError()
+        // Apollo otherwise caches partial failures as successful data on the next cache-first fetch.
+        let response = try await fetch(
+            query: query, cachePolicy: cachePolicy, requestConfiguration: .init(requestTimeout: 30, writeResultsToCache: false))
+        try Task.checkCancellation()
+        if let error = response.errors?.first { throw error }
+        guard let data = response.data else { throw MissingDataError() }
+        if response.source == .server {
+            do {
+                try await store.withinReadWriteTransaction { try await $0.write(data: data, for: query) }
+            } catch {
+                Logger.api.error("Couldn't cache \(Query.operationName, privacy: .public): \(error.localizedDescription)")
+            }
         }
-        for error in errors {
-            Logger.api.error("\(Query.operationName, privacy: .public): \(error.localizedDescription, privacy: .public)")
-        }
+        try Task.checkCancellation()
         return data
     }
 }
 
 nonisolated struct MissingDataError: LocalizedError {
-    // Xcode 26 makes the string catalog's generated symbols main-actor isolated, so this uses the key.
+    // Xcode 26's generated string symbols are main-actor isolated.
     var errorDescription: String? { String(localized: "missingData") }
 }

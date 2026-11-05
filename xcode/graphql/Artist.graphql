@@ -14,18 +14,25 @@ query Artist($slug: String!) {
       }
     }
   }
-  attended: shows(artist: { slug: $slug }, attended: true, first: 200) {
+  attended: shows(artist: { slug: $slug }, attended: true, first: 5) {
+    count
     edges {
       node {
         ...ShowList_show
       }
     }
+    pageInfo {
+      hasNextPage
+    }
   }
-  shows(artist: { slug: $slug }, first: 200, latest: true) {
+  shows(artist: { slug: $slug }, first: 5, latest: true) {
     edges {
       node {
         ...ShowList_show
       }
+    }
+    pageInfo {
+      hasNextPage
     }
   }
 }

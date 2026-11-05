@@ -10,27 +10,15 @@ nonisolated public final class CodeNode: MockObject {
   public typealias MockValueCollectionType = Array<Mock<CodeNode>>
 
   public struct MockFields: Sendable {
-    @Field<GraphQLEnum<HighForThisAPI.ElementDirection>>("direction") public var direction
-    @Field<Int>("format") public var format
-    @Field<Int>("indent") public var indent
-    @Field<String>("type") public var type
-    @Field<Int>("version") public var version
+    @Field<[EditorNode?]>("children") public var children
   }
 }
 
 public extension Mock where O == CodeNode {
   convenience init(
-    direction: GraphQLEnum<HighForThisAPI.ElementDirection>? = nil,
-    format: Int? = nil,
-    indent: Int? = nil,
-    type: String? = nil,
-    version: Int? = nil
+    children: [(any AnyMock)?]? = nil
   ) {
     self.init()
-    _setScalar(direction, for: \.direction)
-    _setScalar(format, for: \.format)
-    _setScalar(indent, for: \.indent)
-    _setScalar(type, for: \.type)
-    _setScalar(version, for: \.version)
+    _setList(children, for: \.children)
   }
 }

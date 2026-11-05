@@ -10,18 +10,15 @@ nonisolated public final class VideoEdge: MockObject {
   public typealias MockValueCollectionType = Array<Mock<VideoEdge>>
 
   public struct MockFields: Sendable {
-    @Field<String>("cursor") public var cursor
     @Field<Video>("node") public var node
   }
 }
 
 public extension Mock where O == VideoEdge {
   convenience init(
-    cursor: String = "",
     node: Mock<Video> = Mock<Video>()
   ) {
     self.init()
-    _setScalar(cursor, for: \.cursor)
     _setEntity(node, for: \.node)
   }
 }

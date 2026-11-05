@@ -1,10 +1,31 @@
-query Shows($attended: Boolean, $first: Int!, $latest: Boolean, $year: Int) {
-  shows(attended: $attended, first: $first, latest: $latest, year: $year) {
-    years
+query Shows(
+  $after: String
+  $artist: EntityArg
+  $attended: Boolean
+  $first: Int!
+  $includeYears: Boolean!
+  $latest: Boolean
+  $venue: EntityArg
+  $year: Int
+) {
+  shows(
+    after: $after
+    artist: $artist
+    attended: $attended
+    first: $first
+    latest: $latest
+    venue: $venue
+    year: $year
+  ) {
+    years @include(if: $includeYears)
     edges {
       node {
         ...ShowList_show
       }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }
