@@ -26,7 +26,7 @@ swift format lint --recursive --strict HighForThis HighForThisTests HighForThisU
 
 ## Rules
 
-- Keep iOS and macOS building without warnings: CI fails on any.
+- Keep iOS and macOS building without warnings: CI fails on any. TestFlight uploads only from `main`, after CI passes; never expose signing secrets to pull-request jobs.
 - Deploy to 26.0, and keep building with Xcode 26 as well as 27. An API that's new in 27 goes behind `if #available`, with a fallback for 26. Check layout changes on both; CI runs the UI tests on both.
 - Xcode 26's Swift 6.2 makes extensions of the generated types, and the string catalog's symbols, main-actor isolated where 6.4 doesn't: mark extensions that pure code uses `nonisolated`.
 - Detail screens fetch through `QueryView` / `QueryState`; lists use `CursorFeed` and `FeedList`. Loaders are injectable. Never publish a cancelled or superseded response, silently discard a refresh error, or truncate a connection without exposing pagination.

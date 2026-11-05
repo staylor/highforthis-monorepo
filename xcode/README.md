@@ -61,6 +61,15 @@ xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
 ```
 
-CI (`.github/workflows/xcode.yml`) archives the iOS and Mac apps with Xcode 27.1, and the iOS app with Xcode 26, unsigned, and fails on any warning. It runs unit and UI tests on iPhone and iPad with iOS 27 and 26.5, plus unit tests on the Mac and a player regression test on the minimum iOS 26.0 runtime. On simulators, a failed test is retried up to twice, because CI simulators sometimes time out reading the UI or fail to quit the app. It also checks that `HighForThisAPI` matches the operations and schema and that hand-written Swift is formatted.
+CI (`.github/workflows/xcode.yml`) archives the iOS and Mac apps with Xcode 27.1, and the iOS app with Xcode 26, unsigned, and fails on any warning. It runs unit and UI tests on iPhone and iPad with iOS 27 and 26.5, plus unit tests on the Mac and a player regression test on the minimum iOS 26.0 runtime. On simulators, a failed test is retried up to twice, because CI simulators sometimes time out reading the UI or fail to quit the app. It also checks that `HighForThisAPI` matches the operations and schema and that hand-written Swift is formatted. After CI passes on `main`, it uploads signed iOS and macOS builds to TestFlight.
+
+## Releasing
+
+Every push to `main` that changes the app, its GraphQL operations or the schema uploads iOS and macOS builds after CI succeeds. To upload without such a change, run the Xcode workflow manually on `main`.
+
+- The `testflight` environment deploys only from `main`. It stores `ASC_KEY`, `ASC_KEY_ID` and `ASC_ISSUER_ID` for an App Store Connect team API key, plus `DEVELOPMENT_CERTIFICATE` (a base64 `.p12`) and `DEVELOPMENT_CERTIFICATE_PASSWORD`.
+- The development certificate expires on 2027-10-26. To renew it, export a new Apple Development identity as a password-protected `.p12` and replace both certificate secrets.
+- Archives are signed for development and exported with cloud-managed distribution certificates. Xcode assigns the next build number, so a release bumps only the app target's `MARKETING_VERSION`.
+- The App Store Connect record has a tvOS version, but this project does not yet have a tvOS target, so CI does not upload Apple TV builds.
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the code fits together.
