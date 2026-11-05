@@ -46,7 +46,8 @@ nonisolated enum PostBlock: Equatable {
     case heading(level: Int, text: AttributedString)
     case paragraph(AttributedString)
     case quote(AttributedString)
-    case image(url: URL, aspectRatio: Double)
+    case code(AttributedString)
+    case image(url: URL, aspectRatio: Double, altText: String)
     case video(Video_video)
 
     static func blocks(in editorState: PostQuery.Data.Post.EditorState?) -> [PostBlock] {
@@ -65,11 +66,12 @@ nonisolated enum PostBlock: Equatable {
         if let element = node.asElementNode, element.type == "paragraph" {
             return text(element.children).map(PostBlock.paragraph)
         }
-        if let image = node.asImageNode?.image, let crop = image.crops.first(where: { $0.width == 640 }) ?? image.crops.first,
-            crop.width > 0, crop.height > 0
-        {
+        if let code = node.asCodeNode {
+            return text(code.children).map(PostBlock.code)
+        }
+        if let image = node.asImageNode?.image, let crop = image.crops.filter({ $0.height > 0 }).best(forWidth: 640) {
             let url = AppConfiguration.uploadURL(destination: image.destination, fileName: crop.fileName)
-            return .image(url: url, aspectRatio: Double(crop.width) / Double(crop.height))
+            return .image(url: url, aspectRatio: Double(crop.width) / Double(crop.height), altText: image.altText ?? "")
         }
         if let video = node.asVideoNode?.video {
             return .video(video.fragments.video_video)
@@ -119,6 +121,13 @@ nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.C
 }
 
 nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.Child: LexicalTextNode {
+    var run: LexicalRun? {
+        if asLinebreakNode != nil { return .lineBreak }
+        return asTextNode.map { .text($0.text ?? "", LexicalFormat(rawValue: $0.format ?? 0)) }
+    }
+}
+
+nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.Child: LexicalTextNode {
     var run: LexicalRun? {
         if asLinebreakNode != nil { return .lineBreak }
         return asTextNode.map { .text($0.text ?? "", LexicalFormat(rawValue: $0.format ?? 0)) }

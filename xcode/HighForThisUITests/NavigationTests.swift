@@ -1,138 +1,167 @@
 import XCTest
 
 #if os(iOS)
-/// These run against the production API, so they check what the screens are made of rather than what they say.
 final class NavigationTests: XCTestCase {
-    private let timeout: TimeInterval = 30
-
     override func setUp() {
         continueAfterFailure = false
     }
 
     @MainActor
-    func testHistoryOpensAShowItsArtistAndItsVenue() {
+    func testShowArtistAndVenueNavigation() {
         let app = launch()
         select("History", in: app)
-
-        tap(firstElement(withPrefix: "show-", in: app))
-        let artist = firstElement(withPrefix: "artist-", in: app)
-        XCTAssertTrue(artist.waitForExistence(timeout: timeout))
-        XCTAssertTrue(firstElement(withPrefix: "venue-", in: app).exists)
-        attachScreenshot("Show", of: app)
-
-        tap(artist)
-        XCTAssertTrue(app.staticTexts["Recommended Shows"].waitForExistence(timeout: timeout))
-        attachScreenshot("Artist", of: app)
-        goBack(in: app)
-
-        tap(firstElement(withPrefix: "venue-", in: app))
-        XCTAssertTrue(app.buttons["Open in Maps"].waitForExistence(timeout: timeout))
-        XCTAssertTrue(firstElement(withPrefix: "show-", in: app).waitForExistence(timeout: timeout))
-        attachScreenshot("Venue", of: app)
+        tap(element("show-show-2025-0", in: app))
+        tap(element("artist-sample-artist", in: app))
+        XCTAssertTrue(app.staticTexts["Recommended Shows"].waitForExistence(timeout: 10))
+        screenshot("Artist", app)
+        back(app)
+        tap(element("venue-sample-hall", in: app))
+        XCTAssertTrue(app.buttons["venue-map"].waitForExistence(timeout: 10))
+        screenshot("Venue", app)
     }
 
     @MainActor
-    func testHistoryFiltersByYear() {
+    func testHistoryCanLoadEveryPage() {
         let app = launch()
         select("History", in: app)
-        XCTAssertTrue(firstElement(withPrefix: "show-", in: app).waitForExistence(timeout: timeout))
-
-        app.buttons["year-filter"].tap()
-        tap(app.buttons["2019"])
-
-        let header = app.staticTexts.matching(NSPredicate(format: "label ENDSWITH %@", ", 2019")).firstMatch
-        XCTAssertTrue(header.waitForExistence(timeout: timeout))
-        let otherYears = app.staticTexts.matching(
-            NSPredicate(format: "label MATCHES %@ AND NOT (label ENDSWITH %@)", ".*, 20[0-9]{2}", ", 2019")
-        )
-        XCTAssertEqual(otherYears.count, 0)
-        attachScreenshot("History in 2019", of: app)
+        tap(app.buttons["load-more"])
+        tap(app.buttons["load-more"])
+        XCTAssertTrue(element("show-show-2025-4", in: app).waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons["load-more"].exists)
     }
 
     @MainActor
-    func testRecommendedShowsLoad() {
-        let app = launch()
-        let show = firstElement(withPrefix: "show-", in: app)
-        let none = app.staticTexts["There are no shows to recommend right now."]
-        XCTAssertTrue(show.waitForExistence(timeout: timeout) || none.exists)
-        attachScreenshot("Recommended Shows", of: app)
+    func testEmptyYearKeepsTheFilterAndCanReturnToAllYears() {
+        let app = launch(scenario: "emptyYearMetadata")
+        select("History", in: app)
+        tap(app.buttons["year-filter"])
+        tap(app.buttons["2027"])
+        XCTAssertTrue(app.staticTexts["No shows."].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["year-filter"].exists)
+        tap(app.buttons["year-filter"])
+        tap(app.buttons["All Years"])
+        XCTAssertTrue(element("show-show-2025-0", in: app).waitForExistence(timeout: 10))
     }
 
     @MainActor
-    func testAnEpisodePlaysAndPauses() {
+    func testNetworkFailureCanRetry() {
+        let app = launch(scenario: "failOnce")
+        tap(app.buttons["retry-load"])
+        XCTAssertTrue(element("show-show-2025-0", in: app).waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons["retry-load"].exists)
+    }
+
+    @MainActor
+    func testPlayerStaysAvailableAcrossTabsAndCanBeStopped() {
         let app = launch()
         select("Podcast", in: app)
-
-        tap(firstElement(withPrefix: "podcast-", in: app))
-        let play = app.buttons["Play"]
-        XCTAssertTrue(play.waitForExistence(timeout: timeout))
-        attachScreenshot("Episode", of: app)
-
-        play.tap()
-        XCTAssertTrue(app.buttons["Pause"].waitForExistence(timeout: timeout))
-        app.buttons["Pause"].tap()
-        XCTAssertTrue(play.waitForExistence(timeout: timeout))
-    }
-
-    @MainActor
-    func testVideosLinkToYouTube() {
-        let app = launch()
+        tap(element("podcast-podcast-0", in: app))
+        tap(app.buttons["episode-play-pause"])
+        XCTAssertTrue(app.buttons["player-play-pause"].waitForExistence(timeout: 10))
         select("Videos", in: app)
-
-        XCTAssertTrue(firstElement(withPrefix: "video-", in: app).waitForExistence(timeout: timeout))
-        XCTAssertTrue(app.buttons["year-filter"].exists)
-        attachScreenshot("Videos", of: app)
+        let pause = app.buttons["player-play-pause"]
+        let tabBar = app.tabBars.firstMatch
+        if tabBar.exists, tabBar.frame.minY > app.frame.height / 2 {
+            XCTAssertLessThanOrEqual(pause.frame.maxY, tabBar.frame.minY)
+        }
+        XCTAssertEqual(pause.label, "Pause")
+        pause.tap()
+        XCTAssertEqual(pause.label, "Play")
+        tap(app.buttons["open-player"])
+        XCTAssertTrue(app.navigationBars["Now Playing"].waitForExistence(timeout: 10))
+        screenshot("Now Playing", app)
+        tap(app.buttons["stop-playback"])
+        XCTAssertTrue(pause.waitForNonExistence(timeout: 10))
+        XCTAssertTrue(element("video-video-0", in: app).exists)
     }
 
     @MainActor
-    func testAPostOpensFromTheList() {
+    func testEpisodeWithoutAudioHasNoPlayButton() {
+        let app = launch()
+        select("Podcast", in: app)
+        tap(element("podcast-podcast-1", in: app))
+        XCTAssertTrue(app.staticTexts["Audio is unavailable for this episode."].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons["episode-play-pause"].exists)
+    }
+
+    @MainActor
+    func testPlaybackFailureIsVisible() {
+        let app = launch(scenario: "brokenAudio")
+        select("Podcast", in: app)
+        tap(element("podcast-podcast-0", in: app))
+        tap(app.buttons["episode-play-pause"])
+        XCTAssertTrue(element("playback-error", in: app).waitForExistence(timeout: 15))
+        XCTAssertEqual(app.buttons["episode-play-pause"].label, "Play")
+        screenshot("Playback Failure", app)
+    }
+
+    @MainActor
+    func testPostRendersHeadingParagraphQuoteAndCode() {
         let app = launch()
         select("Posts", in: app)
-
-        let post = firstElement(withPrefix: "post-", in: app)
-        XCTAssertTrue(post.waitForExistence(timeout: timeout))
-        attachScreenshot("Posts", of: app)
-        let title = post.label
-        tap(post)
-
-        XCTAssertTrue(app.navigationBars[title].waitForExistence(timeout: timeout))
-        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", title)).firstMatch.waitForExistence(timeout: timeout))
-        attachScreenshot("Post", of: app)
+        tap(element("post-post-0", in: app))
+        XCTAssertTrue(app.staticTexts["A second listen"].waitForExistence(timeout: 10))
+        app.swipeUp()
+        XCTAssertTrue(app.staticTexts["Music brings people together."].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["side A\nside B"].exists)
+        screenshot("Post", app)
     }
 
     @MainActor
-    private func launch() -> XCUIApplication {
+    func testAccessibilityTextAndDarkAppearanceKeepNavigationUsable() {
+        let app = launch(largeText: true, dark: true)
+        select("Videos", in: app)
+        XCTAssertTrue(element("video-video-0", in: app).waitForExistence(timeout: 10))
+        screenshot("Large Text Videos", app)
+        select("Podcast", in: app)
+        tap(element("podcast-podcast-0", in: app))
+        app.swipeUp()
+        tap(app.buttons["episode-play-pause"])
+        XCTAssertTrue(app.buttons["open-player"].waitForExistence(timeout: 10))
+        app.swipeUp()
+        screenshot("Large Text Episode", app)
+    }
+
+    @MainActor
+    private func launch(scenario: String = "normal", largeText: Bool = false, dark: Bool = false) -> XCUIApplication {
         let app = XCUIApplication()
+        app.launchArguments = ["-ui-testing", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if largeText { app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"] }
+        app.launchEnvironment["UI_TEST_DARK"] = dark ? "1" : "0"
+        app.launchEnvironment["UI_TEST_SCENARIO"] = scenario
+        app.launchEnvironment["TZ"] = "America/New_York"
         app.launch()
         return app
     }
 
     @MainActor
     private func select(_ tab: String, in app: XCUIApplication) {
-        let button = app.tabBars.buttons[tab]
-        XCTAssertTrue(button.waitForExistence(timeout: timeout))
-        button.tap()
+        let tabButton = app.tabBars.buttons[tab].firstMatch
+        if tabButton.waitForExistence(timeout: 3) {
+            tabButton.tap()
+        } else {
+            tap(app.buttons[tab].firstMatch)
+        }
     }
 
     @MainActor
-    private func firstElement(withPrefix prefix: String, in app: XCUIApplication) -> XCUIElement {
-        app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH %@", prefix)).firstMatch
+    private func element(_ identifier: String, in app: XCUIApplication) -> XCUIElement {
+        app.descendants(matching: .any).matching(identifier: identifier).firstMatch
     }
 
-    /// Waits for the element, since everything on screen arrives over the network, then taps it.
     @MainActor
     private func tap(_ element: XCUIElement) {
-        XCTAssertTrue(element.waitForExistence(timeout: timeout), "\(element) didn't appear")
+        XCTAssertTrue(element.waitForExistence(timeout: 10))
         element.tap()
     }
 
     @MainActor
-    private func goBack(in app: XCUIApplication) {
+    private func back(_ app: XCUIApplication) {
         app.navigationBars.buttons["BackButton"].firstMatch.tap()
     }
 
     @MainActor
-    private func attachScreenshot(_ name: String, of app: XCUIApplication) {
+    private func screenshot(_ name: String, _ app: XCUIApplication) {
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways

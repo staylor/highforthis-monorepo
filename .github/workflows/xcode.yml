@@ -6,6 +6,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 # A push to a pull request cancels its older run, but a run on main that has started is never cut short by the next merge.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -122,7 +125,19 @@ jobs:
             platform: iOS
             build: 23F77
             device: iPhone 17 Pro
-          # The UI tests are for iPhone, so the Mac runs the unit tests alone.
+          - name: iPad
+            platform: iOS
+            device: iPad Pro 11-inch (M5)
+          - name: iPad, iOS 26.5
+            platform: iOS
+            build: 23F77
+            device: iPad Pro 11-inch (M5)
+          - name: iPhone, iOS 26.0 player
+            platform: iOS
+            build: 23A343
+            device: iPhone 17 Pro
+            only-testing: HighForThisUITests/NavigationTests/testPlayerStaysAvailableAcrossTabsAndCanBeStopped
+          # The Mac runs the unit tests alone.
           - name: Mac
             platform: macOS
             only-testing: HighForThisTests
@@ -169,9 +184,12 @@ jobs:
           xcrun simctl list devices available | grep "$udid"
           # The test runner can stall while a cold simulator boots, and then never starts.
           xcrun simctl bootstatus "$udid" -b
+      # CI simulators sometimes time out reading the UI or fail to quit the app. The Mac run doesn't retry,
+      # so a flaky race in the unit tests still fails CI.
       - name: Test
         env:
           DESTINATION: ${{ steps.simulator.outputs.destination || 'platform=macOS' }}
+          DEVICE: ${{ matrix.device }}
           ONLY_TESTING: ${{ matrix.only-testing }}
         run: |
           set -o pipefail
@@ -181,7 +199,7 @@ jobs:
             -destination "$DESTINATION" \
             ${ONLY_TESTING:+-only-testing:"$ONLY_TESTING"} \
             -resultBundlePath Tests.xcresult \
-            -retry-tests-on-failure -test-iterations 3 \
+            ${DEVICE:+-retry-tests-on-failure -test-iterations 3} \
             CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
             | xcbeautify --renderer github-actions
       - name: Upload test results

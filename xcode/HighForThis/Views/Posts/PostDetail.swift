@@ -8,17 +8,7 @@ struct PostDetail: View {
     var body: some View {
         QueryView(PostQuery(slug: slug)) { data in
             if let post = data.post {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        PostTitle(text: post.title)
-                        ForEach(Array(PostBlock.blocks(in: post.editorState).enumerated()), id: \.offset) { _, block in
-                            PostBlockView(block: block)
-                        }
-                    }
-                    .frame(maxWidth: 640, alignment: .leading)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical)
-                }
+                PostReader(post: post)
             } else {
                 NotFoundView()
             }
@@ -27,22 +17,31 @@ struct PostDetail: View {
     }
 }
 
-/// The post's title as the website sets it: heavy capitals beside a bar of the accent color.
-private struct PostTitle: View {
-    let text: String
+private struct PostReader: View {
+    let post: PostQuery.Data.Post
+    @State private var blocks: [PostBlock] = []
 
     var body: some View {
-        Text(text)
-            .font(.title.weight(.black))
-            .textCase(.uppercase)
-            .padding(.leading, 16)
-            .overlay(alignment: .leading) {
-                Rectangle()
-                    .fill(.tint)
-                    .frame(width: 6)
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 20) {
+                Text(post.title)
+                    .font(.title.weight(.black))
+                    .textCase(.uppercase)
+                    .padding(.leading, 16)
+                    .overlay(alignment: .leading) {
+                        Rectangle().fill(.tint).frame(width: 6)
+                    }
+                    .accessibilityAddTraits(.isHeader)
+                ForEach(Array(blocks.enumerated()), id: \.offset) { _, block in
+                    PostBlockView(block: block)
+                }
             }
-            .padding(.horizontal)
-            .accessibilityAddTraits(.isHeader)
+            .textSelection(.enabled)
+            .frame(maxWidth: 680, alignment: .leading)
+            .padding()
+            .frame(maxWidth: .infinity)
+        }
+        .task(id: post.editorState) { blocks = PostBlock.blocks(in: post.editorState) }
     }
 }
 
@@ -52,53 +51,43 @@ private struct PostBlockView: View {
     var body: some View {
         switch block {
         case .heading(let level, let text):
-            Heading(level: level, text: text)
-                .padding(.horizontal)
+            VStack(alignment: .leading, spacing: 8) {
+                Text(text)
+                    .font(level == 1 ? .title.bold() : level == 2 ? .title2.bold() : .title3.weight(.black))
+                    .textCase(level == 3 ? .uppercase : nil)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                if level == 3 {
+                    DashedRule()
+                        .stroke(.tint, style: StrokeStyle(lineWidth: 2, dash: [4]))
+                        .frame(height: 2)
+                        .accessibilityHidden(true)
+                }
+            }
+            .padding(.top, 8)
         case .paragraph(let text):
-            Text(text)
-                .padding(.horizontal)
+            Text(text).fixedSize(horizontal: false, vertical: true)
         case .quote(let text):
             Text(text)
                 .italic()
+                .fixedSize(horizontal: false, vertical: true)
                 .padding(.leading, 16)
                 .overlay(alignment: .leading) {
-                    Rectangle()
-                        .fill(.tint)
-                        .frame(width: 3)
+                    Rectangle().fill(.tint).frame(width: 3)
                 }
-                .padding(.horizontal)
-        case .image(let url, let aspectRatio):
+        case .code(let text):
+            ScrollView(.horizontal) {
+                Text(text).font(.body.monospaced()).padding()
+            }
+            .background(.quaternary, in: .rect(cornerRadius: 8))
+        case .image(let url, let aspectRatio, let altText):
             RemoteImage(url: url, aspectRatio: aspectRatio)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(altText)
+                .accessibilityHidden(altText.isEmpty)
+                .accessibilityAddTraits(.isImage)
         case .video(let video):
             VideoLink(video: video)
-                .padding(.horizontal)
-        }
-    }
-}
-
-private struct Heading: View {
-    let level: Int
-    let text: AttributedString
-
-    var body: some View {
-        switch level {
-        case 1:
-            Text(text).font(.title.bold())
-        case 2:
-            Text(text).font(.title2.bold())
-        case 3:
-            // The website's section headings: heavy capitals over a dashed rule.
-            VStack(alignment: .leading, spacing: 6) {
-                Text(text)
-                    .font(.title3.weight(.black))
-                    .textCase(.uppercase)
-                DashedRule()
-                    .stroke(.tint, style: StrokeStyle(lineWidth: 2, dash: [4]))
-                    .frame(height: 2)
-            }
-            .padding(.top, 8)
-        default:
-            Text(text).font(.headline)
         }
     }
 }
@@ -109,11 +98,5 @@ private nonisolated struct DashedRule: Shape {
             path.move(to: CGPoint(x: rect.minX, y: rect.midY))
             path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
         }
-    }
-}
-
-#Preview {
-    NavigationStack {
-        PostDetail(slug: "best-albums-of-2023", title: "Best Albums of 2023")
     }
 }

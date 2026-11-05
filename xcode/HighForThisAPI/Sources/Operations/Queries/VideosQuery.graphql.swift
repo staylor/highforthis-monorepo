@@ -8,27 +8,31 @@ nonisolated public struct VideosQuery: GraphQLQuery {
   public static let operationName: String = "Videos"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Videos($after: String, $first: Int, $year: Int) { videos(after: $after, first: $first, year: $year) { __typename years edges { __typename cursor node { __typename ...Video_video } } pageInfo { __typename hasNextPage hasPreviousPage } } }"#,
+      #"query Videos($after: String, $first: Int!, $includeYears: Boolean!, $year: Int) { videos(after: $after, first: $first, year: $year) { __typename years @include(if: $includeYears) edges { __typename node { __typename ...Video_video } } pageInfo { __typename endCursor hasNextPage } } }"#,
       fragments: [Video_video.self]
     ))
 
   public var after: GraphQLNullable<String>
-  public var first: GraphQLNullable<Int32>
+  public var first: Int32
+  public var includeYears: Bool
   public var year: GraphQLNullable<Int32>
 
   public init(
     after: GraphQLNullable<String>,
-    first: GraphQLNullable<Int32>,
+    first: Int32,
+    includeYears: Bool,
     year: GraphQLNullable<Int32>
   ) {
     self.after = after
     self.first = first
+    self.includeYears = includeYears
     self.year = year
   }
 
   @_spi(Unsafe) public var __variables: Variables? { [
     "after": after,
     "first": first,
+    "includeYears": includeYears,
     "year": year
   ] }
 
@@ -60,9 +64,9 @@ nonisolated public struct VideosQuery: GraphQLQuery {
       @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.VideoConnection }
       @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("years", [Int]?.self),
         .field("edges", [Edge].self),
         .field("pageInfo", PageInfo.self),
+        .include(if: "includeYears", .field("years", [Int]?.self)),
       ] }
       @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
         VideosQuery.Data.Videos.self
@@ -82,14 +86,12 @@ nonisolated public struct VideosQuery: GraphQLQuery {
         @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.VideoEdge }
         @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
-          .field("cursor", String.self),
           .field("node", Node.self),
         ] }
         @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
           VideosQuery.Data.Videos.Edge.self
         ] }
 
-        public var cursor: String { __data["cursor"] }
         public var node: Node { __data["node"] }
 
         /// Videos.Edge.Node
@@ -136,15 +138,15 @@ nonisolated public struct VideosQuery: GraphQLQuery {
         @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.PageInfo }
         @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
+          .field("endCursor", String?.self),
           .field("hasNextPage", Bool?.self),
-          .field("hasPreviousPage", Bool?.self),
         ] }
         @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
           VideosQuery.Data.Videos.PageInfo.self
         ] }
 
+        public var endCursor: String? { __data["endCursor"] }
         public var hasNextPage: Bool? { __data["hasNextPage"] }
-        public var hasPreviousPage: Bool? { __data["hasPreviousPage"] }
       }
     }
   }

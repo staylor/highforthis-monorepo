@@ -9,6 +9,7 @@ struct ArtworkHeader: View {
             .frame(maxWidth: .infinity, maxHeight: 440)
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
+            .accessibilityHidden(true)
     }
 }
 

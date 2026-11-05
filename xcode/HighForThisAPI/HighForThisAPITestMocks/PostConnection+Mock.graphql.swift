@@ -11,14 +11,17 @@ nonisolated public final class PostConnection: MockObject {
 
   public struct MockFields: Sendable {
     @Field<[PostEdge]>("edges") public var edges
+    @Field<PageInfo>("pageInfo") public var pageInfo
   }
 }
 
 public extension Mock where O == PostConnection {
   convenience init(
-    edges: [Mock<PostEdge>] = []
+    edges: [Mock<PostEdge>] = [],
+    pageInfo: Mock<PageInfo> = Mock<PageInfo>()
   ) {
     self.init()
     _setList(edges, for: \.edges)
+    _setEntity(pageInfo, for: \.pageInfo)
   }
 }

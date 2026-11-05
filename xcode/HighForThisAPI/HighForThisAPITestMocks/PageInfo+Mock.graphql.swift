@@ -10,18 +10,18 @@ nonisolated public final class PageInfo: MockObject {
   public typealias MockValueCollectionType = Array<Mock<PageInfo>>
 
   public struct MockFields: Sendable {
+    @Field<String>("endCursor") public var endCursor
     @Field<Bool>("hasNextPage") public var hasNextPage
-    @Field<Bool>("hasPreviousPage") public var hasPreviousPage
   }
 }
 
 public extension Mock where O == PageInfo {
   convenience init(
-    hasNextPage: Bool? = nil,
-    hasPreviousPage: Bool? = nil
+    endCursor: String? = nil,
+    hasNextPage: Bool? = nil
   ) {
     self.init()
+    _setScalar(endCursor, for: \.endCursor)
     _setScalar(hasNextPage, for: \.hasNextPage)
-    _setScalar(hasPreviousPage, for: \.hasPreviousPage)
   }
 }

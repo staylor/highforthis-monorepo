@@ -1,10 +1,9 @@
-query Posts {
-  posts(first: 20, status: PUBLISH) {
+query Posts($after: String, $first: Int!) {
+  posts(after: $after, first: $first, status: PUBLISH) {
     edges {
       node {
         id
         slug
-        summary
         title
         featuredMedia {
           id
@@ -17,6 +16,10 @@ query Posts {
           }
         }
       }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }

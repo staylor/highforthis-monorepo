@@ -8,7 +8,7 @@ nonisolated public struct VenueQuery: GraphQLQuery {
   public static let operationName: String = "Venue"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Venue($slug: String!) { attended: shows(attended: true, first: 200, venue: { slug: $slug }) { __typename edges { __typename node { __typename ...ShowList_show } } } shows(first: 200, latest: true, venue: { slug: $slug }) { __typename edges { __typename node { __typename ...ShowList_show } } } venue(slug: $slug) { __typename id address capacity name slug website coordinates { __typename latitude longitude } } }"#,
+      #"query Venue($slug: String!) { attended: shows(attended: true, first: 5, venue: { slug: $slug }) { __typename count edges { __typename node { __typename ...ShowList_show } } pageInfo { __typename hasNextPage } } shows(first: 5, latest: true, venue: { slug: $slug }) { __typename edges { __typename node { __typename ...ShowList_show } } pageInfo { __typename hasNextPage } } venue(slug: $slug) { __typename id address capacity name slug website coordinates { __typename latitude longitude } } }"#,
       fragments: [ShowList_show.self]
     ))
 
@@ -28,11 +28,11 @@ nonisolated public struct VenueQuery: GraphQLQuery {
     @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
       .field("shows", alias: "attended", Attended?.self, arguments: [
         "attended": true,
-        "first": 200,
+        "first": 5,
         "venue": ["slug": .variable("slug")]
       ]),
       .field("shows", Shows?.self, arguments: [
-        "first": 200,
+        "first": 5,
         "latest": true,
         "venue": ["slug": .variable("slug")]
       ]),
@@ -56,13 +56,17 @@ nonisolated public struct VenueQuery: GraphQLQuery {
       @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ShowConnection }
       @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
+        .field("count", Int?.self),
         .field("edges", [Edge].self),
+        .field("pageInfo", PageInfo.self),
       ] }
       @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
         VenueQuery.Data.Attended.self
       ] }
 
+      public var count: Int? { __data["count"] }
       public var edges: [Edge] { __data["edges"] }
+      public var pageInfo: PageInfo { __data["pageInfo"] }
 
       /// Attended.Edge
       ///
@@ -117,6 +121,25 @@ nonisolated public struct VenueQuery: GraphQLQuery {
           public typealias Venue = ShowList_show.Venue
         }
       }
+
+      /// Attended.PageInfo
+      ///
+      /// Parent Type: `PageInfo`
+      nonisolated public struct PageInfo: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.PageInfo }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("hasNextPage", Bool?.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          VenueQuery.Data.Attended.PageInfo.self
+        ] }
+
+        public var hasNextPage: Bool? { __data["hasNextPage"] }
+      }
     }
 
     /// Shows
@@ -130,12 +153,14 @@ nonisolated public struct VenueQuery: GraphQLQuery {
       @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("edges", [Edge].self),
+        .field("pageInfo", PageInfo.self),
       ] }
       @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
         VenueQuery.Data.Shows.self
       ] }
 
       public var edges: [Edge] { __data["edges"] }
+      public var pageInfo: PageInfo { __data["pageInfo"] }
 
       /// Shows.Edge
       ///
@@ -189,6 +214,25 @@ nonisolated public struct VenueQuery: GraphQLQuery {
 
           public typealias Venue = ShowList_show.Venue
         }
+      }
+
+      /// Shows.PageInfo
+      ///
+      /// Parent Type: `PageInfo`
+      nonisolated public struct PageInfo: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.PageInfo }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("hasNextPage", Bool?.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          VenueQuery.Data.Shows.PageInfo.self
+        ] }
+
+        public var hasNextPage: Bool? { __data["hasNextPage"] }
       }
     }
 

@@ -6,7 +6,7 @@
 
 nonisolated public struct TextNodes_textNode: HighForThisAPI.SelectionSet, Fragment {
   public static var fragmentDefinition: StaticString {
-    #"fragment TextNodes_textNode on TextNode { __typename detail format mode style text textFormat textStyle type }"#
+    #"fragment TextNodes_textNode on TextNode { __typename format text }"#
   }
 
   @_spi(Unsafe) public let __data: DataDict
@@ -15,25 +15,13 @@ nonisolated public struct TextNodes_textNode: HighForThisAPI.SelectionSet, Fragm
   @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.TextNode }
   @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
-    .field("detail", Int?.self),
     .field("format", Int?.self),
-    .field("mode", GraphQLEnum<HighForThisAPI.TextModeType>?.self),
-    .field("style", String?.self),
     .field("text", String?.self),
-    .field("textFormat", Int?.self),
-    .field("textStyle", String?.self),
-    .field("type", String?.self),
   ] }
   @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
     TextNodes_textNode.self
   ] }
 
-  public var detail: Int? { __data["detail"] }
   public var format: Int? { __data["format"] }
-  public var mode: GraphQLEnum<HighForThisAPI.TextModeType>? { __data["mode"] }
-  public var style: String? { __data["style"] }
   public var text: String? { __data["text"] }
-  public var textFormat: Int? { __data["textFormat"] }
-  public var textStyle: String? { __data["textStyle"] }
-  public var type: String? { __data["type"] }
 }

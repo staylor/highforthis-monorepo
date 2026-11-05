@@ -1,16 +1,23 @@
 query Venue($slug: String!) {
-  attended: shows(attended: true, first: 200, venue: { slug: $slug }) {
+  attended: shows(attended: true, first: 5, venue: { slug: $slug }) {
+    count
     edges {
       node {
         ...ShowList_show
       }
     }
+    pageInfo {
+      hasNextPage
+    }
   }
-  shows(first: 200, latest: true, venue: { slug: $slug }) {
+  shows(first: 5, latest: true, venue: { slug: $slug }) {
     edges {
       node {
         ...ShowList_show
       }
+    }
+    pageInfo {
+      hasNextPage
     }
   }
   venue(slug: $slug) {

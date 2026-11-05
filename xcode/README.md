@@ -37,7 +37,7 @@ pnpm codegen:ios   # regenerate HighForThisAPI from the committed schema
 pnpm codegen       # fetch the schema from the local GraphQL server first, and regenerate the web types too
 ```
 
-`scripts/generate-api.sh` downloads the Apollo iOS CLI version it names into `.cache/`. The generated `Package.swift` pins apollo-ios to that exact version, so the app and its generated code can't drift apart: to upgrade Apollo, change `APOLLO_IOS_VERSION` and regenerate. Don't edit `HighForThisAPI` by hand; CI regenerates it and fails on any difference. The exception is `SchemaConfiguration.swift`, which codegen writes once and leaves alone: it gives every object its `id` as a cache key.
+`scripts/generate-api.sh` downloads a pinned, checksum-verified Apollo iOS CLI into `.cache/` and installs it atomically. To upgrade Apollo, update `APOLLO_IOS_VERSION`, the archive's SHA-256, and the exact package version in `HighForThis.xcodeproj`, then regenerate. The generated `Package.swift` also pins that exact runtime version. Don't edit `HighForThisAPI` by hand; CI regenerates it and fails on any difference. The exception is `SchemaConfiguration.swift`, which codegen writes once and leaves alone: it gives every object its `id` as a cache key.
 
 ESLint checks the operations against the schema, with `pnpm lint` from the repository root.
 
@@ -51,7 +51,7 @@ xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis \
 swift format lint --recursive --strict HighForThis HighForThisTests HighForThisUITests   # formatting
 ```
 
-The unit tests use Swift Testing, with fixtures built from the generated `HighForThisAPITestMocks`. The UI tests run against the production API, so they need a network connection, and they check how the screens connect rather than what they say.
+Unit tests use Swift Testing and generated Apollo mocks. UI tests use a debug-only GraphQL transport and locally generated audio, not production content. They cover navigation, paging, empty states, retry, playback failures, the persistent player, dark appearance and accessibility text on iPhone and iPad. The fixture transport still exercises Apollo's real response parser, and playback uses AVPlayer. Release builds contain no test fixtures. Map tiles may download, but tests do not depend on their availability.
 
 Layouts can differ on 26 and 27, so run the UI tests on both:
 
@@ -61,6 +61,6 @@ xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
 ```
 
-CI (`.github/workflows/xcode.yml`) archives the iOS and Mac apps with Xcode 27.1, and the iOS app with Xcode 26, unsigned, and fails on any warning. It runs the unit and UI tests on iOS 27 and 26.5 and the unit tests on the Mac, checks that `HighForThisAPI` matches the operations and schema, and checks the formatting, whenever the app, its operations or the schema change.
+CI (`.github/workflows/xcode.yml`) archives the iOS and Mac apps with Xcode 27.1, and the iOS app with Xcode 26, unsigned, and fails on any warning. It runs unit and UI tests on iPhone and iPad with iOS 27 and 26.5, plus unit tests on the Mac and a player regression test on the minimum iOS 26.0 runtime. On simulators, a failed test is retried up to twice, because CI simulators sometimes time out reading the UI or fail to quit the app. It also checks that `HighForThisAPI` matches the operations and schema and that hand-written Swift is formatted.
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the code fits together.
