@@ -184,9 +184,12 @@ jobs:
           xcrun simctl list devices available | grep "$udid"
           # The test runner can stall while a cold simulator boots, and then never starts.
           xcrun simctl bootstatus "$udid" -b
+      # CI simulators sometimes time out reading the UI or fail to quit the app. The Mac run doesn't retry,
+      # so a flaky race in the unit tests still fails CI.
       - name: Test
         env:
           DESTINATION: ${{ steps.simulator.outputs.destination || 'platform=macOS' }}
+          DEVICE: ${{ matrix.device }}
           ONLY_TESTING: ${{ matrix.only-testing }}
         run: |
           set -o pipefail
@@ -196,6 +199,7 @@ jobs:
             -destination "$DESTINATION" \
             ${ONLY_TESTING:+-only-testing:"$ONLY_TESTING"} \
             -resultBundlePath Tests.xcresult \
+            ${DEVICE:+-retry-tests-on-failure -test-iterations 3} \
             CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
             | xcbeautify --renderer github-actions
       - name: Upload test results

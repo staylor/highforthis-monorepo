@@ -61,6 +61,6 @@ xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
 ```
 
-CI (`.github/workflows/xcode.yml`) archives the iOS and Mac apps with Xcode 27.1, and the iOS app with Xcode 26, unsigned, and fails on any warning. It runs unit and UI tests on iPhone and iPad with iOS 27 and 26.5, plus unit tests on the Mac and a player regression test on the minimum iOS 26.0 runtime, without retrying failed tests. It also checks that `HighForThisAPI` matches the operations and schema and that hand-written Swift is formatted.
+CI (`.github/workflows/xcode.yml`) archives the iOS and Mac apps with Xcode 27.1, and the iOS app with Xcode 26, unsigned, and fails on any warning. It runs unit and UI tests on iPhone and iPad with iOS 27 and 26.5, plus unit tests on the Mac and a player regression test on the minimum iOS 26.0 runtime. On simulators, a failed test is retried up to twice, because CI simulators sometimes time out reading the UI or fail to quit the app. It also checks that `HighForThisAPI` matches the operations and schema and that hand-written Swift is formatted.
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the code fits together.
