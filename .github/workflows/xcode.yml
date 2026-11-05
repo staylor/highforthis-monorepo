@@ -35,6 +35,8 @@ jobs:
           base=HEAD^1
           if [ "$GITHUB_EVENT_NAME" = push ]; then
             base=$BEFORE
+            # A push can add several commits, and the checkout has only the last two.
+            git fetch --quiet --depth=1 origin "$base" || true
           fi
           # Documentation and this workflow don't change the app, so changing only them skips the Xcode jobs.
           # To test a workflow change, run the workflow manually on its branch.
