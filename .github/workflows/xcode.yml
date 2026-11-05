@@ -182,8 +182,27 @@ jobs:
           fi
           echo "destination=id=$udid" >> "$GITHUB_OUTPUT"
           xcrun simctl list devices available | grep "$udid"
-          # The test runner can stall while a cold simulator boots, and then never starts.
-          xcrun simctl bootstatus "$udid" -b
+          # The test runner can stall while a cold simulator boots, and then never starts. The boot itself can also hang
+          # at "Waiting on BackBoard": CI boots take under 5 minutes, so give up after 10 and boot the erased device again.
+          boot() {
+            xcrun simctl bootstatus "$udid" -b &
+            local pid=$!
+            SECONDS=0
+            while kill -0 "$pid" 2>/dev/null; do
+              if [ "$SECONDS" -ge 600 ]; then
+                kill "$pid"
+                return 1
+              fi
+              sleep 5
+            done
+            wait "$pid"
+          }
+          if ! boot; then
+            echo "::warning::The simulator didn't finish booting in 10 minutes, so it's being erased and booted again."
+            xcrun simctl shutdown "$udid" || true
+            xcrun simctl erase "$udid"
+            boot
+          fi
       # CI simulators sometimes time out reading the UI or fail to quit the app. The Mac run doesn't retry,
       # so a flaky race in the unit tests still fails CI.
       - name: Test
