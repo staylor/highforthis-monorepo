@@ -129,6 +129,11 @@ jobs:
           - name: iPhone
             platform: iOS
             device: iPhone 18 Pro
+          # Built with the iOS 27.1 SDK, the app fills iPhone Duo's displays, with its bars down the side. simctl can't
+          # fold or unfold the simulator, so the tests see the pose it boots in.
+          - name: iPhone Duo
+            platform: iOS
+            device: iPhone Duo
           # The deployment target is 26.0, and the image only has 27 simulators. These are the 26.5 releases' builds:
           # asking for version 26.5 sometimes installs its release candidate.
           - name: iPhone, iOS 26.5
