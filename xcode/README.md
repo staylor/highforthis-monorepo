@@ -1,6 +1,6 @@
 # High For This
 
-The iPhone, iPad and Mac app for [highforthis.com](https://highforthis.com). Everything in it comes from the site's GraphQL API.
+The iPhone, iPad, Mac and Apple TV app for [highforthis.com](https://highforthis.com). Everything in it comes from the site's GraphQL API.
 
 | Tab     | What it shows                                                                                                  |
 | ------- | -------------------------------------------------------------------------------------------------------------- |
@@ -10,13 +10,15 @@ The iPhone, iPad and Mac app for [highforthis.com](https://highforthis.com). Eve
 | Posts   | Posts, laid out like the website                                                                               |
 | History | The shows we've been to, newest first or by year                                                               |
 
+Apple TV has no web browser and can't open YouTube, so it leaves out the Videos tab and links to websites. While an episode is loaded, a Now Playing tab holds the player, and the remote's Play/Pause button controls it.
+
 ## Building
 
 Requirements: Xcode 26 or later. Releases build with Xcode 27.1.
 
-The app deploys to iOS 26.0 and macOS 26.0, so it runs on the 26 and 27 releases.
+The app deploys to iOS 26.0, macOS 26.0 and tvOS 26.0, so it runs on the 26 and 27 releases.
 
-1. Open `HighForThis.xcodeproj`. The `HighForThis` scheme builds the iPhone, iPad and Mac app.
+1. Open `HighForThis.xcodeproj`. The `HighForThis` scheme builds the iPhone, iPad, Mac and Apple TV app.
 2. Choose a run destination and run. Signing uses team `LQR2VDPY65`.
 
 The app finds its servers in two build settings, which reach the code through Info.plist:
@@ -45,18 +47,21 @@ ESLint checks the operations against the schema, with `pnpm lint` from the repos
 
 ```sh
 xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis \
-  -destination 'platform=macOS' -only-testing:HighForThisTests            # unit tests, without a simulator
+  -destination 'platform=macOS' -only-testing:HighForThisTests              # unit tests, without a simulator
 xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis \
-  -destination 'platform=iOS Simulator,name=iPhone 18 Pro'                # unit and UI tests
+  -destination 'platform=iOS Simulator,name=iPhone 18 Pro'                  # unit and UI tests
+xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis \
+  -destination 'platform=tvOS Simulator,name=Apple TV 4K (3rd generation)'  # unit and Apple TV UI tests
 swift format lint --recursive --strict HighForThis HighForThisTests HighForThisUITests   # formatting
 ```
 
-Unit tests use Swift Testing and generated Apollo mocks. UI tests use a debug-only GraphQL transport and locally generated audio, not production content. They cover navigation, paging, empty states, retry, playback failures, the persistent player, dark appearance and accessibility text on iPhone and iPad. The fixture transport still exercises Apollo's real response parser, and playback uses AVPlayer. Release builds contain no test fixtures. Map tiles may download, but tests do not depend on their availability.
+Unit tests use Swift Testing and generated Apollo mocks. UI tests use a debug-only GraphQL transport and locally generated audio, not production content. They cover navigation, paging, empty states, retry, playback failures, the persistent player, dark appearance and accessibility text on iPhone and iPad, and drive the Apple TV app with the Siri Remote. The fixture transport still exercises Apollo's real response parser, and playback uses AVPlayer. Release builds contain no test fixtures. Map tiles may download, but tests do not depend on their availability.
 
 Layouts can differ on 26 and 27, so run the UI tests on both:
 
 ```sh
-xcodebuild -downloadPlatform iOS -buildVersion 23F77   # the iOS 26.5 simulator, once
+xcodebuild -downloadPlatform iOS -buildVersion 23F77    # the iOS 26.5 simulator, once
+xcodebuild -downloadPlatform tvOS -buildVersion 23L470  # and tvOS 26.5's
 xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
 ```

@@ -18,32 +18,42 @@ struct VideoList: View {
     }
 }
 
+/// A video, which opens on YouTube. tvOS can't open it, so there it's only the title and thumbnail.
 struct VideoLink: View {
     let video: Video_video
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        Link(destination: video.youTubeURL) {
-            let layout =
-                dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12)) : AnyLayout(HStackLayout(spacing: 12))
-            layout {
-                Text(video.title)
-                    .font(.body)
-                    .foregroundStyle(.primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                RemoteImage(
-                    url: video.thumbnails.best(forWidth: 480).flatMap { URL.webURL($0.url) }, aspectRatio: 16 / 9, contentMode: .fill
-                )
-                .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 120)
-                .clipShape(.rect(cornerRadius: 8))
-                .accessibilityHidden(true)
-            }
-            .padding(.vertical, 4)
+        #if os(tvOS)
+        label
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(video.title)
+            .accessibilityIdentifier("video-\(video.id)")
+        #else
+        Link(destination: video.youTubeURL) { label }
+            .accessibilityLabel(video.title)
+            .accessibilityHint(.opensYouTube)
+            .accessibilityIdentifier("video-\(video.id)")
+        #endif
+    }
+
+    private var label: some View {
+        let layout =
+            dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12)) : AnyLayout(HStackLayout(spacing: 12))
+        return layout {
+            Text(video.title)
+                .font(.body)
+                .foregroundStyle(.primary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            RemoteImage(
+                url: video.thumbnails.best(forWidth: 480).flatMap { URL.webURL($0.url) }, aspectRatio: 16 / 9, contentMode: .fill
+            )
+            .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 120)
+            .clipShape(.rect(cornerRadius: 8))
+            .accessibilityHidden(true)
         }
-        .accessibilityLabel(video.title)
-        .accessibilityHint(.opensYouTube)
-        .accessibilityIdentifier("video-\(video.id)")
+        .padding(.vertical, 4)
     }
 }
 

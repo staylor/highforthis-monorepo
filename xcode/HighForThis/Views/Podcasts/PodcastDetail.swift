@@ -22,24 +22,16 @@ struct PodcastDetail: View {
                             }
                         }
                         .foregroundStyle(.secondary)
-                        Text(podcast.description)
-                            .textSelection(.enabled)
-                        if let audio = podcast.audio {
-                            PlaybackControls(
-                                episode: PodcastPlayer.Episode(
-                                    id: podcast.id,
-                                    title: podcast.title,
-                                    url: AppConfiguration.uploadURL(destination: audio.destination, fileName: audio.fileName)
-                                )
-                            )
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical)
-                        } else {
-                            Label(.audioUnavailable, systemImage: "speaker.slash")
-                                .foregroundStyle(.secondary)
-                        }
+                        #if os(tvOS)
+                        // The remote can only reach controls, so on tvOS Play comes first and takes focus.
+                        playback(podcast)
+                        notes(podcast)
+                        #else
+                        notes(podcast)
+                        playback(podcast)
+                        #endif
                     }
-                    .frame(maxWidth: 640, alignment: .leading)
+                    .frame(maxWidth: .readable(640), alignment: .leading)
                     .padding()
                     .frame(maxWidth: .infinity)
                 }
@@ -48,5 +40,27 @@ struct PodcastDetail: View {
             }
         }
         .detailTitle(title)
+    }
+
+    private func notes(_ podcast: PodcastQuery.Data.Podcast) -> some View {
+        Text(podcast.description)
+            .selectableText()
+    }
+
+    @ViewBuilder private func playback(_ podcast: PodcastQuery.Data.Podcast) -> some View {
+        if let audio = podcast.audio {
+            PlaybackControls(
+                episode: PodcastPlayer.Episode(
+                    id: podcast.id,
+                    title: podcast.title,
+                    url: AppConfiguration.uploadURL(destination: audio.destination, fileName: audio.fileName)
+                )
+            )
+            .frame(maxWidth: .infinity)
+            .padding(.vertical)
+        } else {
+            Label(.audioUnavailable, systemImage: "speaker.slash")
+                .foregroundStyle(.secondary)
+        }
     }
 }

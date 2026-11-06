@@ -15,6 +15,12 @@ struct ShowList: View {
             emptyTitle: kind == .upcoming ? .noRecommendedShows : .noShows,
             systemImage: "music.mic"
         ) { shows in
+            #if os(tvOS)
+            // A tvOS toolbar button shows neither the selected year nor the filter's accessibility label.
+            if showsYearFilter {
+                YearFilter(years: feed.years, selection: $year)
+            }
+            #endif
             ForEach(ShowDay.days(from: shows)) { day in
                 Section {
                     ForEach(day.shows, id: \.id) { show in
@@ -29,11 +35,17 @@ struct ShowList: View {
             }
         }
         .navigationTitle(kind == .upcoming ? .recommendedShows : .showHistory)
+        #if !os(tvOS)
         .toolbar {
-            if kind == .history, !feed.years.isEmpty || year != nil {
+            if showsYearFilter {
                 ToolbarItem { YearFilter(years: feed.years, selection: $year) }
             }
         }
+        #endif
+    }
+
+    private var showsYearFilter: Bool {
+        kind == .history && (!feed.years.isEmpty || year != nil)
     }
 }
 

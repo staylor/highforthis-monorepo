@@ -15,12 +15,12 @@ struct ArtistDetail: View {
                         ArtworkHeader(artwork: artwork)
                     }
                     if let website = artist.website.flatMap(URL.webURL) {
-                        Link(destination: website) {
+                        WebLink(destination: website) {
                             Label(.artistWebsite, systemImage: "safari")
                         }
                     }
                     if let appleMusic = artist.appleMusic?.url.flatMap(URL.webURL) {
-                        Link(destination: appleMusic) {
+                        WebLink(destination: appleMusic) {
                             Label(.listenOnAppleMusic, systemImage: "music.note")
                         }
                     }

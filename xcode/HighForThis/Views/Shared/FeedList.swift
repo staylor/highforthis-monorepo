@@ -22,7 +22,7 @@ struct FeedList<Filter: Hashable, Item: FeedItem, Rows: View>: View {
                     .frame(minHeight: 44)
                     .foregroundStyle(.tint)
                 }
-                .listRowSeparator(.hidden)
+                .listRowSeparatorHidden()
                 .disabled(feed.isLoading || feed.error != nil)
                 .accessibilityIdentifier("load-more")
             }

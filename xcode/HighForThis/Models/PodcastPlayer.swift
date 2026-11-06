@@ -27,7 +27,7 @@ final class PodcastPlayer {
     @ObservationIgnored private var itemObservation: NSKeyValueObservation?
     @ObservationIgnored private var observers: [NSObjectProtocol] = []
     @ObservationIgnored private var timeObserver: Any?
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
     @ObservationIgnored private var nowPlayingSession: MPNowPlayingSession?
     @ObservationIgnored private var resumeAfterInterruption = false
     #endif
@@ -47,7 +47,7 @@ final class PodcastPlayer {
             }
         }
         observePlaybackEvents()
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
         configureRemoteCommands()
         observeAudioSession()
         #endif
@@ -57,7 +57,7 @@ final class PodcastPlayer {
         activation?.cancel()
         if let timeObserver { player.removeTimeObserver(timeObserver) }
         for observer in observers { NotificationCenter.default.removeObserver(observer) }
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
         let commands = nowPlayingSession?.remoteCommandCenter
         commands?.playCommand.removeTarget(nil)
         commands?.pauseCommand.removeTarget(nil)
@@ -117,7 +117,7 @@ final class PodcastPlayer {
             do {
                 try await sessionControl(true, revision)
                 try Task.checkCancellation()
-                #if os(iOS)
+                #if os(iOS) || os(tvOS)
                 _ = await nowPlayingSession?.becomeActiveIfPossible()
                 #endif
                 if hasEnded { await player.seek(to: .zero) }
@@ -139,7 +139,7 @@ final class PodcastPlayer {
         isPreparing = false
         wantsPlayback = false
         player.pause()
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
         resumeAfterInterruption = false
         #endif
         let revision = revision
@@ -174,7 +174,7 @@ final class PodcastPlayer {
     private func load(_ episode: Episode) {
         pause()
         let item = AVPlayerItem(url: episode.url)
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
         item.nowPlayingInfo = [MPMediaItemPropertyTitle: episode.title, MPMediaItemPropertyArtist: "High For This"]
         #endif
         self.episode = episode
@@ -224,7 +224,7 @@ final class PodcastPlayer {
         Logger.playback.error("Playback failed: \(error.localizedDescription)")
     }
 
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
     private func configureRemoteCommands() {
         let session = MPNowPlayingSession(players: [player])
         session.automaticallyPublishesNowPlayingInfo = true
@@ -298,7 +298,7 @@ private actor PlaybackAudioSession {
     func setActive(_ active: Bool, revision: Int) throws {
         guard revision >= self.revision else { return }
         self.revision = revision
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
         let session = AVAudioSession.sharedInstance()
         if active {
             try session.setCategory(.playback, mode: .spokenAudio, policy: .longFormAudio)

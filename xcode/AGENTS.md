@@ -12,9 +12,14 @@ xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis -destination 
 # Builds
 xcodebuild build -project HighForThis.xcodeproj -scheme HighForThis -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO
 xcodebuild build -project HighForThis.xcodeproj -scheme HighForThis -destination 'generic/platform=macOS' CODE_SIGNING_ALLOWED=NO
+xcodebuild build -project HighForThis.xcodeproj -scheme HighForThis -destination 'generic/platform=tvOS Simulator' CODE_SIGNING_ALLOWED=NO
 
 # Unit and UI tests on an iPhone simulator
 xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis -destination 'platform=iOS Simulator,name=iPhone 18 Pro' \
+  CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=
+
+# Unit and UI tests on an Apple TV simulator
+xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis -destination 'platform=tvOS Simulator,name=Apple TV 4K (3rd generation)' \
   CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=
 
 # Regenerate HighForThisAPI after changing graphql/, from the repository root
@@ -26,7 +31,7 @@ swift format lint --recursive --strict HighForThis HighForThisTests HighForThisU
 
 ## Rules
 
-- Keep iOS and macOS building without warnings: CI fails on any. TestFlight uploads only from `main`, after CI passes; never expose signing secrets to pull-request jobs.
+- Keep iOS, macOS and tvOS building without warnings: CI fails on any. TestFlight uploads only from `main`, after CI passes; never expose signing secrets to pull-request jobs.
 - Deploy to 26.0, and keep building with Xcode 26 as well as 27. An API that's new in 27 goes behind `if #available`, with a fallback for 26. Check layout changes on both; CI runs the UI tests on both.
 - Xcode 26's Swift 6.2 makes extensions of the generated types, and the string catalog's symbols, main-actor isolated where 6.4 doesn't: mark extensions that pure code uses `nonisolated`.
 - Detail screens fetch through `QueryView` / `QueryState`; lists use `CursorFeed` and `FeedList`. Loaders are injectable. Never publish a cancelled or superseded response, silently discard a refresh error, or truncate a connection without exposing pagination.
@@ -35,4 +40,5 @@ swift format lint --recursive --strict HighForThis HighForThisTests HighForThisU
 - Add strings to `Localizable.xcstrings` under a symbolic key, and use the generated symbol.
 - Don't edit `HighForThisAPI` by hand, apart from `SchemaConfiguration.swift`. Change the operations in `graphql/` and run `pnpm codegen:ios`; `pnpm lint` checks them against the schema.
 - Give new list rows an accessibility identifier and add a UI test for new navigation. UI tests use `-ui-testing` and the debug-only fixture transport, never production data. Keep fixture code under `#if DEBUG`.
-- Test layout on iPhone and iPad, with accessibility text sizes and dark mode. Use native Liquid Glass for controls, not as a background for reading content. The optional tab accessory API requires iOS 26.1; keep the 26.0 fallback.
+- tvOS has no web browser, Maps app, `Slider`, text selection or list separators: use `WebLink`, `selectableText()` and `listRowSeparatorHidden()`, and keep platform branches small. The remote only moves focus, so text a reader scrolls through takes focus (`focusableForReading()`) and every control must be reachable. Drive Apple TV UI tests with `XCUIRemote` in `TVNavigationTests`; list rows take focus as cells.
+- Test layout on iPhone, iPad and Apple TV, with accessibility text sizes and dark mode. Use native Liquid Glass for controls, not as a background for reading content. The optional tab accessory API requires iOS 26.1; keep the 26.0 fallback.

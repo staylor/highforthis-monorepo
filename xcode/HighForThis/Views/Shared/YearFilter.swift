@@ -19,13 +19,25 @@ struct YearFilter: View {
                 }
             }
         } label: {
+            #if os(tvOS)
+            LabeledContent {
+                Text(selectionTitle)
+            } label: {
+                Label(.filterByYear, systemImage: "line.3.horizontal.decrease")
+            }
+            #else
             HStack(spacing: 6) {
                 if let selection { Text(verbatim: String(selection)).monospacedDigit() }
                 Image(systemName: selection == nil ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill")
             }
+            #endif
         }
         .accessibilityLabel(.filterByYear)
-        .accessibilityValue(selection.map(String.init) ?? String(localized: .allYears))
+        .accessibilityValue(selectionTitle)
         .accessibilityIdentifier("year-filter")
+    }
+
+    private var selectionTitle: String {
+        selection.map(String.init) ?? String(localized: .allYears)
     }
 }

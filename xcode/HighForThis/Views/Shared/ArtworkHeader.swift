@@ -8,7 +8,7 @@ struct ArtworkHeader: View {
         RemoteImage(url: artwork.url, aspectRatio: artwork.aspectRatio)
             .frame(maxWidth: .infinity, maxHeight: 440)
             .listRowInsets(EdgeInsets())
-            .listRowSeparator(.hidden)
+            .listRowSeparatorHidden()
             .accessibilityHidden(true)
     }
 }

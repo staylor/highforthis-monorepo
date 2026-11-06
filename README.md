@@ -10,7 +10,7 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 | [`web`](./web)                     | Web application (React Router v7, Vite, Tailwind CSS)  |
 | [`shared`](./shared)               | Shared structured logging and OpenTelemetry utilities  |
 | [`observability`](./observability) | OpenObserve backend and GUI deployment                 |
-| [`xcode`](./xcode)                 | iPhone, iPad and Mac app (SwiftUI, Apollo iOS)         |
+| [`xcode`](./xcode)                 | iOS, iPadOS, macOS and tvOS app (SwiftUI, Apollo iOS)  |
 
 ## Requirements
 
