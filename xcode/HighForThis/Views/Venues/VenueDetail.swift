@@ -17,7 +17,7 @@ struct VenueDetail: View {
                     {
                         VenueMap(name: venue.name, coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
                             .listRowInsets(EdgeInsets())
-                            .listRowSeparator(.hidden)
+                            .listRowSeparatorHidden()
                     }
                     if let address = venue.address, !address.isEmpty {
                         Label(address, systemImage: "mappin.and.ellipse")
@@ -26,11 +26,11 @@ struct VenueDetail: View {
                         Label {
                             Text(.capacity(capacity))
                         } icon: {
-                            Image(systemName: "person.3")
+                            Image(systemName: Self.capacitySymbol)
                         }
                     }
                     if let website = venue.website.flatMap(URL.webURL) {
-                        Link(destination: website) {
+                        WebLink(destination: website) {
                             Label(.venueWebsite, systemImage: "safari")
                         }
                     }
@@ -62,6 +62,13 @@ struct VenueDetail: View {
         }
         .detailTitle(name)
     }
+
+    #if os(tvOS)
+    // person.3 is wider than the column tvOS lists give a label's icon.
+    private static let capacitySymbol = "person.2"
+    #else
+    private static let capacitySymbol = "person.3"
+    #endif
 }
 
 #Preview {

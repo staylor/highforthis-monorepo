@@ -32,12 +32,14 @@ private struct PostReader: View {
                         Rectangle().fill(.tint).frame(width: 6)
                     }
                     .accessibilityAddTraits(.isHeader)
-                ForEach(Array(blocks.enumerated()), id: \.offset) { _, block in
+                ForEach(Array(blocks.enumerated()), id: \.offset) { index, block in
                     PostBlockView(block: block)
+                        .focusableForReading()
+                        .accessibilityIdentifier("post-block-\(index)")
                 }
             }
-            .textSelection(.enabled)
-            .frame(maxWidth: 680, alignment: .leading)
+            .selectableText()
+            .frame(maxWidth: .readable(680), alignment: .leading)
             .padding()
             .frame(maxWidth: .infinity)
         }
@@ -76,10 +78,19 @@ private struct PostBlockView: View {
                     Rectangle().fill(.tint).frame(width: 3)
                 }
         case .code(let text):
+            #if os(tvOS)
+            // The remote can't scroll sideways through text that doesn't take focus, so long lines wrap.
+            Text(text)
+                .font(.body.monospaced())
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.quaternary, in: .rect(cornerRadius: 8))
+            #else
             ScrollView(.horizontal) {
                 Text(text).font(.body.monospaced()).padding()
             }
             .background(.quaternary, in: .rect(cornerRadius: 8))
+            #endif
         case .image(let url, let aspectRatio, let altText):
             RemoteImage(url: url, aspectRatio: aspectRatio)
                 .accessibilityElement(children: .ignore)

@@ -4,8 +4,10 @@ struct PlaybackControls: View {
     let episode: PodcastPlayer.Episode
     @Environment(PodcastPlayer.self) private var player
     @Environment(\.colorScheme) private var colorScheme
+    #if !os(tvOS)
     @State private var scrubPosition = 0.0
     @State private var isScrubbing = false
+    #endif
 
     private var isCurrent: Bool { player.episode?.id == episode.id }
 
@@ -13,24 +15,8 @@ struct PlaybackControls: View {
         VStack(spacing: 16) {
             if isCurrent, player.duration > 0 {
                 VStack(spacing: 4) {
-                    Slider(
-                        value: Binding(
-                            get: { isScrubbing ? scrubPosition : min(player.elapsed, player.duration) }, set: { scrubPosition = $0 }),
-                        in: 0...player.duration
-                    ) {
-                        Text(.playbackPosition)
-                    } onEditingChanged: { editing in
-                        if editing { scrubPosition = player.elapsed } else { player.seek(to: scrubPosition) }
-                        isScrubbing = editing
-                    }
-                    .accessibilityValue(Duration.seconds(player.elapsed).formatted(.time(pattern: .minuteSecond)))
-                    .accessibilityAdjustableAction { direction in
-                        switch direction {
-                        case .increment: player.skip(by: 15)
-                        case .decrement: player.skip(by: -15)
-                        @unknown default: break
-                        }
-                    }
+                    position
+                        .accessibilityValue(Duration.seconds(player.elapsed).formatted(.time(pattern: .minuteSecond)))
                     HStack {
                         Text(Duration.seconds(player.elapsed), format: .time(pattern: .minuteSecond))
                         Spacer()
@@ -50,7 +36,10 @@ struct PlaybackControls: View {
                         player.toggle(episode)
                     }
                     .buttonStyle(.glassProminent)
+                    #if !os(tvOS)
+                    // The accent tint needs a dark symbol in dark mode. On tvOS, the focus effect sets the colors.
                     .foregroundStyle(colorScheme == .dark ? .black : .white)
+                    #endif
                     .accessibilityIdentifier("episode-play-pause")
                     Button(.skipForward, systemImage: "goforward.15") { player.skip(by: 15) }
                         .disabled(!isCurrent || player.duration == 0)
@@ -72,6 +61,31 @@ struct PlaybackControls: View {
                     .accessibilityIdentifier("playback-error")
             }
         }
+    }
+
+    /// tvOS has no slider; the remote moves through the episode with the skip buttons.
+    @ViewBuilder private var position: some View {
+        #if os(tvOS)
+        ProgressView(value: min(player.elapsed, player.duration), total: player.duration)
+            .accessibilityLabel(.playbackPosition)
+        #else
+        Slider(
+            value: Binding(get: { isScrubbing ? scrubPosition : min(player.elapsed, player.duration) }, set: { scrubPosition = $0 }),
+            in: 0...player.duration
+        ) {
+            Text(.playbackPosition)
+        } onEditingChanged: { editing in
+            if editing { scrubPosition = player.elapsed } else { player.seek(to: scrubPosition) }
+            isScrubbing = editing
+        }
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment: player.skip(by: 15)
+            case .decrement: player.skip(by: -15)
+            @unknown default: break
+            }
+        }
+        #endif
     }
 }
 
@@ -117,36 +131,44 @@ struct NowPlayingView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
+        #if os(tvOS)
+        // On tvOS this is a tab, so it has no Done button.
+        content
+            .frame(maxHeight: .infinity)
+        #else
         NavigationStack {
-            ScrollView {
-                if let episode = player.episode {
-                    VStack(spacing: 24) {
-                        Image(systemName: "waveform")
-                            .font(.largeTitle)
-                            .foregroundStyle(.tint)
-                            .accessibilityHidden(true)
-                        Text(episode.title).font(.title2.bold()).multilineTextAlignment(.center)
-                        PlaybackControls(episode: episode)
-                        Button(.stopPlayback, role: .destructive) {
-                            player.stop()
-                            dismiss()
-                        }
-                        .accessibilityIdentifier("stop-playback")
+            ScrollView { content }
+                .navigationTitle(.nowPlaying)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button(.done) { dismiss() }
                     }
-                    .frame(maxWidth: 480)
-                    .padding(24)
-                    .frame(maxWidth: .infinity)
                 }
-            }
-            .navigationTitle(.nowPlaying)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(.done) { dismiss() }
-                }
-            }
         }
         #if os(macOS)
         .frame(minWidth: 400, minHeight: 420)
         #endif
+        #endif
+    }
+
+    @ViewBuilder private var content: some View {
+        if let episode = player.episode {
+            VStack(spacing: 24) {
+                Image(systemName: "waveform")
+                    .font(.largeTitle)
+                    .foregroundStyle(.tint)
+                    .accessibilityHidden(true)
+                Text(episode.title).font(.title2.bold()).multilineTextAlignment(.center)
+                PlaybackControls(episode: episode)
+                Button(.stopPlayback, role: .destructive) {
+                    player.stop()
+                    dismiss()
+                }
+                .accessibilityIdentifier("stop-playback")
+            }
+            .frame(maxWidth: .readable(480))
+            .padding(24)
+            .frame(maxWidth: .infinity)
+        }
     }
 }
