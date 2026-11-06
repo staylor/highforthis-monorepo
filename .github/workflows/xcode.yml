@@ -189,11 +189,18 @@ jobs:
           BUILD: ${{ matrix.build }}
           DEVICE: ${{ matrix.device }}
         # Xcode can leave an older runtime's simulators out of its destinations, as Xcode 27.1 does with tvOS 27.0
-        # once tvOS 27.2 is installed, so this uses the newest runtime, adding the device to it when it's missing.
+        # once tvOS 27.2 is installed, so this uses the newest runtime for the device, adding the device to it when
+        # it's missing. Runtimes made for one new model, such as iPhone Duo's, support only that model.
         run: |
-          runtime=$(xcrun simctl list runtimes available --json | jq -r --arg platform "$PLATFORM" --arg build "$BUILD" '
-            [.runtimes[] | select(.platform == $platform and ($build == "" or .buildversion == $build))]
-            | sort_by(.version | split(".") | map(tonumber)) | last | .identifier // empty')
+          runtime=$(xcrun simctl list runtimes available --json |
+            jq -r --arg platform "$PLATFORM" --arg build "$BUILD" --arg device "$DEVICE" '
+              [.runtimes[] | select(.platform == $platform and ($build == "" or .buildversion == $build))
+                | select(any(.supportedDeviceTypes[]?; .name == $device))]
+              | sort_by(.version | split(".") | map(tonumber)) | last | .identifier // empty')
+          if [ -z "$runtime" ]; then
+            echo "::error::No $PLATFORM ${BUILD:-runtime} supports $DEVICE."
+            exit 1
+          fi
           udid=$(xcrun simctl list devices available --json | jq -r --arg runtime "$runtime" --arg device "$DEVICE" '
             [.devices[$runtime][]? | select(.name == $device)] | last | .udid // empty')
           if [ -z "$udid" ]; then
