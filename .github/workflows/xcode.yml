@@ -78,9 +78,15 @@ jobs:
             destination: generic/platform=iOS
           - name: macOS
             destination: generic/platform=macOS
+          - name: tvOS
+            destination: generic/platform=tvOS
           # Swift 6.2 infers main-actor isolation in places 6.4 doesn't, so check the image's default Xcode 26 too.
           - name: iOS, Xcode 26
             destination: generic/platform=iOS
+            runner: macos-26
+            developer-dir: /Applications/Xcode.app/Contents/Developer
+          - name: tvOS, Xcode 26
+            destination: generic/platform=tvOS
             runner: macos-26
             developer-dir: /Applications/Xcode.app/Contents/Developer
     defaults:
@@ -123,7 +129,7 @@ jobs:
           - name: iPhone
             platform: iOS
             device: iPhone 18 Pro
-          # The deployment target is 26.0, and the image only has 27 simulators. This is the 26.5 release's build:
+          # The deployment target is 26.0, and the image only has 27 simulators. These are the 26.5 releases' builds:
           # asking for version 26.5 sometimes installs its release candidate.
           - name: iPhone, iOS 26.5
             platform: iOS
@@ -141,6 +147,13 @@ jobs:
             build: 23A343
             device: iPhone 17 Pro
             only-testing: HighForThisUITests/NavigationTests/testPlayerStaysAvailableAcrossTabsAndCanBeStopped
+          - name: Apple TV
+            platform: tvOS
+            device: Apple TV 4K (3rd generation)
+          - name: Apple TV, tvOS 26.5
+            platform: tvOS
+            build: 23L470
+            device: Apple TV 4K (3rd generation)
           # The Mac runs the unit tests alone.
           - name: Mac
             platform: macOS
@@ -284,6 +297,8 @@ jobs:
             destination: generic/platform=iOS
           - name: macOS
             destination: generic/platform=macOS
+          - name: tvOS
+            destination: generic/platform=tvOS
     defaults:
       run:
         working-directory: xcode
