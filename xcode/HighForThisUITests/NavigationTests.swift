@@ -155,9 +155,10 @@ final class NavigationTests: XCTestCase {
         element.tap()
     }
 
+    // iPhone Duo puts the Back button in its vertical bar, outside the navigation bar.
     @MainActor
     private func back(_ app: XCUIApplication) {
-        app.navigationBars.buttons["BackButton"].firstMatch.tap()
+        tap(app.buttons["BackButton"].firstMatch)
     }
 
     @MainActor
