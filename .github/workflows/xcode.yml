@@ -188,14 +188,16 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
           BUILD: ${{ matrix.build }}
           DEVICE: ${{ matrix.device }}
+        # Xcode can leave an older runtime's simulators out of its destinations, as Xcode 27.1 does with tvOS 27.0
+        # once tvOS 27.2 is installed, so this uses the newest runtime, adding the device to it when it's missing.
         run: |
-          runtimes=$(xcrun simctl list runtimes available --json | jq -c --arg platform "$PLATFORM" --arg build "$BUILD" '
+          runtime=$(xcrun simctl list runtimes available --json | jq -r --arg platform "$PLATFORM" --arg build "$BUILD" '
             [.runtimes[] | select(.platform == $platform and ($build == "" or .buildversion == $build))]
-            | sort_by(.version | split(".") | map(tonumber)) | map(.identifier)')
-          udid=$(xcrun simctl list devices available --json | jq -r --argjson runtimes "$runtimes" --arg device "$DEVICE" '
-            [.devices as $devices | $runtimes[] | $devices[.][]? | select(.name == $device)] | last | .udid // empty')
+            | sort_by(.version | split(".") | map(tonumber)) | last | .identifier // empty')
+          udid=$(xcrun simctl list devices available --json | jq -r --arg runtime "$runtime" --arg device "$DEVICE" '
+            [.devices[$runtime][]? | select(.name == $device)] | last | .udid // empty')
           if [ -z "$udid" ]; then
-            udid=$(xcrun simctl create "$DEVICE" "$DEVICE" "$(jq -r last <<< "$runtimes")")
+            udid=$(xcrun simctl create "$DEVICE" "$DEVICE" "$runtime")
           fi
           echo "destination=id=$udid" >> "$GITHUB_OUTPUT"
           xcrun simctl list devices available | grep "$udid"
