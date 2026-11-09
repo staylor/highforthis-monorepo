@@ -137,8 +137,16 @@ function toListing(event: TicketmasterEvent): Listing {
   };
 }
 
+// Shortest name first, then Ticketmaster's own listing over another seller's, then the lower ID,
+// so a show keeps its ID whatever order the API lists its duplicates in
+function rank(a: TicketmasterEvent, b: TicketmasterEvent) {
+  const sold = (event: TicketmasterEvent) =>
+    Number(Boolean(event.url && URL.canParse(event.url) && isTicketmasterUrl(new URL(event.url))));
+  return a.name.length - b.name.length || sold(b) - sold(a) || a.id.localeCompare(b.id);
+}
+
 // VIP packages, multi-day passes and listings from other sellers repeat a show's date and
-// artists; keep the plainly named show
+// artists; keep one
 function dedupe(events: TicketmasterEvent[]) {
   const artistsOf = (event: TicketmasterEvent) =>
     (event._embedded?.attractions ?? []).map(({ id }) => id).join(',') || event.name;
@@ -157,7 +165,7 @@ function dedupe(events: TicketmasterEvent[]) {
     }
     const key = `${day}|${start.localTime}`;
     const kept = byShow.get(key);
-    if (!kept || event.name.length < kept.name.length) {
+    if (!kept || rank(event, kept) < 0) {
       byShow.set(key, event);
     }
   }
