@@ -15,12 +15,12 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_27.2.app/Contents/Developer
 
 jobs:
   changes:
     name: Changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       xcode: ${{ steps.diff.outputs.xcode }}
     steps:
@@ -56,7 +56,7 @@ jobs:
     name: CI
     if: always()
     needs: [changes, build, test, generated-code, format]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Check results
         if: always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
@@ -69,7 +69,7 @@ jobs:
     runs-on: ${{ matrix.runner || 'xcode-27' }}
     timeout-minutes: 30
     env:
-      DEVELOPER_DIR: ${{ matrix.developer-dir || '/Applications/Xcode_27.1.app/Contents/Developer' }}
+      DEVELOPER_DIR: ${{ matrix.developer-dir || '/Applications/Xcode_27.2.app/Contents/Developer' }}
     strategy:
       fail-fast: false
       matrix:
@@ -129,7 +129,7 @@ jobs:
           - name: iPhone
             platform: iOS
             device: iPhone 18 Pro
-          # Built with the iOS 27.1 SDK, the app fills iPhone Duo's displays, with its bars down the side. simctl can't
+          # Built with the iOS 27.2 SDK, the app fills iPhone Duo's displays, with its bars down the side. simctl can't
           # fold or unfold the simulator, so the tests see the pose it boots in.
           - name: iPhone Duo
             platform: iOS

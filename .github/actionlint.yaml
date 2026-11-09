@@ -1,4 +1,5 @@
 self-hosted-runner:
-  # GitHub-hosted, but in public preview, so actionlint doesn't know it yet.
+  # GitHub-hosted, but actionlint doesn't know these labels yet.
   labels:
     - xcode-27
+    - ubuntu-26.04
