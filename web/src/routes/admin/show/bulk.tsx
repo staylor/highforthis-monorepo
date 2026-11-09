@@ -21,6 +21,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 
   const result = await mutate({
     context,
+    request,
     mutation: bulkCreateShowsMutation,
     variables: { input: parsed.shows },
   });

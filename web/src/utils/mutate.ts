@@ -3,6 +3,7 @@ import { ServerError } from '@apollo/client/errors';
 import qs from 'qs';
 import type { RouterContextProvider } from 'react-router';
 
+import { isAuthenticated } from '#/auth';
 import { apolloClientContext } from '#/context.js';
 
 import parseObject from './parseObject';
@@ -24,13 +25,19 @@ export const parseFormData = async (request: Request, args?: ParseFormDataArgs) 
 
 type MutationData = Pick<MutationOptions, 'mutation' | 'variables'> & {
   context: Readonly<RouterContextProvider>;
+  request: Request;
 };
 
-const mutate = async ({ mutation, variables, context }: MutationData) => {
+const mutate = async ({ mutation, variables, context, request }: MutationData) => {
   const apolloClient = context.get(apolloClientContext);
+  const token = await isAuthenticated(request);
   let data: Record<string, any> = {};
   try {
-    const result = await apolloClient.mutate({ mutation, variables });
+    const result = await apolloClient.mutate({
+      mutation,
+      variables,
+      context: { headers: token ? { Authorization: `Bearer ${token}` } : {} },
+    });
     data = (result.data ?? {}) as Record<string, any>;
   } catch (e) {
     const error = e as Error;

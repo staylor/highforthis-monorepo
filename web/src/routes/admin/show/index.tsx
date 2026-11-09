@@ -25,6 +25,7 @@ export async function action({ request, context, url }: Route.ActionArgs) {
     const { id, attended } = await parseFormData(request);
     return mutate({
       context,
+      request,
       mutation: updateMutation,
       variables: {
         id,

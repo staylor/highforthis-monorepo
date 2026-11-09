@@ -3,6 +3,7 @@ import type { Request, Response, NextFunction } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
 import { z } from 'zod';
 
+import { isAdmin } from '#/authorization';
 import prisma from '#/database';
 import env from '#/env';
 import type { UserWithRoles } from '#/models';
@@ -55,7 +56,7 @@ export async function jwtMiddleware(req: Request, _res: Response, next: NextFunc
 
 export function sessionHandler(req: Request, res: Response): void {
   const user = req.context?.authUser as UserWithRoles | undefined;
-  if (!user?.roles.some((role) => role.name === 'admin')) {
+  if (!isAdmin(user)) {
     res.status(401).json({ error: 'Authentication required' });
     return;
   }

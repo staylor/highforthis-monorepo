@@ -2,7 +2,7 @@ import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'reac
 
 import { isAuthenticated } from '#/auth';
 import { graphqlHostContext } from '#/context.js';
-import { sessionStorage } from '#/session';
+import { sessionStorage } from '#/session.js';
 import { post } from '#/utils/action';
 
 export async function action({ request, context }: ActionFunctionArgs) {

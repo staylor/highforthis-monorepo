@@ -7,6 +7,7 @@ import type {
   QueryPostsArgs,
 } from 'types/graphql';
 
+import { isAdmin } from '#/authorization';
 import prisma from '#/database';
 import type { AppContext } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
@@ -48,7 +49,7 @@ const resolvers = {
     async posts(_: unknown, args: QueryPostsArgs, { authUser }: AppContext) {
       const { search, status, ...connectionArgs } = args;
       const where: Prisma.PostWhereInput = {};
-      const userCanSee = authUser?.roles?.some((r) => r.name === 'admin');
+      const userCanSee = isAdmin(authUser);
       if (!userCanSee) {
         where.status = 'PUBLISH';
       } else if (status) {
@@ -79,7 +80,7 @@ const resolvers = {
 
       if (!post) return null;
 
-      const userCanSee = authUser?.roles?.some((r) => r.name === 'admin');
+      const userCanSee = isAdmin(authUser);
       if (post.status === 'DRAFT' && !userCanSee) {
         throw new Error('You do not have permission');
       }
