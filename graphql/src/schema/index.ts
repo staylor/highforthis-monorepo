@@ -2,6 +2,7 @@ import APIKeys from '#/schema/APIKeys';
 import AppleMusic from '#/schema/AppleMusic';
 import Artist from '#/schema/Artist';
 import EditorState from '#/schema/EditorState';
+import Listing from '#/schema/Listing';
 import Media from '#/schema/Media';
 import Podcast from '#/schema/Podcast';
 import Post from '#/schema/Post';
@@ -16,6 +17,7 @@ const modules = [
   AppleMusic,
   Artist,
   EditorState,
+  Listing,
   Media,
   Podcast,
   Post,

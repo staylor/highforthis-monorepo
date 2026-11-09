@@ -80,6 +80,10 @@ const useRouteConfig = () => {
             path: '/show/bulk',
             label: t('shows.bulk.nav'),
           },
+          {
+            path: '/show/listings',
+            label: t('shows.listings.nav'),
+          },
         ],
       },
       {

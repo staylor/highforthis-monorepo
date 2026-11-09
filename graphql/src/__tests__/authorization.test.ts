@@ -50,6 +50,7 @@ describe('resolvers', () => {
       ]),
       ['Query.user', resolvers.Query.user],
       ['Query.users', resolvers.Query.users],
+      ['Query.venueListings', resolvers.Query.venueListings],
     ];
 
     for (const [name, resolver] of guarded) {

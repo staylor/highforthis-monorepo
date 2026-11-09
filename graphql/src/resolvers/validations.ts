@@ -129,6 +129,15 @@ export const updateShowSchema = z.object({
   venue: z.string().optional(),
 });
 
+export const importListingsSchema = z
+  .array(
+    z.object({
+      artists: z.array(z.string().trim().min(1)).min(1),
+      sourceId: z.string().min(1),
+    })
+  )
+  .min(1);
+
 // --- User ---
 
 export const createUserSchema = z.object({
@@ -154,6 +163,12 @@ const venueCoordinatesInput = z.object({
   longitude: z.number().nullish(),
 });
 
+// An empty form field clears the listings page
+const listingsUrl = z
+  .union([z.url(), z.literal('')])
+  .nullish()
+  .transform((value) => (value === '' ? null : value));
+
 export const createVenueSchema = z.object({
   capacity: z.string().nullish(),
   city: z.string().nullish(),
@@ -161,6 +176,7 @@ export const createVenueSchema = z.object({
   description: z.string().nullish(),
   excludeFromSearch: z.boolean().optional(),
   featuredMedia: z.array(z.string()).nullish(),
+  listingsUrl,
   name: z.string().min(1),
   permanentlyClosed: z.boolean().optional(),
   postalCode: z.string().nullish(),
@@ -177,6 +193,7 @@ export const updateVenueSchema = z.object({
   description: z.string().nullish(),
   excludeFromSearch: z.boolean().optional(),
   featuredMedia: z.array(z.string()).nullish(),
+  listingsUrl,
   name: z.string().optional(),
   permanentlyClosed: z.boolean().optional(),
   postalCode: z.string().nullish(),

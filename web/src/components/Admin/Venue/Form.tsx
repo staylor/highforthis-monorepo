@@ -8,6 +8,7 @@ import { HeaderAdd, Heading } from '#/components/Admin/styles';
 import Checkbox from '#/components/Form/Checkbox';
 import Input from '#/components/Form/Input';
 import Message from '#/components/Form/Message';
+import Link from '#/components/Link';
 import type { Fields } from '#/types';
 
 import {
@@ -46,6 +47,13 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
     slug('venue', i18n),
     description('venue', i18n),
     website('venue', i18n),
+    {
+      label: t('venues.listingsUrl'),
+      prop: 'listingsUrl',
+      inputType: 'url',
+      placeholder: t('venues.listingsUrlPlaceholder'),
+      render: ({ venue }) => venue?.listingsUrl,
+    },
     {
       label: t('venues.capacity'),
       prop: 'capacity',
@@ -107,6 +115,14 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
       <Heading>{heading}</Heading>
       <HeaderAdd label={t('venues.all')} to="/admin/venue" />
       {data.venue && <PageLink url={`/venue/${data.venue.slug}`}>{t('venues.view')}</PageLink>}
+      {data.venue?.listingsUrl && (
+        <Link
+          to={`/admin/show/listings/${data.venue.id}`}
+          className="text-pink inline-block text-sm underline"
+        >
+          {t('shows.listings.view')}
+        </Link>
+      )}
       <Message text={t('venues.updated')} />
       <Form data={data} fields={fields} buttonLabel={buttonLabel} />
     </>
@@ -128,6 +144,7 @@ VenueForm.fragments = {
         ...FeaturedMedia_media
       }
       id
+      listingsUrl
       name
       permanentlyClosed
       postalCode

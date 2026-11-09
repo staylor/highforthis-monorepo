@@ -23,7 +23,11 @@ export async function action({ request, context, params, url }: Route.ActionArgs
     url,
     context,
     mutation: venueMutation,
-    variables: { id: params.id, input: { excludeFromSearch: false, permanentlyClosed: false } },
+    // the form leaves out empty fields and unchecked boxes, so these defaults clear them
+    variables: {
+      id: params.id,
+      input: { excludeFromSearch: false, listingsUrl: null, permanentlyClosed: false },
+    },
     parseFormDataArgs: { skipKeys: ['capacity', 'postalCode'] },
   });
 }
