@@ -274,12 +274,6 @@ const resolvers = {
       const { artists, venue, date, ...data } = validated;
       const values: Record<string, unknown> = { ...data };
 
-      for (const key of ['title', 'notes', 'url'] as const) {
-        if (!validated[key]) {
-          values[key] = null;
-        }
-      }
-
       if (date) values.date = new Date(date);
       if (venue) values.venueId = venue;
 

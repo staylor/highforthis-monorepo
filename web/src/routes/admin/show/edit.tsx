@@ -18,7 +18,8 @@ export async function action({ request, context, params, url }: Route.ActionArgs
     url,
     context,
     mutation: showMutation,
-    variables: { id: params.id, input: { attended: false } },
+    // the form leaves out empty fields and unchecked boxes, so these defaults clear them
+    variables: { id: params.id, input: { attended: false, notes: null, title: null, url: null } },
   });
 }
 
