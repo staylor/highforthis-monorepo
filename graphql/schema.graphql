@@ -161,6 +161,7 @@ input CreateVenueInput {
   description: String
   excludeFromSearch: Boolean
   featuredMedia: [String]
+  listingsUrl: String
   name: String!
   permanentlyClosed: Boolean
   postalCode: String
@@ -332,6 +333,16 @@ input ImageUploadCropInput {
   width: Int
 }
 
+input ImportListingInput {
+  artists: [String!]!
+  sourceId: String!
+}
+
+type ImportListingsResult {
+  artistsCreated: Int!
+  showsCreated: Int!
+}
+
 interface LexicalNode {
   type: String
   version: Int
@@ -340,6 +351,20 @@ interface LexicalNode {
 type LinebreakNode implements LexicalNode {
   type: String
   version: Int
+}
+
+type Listing {
+  cancelled: Boolean!
+  dateChanged: Boolean!
+  headliners: [String!]!
+  localDate: String
+  localTime: String
+  newArtists: [String!]!
+  show: Show
+  sourceId: String!
+  status: String
+  support: [String!]!
+  url: String
 }
 
 type MediaCropSetting {
@@ -396,6 +421,7 @@ type Mutation {
   createUser(input: CreateUserInput!): User
   createVenue(input: CreateVenueInput!): Venue
   createVideo(input: CreateVideoInput!): Video
+  importListings(input: [ImportListingInput!]!, venueId: String!): ImportListingsResult!
   removeArtist(ids: [String]!): Boolean
   removeMediaUpload(ids: [String]!): Boolean
   removePodcast(ids: [String]!): Boolean
@@ -531,6 +557,7 @@ type Query {
   user(id: String!): User
   users(after: String, before: String, first: Int, last: Int, search: String): UserConnection
   venue(id: String, slug: String): Venue
+  venueListings(venueId: String!): VenueListings!
   venues(after: String, before: String, filtered: Boolean, first: Int, last: Int, search: String): VenueConnection
   video(id: String, slug: String): Video
   videos(after: String, before: String, first: Int, last: Int, search: String, year: Int): VideoConnection
@@ -691,6 +718,7 @@ input UpdateVenueInput {
   description: String
   excludeFromSearch: Boolean
   featuredMedia: [String]
+  listingsUrl: String
   name: String
   permanentlyClosed: Boolean
   postalCode: String
@@ -740,6 +768,7 @@ type Venue {
   excludeFromSearch: Boolean
   featuredMedia: [MediaUpload!]
   id: String!
+  listingsUrl: String
   name: String!
   permanentlyClosed: Boolean
   postalCode: String
@@ -768,6 +797,12 @@ input VenueCoordinatesInput {
 type VenueEdge {
   cursor: String!
   node: Venue!
+}
+
+type VenueListings {
+  error: String
+  listings: [Listing!]!
+  source: String
 }
 
 type Video {

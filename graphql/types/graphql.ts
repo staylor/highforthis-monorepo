@@ -184,6 +184,7 @@ export type CreateVenueInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   excludeFromSearch?: InputMaybe<Scalars['Boolean']['input']>;
   featuredMedia?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  listingsUrl?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   permanentlyClosed?: InputMaybe<Scalars['Boolean']['input']>;
   postalCode?: InputMaybe<Scalars['String']['input']>;
@@ -374,6 +375,17 @@ export type ImageUploadCropInput = {
   width?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type ImportListingInput = {
+  artists: Array<Scalars['String']['input']>;
+  sourceId: Scalars['String']['input'];
+};
+
+export type ImportListingsResult = {
+  __typename?: 'ImportListingsResult';
+  artistsCreated: Scalars['Int']['output'];
+  showsCreated: Scalars['Int']['output'];
+};
+
 export type LexicalNode = {
   type?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['Int']['output']>;
@@ -383,6 +395,21 @@ export type LinebreakNode = LexicalNode & {
   __typename?: 'LinebreakNode';
   type?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['Int']['output']>;
+};
+
+export type Listing = {
+  __typename?: 'Listing';
+  cancelled: Scalars['Boolean']['output'];
+  dateChanged: Scalars['Boolean']['output'];
+  headliners: Array<Scalars['String']['output']>;
+  localDate?: Maybe<Scalars['String']['output']>;
+  localTime?: Maybe<Scalars['String']['output']>;
+  newArtists: Array<Scalars['String']['output']>;
+  show?: Maybe<Show>;
+  sourceId: Scalars['String']['output'];
+  status?: Maybe<Scalars['String']['output']>;
+  support: Array<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
 };
 
 export type MediaCropSetting = {
@@ -444,6 +471,7 @@ export type Mutation = {
   createUser?: Maybe<User>;
   createVenue?: Maybe<Venue>;
   createVideo?: Maybe<Video>;
+  importListings: ImportListingsResult;
   removeArtist?: Maybe<Scalars['Boolean']['output']>;
   removeMediaUpload?: Maybe<Scalars['Boolean']['output']>;
   removePodcast?: Maybe<Scalars['Boolean']['output']>;
@@ -496,6 +524,11 @@ export type MutationCreateVenueArgs = {
 
 export type MutationCreateVideoArgs = {
   input: CreateVideoInput;
+};
+
+export type MutationImportListingsArgs = {
+  input: Array<ImportListingInput>;
+  venueId: Scalars['String']['input'];
 };
 
 export type MutationRemoveArtistArgs = {
@@ -712,6 +745,7 @@ export type Query = {
   user?: Maybe<User>;
   users?: Maybe<UserConnection>;
   venue?: Maybe<Venue>;
+  venueListings: VenueListings;
   venues?: Maybe<VenueConnection>;
   video?: Maybe<Video>;
   videos?: Maybe<VideoConnection>;
@@ -814,6 +848,10 @@ export type QueryUsersArgs = {
 export type QueryVenueArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryVenueListingsArgs = {
+  venueId: Scalars['String']['input'];
 };
 
 export type QueryVenuesArgs = {
@@ -1002,6 +1040,7 @@ export type UpdateVenueInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   excludeFromSearch?: InputMaybe<Scalars['Boolean']['input']>;
   featuredMedia?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  listingsUrl?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   permanentlyClosed?: InputMaybe<Scalars['Boolean']['input']>;
   postalCode?: InputMaybe<Scalars['String']['input']>;
@@ -1055,6 +1094,7 @@ export type Venue = {
   excludeFromSearch?: Maybe<Scalars['Boolean']['output']>;
   featuredMedia?: Maybe<Array<MediaUpload>>;
   id: Scalars['String']['output'];
+  listingsUrl?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   permanentlyClosed?: Maybe<Scalars['Boolean']['output']>;
   postalCode?: Maybe<Scalars['String']['output']>;
@@ -1086,6 +1126,13 @@ export type VenueEdge = {
   __typename?: 'VenueEdge';
   cursor: Scalars['String']['output'];
   node: Venue;
+};
+
+export type VenueListings = {
+  __typename?: 'VenueListings';
+  error?: Maybe<Scalars['String']['output']>;
+  listings: Array<Listing>;
+  source?: Maybe<Scalars['String']['output']>;
 };
 
 export type Video = {

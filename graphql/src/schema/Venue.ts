@@ -18,6 +18,7 @@ const Venue = `#graphql
     coordinates: VenueCoordinates
     featuredMedia: [MediaUpload!]
     website: String
+    listingsUrl: String
     excludeFromSearch: Boolean
     permanentlyClosed: Boolean
   }
@@ -39,6 +40,7 @@ const Venue = `#graphql
     description: String
     featuredMedia: [String]
     website: String
+    listingsUrl: String
     streetAddress: String
     city: String
     state: String
@@ -60,6 +62,7 @@ const Venue = `#graphql
     description: String
     featuredMedia: [String]
     website: String
+    listingsUrl: String
     streetAddress: String
     city: String
     state: String

@@ -35,6 +35,7 @@ export default [
       index('routes/admin/show/index.tsx'),
       route('add', 'routes/admin/show/add.tsx'),
       route('bulk', 'routes/admin/show/bulk.tsx'),
+      route('listings/:venueId?', 'routes/admin/show/listings.tsx'),
       route(':id', 'routes/admin/show/edit.tsx'),
     ]),
     ...adminRoutes('user'),
