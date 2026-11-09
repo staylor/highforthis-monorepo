@@ -14,7 +14,7 @@ Apple TV has no web browser and can't open YouTube, so it leaves out the Videos 
 
 ## Building
 
-Requirements: Xcode 26 or later. Releases build with Xcode 27.1.
+Requirements: Xcode 26 or later. Releases build with Xcode 27.2.
 
 The app deploys to iOS 26.0, macOS 26.0 and tvOS 26.0, so it runs on the 26 and 27 releases.
 
@@ -66,7 +66,7 @@ xcodebuild test -project HighForThis.xcodeproj -scheme HighForThis \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
 ```
 
-CI (`.github/workflows/xcode.yml`) archives the iOS, Mac and Apple TV apps with Xcode 27.1, and the iOS and Apple TV apps with Xcode 26, unsigned, and fails on any warning. It runs unit and UI tests on iPhone, iPad and Apple TV with 27 and 26.5, and on iPhone Duo, plus unit tests on the Mac and a player regression test on the minimum iOS 26.0 runtime. On simulators, a failed test is retried up to twice, because CI simulators sometimes time out reading the UI or fail to quit the app. It also checks that `HighForThisAPI` matches the operations and schema and that hand-written Swift is formatted. After CI passes on `main`, it uploads signed iOS, macOS and tvOS builds to TestFlight.
+CI (`.github/workflows/xcode.yml`) archives the iOS, Mac and Apple TV apps with Xcode 27.2, and the iOS and Apple TV apps with Xcode 26, unsigned, and fails on any warning. It runs unit and UI tests on iPhone, iPad and Apple TV with 27 and 26.5, and on iPhone Duo, plus unit tests on the Mac and a player regression test on the minimum iOS 26.0 runtime. On simulators, a failed test is retried up to twice, because CI simulators sometimes time out reading the UI or fail to quit the app. It also checks that `HighForThisAPI` matches the operations and schema and that hand-written Swift is formatted. After CI passes on `main`, it uploads signed iOS, macOS and tvOS builds to TestFlight.
 
 ## Releasing
 
