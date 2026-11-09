@@ -201,6 +201,9 @@ model Show {
   venueId   String
   venue     Venue        @relation(fields: [venueId], references: [id])
   artists   ShowArtist[]
+  // The venue listing a show was added from: "aeg" or "ticketmaster", and its event ID there
+  source    String?
+  sourceId  String?
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 }
@@ -282,6 +285,8 @@ model Venue {
   latitude          Float?
   longitude         Float?
   website           String?
+  // A Bowery Presents/AEG venue page, AEG feed, or ticketmaster.com venue page
+  listingsUrl       String?
   excludeFromSearch Boolean             @default(false)
   permanentlyClosed Boolean             @default(false)
   createdAt         DateTime            @default(now())

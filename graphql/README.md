@@ -21,19 +21,20 @@ cp .env.example .env  # then fill in values
 
 ### Environment Variables
 
-| Variable                          | Description                      |
-| --------------------------------- | -------------------------------- |
-| `DATABASE_URL`                    | PostgreSQL connection string     |
-| `TOKEN_KEY`                       | JWT token key                    |
-| `TOKEN_SECRET`                    | JWT token secret                 |
-| `YOUTUBE_API_KEY`                 | YouTube Data API key             |
-| `GCS_BUCKET`                      | Google Cloud Storage bucket name |
-| `GCS_CLIENT_EMAIL`                | GCS service account email        |
-| `GCS_PRIVATE_KEY`                 | GCS service account private key  |
-| `APPLE_MUSIC_AUTH_KEY_PATH`       | Path to Apple Music auth key     |
-| `APPLE_MUSIC_KEY_ID`              | Apple Music key ID               |
-| `APPLE_MUSIC_TEAM_ID`             | Apple Music team ID              |
-| `GOOGLE_MAPS_GEOLOCATION_API_KEY` | Google Maps geolocation API key  |
+| Variable                          | Description                                       |
+| --------------------------------- | ------------------------------------------------- |
+| `DATABASE_URL`                    | PostgreSQL connection string                      |
+| `TOKEN_KEY`                       | JWT token key                                     |
+| `TOKEN_SECRET`                    | JWT token secret                                  |
+| `YOUTUBE_API_KEY`                 | YouTube Data API key                              |
+| `GCS_BUCKET`                      | Google Cloud Storage bucket name                  |
+| `GCS_CLIENT_EMAIL`                | GCS service account email                         |
+| `GCS_PRIVATE_KEY`                 | GCS service account private key                   |
+| `APPLE_MUSIC_AUTH_KEY_PATH`       | Path to Apple Music auth key                      |
+| `APPLE_MUSIC_KEY_ID`              | Apple Music key ID                                |
+| `APPLE_MUSIC_TEAM_ID`             | Apple Music team ID                               |
+| `GOOGLE_MAPS_GEOLOCATION_API_KEY` | Google Maps geolocation API key                   |
+| `TICKETMASTER_API_KEY`            | Ticketmaster Discovery API key for venue listings |
 
 ### PostgreSQL (macOS)
 
