@@ -6,7 +6,7 @@ import { redirect, Outlet } from 'react-router';
 import { isAuthenticated } from '#/auth';
 import NavMenu, { AdminNavProvider, useAdminNav } from '#/components/Admin/NavMenu';
 import { graphqlHostContext } from '#/context.js';
-import { sessionStorage } from '#/session';
+import { sessionStorage } from '#/session.js';
 import adminCss from '#/styles/admin.css?url';
 import { rootData } from '#/utils/rootData';
 import titleTemplate from '#/utils/title';

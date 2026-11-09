@@ -1,6 +1,7 @@
 import { createCookieSessionStorage } from 'react-router';
 
-let storage: any;
+/** @type {import('react-router').SessionStorage} */
+let storage;
 if (typeof process !== 'undefined') {
   storage = createCookieSessionStorage({
     cookie: {

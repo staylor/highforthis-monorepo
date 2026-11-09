@@ -37,7 +37,8 @@
     "jsdom": "^28.1.0",
     "prisma": "7.4.1",
     "tsx": "4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "4.0.18"
   },
   "scripts": {
     "dev": "pnpm --filter @highforthis/shared build && NODE_OPTIONS='--disable-warning=DEP0040' tsx watch --env-file-if-exists=.env src/index.ts",
@@ -55,6 +56,7 @@
     "db:migrate-from-mongo": "tsx --env-file-if-exists=.env tools/migrate-from-mongo.ts",
     "tools:script:dev": "tsx --env-file-if-exists=.env",
     "tools:script:prod": "tsx --env-file-if-exists=.env.production",
+    "test": "vitest run",
     "typecheck": "tsc"
   }
 }

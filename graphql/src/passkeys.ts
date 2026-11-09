@@ -7,6 +7,7 @@ import type { Request, Response } from 'express';
 import { z } from 'zod';
 
 import { issueToken } from '#/authentication';
+import { isAdmin } from '#/authorization';
 import prisma from '#/database';
 import env from '#/env';
 import type { UserWithRoles } from '#/models';
@@ -36,7 +37,7 @@ const authenticatorTransports = new Set<AuthenticatorTransportFuture>([
 
 function getAdminUser(req: Request): UserWithRoles | null {
   const user = req.context?.authUser as UserWithRoles | undefined;
-  return user?.roles.some((role) => role.name === 'admin') ? user : null;
+  return isAdmin(user) ? user : null;
 }
 
 function parseTransports(transports: string[]): AuthenticatorTransportFuture[] {
@@ -136,7 +137,7 @@ export async function authenticationVerificationHandler(
       include: { user: { include: { roles: true } } },
     });
 
-    if (!passkey || !passkey.user.roles.some((role) => role.name === 'admin')) {
+    if (!passkey || !isAdmin(passkey.user)) {
       throw new Error('Passkey authentication failed');
     }
 

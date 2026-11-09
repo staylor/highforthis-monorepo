@@ -10,6 +10,7 @@ import factory from './apollo/client.js';
 import rejectWordPress from './rejectWordPress.js';
 import { apolloClientContext, graphqlHostContext, i18nContext } from './src/context.js';
 import createI18n from './src/i18n.js';
+import { sessionStorage } from './src/session.js';
 
 process.env.TZ = 'America/New_York';
 
@@ -60,6 +61,17 @@ app.use(cookieParser());
 
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable('x-powered-by');
+
+// The upload page posts from the browser, which can't read the httpOnly session cookie.
+// Attach its token so the GraphQL server can check that the uploader is an admin.
+app.use('/upload', async (req, _res, next) => {
+  const session = await sessionStorage.getSession(req.headers.cookie);
+  const token = session.get('token');
+  if (token) {
+    req.headers.authorization = `Bearer ${token}`;
+  }
+  next();
+});
 
 // Proxy API requests before Vite's development middleware can serve an HTML fallback.
 app.use(proxy);

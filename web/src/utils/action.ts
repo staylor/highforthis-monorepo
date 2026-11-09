@@ -55,6 +55,7 @@ export const handleSubmission = async ({
   }
   const result: Record<string, any> = await mutate({
     context,
+    request,
     mutation,
     variables: mergedVariables,
   });
@@ -81,6 +82,7 @@ export const handleDelete = async ({
     if (ids.length > 0) {
       await mutate({
         context,
+        request,
         mutation,
         variables: {
           ids,

@@ -9,6 +9,7 @@ import cors from 'cors';
 import express from 'express';
 
 import { authMiddleware, jwtMiddleware, sessionHandler } from './authentication';
+import { adminMiddleware } from './authorization';
 import env from './env';
 import cronJobs from './jobs';
 import type { AppContext } from './models';
@@ -68,7 +69,7 @@ async function startServer(): Promise<void> {
   app.get('/auth/session', jwtMiddleware, sessionHandler);
   app.post('/auth', express.json(), authMiddleware);
 
-  app.post('/upload', jwtMiddleware, multerMiddleware(uploadDir), mediaMiddleware);
+  app.post('/upload', jwtMiddleware, adminMiddleware, multerMiddleware(uploadDir), mediaMiddleware);
 
   const server = new ApolloServer<AppContext>({
     typeDefs,
