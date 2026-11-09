@@ -40,7 +40,7 @@ function serve(events: unknown[]) {
           _embedded: {
             venues: [
               { id: 'KovZpZAEF7FA', url: 'https://www.ticketmaster.com/other/venue/3990' },
-              ...[399, 400, 401].map((legacyId) => ({
+              ...[399, 400, 401, 403, 404].map((legacyId) => ({
                 id: `KovZ${legacyId}`,
                 url: `https://www.ticketmaster.com/barclays-center-tickets-brooklyn/venue/${legacyId}`,
               })),
@@ -115,6 +115,20 @@ describe('ticketmasterListings', () => {
     const listings = await ticketmasterListings(venuePage(400));
 
     expect(listings.map(({ sourceId }) => sourceId)).toEqual(['G5v', 'next']);
+  });
+
+  it("keeps the same show from another seller's duplicate whatever the order", async () => {
+    const axs = event('k7vGF', 'Olivia Rodrigo', {
+      url: 'https://www.axs.com/events/1631716/olivia-rodrigo-tickets',
+    });
+    const own = event('Z7r9j', 'Olivia Rodrigo');
+
+    serve([axs, own]);
+    const [first] = await ticketmasterListings(venuePage(403));
+    serve([own, axs]);
+    const [second] = await ticketmasterListings(venuePage(404));
+
+    expect([first.sourceId, second.sourceId]).toEqual(['Z7r9j', 'Z7r9j']);
   });
 
   it('reads venue pages that put the venue name after /venue/', async () => {
