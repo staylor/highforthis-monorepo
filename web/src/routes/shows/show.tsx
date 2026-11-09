@@ -38,7 +38,7 @@ export default function ShowRoute({ loaderData }: Route.ComponentProps) {
       </div>
       <div className="md:mt-4">
         <p className="mb-3 text-lg">
-          {d.monthName} {d.month}, {d.year} - {d.time}
+          {d.monthName} {d.day}, {d.year} - {d.time}
         </p>
         {show.title && <Heading1>{show.title}</Heading1>}
         <ArtistHeading className="font-sans">

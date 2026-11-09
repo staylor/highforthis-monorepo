@@ -9,11 +9,12 @@ export const formatDate = (date?: number) => {
   const minutes = d.getMinutes();
   return {
     month,
+    day,
     monthName: d.toLocaleString('en-us', {
       month: 'long',
     }),
     year,
-    time: `${hours % 12}:${String(minutes).padStart(2, '0')}${hours < 12 ? 'AM' : 'PM'}`,
+    time: `${hours % 12 || 12}:${String(minutes).padStart(2, '0')}${hours < 12 ? 'AM' : 'PM'}`,
     formatted: `${month < 10 ? `0${month}` : month}/${day < 10 ? `0${day}` : day}`,
   };
 };
