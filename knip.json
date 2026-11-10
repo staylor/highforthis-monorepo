@@ -1,13 +1,15 @@
 {
   "workspaces": {
     ".": {
+      "entry": ["oxfmt.config.ts", "oxlint.config.ts"],
       "ignoreDependencies": [
+        "@lexical/eslint-plugin",
+        "eslint-plugin-i18next",
         "esbuild",
         "react",
         "react-dom",
         "tsconfig-paths",
-        "tsx",
-        "eslint-plugin-tailwindcss"
+        "tsx"
       ]
     },
     "graphql": {
