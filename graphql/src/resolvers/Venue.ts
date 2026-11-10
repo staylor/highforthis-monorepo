@@ -8,6 +8,7 @@ import type {
 } from 'types/graphql';
 
 import prisma from '#/database';
+import { geocodeVenue } from '#/geocode';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
@@ -18,10 +19,15 @@ const venueIncludes = {
   featuredMedia: { include: { media: true } },
 };
 
+const ADDRESS_FIELDS = ['streetAddress', 'city', 'state', 'postalCode'] as const;
+
 const resolvers = {
   Venue: {
+    // "Street" over "City, ST 12345", leaving out whatever isn't set
     address(venue: Venue) {
-      return `${venue.streetAddress}\n${venue.city}, ${venue.state} ${venue.postalCode}`;
+      const region = [venue.state, venue.postalCode].filter(Boolean).join(' ');
+      const locality = [venue.city, region].filter(Boolean).join(', ');
+      return [venue.streetAddress?.trim(), locality].filter(Boolean).join('\n') || null;
     },
     coordinates(venue: Venue) {
       if (venue.latitude === null && venue.longitude === null) return null;
@@ -72,12 +78,17 @@ const resolvers = {
     async createVenue(_: unknown, { input }: MutationCreateVenueArgs) {
       const { featuredMedia, coordinates, ...data } = createVenueSchema.parse(input);
       const slug = await getUniqueSlug(prisma.venue, data.name);
+      // Look the venue up unless its coordinates were entered
+      const location =
+        typeof coordinates?.latitude === 'number' && typeof coordinates.longitude === 'number'
+          ? coordinates
+          : await geocodeVenue(data);
       return prisma.venue.create({
         data: {
           ...data,
           slug,
-          latitude: coordinates?.latitude,
-          longitude: coordinates?.longitude,
+          latitude: location?.latitude,
+          longitude: location?.longitude,
           featuredMedia: featuredMedia?.length
             ? { create: featuredMedia.map((mediaId) => ({ mediaId })) }
             : undefined,
@@ -101,7 +112,21 @@ const resolvers = {
           });
         }
       }
-      return prisma.venue.update({ where: { id }, data: updateData, include: venueIncludes });
+      const venue = await prisma.venue.update({
+        where: { id },
+        data: updateData,
+        include: venueIncludes,
+      });
+
+      // Saving an address for a venue without coordinates looks them up
+      const addressSaved = ADDRESS_FIELDS.some((field) => data[field] !== undefined);
+      if (!addressSaved || (venue.latitude !== null && venue.longitude !== null)) {
+        return venue;
+      }
+      const location = await geocodeVenue(venue);
+      return location
+        ? prisma.venue.update({ where: { id }, data: location, include: venueIncludes })
+        : venue;
     },
 
     async removeVenue(_: unknown, { ids }: MutationRemoveVenueArgs) {

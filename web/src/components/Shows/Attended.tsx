@@ -39,6 +39,7 @@ export default function Attended({
         <tbody>
           {shows.edges.map(({ node }) => {
             const d = formatDate(node.date);
+            const place = [node.venue.city, node.venue.state].filter(Boolean).join(', ');
 
             return (
               <tr key={node.id} className={cn(rowHover, rowBorder)}>
@@ -59,7 +60,7 @@ export default function Attended({
                   </Link>
                   {relation === 'artist' && (
                     <span className="text-muted dark:text-muted-dark block text-xs sm:hidden">
-                      {node.venue.city}, {node.venue.state}
+                      {place}
                     </span>
                   )}
                 </td>
@@ -70,7 +71,7 @@ export default function Attended({
                       'text-muted dark:text-muted-dark hidden uppercase sm:table-cell'
                     )}
                   >
-                    {node.venue.city}, {node.venue.state}
+                    {place}
                   </td>
                 )}
               </tr>
