@@ -52,7 +52,7 @@ export default function Venue({ loaderData }: Route.ComponentProps) {
               rel="noreferrer"
               className="text-pink text-sm underline"
             >
-              {t('venues.website')} &rarr;
+              {t('venues.website')} →
             </a>
           )}
           {venue.permanentlyClosed && (

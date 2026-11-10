@@ -1,17 +1,54 @@
-import config from '@wonderboymusic/eslint-config';
-import { defineConfig } from 'eslint/config';
-import i18next from 'eslint-plugin-i18next';
+import graphql from '@graphql-eslint/eslint-plugin';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
-import ignores from './lint/ignores.js';
-import overrides from './lint/overrides.js';
+const namingConvention = [
+  'error',
+  {
+    VariableDefinition: 'camelCase',
+    OperationDefinition: {
+      style: 'PascalCase',
+      forbiddenPrefixes: ['Query', 'Mutation', 'Subscription', 'Get'],
+      forbiddenSuffixes: ['Query', 'Mutation', 'Subscription'],
+    },
+    FragmentDefinition: {
+      forbiddenPrefixes: ['Fragment'],
+      forbiddenSuffixes: ['Fragment'],
+    },
+  },
+];
 
 export default defineConfig([
+  // oxlint lints JavaScript and TypeScript; ESLint only covers GraphQL, which oxlint cannot parse
+  globalIgnores(['**/*.{js,cjs,mjs}']),
   {
-    ignores,
+    files: ['web/src/**/*.graphql'],
+    languageOptions: {
+      parser: graphql.parser,
+    },
+    plugins: { '@graphql-eslint': graphql },
+    rules: {
+      ...graphql.configs['flat/operations-all'].rules,
+      ...graphql.configs['flat/schema-relay'].rules,
+      '@graphql-eslint/naming-convention': namingConvention,
+      '@graphql-eslint/unique-fragment-name': 'off',
+      '@graphql-eslint/unique-operation-name': 'off',
+    },
   },
   {
-    extends: [config],
+    files: ['xcode/graphql/*.graphql'],
+    languageOptions: {
+      parser: graphql.parser,
+    },
+    plugins: { '@graphql-eslint': graphql },
+    rules: {
+      ...graphql.configs['flat/operations-all'].rules,
+      ...graphql.configs['flat/schema-relay'].rules,
+      '@graphql-eslint/match-document-filename': 'off',
+      '@graphql-eslint/naming-convention': namingConvention,
+      '@graphql-eslint/no-one-place-fragments': 'off',
+      '@graphql-eslint/require-import-fragment': 'off',
+      '@graphql-eslint/unique-fragment-name': 'off',
+      '@graphql-eslint/unique-operation-name': 'off',
+    },
   },
-  i18next.configs['flat/recommended'],
-  ...overrides,
 ]);

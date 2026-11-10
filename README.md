@@ -44,8 +44,8 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 | `pnpm codegen`                  | Run GraphQL Codegen (TypeScript types, schema, Apollo iOS) |
 | `pnpm codegen:ios`              | Regenerate the app's Swift API from the committed schema   |
 | `pnpm db:refresh`               | Replace the local database with the latest production data |
-| `pnpm lint`                     | Lint all workspaces with ESLint                            |
-| `pnpm lint-fix`                 | Lint and auto-fix                                          |
+| `pnpm lint`                     | Lint with oxlint and ESLint (GraphQL), check formatting    |
+| `pnpm lint-fix`                 | Lint, auto-fix and format                                  |
 | `pnpm knip`                     | Find unused files, exports, and dependencies               |
 | `pnpm test:web`                 | Run web workspace tests                                    |
 | `pnpm typecheck`                | Type-check all workspaces                                  |
