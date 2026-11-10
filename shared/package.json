@@ -19,8 +19,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc"
+    "build": "tsgo -p tsconfig.build.json",
+    "typecheck": "tsgo"
   },
   "dependencies": {
     "@opentelemetry/api": "1.9.1",
