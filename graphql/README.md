@@ -33,7 +33,7 @@ cp .env.example .env  # then fill in values
 | `APPLE_MUSIC_AUTH_KEY_PATH`       | Path to Apple Music auth key                      |
 | `APPLE_MUSIC_KEY_ID`              | Apple Music key ID                                |
 | `APPLE_MUSIC_TEAM_ID`             | Apple Music team ID                               |
-| `GOOGLE_MAPS_GEOLOCATION_API_KEY` | Google Maps geolocation API key                   |
+| `GOOGLE_MAPS_GEOLOCATION_API_KEY` | Google Maps key for venue maps and geocoding      |
 | `TICKETMASTER_API_KEY`            | Ticketmaster Discovery API key for venue listings |
 
 ### PostgreSQL (macOS)
