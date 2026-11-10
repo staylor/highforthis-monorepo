@@ -26,7 +26,6 @@
       "ignoreDependencies": [
         "i18next-fs-backend",
         "i18next-http-backend",
-        "postcss",
         "tailwindcss",
         "@tailwindcss/forms"
       ]
