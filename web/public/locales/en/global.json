@@ -23,6 +23,9 @@
     "otherCrops": "Other available images",
     "showing": "Showing"
   },
+  "editor": {
+    "placeholder": "Start writing..."
+  },
   "entity": {
     "add": {
       "artist": "Add Artist",
