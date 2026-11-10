@@ -72,6 +72,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:update": "vitest -u run",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsgo"
   }
 }

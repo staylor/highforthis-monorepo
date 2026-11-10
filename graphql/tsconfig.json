@@ -8,9 +8,9 @@
     "resolveJsonModule": true,
     "target": "ES2024",
     "strict": true,
-    "baseUrl": ".",
     "paths": {
-      "#/*": ["./src/*"]
+      "#/*": ["./src/*"],
+      "types/*": ["./types/*"]
     },
     "skipLibCheck": true,
     "noEmit": true,

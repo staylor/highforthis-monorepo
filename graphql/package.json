@@ -57,6 +57,6 @@
     "tools:script:dev": "tsx --env-file-if-exists=.env",
     "tools:script:prod": "tsx --env-file-if-exists=.env.production",
     "test": "vitest run",
-    "typecheck": "tsc"
+    "typecheck": "tsgo"
   }
 }
