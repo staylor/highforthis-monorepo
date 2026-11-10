@@ -8,7 +8,7 @@ import type {
 } from 'types/graphql';
 
 import prisma from '#/database';
-import { geocodeVenue } from '#/geocode';
+import { ADDRESS_FIELDS, geocodeVenue } from '#/geocode';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
@@ -18,8 +18,6 @@ import { createVenueSchema, updateVenueSchema } from './validations';
 const venueIncludes = {
   featuredMedia: { include: { media: true } },
 };
-
-const ADDRESS_FIELDS = ['streetAddress', 'city', 'state', 'postalCode'] as const;
 
 const resolvers = {
   Venue: {
@@ -81,14 +79,13 @@ const resolvers = {
       // Look the venue up unless its coordinates were entered
       const location =
         typeof coordinates?.latitude === 'number' && typeof coordinates.longitude === 'number'
-          ? coordinates
+          ? { latitude: coordinates.latitude, longitude: coordinates.longitude }
           : await geocodeVenue(data);
       return prisma.venue.create({
         data: {
           ...data,
+          ...location,
           slug,
-          latitude: location?.latitude,
-          longitude: location?.longitude,
           featuredMedia: featuredMedia?.length
             ? { create: featuredMedia.map((mediaId) => ({ mediaId })) }
             : undefined,
@@ -118,7 +115,8 @@ const resolvers = {
         include: venueIncludes,
       });
 
-      // Saving an address for a venue without coordinates looks them up
+      // Saving an address for a venue without coordinates looks it up, which also fills in any
+      // empty part of its address
       const addressSaved = ADDRESS_FIELDS.some((field) => data[field] !== undefined);
       if (!addressSaved || (venue.latitude !== null && venue.longitude !== null)) {
         return venue;

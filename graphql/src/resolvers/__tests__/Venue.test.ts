@@ -9,7 +9,10 @@ const { update, geocodeVenue } = vi.hoisted(() => ({
 }));
 
 vi.mock('#/database', () => ({ default: { venue: { update } } }));
-vi.mock('#/geocode', () => ({ geocodeVenue }));
+vi.mock('#/geocode', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('#/geocode')>()),
+  geocodeVenue,
+}));
 
 function venue(fields: Partial<Venue>) {
   return {
