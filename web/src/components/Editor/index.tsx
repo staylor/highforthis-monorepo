@@ -7,6 +7,7 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin.js';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin.js';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import type { LexicalEditor, SerializedEditorState } from 'lexical';
+import { useTranslation } from 'react-i18next';
 
 import BlockToolbarPlugin from './plugins/BlockToolbarPlugin';
 import HiddenFieldPlugin from './plugins/HiddenFieldPlugin';
@@ -16,7 +17,9 @@ import VideoNode from './plugins/VideoNode';
 import theme from './theme';
 
 function Placeholder() {
-  return <div className="editor-placeholder">Start writing...</div>;
+  const { t } = useTranslation();
+
+  return <div className="editor-placeholder">{t('editor.placeholder')}</div>;
 }
 
 export default function Editor({ editorState }: { editorState: SerializedEditorState }) {
