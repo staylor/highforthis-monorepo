@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 
 import type { Callback } from '../Storage';
 
@@ -52,26 +53,28 @@ export default class Image extends Upload {
   }
 
   async save(file: Express.Multer.File, cb: Callback) {
-    await this.setFileProps(file);
-    // Imported on first use: libvips adds about 13 MB of RSS to every idle process.
-    const { default: sharp } = await import('sharp');
+    let fileData: FileData;
+    try {
+      await this.setFileProps(file);
+      // Imported on first use: libvips adds about 13 MB of RSS to every idle process.
+      const { default: sharp } = await import('sharp');
 
-    const finalPath = path.join(this.destination, this.fileName);
-    const original = {
-      fileName: this.fileName,
-      width: 0,
-      height: 0,
-      fileSize: 0,
-    };
-    const imageMeta = sharp().on('info', (info) => {
-      original.width = info.width;
-      original.height = info.height;
-      original.fileSize = info.size;
-    });
+      const finalPath = path.join(this.destination, this.fileName);
+      const original = {
+        fileName: this.fileName,
+        width: 0,
+        height: 0,
+        fileSize: 0,
+      };
+      const imageMeta = sharp().on('info', (info) => {
+        original.width = info.width;
+        original.height = info.height;
+        original.fileSize = info.size;
+      });
 
-    const outStream = fs.createWriteStream(finalPath);
-    outStream.on('error', cb);
-    outStream.on('finish', async () => {
+      // Rejects if any stream fails, such as sharp on a file that isn't a readable image
+      await pipeline(file.stream, imageMeta, fs.createWriteStream(finalPath));
+
       const sizes = this.settings.crops.map(({ width, height }: CropSetting) => {
         const w = width ?? 0;
         const h = height ?? 0;
@@ -83,10 +86,9 @@ export default class Image extends Upload {
         }
         return [w, h];
       });
-
       this.crops = await Promise.all(sizes.map((size) => this.handleCrop(finalPath, size)));
 
-      const fileData: FileData = {
+      fileData = {
         ...original,
         mimeType: file.mimetype,
         originalName: file.originalname,
@@ -97,10 +99,11 @@ export default class Image extends Upload {
         type: 'image',
         crops: this.crops,
       };
-      cb(null, fileData as Partial<Express.Multer.File>);
-    });
-
-    file.stream.pipe(imageMeta).pipe(outStream);
+    } catch (error) {
+      cb(error as Error);
+      return;
+    }
+    cb(null, fileData as Partial<Express.Multer.File>);
   }
 
   toArray() {
