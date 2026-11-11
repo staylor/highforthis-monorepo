@@ -67,7 +67,7 @@ function Sidebar({ shows }: { shows: ShowConnection }) {
                     )}
                   >
                     {/* Date block */}
-                    <div className="flex-shrink-0 text-center">
+                    <div className="shrink-0 text-center">
                       <div className="text-pink text-2xl leading-none font-bold">
                         {String(date.getDate()).padStart(2, '0')}
                       </div>

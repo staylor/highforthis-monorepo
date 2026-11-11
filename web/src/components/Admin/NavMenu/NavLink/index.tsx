@@ -31,7 +31,7 @@ function NavLink({ item, isActive, isCollapsed, isExpanded, hasSubNav, onToggle 
           'flex items-center rounded-lg text-sm font-medium no-underline',
           'transition-colors duration-150 outline-none',
           'focus-visible:ring-pink/50 focus-visible:ring-2',
-          isCollapsed ? 'h-10 w-10 justify-center' : 'gap-3 py-2 pr-9 pl-2.5',
+          isCollapsed ? 'justify-center size-10' : 'gap-3 py-2 pr-9 pl-2.5',
           isActive
             ? 'bg-pink/10 text-pink visited:text-pink dark:bg-pink/15'
             : cn(
@@ -40,10 +40,10 @@ function NavLink({ item, isActive, isCollapsed, isExpanded, hasSubNav, onToggle 
               )
         )}
       >
-        <Icon name={item.icon} className="h-5 w-5" />
+        <Icon name={item.icon} className="size-5" />
         {!isCollapsed && <span className="truncate">{item.label}</span>}
         {!isCollapsed && item.external && (
-          <Icon name="external" className="ml-auto h-3.5 w-3.5 opacity-40" />
+          <Icon name="external" className="ml-auto size-3.5 opacity-40" />
         )}
       </RRNavLink>
 
@@ -67,7 +67,7 @@ function NavLink({ item, isActive, isCollapsed, isExpanded, hasSubNav, onToggle 
         >
           <Icon
             name="chevronDown"
-            className={cn('h-3.5 w-3.5 transition-transform duration-200', {
+            className={cn('transition-transform duration-200 size-3.5', {
               '-rotate-90': !isExpanded,
             })}
           />

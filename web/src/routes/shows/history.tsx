@@ -60,7 +60,7 @@ function ShowsHistoryRoute({ loaderData }: Route.ComponentProps) {
             {t('shows.attendedIn', { count: shows.edges.length, year })}
           </Heading2>
           <p className="my-5">
-            <Link className="bold text-pink text-xl uppercase underline" to="/shows/history">
+            <Link className="text-pink text-xl uppercase underline" to="/shows/history">
               {t('shows.viewFullHistory')}
             </Link>
           </p>

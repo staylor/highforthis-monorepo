@@ -24,12 +24,12 @@ function CollapseButton({ isCollapsed, onClick }: CollapseButtonProps) {
           'hover:bg-neutral-100 hover:text-neutral-900',
           'focus-visible:ring-pink/50 focus-visible:ring-2 focus-visible:outline-none',
           'dark:text-neutral-400 dark:hover:bg-white/5 dark:hover:text-white',
-          isCollapsed ? 'h-10 w-10 justify-center' : 'w-full gap-3 px-2.5 py-2'
+          isCollapsed ? 'justify-center size-10' : 'w-full gap-3 px-2.5 py-2'
         )}
       >
         <Icon
           name="chevronLeft"
-          className={cn('h-4 w-4 transition-transform duration-200', { 'rotate-180': isCollapsed })}
+          className={cn('transition-transform duration-200 size-4', { 'rotate-180': isCollapsed })}
         />
         {!isCollapsed && <span className="truncate">{label}</span>}
       </button>

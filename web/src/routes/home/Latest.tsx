@@ -38,15 +38,15 @@ function Latest({ artworkSeed, posts }: LatestProps) {
             'hover:shadow-pink/5 dark:hover:shadow-pink/10 hover:shadow-lg'
           )}
         >
-          <div className="aspect-[4/3] overflow-hidden bg-neutral-950">
+          <div className="aspect-4/3 overflow-hidden bg-neutral-950">
             <PostArtwork
               post={featured.node}
               seed={`${artworkSeed}:${featured.node.id}`}
               variant="collage"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
           </div>
-          <div className="absolute right-0 bottom-0 left-0 p-8">
+          <div className="absolute inset-x-0 bottom-0 p-8">
             <span className="bg-pink/90 mb-4 inline-block rounded px-3 py-1 text-xs font-bold tracking-wider text-white uppercase">
               {t('posts.featured')}
             </span>

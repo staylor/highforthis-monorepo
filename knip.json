@@ -5,6 +5,7 @@
       "ignoreDependencies": [
         "@lexical/eslint-plugin",
         "eslint-plugin-i18next",
+        "eslint-plugin-tailwindcss",
         "esbuild",
         "react",
         "react-dom",
@@ -26,7 +27,6 @@
       "ignoreDependencies": [
         "i18next-fs-backend",
         "i18next-http-backend",
-        "tailwindcss",
         "@tailwindcss/forms"
       ]
     }

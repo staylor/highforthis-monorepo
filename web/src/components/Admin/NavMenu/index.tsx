@@ -158,7 +158,7 @@ function Brand({ isCollapsed }: { isCollapsed: boolean }) {
       })}
     >
       {isCollapsed ? (
-        <span className="bg-pink flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm font-black text-white">
+        <span className="bg-pink flex size-7 shrink-0 items-center justify-center rounded-lg text-sm font-black text-white">
           {t('title').charAt(0)}
         </span>
       ) : (
@@ -231,7 +231,7 @@ function NavMenu() {
                 'dark:hover:bg-white/10 dark:hover:text-white'
               )}
             >
-              <Icon name="close" className="h-5 w-5" />
+              <Icon name="close" className="size-5" />
             </button>
           </div>
           <NavList isCollapsed={false} />
@@ -257,7 +257,7 @@ function MobileToggle() {
         'dark:text-neutral-300 dark:hover:bg-white/10 dark:hover:text-white'
       )}
     >
-      <Icon name="menu" className="h-6 w-6" />
+      <Icon name="menu" className="size-6" />
     </button>
   );
 }

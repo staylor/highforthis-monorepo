@@ -42,7 +42,7 @@ export const Body = (props: HTMLAttributes<HTMLBodyElement>) => (
 const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'mx-auto max-w-screen-xl bg-white p-6 dark:bg-black',
+      'mx-auto max-w-7xl bg-white p-6 dark:bg-black',
       'transition-colors duration-300 ease-linear',
       className
     )}

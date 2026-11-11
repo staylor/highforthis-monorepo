@@ -89,6 +89,9 @@ importers:
       eslint-plugin-i18next:
         specifier: 6.1.5
         version: 6.1.5
+      eslint-plugin-tailwindcss:
+        specifier: 4.4.0
+        version: 4.4.0(eslint@10.14.0(jiti@2.7.0))(tailwindcss@4.3.4)(typescript@5.9.3)
       eslint-plugin-testing-library:
         specifier: 7.16.2
         version: 7.16.2(eslint@10.14.0(jiti@2.7.0))(typescript@5.9.3)
@@ -2422,6 +2425,10 @@ packages:
   '@pinojs/redact@0.4.0':
     resolution: {integrity: sha512-k2ENnmBugE/rzQfEcdWHcCY+/FM3VLzH9cYEsbdsoqrvzAKRhUZeRNhAZvB8OitQJ1TBed3yqWtdjzS6wJKBwg==, tarball: https://registry.npmjs.org/@pinojs/redact/-/redact-0.4.0.tgz}
 
+  '@pkgr/core@0.3.6':
+    resolution: {integrity: sha512-SEeaJLb3qBNF/OaXnaR1NmmBbFYk1zC0ZH/52fATcRPLFg/p791YrcyFFy44Bo9sLaGuSuLp5Q6axbb/O+v/RA==, tarball: https://registry.npmjs.org/@pkgr/core/-/core-0.3.6.tgz}
+    engines: {node: ^14.18.0 || >=16.0.0}
+
   '@preact/signals-core@1.13.0':
     resolution: {integrity: sha512-slT6XeTCAbdql61GVLlGU4x7XHI7kCZV5Um5uhE4zLX4ApgiiXc0UYFvVOKq06xcovzp7p+61l68oPi563ARKg==, tarball: https://registry.npmjs.org/@preact/signals-core/-/signals-core-1.13.0.tgz}
 
@@ -3468,6 +3475,9 @@ packages:
     resolution: {integrity: sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==}
     engines: {'0': node >= 6.0}
 
+  confbox@0.1.8:
+    resolution: {integrity: sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w==, tarball: https://registry.npmjs.org/confbox/-/confbox-0.1.8.tgz}
+
   confbox@0.2.4:
     resolution: {integrity: sha512-ysOGlgTFbN2/Y6Cg3Iye8YKulHw+R2fNXHrgSmXISQdMnomY6eNDprVdW9R5xBguEqI954+S6709UyiO7B+6OQ==, tarball: https://registry.npmjs.org/confbox/-/confbox-0.2.4.tgz}
 
@@ -3776,6 +3786,17 @@ packages:
   eslint-plugin-i18next@6.1.5:
     resolution: {integrity: sha512-xCTfstbK9ZpQ6UFT5S1s6zbZMhKn2o2jRSQYiU2UkV7wt8y1m3WjkUYGkGlipgRdFInYI9+LAqE+JQU/L73HmA==, tarball: https://registry.npmjs.org/eslint-plugin-i18next/-/eslint-plugin-i18next-6.1.5.tgz}
     engines: {node: '>=18.10.0'}
+
+  eslint-plugin-tailwindcss@4.4.0:
+    resolution: {integrity: sha512-cPyEIeBTVbPU30oQTm7pOqOYurb5vtGaGhRCajYsSUwpUS9fvswB13dOLDUjGJJ+Rt8ylXf4L0hrhLA7Hf7WTQ==, tarball: https://registry.npmjs.org/eslint-plugin-tailwindcss/-/eslint-plugin-tailwindcss-4.4.0.tgz}
+    engines: {node: '>=20.19.0'}
+    peerDependencies:
+      eslint: ^9.0.0 || ^10.0.0
+      tailwindcss: ^4.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   eslint-plugin-testing-library@7.16.2:
     resolution: {integrity: sha512-8gleGnQXK2ZA3hHwjCwpYTZvM+9VsrJ+/9kDI8CjqAQGAdMQOdn/rJNu7ZySENuiWlGKQWyZJ4ZjEg2zamaRHw==, tarball: https://registry.npmjs.org/eslint-plugin-testing-library/-/eslint-plugin-testing-library-7.16.2.tgz}
@@ -4545,6 +4566,10 @@ packages:
     resolution: {integrity: sha512-ME4Fb83LgEgwNw96RKNvKV4VTLuXfoKudAmm2lP8Kk87KaMK0/Xrx/aAkMWmT8mDb+3MlFDspfbCs7adjRxA2g==, tarball: https://registry.npmjs.org/listr2/-/listr2-9.0.5.tgz}
     engines: {node: '>=20.0.0'}
 
+  local-pkg@1.2.1:
+    resolution: {integrity: sha512-++gUqRDEvcnN6Zhqrr+y/CkVEHhlrR96vZn3nZZPYzMcBUyBtTKzB9NadClFIsIVSsu+3i9tfk/erqy9kAmt7Q==, tarball: https://registry.npmjs.org/local-pkg/-/local-pkg-1.2.1.tgz}
+    engines: {node: '>=14'}
+
   locate-path@6.0.0:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==, tarball: https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz}
     engines: {node: '>=10'}
@@ -4733,6 +4758,9 @@ packages:
     resolution: {integrity: sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==}
     engines: {node: '>=10'}
     hasBin: true
+
+  mlly@1.8.2:
+    resolution: {integrity: sha512-d+ObxMQFmbt10sretNDytwt85VrbkhhUA/JBGm1MPaWJ65Cl4wOgLaB1NYvJSZ0Ef03MMEU/0xpPMXUIQ29UfA==, tarball: https://registry.npmjs.org/mlly/-/mlly-1.8.2.tgz}
 
   module-details-from-path@1.0.4:
     resolution: {integrity: sha512-EGWKgxALGMgzvxYF1UyGTy0HXX/2vHLkw6+NvDKW2jypWbHpjQuj4UMcqQWXHERJhVGKikolT06G3bcKe4fi7w==, tarball: https://registry.npmjs.org/module-details-from-path/-/module-details-from-path-1.0.4.tgz}
@@ -5029,6 +5057,9 @@ packages:
     resolution: {integrity: sha512-r34yH/GlQpKZbU1BvFFqOjhISRo1MNx1tWYsYvmj6KIRHSPMT2+yHOEb1SG6NMvRoHRF0a07kCOox/9yakl1vg==, tarball: https://registry.npmjs.org/pino/-/pino-10.3.1.tgz}
     hasBin: true
 
+  pkg-types@1.3.1:
+    resolution: {integrity: sha512-/Jm5M4RvtBFVkKWRu2BLUTNP8/M2a+UwuAX+ae4770q1qVGtfjG+WTCupoZixokjmHiry8uI+dlY8KXYV5HVVQ==, tarball: https://registry.npmjs.org/pkg-types/-/pkg-types-1.3.1.tgz}
+
   pkg-types@2.3.0:
     resolution: {integrity: sha512-SIqCzDRg0s9npO5XQ3tNZioRY1uK06lA41ynBC1YmFTmnY6FjUjVt6s4LoADmwoig1qqD0oK8h1p/8mlMx8Oig==, tarball: https://registry.npmjs.org/pkg-types/-/pkg-types-2.3.0.tgz}
 
@@ -5038,6 +5069,16 @@ packages:
   possible-typed-array-names@1.1.0:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
     engines: {node: '>= 0.4'}
+
+  postcss-nested@7.0.2:
+    resolution: {integrity: sha512-5osppouFc0VR9/VYzYxO03VaDa3e8F23Kfd6/9qcZTUI8P58GIYlArOET2Wq0ywSl2o2PjELhYOFI4W7l5QHKw==, tarball: https://registry.npmjs.org/postcss-nested/-/postcss-nested-7.0.2.tgz}
+    engines: {node: '>=18.0'}
+    peerDependencies:
+      postcss: ^8.2.14
+
+  postcss-selector-parser@7.2.0:
+    resolution: {integrity: sha512-Khh/tERVBn0I1499dvBSHY0pWJloMJWUxDsOBM0CCDPAcVZ10Jl2L1qy1f19uEX22spa8Mv7DCdEQJc0cGwBhQ==, tarball: https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-7.2.0.tgz}
+    engines: {node: '>=4'}
 
   postcss@8.5.6:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
@@ -5131,6 +5172,9 @@ packages:
   qs@6.15.0:
     resolution: {integrity: sha512-mAZTtNCeetKMH+pSjrb76NAM8V9a05I9aBZOHztWy/UqcJdQYNsf59vrRKWnojAT9Y+GbIvoTBC++CPHqpDBhQ==}
     engines: {node: '>=0.6'}
+
+  quansync@0.2.11:
+    resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==, tarball: https://registry.npmjs.org/quansync/-/quansync-0.2.11.tgz}
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
@@ -5541,8 +5585,17 @@ packages:
     resolution: {integrity: sha512-c7AfkZ9udatCuAy9RSfiGPpeOKKUAUK5e1cXadLOGUjasdxqYqAK0jTNkM/FSEyJ3a5Ra27j/tw/PS0qLmaF/A==}
     engines: {node: '>=18'}
 
+  synckit@0.11.13:
+    resolution: {integrity: sha512-eNRKgb3z66Yp3D2CixVujOUvXLFUTij/zVnV8KRyvFdQwpz7I5DS8UfRkTeLzb64u+dkzDSdelE24izu+zSSUg==, tarball: https://registry.npmjs.org/synckit/-/synckit-0.11.13.tgz}
+    engines: {node: ^14.18.0 || >=16.0.0}
+
   tabbable@6.4.0:
     resolution: {integrity: sha512-05PUHKSNE8ou2dwIxTngl4EzcnsCDZGJ/iCLtDflR/SHB/ny14rXc+qU5P4mG9JkusiV7EivzY9Mhm55AzAvCg==, tarball: https://registry.npmjs.org/tabbable/-/tabbable-6.4.0.tgz}
+
+  tailwind-api-utils@1.0.3:
+    resolution: {integrity: sha512-KpzUHkH1ug1sq4394SLJX38ZtpeTiqQ1RVyFTTSY2XuHsNSTWUkRo108KmyyrMWdDbQrLYkSHaNKj/a3bmA4sQ==, tarball: https://registry.npmjs.org/tailwind-api-utils/-/tailwind-api-utils-1.0.3.tgz}
+    peerDependencies:
+      tailwindcss: ^3.3.0 || ^4.0.0 || ^4.0.0-beta
 
   tailwind-merge@3.7.0:
     resolution: {integrity: sha512-XPPUyAc+cvspz3lHTcR/QgPfW2A0lv/xQNIjX3HGhLR+Nq2lHaLq5MtTesHn8GUr3W3DguT2KT5x3NVgRtYwmA==, tarball: https://registry.npmjs.org/tailwind-merge/-/tailwind-merge-3.7.0.tgz}
@@ -5696,6 +5749,9 @@ packages:
   ua-parser-js@1.0.41:
     resolution: {integrity: sha512-LbBDqdIC5s8iROCUjMbW1f5dJQTEFB1+KO9ogbvlb3nm9n4YHa5p4KTvFPWvh2Hs8gZMBuiB1/8+pdfe/tDPug==}
     hasBin: true
+
+  ufo@1.6.4:
+    resolution: {integrity: sha512-JFNbkD1Svwe0KvGi8GOeLcP4kAWQ609twvCdcHxq1oSL8svv39ZuSvajcD8B+5D0eL4+s1Is2D/O6KN3qcTeRA==, tarball: https://registry.npmjs.org/ufo/-/ufo-1.6.4.tgz}
 
   unc-path-regex@0.1.2:
     resolution: {integrity: sha512-eXL4nmJT7oCpkZsHZUOJo8hcX3GbsiDOa0Qu9F646fi8dT3XuSVopVqAcEiVzSKKH7UoDti23wNX3qGFxcW5Qg==}
@@ -8219,6 +8275,8 @@ snapshots:
 
   '@pinojs/redact@0.4.0': {}
 
+  '@pkgr/core@0.3.6': {}
+
   '@preact/signals-core@1.13.0': {}
 
   '@prisma/adapter-pg@7.4.1':
@@ -9295,6 +9353,8 @@ snapshots:
       readable-stream: 3.6.2
       typedarray: 0.0.6
 
+  confbox@0.1.8: {}
+
   confbox@0.2.4: {}
 
   consola@3.4.2: {}
@@ -9578,6 +9638,20 @@ snapshots:
   eslint-plugin-i18next@6.1.5:
     dependencies:
       requireindex: 1.1.0
+
+  eslint-plugin-tailwindcss@4.4.0(eslint@10.14.0(jiti@2.7.0))(tailwindcss@4.3.4)(typescript@5.9.3):
+    dependencies:
+      '@typescript-eslint/utils': 8.72.2(eslint@10.14.0(jiti@2.7.0))(typescript@5.9.3)
+      eslint: 10.14.0(jiti@2.7.0)
+      postcss: 8.5.6
+      postcss-nested: 7.0.2(postcss@8.5.6)
+      synckit: 0.11.13
+      tailwind-api-utils: 1.0.3(tailwindcss@4.3.4)
+      tailwindcss: 4.3.4
+    optionalDependencies:
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - supports-color
 
   eslint-plugin-testing-library@7.16.2(eslint@10.14.0(jiti@2.7.0))(typescript@5.9.3):
     dependencies:
@@ -10438,6 +10512,12 @@ snapshots:
       rfdc: 1.4.1
       wrap-ansi: 9.0.2
 
+  local-pkg@1.2.1:
+    dependencies:
+      mlly: 1.8.2
+      pkg-types: 2.3.1
+      quansync: 0.2.11
+
   locate-path@6.0.0:
     dependencies:
       p-locate: 5.0.0
@@ -10577,6 +10657,13 @@ snapshots:
       minimist: 1.2.8
 
   mkdirp@3.0.1: {}
+
+  mlly@1.8.2:
+    dependencies:
+      acorn: 8.16.0
+      pathe: 2.0.3
+      pkg-types: 1.3.1
+      ufo: 1.6.4
 
   module-details-from-path@1.0.4: {}
 
@@ -10914,6 +11001,12 @@ snapshots:
       sonic-boom: 4.2.1
       thread-stream: 4.2.0
 
+  pkg-types@1.3.1:
+    dependencies:
+      confbox: 0.1.8
+      mlly: 1.8.2
+      pathe: 2.0.3
+
   pkg-types@2.3.0:
     dependencies:
       confbox: 0.2.4
@@ -10927,6 +11020,15 @@ snapshots:
       pathe: 2.0.3
 
   possible-typed-array-names@1.1.0: {}
+
+  postcss-nested@7.0.2(postcss@8.5.6):
+    dependencies:
+      postcss: 8.5.6
+      postcss-selector-parser: 7.2.0
+
+  postcss-selector-parser@7.2.0:
+    dependencies:
+      util-deprecate: 1.0.2
 
   postcss@8.5.6:
     dependencies:
@@ -11010,6 +11112,8 @@ snapshots:
   qs@6.15.0:
     dependencies:
       side-channel: 1.1.0
+
+  quansync@0.2.11: {}
 
   queue-microtask@1.2.3: {}
 
@@ -11451,7 +11555,18 @@ snapshots:
       timeout-signal: 2.0.0
       whatwg-mimetype: 4.0.0
 
+  synckit@0.11.13:
+    dependencies:
+      '@pkgr/core': 0.3.6
+
   tabbable@6.4.0: {}
+
+  tailwind-api-utils@1.0.3(tailwindcss@4.3.4):
+    dependencies:
+      enhanced-resolve: 5.26.1
+      jiti: 2.7.0
+      local-pkg: 1.2.1
+      tailwindcss: 4.3.4
 
   tailwind-merge@3.7.0: {}
 
@@ -11589,6 +11704,8 @@ snapshots:
   typescript@5.9.3: {}
 
   ua-parser-js@1.0.41: {}
+
+  ufo@1.6.4: {}
 
   unc-path-regex@0.1.2: {}
 

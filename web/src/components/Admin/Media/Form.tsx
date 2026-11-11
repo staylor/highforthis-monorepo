@@ -56,7 +56,7 @@ export default function MediaForm({
           const video = media as VideoUpload;
           mediaInfo = (
             <video
-              className="mt-2.5 mb-5 max-w-screen-sm appearance-none"
+              className="mt-2.5 mb-5 max-w-160 appearance-none"
               preload="metadata"
               width={video.width || undefined}
               height={video.height || undefined}
