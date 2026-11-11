@@ -45,7 +45,7 @@ export default function PostForm({ data = {} as Post, heading, buttonLabel }: Po
       type: 'heading',
       className: cn(
         'block font-black tracking-wide mb-2.5 lg:mb-6 text-4xl lg:text-5xl',
-        'm-0 p-0 shadow-none border-0 leading-tight break-words'
+        'm-0 p-0 shadow-none border-0 leading-tight wrap-break-word'
       ),
       placeholder: t('posts.addTitle'),
     },

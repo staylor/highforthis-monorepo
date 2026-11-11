@@ -89,7 +89,7 @@ function Collage({ className, images }: { className?: string; images: DisplayIma
   return (
     <div
       className={cn(
-        'grid h-full w-full gap-1 bg-neutral-950',
+        'grid gap-1 bg-neutral-950 size-full',
         count === 2 && 'grid-cols-2',
         count === 3 && 'grid-cols-2 grid-rows-2',
         count === 4 && 'grid-cols-2 grid-rows-2',
@@ -101,7 +101,7 @@ function Collage({ className, images }: { className?: string; images: DisplayIma
         <div key={id} className={cn('overflow-hidden', collageItemClasses[count][index])}>
           <img
             alt=""
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
             loading={index === 0 ? 'eager' : 'lazy'}
             src={src}
           />
@@ -116,10 +116,10 @@ function Stack({ className, images }: { className?: string; images: DisplayImage
 
   if (visibleImages.length === 1) {
     return (
-      <div className={cn('h-28 w-28 shrink-0 overflow-hidden rounded-lg', className)}>
+      <div className={cn('shrink-0 overflow-hidden rounded-lg size-28', className)}>
         <img
           alt=""
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
           src={visibleImages[0].src}
         />
@@ -128,13 +128,13 @@ function Stack({ className, images }: { className?: string; images: DisplayImage
   }
 
   return (
-    <div className={cn('relative h-28 w-28 shrink-0', className)}>
+    <div className={cn('relative shrink-0 size-28', className)}>
       {visibleImages.map(({ id, src }, index) => (
         <img
           key={id}
           alt=""
           className={cn(
-            'dark:border-surface-dark-card absolute inset-2 h-24 w-24 rounded-lg border-2 border-white object-cover shadow-md',
+            'dark:border-surface-dark-card absolute inset-2 rounded-lg border-2 border-white object-cover shadow-md size-24',
             'transition-transform duration-500 ease-out',
             stackItemClasses[index]
           )}

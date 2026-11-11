@@ -54,7 +54,7 @@ export default function DarkMode() {
             'absolute inset-0 cursor-pointer rounded-full border transition-colors duration-300',
             'border-neutral-200 bg-neutral-200',
             'dark:bg-surface-dark-card dark:border-white/10',
-            'before:absolute before:bottom-0.5 before:left-0.5 before:h-5 before:w-5',
+            'before:absolute before:bottom-0.5 before:left-0.5 before:size-5',
             'before:rounded-full before:bg-white before:shadow-sm before:transition-transform before:duration-300',
             'peer-checked:before:translate-x-6',
             'peer-checked:before:bg-pink'

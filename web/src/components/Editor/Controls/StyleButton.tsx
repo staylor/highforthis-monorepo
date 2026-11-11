@@ -21,7 +21,7 @@ function StyleButton({ label, style, onToggle, className, active }: StyleButtonP
       role="button"
       tabIndex={-1}
       className={cn(
-        'flex h-7 w-7 items-center justify-center',
+        'flex items-center justify-center size-7',
         'cursor-pointer first:rounded-l last:rounded-r',
         className,
         {

@@ -46,7 +46,7 @@ export default function Message({
           )}
           onClick={onClick}
         >
-          <Icon name="close" className="h-4 w-4" />
+          <Icon name="close" className="size-4" />
         </button>
       )}
     </div>

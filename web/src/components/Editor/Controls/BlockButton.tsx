@@ -25,7 +25,7 @@ function BlockButton({ active, onMouseDown, ref }: Props) {
         onMouseDown();
       }}
     >
-      <Icon name={active ? 'closeCircle' : 'plusCircle'} className="h-6 w-6" />
+      <Icon name={active ? 'closeCircle' : 'plusCircle'} className="size-6" />
     </div>
   );
 }

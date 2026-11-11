@@ -61,7 +61,7 @@ export default function Posts({ loaderData }: Route.ComponentProps) {
                 'hover:shadow-pink/5 dark:hover:shadow-pink/10 hover:shadow-lg'
               )}
             >
-              <div className="aspect-[3/2] overflow-hidden bg-neutral-950">
+              <div className="aspect-3/2 overflow-hidden bg-neutral-950">
                 <PostArtwork post={node} seed={`${artworkSeed}:${node.id}`} variant="collage" />
               </div>
               <div className="p-4">

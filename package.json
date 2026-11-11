@@ -40,6 +40,7 @@
     "esbuild": "0.27.3",
     "eslint": "10.14.0",
     "eslint-plugin-i18next": "6.1.5",
+    "eslint-plugin-tailwindcss": "4.4.0",
     "eslint-plugin-testing-library": "7.16.2",
     "graphql": "16.13.0",
     "knip": "5.85.0",

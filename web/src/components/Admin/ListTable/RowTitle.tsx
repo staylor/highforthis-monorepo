@@ -12,7 +12,7 @@ interface RowTitleProps {
 export default function RowTitle({ url, title, subtitle }: RowTitleProps) {
   const { t } = useTranslation();
   return (
-    <strong className="mb-1 block text-sm font-bold break-words">
+    <strong className="mb-1 block text-sm font-bold wrap-break-word">
       <Link to={url}>{title || t('table.noTitle')}</Link>
       {subtitle && (
         <>

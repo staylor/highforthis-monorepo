@@ -53,7 +53,7 @@ const Navigation = () => {
           className={cn(
             'absolute top-full right-4 z-50 w-56 rounded-xl lg:hidden',
             'dark:bg-surface-dark border border-neutral-200 bg-white shadow-lg dark:border-white/10',
-            'px-5 py-5'
+            'p-5'
           )}
         >
           <div className="flex flex-col gap-4">
@@ -86,7 +86,7 @@ function MobileToggle() {
       aria-expanded={isOpen}
     >
       <svg
-        className="h-6 w-6 text-neutral-700 dark:text-white"
+        className="size-6 text-neutral-700 dark:text-white"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

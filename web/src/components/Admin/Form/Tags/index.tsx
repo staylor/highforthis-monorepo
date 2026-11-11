@@ -49,12 +49,12 @@ export default function Tags({ name, tags }: TagsProps) {
               type="button"
               aria-label={t('tags.remove', { tag })}
               className={cn(
-                'float-left mr-0.5 flex h-5 w-5 cursor-pointer items-center justify-center',
+                'float-left mr-0.5 flex cursor-pointer items-center justify-center size-5',
                 'text-dark rounded-full transition-colors hover:bg-neutral-200'
               )}
               onClick={bindClick(i)}
             >
-              <Icon name="close" className="h-3.5 w-3.5" />
+              <Icon name="close" className="size-3.5" />
             </button>{' '}
             {tag}
           </div>
