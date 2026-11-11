@@ -49,12 +49,12 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
             'last:border-b-0'
           )}
         >
-          <h3 className="group-hover:text-pink mb-2 text-lg font-semibold transition-colors">
+          <h3 className="mb-2 text-lg font-semibold transition-colors group-hover:text-pink">
             {node.title}
           </h3>
           {node.description && (
             <p
-              className="text-muted dark:text-muted-dark line-clamp-3 text-sm leading-relaxed"
+              className="line-clamp-3 text-sm leading-relaxed text-muted dark:text-muted-dark"
               dangerouslySetInnerHTML={{
                 __html: (node.description || '').replace(/\n/g, '<br />'),
               }}

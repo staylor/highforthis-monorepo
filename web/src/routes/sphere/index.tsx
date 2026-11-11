@@ -114,7 +114,7 @@ export default function Sphere({ loaderData }: Route.ComponentProps) {
           {showStats ? t('sphere.stats.hide') : t('sphere.stats.show')}
         </Button>
         {currentSong && !showStats && (
-          <div className="bg-pink sticky top-0 mb-4 flex justify-between p-2 text-white">
+          <div className="sticky top-0 mb-4 flex justify-between bg-pink p-2 text-white">
             <p>
               <Trans
                 i18nKey="sphere.stats.song"
@@ -152,7 +152,7 @@ export default function Sphere({ loaderData }: Route.ComponentProps) {
         )}
         <div className="grid grid-cols-3 gap-2">
           {setlists.map(({ date, sets: [set1, set2, encore] }, i) => (
-            <div key={i.toString()} className="border-detail border p-2">
+            <div key={i.toString()} className="border border-detail p-2">
               <p className="mb-4 text-lg">
                 <strong>{date}</strong>
               </p>

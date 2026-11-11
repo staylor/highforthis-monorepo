@@ -49,7 +49,7 @@ function NavLink({ item, isActive, isCollapsed, isExpanded, hasSubNav, onToggle 
 
       {/* active indicator for the collapsed rail */}
       {isCollapsed && isActive && (
-        <i className="bg-pink absolute top-1/2 -left-2 h-5 w-1 -translate-y-1/2 rounded-r-full" />
+        <i className="absolute top-1/2 -left-2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-pink" />
       )}
 
       {showDisclosure && (

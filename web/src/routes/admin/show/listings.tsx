@@ -136,7 +136,7 @@ function ListingRow({
           disabled={!canAdd}
           onChange={(e) => onToggle(listing.sourceId, e.target.checked)}
           aria-label={t('shows.listings.select', { date: day })}
-          className="text-pink focus:ring-pink rounded-sm border-gray-300 shadow-sm disabled:opacity-40"
+          className="rounded-sm border-gray-300 text-pink shadow-sm focus:ring-pink disabled:opacity-40"
         />
       </td>
       <td className={cn(cell, 'whitespace-nowrap')}>
@@ -181,7 +181,7 @@ function ListingRow({
               {missingSupport.length > 0 && (
                 <button
                   type="button"
-                  className="text-pink cursor-pointer text-xs underline"
+                  className="cursor-pointer text-xs text-pink underline"
                   onClick={() => setArtists([...names, ...missingSupport].join('; '))}
                 >
                   {t('shows.listings.addSupport', { names: missingSupport.join(', ') })}
@@ -241,7 +241,7 @@ function ListingsTable({ venueListings }: { venueListings: VenueListings }) {
             type="checkbox"
             checked={hideAdded}
             onChange={(e) => setHideAdded(e.target.checked)}
-            className="text-pink focus:ring-pink rounded-sm border-gray-300 shadow-sm"
+            className="rounded-sm border-gray-300 text-pink shadow-sm focus:ring-pink"
           />
           {t('shows.listings.hideAdded')}
         </label>
@@ -258,9 +258,9 @@ function ListingsTable({ venueListings }: { venueListings: VenueListings }) {
         <p className="my-10">{t('shows.listings.empty')}</p>
       ) : (
         <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-          <table className="border-detail w-full min-w-160 table-fixed border-spacing-0 border shadow-sm">
+          <table className="w-full min-w-160 table-fixed border-spacing-0 border border-detail shadow-sm">
             <thead>
-              <tr className="border-detail border-b text-left text-sm">
+              <tr className="border-b border-detail text-left text-sm">
                 <th className={cn(cell, 'w-10')} aria-hidden />
                 <th className={cn(cell, 'w-32')}>{t('shows.listings.date')}</th>
                 <th className={cell}>{t('shows.listings.artists')}</th>

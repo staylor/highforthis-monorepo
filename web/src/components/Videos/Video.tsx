@@ -60,7 +60,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
       )}
       {/* Play button overlay */}
       <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
-        <div className="bg-pink/90 flex size-14 items-center justify-center rounded-full backdrop-blur-sm">
+        <div className="flex size-14 items-center justify-center rounded-full bg-pink/90 backdrop-blur-sm">
           <svg className="ml-0.5 size-7 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z" />
           </svg>
@@ -91,7 +91,7 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
       {single ? (
         <TextTitle>{video.title}</TextTitle>
       ) : (
-        <h1 className="group-hover:text-pink text-base leading-snug font-semibold transition-colors">
+        <h1 className="text-base leading-snug font-semibold transition-colors group-hover:text-pink">
           <Link to={`/video/${video.slug}`}>{video.title}</Link>
         </h1>
       )}

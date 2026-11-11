@@ -35,7 +35,7 @@ export default function Venue({ loaderData }: Route.ComponentProps) {
         <div className="my-4 md:my-0 md:mr-4">
           {venue.address && (
             <p
-              className="text-muted dark:text-muted-dark mb-3 text-sm"
+              className="mb-3 text-sm text-muted dark:text-muted-dark"
               dangerouslySetInnerHTML={{ __html: venue.address.replace(/\n/g, '<br />') }}
             />
           )}
@@ -50,13 +50,13 @@ export default function Venue({ loaderData }: Route.ComponentProps) {
               href={venue.website}
               target="_blank"
               rel="noreferrer"
-              className="text-pink text-sm underline"
+              className="text-sm text-pink underline"
             >
               {t('venues.website')} →
             </a>
           )}
           {venue.permanentlyClosed && (
-            <p className="bg-pink mt-4 rounded-lg p-2 text-sm font-bold text-white">
+            <p className="mt-4 rounded-lg bg-pink p-2 text-sm font-bold text-white">
               {t('venues.permanentlyClosed')}.
             </p>
           )}

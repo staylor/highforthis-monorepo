@@ -134,10 +134,10 @@ function ListTable({
       </section>
       {/* horizontal scroll instead of unreadable columns on narrow screens */}
       <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-        <table className="border-detail w-full min-w-160 table-fixed border-spacing-0 border shadow-sm">
+        <table className="w-full min-w-160 table-fixed border-spacing-0 border border-detail shadow-sm">
           <thead>
             <Headers
-              className="border-detail border-b"
+              className="border-b border-detail"
               checkClass="border-b border-detail"
               columns={columns}
               checked={state.all}
@@ -182,7 +182,7 @@ function ListTable({
           </tbody>
           <tfoot>
             <Headers
-              className="border-detail border-t"
+              className="border-t border-detail"
               checkClass="border-t border-detail"
               columns={columns}
               checked={state.all}

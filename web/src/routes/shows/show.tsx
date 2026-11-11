@@ -63,7 +63,7 @@ export default function ShowRoute({ loaderData }: Route.ComponentProps) {
           <a
             href={show.url}
             target="_blank"
-            className="border-pink text-pink my-2 inline-block rounded-md border px-3 py-2 font-sans text-xl"
+            className="my-2 inline-block rounded-md border border-pink px-3 py-2 font-sans text-xl text-pink"
             rel="noreferrer"
           >
             {t('shows.website')}

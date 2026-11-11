@@ -47,7 +47,7 @@ function Latest({ artworkSeed, posts }: LatestProps) {
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
           </div>
           <div className="absolute inset-x-0 bottom-0 p-8">
-            <span className="bg-pink/90 mb-4 inline-block rounded px-3 py-1 text-xs font-bold tracking-wider text-white uppercase">
+            <span className="mb-4 inline-block rounded bg-pink/90 px-3 py-1 text-xs font-bold tracking-wider text-white uppercase">
               {t('posts.featured')}
             </span>
             <h2 className="mb-3 text-3xl leading-tight font-bold text-white lg:text-4xl">
@@ -78,11 +78,11 @@ function Latest({ artworkSeed, posts }: LatestProps) {
               >
                 <PostArtwork post={node} seed={`${artworkSeed}:${node.id}`} variant="stack" />
                 <div className="flex flex-col justify-center">
-                  <h3 className="group-hover:text-pink mb-1.5 text-lg font-semibold transition-colors">
+                  <h3 className="mb-1.5 text-lg font-semibold transition-colors group-hover:text-pink">
                     {node.title}
                   </h3>
                   {node.summary && (
-                    <p className="text-muted dark:text-muted-dark line-clamp-2 text-sm">
+                    <p className="line-clamp-2 text-sm text-muted dark:text-muted-dark">
                       {node.summary}
                     </p>
                   )}

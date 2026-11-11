@@ -43,12 +43,12 @@ function Sidebar({ shows }: { shows: ShowConnection }) {
         viewAllText="Full Calendar →"
       />
       {shows.edges.length === 0 && (
-        <p className="text-muted dark:text-muted-dark text-sm">{t('shows.noRecommended')}</p>
+        <p className="text-sm text-muted dark:text-muted-dark">{t('shows.noRecommended')}</p>
       )}
       <div className="flex flex-col gap-8">
         {groups.map((group) => (
           <div key={group.key}>
-            <h3 className="text-muted dark:text-muted-dark mb-3 text-xs font-semibold tracking-wider uppercase">
+            <h3 className="mb-3 text-xs font-semibold tracking-wider text-muted uppercase dark:text-muted-dark">
               {group.label}
             </h3>
             <div className="columns-1 gap-3 sm:columns-2 lg:columns-3">
@@ -68,20 +68,20 @@ function Sidebar({ shows }: { shows: ShowConnection }) {
                   >
                     {/* Date block */}
                     <div className="shrink-0 text-center">
-                      <div className="text-pink text-2xl leading-none font-bold">
+                      <div className="text-2xl leading-none font-bold text-pink">
                         {String(date.getDate()).padStart(2, '0')}
                       </div>
-                      <div className="text-muted dark:text-muted-dark text-xs font-medium tracking-wider uppercase tabular-nums">
+                      <div className="text-xs font-medium tracking-wider text-muted uppercase tabular-nums dark:text-muted-dark">
                         {date.toLocaleString('en-us', { weekday: 'short' })}
                       </div>
                     </div>
 
                     {/* Show info */}
                     <div className="min-w-0 flex-1">
-                      <div className="group-hover:text-pink text-base leading-snug font-semibold transition-colors">
+                      <div className="text-base leading-snug font-semibold transition-colors group-hover:text-pink">
                         {formatArtists(node)}
                       </div>
-                      <div className="text-muted dark:text-muted-dark mt-1 text-sm">
+                      <div className="mt-1 text-sm text-muted dark:text-muted-dark">
                         {node.venue.name}
                       </div>
                     </div>

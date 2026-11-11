@@ -84,7 +84,7 @@ export default function Media() {
     <>
       <Heading>{t('media.upload')}</Heading>
       <div
-        className="border-dark my-5 block h-50 w-full max-w-150 border-4 border-dashed"
+        className="my-5 block h-50 w-full max-w-150 border-4 border-dashed border-dark"
         onDrop={onDrop}
         onDragOver={(e) => e.preventDefault()}
         onDragEnd={() => false}
@@ -100,7 +100,7 @@ export default function Media() {
               {upload.id ? <Link to={`/admin/media/${upload.id}`}>{t('media.edit')}</Link> : null}
             </div>
             <div
-              className="bg-pink absolute top-0 left-0 z-10 h-7.5"
+              className="absolute top-0 left-0 z-10 h-7.5 bg-pink"
               style={{ width: upload.id ? '3px' : `${upload.progress}%` }}
             />
           </div>
