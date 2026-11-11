@@ -19,6 +19,28 @@ export type ApiKeys = {
   googleMaps?: Maybe<Scalars['String']['output']>;
 };
 
+export type AppleMusicAlbum = {
+  __typename?: 'AppleMusicAlbum';
+  artistName: Scalars['String']['output'];
+  artwork: AppleMusicArtwork;
+  cover: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  releaseDate?: Maybe<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type AppleMusicAlbumCoverArgs = {
+  size: Scalars['Int']['input'];
+};
+
+export type AppleMusicAlbumResults = {
+  __typename?: 'AppleMusicAlbumResults';
+  albums: Array<AppleMusicAlbum>;
+  error?: Maybe<Scalars['String']['output']>;
+};
+
 export type AppleMusicArtwork = {
   __typename?: 'AppleMusicArtwork';
   bgColor?: Maybe<Scalars['String']['output']>;
@@ -447,6 +469,7 @@ export type MediaUploadEdge = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAlbumCovers: Array<MediaUpload>;
   bulkCreateShows: BulkCreateShowsResult;
   createArtist?: Maybe<Artist>;
   createPodcast?: Maybe<Podcast>;
@@ -476,6 +499,11 @@ export type Mutation = {
   updateUser?: Maybe<User>;
   updateVenue?: Maybe<Venue>;
   updateVideo?: Maybe<Video>;
+};
+
+
+export type MutationAddAlbumCoversArgs = {
+  ids: Array<Scalars['String']['input']>;
 };
 
 
@@ -740,6 +768,7 @@ export enum PostStatus {
 export type Query = {
   __typename?: 'Query';
   apiKeys?: Maybe<ApiKeys>;
+  appleMusicAlbums: AppleMusicAlbumResults;
   artist?: Maybe<Artist>;
   artists?: Maybe<ArtistConnection>;
   dashboardSettings: DashboardSettings;
@@ -762,6 +791,11 @@ export type Query = {
   venues?: Maybe<VenueConnection>;
   video?: Maybe<Video>;
   videos?: Maybe<VideoConnection>;
+};
+
+
+export type QueryAppleMusicAlbumsArgs = {
+  term: Scalars['String']['input'];
 };
 
 
@@ -1411,6 +1445,25 @@ export type DeleteArtistMutationVariables = Exact<{
 
 
 export type DeleteArtistMutation = { __typename?: 'Mutation', removeArtist?: boolean | null };
+
+export type AlbumCoversAdminQueryVariables = Exact<{
+  term: Scalars['String']['input'];
+}>;
+
+
+export type AlbumCoversAdminQuery = { __typename?: 'Query', appleMusicAlbums: { __typename?: 'AppleMusicAlbumResults', error?: string | null, albums: Array<{ __typename?: 'AppleMusicAlbum', id: string, name: string, artistName: string, releaseDate?: string | null, cover: string, artwork: { __typename?: 'AppleMusicArtwork', width?: number | null, height?: number | null } }> } };
+
+export type AddAlbumCoversMutationVariables = Exact<{
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
+}>;
+
+
+export type AddAlbumCoversMutation = { __typename?: 'Mutation', addAlbumCovers: Array<
+    | { __typename?: 'AudioUpload', id: string }
+    | { __typename?: 'FileUpload', id: string }
+    | { __typename?: 'ImageUpload', id: string }
+    | { __typename?: 'VideoUpload', id: string }
+  > };
 
 export type MediaAdminQueryVariables = Exact<{
   id: Scalars['String']['input'];

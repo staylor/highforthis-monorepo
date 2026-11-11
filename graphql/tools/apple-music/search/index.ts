@@ -1,9 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { developerToken } from '#/appleMusic';
 import prisma from '#/database';
-
-import { generateToken } from '../jwt';
 
 const searchUrl = (term: string) =>
   `https://api.music.apple.com/v1/catalog/us/search?term=${encodeURIComponent(term)}`;
@@ -11,7 +10,7 @@ const searchUrl = (term: string) =>
 const search = (term: string) =>
   fetch(searchUrl(term), {
     headers: {
-      Authorization: `Bearer ${generateToken()}`,
+      Authorization: `Bearer ${developerToken()}`,
     },
   })
     .then((response) => response.json())

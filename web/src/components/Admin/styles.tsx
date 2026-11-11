@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, PropsWithChildren } from 'react';
 import { useLocation } from 'react-router';
 
 import { buttonClasses } from '#/components/Button';
@@ -34,4 +34,13 @@ export const HeaderAdd = ({
 
 export const FormWrap = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div {...props} className={cn('block after:clear-both after:table', className)} />
+);
+
+export const Alert = ({ children }: PropsWithChildren) => (
+  <div
+    role="alert"
+    className="mb-5 max-w-2xl border-l-4 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-900 dark:bg-red-950/30 dark:text-red-200"
+  >
+    {children}
+  </div>
 );

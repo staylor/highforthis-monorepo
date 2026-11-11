@@ -30,9 +30,9 @@ cp .env.example .env  # then fill in values
 | `GCS_BUCKET`                      | Google Cloud Storage bucket name                  |
 | `GCS_CLIENT_EMAIL`                | GCS service account email                         |
 | `GCS_PRIVATE_KEY`                 | GCS service account private key                   |
-| `APPLE_MUSIC_AUTH_KEY_PATH`       | Path to Apple Music auth key                      |
-| `APPLE_MUSIC_KEY_ID`              | Apple Music key ID                                |
-| `APPLE_MUSIC_TEAM_ID`             | Apple Music team ID                               |
+| `APPLE_MUSIC_KEY_ID`              | MusicKit key ID, for album covers                 |
+| `APPLE_MUSIC_TEAM_ID`             | Apple Developer team ID                           |
+| `APPLE_MUSIC_PRIVATE_KEY`         | MusicKit private key (the .p8 file's contents)    |
 | `GOOGLE_MAPS_GEOLOCATION_API_KEY` | Google Maps key for venue maps and geocoding      |
 | `TICKETMASTER_API_KEY`            | Ticketmaster Discovery API key for venue listings |
 

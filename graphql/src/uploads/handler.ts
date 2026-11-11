@@ -55,60 +55,59 @@ const uploadFileSchema = z.object({
   image: z.array(audioImageSchema).optional(),
 });
 
+// Records a stored file in the media library, with an image's crops or an audio file's details
+export async function createMediaUpload(file: unknown) {
+  const { crops, images, artist, albumArtist, genre, image, ...data } =
+    uploadFileSchema.parse(file);
+  const record = await prisma.mediaUpload.create({ data });
+
+  // Image crops
+  if (crops?.length) {
+    await prisma.imageUploadCrop.createMany({
+      data: crops.map((c) => ({ ...c, mediaId: record.id })),
+    });
+  }
+
+  // Audio cover images
+  if (images?.length) {
+    await prisma.audioImage.createMany({
+      data: images.map((i) => ({ ...i, mediaId: record.id })),
+    });
+  } else if (image?.length) {
+    // 'image' field from Audio upload metadata extraction
+    await prisma.audioImage.createMany({
+      data: image.map((i) => ({ ...i, mediaId: record.id })),
+    });
+  }
+
+  // Audio artists
+  if (artist?.length) {
+    await prisma.audioArtist.createMany({
+      data: artist.map((name) => ({ name, mediaId: record.id })),
+    });
+  }
+
+  // Audio album artists
+  if (albumArtist?.length) {
+    await prisma.audioAlbumArtist.createMany({
+      data: albumArtist.map((name) => ({ name, mediaId: record.id })),
+    });
+  }
+
+  // Audio genres
+  if (genre?.length) {
+    await prisma.audioGenre.createMany({
+      data: genre.map((name) => ({ name, mediaId: record.id })),
+    });
+  }
+
+  return record.id;
+}
+
 export default async (_req: Request, res: Response) => {
   const multerFiles = (_req.files ?? []) as Express.Multer.File[];
   const rawFiles = multerFiles.map(
     ({ fieldname: _, originalname: _o, encoding: _e, mimetype: _m, ...rest }) => rest
   );
-
-  const ids = await Promise.all(
-    rawFiles.map(async (file) => {
-      const { crops, images, artist, albumArtist, genre, image, ...data } =
-        uploadFileSchema.parse(file);
-      const record = await prisma.mediaUpload.create({ data });
-
-      // Image crops
-      if (crops?.length) {
-        await prisma.imageUploadCrop.createMany({
-          data: crops.map((c) => ({ ...c, mediaId: record.id })),
-        });
-      }
-
-      // Audio cover images
-      if (images?.length) {
-        await prisma.audioImage.createMany({
-          data: images.map((i) => ({ ...i, mediaId: record.id })),
-        });
-      } else if (image?.length) {
-        // 'image' field from Audio upload metadata extraction
-        await prisma.audioImage.createMany({
-          data: image.map((i) => ({ ...i, mediaId: record.id })),
-        });
-      }
-
-      // Audio artists
-      if (artist?.length) {
-        await prisma.audioArtist.createMany({
-          data: artist.map((name) => ({ name, mediaId: record.id })),
-        });
-      }
-
-      // Audio album artists
-      if (albumArtist?.length) {
-        await prisma.audioAlbumArtist.createMany({
-          data: albumArtist.map((name) => ({ name, mediaId: record.id })),
-        });
-      }
-
-      // Audio genres
-      if (genre?.length) {
-        await prisma.audioGenre.createMany({
-          data: genre.map((name) => ({ name, mediaId: record.id })),
-        });
-      }
-
-      return record.id;
-    })
-  );
-  res.json(ids);
+  res.json(await Promise.all(rawFiles.map(createMediaUpload)));
 };

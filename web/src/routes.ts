@@ -16,6 +16,7 @@ export default [
     ...prefix('media', [
       index('routes/admin/media/index.tsx'),
       route('upload', 'routes/admin/media/upload.tsx'),
+      route('album-covers', 'routes/admin/media/album-covers.tsx'),
       route(':id', 'routes/admin/media/edit.tsx'),
     ]),
     ...adminRoutes('podcast'),

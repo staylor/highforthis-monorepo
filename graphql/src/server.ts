@@ -1,5 +1,4 @@
 import http from 'node:http';
-import path from 'node:path';
 
 import { ApolloServer, HeaderMap } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
@@ -24,7 +23,7 @@ import {
 import rejectWordPress from './rejectWordPress';
 import resolvers from './resolvers';
 import typeDefs from './schema';
-import { multerMiddleware, mediaMiddleware } from './uploads';
+import { mediaMiddleware, multerMiddleware, uploadDir } from './uploads';
 
 const GRAPHQL_PORT = env.GRAPHQL_PORT;
 const logger = createLogger({ serviceName: 'graphql' });
@@ -42,7 +41,6 @@ async function startServer(): Promise<void> {
   app.use(compression());
   app.use(createHttpLogger(logger));
   // This server handles uploads, and can serve previews of static assets
-  const uploadDir = path.join(process.cwd(), 'public/uploads');
   app.use(express.static(uploadDir));
 
   app.use(express.urlencoded({ extended: true }));
@@ -69,7 +67,7 @@ async function startServer(): Promise<void> {
   app.get('/auth/session', jwtMiddleware, sessionHandler);
   app.post('/auth', express.json(), authMiddleware);
 
-  app.post('/upload', jwtMiddleware, adminMiddleware, multerMiddleware(uploadDir), mediaMiddleware);
+  app.post('/upload', jwtMiddleware, adminMiddleware, multerMiddleware, mediaMiddleware);
 
   const server = new ApolloServer<AppContext>({
     typeDefs,
