@@ -54,7 +54,7 @@ function AdminShell() {
   const { t } = useTranslation();
   const { isCollapsed } = useAdminNav();
   return (
-    <div className="dark:bg-surface-dark min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-surface-dark">
       <div id="portal" />
       <div className="absolute" id="atomicToolbar" />
       <NavMenu />
@@ -73,7 +73,7 @@ function AdminShell() {
           )}
         >
           <NavMenu.MobileToggle />
-          <span className="font-title truncate text-2xl tracking-tight text-neutral-900 uppercase dark:text-white">
+          <span className="truncate font-title text-2xl tracking-tight text-neutral-900 uppercase dark:text-white">
             {t('title')}
           </span>
         </header>

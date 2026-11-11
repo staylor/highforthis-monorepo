@@ -59,7 +59,7 @@ export default function ShowsGrid({
                   <Link className="text-pink hover:underline" to={formatShowLink(node)}>
                     {formatArtists(node)}
                   </Link>
-                  <span className="text-muted dark:text-muted-dark block text-xs sm:hidden">
+                  <span className="block text-xs text-muted sm:hidden dark:text-muted-dark">
                     {node.venue.name}
                   </span>
                 </td>
@@ -70,7 +70,7 @@ export default function ShowsGrid({
                   )}
                 >
                   <Link
-                    className="hover:text-pink transition-colors"
+                    className="transition-colors hover:text-pink"
                     to={`/venue/${node.venue.slug}`}
                   >
                     {node.venue.name}
@@ -102,7 +102,7 @@ export default function ShowsGrid({
                       <tr>
                         <td colSpan={3} className="h-2" />
                       </tr>
-                      <tr className="dark:bg-surface-dark-card bg-neutral-100">
+                      <tr className="bg-neutral-100 dark:bg-surface-dark-card">
                         <td
                           colSpan={3}
                           className={cn(
@@ -129,7 +129,7 @@ export default function ShowsGrid({
                   <tr>
                     <td colSpan={3} className="h-2" />
                   </tr>
-                  <tr className="dark:bg-surface-dark-card bg-neutral-100">
+                  <tr className="bg-neutral-100 dark:bg-surface-dark-card">
                     <td
                       colSpan={3}
                       className={cn(

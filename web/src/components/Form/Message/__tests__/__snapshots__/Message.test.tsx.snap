@@ -7,7 +7,7 @@ exports[`message > text 1`] = `
   class="border-pink border-l-4 bg-neutral-50 shadow-xs relative mt-1 mb-4 block py-px pr-9 pl-3"
 >
   <p
-    class="text-dark my-2 p-0.5 text-sm"
+    class="my-2 p-0.5 text-sm text-dark"
   >
     This is an admin message.
   </p>

@@ -53,13 +53,13 @@ export default function Attended({
                 </td>
                 <td className={cellBase}>
                   <Link
-                    className="hover:text-pink transition-colors hover:underline"
+                    className="transition-colors hover:text-pink hover:underline"
                     to={relation === 'artist' ? `/venue/${node.venue.slug}` : formatShowLink(node)}
                   >
                     {relation === 'artist' ? node.venue.name : formatArtists(node)}
                   </Link>
                   {relation === 'artist' && (
-                    <span className="text-muted dark:text-muted-dark block text-xs sm:hidden">
+                    <span className="block text-xs text-muted sm:hidden dark:text-muted-dark">
                       {place}
                     </span>
                   )}

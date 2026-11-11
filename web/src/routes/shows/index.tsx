@@ -46,7 +46,7 @@ function ShowsRoute({ loaderData }: Route.ComponentProps) {
   return (
     <article>
       <Heading1>{t('shows.recommended')}</Heading1>
-      <p className="text-muted dark:text-muted-dark mb-8 text-base">
+      <p className="mb-8 text-base text-muted dark:text-muted-dark">
         {t('shows.todaysDate')}:{' '}
         <strong className="text-neutral-900 dark:text-white">{date.formatted}</strong>
       </p>

@@ -143,7 +143,7 @@ function Stack({ className, images }: { className?: string; images: DisplayImage
         />
       ))}
       {images.length > visibleImages.length && (
-        <span className="bg-pink absolute right-0 bottom-0 z-40 rounded-full px-1.5 py-0.5 text-[10px] font-bold text-white shadow">
+        <span className="absolute right-0 bottom-0 z-40 rounded-full bg-pink px-1.5 py-0.5 text-[10px] font-bold text-white shadow">
           +{images.length - visibleImages.length}
         </span>
       )}

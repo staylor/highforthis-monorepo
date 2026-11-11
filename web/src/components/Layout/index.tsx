@@ -36,7 +36,7 @@ export const Html = (props: HtmlHTMLAttributes<HTMLHtmlElement>) => {
 };
 
 export const Body = (props: HTMLAttributes<HTMLBodyElement>) => (
-  <body {...props} className="font-body h-full" />
+  <body {...props} className="h-full font-body" />
 );
 
 const Wrapper = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
@@ -73,7 +73,7 @@ const Layout = ({ children }: PropsWithChildren) => {
             {/* Logo */}
             <Link
               to="/"
-              className="font-title hover:text-pink text-4xl font-black tracking-tight uppercase"
+              className="font-title text-4xl font-black tracking-tight uppercase hover:text-pink"
             >
               {siteSettings?.siteTitle || t('title')}
             </Link>
@@ -86,7 +86,7 @@ const Layout = ({ children }: PropsWithChildren) => {
               <div className="hidden lg:block">
                 <DarkMode />
               </div>
-              <div className="text-muted dark:text-muted-dark hidden items-center gap-3 lg:flex">
+              <div className="hidden items-center gap-3 text-muted lg:flex dark:text-muted-dark">
                 <SocialIcons />
               </div>
               <Navigation.MobileToggle />
@@ -118,11 +118,11 @@ const Layout = ({ children }: PropsWithChildren) => {
             <div className="font-title text-2xl font-bold tracking-tight text-neutral-300 dark:text-white/30">
               {siteSettings?.siteTitle || t('title')}
             </div>
-            <div className="text-muted dark:text-muted-dark flex items-center gap-6">
+            <div className="flex items-center gap-6 text-muted dark:text-muted-dark">
               <SocialIcons />
             </div>
             <div
-              className="text-muted dark:text-muted-dark text-center text-xs"
+              className="text-center text-xs text-muted dark:text-muted-dark"
               dangerouslySetInnerHTML={{ __html: siteSettings?.copyrightText as string }}
             />
           </div>

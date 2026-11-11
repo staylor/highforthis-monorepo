@@ -81,7 +81,7 @@ export default function VideosIndex({ loaderData }: Route.ComponentProps) {
         <Heading1>{params.year ? `${params.year} Videos` : 'Videos'}</Heading1>
         <Select
           value={params.year || ''}
-          className="dark:text-dark text-sm"
+          className="text-sm dark:text-dark"
           placeholder={t('nav.videosByYear')}
           choices={yearChoices}
           onChange={(value: string) => navigate(`/videos/${value}`)}

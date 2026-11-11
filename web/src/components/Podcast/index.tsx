@@ -15,7 +15,7 @@ export default function Podcast({ title, description, children }: PodcastProps) 
     <article className="mx-auto my-0 w-auto lg:mx-0 lg:w-3/4">
       <Heading1 className="uppercase">{title}</Heading1>
       <p
-        className="text-muted dark:text-muted-dark mb-8 text-base leading-relaxed"
+        className="mb-8 text-base leading-relaxed text-muted dark:text-muted-dark"
         dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, '<br />') }}
       />
       <div className="mb-8 flex gap-3">
