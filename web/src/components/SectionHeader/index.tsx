@@ -19,7 +19,7 @@ export default function SectionHeader({
       {viewAllLink && (
         <Link
           to={viewAllLink}
-          className="text-muted hover:text-pink dark:text-muted-dark text-sm font-medium tracking-wide uppercase transition-colors"
+          className="text-sm font-medium tracking-wide text-muted uppercase transition-colors hover:text-pink dark:text-muted-dark"
         >
           {viewAllText}
         </Link>

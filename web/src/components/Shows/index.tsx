@@ -22,9 +22,9 @@ function Shows({
         shows={shows}
         showMonths={showMonths}
         showYears={showYears}
-        className="xs:block hidden"
+        className="hidden xs:block"
       />
-      <ShowsList shows={shows} className="xs:hidden block" />
+      <ShowsList shows={shows} className="block xs:hidden" />
     </>
   );
 }

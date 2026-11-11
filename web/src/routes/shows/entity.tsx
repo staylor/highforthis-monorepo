@@ -56,11 +56,11 @@ export default function ShowStatsRoute({ loaderData }: Route.ComponentProps) {
     <article className="w-160 max-w-full">
       <Heading1>{t(`entity.stats.${params.entity}`)}</Heading1>
       <p className="mb-8">
-        <Link to={`/shows/stats/${other}`} className="text-pink mr-2 text-lg underline">
+        <Link to={`/shows/stats/${other}`} className="mr-2 text-lg text-pink underline">
           {t(`entity.stats.see.${other}`)}
         </Link>
         {' • '}
-        <Link to="/shows/history" className="text-pink ml-2 text-lg underline">
+        <Link to="/shows/history" className="ml-2 text-lg text-pink underline">
           {t('entity.stats.see.all')}
         </Link>
       </p>

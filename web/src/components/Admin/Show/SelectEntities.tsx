@@ -44,7 +44,7 @@ export default function SelectEntities({ name, nodes, filtered }: SelectEntityPr
                 type="button"
                 aria-label={`Remove ${entityMap[id].name}`}
                 onClick={removeId(id)}
-                className="text-pink relative top-1 ml-0.5 inline-flex size-5 items-center justify-center"
+                className="relative top-1 ml-0.5 inline-flex size-5 items-center justify-center text-pink"
               >
                 <Icon name="close" className="size-3.5" />
               </button>

@@ -109,7 +109,7 @@ export default function Passkeys() {
           />
         </label>
         <button
-          className="border-detail cursor-pointer rounded-sm border bg-white px-4 py-2"
+          className="cursor-pointer rounded-sm border border-detail bg-white px-4 py-2"
           disabled={isRegistering}
           onClick={register}
           type="button"

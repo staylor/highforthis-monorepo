@@ -30,7 +30,7 @@ function PageLink({ url, children }: PropsWithChildren<{ url: string }>) {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="text-pink mx-4 inline-block text-sm underline"
+      className="mx-4 inline-block text-sm text-pink underline"
     >
       {children}
     </a>
