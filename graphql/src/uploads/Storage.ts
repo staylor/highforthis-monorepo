@@ -48,20 +48,22 @@ export async function storeFile(
     upload = new Upload(uploadOpts);
   }
   const { promise, resolve, reject } = Promise.withResolvers<Partial<Express.Multer.File>>();
-  upload.save(file, async (err, fileData) => {
-    if (err) {
-      reject(err);
-      return;
-    }
-    try {
-      if (adapter) {
-        await upload.process(adapter);
+  upload
+    .save(file, async (err, fileData) => {
+      if (err) {
+        reject(err);
+        return;
       }
-      resolve(fileData ?? {});
-    } catch (error) {
-      reject(error);
-    }
-  });
+      try {
+        if (adapter) {
+          await upload.process(adapter);
+        }
+        resolve(fileData ?? {});
+      } catch (error) {
+        reject(error);
+      }
+    })
+    .catch(reject);
   return promise;
 }
 
