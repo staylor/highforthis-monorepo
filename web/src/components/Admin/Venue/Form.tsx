@@ -33,7 +33,7 @@ function PageLink({ url, children }: PropsWithChildren<{ url: string }>) {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="text-pink mx-4 inline-block text-sm underline"
+      className="mx-4 inline-block text-sm text-pink underline"
     >
       {children}
     </a>
@@ -118,7 +118,7 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
       {data.venue?.listingsUrl && (
         <Link
           to={`/admin/show/listings/${data.venue.id}`}
-          className="text-pink inline-block text-sm underline"
+          className="inline-block text-sm text-pink underline"
         >
           {t('shows.listings.view')}
         </Link>

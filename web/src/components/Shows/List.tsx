@@ -38,7 +38,7 @@ export default function ShowsList({
               <p className="mt-4 mb-1 first:mt-0">
                 <strong className="text-lg">{d.year}</strong>
               </p>
-              <p className="text-muted dark:text-muted-dark mb-1 text-xs font-semibold tracking-wider uppercase">
+              <p className="mb-1 text-xs font-semibold tracking-wider text-muted uppercase dark:text-muted-dark">
                 {d.monthName}
               </p>
               {showRow}
@@ -49,7 +49,7 @@ export default function ShowsList({
           months[`${d.year}${d.month}`] = 1;
           return (
             <div key={node.id}>
-              <p className="text-muted dark:text-muted-dark mt-3 mb-1 text-xs font-semibold tracking-wider uppercase">
+              <p className="mt-3 mb-1 text-xs font-semibold tracking-wider text-muted uppercase dark:text-muted-dark">
                 {d.monthName}
               </p>
               {showRow}

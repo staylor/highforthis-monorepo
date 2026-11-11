@@ -14,7 +14,7 @@ type IconProps = PropsWithChildren<{
 
 const SocialIcon = ({ url, label, children }: IconProps) => (
   <a
-    className="hover:text-pink text-current transition-colors"
+    className="text-current transition-colors hover:text-pink"
     href={url}
     target="_blank"
     rel="noopener noreferrer"

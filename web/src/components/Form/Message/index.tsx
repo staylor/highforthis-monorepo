@@ -35,7 +35,7 @@ export default function Message({
         'relative mt-1 mb-4 block py-px pr-9 pl-3'
       )}
     >
-      <p className="text-dark my-2 p-0.5 text-sm">{text}</p>
+      <p className="my-2 p-0.5 text-sm text-dark">{text}</p>
       {dismissable && (
         <button
           type="button"

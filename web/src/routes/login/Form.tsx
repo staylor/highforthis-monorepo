@@ -58,7 +58,7 @@ export default function LoginForm({ passwordLoginEnabled }: { passwordLoginEnabl
   return (
     <div className="mt-5 block p-6 text-sm shadow-2xl">
       <button
-        className="border-detail box-border w-full cursor-pointer appearance-none rounded-sm border bg-white px-3 py-2 align-baseline text-sm"
+        className="box-border w-full cursor-pointer appearance-none rounded-sm border border-detail bg-white px-3 py-2 align-baseline text-sm"
         disabled={isAuthenticating}
         onClick={authenticateWithPasskey}
         type="button"
@@ -91,7 +91,7 @@ export default function LoginForm({ passwordLoginEnabled }: { passwordLoginEnabl
               />
             </label>
             <button
-              className="border-detail box-border h-7 cursor-pointer appearance-none rounded-sm border bg-white px-3 pb-0.5 align-baseline text-sm"
+              className="box-border h-7 cursor-pointer appearance-none rounded-sm border border-detail bg-white px-3 pb-0.5 align-baseline text-sm"
               type="submit"
             >
               {t('login.button')}

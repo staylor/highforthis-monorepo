@@ -65,11 +65,11 @@ export default function Posts({ loaderData }: Route.ComponentProps) {
                 <PostArtwork post={node} seed={`${artworkSeed}:${node.id}`} variant="collage" />
               </div>
               <div className="p-4">
-                <h2 className="group-hover:text-pink mb-1.5 text-base font-semibold transition-colors">
+                <h2 className="mb-1.5 text-base font-semibold transition-colors group-hover:text-pink">
                   {node.title}
                 </h2>
                 {node.summary && (
-                  <p className="text-muted dark:text-muted-dark line-clamp-2 text-sm">
+                  <p className="line-clamp-2 text-sm text-muted dark:text-muted-dark">
                     {node.summary}
                   </p>
                 )}

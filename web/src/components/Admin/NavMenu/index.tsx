@@ -158,11 +158,11 @@ function Brand({ isCollapsed }: { isCollapsed: boolean }) {
       })}
     >
       {isCollapsed ? (
-        <span className="bg-pink flex size-7 shrink-0 items-center justify-center rounded-lg text-sm font-black text-white">
+        <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-pink text-sm font-black text-white">
           {t('title').charAt(0)}
         </span>
       ) : (
-        <span className="font-title truncate text-2xl tracking-tight text-neutral-900 uppercase dark:text-white">
+        <span className="truncate font-title text-2xl tracking-tight text-neutral-900 uppercase dark:text-white">
           {t('title')}
         </span>
       )}
