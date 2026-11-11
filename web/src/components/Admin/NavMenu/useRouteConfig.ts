@@ -54,6 +54,10 @@ const useRouteConfig = () => {
             path: '/media/upload',
             label: t('media.upload'),
           },
+          {
+            path: '/media/album-covers',
+            label: t('media.albumCovers.heading'),
+          },
         ],
       },
     ],

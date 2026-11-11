@@ -22,6 +22,49 @@ interface StorageOpts {
   adapter: StorageAdapter;
 }
 
+// Saves a file as the kind of upload its MIME type calls for, with an image's crops, and copies
+// the results to the bucket
+export async function storeFile(
+  file: Express.Multer.File,
+  uploadDir: string,
+  adapter?: StorageAdapter
+) {
+  const mediaSettings = await prisma.mediaSettings.findUnique({
+    where: { id: 'media' },
+  });
+
+  let upload: Upload;
+  const crops = mediaSettings
+    ? await prisma.mediaCropSetting.findMany({ where: { mediaSettingsId: mediaSettings.id } })
+    : [];
+  const uploadOpts: UploadOpts = { uploadDir, settings: { crops } };
+  if (file.mimetype.startsWith('image/')) {
+    upload = new Image(uploadOpts);
+  } else if (file.mimetype.startsWith('audio/')) {
+    upload = new Audio(uploadOpts);
+  } else if (file.mimetype.startsWith('video/')) {
+    upload = new Video(uploadOpts);
+  } else {
+    upload = new Upload(uploadOpts);
+  }
+  const { promise, resolve, reject } = Promise.withResolvers<Partial<Express.Multer.File>>();
+  upload.save(file, async (err, fileData) => {
+    if (err) {
+      reject(err);
+      return;
+    }
+    try {
+      if (adapter) {
+        await upload.process(adapter);
+      }
+      resolve(fileData ?? {});
+    } catch (error) {
+      reject(error);
+    }
+  });
+  return promise;
+}
+
 class Storage {
   opts: StorageOpts;
 
@@ -30,33 +73,14 @@ class Storage {
   }
 
   public async _handleFile(_req: Request, file: Express.Multer.File, cb: Callback) {
-    const mediaSettings = await prisma.mediaSettings.findUnique({
-      where: { id: 'media' },
-    });
-
-    let upload: Upload;
-    const crops = mediaSettings
-      ? await prisma.mediaCropSetting.findMany({ where: { mediaSettingsId: mediaSettings.id } })
-      : [];
-    const uploadOpts: UploadOpts = {
-      uploadDir: this.opts.uploadDir,
-      settings: { crops },
-    };
-    if (file.mimetype.startsWith('image/')) {
-      upload = new Image(uploadOpts);
-    } else if (file.mimetype.startsWith('audio/')) {
-      upload = new Audio(uploadOpts);
-    } else if (file.mimetype.startsWith('video/')) {
-      upload = new Video(uploadOpts);
-    } else {
-      upload = new Upload(uploadOpts);
+    let info;
+    try {
+      info = await storeFile(file, this.opts.uploadDir, this.opts.adapter);
+    } catch (error) {
+      cb(error as Error);
+      return;
     }
-    upload.save(file, async (err, fileData) => {
-      if (this.opts.adapter) {
-        await upload.process(this.opts.adapter);
-      }
-      cb(err, fileData);
-    });
+    cb(null, info);
   }
 
   public _removeFile(_req: Request, file: Express.Multer.File, cb: Callback) {

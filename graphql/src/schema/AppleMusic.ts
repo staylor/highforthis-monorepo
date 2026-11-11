@@ -34,6 +34,31 @@ const AppleMusic = `#graphql
     genreNames: [String!]
     artwork: AppleMusicArtworkInput
   }
+
+  type AppleMusicAlbum {
+    id: String!
+    name: String!
+    artistName: String!
+    releaseDate: String
+    url: String
+    artwork: AppleMusicArtwork!
+    # The cover, fitted within a square this many pixels wide
+    cover(size: Int!): String!
+  }
+
+  type AppleMusicAlbumResults {
+    albums: [AppleMusicAlbum!]!
+    error: String
+  }
+
+  extend type Query {
+    appleMusicAlbums(term: String!): AppleMusicAlbumResults!
+  }
+
+  extend type Mutation {
+    # Adds the albums' full-size covers to the media library
+    addAlbumCovers(ids: [String!]!): [MediaUpload!]!
+  }
 `;
 
 export default AppleMusic;

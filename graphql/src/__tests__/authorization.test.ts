@@ -48,6 +48,7 @@ describe('resolvers', () => {
         `Mutation.${name}`,
         resolver,
       ]),
+      ['Query.appleMusicAlbums', resolvers.Query.appleMusicAlbums],
       ['Query.user', resolvers.Query.user],
       ['Query.users', resolvers.Query.users],
       ['Query.venueListings', resolvers.Query.venueListings],

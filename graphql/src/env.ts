@@ -26,6 +26,11 @@ const envSchema = z.object({
   // Optional API keys
   GOOGLE_MAPS_GEOLOCATION_API_KEY: z.string().optional(),
   TICKETMASTER_API_KEY: z.string().optional(),
+
+  // Apple Music, for album covers: a MusicKit key and the team it belongs to
+  APPLE_MUSIC_KEY_ID: z.string().optional(),
+  APPLE_MUSIC_TEAM_ID: z.string().optional(),
+  APPLE_MUSIC_PRIVATE_KEY: z.string().optional(),
 });
 
 const env = envSchema.parse(process.env);

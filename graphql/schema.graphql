@@ -9,6 +9,21 @@ type APIKeys {
   googleMaps: String
 }
 
+type AppleMusicAlbum {
+  artistName: String!
+  artwork: AppleMusicArtwork!
+  cover(size: Int!): String!
+  id: String!
+  name: String!
+  releaseDate: String
+  url: String
+}
+
+type AppleMusicAlbumResults {
+  albums: [AppleMusicAlbum!]!
+  error: String
+}
+
 type AppleMusicArtwork {
   bgColor: String
   height: Int
@@ -413,6 +428,7 @@ type MediaUploadEdge {
 }
 
 type Mutation {
+  addAlbumCovers(ids: [String!]!): [MediaUpload!]!
   bulkCreateShows(input: [BulkCreateShowInput!]!): BulkCreateShowsResult!
   createArtist(input: CreateArtistInput!): Artist
   createPodcast(input: CreatePodcastInput!): Podcast
@@ -539,6 +555,7 @@ enum PostStatus {
 
 type Query {
   apiKeys: APIKeys
+  appleMusicAlbums(term: String!): AppleMusicAlbumResults!
   artist(id: String, slug: String): Artist
   artists(after: String, before: String, filtered: Boolean, first: Int, last: Int, search: String): ArtistConnection
   dashboardSettings: DashboardSettings!

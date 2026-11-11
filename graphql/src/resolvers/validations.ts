@@ -48,6 +48,9 @@ export const updateMediaUploadSchema = z.object({
   title: z.string().nullish(),
 });
 
+// Apple Music catalog IDs of the albums whose covers to add, at most a page of search results
+export const addAlbumCoversSchema = z.array(z.string().regex(/^\d+$/)).min(1).max(25);
+
 // --- Podcast ---
 
 export const createPodcastSchema = z.object({

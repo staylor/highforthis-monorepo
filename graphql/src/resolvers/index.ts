@@ -1,5 +1,6 @@
 import { requireAdmin, type Resolver } from '#/authorization';
 import APIKeys from '#/resolvers/APIKeys';
+import AppleMusic from '#/resolvers/AppleMusic';
 import Artist from '#/resolvers/Artist';
 import EditorState from '#/resolvers/EditorState';
 import Listing from '#/resolvers/Listing';
@@ -16,6 +17,7 @@ type ResolverMap = Record<string, Record<string, unknown>>;
 
 const modules: ResolverMap[] = [
   APIKeys,
+  AppleMusic,
   Artist,
   EditorState,
   Listing,
@@ -37,7 +39,7 @@ const resolvers = modules.reduce<ResolverMap>((merged, mod) => {
 }, {});
 
 // Every mutation, and any query listed here, requires an admin.
-const adminQueries = ['user', 'users', 'venueListings'];
+const adminQueries = ['appleMusicAlbums', 'user', 'users', 'venueListings'];
 
 for (const [name, resolver] of Object.entries(resolvers.Mutation)) {
   resolvers.Mutation[name] = requireAdmin(resolver as Resolver);

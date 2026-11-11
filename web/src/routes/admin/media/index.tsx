@@ -37,6 +37,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
   const location = useLocation();
   const { updateQuery, searchParams } = useUpdateQuery();
   const count = Number(searchParams.get('deleted') || 0);
+  const added = Number(searchParams.get('added') || 0);
   const columns: Columns = [
     {
       className: 'w-16',
@@ -119,6 +120,7 @@ export default function Media({ loaderData }: Route.ComponentProps) {
       <Heading>{t('media.heading')}</Heading>
       <HeaderAdd label={t('media.add')} to={`${location.pathname}/upload`} />
       {count > 0 && <Message param="deleted" text={t('media.deleted', { count })} />}
+      {added > 0 && <Message param="added" text={t('media.albumCovers.added', { count: added })} />}
       <Search placeholder={t('media.search')} />
       <ListTable columns={columns} filters={filters} data={uploads!} />
     </>

@@ -92,6 +92,19 @@
   },
   "media": {
     "add": "Add Media",
+    "albumCovers": {
+      "add_zero": "Add Covers",
+      "add_one": "Add {{count}} Cover",
+      "add_other": "Add {{count}} Covers",
+      "added_one": "Added {{count}} album cover",
+      "added_other": "Added {{count}} album covers",
+      "adding": "Adding Covers…",
+      "empty": "No albums on Apple Music match your search.",
+      "failed": "The covers could not be added. Please try again.",
+      "heading": "Album Covers",
+      "hint": "Search Apple Music for an album or artist, then pick the covers to add to the media library.",
+      "search": "Search Apple Music"
+    },
     "all": "All Media",
     "altText": "Alternative Text",
     "caption": "Caption",

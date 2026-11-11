@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -12,7 +12,7 @@ import {
   useSearchParams,
 } from 'react-router';
 
-import { Heading } from '#/components/Admin/styles';
+import { Alert, Heading } from '#/components/Admin/styles';
 import Button from '#/components/Button';
 import Message from '#/components/Form/Message';
 import Select from '#/components/Form/Select';
@@ -84,15 +84,6 @@ function formatTime(localTime: string) {
   const [hours, minutes] = localTime.split(':').map(Number);
   return `${hours % 12 || 12}:${String(minutes).padStart(2, '0')} ${hours < 12 ? 'AM' : 'PM'}`;
 }
-
-const Alert = ({ children }: PropsWithChildren) => (
-  <div
-    role="alert"
-    className="mb-5 max-w-2xl border-l-4 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-900 dark:bg-red-950/30 dark:text-red-200"
-  >
-    {children}
-  </div>
-);
 
 const cell = 'px-2.5 py-2 align-top text-sm';
 const pill = 'rounded-full border px-2 py-px text-xs';
