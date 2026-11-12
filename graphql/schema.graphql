@@ -209,9 +209,10 @@ input DashboardSettingsInput {
   googleTrackingId: String
 }
 
-union EditorNode = CodeNode | ElementNode | HeadingNode | ImageNode | LinebreakNode | QuoteNode | TextNode | VideoNode
+union EditorNode = CodeNode | ElementNode | HeadingNode | ImageNode | LinebreakNode | ListItemNode | ListNode | QuoteNode | TextNode | VideoNode
 
 input EditorNodeInput {
+  checked: Boolean
   children: [EditorNodeInput]
   detail: Int
   direction: ElementDirection
@@ -219,14 +220,17 @@ input EditorNodeInput {
   imageId: String
   indent: Int
   language: String
+  listType: ListType
   mode: TextModeType
   size: String
+  start: Int
   style: String
-  tag: HeadingTag
+  tag: String
   text: String
   textFormat: Int
   textStyle: String
   type: String
+  value: Int
   version: Int
   videoId: String
 }
@@ -366,6 +370,34 @@ interface LexicalNode {
 type LinebreakNode implements LexicalNode {
   type: String
   version: Int
+}
+
+type ListItemNode implements ElementNodeType & LexicalNode {
+  checked: Boolean
+  children: [EditorNode]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  type: String
+  value: Int
+  version: Int
+}
+
+type ListNode implements ElementNodeType & LexicalNode {
+  children: [EditorNode]
+  direction: ElementDirection
+  format: Int
+  indent: Int
+  listType: ListType
+  start: Int
+  type: String
+  version: Int
+}
+
+enum ListType {
+  bullet
+  check
+  number
 }
 
 type Listing {

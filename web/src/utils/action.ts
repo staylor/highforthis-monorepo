@@ -6,6 +6,23 @@ import { redirect } from 'react-router';
 import type { ParseFormDataArgs } from './mutate';
 import mutate, { parseFormData } from './mutate';
 
+interface SubmittedNode {
+  format?: unknown;
+  children?: SubmittedNode[];
+}
+
+// Lexical saves an element's alignment as a string ('' when unset), but the schema's `format` is
+// the text format bitmask, and the site doesn't align blocks
+function clearElementFormats(node: SubmittedNode) {
+  if (!Array.isArray(node.children)) {
+    return;
+  }
+  if (typeof node.format !== 'number') {
+    node.format = 0;
+  }
+  node.children.forEach(clearElementFormats);
+}
+
 export const post = async (url: string, data: Record<string, any>) =>
   fetch(url, {
     method: 'POST',
@@ -37,11 +54,7 @@ export const handleSubmission = async ({
   const input = await parseFormData(request, parseFormDataArgs);
   if (input.editorState) {
     input.editorState = JSON.parse(input.editorState);
-    // this seems like a bug in Lexical
-    input.editorState.root.format = input.editorState.root.format || 0;
-    input.editorState.root.children.forEach((child: any) => {
-      child.format = child.format || 0;
-    });
+    clearElementFormats(input.editorState.root);
   }
 
   const mergedVariables = { ...variables };

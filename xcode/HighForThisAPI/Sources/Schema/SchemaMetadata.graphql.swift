@@ -32,6 +32,8 @@ nonisolated public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     "ImageUpload": HighForThisAPI.Objects.ImageUpload,
     "ImageUploadCrop": HighForThisAPI.Objects.ImageUploadCrop,
     "LinebreakNode": HighForThisAPI.Objects.LinebreakNode,
+    "ListItemNode": HighForThisAPI.Objects.ListItemNode,
+    "ListNode": HighForThisAPI.Objects.ListNode,
     "PageInfo": HighForThisAPI.Objects.PageInfo,
     "Podcast": HighForThisAPI.Objects.Podcast,
     "PodcastConnection": HighForThisAPI.Objects.PodcastConnection,

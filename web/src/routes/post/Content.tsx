@@ -1,8 +1,9 @@
 import Blockquote from '#/components/Blockquote';
 import { Heading2, Heading3, Heading4 } from '#/components/Heading';
+import { OrderedList, UnorderedList } from '#/components/List';
 import Paragraph from '#/components/Paragraph';
 import VideoComponent from '#/components/Videos/Video';
-import { HeadingTag } from '#/types/graphql';
+import { HeadingTag, ListType } from '#/types/graphql';
 import type {
   CodeNode,
   EditorState,
@@ -10,6 +11,8 @@ import type {
   HeadingNode,
   ImageNode,
   ImageUpload,
+  ListItemNode,
+  ListNode,
   QuoteNode,
   TextNode,
   Video,
@@ -82,6 +85,26 @@ export default function Content({ editorState }: { editorState: EditorState }) {
             alt=""
             src={uploadUrl(image.destination, crop.fileName)}
           />
+        );
+      case 'list':
+        const list = elem as ListNode;
+        const items = (list.children as ListItemNode[])
+          .filter((item) => !isEmptyText(item.children as TextNode[]))
+          .map((item, itemIdx) => (
+            <li key={`item-${itemIdx.toString()}`}>
+              <TextNodes nodes={item.children as TextNode[]} />
+            </li>
+          ));
+        if (items.length === 0) {
+          return null;
+        }
+
+        return list.listType === ListType.Number ? (
+          <OrderedList key={`list-${key}`} start={list.start ?? undefined}>
+            {items}
+          </OrderedList>
+        ) : (
+          <UnorderedList key={`list-${key}`}>{items}</UnorderedList>
         );
       case 'paragraph':
         const paragraph = elem as ElementNode;

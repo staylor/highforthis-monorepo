@@ -12,6 +12,8 @@ public extension Interfaces {
       "ElementNode",
       "HeadingNode",
       "ImageNode",
+      "ListItemNode",
+      "ListNode",
       "QuoteNode",
       "VideoNode"
     ]

@@ -27,13 +27,19 @@ const EditorState = `#graphql
     h6
   }
 
+  enum ListType {
+    bullet
+    check
+    number
+  }
+
   enum TextModeType {
     normal
     token
     segmented
   }
 
-  union EditorNode = ElementNode | CodeNode | HeadingNode | ImageNode | LinebreakNode | QuoteNode | TextNode | VideoNode
+  union EditorNode = ElementNode | CodeNode | HeadingNode | ImageNode | LinebreakNode | ListItemNode | ListNode | QuoteNode | TextNode | VideoNode
 
   type CodeNode implements LexicalNode & ElementNodeType {
     children: [EditorNode]
@@ -89,6 +95,28 @@ const EditorState = `#graphql
     version: Int
   }
 
+  type ListItemNode implements LexicalNode & ElementNodeType {
+    checked: Boolean
+    children: [EditorNode]
+    direction: ElementDirection
+    format: Int
+    indent: Int
+    type: String
+    value: Int
+    version: Int
+  }
+
+  type ListNode implements LexicalNode & ElementNodeType {
+    children: [EditorNode]
+    direction: ElementDirection
+    format: Int
+    indent: Int
+    listType: ListType
+    start: Int
+    type: String
+    version: Int
+  }
+
   type QuoteNode implements LexicalNode & ElementNodeType {
     children: [EditorNode]
     direction: ElementDirection
@@ -136,11 +164,17 @@ const EditorState = `#graphql
     textStyle: String
     # Code
     language: String
-    # Heading
-    tag: HeadingTag
+    # Heading (h1–h6) or list (ul, ol)
+    tag: String
     # Image
     imageId: String
     size: String
+    # List
+    listType: ListType
+    start: Int
+    # List item
+    checked: Boolean
+    value: Int
     # Video
     videoId: String
   }

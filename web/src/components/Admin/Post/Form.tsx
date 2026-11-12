@@ -138,6 +138,7 @@ PostForm.fragments = {
                 destination
                 id
               }
+              size
             }
             ... on VideoNode {
               video {
@@ -149,6 +150,38 @@ PostForm.fragments = {
                 ...TextNodes_linebreakNode
                 ...TextNodes_textNode
               }
+            }
+            ... on QuoteNode {
+              children {
+                ...TextNodes_linebreakNode
+                ...TextNodes_textNode
+              }
+            }
+            ... on CodeNode {
+              children {
+                ...TextNodes_linebreakNode
+                ...TextNodes_textNode
+              }
+              language
+            }
+            ... on ListNode {
+              children {
+                ... on ListItemNode {
+                  checked
+                  children {
+                    ...TextNodes_linebreakNode
+                    ...TextNodes_textNode
+                  }
+                  direction
+                  format
+                  indent
+                  type
+                  value
+                  version
+                }
+              }
+              listType
+              start
             }
           }
           direction
