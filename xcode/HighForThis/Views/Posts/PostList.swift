@@ -3,6 +3,8 @@ import SwiftUI
 
 struct PostList: View {
     @State private var feed = Feeds.posts()
+    // Like the website, the list shuffles each post's covers once each time it's shown.
+    @State private var artworkSeed = UUID().uuidString
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
@@ -16,8 +18,10 @@ struct PostList: View {
                         Text(post.title)
                             .font(.headline)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        if let thumbnail = post.thumbnailURL {
-                            RemoteImage(url: thumbnail, aspectRatio: 4 / 3, contentMode: .fill)
+                        let artwork = post.artwork(seed: artworkSeed, width: dynamicTypeSize.isAccessibilitySize ? 640 : 300)
+                        if !artwork.isEmpty {
+                            PostArtworkCollage(images: artwork)
+                                .aspectRatio(4 / 3, contentMode: .fit)
                                 .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 100)
                                 .clipShape(.rect(cornerRadius: 8))
                                 .accessibilityHidden(true)
@@ -29,17 +33,6 @@ struct PostList: View {
             }
         }
         .navigationTitle(.posts)
-    }
-}
-
-nonisolated extension PostsQuery.Data.Posts.Edge.Node {
-    fileprivate var thumbnailURL: URL? {
-        for image in featuredMedia?.compactMap(\.asImageUpload) ?? [] {
-            if let crop = image.crops.best(forWidth: 300) {
-                return AppConfiguration.uploadURL(destination: image.destination, fileName: crop.fileName)
-            }
-        }
-        return nil
     }
 }
 

@@ -47,6 +47,8 @@ export default defineConfig([
       '@graphql-eslint/naming-convention': namingConvention,
       '@graphql-eslint/no-one-place-fragments': 'off',
       '@graphql-eslint/require-import-fragment': 'off',
+      // the post list reads album covers from each post's editor state, eight levels down
+      '@graphql-eslint/selection-set-depth': ['error', { maxDepth: 8 }],
       '@graphql-eslint/unique-fragment-name': 'off',
       '@graphql-eslint/unique-operation-name': 'off',
     },
