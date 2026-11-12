@@ -8,7 +8,7 @@ nonisolated public struct PostsQuery: GraphQLQuery {
   public static let operationName: String = "Posts"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Posts($after: String, $first: Int!) { posts(after: $after, first: $first, status: PUBLISH) { __typename edges { __typename node { __typename id slug title featuredMedia { __typename id destination ... on ImageUpload { crops { __typename fileName width } } } } } pageInfo { __typename endCursor hasNextPage } } }"#
+      #"query Posts($after: String, $first: Int!) { posts(after: $after, first: $first, status: PUBLISH) { __typename edges { __typename node { __typename id slug title editorState { __typename root { __typename children { __typename ... on ImageNode { image { __typename id destination crops { __typename fileName width } } } } } } featuredMedia { __typename id destination ... on ImageUpload { crops { __typename fileName width } } } } } pageInfo { __typename endCursor hasNextPage } } }"#
     ))
 
   public var after: GraphQLNullable<String>
@@ -96,6 +96,7 @@ nonisolated public struct PostsQuery: GraphQLQuery {
             .field("id", String.self),
             .field("slug", String.self),
             .field("title", String.self),
+            .field("editorState", EditorState?.self),
             .field("featuredMedia", [FeaturedMedium]?.self),
           ] }
           @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
@@ -105,7 +106,129 @@ nonisolated public struct PostsQuery: GraphQLQuery {
           public var id: String { __data["id"] }
           public var slug: String { __data["slug"] }
           public var title: String { __data["title"] }
+          public var editorState: EditorState? { __data["editorState"] }
           public var featuredMedia: [FeaturedMedium]? { __data["featuredMedia"] }
+
+          /// Posts.Edge.Node.EditorState
+          ///
+          /// Parent Type: `EditorState`
+          nonisolated public struct EditorState: HighForThisAPI.SelectionSet {
+            @_spi(Unsafe) public let __data: DataDict
+            @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+            @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.EditorState }
+            @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
+              .field("root", Root?.self),
+            ] }
+            @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+              PostsQuery.Data.Posts.Edge.Node.EditorState.self
+            ] }
+
+            public var root: Root? { __data["root"] }
+
+            /// Posts.Edge.Node.EditorState.Root
+            ///
+            /// Parent Type: `ElementNode`
+            nonisolated public struct Root: HighForThisAPI.SelectionSet {
+              @_spi(Unsafe) public let __data: DataDict
+              @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+              @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ElementNode }
+              @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+                .field("__typename", String.self),
+                .field("children", [Child?]?.self),
+              ] }
+              @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+                PostsQuery.Data.Posts.Edge.Node.EditorState.Root.self
+              ] }
+
+              public var children: [Child?]? { __data["children"] }
+
+              /// Posts.Edge.Node.EditorState.Root.Child
+              ///
+              /// Parent Type: `EditorNode`
+              nonisolated public struct Child: HighForThisAPI.SelectionSet {
+                @_spi(Unsafe) public let __data: DataDict
+                @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+                @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Unions.EditorNode }
+                @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+                  .field("__typename", String.self),
+                  .inlineFragment(AsImageNode.self),
+                ] }
+                @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+                  PostsQuery.Data.Posts.Edge.Node.EditorState.Root.Child.self
+                ] }
+
+                public var asImageNode: AsImageNode? { _asInlineFragment() }
+
+                /// Posts.Edge.Node.EditorState.Root.Child.AsImageNode
+                ///
+                /// Parent Type: `ImageNode`
+                nonisolated public struct AsImageNode: HighForThisAPI.InlineFragment {
+                  @_spi(Unsafe) public let __data: DataDict
+                  @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+                  public typealias RootEntityType = PostsQuery.Data.Posts.Edge.Node.EditorState.Root.Child
+                  @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ImageNode }
+                  @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+                    .field("image", Image?.self),
+                  ] }
+                  @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+                    PostsQuery.Data.Posts.Edge.Node.EditorState.Root.Child.self,
+                    PostsQuery.Data.Posts.Edge.Node.EditorState.Root.Child.AsImageNode.self
+                  ] }
+
+                  public var image: Image? { __data["image"] }
+
+                  /// Posts.Edge.Node.EditorState.Root.Child.AsImageNode.Image
+                  ///
+                  /// Parent Type: `ImageUpload`
+                  nonisolated public struct Image: HighForThisAPI.SelectionSet {
+                    @_spi(Unsafe) public let __data: DataDict
+                    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+                    @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ImageUpload }
+                    @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+                      .field("__typename", String.self),
+                      .field("id", String.self),
+                      .field("destination", String.self),
+                      .field("crops", [Crop].self),
+                    ] }
+                    @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+                      PostsQuery.Data.Posts.Edge.Node.EditorState.Root.Child.AsImageNode.Image.self
+                    ] }
+
+                    public var id: String { __data["id"] }
+                    public var destination: String { __data["destination"] }
+                    public var crops: [Crop] { __data["crops"] }
+
+                    /// Posts.Edge.Node.EditorState.Root.Child.AsImageNode.Image.Crop
+                    ///
+                    /// Parent Type: `ImageUploadCrop`
+                    nonisolated public struct Crop: HighForThisAPI.SelectionSet {
+                      @_spi(Unsafe) public let __data: DataDict
+                      @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+                      @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ImageUploadCrop }
+                      @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+                        .field("__typename", String.self),
+                        .field("fileName", String.self),
+                        .field("width", Int.self),
+                      ] }
+                      @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+                        PostsQuery.Data.Posts.Edge.Node.EditorState.Root.Child.AsImageNode.Image.Crop.self
+                      ] }
+
+                      public var fileName: String { __data["fileName"] }
+                      public var width: Int { __data["width"] }
+                    }
+                  }
+                }
+              }
+            }
+          }
 
           /// Posts.Edge.Node.FeaturedMedium
           ///

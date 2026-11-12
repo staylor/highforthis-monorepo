@@ -5,6 +5,22 @@ query Posts($after: String, $first: Int!) {
         id
         slug
         title
+        editorState {
+          root {
+            children {
+              ... on ImageNode {
+                image {
+                  id
+                  destination
+                  crops {
+                    fileName
+                    width
+                  }
+                }
+              }
+            }
+          }
+        }
         featuredMedia {
           id
           destination

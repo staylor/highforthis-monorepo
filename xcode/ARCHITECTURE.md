@@ -24,7 +24,9 @@ Video and post rows stack vertically at accessibility text sizes. Maps are real 
 
 `PostBlock` converts Lexical headings, paragraphs, quotes, code, images and videos to display values. Text formats become `AttributedString` runs, preserving combined formatting. The reader computes these blocks when the editor state changes and uses a `LazyVStack`, rather than constructing and downloading every image immediately. Text is selectable, headings have accessibility traits, and image descriptions use the CMS's alt text. The Siri Remote scrolls only by moving focus, so on tvOS each block takes focus (`focusableForReading()`), code wraps rather than scrolling sideways, and columns widen by the ratio of tvOS to iOS body text (`CGFloat.readable(_:)`). Episode pages put Play before the description there, so it takes focus.
 
-Uploads use the CMS's Cloud Storage bucket (`UPLOADS_URL`) at `destination/fileName`. Apple Music artwork replaces `{w}` and `{h}` in its URL template, bounding both dimensions to 1500 pixels. Images use `AsyncImage`; the shared URL cache has a 32 MB memory and 256 MB disk budget. Frames retain their aspect ratio while loading or showing a failure placeholder.
+Post rows show the album covers in each post, as the website's post cards do: each cover once, or the featured images when a post has none, up to five tiled in the site's collage layouts. A seed made once per list shuffles them with the website's hash, so the list shows a different few each time it opens and keeps them while it's open.
+
+Uploads use the CMS's Cloud Storage bucket (`UPLOADS_URL`) at `destination/fileName`. Apple Music artwork replaces `{w}` and `{h}` in its URL template, bounding both dimensions to 1500 pixels. Images use `AsyncImage`; the shared URL cache has a 32 MB memory and 256 MB disk budget. Frames hold their aspect ratio, or their collage tile, while loading or showing a failure placeholder.
 
 ## Playback
 

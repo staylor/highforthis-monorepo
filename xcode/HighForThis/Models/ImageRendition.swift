@@ -13,6 +13,7 @@ nonisolated extension Collection where Element: ImageRendition {
     }
 }
 
+nonisolated extension PostsQuery.Data.Posts.Edge.Node.EditorState.Root.Child.AsImageNode.Image.Crop: ImageRendition {}
 nonisolated extension PostsQuery.Data.Posts.Edge.Node.FeaturedMedium.AsImageUpload.Crop: ImageRendition {}
 nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsImageNode.Image.Crop: ImageRendition {}
 nonisolated extension Video_video.Thumbnail: ImageRendition {}
