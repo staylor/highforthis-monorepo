@@ -245,11 +245,14 @@ export type EditorNode =
   | HeadingNode
   | ImageNode
   | LinebreakNode
+  | ListItemNode
+  | ListNode
   | QuoteNode
   | TextNode
   | VideoNode;
 
 export type EditorNodeInput = {
+  checked?: InputMaybe<Scalars['Boolean']['input']>;
   children?: InputMaybe<Array<InputMaybe<EditorNodeInput>>>;
   detail?: InputMaybe<Scalars['Int']['input']>;
   direction?: InputMaybe<ElementDirection>;
@@ -257,14 +260,17 @@ export type EditorNodeInput = {
   imageId?: InputMaybe<Scalars['String']['input']>;
   indent?: InputMaybe<Scalars['Int']['input']>;
   language?: InputMaybe<Scalars['String']['input']>;
+  listType?: InputMaybe<ListType>;
   mode?: InputMaybe<TextModeType>;
   size?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['Int']['input']>;
   style?: InputMaybe<Scalars['String']['input']>;
-  tag?: InputMaybe<HeadingTag>;
+  tag?: InputMaybe<Scalars['String']['input']>;
   text?: InputMaybe<Scalars['String']['input']>;
   textFormat?: InputMaybe<Scalars['Int']['input']>;
   textStyle?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['Int']['input']>;
   version?: InputMaybe<Scalars['Int']['input']>;
   videoId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -417,6 +423,38 @@ export type LinebreakNode = LexicalNode & {
   type?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['Int']['output']>;
 };
+
+export type ListItemNode = ElementNodeType &
+  LexicalNode & {
+    __typename?: 'ListItemNode';
+    checked?: Maybe<Scalars['Boolean']['output']>;
+    children?: Maybe<Array<Maybe<EditorNode>>>;
+    direction?: Maybe<ElementDirection>;
+    format?: Maybe<Scalars['Int']['output']>;
+    indent?: Maybe<Scalars['Int']['output']>;
+    type?: Maybe<Scalars['String']['output']>;
+    value?: Maybe<Scalars['Int']['output']>;
+    version?: Maybe<Scalars['Int']['output']>;
+  };
+
+export type ListNode = ElementNodeType &
+  LexicalNode & {
+    __typename?: 'ListNode';
+    children?: Maybe<Array<Maybe<EditorNode>>>;
+    direction?: Maybe<ElementDirection>;
+    format?: Maybe<Scalars['Int']['output']>;
+    indent?: Maybe<Scalars['Int']['output']>;
+    listType?: Maybe<ListType>;
+    start?: Maybe<Scalars['Int']['output']>;
+    type?: Maybe<Scalars['String']['output']>;
+    version?: Maybe<Scalars['Int']['output']>;
+  };
+
+export enum ListType {
+  Bullet = 'bullet',
+  Check = 'check',
+  Number = 'number',
+}
 
 export type Listing = {
   __typename?: 'Listing';

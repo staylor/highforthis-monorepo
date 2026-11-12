@@ -108,6 +108,30 @@ const postQuery = gql`
                 ...TextNodes_textNode
               }
             }
+            ... on QuoteNode {
+              children {
+                ...TextNodes_linebreakNode
+                ...TextNodes_textNode
+              }
+            }
+            ... on CodeNode {
+              children {
+                ...TextNodes_linebreakNode
+                ...TextNodes_textNode
+              }
+            }
+            ... on ListNode {
+              children {
+                ... on ListItemNode {
+                  children {
+                    ...TextNodes_linebreakNode
+                    ...TextNodes_textNode
+                  }
+                }
+              }
+              listType
+              start
+            }
           }
           direction
           format

@@ -16,7 +16,10 @@ const resolvers = {
         image: 'ImageNode',
         linebreak: 'LinebreakNode',
         list: 'ListNode',
+        listitem: 'ListItemNode',
         quote: 'QuoteNode',
+        // a tab is a TextNode holding "\t"
+        tab: 'TextNode',
         text: 'TextNode',
         video: 'VideoNode',
       },

@@ -13,6 +13,8 @@ public extension Interfaces {
       "HeadingNode",
       "ImageNode",
       "LinebreakNode",
+      "ListItemNode",
+      "ListNode",
       "QuoteNode",
       "TextNode",
       "VideoNode"
