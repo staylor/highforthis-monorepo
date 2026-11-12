@@ -36,6 +36,7 @@ private struct PostReader: View {
                     PostBlockView(block: block)
                         .focusableForReading()
                         .accessibilityIdentifier("post-block-\(index)")
+                        .padding(.top, block.spacingAbove)
                 }
             }
             .selectableText()
@@ -53,20 +54,25 @@ private struct PostBlockView: View {
     var body: some View {
         switch block {
         case .heading(let level, let text):
-            VStack(alignment: .leading, spacing: 8) {
+            if level == 3 {
+                // Album titles, as the website draws an h3: bold, over a dashed rule as wide as the title and its padding.
+                Text(text)
+                    .font(.title2.bold())
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(EdgeInsets(top: 4, leading: 2, bottom: 6, trailing: 24))
+                    .overlay(alignment: .bottom) {
+                        DashedRule()
+                            .stroke(.tint, style: StrokeStyle(lineWidth: 2, dash: [6, 5]))
+                            .frame(height: 2)
+                            .accessibilityHidden(true)
+                    }
+                    .accessibilityAddTraits(.isHeader)
+            } else {
                 Text(text)
                     .font(level == 1 ? .title.bold() : level == 2 ? .title2.bold() : .title3.weight(.black))
-                    .textCase(level == 3 ? .uppercase : nil)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityAddTraits(.isHeader)
-                if level == 3 {
-                    DashedRule()
-                        .stroke(.tint, style: StrokeStyle(lineWidth: 2, dash: [4]))
-                        .frame(height: 2)
-                        .accessibilityHidden(true)
-                }
             }
-            .padding(.top, 8)
         case .paragraph(let text):
             Text(text).fixedSize(horizontal: false, vertical: true)
         case .quote(let text):
@@ -100,6 +106,15 @@ private struct PostBlockView: View {
         case .video(let video):
             VideoLink(video: video)
         }
+    }
+}
+
+extension PostBlock {
+    /// Room above a heading, beyond the blocks' spacing, outside the tvOS focus highlight. After a paragraph, the website
+    /// leaves 48 points above an album title: the paragraph's margin and the title's own.
+    fileprivate var spacingAbove: CGFloat {
+        guard case .heading(let level, _) = self else { return 0 }
+        return level == 3 ? 28 : 8
     }
 }
 
