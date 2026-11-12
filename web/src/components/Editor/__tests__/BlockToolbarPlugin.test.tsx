@@ -11,18 +11,34 @@ import {
   type LexicalEditor,
   type ParagraphNode,
 } from 'lexical';
-import { describe, expect, it } from 'vitest';
+import { createRoutesStub } from 'react-router';
+import { describe, expect, it, onTestFinished } from 'vitest';
 
 import Editor from '#/components/Editor';
 
 // the block toolbar's buttons, in order: H2, H3, image, video, quote, bullet list, numbered list, code
+const VIDEO = 3;
 const BULLET_LIST = 5;
 
-function renderEditor() {
-  const { container } = render(<Editor />);
-  return getNearestEditorFromDOMNode(
-    container.querySelector('[data-lexical-editor="true"]')
-  ) as LexicalEditor;
+const video = {
+  id: 'video-1',
+  dataId: 'youtube-1',
+  slug: 'a-video',
+  title: 'A video',
+  thumbnails: [{ height: 90, url: 'https://example.com/thumbnail.jpg', width: 120 }],
+};
+
+async function renderEditor() {
+  const Stub = createRoutesStub([
+    { path: '/', Component: () => <Editor /> },
+    // what the video picker lists
+    {
+      path: '/modals/video/:cursor?',
+      loader: () => ({ videos: { edges: [{ node: video }], pageInfo: { hasNextPage: false } } }),
+    },
+  ]);
+  render(<Stub />);
+  return getNearestEditorFromDOMNode(await screen.findByRole('textbox')) as LexicalEditor;
 }
 
 async function update(editor: LexicalEditor, fn: () => void) {
@@ -47,7 +63,7 @@ function blocks(editor: LexicalEditor) {
 
 describe('block toolbar', () => {
   it('turns the empty first line of a new post into a heading', async () => {
-    const editor = renderEditor();
+    const editor = await renderEditor();
     await update(editor, () => $getRoot().selectStart());
 
     fireEvent.mouseDown(screen.getByText('H3'));
@@ -56,7 +72,7 @@ describe('block toolbar', () => {
   });
 
   it('keeps taking input after changing an empty line', async () => {
-    const editor = renderEditor();
+    const editor = await renderEditor();
     await update(editor, () => {
       const empty = $createParagraphNode();
       $getRoot().getFirstChildOrThrow<ParagraphNode>().append($createTextNode('First line'));
@@ -79,7 +95,7 @@ describe('block toolbar', () => {
   });
 
   it('turns a line back into a paragraph when its own type is pressed again', async () => {
-    const editor = renderEditor();
+    const editor = await renderEditor();
     await update(editor, () => $getRoot().selectStart());
 
     fireEvent.mouseDown(screen.getByText('H3'));
@@ -90,7 +106,7 @@ describe('block toolbar', () => {
   });
 
   it('makes a line with mixed formatting a single list item', async () => {
-    const editor = renderEditor();
+    const editor = await renderEditor();
     await update(editor, () => {
       const line = $getRoot().getFirstChildOrThrow<ParagraphNode>();
       line.append($createTextNode('Bold').toggleFormat('bold'), $createTextNode(' and plain'));
@@ -106,6 +122,26 @@ describe('block toolbar', () => {
           return $isListNode(list) ? list.getChildren().map((item) => item.getTextContent()) : [];
         })
       ).toEqual(['Bold and plain'])
+    );
+  });
+
+  it('saves the video picked from the toolbar by its id', async () => {
+    const portal = document.createElement('div');
+    portal.id = 'portal';
+    document.body.append(portal);
+    onTestFinished(() => portal.remove());
+    const editor = await renderEditor();
+    await update(editor, () => $getRoot().selectStart());
+
+    fireEvent.mouseDown(blockButton(VIDEO));
+    fireEvent.click(await screen.findByText(video.title));
+
+    await waitFor(() =>
+      expect(editor.getEditorState().toJSON().root.children[0]).toEqual({
+        type: 'video',
+        version: 1,
+        videoId: video.id,
+      })
     );
   });
 });

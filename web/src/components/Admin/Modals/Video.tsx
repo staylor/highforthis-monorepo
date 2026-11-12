@@ -10,6 +10,7 @@ import { modalClass, frameClass, itemTitleClass } from './styles';
 import useInfiniteScroll from './useInfiniteScroll';
 
 interface SelectedVideoData {
+  id: string;
   dataId: string;
   title: string;
   slug: string;
@@ -17,7 +18,6 @@ interface SelectedVideoData {
 }
 
 interface SelectedVideo {
-  videoId: string;
   video: SelectedVideoData;
 }
 
@@ -59,6 +59,7 @@ function VideoModal({ selectVideo, onClose }: VideoModalProps) {
                 e.preventDefault();
 
                 const normalized: SelectedVideoData = {
+                  id: node.id,
                   dataId: node.dataId,
                   title: node.title,
                   slug: node.slug,
@@ -68,10 +69,7 @@ function VideoModal({ selectVideo, onClose }: VideoModalProps) {
                   normalized.thumbnails.push({ width, height, url });
                 });
 
-                selectVideo({
-                  videoId: node.id,
-                  video: normalized,
-                });
+                selectVideo({ video: normalized });
                 onClose(e);
               }}
             >
