@@ -1,20 +1,29 @@
-import { $createCodeNode } from '@lexical/code';
-import { $createListNode, type ListType } from '@lexical/list';
+import { $createCodeNode, $isCodeNode } from '@lexical/code';
+import {
+  $isListItemNode,
+  $isListNode,
+  INSERT_ORDERED_LIST_COMMAND,
+  INSERT_UNORDERED_LIST_COMMAND,
+} from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
-import type { HeadingTagType } from '@lexical/rich-text';
-import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
+import {
+  $createHeadingNode,
+  $createQuoteNode,
+  $isHeadingNode,
+  $isQuoteNode,
+} from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
-import { mergeRegister, $insertNodeToNearestRoot } from '@lexical/utils';
+import { $insertNodeToNearestRoot } from '@lexical/utils';
 import {
   $createParagraphNode,
   $getSelection,
-  $getNearestNodeFromDOMNode,
+  $isElementNode,
   $isParagraphNode,
   $isRangeSelection,
-  SELECTION_CHANGE_COMMAND,
+  $isRootOrShadowRoot,
 } from 'lexical';
-import type { LexicalNode, RangeSelection } from 'lexical';
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import type { ElementNode, LexicalCommand, LexicalNode } from 'lexical';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import type { ReactNode, SyntheticEvent } from 'react';
 
 import MediaModal from '#/components/Admin/Modals/Media';
@@ -28,296 +37,220 @@ import type { ImageUpload, Video } from '#/types/graphql';
 
 import { $createImageNode } from './ImageNode';
 import { $createVideoNode } from './VideoNode';
-import { getNodeFromSelection, getStyleFromNode, setStyle } from './utils';
+
+type Modals = Record<'media' | 'video', boolean>;
+
+const allModals = (): Modals => ({ media: false, video: false });
+const reducer = (_prev: Modals, action: Partial<Modals>) => ({ ...allModals(), ...action });
 
 interface BlockType {
   label: ReactNode;
-  nodeType?: string;
   style: string;
-  className?: string;
-  onToggle?: () => void;
+  // what the button does: turn the line into a block, into a list, or open a media picker
+  $createBlock?: () => ElementNode;
+  listCommand?: LexicalCommand<void>;
+  modal?: keyof Modals;
 }
 
 const iconClass = 'h-4 w-4';
 
-const BLOCK_OFFSET = 0;
+const BLOCK_TYPES: BlockType[] = [
+  { label: 'H2', style: 'h2', $createBlock: () => $createHeadingNode('h2') },
+  { label: 'H3', style: 'h3', $createBlock: () => $createHeadingNode('h3') },
+  { label: <Icon name="media" className={iconClass} />, style: 'atomic-image', modal: 'media' },
+  { label: <Icon name="video" className={iconClass} />, style: 'video', modal: 'video' },
+  {
+    label: <Icon name="quote" className={iconClass} />,
+    style: 'blockquote',
+    $createBlock: () => $createQuoteNode(),
+  },
+  {
+    label: <Icon name="listBullet" className={iconClass} />,
+    style: 'bullet',
+    listCommand: INSERT_UNORDERED_LIST_COMMAND,
+  },
+  {
+    label: <Icon name="listOrdered" className={iconClass} />,
+    style: 'number',
+    listCommand: INSERT_ORDERED_LIST_COMMAND,
+  },
+  {
+    label: <Icon name="code" className={iconClass} />,
+    style: 'code',
+    $createBlock: () => $createCodeNode(),
+  },
+];
+
+// the toolbar sits this far above the line its button is on
 const BLOCK_TOOLBAR_OFFSET = 40;
 
-const LowPriority = 1;
+interface BlockControls {
+  visible: boolean;
+  open: boolean;
+  // the line's offset from the top of the editor
+  top: number;
+  // the line's block type, named like BLOCK_TYPES' styles; empty for a paragraph
+  style: string;
+}
 
-type Modals = Record<string, boolean>;
+const hiddenControls: BlockControls = { visible: false, open: false, top: 0, style: '' };
 
-const allModals = () => ({ media: false, video: false });
-const reducer = (_prev: Modals, action: Modals) => ({ ...allModals(), ...action });
+/**
+ * The line a collapsed caret is at the very start of, which is where the block controls show:
+ * a list item, or the top-level block the caret is in. Null anywhere else.
+ */
+function $getLineAtCaret(): ElementNode | null {
+  const selection = $getSelection();
+  if (!$isRangeSelection(selection) || !selection.isCollapsed() || selection.anchor.offset !== 0) {
+    return null;
+  }
+
+  let node: LexicalNode | null = selection.anchor.getNode();
+  while (node && !$isRootOrShadowRoot(node)) {
+    if ($isListItemNode(node) || $isRootOrShadowRoot(node.getParent())) {
+      return $isElementNode(node) ? node : null;
+    }
+    // the caret is past the start of the line
+    if (node.getPreviousSibling()) {
+      return null;
+    }
+    node = node.getParent();
+  }
+  return null;
+}
+
+function $getBlockStyle(line: ElementNode) {
+  const block = $isListItemNode(line) ? line.getParent() : line;
+  if ($isListNode(block)) {
+    return block.getListType();
+  }
+  if ($isHeadingNode(block)) {
+    return block.getTag();
+  }
+  if ($isQuoteNode(block)) {
+    return 'blockquote';
+  }
+  if ($isCodeNode(block)) {
+    return 'code';
+  }
+  return '';
+}
+
+/**
+ * Images and videos go on the caret's line: an empty line becomes the block, with a new line after
+ * it to keep writing, and otherwise the block goes above the line and the caret stays where it is.
+ */
+function $insertBlock(node: LexicalNode) {
+  const line = $getLineAtCaret();
+  if ($isParagraphNode(line) && line.isEmpty()) {
+    line.replace(node);
+    const paragraph = $createParagraphNode();
+    node.insertAfter(paragraph);
+    paragraph.select();
+  } else if (line && $isRootOrShadowRoot(line.getParent())) {
+    line.insertBefore(node);
+  } else {
+    $insertNodeToNearestRoot(node);
+  }
+}
 
 export default function BlockToolbarPlugin() {
-  const [activeStyle, setActiveStyle] = useState('');
-  const [modals, setModals] = useReducer(reducer, allModals());
-  const toolbarOpenRef = useRef(false);
-  const blockButtonRef = useRef(null);
-  const blockToolbarRef = useRef(null);
-  // Track whether the button is currently shown (cursor on empty line)
-  const buttonVisibleRef = useRef(false);
-  const [buttonActive, setButtonActive] = useState(false);
   const [editor] = useLexicalComposerContext();
+  const [controls, setControls] = useState(hiddenControls);
+  const [modals, setModals] = useReducer(reducer, allModals());
 
-  const BLOCK_TYPES: BlockType[] = useMemo(
-    () => [
-      { label: 'H2', nodeType: 'heading', style: 'h2' },
-      { label: 'H3', nodeType: 'heading', style: 'h3' },
-      {
-        label: <Icon name="media" className={iconClass} />,
-        style: 'atomic-image',
-        onToggle: () => {
-          setModals({ media: true });
-        },
-      },
-      {
-        label: <Icon name="video" className={iconClass} />,
-        nodeType: 'video',
-        style: 'video',
-        onToggle: () => {
-          setModals({ video: true });
-        },
-      },
-      {
-        label: <Icon name="quote" className={iconClass} />,
-        nodeType: 'quote',
-        style: 'blockquote',
-      },
-      {
-        label: <Icon name="listBullet" className={iconClass} />,
-        nodeType: 'list',
-        style: 'bullet',
-      },
-      {
-        label: <Icon name="listOrdered" className={iconClass} />,
-        nodeType: 'list',
-        style: 'number',
-      },
-      {
-        label: <Icon name="code" className={iconClass} />,
-        nodeType: 'code',
-        style: 'code',
-      },
-    ],
-    [setModals]
-  );
-  const ALL_TYPES = useMemo(
-    () => BLOCK_TYPES.map((type) => type.nodeType).filter(Boolean),
-    [BLOCK_TYPES]
-  );
-
-  const getTopOffset = useCallback(() => {
-    const editorRef = editor.getRootElement();
-    const editorBoundary = editorRef?.getBoundingClientRect();
-    if (!editorBoundary) {
-      return;
-    }
-
-    const selected = window.getSelection() as Selection;
-
-    let bounds: DOMRect | undefined;
-    if (selected.focusNode) {
-      if ('getBoundingClientRect' in selected.focusNode) {
-        bounds = (selected.focusNode as HTMLElement).getBoundingClientRect();
-      } else if (
-        selected.focusNode.parentElement &&
-        'getBoundingClientRect' in selected.focusNode.parentElement
-      ) {
-        bounds = selected.focusNode.parentElement.getBoundingClientRect();
-      }
-    }
-    if (!bounds) {
-      return;
-    }
-
-    if (bounds.x === 0 && bounds.y === 0) {
-      return;
-    }
-    return bounds.top - editorBoundary.top - BLOCK_OFFSET;
-  }, [editor]);
-
-  const hideToolbar = useCallback(() => {
-    toolbarOpenRef.current = false;
-    setStyle(blockToolbarRef, {
-      scale: '0',
-    });
-  }, []);
-
-  const showToolbar = useCallback(() => {
-    const offset = getTopOffset();
-    if (offset !== undefined) {
-      toolbarOpenRef.current = true;
-      setStyle(blockToolbarRef, {
-        top: `${offset - BLOCK_TOOLBAR_OFFSET}px`,
-        scale: '1',
-      });
-    } else {
-      hideToolbar();
-    }
-  }, [getTopOffset, hideToolbar]);
-
-  const hideButton = useCallback(() => {
-    buttonVisibleRef.current = false;
-    setStyle(blockButtonRef, {
-      scale: '0',
-    });
-    if (toolbarOpenRef.current) {
-      hideToolbar();
-    }
-    setButtonActive(false);
-    setActiveStyle('');
-  }, [hideToolbar]);
-
-  const showButton = useCallback(() => {
-    buttonVisibleRef.current = true;
-    const topOffset = getTopOffset();
-    if (topOffset !== undefined) {
-      setStyle(blockButtonRef, {
-        top: `${topOffset}px`,
-        scale: '1',
-      });
-    } else {
-      hideButton();
-    }
-  }, [getTopOffset, hideButton]);
-
-  const toggleToolbar = useCallback(() => {
-    if (toolbarOpenRef.current) {
-      hideToolbar();
-      setButtonActive(false);
-    } else {
-      showToolbar();
-      setButtonActive(true);
-    }
-  }, [showToolbar, hideToolbar]);
-
-  const showButtonRef = useRef(showButton);
-  showButtonRef.current = showButton;
-  const hideButtonRef = useRef(hideButton);
-  hideButtonRef.current = hideButton;
-  const showToolbarRef = useRef(showToolbar);
-  showToolbarRef.current = showToolbar;
-  const hideToolbarRef = useRef(hideToolbar);
-  hideToolbarRef.current = hideToolbar;
-
-  useEffect(() => {
-    const $updateButton = () => {
-      const selection = $getSelection() as RangeSelection;
-      if (!selection) {
-        hideButtonRef.current();
-        return;
-      }
-
-      const range = selection as RangeSelection;
-      const anchorOffset = range.anchor.offset;
-      const focusOffset = range.focus.offset;
-
-      if (anchorOffset === 0 && focusOffset === 0) {
-        showButtonRef.current();
-
-        editor.update(() => {
-          const selectedNode = getNodeFromSelection();
-          if (!selectedNode) {
-            return;
-          }
-
-          const node = $getNearestNodeFromDOMNode(selectedNode) as LexicalNode;
-          if (!node) {
-            return;
-          }
-          if (ALL_TYPES.includes(node.__type)) {
-            const style = getStyleFromNode(node) as string;
-            setButtonActive(true);
-            showToolbarRef.current();
-            setActiveStyle(style);
-          } else {
-            setButtonActive(false);
-            hideToolbarRef.current();
-            setActiveStyle('');
-          }
-        });
-      } else {
-        hideButtonRef.current();
-      }
-    };
-
-    const unregister = mergeRegister(
+  useEffect(
+    () =>
       editor.registerUpdateListener(({ editorState }) => {
-        editorState.read(() => {
-          $updateButton();
+        const next = editorState.read(
+          () => {
+            const line = $getLineAtCaret();
+            const element = line && editor.getElementByKey(line.getKey());
+            const root = editor.getRootElement();
+            if (!line || !element || !root) {
+              return null;
+            }
+
+            const style = $getBlockStyle(line);
+            return {
+              visible: true,
+              // a line that already has a block type opens the toolbar, to change or undo it
+              open: style !== '',
+              top: element.getBoundingClientRect().top - root.getBoundingClientRect().top,
+              style,
+            };
+          },
+          { editor }
+        );
+
+        setControls((prev) => {
+          if (!next) {
+            return prev.visible ? { ...prev, visible: false, open: false } : prev;
+          }
+          const unchanged =
+            prev.visible &&
+            prev.open === next.open &&
+            prev.top === next.top &&
+            prev.style === next.style;
+          return unchanged ? prev : next;
         });
       }),
-      editor.registerCommand(
-        SELECTION_CHANGE_COMMAND,
-        () => {
-          $updateButton();
-          return false;
-        },
-        LowPriority
-      )
-    );
-    return unregister;
-  }, [editor, ALL_TYPES]);
+    [editor]
+  );
 
-  const onToggle = useCallback(
+  const toggleBlock = useCallback(
     (type: BlockType) => {
       editor.update(() => {
+        const line = $getLineAtCaret();
+        if (!line) {
+          return;
+        }
+
         const selection = $getSelection();
-        if ($isRangeSelection(selection)) {
-          const selectedNode = getNodeFromSelection() as HTMLElement;
-          const node = $getNearestNodeFromDOMNode(selectedNode) as LexicalNode;
-
-          // This is when a type (e.g. 'quote') is active on the current node, and you click it again
-          // Setting to ParagraphNode removes the special treatment
-          if (ALL_TYPES.includes(node.__type) && type.style === activeStyle) {
-            $setBlocksType(selection, () => $createParagraphNode());
-            setActiveStyle('');
-            return;
-          }
-
-          switch (type.nodeType) {
-            case 'heading':
-              $setBlocksType(selection, () => $createHeadingNode(type.style as HeadingTagType));
-              setActiveStyle(type.style);
-              break;
-            case 'quote':
-              $setBlocksType(selection, () => $createQuoteNode());
-              setActiveStyle(type.style);
-              break;
-            case 'code':
-              $setBlocksType(selection, () => $createCodeNode());
-              setActiveStyle(type.style);
-              break;
-            case 'list':
-              $setBlocksType(selection, () => $createListNode(type.style as ListType));
-              setActiveStyle(type.style);
-              break;
-          }
+        if ($getBlockStyle(line) === type.style) {
+          // pressing the line's own type again turns it back into a paragraph
+          $setBlocksType(selection, () => $createParagraphNode());
+        } else if (type.listCommand) {
+          editor.dispatchCommand(type.listCommand, undefined);
+        } else if (type.$createBlock) {
+          $setBlocksType(selection, type.$createBlock);
         }
       });
     },
-    [editor, activeStyle, setActiveStyle, ALL_TYPES]
+    [editor]
   );
+
+  const closeModal = (e: SyntheticEvent) => {
+    e.preventDefault();
+    setModals({});
+  };
 
   return (
     <>
-      <BlockButton ref={blockButtonRef as any} active={buttonActive} onMouseDown={toggleToolbar} />
-      <Toolbar ref={blockToolbarRef} className="-left-7 after:right-auto after:left-1">
+      <BlockButton
+        active={controls.open}
+        style={{ top: controls.top, scale: controls.visible ? '1' : undefined }}
+        onMouseDown={() => setControls((prev) => ({ ...prev, open: !prev.open }))}
+      />
+      <Toolbar
+        className="-left-7 after:right-auto after:left-1"
+        style={{
+          top: controls.top - BLOCK_TOOLBAR_OFFSET,
+          scale: controls.visible && controls.open ? '1' : undefined,
+        }}
+      >
         <Controls>
           {BLOCK_TYPES.map((type) => (
             <StyleButton
               key={type.style}
-              className={type.className as string}
-              active={activeStyle === type.style}
+              active={controls.style === type.style}
               label={type.label}
               onToggle={() => {
-                if (type.onToggle) {
-                  type.onToggle();
+                if (type.modal) {
+                  setModals({ [type.modal]: true });
                   return;
                 }
-                onToggle(type);
+                toggleBlock(type);
               }}
               style={type.style}
             />
@@ -327,62 +260,22 @@ export default function BlockToolbarPlugin() {
       {modals.media && (
         <MediaModal
           selectImage={({ image, size }) => {
-            hideToolbar();
-            hideButton();
             editor.update(() => {
-              const node = $createImageNode(image as ImageUpload, size);
-              const selection = $getSelection();
-              if ($isRangeSelection(selection)) {
-                const anchor = selection.anchor.getNode();
-                const parent = anchor.getTopLevelElementOrThrow();
-                if ($isParagraphNode(parent) && parent.getTextContentSize() === 0) {
-                  parent.replace(node);
-                } else {
-                  $insertNodeToNearestRoot(node);
-                }
-              } else {
-                $insertNodeToNearestRoot(node);
-              }
-              const paragraph = $createParagraphNode();
-              node.insertAfter(paragraph);
-              paragraph.select();
+              $insertBlock($createImageNode(image as ImageUpload, size));
             });
           }}
           selectAudio={() => {}}
-          onClose={(e) => {
-            e.preventDefault();
-            setModals({});
-          }}
+          onClose={closeModal}
         />
       )}
       {modals.video && (
         <VideoModal
           selectVideo={({ video }) => {
-            hideToolbar();
-            hideButton();
             editor.update(() => {
-              const node = $createVideoNode(video as Video);
-              const selection = $getSelection();
-              if ($isRangeSelection(selection)) {
-                const anchor = selection.anchor.getNode();
-                const parent = anchor.getTopLevelElementOrThrow();
-                if ($isParagraphNode(parent) && parent.getTextContentSize() === 0) {
-                  parent.replace(node);
-                } else {
-                  $insertNodeToNearestRoot(node);
-                }
-              } else {
-                $insertNodeToNearestRoot(node);
-              }
-              const paragraph = $createParagraphNode();
-              node.insertAfter(paragraph);
-              paragraph.select();
+              $insertBlock($createVideoNode(video as Video));
             });
           }}
-          onClose={(e: SyntheticEvent) => {
-            e.preventDefault();
-            setModals({});
-          }}
+          onClose={closeModal}
         />
       )}
     </>

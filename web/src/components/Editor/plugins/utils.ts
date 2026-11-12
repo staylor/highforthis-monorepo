@@ -1,6 +1,3 @@
-import type { ListNode } from '@lexical/list';
-import type { HeadingNode } from '@lexical/rich-text';
-import type { LexicalNode } from 'lexical';
 import type { CSSProperties } from 'react';
 
 export const setStyle = (
@@ -17,38 +14,3 @@ export const setStyle = (
     (ref.current as HTMLElement).style[key] = styles[key];
   });
 };
-
-export function getNodeFromSelection() {
-  const selected = window.getSelection() as Selection;
-  if (!selected) {
-    return;
-  }
-  let selectedNode = selected.focusNode?.parentElement as HTMLElement;
-  if (!selectedNode) {
-    return;
-  }
-  while (selectedNode?.parentElement) {
-    if (selectedNode.parentElement.getAttribute('data-lexical-editor') === 'true') {
-      break;
-    }
-    selectedNode = selectedNode.parentElement as HTMLElement;
-  }
-  return selectedNode;
-}
-
-export function getStyleFromNode(node: LexicalNode) {
-  switch (node.__type) {
-    case 'heading':
-      return (node as HeadingNode).__tag;
-    case 'quote':
-      return 'blockquote';
-    case 'code':
-      return 'code';
-    case 'list':
-      return (node as ListNode).__listType;
-    case 'video':
-      return 'video';
-    case 'image':
-      return 'image';
-  }
-}

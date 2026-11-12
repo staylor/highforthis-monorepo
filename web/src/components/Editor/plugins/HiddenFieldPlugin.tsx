@@ -5,13 +5,13 @@ export default function HiddenFieldPlugin() {
   const [fieldValue, setFieldValue] = useState('');
   const [editor] = useLexicalComposerContext();
 
-  useEffect(() => {
-    editor.registerUpdateListener(({ editorState }) => {
-      const data = editorState.toJSON();
-      const serialized = JSON.stringify(data);
-      setFieldValue(serialized);
-    });
-  }, [editor]);
+  useEffect(
+    () =>
+      editor.registerUpdateListener(({ editorState }) => {
+        setFieldValue(JSON.stringify(editorState.toJSON()));
+      }),
+    [editor]
+  );
 
   return <input type="hidden" name="editorState" value={fieldValue} />;
 }

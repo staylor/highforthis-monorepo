@@ -1,21 +1,22 @@
 import cn from 'classnames';
-import type { RefAttributes } from 'react';
+import type { CSSProperties } from 'react';
 
 import Icon from '#/components/Icon';
 
-interface Props extends RefAttributes<HTMLDivElement> {
+interface Props {
   active: boolean;
   onMouseDown: () => void;
+  style?: CSSProperties;
 }
 
-function BlockButton({ active, onMouseDown, ref }: Props) {
+function BlockButton({ active, onMouseDown, style }: Props) {
   return (
     <div
       className={cn(
         'text-detail hover:text-detail-dark',
         'toolbar-hidden absolute -left-7.5 block cursor-pointer transition-[scale]'
       )}
-      ref={ref as any}
+      style={style}
       role="button"
       tabIndex={0}
       onMouseDown={(e) => {

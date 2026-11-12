@@ -1,7 +1,12 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
 import { mergeRegister } from '@lexical/utils';
-import type { RangeSelection, TextFormatType } from 'lexical';
-import { $getSelection, FORMAT_TEXT_COMMAND, SELECTION_CHANGE_COMMAND } from 'lexical';
+import type { TextFormatType } from 'lexical';
+import {
+  $getSelection,
+  $isRangeSelection,
+  FORMAT_TEXT_COMMAND,
+  SELECTION_CHANGE_COMMAND,
+} from 'lexical';
 import type { ReactNode } from 'react';
 import { useRef, useEffect, useCallback, useReducer, useMemo } from 'react';
 
@@ -81,23 +86,22 @@ export default function InlineToolbarPlugin() {
       return;
     }
 
-    const selection = $getSelection() as RangeSelection;
-    if (!selection) {
+    const selection = $getSelection();
+    // an image or video picked with the arrow keys is a node selection, with no text to format
+    if (!$isRangeSelection(selection)) {
+      setStyle(inlineToolbarRef, {
+        scale: '0',
+      });
       return;
     }
 
     const updates = {} as Formats;
     INLINE_STYLES.forEach(({ style }) => {
-      updates[style] = selection.hasFormat?.(style);
+      updates[style] = selection.hasFormat(style);
     });
     setFormats(updates);
 
-    const range = selection as RangeSelection;
-    const anchorOffset = range.anchor.offset;
-    const focusOffset = range.focus.offset;
-
-    // empty selection
-    if (anchorOffset === focusOffset) {
+    if (selection.isCollapsed()) {
       setStyle(inlineToolbarRef, {
         scale: '0',
       });
@@ -112,7 +116,10 @@ export default function InlineToolbarPlugin() {
 
     const toolbar = inlineToolbarRef.current as HTMLElement;
     const toolbarWidth = toolbar.offsetWidth;
-    const selected = window.getSelection() as Selection;
+    const selected = window.getSelection();
+    if (!selected?.rangeCount) {
+      return;
+    }
     const selectionBoundary = selected.getRangeAt(0).getBoundingClientRect();
 
     const widthDiff = selectionBoundary.width - toolbarWidth;
