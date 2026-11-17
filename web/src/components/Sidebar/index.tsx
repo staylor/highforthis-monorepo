@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Link from '#/components/Link';
@@ -51,7 +52,24 @@ function Sidebar({ shows }: { shows: ShowConnection }) {
             <h3 className="mb-3 text-xs font-semibold tracking-wider text-muted uppercase dark:text-muted-dark">
               {group.label}
             </h3>
-            <div className="columns-1 gap-3 sm:columns-2 lg:columns-3">
+            {/*
+              A grid that fills column by column, not CSS columns: Safari can't
+              split the layer a hover transition creates across columns, so the
+              top card of the 2nd and 3rd columns vanished while animating.
+            */}
+            <div
+              className={cn(
+                'grid gap-3',
+                'sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-(--rows-sm)',
+                'lg:grid-cols-3 lg:grid-rows-(--rows-lg)'
+              )}
+              style={
+                {
+                  '--rows-sm': `repeat(${Math.ceil(group.shows.length / 2)}, auto)`,
+                  '--rows-lg': `repeat(${Math.ceil(group.shows.length / 3)}, auto)`,
+                } as CSSProperties
+              }
+            >
               {group.shows.map(({ node }) => {
                 const date = new Date(node.date);
                 return (
@@ -59,7 +77,7 @@ function Sidebar({ shows }: { shows: ShowConnection }) {
                     to={formatShowLink(node)}
                     key={node.id}
                     className={cn(
-                      'group mb-3 flex break-inside-avoid items-start gap-4 rounded-xl p-4',
+                      'group flex items-start gap-4 rounded-xl p-4',
                       'border border-neutral-100 bg-white shadow-sm',
                       'dark:bg-surface-dark-card dark:border-white/5',
                       'transition-all duration-300 hover:-translate-y-0.5',
