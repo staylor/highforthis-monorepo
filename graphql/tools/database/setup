@@ -1,0 +1,51 @@
+#!/bin/bash
+# Creates the database if it's missing, applies the Prisma schema, and loads the
+# seed data into an empty database. Safe to run again: existing data is kept.
+set -euo pipefail
+
+source "$(dirname "$0")/common"
+require_server
+
+DUMP_FILE="dump/highforthis-seed.dump"
+database="$(database_name)"
+
+exists="$(psql --dbname="$(maintenance_url)" --no-psqlrc --tuples-only --no-align \
+  --set=database="$database" <<'SQL'
+SELECT count(*) FROM pg_database WHERE datname = :'database';
+SQL
+)"
+
+if [ "$exists" = "0" ]; then
+  echo "Creating database $database..."
+  psql --dbname="$(maintenance_url)" --no-psqlrc --quiet --set=ON_ERROR_STOP=1 \
+    --set=database="$database" <<'SQL'
+CREATE DATABASE :"database";
+SQL
+fi
+
+echo "Generating Prisma client..."
+pnpm db:generate
+
+echo "Applying Prisma schema..."
+pnpm db:push
+
+artists="$(psql --dbname="$DATABASE_URL" --no-psqlrc --tuples-only --no-align \
+  --command='SELECT count(*) FROM "Artist"')"
+
+if [ "$artists" != "0" ]; then
+  echo "Database $database already has data, so the seed wasn't loaded. Run 'pnpm db:reset' to start over."
+  exit 0
+fi
+
+superuser="$(psql --dbname="$DATABASE_URL" --no-psqlrc --tuples-only --no-align \
+  --command='SELECT rolsuper FROM pg_roles WHERE rolname = current_user')"
+# Restoring with foreign key triggers disabled needs a superuser. Homebrew's Postgres
+# makes your macOS account one, which is the user graphql/.env.example connects as.
+[ "$superuser" = "t" ] ||
+  fail "Loading the seed needs a superuser. Connect as your macOS user, as in graphql/.env.example."
+
+echo "Loading seed data..."
+pg_restore --no-owner --no-privileges --data-only --disable-triggers --exit-on-error \
+  --dbname="$DATABASE_URL" "$DUMP_FILE"
+
+echo "Database $database is ready."

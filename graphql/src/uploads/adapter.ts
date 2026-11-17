@@ -18,13 +18,19 @@ class StorageAdapter {
 
   // Imported on first use: the client adds about 5 MB of heap to every idle process.
   private getBucket(): Promise<Bucket> {
+    const { GCS_BUCKET, GCS_CLIENT_EMAIL, GCS_PRIVATE_KEY } = env;
+    if (!GCS_BUCKET || !GCS_CLIENT_EMAIL || !GCS_PRIVATE_KEY) {
+      return Promise.reject(
+        new Error('Set GCS_BUCKET, GCS_CLIENT_EMAIL and GCS_PRIVATE_KEY to upload media.')
+      );
+    }
     this.bucket ??= import('@google-cloud/storage').then(({ Storage }) =>
       new Storage({
         credentials: {
-          client_email: env.GCS_CLIENT_EMAIL,
-          private_key: env.GCS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+          client_email: GCS_CLIENT_EMAIL,
+          private_key: GCS_PRIVATE_KEY.replace(/\\n/g, '\n'),
         },
-      }).bucket(env.GCS_BUCKET)
+      }).bucket(GCS_BUCKET)
     );
     return this.bucket;
   }

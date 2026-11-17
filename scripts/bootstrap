@@ -1,0 +1,30 @@
+#!/bin/bash
+# Gets a fresh clone ready for `pnpm dev`: installs Postgres and the packages, creates
+# graphql/.env, and builds the local database. Safe to run again at any time.
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+if command -v brew >/dev/null 2>&1; then
+  if ! brew bundle check >/dev/null 2>&1; then
+    echo "Installing Homebrew dependencies..."
+    brew bundle --no-upgrade
+  fi
+  # brew bundle starts Postgres when it installs it; this covers a service stopped since
+  brew services start postgresql@18 >/dev/null
+else
+  echo "Homebrew wasn't found. Install Postgres 18 and start it yourself, then set DATABASE_URL in graphql/.env."
+fi
+
+echo "Installing packages..."
+pnpm install
+
+if [ ! -f graphql/.env ]; then
+  sed "s/your-macos-username/$USER/" graphql/.env.example > graphql/.env
+  echo "Created graphql/.env"
+fi
+
+pnpm --filter @highforthis/graphql db:setup
+
+echo
+echo "Ready. Start GraphQL and the web app with: pnpm dev"

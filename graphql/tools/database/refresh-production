@@ -5,10 +5,7 @@ DUMP_FILE="${PRODUCTION_DUMP_FILE:-dump/latest-production.dump}"
 RAILWAY_DATABASE_SERVICE="${RAILWAY_DATABASE_SERVICE:-Postgres}"
 RAILWAY_ENVIRONMENT="${RAILWAY_ENVIRONMENT:-production}"
 
-fail() {
-  echo "ERROR: $*" >&2
-  exit 1
-}
+source "$(dirname "$0")/common"
 
 require_command() {
   command -v "$1" >/dev/null 2>&1 || fail "$1 is required but was not found in PATH"
@@ -32,17 +29,8 @@ url_parts() {
   ' "$1"
 }
 
-require_command node
-require_command pg_dump
-require_command pg_restore
-require_command psql
 require_command pnpm
-
-if [ -z "${DATABASE_URL:-}" ] && [ -f .env ]; then
-  DATABASE_URL="$(node --env-file=.env -e 'process.stdout.write(process.env.DATABASE_URL ?? "")')"
-fi
-
-[ -n "${DATABASE_URL:-}" ] || fail "DATABASE_URL is not set and was not found in graphql/.env"
+require_server
 
 if [ -z "${PRODUCTION_DATABASE_URL:-}" ]; then
   require_command railway

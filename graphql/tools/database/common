@@ -1,0 +1,39 @@
+# Sourced by the database scripts, which run from graphql/.
+
+fail() {
+  echo "ERROR: $*" >&2
+  exit 1
+}
+
+if [ -z "${DATABASE_URL:-}" ] && [ -f .env ]; then
+  DATABASE_URL="$(node --env-file=.env -e 'process.stdout.write(process.env.DATABASE_URL ?? "")')"
+fi
+[ -n "${DATABASE_URL:-}" ] || fail "DATABASE_URL is not set. Run 'pnpm bootstrap' from the repository root to create graphql/.env."
+export DATABASE_URL
+
+# Homebrew doesn't link versioned formulae onto the PATH, so look for postgresql@18 directly.
+for brew_prefix in "${HOMEBREW_PREFIX:-}" /opt/homebrew /usr/local; do
+  if [ -n "$brew_prefix" ] && [ -d "$brew_prefix/opt/postgresql@18/bin" ]; then
+    PATH="$brew_prefix/opt/postgresql@18/bin:$PATH"
+    break
+  fi
+done
+
+for tool in psql pg_dump pg_restore pg_isready; do
+  command -v "$tool" >/dev/null 2>&1 || fail "$tool was not found. Install Postgres with 'brew bundle' from the repository root."
+done
+
+# The database named in DATABASE_URL
+database_name() {
+  node -e 'process.stdout.write(decodeURIComponent(new URL(process.argv[1]).pathname.slice(1)))' "$DATABASE_URL"
+}
+
+# The same server's built-in postgres database, for creating and dropping ours
+maintenance_url() {
+  node -e 'const url = new URL(process.argv[1]); url.pathname = "/postgres"; process.stdout.write(url.href)' "$DATABASE_URL"
+}
+
+require_server() {
+  pg_isready --quiet --dbname="$(maintenance_url)" ||
+    fail "Postgres isn't running. Start it with 'brew services start postgresql@18'."
+}

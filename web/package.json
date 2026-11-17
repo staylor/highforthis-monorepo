@@ -63,7 +63,8 @@
     "vitest": "4.0.18"
   },
   "scripts": {
-    "dev": "pnpm --filter @highforthis/shared build && node --env-file-if-exists=.env server.js",
+    "dev": "pnpm --filter @highforthis/shared build && pnpm dev:service",
+    "dev:service": "node --env-file-if-exists=.env server.js",
     "build": "pnpm --filter @highforthis/shared build && pnpm build:service",
     "build:service": "NODE_ENV=production react-router build",
     "prod:upload": "tsx tools/upload-assets.ts",

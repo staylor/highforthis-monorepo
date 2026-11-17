@@ -14,21 +14,18 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 
 ## Requirements
 
-- Node.js >= 24
-- pnpm 10.x
-- PostgreSQL 18
-- ffprobe (for audio metadata)
+- macOS with [Homebrew](https://brew.sh)
+- Node.js 24 (`nvm use` reads `.nvmrc`)
+- pnpm 10 (`corepack enable` provides the version in `package.json`)
 
 ## Setup
 
 ```bash
-# Install dependencies
-pnpm install
-
-# Start both GraphQL and Web in development
-pnpm graphql:dev   # http://localhost:8081/graphql
-pnpm web:dev       # http://localhost:3000
+pnpm bootstrap   # install Postgres and packages, create graphql/.env, load the seed data
+pnpm dev         # GraphQL at http://localhost:8081/graphql, web at http://localhost:3000
 ```
+
+`pnpm bootstrap` is safe to run again: it only does what's missing and never replaces data. `pnpm db:reset` rebuilds the database from the seed, and `pnpm db:refresh` loads a production snapshot. The app runs without any API keys; add the ones a feature needs to `graphql/.env` (see [`graphql/README.md`](./graphql/README.md#environment-variables)).
 
 Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOINT` is configured, they also export correlated logs, traces, HTTP/GraphQL spans, and runtime metrics through OTLP. See [`observability/README.md`](./observability/README.md) for OpenObserve and Railway setup.
 
@@ -36,6 +33,8 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 
 | Script                          | Description                                                |
 | ------------------------------- | ---------------------------------------------------------- |
+| `pnpm bootstrap`                | Set up a fresh clone (Postgres, packages, .env, database)  |
+| `pnpm dev`                      | Start GraphQL and the web app in development               |
 | `pnpm graphql:dev`              | Start GraphQL server in development (watch mode)           |
 | `pnpm web:dev`                  | Start web app in development                               |
 | `pnpm observability:dev`        | Start OpenObserve with Docker                              |
@@ -43,6 +42,7 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 | `pnpm build`                    | Build all workspaces for production                        |
 | `pnpm codegen`                  | Run GraphQL Codegen (TypeScript types, schema, Apollo iOS) |
 | `pnpm codegen:ios`              | Regenerate the app's Swift API from the committed schema   |
+| `pnpm db:reset`                 | Rebuild the local database from the seed data              |
 | `pnpm db:refresh`               | Replace the local database with the latest production data |
 | `pnpm lint`                     | Lint with oxlint and ESLint (GraphQL), check formatting    |
 | `pnpm lint-fix`                 | Lint, auto-fix and format                                  |

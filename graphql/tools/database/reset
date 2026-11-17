@@ -1,52 +1,16 @@
 #!/bin/bash
-set -e
+# Drops the database and builds it again from the schema and seed data.
+set -euo pipefail
 
-# Load .env if DATABASE_URL is not already set
-if [ -z "$DATABASE_URL" ] && [ -f .env ]; then
-  export $(grep -E '^DATABASE_URL=' .env | xargs)
-fi
+source "$(dirname "$0")/common"
+require_server
 
-if [ -z "$DATABASE_URL" ]; then
-  echo "ERROR: DATABASE_URL is not set"
-  exit 1
-fi
+database="$(database_name)"
 
-# Parse DATABASE_URL: postgresql://[user[:pass]@]host:port/dbname
-DB_NAME=$(echo "$DATABASE_URL" | sed -E 's|.*\/([^?]+).*|\1|')
-DB_USER=$(echo "$DATABASE_URL" | sed -E 's|.*://([^:@]+)[@:].*|\1|')
-DUMP_FILE="dump/highforthis-seed.dump"
+echo "Dropping database $database..."
+psql --dbname="$(maintenance_url)" --no-psqlrc --quiet --set=ON_ERROR_STOP=1 \
+  --set=database="$database" <<'SQL'
+DROP DATABASE IF EXISTS :"database" WITH (FORCE);
+SQL
 
-OWNER_FLAG=""
-USER_FLAG=""
-if [ -n "$DB_USER" ]; then
-  OWNER_FLAG="-O $DB_USER"
-  USER_FLAG="-U $DB_USER"
-fi
-
-echo "Dropping database $DB_NAME..."
-dropdb --if-exists "$DB_NAME"
-
-echo "Creating database $DB_NAME..."
-createdb $OWNER_FLAG "$DB_NAME"
-
-echo "Generating Prisma client..."
-pnpm db:generate
-
-echo "Pushing Prisma schema..."
-pnpm db:push
-
-if [ -n "$DB_USER" ]; then
-  echo "Granting superuser to $DB_USER..."
-  psql postgres -c "ALTER USER $DB_USER WITH SUPERUSER;"
-fi
-
-echo "Restoring seed data..."
-pg_restore --no-owner --no-privileges --data-only --disable-triggers \
-  $USER_FLAG -d "$DB_NAME" "$DUMP_FILE" || true
-
-if [ -n "$DB_USER" ]; then
-  echo "Revoking superuser from $DB_USER..."
-  psql postgres -c "ALTER USER $DB_USER WITH NOSUPERUSER;"
-fi
-
-echo "Done! Database $DB_NAME has been reset and seeded."
+exec bash "$(dirname "$0")/setup"

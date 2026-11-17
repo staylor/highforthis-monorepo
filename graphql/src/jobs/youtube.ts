@@ -8,7 +8,7 @@ const PLAYLIST_PATH = '/youtube/v3/playlistItems';
 const PER_PAGE = '50';
 const CHANNEL_ID = 'UCwQRSPBN5eGmO1nYE40t1hw';
 
-const API_KEY = env.YOUTUBE_API_KEY;
+const API_KEY = env.YOUTUBE_API_KEY ?? '';
 
 interface YouTubeThumbnail {
   url: string;
@@ -182,6 +182,11 @@ async function fetchPlaylist(year: string, playlistId: string): Promise<string[]
 }
 
 export default async () => {
+  if (!API_KEY) {
+    console.log('Skipping the YouTube import: YOUTUBE_API_KEY is not set.');
+    return;
+  }
+
   let response: YouTubeListResponse<YouTubePlaylist>;
   try {
     response = await fetchPlaylists();

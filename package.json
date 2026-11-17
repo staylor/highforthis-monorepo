@@ -53,9 +53,12 @@
     "typescript": "5.9.3"
   },
   "scripts": {
+    "bootstrap": "bash scripts/bootstrap",
+    "dev": "pnpm --filter @highforthis/shared build && pnpm --parallel --filter @highforthis/graphql --filter @highforthis/web dev:service",
     "codegen": "graphql-codegen && pnpm lint-fix && pnpm codegen:ios",
     "codegen:ios": "sh xcode/scripts/generate-api.sh",
     "db:refresh": "pnpm --filter @highforthis/graphql db:refresh",
+    "db:reset": "pnpm --filter @highforthis/graphql db:reset",
     "graphql:dev": "pnpm --filter @highforthis/graphql dev",
     "web:dev": "pnpm --filter @highforthis/web dev",
     "observability:dev": "pnpm observability:dev:docker",

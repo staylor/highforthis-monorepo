@@ -11,74 +11,31 @@ GraphQL API server for High For This, built with Apollo Server, Express, and Pri
 
 ## Setup
 
-```bash
-# From the monorepo root
-pnpm install
+From the monorepo root, `pnpm bootstrap` sets everything up, and `pnpm dev` starts GraphQL with the web app. See the [root README](../README.md#setup).
 
-# Create graphql/.env with the variables below
-```
+Bootstrap installs PostgreSQL 18 from the `Brewfile`, creates `graphql/.env` from [`.env.example`](.env.example), and runs `pnpm db:setup`. That creates the database if it's missing, applies the Prisma schema, and loads `dump/highforthis-seed.dump` into an empty database. It's safe to run again; existing data is kept.
+
+`DATABASE_URL` connects as your macOS user, which Homebrew's Postgres sets up as a superuser with no password. Loading the seed needs a superuser, because the restore disables foreign key triggers.
+
+The schema is applied with `prisma db push`; there are no migration files. Railway's pre-deploy command runs the same push against production.
 
 ### Environment Variables
 
-| Variable                          | Description                                       |
-| --------------------------------- | ------------------------------------------------- |
-| `DATABASE_URL`                    | PostgreSQL connection string                      |
-| `TOKEN_SECRET`                    | JWT token secret                                  |
-| `YOUTUBE_API_KEY`                 | YouTube Data API key                              |
-| `GCS_BUCKET`                      | Google Cloud Storage bucket name                  |
-| `GCS_CLIENT_EMAIL`                | GCS service account email                         |
-| `GCS_PRIVATE_KEY`                 | GCS service account private key                   |
-| `APPLE_MUSIC_KEY_ID`              | MusicKit key ID, for album covers                 |
-| `APPLE_MUSIC_TEAM_ID`             | Apple Developer team ID                           |
-| `APPLE_MUSIC_PRIVATE_KEY`         | MusicKit private key (the .p8 file's contents)    |
-| `GOOGLE_MAPS_GEOLOCATION_API_KEY` | Google Maps key for venue maps and geocoding      |
-| `TICKETMASTER_API_KEY`            | Ticketmaster Discovery API key for venue listings |
+In development (`pnpm dev`), only `DATABASE_URL` is needed. Everything else is optional, and a feature that needs a missing value fails with a message naming it. Outside development, the server won't start without the required ones.
 
-### PostgreSQL (macOS)
-
-Install PostgreSQL 18 with Homebrew. The seed dump is made with 18, and `pg_restore` can't read dumps from a newer version than itself.
-
-```bash
-brew install postgresql@18
-```
-
-Versioned formulae aren't linked to `/opt/homebrew/bin` by default. Add PostgreSQL to your PATH:
-
-```bash
-echo 'export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-Start the service:
-
-```bash
-brew services start postgresql@18
-```
-
-Create a user and database:
-
-```bash
-psql postgres <<SQL
-CREATE USER hft_user WITH PASSWORD 'hft_pass';
-CREATE DATABASE highforthis OWNER hft_user;
-SQL
-```
-
-Set `DATABASE_URL` in `graphql/.env`:
-
-```
-DATABASE_URL="postgresql://hft_user:hft_pass@localhost:5432/highforthis"
-```
-
-Load the seed data:
-
-```bash
-pnpm db:reset
-```
-
-This drops and recreates the database, pushes the Prisma schema, and restores `dump/highforthis-seed.dump`. It briefly makes the database user a superuser so the restore can disable foreign key triggers.
-
-The schema is applied with `prisma db push`; there are no migration files. Railway's pre-deploy command runs the same push against production.
+| Variable                          | Required in production | Description                                       |
+| --------------------------------- | ---------------------- | ------------------------------------------------- |
+| `DATABASE_URL`                    | Yes                    | PostgreSQL connection string                      |
+| `TOKEN_SECRET`                    | Yes                    | Signs login tokens (development has a default)    |
+| `GCS_BUCKET`                      | Yes                    | Google Cloud Storage bucket for uploads           |
+| `GCS_CLIENT_EMAIL`                | Yes                    | GCS service account email                         |
+| `GCS_PRIVATE_KEY`                 | Yes                    | GCS service account private key                   |
+| `YOUTUBE_API_KEY`                 | Yes                    | YouTube Data API key, for the video import job    |
+| `APPLE_MUSIC_KEY_ID`              |                        | MusicKit key ID, for album covers                 |
+| `APPLE_MUSIC_TEAM_ID`             |                        | Apple Developer team ID                           |
+| `APPLE_MUSIC_PRIVATE_KEY`         |                        | MusicKit private key (the .p8 file's contents)    |
+| `GOOGLE_MAPS_GEOLOCATION_API_KEY` |                        | Google Maps key for venue maps and geocoding      |
+| `TICKETMASTER_API_KEY`            |                        | Ticketmaster Discovery API key for venue listings |
 
 ### Refresh from production
 
@@ -115,7 +72,7 @@ pnpm dev
 # Server starts at http://localhost:8081/graphql
 ```
 
-Uses `tsx watch` for hot reloading.
+Uses `tsx watch` for hot reloading. Run `pnpm dev` from the monorepo root to start the web app too.
 
 ## Production
 
@@ -142,7 +99,8 @@ pnpm start
 | `pnpm db:studio`             | Open Prisma Studio                                  |
 | `pnpm db:dump`               | Dump database to seed file                          |
 | `pnpm db:refresh`            | Replace local data with a fresh production snapshot |
-| `pnpm db:reset`              | Drop, recreate, and seed the database               |
+| `pnpm db:setup`              | Create, update, and seed the database if it's empty |
+| `pnpm db:reset`              | Drop the database and set it up again from the seed |
 | `pnpm typecheck`             | Type-check with TypeScript                          |
 
 ## Project Structure

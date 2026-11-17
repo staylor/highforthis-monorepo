@@ -41,7 +41,8 @@
     "vitest": "4.0.18"
   },
   "scripts": {
-    "dev": "pnpm --filter @highforthis/shared build && NODE_OPTIONS='--disable-warning=DEP0040' tsx watch --env-file-if-exists=.env src/index.ts",
+    "dev": "pnpm --filter @highforthis/shared build && pnpm dev:service",
+    "dev:service": "NODE_ENV=development NODE_OPTIONS='--disable-warning=DEP0040' tsx watch --env-file-if-exists=.env src/index.ts",
     "build": "pnpm --filter @highforthis/shared build && pnpm build:service",
     "build:service": "prisma generate && rm -rf dist && esbuild src/index.ts --packages=external --bundle --splitting --platform=node --target=node24 --format=esm --outdir=dist",
     "start": "node dist/index.js",
@@ -52,6 +53,7 @@
     "db:dump": "bash tools/database/dump",
     "db:refresh": "bash tools/database/refresh-production",
     "db:reset": "bash tools/database/reset",
+    "db:setup": "bash tools/database/setup",
     "db:reset-admin-password": "tsx --env-file-if-exists=.env tools/database/reset-admin-password.ts",
     "tools:script:dev": "tsx --env-file-if-exists=.env",
     "tools:script:prod": "tsx --env-file-if-exists=.env.production",
