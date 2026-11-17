@@ -15,8 +15,7 @@ GraphQL API server for High For This, built with Apollo Server, Express, and Pri
 # From the monorepo root
 pnpm install
 
-# Configure environment variables
-cp .env.example .env  # then fill in values
+# Create graphql/.env with the variables below
 ```
 
 ### Environment Variables
@@ -24,7 +23,6 @@ cp .env.example .env  # then fill in values
 | Variable                          | Description                                       |
 | --------------------------------- | ------------------------------------------------- |
 | `DATABASE_URL`                    | PostgreSQL connection string                      |
-| `TOKEN_KEY`                       | JWT token key                                     |
 | `TOKEN_SECRET`                    | JWT token secret                                  |
 | `YOUTUBE_API_KEY`                 | YouTube Data API key                              |
 | `GCS_BUCKET`                      | Google Cloud Storage bucket name                  |
@@ -38,26 +36,26 @@ cp .env.example .env  # then fill in values
 
 ### PostgreSQL (macOS)
 
-Install PostgreSQL via Homebrew:
+Install PostgreSQL 18 with Homebrew. The seed dump is made with 18, and `pg_restore` can't read dumps from a newer version than itself.
 
 ```bash
-brew install postgresql@17
+brew install postgresql@18
 ```
 
 Versioned formulae aren't linked to `/opt/homebrew/bin` by default. Add PostgreSQL to your PATH:
 
 ```bash
-echo 'export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"' >> ~/.zshrc
+echo 'export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
 Start the service:
 
 ```bash
-brew services start postgresql@17
+brew services start postgresql@18
 ```
 
-Create a database and user:
+Create a user and database:
 
 ```bash
 psql postgres <<SQL
@@ -66,36 +64,21 @@ CREATE DATABASE highforthis OWNER hft_user;
 SQL
 ```
 
-Set `DATABASE_URL` in your `.env` file:
+Set `DATABASE_URL` in `graphql/.env`:
 
 ```
 DATABASE_URL="postgresql://hft_user:hft_pass@localhost:5432/highforthis"
 ```
 
-Push the schema and seed the database:
+Load the seed data:
 
 ```bash
 pnpm db:reset
 ```
 
-This drops and recreates the database, pushes the Prisma schema, and restores the seed data (temporarily granting superuser to disable foreign key triggers during restore).
+This drops and recreates the database, pushes the Prisma schema, and restores `dump/highforthis-seed.dump`. It briefly makes the database user a superuser so the restore can disable foreign key triggers.
 
-### Database
-
-```bash
-# Generate Prisma client
-pnpm db:generate
-
-# Push schema to database (no migrations)
-pnpm db:push
-
-# Create a migration
-pnpm db:migrate
-
-# Open Prisma Studio
-pnpm db:studio
-
-```
+The schema is applied with `prisma db push`; there are no migration files. Railway's pre-deploy command runs the same push against production.
 
 ### Refresh from production
 
@@ -160,79 +143,7 @@ pnpm start
 | `pnpm db:dump`               | Dump database to seed file                          |
 | `pnpm db:refresh`            | Replace local data with a fresh production snapshot |
 | `pnpm db:reset`              | Drop, recreate, and seed the database               |
-| `pnpm db:migrate-from-mongo` | Import data from MongoDB dump into PostgreSQL       |
 | `pnpm typecheck`             | Type-check with TypeScript                          |
-
-## Data Migration (MongoDB → PostgreSQL)
-
-The `dump/` directory contains data for migrating from the original MongoDB database:
-
-```
-dump/
-├── highforthis-prod/      # Raw BSON files from mongodump
-├── json/                  # JSONL files converted from BSON (used by import script)
-└── highforthis-seed.dump  # pg_dump for seeding a fresh PostgreSQL database
-```
-
-### Full migration from BSON
-
-```bash
-# 1. Convert BSON to JSONL (requires mongodb-database-tools)
-for bson in dump/highforthis-prod/*.bson; do
-  name=$(basename "$bson" .bson)
-  bsondump --type=json "$bson" > "dump/json/${name}.jsonl"
-done
-
-# 2. Reset database and push schema
-pnpm db:push
-
-# 3. Run migration (includes editor state fix and content body backfill)
-pnpm db:migrate-from-mongo
-```
-
-### Seeding PostgreSQL on Debian (production)
-
-#### 1. Install PostgreSQL
-
-```bash
-sudo apt update
-sudo apt install -y postgresql postgresql-client
-```
-
-#### 2. Start and enable the service
-
-```bash
-sudo systemctl enable postgresql
-sudo systemctl start postgresql
-```
-
-#### 3. Create a database and user
-
-```bash
-sudo -u postgres psql <<SQL
-CREATE USER highforthis WITH PASSWORD 'your_secure_password';
-CREATE DATABASE highforthis OWNER highforthis;
-GRANT ALL PRIVILEGES ON DATABASE highforthis TO highforthis;
-SQL
-```
-
-#### 4. Set `DATABASE_URL` in `.env.production`
-
-```
-DATABASE_URL="postgresql://highforthis:your_secure_password@localhost:5432/highforthis"
-```
-
-#### 5. Push schema and seed the database
-
-```bash
-pnpm db:reset
-```
-
-#### 6. Verify
-
-```bash
-psql -U highforthis -d highforthis -c "SELECT count(*) FROM \"Artist\";"
-```
 
 ## Project Structure
 
@@ -248,12 +159,17 @@ src/
 ├── utils/            # Utility functions
 └── jobs/             # Scheduled tasks (cron)
 tools/
-├── migrate-from-mongo.ts  # MongoDB → PostgreSQL migration
-├── database/              # Database dump and reset scripts
-├── youtube.ts             # YouTube data tools
-├── shows.ts               # Show data tools
-└── addresses.ts           # Venue address tools
+├── database/         # Seed dump, reset, and production refresh scripts
+├── editor/           # Post editor content conversions
+├── apple-music/      # Apple Music lookups
+├── websites/         # Show listing scrapers
+├── youtube.ts        # YouTube data tools
+├── shows.ts          # Show data tools
+├── addresses.ts      # Venue address tools
+└── listings-urls.ts  # Venue listing page URLs
+dump/
+└── highforthis-seed.dump  # pg_dump used by db:reset
 prisma/
-└── schema.prisma          # Database schema
-prisma.config.ts           # Prisma configuration
+└── schema.prisma     # Database schema
+prisma.config.ts      # Prisma configuration
 ```

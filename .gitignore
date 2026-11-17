@@ -16,5 +16,4 @@ web/build
 
 *.log
 *.p8
-graphql/dump/highforthis-prod
 graphql/dump/latest-production.dump

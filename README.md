@@ -16,7 +16,7 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 
 - Node.js >= 24
 - pnpm 10.x
-- PostgreSQL 17
+- PostgreSQL 18
 - ffprobe (for audio metadata)
 
 ## Setup
