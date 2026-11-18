@@ -9,7 +9,7 @@ import Artwork from '#/components/Artist/Artwork';
 import Message from '#/components/Form/Message';
 import { deleteArtists, loadArtists, setArtistExcludeFromSearch } from '#/server/artists';
 import type { Columns } from '#/types';
-import { deleteAction, graphqlClient } from '#/utils/route.server';
+import { deleteAction, graphqlClient, isDeleteIntent } from '#/utils/route.server';
 
 import type { Route } from './+types/index';
 
@@ -19,7 +19,7 @@ export async function loader({ request, context, url }: Route.LoaderArgs) {
 
 export async function action(args: Route.ActionArgs) {
   const { request } = args;
-  if (request.method === 'POST') {
+  if (!(await isDeleteIntent(request))) {
     return setArtistExcludeFromSearch({
       gql: graphqlClient(args),
       formData: await request.formData(),

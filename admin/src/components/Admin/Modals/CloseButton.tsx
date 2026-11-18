@@ -1,7 +1,7 @@
-import cn from 'classnames';
 import type { ButtonHTMLAttributes } from 'react';
 
 import Icon from '#/components/Icon';
+import { cn } from '#/utils/cn';
 
 const CloseButton = ({ className, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) => (
   <button

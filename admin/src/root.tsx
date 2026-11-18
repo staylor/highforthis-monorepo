@@ -1,4 +1,3 @@
-import cn from 'classnames';
 import type { HTMLAttributes, PropsWithChildren } from 'react';
 import type { LinksFunction, MetaFunction } from 'react-router';
 import {
@@ -13,6 +12,7 @@ import {
 
 import { loadApp } from '#/server/app';
 import adminCss from '#/styles/admin.css?url';
+import { cn } from '#/utils/cn';
 import { useRootData } from '#/utils/rootData';
 import { graphqlClient } from '#/utils/route.server';
 import titleTemplate, { type TitleProps } from '#/utils/title';

@@ -1,10 +1,10 @@
-import cn from 'classnames';
 import type { HTMLAttributes, PropsWithChildren } from 'react';
 import { useLocation } from 'react-router';
 
 import { buttonClasses } from '#/components/Button';
 import { heading1 } from '#/components/Heading';
 import Link, { type CustomLinkProps } from '#/components/Link';
+import { cn } from '#/utils/cn';
 
 export const Heading = ({ className, children, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
   <h1

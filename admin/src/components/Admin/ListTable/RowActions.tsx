@@ -1,10 +1,10 @@
-import cn from 'classnames';
 import type { ChangeEvent } from 'react';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router';
 
 import Link from '#/components/Link';
+import { cn } from '#/utils/cn';
 
 interface RowAction {
   ids?: string[];
@@ -41,14 +41,15 @@ export default function RowActions({ actions }: { actions: RowAction[] }) {
           case 'delete':
             elem = (
               <form
-                method="delete"
+                method="post"
                 className="inline"
                 onSubmit={(e: ChangeEvent<HTMLFormElement>) => {
                   e.preventDefault();
 
-                  submit(e.currentTarget, { method: 'delete' });
+                  submit(e.currentTarget, { method: 'post' });
                 }}
               >
+                <input type="hidden" name="intent" value="delete" />
                 {action.ids?.map((id: string) => (
                   <input key={id} type="hidden" name="ids" value={id} />
                 ))}

@@ -1,7 +1,7 @@
-import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import Icon from '#/components/Icon';
+import { cn } from '#/utils/cn';
 
 interface CollapseButtonProps {
   isCollapsed: boolean;

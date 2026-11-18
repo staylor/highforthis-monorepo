@@ -1,4 +1,3 @@
-import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import Form from '#/components/Admin/Form';
@@ -9,6 +8,7 @@ import Button from '#/components/Button';
 import Message from '#/components/Form/Message';
 import type { Fields } from '#/types';
 import type { Artist, Post } from '#/types/graphql';
+import { cn } from '#/utils/cn';
 
 interface PostFormProps {
   data?: Post;

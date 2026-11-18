@@ -1,8 +1,8 @@
-import cn from 'classnames';
 import type { TextareaHTMLAttributes, ChangeEvent, KeyboardEvent } from 'react';
 import { useCallback, useEffect, useRef } from 'react';
 
 import { inputBase } from '#/components/Form/styles';
+import { cn } from '#/utils/cn';
 
 interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
   onChange?: (value: string) => void;

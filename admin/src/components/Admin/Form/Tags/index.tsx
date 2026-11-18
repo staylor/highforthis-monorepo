@@ -1,10 +1,10 @@
-import cn from 'classnames';
 import type { KeyboardEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Input from '#/components/Form/Input';
 import Icon from '#/components/Icon';
+import { cn } from '#/utils/cn';
 
 interface TagsProps {
   name: string;

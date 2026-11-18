@@ -1,4 +1,3 @@
-import cn from 'classnames';
 import type { ReactNode, ChangeEvent } from 'react';
 import { useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +6,7 @@ import { useSubmit } from 'react-router';
 import Checkbox from '#/components/Form/Checkbox';
 import Select from '#/components/Form/Select';
 import type { Column, Columns } from '#/types';
+import { cn } from '#/utils/cn';
 
 import Pagination from './Pagination';
 import { formatDate } from './utils';
@@ -71,7 +71,7 @@ function ListTable({
     e.preventDefault();
 
     if (e.currentTarget.bulkActions.value === 'deleteAll') {
-      submit(e.currentTarget, { method: 'delete' });
+      submit(e.currentTarget, { method: 'post' });
     }
   }
 
@@ -116,7 +116,8 @@ function ListTable({
       <section className={cn(toolbarClass, 'my-1.5')}>
         <div className="flex grow flex-wrap items-center gap-2">
           {deletable && (
-            <form method="delete" onChange={handleChange}>
+            <form method="post" onChange={handleChange}>
+              <input type="hidden" name="intent" value="delete" />
               {state.checked.map((id: string) => (
                 <input key={id} type="hidden" name="ids" value={id} />
               ))}

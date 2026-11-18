@@ -1,10 +1,10 @@
-import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import type { MetaFunction } from 'react-router';
 import { Outlet } from 'react-router';
 
 import NavMenu, { AdminNavProvider, useAdminNav } from '#/components/Admin/NavMenu';
 import { requireAdminSession } from '#/utils/adminSession.server';
+import { cn } from '#/utils/cn';
 import { rootData } from '#/utils/rootData';
 import titleTemplate from '#/utils/title';
 

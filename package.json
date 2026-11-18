@@ -30,7 +30,6 @@
     "@types/ffprobe": "1.1.8",
     "@types/ffprobe-static": "2.0.3",
     "@types/html-escape": "2.0.2",
-    "@types/lodash.debounce": "4.0.9",
     "@types/multer": "2.0.0",
     "@types/musicmetadata": "2.0.9",
     "@types/node": "25.3.2",

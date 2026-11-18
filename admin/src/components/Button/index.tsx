@@ -1,6 +1,7 @@
-import cn from 'classnames';
 import type { PropsWithChildren, ButtonHTMLAttributes, AnchorHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
+
+import { cn } from '#/utils/cn';
 
 type ButtonProps = PropsWithChildren<{
   buttonType?: 'primary';

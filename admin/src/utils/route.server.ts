@@ -40,12 +40,19 @@ export function respond<T>(result: T): Response | Exclude<T, RedirectResult> {
 
 type DeleteRows = (args: FormArgs) => Promise<RedirectResult>;
 
-// A list page's DELETE form removes the checked rows; any other method comes back to the list
+// List tables delete with a POST carrying intent=delete, since HTML forms can only GET or
+// POST. Routes that also take other POSTs check this first; it reads a copy of the body, so
+// the request can still be read afterwards.
+export async function isDeleteIntent(request: Request) {
+  return request.method === 'POST' && (await request.clone().formData()).get('intent') === 'delete';
+}
+
+// A list page's delete form removes the checked rows; anything else comes back to the list
 export async function deleteAction(
   { request, context, url }: RouteArgs & { url: URL },
   deleteRows: DeleteRows
 ) {
-  if (request.method !== 'DELETE') {
+  if (!(await isDeleteIntent(request))) {
     return redirect(url.toString());
   }
   const gql = graphqlClient({ request, context });

@@ -1,4 +1,3 @@
-import cn from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Form, useLocation, useNavigation } from 'react-router';
@@ -8,6 +7,7 @@ import { Alert, Heading } from '#/components/Admin/styles';
 import Button from '#/components/Button';
 import { addAlbumCovers, searchAlbumCovers } from '#/server/media';
 import type { AlbumCoversAdminQuery } from '#/types/graphql';
+import { cn } from '#/utils/cn';
 import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/album-covers';

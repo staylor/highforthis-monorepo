@@ -1,5 +1,6 @@
-import cn from 'classnames';
 import type { HTMLAttributes, ReactNode } from 'react';
+
+import { cn } from '#/utils/cn';
 
 const border = cn('border border-detail');
 

@@ -1,7 +1,8 @@
-import debounce from 'lodash.debounce';
 import type { MutableRefObject } from 'react';
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useFetcher } from 'react-router';
+
+import { debounce } from '#/utils/debounce';
 
 interface RelayPageInfo {
   hasPreviousPage: boolean;
