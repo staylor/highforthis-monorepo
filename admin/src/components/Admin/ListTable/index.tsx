@@ -1,9 +1,10 @@
 import type { ReactNode, ChangeEvent } from 'react';
 import { useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSubmit } from 'react-router';
+import { useSearchParams, useSubmit } from 'react-router';
 
 import Checkbox from '#/components/Form/Checkbox';
+import Message from '#/components/Form/Message';
 import Select from '#/components/Form/Select';
 import type { Column, Columns } from '#/types';
 import { cn } from '#/utils/cn';
@@ -62,6 +63,11 @@ function ListTable({
 }: ListTableProps) {
   const { t } = useTranslation();
   const submit = useSubmit();
+  const [searchParams] = useSearchParams();
+  const deleteFailed = Number(searchParams.get('deleteFailed') || 0);
+  const deleteFailedMessage = deleteFailed > 0 && (
+    <Message param="deleteFailed" text={t('table.deleteFailed', { count: deleteFailed })} />
+  );
   const [state, setState] = useReducer(reducer, {
     checked: [],
     all: false,
@@ -105,7 +111,12 @@ function ListTable({
   };
 
   if (!data || !data.edges || !data.edges.length) {
-    return <p className="my-10">{t('table.noItems')}</p>;
+    return (
+      <>
+        {deleteFailedMessage}
+        <p className="my-10">{t('table.noItems')}</p>
+      </>
+    );
   }
 
   const paginationMatrix = <Pagination data={data} perPage={perPage} className="text-right" />;
@@ -113,6 +124,7 @@ function ListTable({
 
   return (
     <>
+      {deleteFailedMessage}
       <section className={cn(toolbarClass, 'my-1.5')}>
         <div className="flex grow flex-wrap items-center gap-2">
           {deletable && (

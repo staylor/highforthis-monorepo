@@ -19,9 +19,13 @@ const hmrProxyPort = process.env.HMR_PROXY_PORT
   ? Number.parseInt(process.env.HMR_PROXY_PORT, 10)
   : null;
 const isHmr = process.env.REMIX_NODE_HMR === '1';
+// On Railway, requests arrive through its edge, which terminates HTTPS and replaces any
+// X-Forwarded-Proto, -Host and -For the client sent. Trusting them gives requests their
+// https:// URL, which the admin proxy forwards so the admin's redirects stay on https.
+const behindRailway = Boolean(process.env.RAILWAY_ENVIRONMENT_NAME);
 
 const listener = createRequestListener(router.fetch, {
-  trustProxy: isHmr,
+  trustProxy: isHmr || behindRailway,
   onError(error) {
     logger.error({ err: error }, 'Request failed');
     return new Response('Internal Server Error', { status: 500 });

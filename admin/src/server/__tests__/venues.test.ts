@@ -36,7 +36,7 @@ describe('venues', () => {
   });
 
   it('deletes the checked venues', async () => {
-    const gql = stubGraphQL();
+    const gql = stubGraphQL({ mutate: { removeVenue: true } });
     const result = await deleteVenues({
       gql,
       formData: form({ ids: ['v1'] }),

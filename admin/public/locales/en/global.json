@@ -306,6 +306,8 @@
   "table": {
     "bulkActions": "Bulk Actions",
     "delete": "Delete",
+    "deleteFailed_one": "Couldn't delete the selected item. If your session has expired, sign in and try again.",
+    "deleteFailed_other": "Couldn't delete the {{count}} selected items. If your session has expired, sign in and try again.",
     "edit": "Edit",
     "noItems": "No items found.",
     "noTitle": "(no title)",

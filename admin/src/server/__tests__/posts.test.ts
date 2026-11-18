@@ -29,7 +29,7 @@ describe('posts', () => {
   });
 
   it('deletes the checked posts', async () => {
-    const gql = stubGraphQL();
+    const gql = stubGraphQL({ mutate: { removePost: true } });
     const result = await deletePosts({
       gql,
       formData: form({ ids: ['p1'] }),
