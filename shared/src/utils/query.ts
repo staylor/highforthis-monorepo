@@ -2,8 +2,8 @@ import type { QueryOptions } from '@apollo/client';
 import { ServerError } from '@apollo/client/errors';
 import type { RouterContextProvider } from 'react-router';
 
-import { isAuthenticated } from '../auth';
-import { apolloClientContext } from '../context.js';
+import { isAuthenticated } from '#/auth';
+import { apolloClientContext } from '#/context.js';
 
 type QueryData = Pick<QueryOptions, 'query' | 'variables'> & {
   request: Request;

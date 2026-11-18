@@ -3,8 +3,8 @@ import type { DocumentNode } from 'graphql';
 import type { ActionFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
 
-import type { ParseFormDataArgs } from '#/utils/mutate';
-import mutate, { parseFormData } from '#/utils/mutate';
+import type { ParseFormDataArgs } from './mutate';
+import mutate, { parseFormData } from './mutate';
 
 interface SubmittedNode {
   format?: unknown;

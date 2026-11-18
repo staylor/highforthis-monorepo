@@ -1,7 +1,7 @@
 import type { SelectHTMLAttributes, ChangeEvent } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import { inputBase } from '../styles';
+import { inputBase } from '#/components/Form/styles';
 
 export type Choice = string | number | { label: string; value: string | number };
 type Group = { label: string; choices: Choice[] };

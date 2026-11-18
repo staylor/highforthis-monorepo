@@ -13,7 +13,10 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2024",
-    "types": ["vitest/globals", "vite/client", "node"]
+    "types": ["vitest/globals", "vite/client", "node"],
+    "paths": {
+      "#/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["src/logger.ts", "src/observability.ts"]
