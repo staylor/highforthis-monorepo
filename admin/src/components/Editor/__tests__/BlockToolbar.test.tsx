@@ -16,22 +16,26 @@ import { describe, expect, it, onTestFinished } from 'vitest';
 
 import Editor from '#/components/Editor';
 
+import { image, savedImage, savedVideo, video } from './fixtures';
+
 // the block toolbar's buttons, in order: H2, H3, image, video, quote, bullet list, numbered list, code
+const IMAGE = 2;
 const VIDEO = 3;
 const BULLET_LIST = 5;
-
-const video = {
-  id: 'video-1',
-  dataId: 'youtube-1',
-  slug: 'a-video',
-  title: 'A video',
-  thumbnails: [{ height: 90, url: 'https://example.com/thumbnail.jpg', width: 120 }],
-};
 
 async function renderEditor() {
   const Stub = createRoutesStub([
     { path: '/', Component: () => <Editor /> },
-    // what the video picker lists
+    // what the image and video pickers list
+    {
+      path: '/modals/media/:type/:cursor?',
+      loader: () => ({
+        uploads: {
+          edges: [{ node: { ...image, title: 'An album cover', type: 'image' } }],
+          pageInfo: { hasNextPage: false },
+        },
+      }),
+    },
     {
       path: '/modals/video/:cursor?',
       loader: () => ({ videos: { edges: [{ node: video }], pageInfo: { hasNextPage: false } } }),
@@ -45,6 +49,14 @@ async function update(editor: LexicalEditor, fn: () => void) {
   await act(async () => {
     editor.update(fn, { discrete: true });
   });
+}
+
+// the pickers render into the page's portal element
+function addPortal() {
+  const portal = document.createElement('div');
+  portal.id = 'portal';
+  document.body.append(portal);
+  onTestFinished(() => portal.remove());
 }
 
 const blockButton = (index: number) =>
@@ -125,11 +137,26 @@ describe('block toolbar', () => {
     );
   });
 
-  it('saves the video picked from the toolbar by its id', async () => {
-    const portal = document.createElement('div');
-    portal.id = 'portal';
-    document.body.append(portal);
-    onTestFinished(() => portal.remove());
+  it('shows the image picked from the toolbar and saves it by its id', async () => {
+    addPortal();
+    const editor = await renderEditor();
+    await update(editor, () => $getRoot().selectStart());
+
+    fireEvent.mouseDown(blockButton(IMAGE));
+    fireEvent.click(await screen.findByText('An album cover'));
+
+    await waitFor(() =>
+      expect(editor.getEditorState().toJSON().root.children[0]).toEqual(savedImage)
+    );
+    expect(screen.queryByText('An album cover')).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox').querySelector('img')).toHaveAttribute(
+      'src',
+      `https://storage.googleapis.com/wonderboymusic/${image.destination}/album-640x0.jpg`
+    );
+  });
+
+  it('shows the video picked from the toolbar and saves it by its id', async () => {
+    addPortal();
     const editor = await renderEditor();
     await update(editor, () => $getRoot().selectStart());
 
@@ -137,11 +164,8 @@ describe('block toolbar', () => {
     fireEvent.click(await screen.findByText(video.title));
 
     await waitFor(() =>
-      expect(editor.getEditorState().toJSON().root.children[0]).toEqual({
-        type: 'video',
-        version: 1,
-        videoId: video.id,
-      })
+      expect(editor.getEditorState().toJSON().root.children[0]).toEqual(savedVideo)
     );
+    expect(screen.getByRole('textbox').querySelector('h3')).toHaveTextContent(video.title);
   });
 });

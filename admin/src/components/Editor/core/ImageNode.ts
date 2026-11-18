@@ -1,9 +1,8 @@
 import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import type { NodeKey, SerializedLexicalNode, Spread } from 'lexical';
-import type { ReactNode } from 'react';
 
-import ImageComponent from '#/components/Editor/Blocks/Image';
 import type { ImageUpload } from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
 
 // this data gets saved
 type SerializedImageNode = Spread<{ imageId: string; size: string }, SerializedLexicalNode>;
@@ -11,7 +10,38 @@ type SerializedImageNode = Spread<{ imageId: string; size: string }, SerializedL
 // this data gets sent by GraphQL
 type SerializedImageInput = Spread<{ image: ImageUpload; size: string }, SerializedLexicalNode>;
 
-export default class ImageNode extends DecoratorNode<ReactNode> {
+const cropWidths: Record<string, number> = {
+  FEATURE: 640,
+  MEDIUM: 300,
+  THUMB: 150,
+};
+
+/** The image as the editor shows it: the crop for its size, or the first crop. */
+function renderImage(image: ImageUpload | null, size: string) {
+  if (!image) {
+    return null;
+  }
+
+  // this logic is insufficient, it assumes all images are at least 640px,
+  // else it goes down to the next size, which is probably too small
+  // probably want to use the original size, but that might be too big
+  const crop = image.crops.find((c) => c.width === cropWidths[size]) ?? image.crops[0];
+  if (!crop) {
+    return null;
+  }
+
+  const img = document.createElement('img');
+  img.className = 'my-2.5';
+  img.alt = '';
+  img.src = uploadUrl(image.destination, crop.fileName);
+  return img;
+}
+
+/**
+ * An image in a post. It draws its own DOM in `createDOM`, so any UI framework (or none) can host
+ * the editor; `decorate()` has nothing to render.
+ */
+export default class ImageNode extends DecoratorNode<null> {
   __image: ImageUpload;
   __size: string;
 
@@ -44,15 +74,20 @@ export default class ImageNode extends DecoratorNode<ReactNode> {
   }
 
   createDOM(): HTMLElement {
-    return document.createElement('div');
+    const element = document.createElement('div');
+    const img = renderImage(this.__image, this.__size);
+    if (img) {
+      element.append(img);
+    }
+    return element;
   }
 
   updateDOM(): false {
     return false;
   }
 
-  decorate(): ReactNode {
-    return <ImageComponent image={this.__image} size={this.__size} />;
+  decorate(): null {
+    return null;
   }
 }
 
