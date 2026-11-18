@@ -1,8 +1,8 @@
 import { redirect, type RouterContextProvider } from 'react-router';
 
-import { isAuthenticated } from '@highforthis/shared/auth';
-import { graphqlHostContext } from '@highforthis/shared/context';
-import { sessionStorage } from '@highforthis/shared/session';
+import { isAuthenticated } from '#/auth';
+import { graphqlHostContext } from '#/context';
+import { sessionStorage } from '#/session';
 
 // Throws a redirect to the login page unless the request carries a valid admin session.
 // The admin layout runs it, and so does any loader that reads data without going through

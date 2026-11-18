@@ -74,7 +74,6 @@
     "lint:graphql": "eslint --cache --cache-strategy content --cache-location ./node_modules/.cache/eslint --report-unused-disable-directives .",
     "test:graphql": "pnpm --filter @highforthis/graphql test",
     "test:admin": "pnpm --filter @highforthis/admin test",
-    "test:shared": "pnpm --filter @highforthis/shared test",
     "test:web": "pnpm --filter @highforthis/web test",
     "typecheck": "pnpm --filter @highforthis/shared build && pnpm -r typecheck"
   }

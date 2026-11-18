@@ -4,9 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { useTranslation } from 'react-i18next';
 import { useLocation, Link } from 'react-router';
 
-import { getItem, setItem, removeItem } from '@highforthis/shared/utils/storage';
-
 import Icon from '#/components/Icon';
+import { getItem, setItem, removeItem } from '#/utils/storage';
 
 import CollapseButton from './CollapseButton';
 import NavLink from './NavLink';

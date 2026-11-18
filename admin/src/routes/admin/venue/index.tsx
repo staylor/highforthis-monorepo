@@ -2,8 +2,6 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
-import query from '@highforthis/shared/utils/query';
-
 import { name, slug, excludeFromSearch, website } from '#/components/Admin/Entity/ListTable';
 import ListTable, { Thumbnail } from '#/components/Admin/ListTable';
 import Search from '#/components/Admin/ListTable/Search';
@@ -15,6 +13,7 @@ import type { VenuesAdminQuery } from '#/types/graphql';
 import { handleDelete } from '#/utils/action';
 import { addPageOffset, addSearchParam } from '#/utils/listVariables';
 import mutate, { parseFormData } from '#/utils/mutate';
+import query from '#/utils/query';
 
 import type { Route } from './+types/index';
 

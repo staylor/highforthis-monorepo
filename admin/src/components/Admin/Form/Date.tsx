@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { inputBase } from '@highforthis/shared/components/Form/styles';
+import { inputBase } from '#/components/Form/styles';
 
 type DateValue = string | number;
 

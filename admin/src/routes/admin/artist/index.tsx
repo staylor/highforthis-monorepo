@@ -2,19 +2,18 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
-import Artwork from '@highforthis/shared/components/Artist/Artwork';
-import query from '@highforthis/shared/utils/query';
-
 import { name, slug, excludeFromSearch, website } from '#/components/Admin/Entity/ListTable';
 import ListTable from '#/components/Admin/ListTable';
 import Search from '#/components/Admin/ListTable/Search';
 import { Heading, HeaderAdd } from '#/components/Admin/styles';
+import Artwork from '#/components/Artist/Artwork';
 import Message from '#/components/Form/Message';
 import type { Columns } from '#/types';
 import type { ArtistsAdminQuery } from '#/types/graphql';
 import { handleDelete } from '#/utils/action';
 import { addPageOffset, addSearchParam } from '#/utils/listVariables';
 import mutate, { parseFormData } from '#/utils/mutate';
+import query from '#/utils/query';
 
 import type { Route } from './+types/index';
 

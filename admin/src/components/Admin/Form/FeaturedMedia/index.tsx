@@ -2,12 +2,11 @@ import { gql } from 'graphql-tag';
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
-import Button from '@highforthis/shared/components/Button';
-import { uploadUrl } from '@highforthis/shared/utils/media';
-
 import MediaModal from '#/components/Admin/Modals/Media';
+import Button from '#/components/Button';
 import type { SelectedImage } from '#/types/admin';
 import type { AudioUpload, ImageUpload, MediaUpload } from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
 
 type SelectedMedia = ImageUpload | AudioUpload | MediaUpload | SelectedImage;
 

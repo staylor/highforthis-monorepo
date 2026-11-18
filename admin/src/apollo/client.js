@@ -1,7 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client/core';
 
-import fragmentMatcher from './fragmentMatcher.js';
-import typePolicies from './typePolicies.js';
+import fragmentMatcher from '@highforthis/shared/apollo/fragmentMatcher';
+import typePolicies from '@highforthis/shared/apollo/typePolicies';
 
 function factory(uri) {
   return () =>

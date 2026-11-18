@@ -5,11 +5,12 @@ import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { RouterContextProvider } from 'react-router';
 
-import factory from '@highforthis/shared/apollo/client';
-import { apolloClientContext, graphqlHostContext, i18nContext } from '@highforthis/shared/context';
-import createI18n from '@highforthis/shared/i18n';
 import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
-import { sessionStorage } from '@highforthis/shared/session';
+
+import factory from './src/apollo/client.js';
+import { apolloClientContext, graphqlHostContext, i18nContext } from './src/context.js';
+import createI18n from './src/i18n.js';
+import { sessionStorage } from './src/session.js';
 
 // The admin app: /admin, /login and /modals. The public site forwards those paths here,
 // so both share one domain, session cookie and passkey origin.

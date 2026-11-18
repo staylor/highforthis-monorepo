@@ -1,7 +1,7 @@
 import type { OperationVariables } from '@apollo/client';
 
-import { PER_PAGE } from '@highforthis/shared/constants';
-import { offsetToCursor } from '@highforthis/shared/utils/connection';
+import { PER_PAGE } from '#/constants';
+import { offsetToCursor } from '#/utils/connection';
 
 // Builds a list query's variables from the admin list pages' ?page= and ?search= params.
 

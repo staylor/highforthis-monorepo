@@ -1,10 +1,2 @@
-import cn from 'classnames';
-import type { HTMLAttributes } from 'react';
-
+// The editor styles paragraphs like the public site.
 export const paragraphBase = 'mb-6';
-
-const Paragraph = ({ className, ...props }: HTMLAttributes<HTMLParagraphElement>) => (
-  <p className={cn(paragraphBase, className)} {...props} />
-);
-
-export default Paragraph;

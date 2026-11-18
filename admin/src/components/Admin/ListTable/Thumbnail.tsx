@@ -1,6 +1,5 @@
-import { uploadUrl } from '@highforthis/shared/utils/media';
-
 import type { AudioUpload, ImageUpload, ImageUploadCrop, MediaUpload } from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
 
 interface ThumbnailProps {
   media: MediaUpload;

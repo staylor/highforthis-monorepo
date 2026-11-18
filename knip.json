@@ -58,7 +58,9 @@
         "src/**/*.{ts,tsx}"
       ],
       "ignoreDependencies": [
-        "tailwindcss"
+        "tailwindcss",
+        "i18next-fs-backend",
+        "i18next-http-backend"
       ],
       "ignore": [
         "src/types/graphql.ts"

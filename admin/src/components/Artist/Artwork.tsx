@@ -11,7 +11,7 @@ interface ArtworkProps {
   className?: string;
 }
 
-export const DEFAULT_IMAGE_SIZE = 300;
+const DEFAULT_IMAGE_SIZE = 300;
 
 export default function Artwork({
   name,

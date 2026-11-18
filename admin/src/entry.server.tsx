@@ -7,7 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import { ServerRouter } from 'react-router';
 import type { EntryContext, RouterContextProvider } from 'react-router';
 
-import { i18nContext } from '@highforthis/shared/context';
+import { i18nContext } from '#/context';
 
 export default function handleRequest(
   request: Request,

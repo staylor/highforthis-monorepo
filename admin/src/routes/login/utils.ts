@@ -1,9 +1,8 @@
 import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 
-import { isAuthenticated } from '@highforthis/shared/auth';
-import { graphqlHostContext } from '@highforthis/shared/context';
-import { sessionStorage } from '@highforthis/shared/session';
-
+import { isAuthenticated } from '#/auth';
+import { graphqlHostContext } from '#/context';
+import { sessionStorage } from '#/session';
 import { post } from '#/utils/action';
 
 export async function action({ request, context }: ActionFunctionArgs) {

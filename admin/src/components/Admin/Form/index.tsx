@@ -3,9 +3,8 @@ import type { PropsWithChildren, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
-import Button from '@highforthis/shared/components/Button';
-
 import { FormWrap } from '#/components/Admin/styles';
+import Button from '#/components/Button';
 import type { Fields, FieldUnion } from '#/types';
 
 import EditableField from './EditableField';

@@ -10,5 +10,5 @@
     "target": "ES2024",
     "types": ["node"]
   },
-  "include": ["src/logger.ts", "src/observability.ts"]
+  "include": ["src/**/*.ts"]
 }

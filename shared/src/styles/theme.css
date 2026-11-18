@@ -1,6 +1,3 @@
-/* Components in shared/src use Tailwind classes too */
-@source '..';
-
 @custom-variant dark (&:where(.dark, .dark *));
 
 @plugin '@tailwindcss/forms';

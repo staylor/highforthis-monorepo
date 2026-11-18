@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import Select from '@highforthis/shared/components/Form/Select';
-
+import Select from '#/components/Form/Select';
 import Icon from '#/components/Icon';
 
 import { sortNodes, type EntityNode } from './utils';
