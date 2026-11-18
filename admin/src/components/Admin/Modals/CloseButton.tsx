@@ -1,6 +1,7 @@
-import Icon from '@highforthis/shared/web/components/Icon';
 import cn from 'classnames';
 import type { ButtonHTMLAttributes } from 'react';
+
+import Icon from '#/components/Icon';
 
 const CloseButton = ({ className, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) => (
   <button

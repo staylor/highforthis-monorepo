@@ -1,7 +1,6 @@
-import Button from '@highforthis/shared/web/components/Button';
-import TextNodes from '@highforthis/shared/web/components/Post/TextNodes';
-import Video from '@highforthis/shared/web/components/Videos/Video';
-import type { Artist, Post } from '@highforthis/shared/web/types/graphql';
+import Button from '@highforthis/shared/components/Button';
+import TextNodes from '@highforthis/shared/components/Post/TextNodes';
+import Video from '@highforthis/shared/components/Videos/Video';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +11,7 @@ import Tags from '#/components/Admin/Form/Tags';
 import { Heading } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import type { Fields } from '#/types';
+import type { Artist, Post } from '#/types/graphql';
 
 interface PostFormProps {
   data?: Post;

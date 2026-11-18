@@ -38,6 +38,9 @@
       "project": [
         "app.js",
         "src/**/*.{ts,tsx}"
+      ],
+      "ignore": [
+        "src/types/graphql.ts"
       ]
     },
     "admin": {
@@ -48,8 +51,8 @@
       "ignoreDependencies": [
         "tailwindcss"
       ],
-      "ignoreUnresolved": [
-        "./build/server/index.js"
+      "ignore": [
+        "src/types/graphql.ts"
       ]
     }
   }

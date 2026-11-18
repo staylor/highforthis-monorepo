@@ -1,11 +1,11 @@
-import Button from '@highforthis/shared/web/components/Button';
-import type { MediaCropSetting, MediaSettings } from '@highforthis/shared/web/types/graphql';
+import Button from '@highforthis/shared/components/Button';
 import type { ThHTMLAttributes, TdHTMLAttributes, SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { InputProps } from '#/components/Form/Input';
 import Input from '#/components/Form/Input';
+import type { MediaCropSetting, MediaSettings } from '#/types/graphql';
 
 const NumberInput = (props: InputProps) => (
   <Input {...props} className="inline-block h-8 w-16 px-1 py-0.5" size={4} inputType="number" />

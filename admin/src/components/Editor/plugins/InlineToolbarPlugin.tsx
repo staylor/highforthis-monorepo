@@ -1,4 +1,3 @@
-import Icon from '@highforthis/shared/web/components/Icon';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
 import { mergeRegister } from '@lexical/utils';
 import type { TextFormatType } from 'lexical';
@@ -14,6 +13,7 @@ import { useRef, useEffect, useCallback, useReducer, useMemo } from 'react';
 import Controls from '#/components/Editor/Controls';
 import StyleButton from '#/components/Editor/Controls/StyleButton';
 import Toolbar from '#/components/Editor/Toolbar';
+import Icon from '#/components/Icon';
 
 import { setStyle } from './utils';
 

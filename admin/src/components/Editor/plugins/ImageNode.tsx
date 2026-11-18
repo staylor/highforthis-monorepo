@@ -1,9 +1,9 @@
-import type { ImageUpload } from '@highforthis/shared/web/types/graphql';
 import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import type { NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 import type { ReactNode } from 'react';
 
 import ImageComponent from '#/components/Editor/Blocks/Image';
+import type { ImageUpload } from '#/types/graphql';
 
 // this data gets saved
 type SerializedImageNode = Spread<{ imageId: string; size: string }, SerializedLexicalNode>;

@@ -1,7 +1,8 @@
-import Icon from '@highforthis/shared/web/components/Icon';
 import cn from 'classnames';
 import type { SyntheticEvent } from 'react';
 import { useSearchParams } from 'react-router';
+
+import Icon from '#/components/Icon';
 
 interface MessageProps {
   dismissable?: boolean;

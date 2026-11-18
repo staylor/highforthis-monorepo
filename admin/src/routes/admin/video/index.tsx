@@ -1,6 +1,5 @@
-import Select from '@highforthis/shared/web/components/Form/Select';
-import type { Video, VideosAdminQuery } from '@highforthis/shared/web/types/graphql';
-import query, { addPageOffset } from '@highforthis/shared/web/utils/query';
+import Select from '@highforthis/shared/components/Form/Select';
+import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
@@ -11,7 +10,9 @@ import { useUpdateQuery } from '#/components/Admin/ListTable/utils';
 import { Heading } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import type { Columns } from '#/types';
+import type { Video, VideosAdminQuery } from '#/types/graphql';
 import { handleDelete } from '#/utils/action';
+import { addPageOffset } from '#/utils/listVariables';
 
 import type { Route } from './+types/index';
 

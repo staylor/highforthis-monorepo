@@ -1,6 +1,7 @@
-import Icon from '@highforthis/shared/web/components/Icon';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
+
+import Icon from '#/components/Icon';
 
 interface CollapseButtonProps {
   isCollapsed: boolean;

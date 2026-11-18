@@ -1,4 +1,4 @@
-import { Heading1 } from '@highforthis/shared/web/components/Heading';
+import { Heading1 } from '@highforthis/shared/components/Heading';
 import cn from 'classnames';
 import type { HTMLAttributes } from 'react';
 

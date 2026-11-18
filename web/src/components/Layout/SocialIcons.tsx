@@ -3,7 +3,7 @@ import {
   INSTAGRAM_USERNAME,
   TWITTER_USERNAME,
   TIKTOK_USERNAME,
-} from '@highforthis/shared/web/constants';
+} from '@highforthis/shared/constants';
 import type { PropsWithChildren } from 'react';
 
 type IconProps = PropsWithChildren<{

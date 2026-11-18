@@ -1,4 +1,4 @@
-import { Heading1, Heading2 } from '@highforthis/shared/web/components/Heading';
+import { Heading1, Heading2 } from '@highforthis/shared/components/Heading';
 import { startRegistration } from '@simplewebauthn/browser';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';

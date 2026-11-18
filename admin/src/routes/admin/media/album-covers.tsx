@@ -1,7 +1,5 @@
-import Button from '@highforthis/shared/web/components/Button';
-import type { AlbumCoversAdminQuery } from '@highforthis/shared/web/types/graphql';
-import mutate from '@highforthis/shared/web/utils/mutate';
-import query from '@highforthis/shared/web/utils/query';
+import Button from '@highforthis/shared/components/Button';
+import query from '@highforthis/shared/utils/query';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import { useState } from 'react';
@@ -10,6 +8,8 @@ import { Form, redirect, useLocation, useNavigation } from 'react-router';
 
 import Search from '#/components/Admin/ListTable/Search';
 import { Alert, Heading } from '#/components/Admin/styles';
+import type { AlbumCoversAdminQuery } from '#/types/graphql';
+import mutate from '#/utils/mutate';
 
 import type { Route } from './+types/album-covers';
 

@@ -1,11 +1,11 @@
-import Button from '@highforthis/shared/web/components/Button';
-import mutate from '@highforthis/shared/web/utils/mutate';
+import Button from '@highforthis/shared/components/Button';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { redirect } from 'react-router';
 
 import { FormWrap, HeaderAdd, Heading } from '#/components/Admin/styles';
 import Textarea from '#/components/Form/Textarea';
+import mutate from '#/utils/mutate';
 
 import type { Route } from './+types/bulk';
 import { parseBulkShowsCsv } from './bulkCsv';

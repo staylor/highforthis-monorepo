@@ -1,12 +1,8 @@
+import factory from '@highforthis/shared/apollo/client';
+import { apolloClientContext, graphqlHostContext, i18nContext } from '@highforthis/shared/context';
+import createI18n from '@highforthis/shared/i18n';
 import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
-import factory from '@highforthis/shared/web/apollo/client';
-import {
-  apolloClientContext,
-  graphqlHostContext,
-  i18nContext,
-} from '@highforthis/shared/web/context';
-import createI18n from '@highforthis/shared/web/i18n';
-import { sessionStorage } from '@highforthis/shared/web/session';
+import { sessionStorage } from '@highforthis/shared/session';
 import { createRequestHandler } from '@react-router/express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';

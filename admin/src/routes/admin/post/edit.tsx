@@ -1,15 +1,15 @@
-import type { Post, PostQuery } from '@highforthis/shared/web/types/graphql';
-import query from '@highforthis/shared/web/utils/query';
+import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import PostForm from '#/components/Admin/Post/Form';
+import type { Post, PostEditQuery } from '#/types/graphql';
 import { handleSubmission } from '#/utils/action';
 
 import type { Route } from './+types/edit';
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  return query<PostQuery>({ request, context, query: postQuery, variables: { id: params.id } });
+  return query<PostEditQuery>({ request, context, query: postQuery, variables: { id: params.id } });
 }
 
 export async function action({ request, context, params, url }: Route.ActionArgs) {

@@ -1,4 +1,4 @@
-import { useRootData } from '@highforthis/shared/web/utils/rootData';
+import { useRootData } from '@highforthis/shared/utils/rootData';
 
 import Analytics from '#/components/Analytics';
 

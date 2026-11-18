@@ -15,5 +15,6 @@
     "target": "ES2024",
     "types": ["vitest/globals", "vite/client", "node"]
   },
-  "include": ["src/web/**/*", "test/**/*"]
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["src/logger.ts", "src/observability.ts"]
 }

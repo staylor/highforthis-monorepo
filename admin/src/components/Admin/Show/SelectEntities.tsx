@@ -1,6 +1,7 @@
-import Select from '@highforthis/shared/web/components/Form/Select';
-import Icon from '@highforthis/shared/web/components/Icon';
+import Select from '@highforthis/shared/components/Form/Select';
 import { useState } from 'react';
+
+import Icon from '#/components/Icon';
 
 import { sortNodes, type EntityNode } from './utils';
 

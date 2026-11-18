@@ -1,6 +1,7 @@
-import type { Choice } from '@highforthis/shared/web/components/Form/Select';
-import type { IconName } from '@highforthis/shared/web/components/Icon';
+import type { Choice } from '@highforthis/shared/components/Form/Select';
 import type { ReactNode } from 'react';
+
+import type { IconName } from '#/components/Icon';
 
 export interface Column {
   className?: string;

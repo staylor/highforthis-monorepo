@@ -1,6 +1,6 @@
-import { isAuthenticated } from '@highforthis/shared/web/auth';
-import { graphqlHostContext } from '@highforthis/shared/web/context';
-import { sessionStorage } from '@highforthis/shared/web/session';
+import { isAuthenticated } from '@highforthis/shared/auth';
+import { graphqlHostContext } from '@highforthis/shared/context';
+import { sessionStorage } from '@highforthis/shared/session';
 import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
 
 import { post } from '#/utils/action';

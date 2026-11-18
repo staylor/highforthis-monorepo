@@ -1,12 +1,7 @@
-import { blockquoteBase } from '@highforthis/shared/web/components/Blockquote';
-import {
-  headingBase,
-  heading2,
-  heading3,
-  heading4,
-} from '@highforthis/shared/web/components/Heading';
-import { orderedListBase, unorderedListBase } from '@highforthis/shared/web/components/List';
-import { paragraphBase } from '@highforthis/shared/web/components/Paragraph';
+import { blockquoteBase } from '@highforthis/shared/components/Blockquote';
+import { headingBase, heading2, heading3, heading4 } from '@highforthis/shared/components/Heading';
+import { orderedListBase, unorderedListBase } from '@highforthis/shared/components/List';
+import { paragraphBase } from '@highforthis/shared/components/Paragraph';
 import cn from 'classnames';
 
 export default {

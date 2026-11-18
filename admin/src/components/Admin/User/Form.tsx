@@ -1,4 +1,3 @@
-import type { User } from '@highforthis/shared/web/types/graphql';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
@@ -6,6 +5,7 @@ import Form from '#/components/Admin/Form';
 import { Heading } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import type { Fields } from '#/types';
+import type { User } from '#/types/graphql';
 
 interface UserFormProps {
   data?: User;

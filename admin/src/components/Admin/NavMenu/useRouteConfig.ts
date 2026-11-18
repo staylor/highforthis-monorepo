@@ -1,4 +1,4 @@
-import { useRootData } from '@highforthis/shared/web/utils/rootData';
+import { useRootData } from '@highforthis/shared/utils/rootData';
 import { useTranslation } from 'react-i18next';
 
 import type { AdminRouteGroup } from '#/types';

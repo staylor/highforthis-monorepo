@@ -1,12 +1,11 @@
 import type { MutationOptions } from '@apollo/client';
 import { ServerError } from '@apollo/client/errors';
+import { isAuthenticated } from '@highforthis/shared/auth';
+import { apolloClientContext } from '@highforthis/shared/context';
 import qs from 'qs';
 import type { RouterContextProvider } from 'react-router';
 
-import { isAuthenticated } from '../auth';
-import { apolloClientContext } from '../context.js';
-
-import parseObject from './parseObject';
+import parseObject from '#/utils/parseObject';
 
 export interface ParseFormDataArgs {
   skipKeys?: string[];

@@ -1,7 +1,7 @@
-import Icon from '@highforthis/shared/web/components/Icon';
 import cn from 'classnames';
 import { NavLink as RRNavLink } from 'react-router';
 
+import Icon from '#/components/Icon';
 import type { AdminTopLevelRoute } from '#/types';
 
 import { adminPath } from '../utils';

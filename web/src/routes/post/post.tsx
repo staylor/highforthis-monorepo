@@ -1,18 +1,19 @@
-import TextNodes from '@highforthis/shared/web/components/Post/TextNodes';
-import Video from '@highforthis/shared/web/components/Videos/Video';
+import TextNodes from '@highforthis/shared/components/Post/TextNodes';
+import Video from '@highforthis/shared/components/Videos/Video';
+import { uploadUrl } from '@highforthis/shared/utils/media';
+import query from '@highforthis/shared/utils/query';
+import { rootData } from '@highforthis/shared/utils/rootData';
+import titleTemplate from '@highforthis/shared/utils/title';
+import { gql } from 'graphql-tag';
+import type { MetaFunction } from 'react-router';
+
 import type {
   EditorState,
   ImageUpload,
   ImageUploadCrop,
   Post as PostType,
   PostQuery,
-} from '@highforthis/shared/web/types/graphql';
-import { uploadUrl } from '@highforthis/shared/web/utils/media';
-import query from '@highforthis/shared/web/utils/query';
-import { rootData } from '@highforthis/shared/web/utils/rootData';
-import titleTemplate from '@highforthis/shared/web/utils/title';
-import { gql } from 'graphql-tag';
-import type { MetaFunction } from 'react-router';
+} from '#/types/graphql';
 
 import type { Route } from './+types/post';
 import Content from './Content';

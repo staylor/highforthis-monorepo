@@ -1,4 +1,4 @@
-import { useRootData } from '@highforthis/shared/web/utils/rootData';
+import { useRootData } from '@highforthis/shared/utils/rootData';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,11 +1,11 @@
-import { Heading1 } from '@highforthis/shared/web/components/Heading';
-import type { ArtistQuery } from '@highforthis/shared/web/types/graphql';
-import query from '@highforthis/shared/web/utils/query';
+import { Heading1 } from '@highforthis/shared/components/Heading';
+import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 
 import Metadata from '#/components/Artist/Metadata';
 import Shows from '#/components/Shows';
 import Attended from '#/components/Shows/Attended';
+import type { ArtistQuery } from '#/types/graphql';
 import { createClientCache } from '#/utils/cache';
 
 import type { Route } from './+types/artist';

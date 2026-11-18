@@ -1,5 +1,3 @@
-import Icon from '@highforthis/shared/web/components/Icon';
-import type { ImageUpload, Video } from '@highforthis/shared/web/types/graphql';
 import { $createCodeNode, $isCodeNode } from '@lexical/code';
 import {
   $isListItemNode,
@@ -34,6 +32,8 @@ import Controls from '#/components/Editor/Controls';
 import BlockButton from '#/components/Editor/Controls/BlockButton';
 import StyleButton from '#/components/Editor/Controls/StyleButton';
 import Toolbar from '#/components/Editor/Toolbar';
+import Icon from '#/components/Icon';
+import type { ImageUpload, Video } from '#/types/graphql';
 
 import { $createImageNode } from './ImageNode';
 import { $createVideoNode } from './VideoNode';

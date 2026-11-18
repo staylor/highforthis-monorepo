@@ -1,15 +1,15 @@
-import Select from '@highforthis/shared/web/components/Form/Select';
-import { Heading1 } from '@highforthis/shared/web/components/Heading';
-import type { VideoConnection, VideosQuery } from '@highforthis/shared/web/types/graphql';
-import query from '@highforthis/shared/web/utils/query';
-import { rootData } from '@highforthis/shared/web/utils/rootData';
-import titleTemplate from '@highforthis/shared/web/utils/title';
+import Select from '@highforthis/shared/components/Form/Select';
+import { Heading1 } from '@highforthis/shared/components/Heading';
+import query from '@highforthis/shared/utils/query';
+import { rootData } from '@highforthis/shared/utils/rootData';
+import titleTemplate from '@highforthis/shared/utils/title';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, type MetaFunction } from 'react-router';
 
 import Videos from '#/components/Videos';
 import { videosQuery as queryFragment } from '#/components/Videos/graphql';
+import type { VideoConnection, VideosQuery } from '#/types/graphql';
 
 import type { Route } from './+types';
 

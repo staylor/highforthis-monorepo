@@ -1,4 +1,4 @@
-import Button from '@highforthis/shared/web/components/Button';
+import Button from '@highforthis/shared/components/Button';
 import cn from 'classnames';
 import type { PropsWithChildren, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';

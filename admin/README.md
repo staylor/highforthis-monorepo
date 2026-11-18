@@ -16,7 +16,7 @@ So URLs, the session cookie, passkeys, and the public site's live refresh while 
 
 Vite's `base` is `/admin/`, so this app's scripts, styles and public files (translations, editor icons, favicon) live under `/admin/` and never collide with the public site's. Every route is in the first page's manifest (`routeDiscovery: { mode: 'initial' }`), so the browser never asks for `/__manifest`, which the public site answers. Links to public pages are plain links that open with a full page load.
 
-Code both apps use lives in `shared/src/web` and is imported as `@highforthis/shared/web/...`: UI components, data helpers, the session, GraphQL types and the Apollo client.
+Code both apps use lives in `shared/src` and is imported as `@highforthis/shared/...`: UI components, data helpers, the session, the GraphQL schema types and the Apollo client. Code only the admin uses stays here. Codegen writes this app's operation types to `src/types/graphql.ts`, which also re-exports the schema types from `shared`, so admin code imports every GraphQL type from `#/types/graphql`.
 
 ## Development
 

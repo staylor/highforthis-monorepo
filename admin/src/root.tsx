@@ -1,8 +1,7 @@
-import { appQuery } from '@highforthis/shared/web/root.graphql';
-import type { AppQuery } from '@highforthis/shared/web/types/graphql';
-import query from '@highforthis/shared/web/utils/query';
-import { useRootData } from '@highforthis/shared/web/utils/rootData';
-import titleTemplate, { type TitleProps } from '@highforthis/shared/web/utils/title';
+import { appQuery } from '@highforthis/shared/root.graphql';
+import query from '@highforthis/shared/utils/query';
+import { useRootData } from '@highforthis/shared/utils/rootData';
+import titleTemplate, { type TitleProps } from '@highforthis/shared/utils/title';
 import cn from 'classnames';
 import type { HTMLAttributes, PropsWithChildren } from 'react';
 import type { LinksFunction, MetaFunction } from 'react-router';
@@ -17,6 +16,7 @@ import {
 } from 'react-router';
 
 import adminCss from '#/styles/admin.css?url';
+import type { AppQuery } from '#/types/graphql';
 
 import type { Route } from './+types/root';
 

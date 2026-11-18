@@ -1,12 +1,12 @@
-import type { PodcastQuery } from '@highforthis/shared/web/types/graphql';
-import { uploadUrl } from '@highforthis/shared/web/utils/media';
-import query from '@highforthis/shared/web/utils/query';
-import { rootData } from '@highforthis/shared/web/utils/rootData';
+import { uploadUrl } from '@highforthis/shared/utils/media';
+import query from '@highforthis/shared/utils/query';
+import { rootData } from '@highforthis/shared/utils/rootData';
 import { gql } from 'graphql-tag';
 import type { MetaFunction } from 'react-router';
 
 import Podcast from '#/components/Podcast';
 import { metaTags } from '#/components/Podcast/utils';
+import type { PodcastQuery } from '#/types/graphql';
 import { createClientCache } from '#/utils/cache';
 
 import type { Route } from './+types/podcast';

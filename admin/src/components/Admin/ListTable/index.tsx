@@ -1,4 +1,4 @@
-import Select from '@highforthis/shared/web/components/Form/Select';
+import Select from '@highforthis/shared/components/Form/Select';
 import cn from 'classnames';
 import type { ReactNode, ChangeEvent } from 'react';
 import { useReducer } from 'react';

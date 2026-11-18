@@ -1,8 +1,9 @@
-import Image from '@highforthis/shared/web/components/Image';
-import type { VenueCoordinates } from '@highforthis/shared/web/types/graphql';
-import { useRootData } from '@highforthis/shared/web/utils/rootData';
+import Image from '@highforthis/shared/components/Image';
+import { useRootData } from '@highforthis/shared/utils/rootData';
 import cn from 'classnames';
 import qs from 'qs';
+
+import type { VenueCoordinates } from '#/types/graphql';
 
 interface MapProps {
   name?: string;
