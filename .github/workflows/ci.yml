@@ -18,7 +18,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm --filter @highforthis/graphql db:generate
-      - run: pnpm --filter @highforthis/web exec react-router typegen
       - run: pnpm --filter @highforthis/admin exec react-router typegen
       - run: pnpm knip
       # the root script builds @highforthis/shared first, so packages importing

@@ -3,58 +3,41 @@
   "packageManager": "pnpm@10.30.1",
   "version": "1.0.0",
   "license": "UNLICENSED",
+  "private": true,
   "type": "module",
-  "imports": {
-    "#/*": "./src/*"
+  "engines": {
+    "node": ">=24.3.0"
   },
   "dependencies": {
-    "@google-cloud/storage": "7.19.0",
+    "@apollo/client": "4.1.6",
     "@highforthis/shared": "workspace:*",
+    "@openobserve/browser-core": "0.4.1",
     "@openobserve/browser-logs": "0.4.1",
     "@openobserve/browser-rum": "0.4.1",
-    "@react-router/express": "8.3.0",
-    "@react-router/node": "8.3.0",
-    "classnames": "2.5.1",
-    "compression": "1.8.1",
-    "cookie-parser": "1.4.7",
-    "express": "5.2.1",
+    "@openobserve/browser-rum-core": "0.4.1",
+    "@openobserve/js-core": "0.4.1",
     "graphql": "16.13.0",
     "graphql-tag": "2.12.6",
     "html-escape": "2.0.0",
-    "http-proxy-middleware": "3.0.5",
     "i18next": "25.8.13",
-    "isbot": "5.1.35",
     "qs": "6.15.0",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "react-i18next": "16.5.4",
-    "react-router": "8.3.0",
-    "tsx": "4.21.0"
+    "remix": "3.2.0"
   },
   "devDependencies": {
-    "@react-router/dev": "8.3.0",
-    "@tailwindcss/vite": "4.3.4",
-    "@testing-library/dom": "10.4.1",
-    "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "16.3.2",
-    "@vitejs/plugin-react": "5.1.4",
-    "happy-dom": "20.7.0",
+    "@tailwindcss/cli": "4.3.4",
     "tailwindcss": "4.3.4",
-    "typescript": "5.9.3",
-    "vite": "7.3.1",
-    "vite-tsconfig-paths": "6.1.1",
-    "vitest": "4.0.18"
+    "typescript": "5.9.3"
   },
   "scripts": {
     "dev": "pnpm --filter @highforthis/shared build && pnpm dev:service",
-    "dev:service": "node --env-file-if-exists=.env server.js",
+    "dev:service": "pnpm css && (pnpm css:watch & NODE_ENV=development node --env-file-if-exists=.env --watch --import remix/node-tsx server.ts)",
+    "hmr": "pnpm css && (pnpm css:watch & NODE_ENV=development node --env-file-if-exists=.env hmr.ts)",
     "build": "pnpm --filter @highforthis/shared build && pnpm build:service",
-    "build:service": "NODE_ENV=production react-router build",
-    "prod:upload": "tsx tools/upload-assets.ts",
-    "start": "node server.js",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:update": "vitest -u run",
-    "typecheck": "react-router typegen && tsgo"
+    "build:service": "pnpm css",
+    "start": "NODE_ENV=production node --import remix/node-tsx server.ts",
+    "css": "tailwindcss -i app/styles/main.css -o app/styles/public/main.css",
+    "css:watch": "tailwindcss -i app/styles/main.css -o app/styles/public/main.css --watch=always",
+    "test": "NODE_ENV=test remix test",
+    "typecheck": "tsgo"
   }
 }

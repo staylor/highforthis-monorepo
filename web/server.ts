@@ -1,0 +1,59 @@
+import * as http from 'node:http';
+
+import { createRequestListener } from 'remix/node-fetch-server';
+
+import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
+import { startObservability } from '@highforthis/shared/observability';
+
+process.env.TZ = 'America/New_York';
+startObservability({ serviceName: 'web' });
+
+const { assets } = await import('./app/assets.ts');
+const { router } = await import('./app/router.ts');
+
+const logger = createLogger({ serviceName: 'web' });
+const httpLogger = createHttpLogger(logger);
+
+const port = Number.parseInt(process.env.PORT || process.env.SERVER_PORT || '3000', 10);
+const hmrProxyPort = process.env.HMR_PROXY_PORT
+  ? Number.parseInt(process.env.HMR_PROXY_PORT, 10)
+  : null;
+const isHmr = process.env.REMIX_NODE_HMR === '1';
+
+const listener = createRequestListener(router.fetch, {
+  trustProxy: isHmr,
+  onError(error) {
+    logger.error({ err: error }, 'Request failed');
+    return new Response('Internal Server Error', { status: 500 });
+  },
+});
+
+// pino-http works on Node's req/res, so it wraps the fetch listener instead of
+// becoming Remix middleware.
+const server = http.createServer((req, res) => {
+  httpLogger(req, res);
+  listener(req, res);
+});
+
+server.listen(port, () => {
+  if (isHmr) {
+    import('remix/node-hmr/runtime')
+      .then((nodeHmr) => nodeHmr.emitServerReady())
+      .catch((error) => logger.error({ err: error }, 'HMR runtime failed to load'));
+  }
+  logger.info({ port: hmrProxyPort ?? port }, 'Web server ready');
+});
+
+let shuttingDown = false;
+
+function shutdown() {
+  if (shuttingDown) {
+    return;
+  }
+  shuttingDown = true;
+  server.close(() => assets.close().finally(() => process.exit(0)));
+  server.closeAllConnections();
+}
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);

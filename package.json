@@ -76,8 +76,6 @@
     "test:admin": "pnpm --filter @highforthis/admin test",
     "test:shared": "pnpm --filter @highforthis/shared test",
     "test:web": "pnpm --filter @highforthis/web test",
-    "test:web:watch": "pnpm --filter @highforthis/web test:watch",
-    "test:web:update": "pnpm --filter @highforthis/web test:update",
     "typecheck": "pnpm --filter @highforthis/shared build && pnpm -r typecheck"
   }
 }

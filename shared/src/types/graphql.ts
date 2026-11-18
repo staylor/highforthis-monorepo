@@ -258,11 +258,12 @@ export type EditorStateInput = {
   root?: InputMaybe<RootNodeInput>;
 };
 
-export enum ElementDirection {
-  Ltr = 'ltr',
-  Rtl = 'rtl'
-}
+export const ElementDirection = {
+  Ltr: 'ltr',
+  Rtl: 'rtl'
+} as const;
 
+export type ElementDirection = typeof ElementDirection[keyof typeof ElementDirection];
 export type ElementNode = ElementNodeType & LexicalNode & {
   __typename?: 'ElementNode';
   children?: Maybe<Array<Maybe<EditorNode>>>;
@@ -320,15 +321,16 @@ export type HeadingNode = ElementNodeType & LexicalNode & {
   version?: Maybe<Scalars['Int']['output']>;
 };
 
-export enum HeadingTag {
-  H1 = 'h1',
-  H2 = 'h2',
-  H3 = 'h3',
-  H4 = 'h4',
-  H5 = 'h5',
-  H6 = 'h6'
-}
+export const HeadingTag = {
+  H1: 'h1',
+  H2: 'h2',
+  H3: 'h3',
+  H4: 'h4',
+  H5: 'h5',
+  H6: 'h6'
+} as const;
 
+export type HeadingTag = typeof HeadingTag[keyof typeof HeadingTag];
 export type ImageNode = ElementNodeType & LexicalNode & {
   __typename?: 'ImageNode';
   children?: Maybe<Array<Maybe<EditorNode>>>;
@@ -419,12 +421,13 @@ export type ListNode = ElementNodeType & LexicalNode & {
   version?: Maybe<Scalars['Int']['output']>;
 };
 
-export enum ListType {
-  Bullet = 'bullet',
-  Check = 'check',
-  Number = 'number'
-}
+export const ListType = {
+  Bullet: 'bullet',
+  Check: 'check',
+  Number: 'number'
+} as const;
 
+export type ListType = typeof ListType[keyof typeof ListType];
 export type Listing = {
   __typename?: 'Listing';
   cancelled: Scalars['Boolean']['output'];
@@ -710,11 +713,12 @@ export type PodcastEdge = {
   node: Podcast;
 };
 
-export enum PodcastOrder {
-  Asc = 'ASC',
-  Desc = 'DESC'
-}
+export const PodcastOrder = {
+  Asc: 'ASC',
+  Desc: 'DESC'
+} as const;
 
+export type PodcastOrder = typeof PodcastOrder[keyof typeof PodcastOrder];
 export type PodcastSettings = {
   __typename?: 'PodcastSettings';
   category?: Maybe<Scalars['String']['output']>;
@@ -775,11 +779,12 @@ export type PostEdge = {
   node: Post;
 };
 
-export enum PostStatus {
-  Draft = 'DRAFT',
-  Publish = 'PUBLISH'
-}
+export const PostStatus = {
+  Draft: 'DRAFT',
+  Publish: 'PUBLISH'
+} as const;
 
+export type PostStatus = typeof PostStatus[keyof typeof PostStatus];
 export type Query = {
   __typename?: 'Query';
   apiKeys?: Maybe<ApiKeys>;
@@ -1003,16 +1008,18 @@ export type ShowEdge = {
 
 export type ShowEntity = Artist | Venue;
 
-export enum ShowEntityType {
-  Artist = 'ARTIST',
-  Venue = 'VENUE'
-}
+export const ShowEntityType = {
+  Artist: 'ARTIST',
+  Venue: 'VENUE'
+} as const;
 
-export enum ShowOrder {
-  Asc = 'ASC',
-  Desc = 'DESC'
-}
+export type ShowEntityType = typeof ShowEntityType[keyof typeof ShowEntityType];
+export const ShowOrder = {
+  Asc: 'ASC',
+  Desc: 'DESC'
+} as const;
 
+export type ShowOrder = typeof ShowOrder[keyof typeof ShowOrder];
 export type ShowStat = {
   __typename?: 'ShowStat';
   count: Scalars['Int']['output'];
@@ -1039,12 +1046,13 @@ export type SiteSettingsInput = {
   tagline?: InputMaybe<Scalars['String']['input']>;
 };
 
-export enum TextModeType {
-  Normal = 'normal',
-  Segmented = 'segmented',
-  Token = 'token'
-}
+export const TextModeType = {
+  Normal: 'normal',
+  Segmented: 'segmented',
+  Token: 'token'
+} as const;
 
+export type TextModeType = typeof TextModeType[keyof typeof TextModeType];
 export type TextNode = LexicalNode & {
   __typename?: 'TextNode';
   detail?: Maybe<Scalars['Int']['output']>;
