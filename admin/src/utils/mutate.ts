@@ -3,8 +3,8 @@ import { ServerError } from '@apollo/client/errors';
 import qs from 'qs';
 import type { RouterContextProvider } from 'react-router';
 
-import { isAuthenticated } from '@highforthis/shared/auth';
-import { apolloClientContext } from '@highforthis/shared/context';
+import { isAuthenticated } from '#/auth';
+import { apolloClientContext } from '#/context';
 
 import parseObject from './parseObject';
 

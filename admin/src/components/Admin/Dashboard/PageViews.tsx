@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { useRootData } from '@highforthis/shared/utils/rootData';
-
 import type { PageViews as PageViewsData } from '#/utils/pageViews.server';
+import { useRootData } from '#/utils/rootData';
 
 const formatDate = (date: string, options: Intl.DateTimeFormatOptions) =>
   // Dates are YYYY-MM-DD in the site's time zone; noon UTC keeps them on the same day

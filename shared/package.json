@@ -5,9 +5,6 @@
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
-  "imports": {
-    "#/*": "./src/*"
-  },
   "exports": {
     "./logger": {
       "types": "./dist/logger.d.ts",
@@ -17,38 +14,10 @@
       "types": "./dist/observability.d.ts",
       "import": "./dist/observability.js"
     },
-    "./apollo/client": "./src/apollo/client.js",
     "./apollo/fragmentMatcher": "./src/apollo/fragmentMatcher.js",
     "./apollo/typePolicies": "./src/apollo/typePolicies.js",
-    "./auth": "./src/auth.ts",
-    "./components/Artist/Artwork": "./src/components/Artist/Artwork.tsx",
-    "./components/Blockquote": "./src/components/Blockquote/index.tsx",
-    "./components/Button": "./src/components/Button/index.tsx",
-    "./components/Form/Select": "./src/components/Form/Select/index.tsx",
-    "./components/Form/styles": "./src/components/Form/styles.ts",
-    "./components/Heading": "./src/components/Heading/index.tsx",
-    "./components/Image": "./src/components/Image/index.tsx",
-    "./components/Link": "./src/components/Link/index.tsx",
-    "./components/List": "./src/components/List/index.tsx",
-    "./components/Paragraph": "./src/components/Paragraph/index.tsx",
-    "./components/Post/TextNodes": "./src/components/Post/TextNodes.tsx",
-    "./components/Shows/utils": "./src/components/Shows/utils.ts",
-    "./components/TextTitle": "./src/components/TextTitle/index.tsx",
-    "./components/Videos/Video": "./src/components/Videos/Video.tsx",
-    "./constants": "./src/constants.ts",
-    "./context": "./src/context.js",
-    "./i18n": "./src/i18n.js",
-    "./root.graphql": "./src/root.graphql.ts",
-    "./session": "./src/session.js",
     "./styles/theme.css": "./src/styles/theme.css",
-    "./types/graphql": "./src/types/graphql.ts",
-    "./utils/base64": "./src/utils/base64.ts",
-    "./utils/connection": "./src/utils/connection.ts",
-    "./utils/media": "./src/utils/media.ts",
-    "./utils/query": "./src/utils/query.ts",
-    "./utils/rootData": "./src/utils/rootData.ts",
-    "./utils/storage": "./src/utils/storage.ts",
-    "./utils/title": "./src/utils/title.ts"
+    "./types/graphql": "./src/types/graphql.ts"
   },
   "files": [
     "dist",
@@ -56,8 +25,7 @@
   ],
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
-    "test": "vitest run",
-    "typecheck": "tsgo && tsgo -p tsconfig.react.json"
+    "typecheck": "tsgo"
   },
   "dependencies": {
     "@apollo/client": "4.1.6",
@@ -79,27 +47,7 @@
     "@opentelemetry/sdk-trace-node": "2.9.0",
     "@opentelemetry/semantic-conventions": "1.43.0",
     "@tailwindcss/forms": "0.5.11",
-    "classnames": "2.5.1",
-    "graphql": "16.13.0",
-    "graphql-tag": "2.12.6",
-    "i18next": "25.8.13",
-    "i18next-fs-backend": "2.6.1",
-    "i18next-http-backend": "3.0.2",
     "pino": "10.3.1",
-    "pino-http": "11.0.0",
-    "react": "19.2.8",
-    "react-i18next": "16.5.4",
-    "react-router": "8.3.0",
-    "tailwind-merge": "3.7.0"
-  },
-  "devDependencies": {
-    "@testing-library/dom": "10.4.1",
-    "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "16.3.2",
-    "@testing-library/user-event": "14.6.1",
-    "@vitejs/plugin-react": "5.1.4",
-    "happy-dom": "20.7.0",
-    "vite": "7.3.1",
-    "vitest": "4.0.18"
+    "pino-http": "11.0.0"
   }
 }

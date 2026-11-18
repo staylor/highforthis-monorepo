@@ -1,7 +1,7 @@
 import type { RouterContextProvider } from 'react-router';
 
-import { isAuthenticated } from '@highforthis/shared/auth';
-import { graphqlHostContext } from '@highforthis/shared/context';
+import { isAuthenticated } from '#/auth';
+import { graphqlHostContext } from '#/context';
 
 export async function passkeyApi<T>({
   request,

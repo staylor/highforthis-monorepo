@@ -4,13 +4,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Form, redirect, useLocation, useNavigation } from 'react-router';
 
-import Button from '@highforthis/shared/components/Button';
-import query from '@highforthis/shared/utils/query';
-
 import Search from '#/components/Admin/ListTable/Search';
 import { Alert, Heading } from '#/components/Admin/styles';
+import Button from '#/components/Button';
 import type { AlbumCoversAdminQuery } from '#/types/graphql';
 import mutate from '#/utils/mutate';
+import query from '#/utils/query';
 
 import type { Route } from './+types/album-covers';
 

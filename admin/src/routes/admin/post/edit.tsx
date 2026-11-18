@@ -1,11 +1,10 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import query from '@highforthis/shared/utils/query';
-
 import PostForm from '#/components/Admin/Post/Form';
 import type { Post, PostEditQuery } from '#/types/graphql';
 import { handleSubmission } from '#/utils/action';
+import query from '#/utils/query';
 
 import type { Route } from './+types/edit';
 

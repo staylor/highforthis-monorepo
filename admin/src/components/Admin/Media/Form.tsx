@@ -1,13 +1,12 @@
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
-import { uploadUrl } from '@highforthis/shared/utils/media';
-
 import Form from '#/components/Admin/Form';
 import { Heading } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import type { Fields } from '#/types';
 import type { MediaUpload, ImageUpload, VideoUpload, AudioUpload } from '#/types/graphql';
+import { uploadUrl } from '#/utils/media';
 
 import AudioInfo from './AudioInfo';
 import ImageInfo from './ImageInfo';

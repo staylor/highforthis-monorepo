@@ -2,18 +2,17 @@ import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useFetcher, useLocation, useSearchParams } from 'react-router';
 
-import { formatShowLink } from '@highforthis/shared/components/Shows/utils';
-import query from '@highforthis/shared/utils/query';
-
 import ListTable, { RowTitle, RowActions } from '#/components/Admin/ListTable';
 import Search from '#/components/Admin/ListTable/Search';
 import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Checkbox from '#/components/Form/Checkbox';
 import Message from '#/components/Form/Message';
+import { formatShowLink } from '#/components/Shows/utils';
 import type { Show, ShowsAdminQuery } from '#/types/graphql';
 import { handleDelete } from '#/utils/action';
 import { addPageOffset, addSearchParam } from '#/utils/listVariables';
 import mutate, { parseFormData } from '#/utils/mutate';
+import query from '#/utils/query';
 
 import type { Route } from './+types';
 

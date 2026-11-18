@@ -2,8 +2,7 @@ import type { ThHTMLAttributes, TdHTMLAttributes, SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Button from '@highforthis/shared/components/Button';
-
+import Button from '#/components/Button';
 import type { InputProps } from '#/components/Form/Input';
 import Input from '#/components/Form/Input';
 import type { MediaCropSetting, MediaSettings } from '#/types/graphql';

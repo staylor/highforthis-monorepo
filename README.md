@@ -7,9 +7,9 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 | Workspace                          | Description                                            |
 | ---------------------------------- | ------------------------------------------------------ |
 | [`graphql`](./graphql)             | GraphQL API server (Apollo Server, Prisma, PostgreSQL) |
-| [`web`](./web)                     | Public site (React Router v7, Vite, Tailwind CSS)      |
+| [`web`](./web)                     | Public site (Remix 3, Tailwind CSS)                    |
 | [`admin`](./admin)                 | Admin and login, served under the public site's domain |
-| [`shared`](./shared)               | Logging, OpenTelemetry, and code both web apps use     |
+| [`shared`](./shared)               | Logging, OpenTelemetry, GraphQL schema types, theme    |
 | [`observability`](./observability) | OpenObserve backend and GUI deployment                 |
 | [`xcode`](./xcode)                 | iOS, iPadOS, macOS and tvOS app (SwiftUI, Apollo iOS)  |
 
@@ -51,7 +51,6 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 | `pnpm knip`                     | Find unused files, exports, and dependencies               |
 | `pnpm test:web`                 | Run web workspace tests                                    |
 | `pnpm test:admin`               | Run admin workspace tests                                  |
-| `pnpm test:shared`              | Run shared workspace tests                                 |
 | `pnpm typecheck`                | Type-check all workspaces                                  |
 
 ## GraphQL Codegen
@@ -76,7 +75,7 @@ pnpm codegen
 
 ## Observability
 
-The shared [`@highforthis/shared`](./shared) workspace initializes OpenTelemetry before either application loads, allowing automatic HTTP, Express, GraphQL, and runtime instrumentation plus structured Pino logging. Requests receive an `x-request-id`; logs produced inside a trace also contain OpenTelemetry trace and span IDs.
+The shared [`@highforthis/shared`](./shared) workspace initializes OpenTelemetry before either application loads, allowing automatic HTTP, Express, GraphQL, and runtime instrumentation plus structured Pino logging. It also holds what both web apps share: the generated GraphQL schema types, the Apollo cache configuration and the Tailwind theme. Requests receive an `x-request-id`; logs produced inside a trace also contain OpenTelemetry trace and span IDs.
 
 OpenObserve runs as a separate Railway service using the pinned image and configuration in [`observability`](./observability). A persistent Railway volume mounted at `/data` is required.
 

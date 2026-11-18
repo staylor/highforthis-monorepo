@@ -24,7 +24,7 @@
     "forceConsistentCasingInFileNames": true,
     "rootDirs": [".", "./.react-router/types"],
     "paths": {
-      "#/*": ["./src/*", "../shared/src/*"]
+      "#/*": ["./src/*"]
     },
     "noEmit": true
   }

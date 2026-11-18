@@ -3,11 +3,10 @@ import { useTranslation } from 'react-i18next';
 import type { MetaFunction } from 'react-router';
 import { Outlet } from 'react-router';
 
-import { rootData } from '@highforthis/shared/utils/rootData';
-import titleTemplate from '@highforthis/shared/utils/title';
-
 import NavMenu, { AdminNavProvider, useAdminNav } from '#/components/Admin/NavMenu';
 import { requireAdminSession } from '#/utils/adminSession.server';
+import { rootData } from '#/utils/rootData';
+import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types/layout';
 

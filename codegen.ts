@@ -1,11 +1,9 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
-const SHARED_DOCUMENTS = 'shared/src/**/*.{ts,tsx}';
 const SHARED_TYPES = '@highforthis/shared/types/graphql';
 
-// The operations an app defines. Admin's documents include shared's, because its queries
-// spread shared fragments; web defines its own. Schema types come from shared's file, which the app's file re-exports,
-// so app code imports every GraphQL type from its own #/types/graphql.
+// The operations an app defines. Schema types come from shared's file, which the app's file
+// re-exports, so app code imports every GraphQL type from its own types file.
 const appTypes = (path: string, documents: string[]) => ({
   [path]: {
     documents,
@@ -45,10 +43,9 @@ const config: CodegenConfig = {
     './shared/src/apollo/fragmentMatcher.js': {
       plugins: ['fragment-matcher'],
     },
-    // Schema types, plus the fragments and queries defined in shared
+    // Schema types both apps' operation types build on
     './shared/src/types/graphql.ts': {
-      documents: [SHARED_DOCUMENTS],
-      plugins: ['typescript', 'typescript-operations'],
+      plugins: ['typescript'],
       config: {
         dedupeOperationSuffix: true,
         // Constant objects instead of enums: web loads this file through Node's type
@@ -58,7 +55,7 @@ const config: CodegenConfig = {
       },
     },
     ...appTypes('./web/app/types/graphql.ts', ['web/app/**/*.{ts,tsx}']),
-    ...appTypes('./admin/src/types/graphql.ts', ['admin/src/**/*.{ts,tsx}', SHARED_DOCUMENTS]),
+    ...appTypes('./admin/src/types/graphql.ts', ['admin/src/**/*.{ts,tsx}']),
   },
 };
 

@@ -4,9 +4,8 @@ import { useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router';
 
-import Select from '@highforthis/shared/components/Form/Select';
-
 import Checkbox from '#/components/Form/Checkbox';
+import Select from '#/components/Form/Select';
 import type { Column, Columns } from '#/types';
 
 import Pagination from './Pagination';

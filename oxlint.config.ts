@@ -22,7 +22,7 @@ export default createConfig(testingLibrary, {
   },
   overrides: [
     {
-      files: ['{web,admin}/**/*', 'shared/src/**/*'],
+      files: ['{web,admin}/**/*'],
       rules: {
         '@lexical/rules-of-lexical': 'error',
         // classnames-order is left out: oxfmt sorts the classes
@@ -36,7 +36,7 @@ export default createConfig(testingLibrary, {
       },
     },
     {
-      files: ['{web,admin,shared}/**/*.test.ts', '{web,admin,shared}/**/*.test.tsx'],
+      files: ['{web,admin}/**/*.test.ts', '{web,admin}/**/*.test.tsx'],
       rules: {
         'i18next/no-literal-string': 'off',
         'tailwindcss/no-custom-classname': 'off',

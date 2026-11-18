@@ -1,6 +1,6 @@
 # @highforthis/admin
 
-The High For This admin: the dashboard, the post editor, and the forms for artists, venues, shows, media, videos, podcasts, users, passkeys and settings. It also serves the login page and the media/video pickers the editor opens. Built with React Router v7 (SSR), Vite, Tailwind CSS and Lexical, like the public site was before the split.
+The High For This admin: the dashboard, the post editor, and the forms for artists, venues, shows, media, videos, podcasts, users, passkeys and settings. It also serves the login page and the media/video pickers the editor opens. Built with React Router v7 (SSR), Vite, Tailwind CSS and Lexical.
 
 ## How it's served
 
@@ -12,11 +12,11 @@ The admin is its own app, but it shares the public site's domain. The `web` serv
 - `/upload`: media uploads (the token from the session cookie is added here)
 - `/auth/passkeys`: passkey sign-in
 
-So URLs, the session cookie, passkeys, and the public site's live refresh while you're signed in work as they did before the split.
+So URLs, the session cookie, passkeys, and the public site's live refresh while you're signed in all work across both apps.
 
 Vite's `base` is `/admin/`, so this app's scripts, styles and public files (translations, editor icons, favicon) live under `/admin/` and never collide with the public site's. Every route is in the first page's manifest (`routeDiscovery: { mode: 'initial' }`), so the browser never asks for `/__manifest`, which the public site answers. Links to public pages are plain links that open with a full page load.
 
-Code both apps use lives in `shared/src` and is imported as `@highforthis/shared/...`: UI components, data helpers, the session, the GraphQL schema types and the Apollo client. Code only the admin uses stays here. Codegen writes this app's operation types to `src/types/graphql.ts`, which also re-exports the schema types from `shared`, so admin code imports every GraphQL type from `#/types/graphql`.
+The public site is a Remix 3 app, so it shares no React code with this one. `shared` holds only what both use: the GraphQL schema types, the Apollo cache configuration and the Tailwind theme. Codegen writes this app's operation types to `src/types/graphql.ts`, which also re-exports the schema types from `shared`, so admin code imports every GraphQL type from `#/types/graphql`.
 
 ## Development
 

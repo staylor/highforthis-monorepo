@@ -12,16 +12,15 @@ import {
   useSearchParams,
 } from 'react-router';
 
-import Button from '@highforthis/shared/components/Button';
-import Select from '@highforthis/shared/components/Form/Select';
-import { inputBase } from '@highforthis/shared/components/Form/styles';
-import Link from '@highforthis/shared/components/Link';
-import query from '@highforthis/shared/utils/query';
-
 import { Alert, Heading } from '#/components/Admin/styles';
+import Button from '#/components/Button';
 import Message from '#/components/Form/Message';
+import Select from '#/components/Form/Select';
+import { inputBase } from '#/components/Form/styles';
+import Link from '#/components/Link';
 import type { VenueListingsAdminQuery } from '#/types/graphql';
 import mutate from '#/utils/mutate';
+import query from '#/utils/query';
 
 import type { Route } from './+types/listings';
 

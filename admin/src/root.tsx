@@ -11,13 +11,12 @@ import {
   useRouteError,
 } from 'react-router';
 
-import { appQuery } from '@highforthis/shared/root.graphql';
-import query from '@highforthis/shared/utils/query';
-import { useRootData } from '@highforthis/shared/utils/rootData';
-import titleTemplate, { type TitleProps } from '@highforthis/shared/utils/title';
-
+import { appQuery } from '#/root.graphql';
 import adminCss from '#/styles/admin.css?url';
 import type { AppQuery } from '#/types/graphql';
+import query from '#/utils/query';
+import { useRootData } from '#/utils/rootData';
+import titleTemplate, { type TitleProps } from '#/utils/title';
 
 import type { Route } from './+types/root';
 

@@ -2,8 +2,7 @@ import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import type { NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 import type { ReactNode } from 'react';
 
-import VideoComponent from '@highforthis/shared/components/Videos/Video';
-
+import VideoComponent from '#/components/Videos/Video';
 import type { Video } from '#/types/graphql';
 
 // this data gets saved

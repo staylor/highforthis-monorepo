@@ -25,15 +25,3 @@ export const Heading2 = ({ className, children, ...props }: HeadingProps) => (
     {children}
   </h2>
 );
-
-export const Heading3 = ({ className, children, ...props }: HeadingProps) => (
-  <h3 className={cn(headingBase, heading3, className)} {...props}>
-    {children}
-  </h3>
-);
-
-export const Heading4 = ({ className, children, ...props }: HeadingProps) => (
-  <h4 className={cn(headingBase, heading4, className)} {...props}>
-    {children}
-  </h4>
-);
