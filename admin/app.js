@@ -63,6 +63,12 @@ const reactRouterHandler = createRequestHandler({
 
 const app = express();
 
+// The public site's server forwards admin paths here and says which host the browser asked
+// for in X-Forwarded-Host. Trusting it gives requests their public URL, which React Router
+// compares with the Origin header to reject cross-site form posts. Only loopback and private
+// network addresses are trusted: web reaches admin over those, and admin has no public domain.
+app.set('trust proxy', ['loopback', 'uniquelocal']);
+
 app.use(compression());
 app.use(createHttpLogger(logger));
 app.use(cookieParser());
