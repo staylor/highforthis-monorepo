@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
@@ -9,27 +8,22 @@ import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import Select from '#/components/Form/Select';
 import Link from '#/components/Link';
+import { deleteMedia, loadMediaList } from '#/server/media';
 import type { Columns } from '#/types';
-import type { MediaUpload, UploadsAdminQuery } from '#/types/graphql';
-import { handleDelete } from '#/utils/action';
-import { addPageOffset } from '#/utils/listVariables';
-import query from '#/utils/query';
+import type { MediaUpload } from '#/types/graphql';
+import { deleteAction, graphqlClient } from '#/utils/route.server';
 
 import type { Route } from './+types/index';
 
 export async function loader({ request, context, url }: Route.LoaderArgs) {
-  const variables = addPageOffset(url);
-  ['type', 'mimeType', 'search'].forEach((key) => {
-    const value = url.searchParams.get(key);
-    if (value) {
-      variables[key] = value;
-    }
+  return loadMediaList({
+    gql: graphqlClient({ request, context }),
+    searchParams: url.searchParams,
   });
-  return query<UploadsAdminQuery>({ request, context, query: uploadsQuery, variables });
 }
 
-export async function action({ request, context, url }: Route.ActionArgs) {
-  return handleDelete({ request, url, context, mutation: uploadsMutation });
+export async function action(args: Route.ActionArgs) {
+  return deleteAction(args, deleteMedia);
 }
 
 export default function Media({ loaderData }: Route.ComponentProps) {
@@ -127,51 +121,3 @@ export default function Media({ loaderData }: Route.ComponentProps) {
     </>
   );
 }
-
-const uploadsQuery = gql`
-  query UploadsAdmin(
-    $after: String
-    $first: Int
-    $mimeType: String
-    $search: String
-    $type: String
-  ) {
-    uploads(after: $after, first: $first, mimeType: $mimeType, search: $search, type: $type)
-      @cache(key: "admin") {
-      count
-      edges {
-        node {
-          destination
-          id
-          mimeType
-          originalName
-          title
-          type
-          ... on ImageUpload {
-            crops {
-              fileName
-              width
-            }
-          }
-          ... on AudioUpload {
-            images {
-              fileName
-              width
-            }
-          }
-        }
-      }
-      mimeTypes
-      pageInfo {
-        hasNextPage
-      }
-      types
-    }
-  }
-`;
-
-const uploadsMutation = gql`
-  mutation DeleteMedia($ids: [String]!) {
-    removeMediaUpload(ids: $ids)
-  }
-`;

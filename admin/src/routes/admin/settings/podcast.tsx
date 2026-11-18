@@ -1,31 +1,21 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import FeaturedMedia from '#/components/Admin/Form/FeaturedMedia';
 import SettingsForm from '#/components/Admin/Settings/Form';
+import { loadPodcastSettings, updatePodcastSettings } from '#/server/settings';
 import type { Fields } from '#/types';
-import type {
-  Podcast,
-  PodcastSettings as PodcastSettingsType,
-  PodcastSettingsQuery,
-} from '#/types/graphql';
-import { handleSubmission } from '#/utils/action';
-import query from '#/utils/query';
+import type { Podcast, PodcastSettings as PodcastSettingsType } from '#/types/graphql';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/podcast';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  return query<PodcastSettingsQuery>({ request, context, query: settingsQuery });
+  return loadPodcastSettings({ gql: graphqlClient({ request, context }) });
 }
 
 export async function action({ request, context, url }: Route.ActionArgs) {
-  return handleSubmission({
-    context,
-    request,
-    url,
-    mutation: settingsMutation,
-    variables: { id: 'podcast' },
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(await updatePodcastSettings({ gql, formData: await request.formData(), url }));
 }
 
 export default function PodcastSettings({ loaderData }: Route.ComponentProps) {
@@ -68,41 +58,3 @@ export default function PodcastSettings({ loaderData }: Route.ComponentProps) {
     />
   );
 }
-
-const settingsQuery = gql`
-  query PodcastSettings {
-    podcastSettings {
-      category
-      copyrightText
-      description
-      explicit
-      feedLink
-      generator
-      id
-      image {
-        crops {
-          fileName
-          width
-        }
-        destination
-        fileName
-        id
-        type
-      }
-      itunesEmail
-      itunesName
-      language
-      managingEditor
-      title
-      websiteLink
-    }
-  }
-`;
-
-const settingsMutation = gql`
-  mutation UpdatePodcastSettings($id: String!, $input: PodcastSettingsInput!) {
-    updatePodcastSettings(id: $id, input: $input) {
-      id
-    }
-  }
-`;

@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useFetcher, useLocation, useSearchParams } from 'react-router';
 
@@ -8,35 +7,22 @@ import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Checkbox from '#/components/Form/Checkbox';
 import Message from '#/components/Form/Message';
 import { formatShowLink } from '#/components/Shows/utils';
-import type { Show, ShowsAdminQuery } from '#/types/graphql';
-import { handleDelete } from '#/utils/action';
-import { addPageOffset, addSearchParam } from '#/utils/listVariables';
-import mutate, { parseFormData } from '#/utils/mutate';
-import query from '#/utils/query';
+import { deleteShows, loadShows, setShowAttended } from '#/server/shows';
+import type { Show } from '#/types/graphql';
+import { deleteAction, graphqlClient } from '#/utils/route.server';
 
 import type { Route } from './+types';
 
 export async function loader({ request, context, url }: Route.LoaderArgs) {
-  const variables = addSearchParam(url, addPageOffset(url, { order: 'DESC' }));
-  return query<ShowsAdminQuery>({ request, context, query: showsQuery, variables });
+  return loadShows({ gql: graphqlClient({ request, context }), searchParams: url.searchParams });
 }
 
-export async function action({ request, context, url }: Route.ActionArgs) {
+export async function action(args: Route.ActionArgs) {
+  const { request } = args;
   if (request.method === 'POST') {
-    const { id, attended } = await parseFormData(request);
-    return mutate({
-      context,
-      request,
-      mutation: updateMutation,
-      variables: {
-        id,
-        input: {
-          attended,
-        },
-      },
-    });
+    return setShowAttended({ gql: graphqlClient(args), formData: await request.formData() });
   }
-  return handleDelete({ request, url, context, mutation: deleteMutation });
+  return deleteAction(args, deleteShows);
 }
 
 export default function Shows({ loaderData }: Route.ComponentProps) {
@@ -160,62 +146,3 @@ export default function Shows({ loaderData }: Route.ComponentProps) {
     </>
   );
 }
-
-const showsQuery = gql`
-  query ShowsAdmin(
-    $after: String
-    $artist: EntityArg
-    $date: Float
-    $first: Int
-    $order: ShowOrder
-    $search: String
-    $venue: EntityArg
-  ) {
-    shows(
-      after: $after
-      artist: $artist
-      date: $date
-      first: $first
-      order: $order
-      search: $search
-      venue: $venue
-    ) @cache(key: "admin") {
-      count
-      edges {
-        node {
-          artists {
-            id
-            name
-            slug
-          }
-          attended
-          date
-          id
-          title
-          venue {
-            id
-            name
-            slug
-          }
-        }
-      }
-      pageInfo {
-        hasNextPage
-      }
-    }
-  }
-`;
-
-const updateMutation = gql`
-  mutation UpdateShowAttended($id: String!, $input: UpdateShowInput!) {
-    updateShow(id: $id, input: $input) {
-      id
-    }
-  }
-`;
-
-const deleteMutation = gql`
-  mutation DeleteShow($ids: [String]!) {
-    removeShow(ids: $ids)
-  }
-`;

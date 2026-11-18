@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import Form from '#/components/Admin/Form';
@@ -59,22 +58,3 @@ export default function PodcastForm({
     </>
   );
 }
-
-PodcastForm.fragments = {
-  podcast: gql`
-    fragment PodcastForm_podcast on Podcast {
-      audio {
-        ...FeaturedMedia_media
-        id
-      }
-      description
-      id
-      image {
-        ...FeaturedMedia_media
-        id
-      }
-      title
-    }
-    ${FeaturedMedia.fragments.media}
-  `,
-};

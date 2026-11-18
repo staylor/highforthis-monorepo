@@ -1,0 +1,53 @@
+import { redirect, type RouterContextProvider } from 'react-router';
+
+import { isAuthenticated } from '#/auth';
+import { apolloClientContext, graphqlHostContext } from '#/context';
+import { isRedirect, type FormArgs, type RedirectResult } from '#/server/forms';
+import { createGraphQLClient, type GraphQLClient } from '#/server/graphql';
+
+// Glue between React Router's loaders and actions and the data functions in #/server, which
+// take plain inputs and don't import React Router.
+
+interface RouteArgs {
+  request: Request;
+  context: Readonly<RouterContextProvider>;
+}
+
+// A GraphQL client for this request, sending the session's token
+export function graphqlClient({ request, context }: RouteArgs): GraphQLClient {
+  return createGraphQLClient({
+    apolloClient: context.get(apolloClientContext),
+    token: () => isAuthenticated(request),
+    authenticateQueries: request.url.includes('/admin'),
+  });
+}
+
+// What the REST endpoints on the GraphQL server (sign-in, passkeys) need
+export async function graphqlAuth({ request, context }: RouteArgs) {
+  return {
+    graphqlHost: context.get(graphqlHostContext),
+    token: (await isAuthenticated(request)) as string | undefined,
+  };
+}
+
+// Turns a data function's redirect into a redirect response, and passes anything else through
+export function respond<T>(result: T): Response | Exclude<T, RedirectResult> {
+  if (isRedirect(result)) {
+    return redirect(result.redirectTo);
+  }
+  return result as Exclude<T, RedirectResult>;
+}
+
+type DeleteRows = (args: FormArgs) => Promise<RedirectResult>;
+
+// A list page's DELETE form removes the checked rows; any other method comes back to the list
+export async function deleteAction(
+  { request, context, url }: RouteArgs & { url: URL },
+  deleteRows: DeleteRows
+) {
+  if (request.method !== 'DELETE') {
+    return redirect(url.toString());
+  }
+  const gql = graphqlClient({ request, context });
+  return respond(await deleteRows({ gql, formData: await request.formData(), url }));
+}

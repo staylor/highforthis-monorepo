@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useSearchParams } from 'react-router';
 
@@ -6,30 +5,19 @@ import ListTable, { RowTitle, RowActions } from '#/components/Admin/ListTable';
 import Search from '#/components/Admin/ListTable/Search';
 import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
+import { deletePodcasts, loadPodcasts } from '#/server/podcasts';
 import type { Columns } from '#/types';
-import type { Podcast, PodcastsAdminQuery } from '#/types/graphql';
-import { handleDelete } from '#/utils/action';
-import { addPageOffset } from '#/utils/listVariables';
-import query from '#/utils/query';
+import type { Podcast } from '#/types/graphql';
+import { deleteAction, graphqlClient } from '#/utils/route.server';
 
 import type { Route } from './+types/index';
 
 export async function loader({ request, context, url }: Route.LoaderArgs) {
-  const variables = addPageOffset(url);
-  const search = url.searchParams.get('search');
-  if (search) {
-    variables.search = search;
-  }
-  return query<PodcastsAdminQuery>({
-    request,
-    context,
-    query: podcastsQuery,
-    variables,
-  });
+  return loadPodcasts({ gql: graphqlClient({ request, context }), searchParams: url.searchParams });
 }
 
-export async function action({ request, context, url }: Route.ActionArgs) {
-  return handleDelete({ request, url, context, mutation: podcastMutation });
+export async function action(args: Route.ActionArgs) {
+  return deleteAction(args, deletePodcasts);
 }
 
 export default function Podcasts({ loaderData }: Route.ComponentProps) {
@@ -67,44 +55,3 @@ export default function Podcasts({ loaderData }: Route.ComponentProps) {
     </>
   );
 }
-
-const podcastsQuery = gql`
-  query PodcastsAdmin($after: String, $first: Int, $search: String) {
-    podcasts(after: $after, first: $first, search: $search) @cache(key: "admin") {
-      count
-      edges {
-        node {
-          audio {
-            destination
-            id
-            images {
-              fileName
-              width
-            }
-            type
-          }
-          id
-          image {
-            crops {
-              fileName
-              width
-            }
-            destination
-            id
-            type
-          }
-          title
-        }
-      }
-      pageInfo {
-        hasNextPage
-      }
-    }
-  }
-`;
-
-const podcastMutation = gql`
-  mutation DeletePodcast($ids: [String]!) {
-    removePodcast(ids: $ids)
-  }
-`;

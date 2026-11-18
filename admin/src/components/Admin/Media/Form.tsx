@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import Form from '#/components/Admin/Form';
@@ -118,49 +117,3 @@ export default function MediaForm({
     </>
   );
 }
-
-MediaForm.fragments = {
-  media: gql`
-    fragment MediaForm_media on MediaUpload {
-      destination
-      fileName
-      fileSize
-      id
-      mimeType
-      originalName
-      title
-      type
-      ... on ImageUpload {
-        altText
-        caption
-        crops {
-          fileName
-          fileSize
-          height
-          width
-        }
-        height
-        width
-      }
-      ... on AudioUpload {
-        description
-        duration
-        images {
-          fileName
-          fileSize
-          height
-          width
-        }
-      }
-      ... on VideoUpload {
-        description
-        duration
-        height
-        width
-      }
-      ... on FileUpload {
-        description
-      }
-    }
-  `,
-};

@@ -1,35 +1,20 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import VenueForm from '#/components/Admin/Venue/Form';
-import type { VenueEditQuery } from '#/types/graphql';
-import { handleSubmission } from '#/utils/action';
-import query from '#/utils/query';
+import { loadVenue, updateVenue } from '#/server/venues';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/edit';
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  return query<VenueEditQuery>({
-    request,
-    context,
-    query: venueQuery,
-    variables: { id: params.id },
-  });
+  return loadVenue({ gql: graphqlClient({ request, context }), id: params.id });
 }
 
 export async function action({ request, context, params, url }: Route.ActionArgs) {
-  return handleSubmission({
-    request,
-    url,
-    context,
-    mutation: venueMutation,
-    // the form leaves out empty fields and unchecked boxes, so these defaults clear them
-    variables: {
-      id: params.id,
-      input: { excludeFromSearch: false, listingsUrl: null, permanentlyClosed: false },
-    },
-    parseFormDataArgs: { skipKeys: ['capacity', 'postalCode'] },
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(
+    await updateVenue({ gql, id: params.id, formData: await request.formData(), url })
+  );
 }
 
 export default function VenueEdit({ loaderData }: Route.ComponentProps) {
@@ -37,38 +22,3 @@ export default function VenueEdit({ loaderData }: Route.ComponentProps) {
   const label = t('venues.edit');
   return <VenueForm data={loaderData} heading={label} buttonLabel={label} />;
 }
-
-const venueQuery = gql`
-  query VenueEdit($id: String) {
-    shows(first: 200, venue: { id: $id }) {
-      edges {
-        node {
-          artists {
-            id
-            name
-          }
-          date
-          id
-          title
-          venue {
-            id
-            name
-          }
-        }
-      }
-    }
-    venue(id: $id) {
-      ...VenueForm_venue
-    }
-  }
-  ${VenueForm.fragments.venue}
-`;
-
-const venueMutation = gql`
-  mutation UpdateVenue($id: String!, $input: UpdateVenueInput!) {
-    updateVenue(id: $id, input: $input) {
-      ...VenueForm_venue
-    }
-  }
-  ${VenueForm.fragments.venue}
-`;

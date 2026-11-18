@@ -1,9 +1,7 @@
-import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Form from '#/components/Admin/Form';
-import FeaturedMedia from '#/components/Admin/Form/FeaturedMedia';
 import { HeaderAdd, Heading } from '#/components/Admin/styles';
 import Checkbox from '#/components/Form/Checkbox';
 import Input from '#/components/Form/Input';
@@ -128,31 +126,3 @@ export default function VenueForm({ data = {}, heading, buttonLabel }: VenueForm
     </>
   );
 }
-
-VenueForm.fragments = {
-  venue: gql`
-    fragment VenueForm_venue on Venue {
-      capacity
-      city
-      coordinates {
-        latitude
-        longitude
-      }
-      description
-      excludeFromSearch
-      featuredMedia {
-        ...FeaturedMedia_media
-      }
-      id
-      listingsUrl
-      name
-      permanentlyClosed
-      postalCode
-      slug
-      state
-      streetAddress
-      website
-    }
-    ${FeaturedMedia.fragments.media}
-  `,
-};

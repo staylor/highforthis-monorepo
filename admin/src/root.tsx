@@ -11,11 +11,10 @@ import {
   useRouteError,
 } from 'react-router';
 
-import { appQuery } from '#/root.graphql';
+import { loadApp } from '#/server/app';
 import adminCss from '#/styles/admin.css?url';
-import type { AppQuery } from '#/types/graphql';
-import query from '#/utils/query';
 import { useRootData } from '#/utils/rootData';
+import { graphqlClient } from '#/utils/route.server';
 import titleTemplate, { type TitleProps } from '#/utils/title';
 
 import type { Route } from './+types/root';
@@ -36,9 +35,8 @@ export const meta: MetaFunction = ({ loaderData }) => {
   return [{ title: titleTemplate(loaderData as TitleProps) }];
 };
 
-// The same query as the public site's root, so useRootData() reads the same shape in both apps
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const data = await query<AppQuery>({ request, context, query: appQuery });
+  const data = await loadApp({ gql: graphqlClient({ request, context }) });
   return { data };
 }
 

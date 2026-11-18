@@ -1,19 +1,14 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import PodcastForm from '#/components/Admin/Podcast/Form';
-import { handleSubmission } from '#/utils/action';
+import { createPodcast } from '#/server/podcasts';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/add';
 
 export async function action({ request, context, url }: Route.ActionArgs) {
-  return handleSubmission({
-    request,
-    url,
-    context,
-    mutation: podcastMutation,
-    createMutation: 'createShow',
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(await createPodcast({ gql, formData: await request.formData(), url }));
 }
 
 export default function PodcastAdd() {
@@ -21,11 +16,3 @@ export default function PodcastAdd() {
   const label = t('podcasts.add');
   return <PodcastForm heading={label} buttonLabel={label} />;
 }
-
-const podcastMutation = gql`
-  mutation CreatePodcast($input: CreatePodcastInput!) {
-    createPodcast(input: $input) {
-      id
-    }
-  }
-`;

@@ -1,45 +1,16 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
-import { redirect } from 'react-router';
 
 import { FormWrap, HeaderAdd, Heading } from '#/components/Admin/styles';
 import Button from '#/components/Button';
 import Textarea from '#/components/Form/Textarea';
-import mutate from '#/utils/mutate';
+import { importShows } from '#/server/shows';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/bulk';
-import { parseBulkShowsCsv } from './bulkCsv';
 
 export async function action({ request, context }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const csv = formData.get('csv')?.toString() ?? '';
-  const parsed = parseBulkShowsCsv(csv);
-
-  if (parsed.errors.length > 0) {
-    return { csv, errors: parsed.errors };
-  }
-
-  const result = await mutate({
-    context,
-    request,
-    mutation: bulkCreateShowsMutation,
-    variables: { input: parsed.shows },
-  });
-  const imported = result.bulkCreateShows;
-
-  if (!imported) {
-    return {
-      csv,
-      errors: [{ line: 1, message: 'The shows could not be imported. Please try again.' }],
-    };
-  }
-
-  const search = new URLSearchParams({
-    artistsCreated: imported.artistsCreated.toString(),
-    imported: imported.showsCreated.toString(),
-    venuesCreated: imported.venuesCreated.toString(),
-  });
-  return redirect(`/admin/show?${search.toString()}`);
+  const gql = graphqlClient({ request, context });
+  return respond(await importShows({ gql, formData: await request.formData() }));
 }
 
 export default function BulkShowAdd({ actionData }: Route.ComponentProps) {
@@ -102,13 +73,3 @@ export default function BulkShowAdd({ actionData }: Route.ComponentProps) {
     </>
   );
 }
-
-const bulkCreateShowsMutation = gql`
-  mutation BulkCreateShows($input: [BulkCreateShowInput!]!) {
-    bulkCreateShows(input: $input) {
-      artistsCreated
-      showsCreated
-      venuesCreated
-    }
-  }
-`;

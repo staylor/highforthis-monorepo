@@ -5,37 +5,20 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { useFetcher, useLoaderData, useRevalidator } from 'react-router';
 
 import { Heading1, Heading2 } from '#/components/Heading';
-
-import { passkeyApi } from './server';
+import { deletePasskey, listPasskeys } from '#/server/passkeys';
 import type {
-  PasskeyListResponse,
   RegistrationOptionsResponse,
   RegistrationVerificationRequest,
-} from './types';
+} from '#/types/passkeys';
+import { graphqlAuth } from '#/utils/route.server';
 
-export async function loader({ request, context }: LoaderFunctionArgs) {
-  return passkeyApi<PasskeyListResponse>({
-    request,
-    context,
-    path: '',
-  });
+export async function loader(args: LoaderFunctionArgs) {
+  return listPasskeys(await graphqlAuth(args));
 }
 
-export async function action({ request, context }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const credentialId = formData.get('credentialId');
-  if (typeof credentialId !== 'string') {
-    throw new Error('Passkey ID is required');
-  }
-
-  await passkeyApi({
-    request,
-    context,
-    path: `/${encodeURIComponent(credentialId)}`,
-    init: { method: 'DELETE' },
-  });
-
-  return { deleted: true };
+export async function action(args: ActionFunctionArgs) {
+  const auth = await graphqlAuth(args);
+  return deletePasskey({ ...auth, formData: await args.request.formData() });
 }
 
 export default function Passkeys() {

@@ -1,16 +1,8 @@
 import cn from 'classnames';
-import { gql } from 'graphql-tag';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Form,
-  redirect,
-  useLocation,
-  useNavigate,
-  useNavigation,
-  useSearchParams,
-} from 'react-router';
+import { Form, useLocation, useNavigate, useNavigation, useSearchParams } from 'react-router';
 
 import { Alert, Heading } from '#/components/Admin/styles';
 import Button from '#/components/Button';
@@ -18,9 +10,10 @@ import Message from '#/components/Form/Message';
 import Select from '#/components/Form/Select';
 import { inputBase } from '#/components/Form/styles';
 import Link from '#/components/Link';
+import { importListings, loadVenueListings } from '#/server/listings';
 import type { VenueListingsAdminQuery } from '#/types/graphql';
-import mutate from '#/utils/mutate';
-import query from '#/utils/query';
+import { graphqlClient, respond } from '#/utils/route.server';
+import { splitArtists } from '#/utils/splitArtists';
 
 import type { Route } from './+types/listings';
 
@@ -28,46 +21,14 @@ type VenueListings = NonNullable<VenueListingsAdminQuery['venueListings']>;
 type Listing = VenueListings['listings'][number];
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  return query<VenueListingsAdminQuery>({
-    request,
-    context,
-    query: listingsQuery,
-    variables: { venueId: params.venueId ?? '', withListings: Boolean(params.venueId) },
-  });
+  return loadVenueListings({ gql: graphqlClient({ request, context }), venueId: params.venueId });
 }
 
-const splitArtists = (value: string) =>
-  value
-    .split(';')
-    .map((name) => name.trim())
-    .filter(Boolean);
-
 export async function action({ request, context, params }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const input = formData.getAll('selected').map((value) => {
-    const sourceId = value.toString();
-    return {
-      sourceId,
-      artists: splitArtists(formData.get(`artists-${sourceId}`)?.toString() ?? ''),
-    };
-  });
-
-  const result = await mutate({
-    context,
-    request,
-    mutation: importMutation,
-    variables: { venueId: params.venueId, input },
-  });
-  const imported = result.importListings;
-  if (!imported) {
-    return { failed: true };
-  }
-
-  const search = new URLSearchParams({
-    added: imported.showsCreated.toString(),
-    artistsCreated: imported.artistsCreated.toString(),
-  });
-  return redirect(`/admin/show/listings/${params.venueId}?${search.toString()}`);
+  const gql = graphqlClient({ request, context });
+  return respond(
+    await importListings({ gql, venueId: params.venueId, formData: await request.formData() })
+  );
 }
 
 function formatDay(localDate: string) {
@@ -320,45 +281,3 @@ export default function Listings({ loaderData, actionData, params }: Route.Compo
     </>
   );
 }
-
-const listingsQuery = gql`
-  query VenueListingsAdmin($venueId: String!, $withListings: Boolean!) {
-    venues(first: 500) {
-      edges {
-        node {
-          id
-          listingsUrl
-          name
-        }
-      }
-    }
-    venueListings(venueId: $venueId) @include(if: $withListings) {
-      error
-      listings {
-        cancelled
-        dateChanged
-        headliners
-        localDate
-        localTime
-        newArtists
-        show {
-          id
-        }
-        sourceId
-        status
-        support
-        url
-      }
-      source
-    }
-  }
-`;
-
-const importMutation = gql`
-  mutation ImportListings($venueId: String!, $input: [ImportListingInput!]!) {
-    importListings(venueId: $venueId, input: $input) {
-      artistsCreated
-      showsCreated
-    }
-  }
-`;

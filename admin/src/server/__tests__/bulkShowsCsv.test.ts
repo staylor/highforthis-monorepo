@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseBulkShowsCsv } from '../bulkCsv';
+import { parseBulkShowsCsv } from '../bulkShowsCsv';
 
 describe('parseBulkShowsCsv', () => {
   it('parses a header and shorthand dates', () => {

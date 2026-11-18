@@ -1,27 +1,21 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import Crops from '#/components/Admin/Settings/Crops';
 import SettingsForm from '#/components/Admin/Settings/Form';
+import { loadMediaSettings, updateMediaSettings } from '#/server/settings';
 import type { Fields } from '#/types';
-import type { MediaSettings, MediaSettingsQuery } from '#/types/graphql';
-import { handleSubmission } from '#/utils/action';
-import query from '#/utils/query';
+import type { MediaSettings } from '#/types/graphql';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/media';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  return query<MediaSettingsQuery>({ request, context, query: settingsQuery });
+  return loadMediaSettings({ gql: graphqlClient({ request, context }) });
 }
 
-export async function action({ context, request, url }: Route.ActionArgs) {
-  return handleSubmission({
-    context,
-    request,
-    url,
-    mutation: settingsMutation,
-    variables: { id: 'media' },
-  });
+export async function action({ request, context, url }: Route.ActionArgs) {
+  const gql = graphqlClient({ request, context });
+  return respond(await updateMediaSettings({ gql, formData: await request.formData(), url }));
 }
 
 export default function MediaSettingsRoute({ loaderData }: Route.ComponentProps) {
@@ -44,24 +38,3 @@ export default function MediaSettingsRoute({ loaderData }: Route.ComponentProps)
     />
   );
 }
-
-const settingsQuery = gql`
-  query MediaSettings {
-    mediaSettings {
-      crops {
-        height
-        name
-        width
-      }
-      id
-    }
-  }
-`;
-
-const settingsMutation = gql`
-  mutation UpdateMediaSettings($id: String!, $input: MediaSettingsInput!) {
-    updateMediaSettings(id: $id, input: $input) {
-      id
-    }
-  }
-`;
