@@ -1,6 +1,7 @@
-import cn from 'classnames';
 import { useState } from 'react';
 import type { InputHTMLAttributes } from 'react';
+
+import { cn } from '#/utils/cn';
 
 export default function Checkbox({
   className,

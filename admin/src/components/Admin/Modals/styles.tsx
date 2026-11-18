@@ -1,4 +1,4 @@
-import cn from 'classnames';
+import { cn } from '#/utils/cn';
 
 export const modalClass = cn(
   'bg-white border-2 border-dark fixed z-top',

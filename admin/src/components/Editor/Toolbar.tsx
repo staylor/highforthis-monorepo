@@ -1,5 +1,6 @@
-import cn from 'classnames';
 import type { HTMLAttributes, RefAttributes } from 'react';
+
+import { cn } from '#/utils/cn';
 
 type Props = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>;
 

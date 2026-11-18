@@ -1,7 +1,7 @@
-import cn from 'classnames';
 import type { CSSProperties } from 'react';
 
 import Icon from '#/components/Icon';
+import { cn } from '#/utils/cn';
 
 interface Props {
   active: boolean;

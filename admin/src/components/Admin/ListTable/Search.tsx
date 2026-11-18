@@ -1,6 +1,5 @@
-import debounce from 'lodash.debounce';
-
 import Input from '#/components/Form/Input';
+import { debounce } from '#/utils/debounce';
 
 import { useUpdateQuery } from './utils';
 

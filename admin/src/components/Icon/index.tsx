@@ -1,5 +1,6 @@
-import cn from 'classnames';
 import type { SVGProps } from 'react';
+
+import { cn } from '#/utils/cn';
 
 /**
  * Minimal, dependency-free icon set for the admin UI (navigation, editor toolbars, dismiss

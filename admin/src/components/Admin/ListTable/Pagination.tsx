@@ -1,9 +1,9 @@
-import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useSearchParams } from 'react-router';
 
 import Link from '#/components/Link';
+import { cn } from '#/utils/cn';
 
 const textClass = cn(
   'border border-detail',

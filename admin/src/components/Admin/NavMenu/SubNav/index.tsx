@@ -1,7 +1,7 @@
-import cn from 'classnames';
 import { NavLink } from 'react-router';
 
 import type { AdminTopLevelRoute } from '#/types';
+import { cn } from '#/utils/cn';
 
 import { adminPath } from '../utils';
 

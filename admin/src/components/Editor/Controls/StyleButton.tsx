@@ -1,5 +1,6 @@
-import cn from 'classnames';
 import type { ReactNode, SyntheticEvent } from 'react';
+
+import { cn } from '#/utils/cn';
 
 interface StyleButtonProps {
   style: string;

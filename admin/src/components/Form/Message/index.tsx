@@ -1,8 +1,8 @@
-import cn from 'classnames';
 import type { SyntheticEvent } from 'react';
 import { useSearchParams } from 'react-router';
 
 import Icon from '#/components/Icon';
+import { cn } from '#/utils/cn';
 
 interface MessageProps {
   dismissable?: boolean;

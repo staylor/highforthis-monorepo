@@ -1,5 +1,6 @@
-import cn from 'classnames';
 import type { HTMLAttributes } from 'react';
+
+import { cn } from '#/utils/cn';
 
 export const headingBase = 'block mb-2 lg:mb-3 dark:text-white';
 

@@ -1,5 +1,6 @@
-import cn from 'classnames';
 import type { HTMLAttributes } from 'react';
+
+import { cn } from '#/utils/cn';
 
 const Controls = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div

@@ -1,4 +1,4 @@
-import cn from 'classnames';
+import { cn } from '#/utils/cn';
 
 const bounceClass = cn('bg-dark absolute top-0 left-0 rounded-full opacity-60 size-full');
 
