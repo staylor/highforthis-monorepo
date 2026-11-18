@@ -46,6 +46,8 @@ Public pages only read the admin's session cookie to know someone is signed in, 
 
 RUM tracks views manually: Remix navigates with the browser's Navigation API, which the RUM SDK doesn't watch, so `app/actions/public/rum.ts` starts a view on load and after each navigation.
 
+The browser loads the OpenObserve SDKs as their prebuilt bundles, served from `/vendor/openobserve-rum@<version>/` and `/vendor/openobserve-logs@<version>/` by `app/lib/openobserve-bundles.ts`. Served through the asset server, they would be about 275 separate modules, each with an import map entry on every page.
+
 ## Production
 
 ```bash

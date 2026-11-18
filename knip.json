@@ -45,11 +45,6 @@
       ],
       "ignore": [
         "app/types/graphql.ts"
-      ],
-      "ignoreDependencies": [
-        "@openobserve/browser-core",
-        "@openobserve/browser-rum-core",
-        "@openobserve/js-core"
       ]
     },
     "admin": {

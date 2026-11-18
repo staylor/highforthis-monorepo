@@ -430,21 +430,12 @@ importers:
       '@highforthis/shared':
         specifier: workspace:*
         version: link:../shared
-      '@openobserve/browser-core':
-        specifier: 0.4.1
-        version: 0.4.1
       '@openobserve/browser-logs':
         specifier: 0.4.1
         version: 0.4.1(@openobserve/browser-rum@0.4.1)
       '@openobserve/browser-rum':
         specifier: 0.4.1
         version: 0.4.1(@openobserve/browser-logs@0.4.1)
-      '@openobserve/browser-rum-core':
-        specifier: 0.4.1
-        version: 0.4.1
-      '@openobserve/js-core':
-        specifier: 0.4.1
-        version: 0.4.1
       graphql:
         specifier: 16.13.0
         version: 16.13.0

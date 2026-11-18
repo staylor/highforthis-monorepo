@@ -1,12 +1,40 @@
-import { openobserveLogs } from '@openobserve/browser-logs';
-import { openobserveRum } from '@openobserve/browser-rum';
+import type { openobserveLogs } from '@openobserve/browser-logs';
+import type { openobserveRum } from '@openobserve/browser-rum';
 
 import type { OpenObserveRumConfig } from '../../lib/rum.ts';
+
+// The SDKs are loaded as their prebuilt bundles (see lib/openobserve-bundles.ts), which set
+// these globals. Only their types are imported, so the asset server never serves the SDKs'
+// own modules.
+declare global {
+  interface Window {
+    OO_RUM?: typeof openobserveRum;
+    OO_LOGS?: typeof openobserveLogs;
+  }
+}
+
+function loadScript(src: string) {
+  return new Promise<void>((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Could not load ${src}`));
+    document.head.append(script);
+  });
+}
 
 // Remix navigates with the browser's Navigation API rather than history.pushState, which the
 // RUM SDK watches to start views. So views are started here: one on load and one after each
 // navigation, which is what the admin dashboard counts as page views.
-export function startRum(config: OpenObserveRumConfig) {
+export async function startRum(config: OpenObserveRumConfig) {
+  await Promise.all([loadScript(config.scripts.rum), loadScript(config.scripts.logs)]);
+  const rum = window.OO_RUM;
+  const logs = window.OO_LOGS;
+  if (!rum || !logs) {
+    throw new Error('The OpenObserve SDK bundles loaded without setting their globals');
+  }
+
   const commonOptions = {
     clientToken: config.clientToken,
     site: config.site,
@@ -18,7 +46,7 @@ export function startRum(config: OpenObserveRumConfig) {
     insecureHTTP: config.insecureHTTP,
   };
 
-  openobserveRum.init({
+  rum.init({
     ...commonOptions,
     applicationId: config.applicationId,
     sessionSampleRate: config.sessionSampleRate,
@@ -32,17 +60,17 @@ export function startRum(config: OpenObserveRumConfig) {
     defaultPrivacyLevel: 'mask-user-input',
   });
 
-  openobserveLogs.init({
+  logs.init({
     ...commonOptions,
     sessionSampleRate: config.sessionSampleRate,
     forwardErrorsToLogs: true,
   });
 
   if (config.sessionReplaySampleRate > 0) {
-    openobserveRum.startSessionReplayRecording();
+    rum.startSessionReplayRecording();
   }
 
-  const startView = () => openobserveRum.startView({ name: window.location.pathname });
+  const startView = () => rum.startView({ name: window.location.pathname });
   startView();
   (window as Window & { navigation?: EventTarget }).navigation?.addEventListener(
     'navigatesuccess',
