@@ -1,6 +1,7 @@
-import Link from '@highforthis/shared/components/Link';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
+
+import Link from '@highforthis/shared/components/Link';
 
 import PostArtwork from '#/components/PostArtwork';
 import SectionHeader from '#/components/SectionHeader';

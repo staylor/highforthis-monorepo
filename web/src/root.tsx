@@ -1,9 +1,3 @@
-import { isAuthenticated } from '@highforthis/shared/auth';
-import { TWITTER_USERNAME } from '@highforthis/shared/constants';
-import { graphqlHostContext } from '@highforthis/shared/context';
-import { appQuery } from '@highforthis/shared/root.graphql';
-import query from '@highforthis/shared/utils/query';
-import titleTemplate, { type TitleProps } from '@highforthis/shared/utils/title';
 import type { LinksFunction, MetaFunction } from 'react-router';
 import {
   Links,
@@ -14,6 +8,13 @@ import {
   isRouteErrorResponse,
   useRouteError,
 } from 'react-router';
+
+import { isAuthenticated } from '@highforthis/shared/auth';
+import { TWITTER_USERNAME } from '@highforthis/shared/constants';
+import { graphqlHostContext } from '@highforthis/shared/context';
+import { appQuery } from '@highforthis/shared/root.graphql';
+import query from '@highforthis/shared/utils/query';
+import titleTemplate, { type TitleProps } from '@highforthis/shared/utils/title';
 
 import mainStylesheetUrl from '#/styles/main.css?url';
 import type { AppQuery } from '#/types/graphql';

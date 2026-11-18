@@ -1,8 +1,9 @@
-import createI18n from '@highforthis/shared/i18n';
 import { startTransition, StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import { HydratedRouter } from 'react-router/dom';
+
+import createI18n from '@highforthis/shared/i18n';
 
 async function startOpenObserveRum() {
   const config = window.__OPENOBSERVE_RUM__;

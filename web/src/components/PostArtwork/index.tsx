@@ -1,6 +1,7 @@
-import { uploadUrl } from '@highforthis/shared/utils/media';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
+
+import { uploadUrl } from '@highforthis/shared/utils/media';
 
 import type { PostArtwork_PostFragment } from '#/types/graphql';
 

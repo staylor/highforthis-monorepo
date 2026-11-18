@@ -1,9 +1,10 @@
+import { gql } from 'graphql-tag';
+import type { MetaFunction } from 'react-router';
+
 import Video from '@highforthis/shared/components/Videos/Video';
 import query from '@highforthis/shared/utils/query';
 import { rootData } from '@highforthis/shared/utils/rootData';
 import titleTemplate from '@highforthis/shared/utils/title';
-import { gql } from 'graphql-tag';
-import type { MetaFunction } from 'react-router';
 
 import type { VideoQuery } from '#/types/graphql';
 import { createClientCache } from '#/utils/cache';

@@ -1,7 +1,8 @@
-import Button from '@highforthis/shared/components/Button';
 import type { ThHTMLAttributes, TdHTMLAttributes, SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import Button from '@highforthis/shared/components/Button';
 
 import type { InputProps } from '#/components/Form/Input';
 import Input from '#/components/Form/Input';

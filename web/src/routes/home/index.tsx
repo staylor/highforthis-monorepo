@@ -1,5 +1,6 @@
-import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
+
+import query from '@highforthis/shared/utils/query';
 
 import PostArtwork from '#/components/PostArtwork';
 import SectionHeader, { AccentLine } from '#/components/SectionHeader';

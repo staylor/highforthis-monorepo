@@ -2,10 +2,11 @@ import http from 'node:http';
 
 import { ApolloServer, HeaderMap } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
 import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
+
+import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
 
 import { authMiddleware, jwtMiddleware, sessionHandler } from './authentication';
 import { adminMiddleware } from './authorization';

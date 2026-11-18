@@ -1,6 +1,7 @@
+import escape from 'html-escape';
+
 import { uploadUrl } from '@highforthis/shared/utils/media';
 import query from '@highforthis/shared/utils/query';
-import escape from 'html-escape';
 
 import type {
   AudioUpload,

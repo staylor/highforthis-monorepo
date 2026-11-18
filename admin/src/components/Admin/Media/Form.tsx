@@ -1,6 +1,7 @@
-import { uploadUrl } from '@highforthis/shared/utils/media';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
+
+import { uploadUrl } from '@highforthis/shared/utils/media';
 
 import Form from '#/components/Admin/Form';
 import { Heading } from '#/components/Admin/styles';

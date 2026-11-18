@@ -1,9 +1,10 @@
-import Button from '@highforthis/shared/components/Button';
-import Link from '@highforthis/shared/components/Link';
-import { formatArtists, formatDate } from '@highforthis/shared/components/Shows/utils';
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import Button from '@highforthis/shared/components/Button';
+import Link from '@highforthis/shared/components/Link';
+import { formatArtists, formatDate } from '@highforthis/shared/components/Shows/utils';
 
 import type { ShowConnection } from '#/types/graphql';
 

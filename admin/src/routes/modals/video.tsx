@@ -1,7 +1,8 @@
 import type { OperationVariables } from '@apollo/client';
+import { gql } from 'graphql-tag';
+
 import Video from '@highforthis/shared/components/Videos/Video';
 import query from '@highforthis/shared/utils/query';
-import { gql } from 'graphql-tag';
 
 import type { VideoModalQuery } from '#/types/graphql';
 

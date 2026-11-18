@@ -1,8 +1,9 @@
+import { gql } from 'graphql-tag';
+import type { MetaFunction } from 'react-router';
+
 import { uploadUrl } from '@highforthis/shared/utils/media';
 import query from '@highforthis/shared/utils/query';
 import { rootData } from '@highforthis/shared/utils/rootData';
-import { gql } from 'graphql-tag';
-import type { MetaFunction } from 'react-router';
 
 import Podcast from '#/components/Podcast';
 import { metaTags } from '#/components/Podcast/utils';

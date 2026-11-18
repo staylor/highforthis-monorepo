@@ -1,9 +1,10 @@
-import Link from '@highforthis/shared/components/Link';
-import query from '@highforthis/shared/utils/query';
-import { rootData, useRootData } from '@highforthis/shared/utils/rootData';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import type { MetaFunction } from 'react-router';
+
+import Link from '@highforthis/shared/components/Link';
+import query from '@highforthis/shared/utils/query';
+import { rootData, useRootData } from '@highforthis/shared/utils/rootData';
 
 import Podcast from '#/components/Podcast';
 import { metaTags } from '#/components/Podcast/utils';

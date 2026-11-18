@@ -1,9 +1,10 @@
-import Select from '@highforthis/shared/components/Form/Select';
 import cn from 'classnames';
 import type { ReactNode, ChangeEvent } from 'react';
 import { useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router';
+
+import Select from '@highforthis/shared/components/Form/Select';
 
 import Checkbox from '#/components/Form/Checkbox';
 import type { Column, Columns } from '#/types';

@@ -1,7 +1,8 @@
-import { getItem, setItem, removeItem } from '@highforthis/shared/utils/storage';
 import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { getItem, setItem, removeItem } from '@highforthis/shared/utils/storage';
 
 const STORAGE_KEY = 'darkMode';
 

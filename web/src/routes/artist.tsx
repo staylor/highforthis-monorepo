@@ -1,6 +1,7 @@
+import { gql } from 'graphql-tag';
+
 import { Heading1 } from '@highforthis/shared/components/Heading';
 import query from '@highforthis/shared/utils/query';
-import { gql } from 'graphql-tag';
 
 import Metadata from '#/components/Artist/Metadata';
 import Shows from '#/components/Shows';

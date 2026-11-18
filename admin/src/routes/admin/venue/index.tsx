@@ -1,7 +1,8 @@
-import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
+
+import query from '@highforthis/shared/utils/query';
 
 import { name, slug, excludeFromSearch, website } from '#/components/Admin/Entity/ListTable';
 import ListTable, { Thumbnail } from '#/components/Admin/ListTable';

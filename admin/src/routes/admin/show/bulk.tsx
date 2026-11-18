@@ -1,7 +1,8 @@
-import Button from '@highforthis/shared/components/Button';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { redirect } from 'react-router';
+
+import Button from '@highforthis/shared/components/Button';
 
 import { FormWrap, HeaderAdd, Heading } from '#/components/Admin/styles';
 import Textarea from '#/components/Form/Textarea';

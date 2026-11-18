@@ -1,5 +1,6 @@
-import { createLogger } from '@highforthis/shared/logger';
 import { z } from 'zod';
+
+import { createLogger } from '@highforthis/shared/logger';
 
 import env from '#/env';
 

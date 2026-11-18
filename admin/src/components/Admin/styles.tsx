@@ -1,9 +1,10 @@
-import { buttonClasses } from '@highforthis/shared/components/Button';
-import { heading1 } from '@highforthis/shared/components/Heading';
-import Link, { type CustomLinkProps } from '@highforthis/shared/components/Link';
 import cn from 'classnames';
 import type { HTMLAttributes, PropsWithChildren } from 'react';
 import { useLocation } from 'react-router';
+
+import { buttonClasses } from '@highforthis/shared/components/Button';
+import { heading1 } from '@highforthis/shared/components/Heading';
+import Link, { type CustomLinkProps } from '@highforthis/shared/components/Link';
 
 export const Heading = ({ className, children, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
   <h1

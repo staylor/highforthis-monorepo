@@ -1,7 +1,8 @@
-import { uploadUrl } from '@highforthis/shared/utils/media';
 import type { SyntheticEvent } from 'react';
 import { useRef } from 'react';
 import ReactDOM from 'react-dom';
+
+import { uploadUrl } from '@highforthis/shared/utils/media';
 
 import Loading from '#/components/Loading';
 import type { SelectedImage, SelectedImageData } from '#/types/admin';

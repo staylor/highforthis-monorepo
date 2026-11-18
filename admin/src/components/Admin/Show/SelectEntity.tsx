@@ -1,6 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
 import Select from '@highforthis/shared/components/Form/Select';
 import Link from '@highforthis/shared/components/Link';
-import { useTranslation } from 'react-i18next';
 
 import { sortNodes, type EntityNode } from './utils';
 
