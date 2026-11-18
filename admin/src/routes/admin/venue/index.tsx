@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
@@ -8,46 +7,22 @@ import Search from '#/components/Admin/ListTable/Search';
 import PermanentlyClosed from '#/components/Admin/Venue/PermanentlyClosed';
 import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
+import { deleteVenues, loadVenues, setVenueFlag } from '#/server/venues';
 import type { Columns } from '#/types';
-import type { VenuesAdminQuery } from '#/types/graphql';
-import { handleDelete } from '#/utils/action';
-import { addPageOffset, addSearchParam } from '#/utils/listVariables';
-import mutate, { parseFormData } from '#/utils/mutate';
-import query from '#/utils/query';
+import { deleteAction, graphqlClient } from '#/utils/route.server';
 
 import type { Route } from './+types/index';
 
 export async function loader({ request, context, url }: Route.LoaderArgs) {
-  const variables = addSearchParam(url, addPageOffset(url));
-  return query<VenuesAdminQuery>({
-    request,
-    context,
-    query: venuesQuery,
-    variables,
-  });
+  return loadVenues({ gql: graphqlClient({ request, context }), searchParams: url.searchParams });
 }
 
-export async function action({ request, context, url }: Route.ActionArgs) {
+export async function action(args: Route.ActionArgs) {
+  const { request } = args;
   if (request.method === 'POST') {
-    const { id, excludeFromSearch, permanentlyClosed, formAction } = await parseFormData(request);
-    let input;
-    if (formAction === 'excludeFromSearch') {
-      input = { excludeFromSearch };
-    } else if (formAction === 'permanentlyClosed') {
-      input = { permanentlyClosed };
-    }
-
-    return mutate({
-      context,
-      request,
-      mutation: updateMutation,
-      variables: {
-        id,
-        input,
-      },
-    });
+    return setVenueFlag({ gql: graphqlClient(args), formData: await request.formData() });
   }
-  return handleDelete({ request, url, context, mutation: deleteMutation });
+  return deleteAction(args, deleteVenues);
 }
 
 export default function Venues({ loaderData }: Route.ComponentProps) {
@@ -96,51 +71,3 @@ export default function Venues({ loaderData }: Route.ComponentProps) {
     </>
   );
 }
-
-const venuesQuery = gql`
-  query VenuesAdmin($after: String, $first: Int, $search: String) {
-    venues(after: $after, first: $first, search: $search) @cache(key: "admin") {
-      count
-      edges {
-        node {
-          address
-          capacity
-          excludeFromSearch
-          featuredMedia {
-            ... on ImageUpload {
-              crops {
-                fileName
-                width
-              }
-              destination
-              id
-              type
-            }
-          }
-          id
-          name
-          permanentlyClosed
-          slug
-          website
-        }
-      }
-      pageInfo {
-        hasNextPage
-      }
-    }
-  }
-`;
-
-const updateMutation = gql`
-  mutation UpdateVenueExclude($id: String!, $input: UpdateVenueInput!) {
-    updateVenue(id: $id, input: $input) {
-      id
-    }
-  }
-`;
-
-const deleteMutation = gql`
-  mutation DeleteVenue($ids: [String]!) {
-    removeVenue(ids: $ids)
-  }
-`;

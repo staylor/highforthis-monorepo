@@ -1,20 +1,14 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import VenueForm from '#/components/Admin/Venue/Form';
-import { handleSubmission } from '#/utils/action';
+import { createVenue } from '#/server/venues';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/add';
 
 export async function action({ request, context, url }: Route.ActionArgs) {
-  return handleSubmission({
-    request,
-    url,
-    context,
-    mutation: venueMutation,
-    createMutation: 'createVenue',
-    parseFormDataArgs: { skipKeys: ['capacity', 'postalCode'] },
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(await createVenue({ gql, formData: await request.formData(), url }));
 }
 
 export default function VenueAdd() {
@@ -22,12 +16,3 @@ export default function VenueAdd() {
   const label = t('venues.add');
   return <VenueForm heading={label} buttonLabel={label} />;
 }
-
-const venueMutation = gql`
-  mutation CreateVenue($input: CreateVenueInput!) {
-    createVenue(input: $input) {
-      ...VenueForm_venue
-    }
-  }
-  ${VenueForm.fragments.venue}
-`;

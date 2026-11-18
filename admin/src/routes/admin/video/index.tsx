@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
@@ -8,28 +7,19 @@ import { useUpdateQuery } from '#/components/Admin/ListTable/utils';
 import { Heading } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import Select from '#/components/Form/Select';
+import { deleteVideos, loadVideos } from '#/server/videos';
 import type { Columns } from '#/types';
-import type { Video, VideosAdminQuery } from '#/types/graphql';
-import { handleDelete } from '#/utils/action';
-import { addPageOffset } from '#/utils/listVariables';
-import query from '#/utils/query';
+import type { Video } from '#/types/graphql';
+import { deleteAction, graphqlClient } from '#/utils/route.server';
 
 import type { Route } from './+types/index';
 
 export async function loader({ request, context, url }: Route.LoaderArgs) {
-  const variables = addPageOffset(url);
-  ['search', 'year'].forEach((key) => {
-    const value = url.searchParams.get(key);
-    if (value) {
-      variables[key] = key === 'year' ? Number(value) : value;
-    }
-  });
-
-  return query<VideosAdminQuery>({ request, context, query: videosQuery, variables });
+  return loadVideos({ gql: graphqlClient({ request, context }), searchParams: url.searchParams });
 }
 
-export async function action({ request, context, url }: Route.ActionArgs) {
-  return handleDelete({ request, url, context, mutation: videoMutation });
+export async function action(args: Route.ActionArgs) {
+  return deleteAction(args, deleteVideos);
 }
 
 export default function Videos({ loaderData }: Route.ComponentProps) {
@@ -102,30 +92,3 @@ export default function Videos({ loaderData }: Route.ComponentProps) {
     </>
   );
 }
-
-const videosQuery = gql`
-  query VideosAdmin($after: String, $first: Int, $search: String, $year: Int) {
-    videos(after: $after, first: $first, search: $search, year: $year) @cache(key: "admin") {
-      count
-      edges {
-        node {
-          id
-          publishedAt
-          slug
-          title
-          year
-        }
-      }
-      pageInfo {
-        hasNextPage
-      }
-      years
-    }
-  }
-`;
-
-const videoMutation = gql`
-  mutation DeleteVideo($ids: [String]!) {
-    removeVideo(ids: $ids)
-  }
-`;

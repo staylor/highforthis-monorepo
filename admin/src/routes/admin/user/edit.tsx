@@ -1,25 +1,18 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import UserForm from '#/components/Admin/User/Form';
-import type { UserEditQuery } from '#/types/graphql';
-import { handleSubmission } from '#/utils/action';
-import query from '#/utils/query';
+import { loadUser, updateUser } from '#/server/users';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/edit';
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  return query<UserEditQuery>({ request, context, query: userQuery, variables: { id: params.id } });
+  return loadUser({ gql: graphqlClient({ request, context }), id: params.id });
 }
 
 export async function action({ request, context, params, url }: Route.ActionArgs) {
-  return handleSubmission({
-    request,
-    url,
-    context,
-    mutation: userMutation,
-    variables: { id: params.id },
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(await updateUser({ gql, id: params.id, formData: await request.formData(), url }));
 }
 
 export default function UserEdit({ loaderData }: Route.ComponentProps) {
@@ -31,21 +24,3 @@ export default function UserEdit({ loaderData }: Route.ComponentProps) {
 
   return <UserForm data={user} heading={t('users.edit')} buttonLabel={t('users.update')} />;
 }
-
-const userQuery = gql`
-  query UserEdit($id: String!) {
-    user(id: $id) {
-      ...UserForm_user
-    }
-  }
-  ${UserForm.fragments.user}
-`;
-
-const userMutation = gql`
-  mutation UpdateUser($id: String!, $input: UpdateUserInput!) {
-    updateUser(id: $id, input: $input) {
-      ...UserForm_user
-    }
-  }
-  ${UserForm.fragments.user}
-`;

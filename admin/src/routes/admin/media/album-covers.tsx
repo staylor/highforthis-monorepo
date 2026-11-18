@@ -1,42 +1,29 @@
 import cn from 'classnames';
-import { gql } from 'graphql-tag';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Form, redirect, useLocation, useNavigation } from 'react-router';
+import { Form, useLocation, useNavigation } from 'react-router';
 
 import Search from '#/components/Admin/ListTable/Search';
 import { Alert, Heading } from '#/components/Admin/styles';
 import Button from '#/components/Button';
+import { addAlbumCovers, searchAlbumCovers } from '#/server/media';
 import type { AlbumCoversAdminQuery } from '#/types/graphql';
-import mutate from '#/utils/mutate';
-import query from '#/utils/query';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/album-covers';
 
 type Album = AlbumCoversAdminQuery['appleMusicAlbums']['albums'][number];
 
 export async function loader({ request, context, url }: Route.LoaderArgs) {
-  const term = url.searchParams.get('search')?.trim();
-  if (!term) {
-    return { appleMusicAlbums: null };
-  }
-  return query<AlbumCoversAdminQuery>({
-    request,
-    context,
-    query: albumsQuery,
-    variables: { term },
+  return searchAlbumCovers({
+    gql: graphqlClient({ request, context }),
+    searchParams: url.searchParams,
   });
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const ids = formData.getAll('selected').map(String);
-  const result = await mutate({ context, request, mutation: addMutation, variables: { ids } });
-  const added: { id: string }[] | undefined = result.addAlbumCovers;
-  if (!added) {
-    return { failed: true };
-  }
-  return redirect(`/admin/media?added=${added.length}`);
+  const gql = graphqlClient({ request, context });
+  return respond(await addAlbumCovers({ gql, formData: await request.formData() }));
 }
 
 function Covers({ albums }: { albums: Album[] }) {
@@ -132,30 +119,3 @@ export default function AlbumCovers({ loaderData, actionData }: Route.ComponentP
     </>
   );
 }
-
-const albumsQuery = gql`
-  query AlbumCoversAdmin($term: String!) {
-    appleMusicAlbums(term: $term) {
-      albums {
-        id
-        name
-        artistName
-        releaseDate
-        cover(size: 600)
-        artwork {
-          width
-          height
-        }
-      }
-      error
-    }
-  }
-`;
-
-const addMutation = gql`
-  mutation AddAlbumCovers($ids: [String!]!) {
-    addAlbumCovers(ids: $ids) {
-      id
-    }
-  }
-`;

@@ -5,14 +5,16 @@ import { offsetToCursor } from '#/utils/connection';
 
 // Builds a list query's variables from the admin list pages' ?page= and ?search= params.
 
-export const addPageOffset = (url: URL, listVariables?: OperationVariables) => {
-  const params = url.searchParams;
+export const addPageOffset = (
+  searchParams: URLSearchParams,
+  listVariables?: OperationVariables
+) => {
   const variables = listVariables || {};
   if (!variables.first) {
     variables.first = PER_PAGE;
   }
-  if (params.has('page')) {
-    const pageOffset = Number(params.get('page')) - 1;
+  if (searchParams.has('page')) {
+    const pageOffset = Number(searchParams.get('page')) - 1;
     if (pageOffset > 0) {
       variables.after = offsetToCursor(pageOffset * variables.first - 1);
     }
@@ -20,9 +22,12 @@ export const addPageOffset = (url: URL, listVariables?: OperationVariables) => {
   return variables;
 };
 
-export const addSearchParam = (url: URL, listVariables?: OperationVariables) => {
+export const addSearchParam = (
+  searchParams: URLSearchParams,
+  listVariables?: OperationVariables
+) => {
   const variables = listVariables || {};
-  const value = url.searchParams.get('search');
+  const value = searchParams.get('search');
   if (value) {
     variables.search = value;
   }

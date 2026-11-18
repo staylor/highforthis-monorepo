@@ -1,30 +1,21 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import MediaForm from '#/components/Admin/Media/Form';
-import type { MediaAdminQuery, MediaUpload } from '#/types/graphql';
-import { handleSubmission } from '#/utils/action';
-import query from '#/utils/query';
+import { loadMedia, updateMedia } from '#/server/media';
+import type { MediaUpload } from '#/types/graphql';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/edit';
 
 export async function loader({ params, request, context }: Route.LoaderArgs) {
-  return query<MediaAdminQuery>({
-    request,
-    context,
-    query: mediaQuery,
-    variables: { id: params.id },
-  });
+  return loadMedia({ gql: graphqlClient({ request, context }), id: params.id });
 }
 
 export async function action({ request, context, params, url }: Route.ActionArgs) {
-  return handleSubmission({
-    request,
-    url,
-    context,
-    mutation: mediaMutation,
-    variables: { id: params.id },
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(
+    await updateMedia({ gql, id: params.id, formData: await request.formData(), url })
+  );
 }
 
 export default function MediaEdit({ loaderData }: Route.ComponentProps) {
@@ -42,21 +33,3 @@ export default function MediaEdit({ loaderData }: Route.ComponentProps) {
     />
   );
 }
-
-const mediaQuery = gql`
-  query MediaAdmin($id: String!) {
-    media(id: $id) {
-      ...MediaForm_media
-    }
-  }
-  ${MediaForm.fragments.media}
-`;
-
-const mediaMutation = gql`
-  mutation UpdateMedia($id: String!, $input: UpdateMediaUploadInput!) {
-    updateMediaUpload(id: $id, input: $input) {
-      ...MediaForm_media
-    }
-  }
-  ${MediaForm.fragments.media}
-`;

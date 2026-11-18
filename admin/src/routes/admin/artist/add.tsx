@@ -1,23 +1,14 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import ArtistForm from '#/components/Admin/Artist/Form';
-import { handleSubmission } from '#/utils/action';
+import { createArtist } from '#/server/artists';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/add';
 
 export async function action({ request, context, url }: Route.ActionArgs) {
-  return handleSubmission({
-    request,
-    url,
-    context,
-    mutation: artistMutation,
-    createMutation: 'createArtist',
-    parseFormDataArgs: {
-      // allows "311" to be sent as string
-      skipKeys: ['name', 'slug'],
-    },
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(await createArtist({ gql, formData: await request.formData(), url }));
 }
 
 export default function ArtistAdd() {
@@ -25,12 +16,3 @@ export default function ArtistAdd() {
   const label = t('artists.add');
   return <ArtistForm heading={label} buttonLabel={label} />;
 }
-
-const artistMutation = gql`
-  mutation CreateArtist($input: CreateArtistInput!) {
-    createArtist(input: $input) {
-      ...ArtistForm_artist
-    }
-  }
-  ${ArtistForm.fragments.artist}
-`;

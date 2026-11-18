@@ -1,26 +1,19 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import SettingsForm from '#/components/Admin/Settings/Form';
+import { loadSiteSettings, updateSiteSettings } from '#/server/settings';
 import type { Fields } from '#/types';
-import type { SiteSettingsQuery } from '#/types/graphql';
-import { handleSubmission } from '#/utils/action';
-import query from '#/utils/query';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/site';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  return query<SiteSettingsQuery>({ request, context, query: settingsQuery });
+  return loadSiteSettings({ gql: graphqlClient({ request, context }) });
 }
 
 export async function action({ request, context, url }: Route.ActionArgs) {
-  return handleSubmission({
-    context,
-    request,
-    url,
-    mutation: settingsMutation,
-    variables: { id: 'site' },
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(await updateSiteSettings({ gql, formData: await request.formData(), url }));
 }
 
 export default function SiteSettings({ loaderData }: Route.ComponentProps) {
@@ -55,25 +48,3 @@ export default function SiteSettings({ loaderData }: Route.ComponentProps) {
     />
   );
 }
-
-const settingsQuery = gql`
-  query SiteSettings {
-    siteSettings {
-      copyrightText
-      emailAddress
-      id
-      language
-      siteTitle
-      siteUrl
-      tagline
-    }
-  }
-`;
-
-const settingsMutation = gql`
-  mutation UpdateSiteSettings($id: String!, $input: SiteSettingsInput!) {
-    updateSiteSettings(id: $id, input: $input) {
-      id
-    }
-  }
-`;

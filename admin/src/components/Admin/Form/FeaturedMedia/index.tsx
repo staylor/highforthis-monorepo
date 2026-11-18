@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
@@ -95,22 +94,5 @@ function FeaturedMedia({ className, type, media, buttonText = 'Set Featured Medi
     </div>
   );
 }
-
-FeaturedMedia.fragments = {
-  media: gql`
-    fragment FeaturedMedia_media on MediaUpload {
-      destination
-      fileName
-      id
-      type
-      ... on ImageUpload {
-        crops {
-          fileName
-          width
-        }
-      }
-    }
-  `,
-};
 
 export default FeaturedMedia;

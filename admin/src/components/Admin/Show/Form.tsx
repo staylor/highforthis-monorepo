@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import Form from '#/components/Admin/Form';
@@ -70,44 +69,3 @@ export default function ShowForm({ data = {}, heading, buttonLabel }: ShowFormPr
     </>
   );
 }
-
-ShowForm.fragments = {
-  show: gql`
-    fragment ShowForm_show on Show {
-      artists {
-        id
-        name
-      }
-      attended
-      date
-      id
-      notes
-      title
-      url
-      venue {
-        id
-        name
-      }
-    }
-  `,
-  entities: gql`
-    fragment ShowForm_entities on Query {
-      artists(filtered: true, first: 500) @cache(key: "admin") {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      venues(filtered: true, first: 500) @cache(key: "admin") {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-    }
-  `,
-};

@@ -1,9 +1,7 @@
-import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Form from '#/components/Admin/Form';
-import FeaturedMedia from '#/components/Admin/Form/FeaturedMedia';
 import { HeaderAdd, Heading } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import type { Fields } from '#/types';
@@ -69,26 +67,3 @@ export default function ArtistForm({ data = {}, heading, buttonLabel }: ArtistFo
     </>
   );
 }
-
-ArtistForm.fragments = {
-  artist: gql`
-    fragment ArtistForm_artist on Artist {
-      appleMusic {
-        artwork {
-          url
-        }
-        id
-      }
-      description
-      excludeFromSearch
-      featuredMedia {
-        ...FeaturedMedia_media
-      }
-      id
-      name
-      slug
-      website
-    }
-    ${FeaturedMedia.fragments.media}
-  `,
-};

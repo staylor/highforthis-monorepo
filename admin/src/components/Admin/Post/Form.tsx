@@ -1,5 +1,4 @@
 import cn from 'classnames';
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import Form from '#/components/Admin/Form';
@@ -8,8 +7,6 @@ import Tags from '#/components/Admin/Form/Tags';
 import { Heading } from '#/components/Admin/styles';
 import Button from '#/components/Button';
 import Message from '#/components/Form/Message';
-import TextNodes from '#/components/Post/TextNodes';
-import Video from '#/components/Videos/Video';
 import type { Fields } from '#/types';
 import type { Artist, Post } from '#/types/graphql';
 
@@ -103,106 +100,3 @@ export default function PostForm({ data = {} as Post, heading, buttonLabel }: Po
     </>
   );
 }
-
-PostForm.fragments = {
-  post: gql`
-    fragment PostForm_post on Post {
-      artists {
-        id
-        name
-      }
-      date
-      editorState {
-        root {
-          children {
-            ... on ElementNodeType {
-              direction
-              format
-              indent
-              type
-              version
-            }
-            ... on HeadingNode {
-              children {
-                ...TextNodes_linebreakNode
-                ...TextNodes_textNode
-              }
-              tag
-            }
-            ... on ImageNode {
-              image {
-                crops {
-                  fileName
-                  width
-                }
-                destination
-                id
-              }
-              size
-            }
-            ... on VideoNode {
-              video {
-                ...Video_video
-              }
-            }
-            ... on ElementNode {
-              children {
-                ...TextNodes_linebreakNode
-                ...TextNodes_textNode
-              }
-            }
-            ... on QuoteNode {
-              children {
-                ...TextNodes_linebreakNode
-                ...TextNodes_textNode
-              }
-            }
-            ... on CodeNode {
-              children {
-                ...TextNodes_linebreakNode
-                ...TextNodes_textNode
-              }
-              language
-            }
-            ... on ListNode {
-              children {
-                ... on ListItemNode {
-                  checked
-                  children {
-                    ...TextNodes_linebreakNode
-                    ...TextNodes_textNode
-                  }
-                  direction
-                  format
-                  indent
-                  type
-                  value
-                  version
-                }
-              }
-              listType
-              start
-            }
-          }
-          direction
-          format
-          indent
-          type
-          version
-        }
-      }
-      featuredMedia {
-        ...FeaturedMedia_media
-      }
-      id
-      slug
-      status
-      summary
-      title
-    }
-    ${TextNodes.fragments.linebreakNode}
-    ${TextNodes.fragments.textNode}
-    ${FeaturedMedia.fragments.media}
-    ${Video.fragments.video}
-  `,
-};

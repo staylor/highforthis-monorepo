@@ -1,18 +1,11 @@
 import type { ActionFunctionArgs } from 'react-router';
 
-import { passkeyApi } from './server';
-import type { RegistrationVerificationRequest } from './types';
+import { verifyPasskeyRegistration } from '#/server/passkeys';
+import type { RegistrationVerificationRequest } from '#/types/passkeys';
+import { graphqlAuth } from '#/utils/route.server';
 
-export async function action({ request, context }: ActionFunctionArgs) {
-  const body = (await request.json()) as RegistrationVerificationRequest;
-
-  return passkeyApi({
-    request,
-    context,
-    path: '/register/verify',
-    init: {
-      method: 'POST',
-      body: JSON.stringify(body),
-    },
-  });
+export async function action(args: ActionFunctionArgs) {
+  const auth = await graphqlAuth(args);
+  const body = (await args.request.json()) as RegistrationVerificationRequest;
+  return verifyPasskeyRegistration({ ...auth, body });
 }

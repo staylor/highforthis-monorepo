@@ -2,32 +2,15 @@ import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from 'reac
 
 import { isAuthenticated } from '#/auth';
 import { graphqlHostContext } from '#/context';
+import { passwordLoginEnabled, signIn } from '#/server/auth';
 import { sessionStorage } from '#/session';
-import { post } from '#/utils/action';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const session = await sessionStorage.getSession(request.headers.get('cookie'));
-  const form = await request.formData();
-  const intent = form.get('intent');
-  const graphqlHost = context.get(graphqlHostContext);
-  let user;
-
-  if (intent === 'passkey') {
-    const challengeId = form.get('challengeId');
-    const response = form.get('response');
-    if (typeof challengeId !== 'string' || typeof response !== 'string') {
-      return redirect('/login/unauthorized');
-    }
-    user = await post(`${graphqlHost}/auth/passkeys/authenticate/verify`, {
-      challengeId,
-      response: JSON.parse(response),
-    });
-  } else {
-    user = await post(`${graphqlHost}/auth`, {
-      email: form.get('email'),
-      password: form.get('password'),
-    });
-  }
+  const user = await signIn({
+    graphqlHost: context.get(graphqlHostContext),
+    formData: await request.formData(),
+  });
 
   if (user) {
     session.set('token', user.token);
@@ -46,6 +29,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   return {
-    passwordLoginEnabled: process.env.PASSWORD_LOGIN_ENABLED !== 'false',
+    passwordLoginEnabled: passwordLoginEnabled(),
   };
 }

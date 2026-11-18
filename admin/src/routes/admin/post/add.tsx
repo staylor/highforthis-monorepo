@@ -1,19 +1,14 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import PostForm from '#/components/Admin/Post/Form';
-import { handleSubmission } from '#/utils/action';
+import { createPost } from '#/server/posts';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/add';
 
 export async function action({ request, context, url }: Route.ActionArgs) {
-  return handleSubmission({
-    request,
-    url,
-    context,
-    mutation: postMutation,
-    createMutation: 'createPost',
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(await createPost({ gql, formData: await request.formData(), url }));
 }
 
 export default function PostAdd() {
@@ -21,12 +16,3 @@ export default function PostAdd() {
   const label = t('posts.add');
   return <PostForm heading={label} buttonLabel={label} />;
 }
-
-const postMutation = gql`
-  mutation CreatePost($input: CreatePostInput!) {
-    createPost(input: $input) {
-      ...PostForm_post
-    }
-  }
-  ${PostForm.fragments.post}
-`;

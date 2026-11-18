@@ -150,43 +150,6 @@ export type AppQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 export type AppQuery = { __typename?: 'Query', apiKeys?: { __typename?: 'APIKeys', googleMaps?: string | null } | null, podcastSettings: { __typename?: 'PodcastSettings', description?: string | null, feedLink?: string | null, id: string, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: string } | null }, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', id: string, name: string, slug: string } } }> } | null, siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };
 
-export type CreateArtistMutationVariables = Types.Exact<{
-  input: Types.CreateArtistInput;
-}>;
-
-
-export type CreateArtistMutation = { __typename?: 'Mutation', createArtist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
-      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
-    > | null } | null };
-
-export type ArtistEditQueryVariables = Types.Exact<{
-  id?: Types.InputMaybe<Types.Scalars['String']['input']>;
-}>;
-
-
-export type ArtistEditQuery = { __typename?: 'Query', artist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
-      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
-    > | null } | null, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } }> } | null };
-
-export type UpdateArtistMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.UpdateArtistInput;
-}>;
-
-
-export type UpdateArtistMutation = { __typename?: 'Mutation', updateArtist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
-      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
-    > | null } | null };
-
 export type ArtistsAdminQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
   first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
@@ -211,24 +174,81 @@ export type DeleteArtistMutationVariables = Types.Exact<{
 
 export type DeleteArtistMutation = { __typename?: 'Mutation', removeArtist?: boolean | null };
 
-export type AlbumCoversAdminQueryVariables = Types.Exact<{
-  term: Types.Scalars['String']['input'];
+export type ArtistEditQueryVariables = Types.Exact<{
+  id?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
-export type AlbumCoversAdminQuery = { __typename?: 'Query', appleMusicAlbums: { __typename?: 'AppleMusicAlbumResults', error?: string | null, albums: Array<{ __typename?: 'AppleMusicAlbum', id: string, name: string, artistName: string, releaseDate?: string | null, cover: string, artwork: { __typename?: 'AppleMusicArtwork', width?: number | null, height?: number | null } }> } };
+export type ArtistEditQuery = { __typename?: 'Query', artist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } }> } | null };
 
-export type AddAlbumCoversMutationVariables = Types.Exact<{
-  ids: Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input'];
+export type CreateArtistMutationVariables = Types.Exact<{
+  input: Types.CreateArtistInput;
 }>;
 
 
-export type AddAlbumCoversMutation = { __typename?: 'Mutation', addAlbumCovers: Array<
-    | { __typename?: 'AudioUpload', id: string }
-    | { __typename?: 'FileUpload', id: string }
-    | { __typename?: 'ImageUpload', id: string }
-    | { __typename?: 'VideoUpload', id: string }
-  > };
+export type CreateArtistMutation = { __typename?: 'Mutation', createArtist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
+export type UpdateArtistMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdateArtistInput;
+}>;
+
+
+export type UpdateArtistMutation = { __typename?: 'Mutation', updateArtist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
+export type VenueListingsAdminQueryVariables = Types.Exact<{
+  venueId: Types.Scalars['String']['input'];
+  withListings: Types.Scalars['Boolean']['input'];
+}>;
+
+
+export type VenueListingsAdminQuery = { __typename?: 'Query', venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, listingsUrl?: string | null, name: string } }> } | null, venueListings?: { __typename?: 'VenueListings', error?: string | null, source?: string | null, listings: Array<{ __typename?: 'Listing', cancelled: boolean, dateChanged: boolean, headliners: Array<string>, localDate?: string | null, localTime?: string | null, newArtists: Array<string>, sourceId: string, status?: string | null, support: Array<string>, url?: string | null, show?: { __typename?: 'Show', id: string } | null }> } };
+
+export type ImportListingsMutationVariables = Types.Exact<{
+  venueId: Types.Scalars['String']['input'];
+  input: Array<Types.ImportListingInput> | Types.ImportListingInput;
+}>;
+
+
+export type ImportListingsMutation = { __typename?: 'Mutation', importListings: { __typename?: 'ImportListingsResult', artistsCreated: number, showsCreated: number } };
+
+export type UploadsAdminQueryVariables = Types.Exact<{
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  mimeType?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  type?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type UploadsAdminQuery = { __typename?: 'Query', uploads?: { __typename?: 'MediaUploadConnection', count: number, mimeTypes?: Array<string> | null, types?: Array<string> | null, edges: Array<{ __typename?: 'MediaUploadEdge', node:
+        | { __typename?: 'AudioUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null }
+        | { __typename?: 'FileUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
+        | { __typename?: 'ImageUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+        | { __typename?: 'VideoUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
+       }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type DeleteMediaMutationVariables = Types.Exact<{
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type DeleteMediaMutation = { __typename?: 'Mutation', removeMediaUpload?: boolean | null };
 
 export type MediaAdminQueryVariables = Types.Exact<{
   id: Types.Scalars['String']['input'];
@@ -255,50 +275,46 @@ export type UpdateMediaMutation = { __typename?: 'Mutation', updateMediaUpload?:
     | { __typename?: 'VideoUpload', description?: string | null, duration?: number | null, height?: number | null, width?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
    | null };
 
-export type UploadsAdminQueryVariables = Types.Exact<{
-  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
+export type AlbumCoversAdminQueryVariables = Types.Exact<{
+  term: Types.Scalars['String']['input'];
+}>;
+
+
+export type AlbumCoversAdminQuery = { __typename?: 'Query', appleMusicAlbums: { __typename?: 'AppleMusicAlbumResults', error?: string | null, albums: Array<{ __typename?: 'AppleMusicAlbum', id: string, name: string, artistName: string, releaseDate?: string | null, cover: string, artwork: { __typename?: 'AppleMusicArtwork', width?: number | null, height?: number | null } }> } };
+
+export type AddAlbumCoversMutationVariables = Types.Exact<{
+  ids: Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input'];
+}>;
+
+
+export type AddAlbumCoversMutation = { __typename?: 'Mutation', addAlbumCovers: Array<
+    | { __typename?: 'AudioUpload', id: string }
+    | { __typename?: 'FileUpload', id: string }
+    | { __typename?: 'ImageUpload', id: string }
+    | { __typename?: 'VideoUpload', id: string }
+  > };
+
+export type MediaModalQueryVariables = Types.Exact<{
+  cursor?: Types.InputMaybe<Types.Scalars['String']['input']>;
   first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  mimeType?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
   type?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
-export type UploadsAdminQuery = { __typename?: 'Query', uploads?: { __typename?: 'MediaUploadConnection', count: number, mimeTypes?: Array<string> | null, types?: Array<string> | null, edges: Array<{ __typename?: 'MediaUploadEdge', node:
-        | { __typename?: 'AudioUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null }
-        | { __typename?: 'FileUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
-        | { __typename?: 'ImageUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-        | { __typename?: 'VideoUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
-       }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+export type MediaModalQuery = { __typename?: 'Query', uploads?: { __typename?: 'MediaUploadConnection', edges: Array<{ __typename?: 'MediaUploadEdge', node:
+        | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null }
+        | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, title?: string | null, type: string }
+        | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+        | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, title?: string | null, type: string }
+       }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
 
-export type DeleteMediaMutationVariables = Types.Exact<{
-  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+export type VideoModalQueryVariables = Types.Exact<{
+  cursor?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
-export type DeleteMediaMutation = { __typename?: 'Mutation', removeMediaUpload?: boolean | null };
-
-export type CreatePodcastMutationVariables = Types.Exact<{
-  input: Types.CreatePodcastInput;
-}>;
-
-
-export type CreatePodcastMutation = { __typename?: 'Mutation', createPodcast?: { __typename?: 'Podcast', id: string } | null };
-
-export type PodcastEditQueryVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-}>;
-
-
-export type PodcastEditQuery = { __typename?: 'Query', podcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
-
-export type UpdatePodcastMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.UpdatePodcastInput;
-}>;
-
-
-export type UpdatePodcastMutation = { __typename?: 'Mutation', updatePodcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
+export type VideoModalQuery = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', edges: Array<{ __typename?: 'VideoEdge', node: { __typename?: 'Video', dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
 
 export type PodcastsAdminQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
@@ -316,12 +332,50 @@ export type DeletePodcastMutationVariables = Types.Exact<{
 
 export type DeletePodcastMutation = { __typename?: 'Mutation', removePodcast?: boolean | null };
 
-export type CreatePostMutationVariables = Types.Exact<{
-  input: Types.CreatePostInput;
+export type PodcastEditQueryVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: string, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+export type PodcastEditQuery = { __typename?: 'Query', podcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
+
+export type CreatePodcastMutationVariables = Types.Exact<{
+  input: Types.CreatePodcastInput;
+}>;
+
+
+export type CreatePodcastMutation = { __typename?: 'Mutation', createPodcast?: { __typename?: 'Podcast', id: string } | null };
+
+export type UpdatePodcastMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdatePodcastInput;
+}>;
+
+
+export type UpdatePodcastMutation = { __typename?: 'Mutation', updatePodcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
+
+export type PostsAdminQueryVariables = Types.Exact<{
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type PostsAdminQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', count: number, edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, title: string } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type DeletePostMutationVariables = Types.Exact<{
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'Mutation', removePost?: boolean | null };
+
+export type PostEditQueryVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+}>;
+
+
+export type PostEditQuery = { __typename?: 'Query', post?: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: string, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
           | { __typename?: 'CodeNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, language?: string | null, children?: Array<
               | { __typename?: 'CodeNode' }
               | { __typename?: 'ElementNode' }
@@ -405,12 +459,12 @@ export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typ
       | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
     > | null } | null };
 
-export type PostEditQueryVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
+export type CreatePostMutationVariables = Types.Exact<{
+  input: Types.CreatePostInput;
 }>;
 
 
-export type PostEditQuery = { __typename?: 'Query', post?: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: string, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: string, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
           | { __typename?: 'CodeNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, language?: string | null, children?: Array<
               | { __typename?: 'CodeNode' }
               | { __typename?: 'ElementNode' }
@@ -584,21 +638,18 @@ export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: { __typ
       | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
     > | null } | null };
 
-export type PostsAdminQueryVariables = Types.Exact<{
-  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
+export type SiteSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type SiteSettingsQuery = { __typename?: 'Query', siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, emailAddress?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };
+
+export type UpdateSiteSettingsMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.SiteSettingsInput;
 }>;
 
 
-export type PostsAdminQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', count: number, edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, title: string } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
-
-export type DeletePostMutationVariables = Types.Exact<{
-  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
-}>;
-
-
-export type DeletePostMutation = { __typename?: 'Mutation', removePost?: boolean | null };
+export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings?: { __typename?: 'SiteSettings', id: string } | null };
 
 export type MediaSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -625,53 +676,6 @@ export type UpdatePodcastSettingsMutationVariables = Types.Exact<{
 
 
 export type UpdatePodcastSettingsMutation = { __typename?: 'Mutation', updatePodcastSettings?: { __typename?: 'PodcastSettings', id: string } | null };
-
-export type SiteSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type SiteSettingsQuery = { __typename?: 'Query', siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, emailAddress?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };
-
-export type UpdateSiteSettingsMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.SiteSettingsInput;
-}>;
-
-
-export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings?: { __typename?: 'SiteSettings', id: string } | null };
-
-export type ShowEntitiesQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type ShowEntitiesQuery = { __typename?: 'Query', show?: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } | null, artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: string, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, name: string } }> } | null };
-
-export type CreateShowMutationVariables = Types.Exact<{
-  input: Types.CreateShowInput;
-}>;
-
-
-export type CreateShowMutation = { __typename?: 'Mutation', createShow?: { __typename?: 'Show', id: string } | null };
-
-export type BulkCreateShowsMutationVariables = Types.Exact<{
-  input: Array<Types.BulkCreateShowInput> | Types.BulkCreateShowInput;
-}>;
-
-
-export type BulkCreateShowsMutation = { __typename?: 'Mutation', bulkCreateShows: { __typename?: 'BulkCreateShowsResult', artistsCreated: number, showsCreated: number, venuesCreated: number } };
-
-export type ShowEditQueryVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-}>;
-
-
-export type ShowEditQuery = { __typename?: 'Query', show?: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } | null, artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: string, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, name: string } }> } | null };
-
-export type UpdateShowMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.UpdateShowInput;
-}>;
-
-
-export type UpdateShowMutation = { __typename?: 'Mutation', updateShow?: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } | null };
 
 export type ShowsAdminQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
@@ -701,43 +705,39 @@ export type DeleteShowMutationVariables = Types.Exact<{
 
 export type DeleteShowMutation = { __typename?: 'Mutation', removeShow?: boolean | null };
 
-export type VenueListingsAdminQueryVariables = Types.Exact<{
-  venueId: Types.Scalars['String']['input'];
-  withListings: Types.Scalars['Boolean']['input'];
+export type ShowEntitiesQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type ShowEntitiesQuery = { __typename?: 'Query', show?: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } | null, artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: string, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, name: string } }> } | null };
+
+export type CreateShowMutationVariables = Types.Exact<{
+  input: Types.CreateShowInput;
 }>;
 
 
-export type VenueListingsAdminQuery = { __typename?: 'Query', venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, listingsUrl?: string | null, name: string } }> } | null, venueListings?: { __typename?: 'VenueListings', error?: string | null, source?: string | null, listings: Array<{ __typename?: 'Listing', cancelled: boolean, dateChanged: boolean, headliners: Array<string>, localDate?: string | null, localTime?: string | null, newArtists: Array<string>, sourceId: string, status?: string | null, support: Array<string>, url?: string | null, show?: { __typename?: 'Show', id: string } | null }> } };
+export type CreateShowMutation = { __typename?: 'Mutation', createShow?: { __typename?: 'Show', id: string } | null };
 
-export type ImportListingsMutationVariables = Types.Exact<{
-  venueId: Types.Scalars['String']['input'];
-  input: Array<Types.ImportListingInput> | Types.ImportListingInput;
-}>;
-
-
-export type ImportListingsMutation = { __typename?: 'Mutation', importListings: { __typename?: 'ImportListingsResult', artistsCreated: number, showsCreated: number } };
-
-export type CreateUserMutationVariables = Types.Exact<{
-  input: Types.CreateUserInput;
-}>;
-
-
-export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id: string } | null };
-
-export type UserEditQueryVariables = Types.Exact<{
+export type ShowEditQueryVariables = Types.Exact<{
   id: Types.Scalars['String']['input'];
 }>;
 
 
-export type UserEditQuery = { __typename?: 'Query', user?: { __typename?: 'User', bio?: string | null, email: string, id: string, name?: string | null, roles?: Array<string | null> | null } | null };
+export type ShowEditQuery = { __typename?: 'Query', show?: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } | null, artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: string, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, name: string } }> } | null };
 
-export type UpdateUserMutationVariables = Types.Exact<{
+export type UpdateShowMutationVariables = Types.Exact<{
   id: Types.Scalars['String']['input'];
-  input: Types.UpdateUserInput;
+  input: Types.UpdateShowInput;
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', bio?: string | null, email: string, id: string, name?: string | null, roles?: Array<string | null> | null } | null };
+export type UpdateShowMutation = { __typename?: 'Mutation', updateShow?: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } | null };
+
+export type BulkCreateShowsMutationVariables = Types.Exact<{
+  input: Array<Types.BulkCreateShowInput> | Types.BulkCreateShowInput;
+}>;
+
+
+export type BulkCreateShowsMutation = { __typename?: 'Mutation', bulkCreateShows: { __typename?: 'BulkCreateShowsResult', artistsCreated: number, showsCreated: number, venuesCreated: number } };
 
 export type UsersAdminQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
@@ -755,42 +755,27 @@ export type DeleteUserMutationVariables = Types.Exact<{
 
 export type DeleteUserMutation = { __typename?: 'Mutation', removeUser?: boolean | null };
 
-export type CreateVenueMutationVariables = Types.Exact<{
-  input: Types.CreateVenueInput;
-}>;
-
-
-export type CreateVenueMutation = { __typename?: 'Mutation', createVenue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
-      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
-    > | null } | null };
-
-export type VenueEditQueryVariables = Types.Exact<{
-  id?: Types.InputMaybe<Types.Scalars['String']['input']>;
-}>;
-
-
-export type VenueEditQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } }> } | null, venue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
-      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
-    > | null } | null };
-
-export type UpdateVenueMutationVariables = Types.Exact<{
+export type UserEditQueryVariables = Types.Exact<{
   id: Types.Scalars['String']['input'];
-  input: Types.UpdateVenueInput;
 }>;
 
 
-export type UpdateVenueMutation = { __typename?: 'Mutation', updateVenue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
-      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
-      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
-    > | null } | null };
+export type UserEditQuery = { __typename?: 'Query', user?: { __typename?: 'User', bio?: string | null, email: string, id: string, name?: string | null, roles?: Array<string | null> | null } | null };
+
+export type CreateUserMutationVariables = Types.Exact<{
+  input: Types.CreateUserInput;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id: string } | null };
+
+export type UpdateUserMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', bio?: string | null, email: string, id: string, name?: string | null, roles?: Array<string | null> | null } | null };
 
 export type VenuesAdminQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
@@ -821,20 +806,42 @@ export type DeleteVenueMutationVariables = Types.Exact<{
 
 export type DeleteVenueMutation = { __typename?: 'Mutation', removeVenue?: boolean | null };
 
-export type VideoEditQueryVariables = Types.Exact<{
+export type VenueEditQueryVariables = Types.Exact<{
   id?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
-export type VideoEditQuery = { __typename?: 'Query', video?: { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
+export type VenueEditQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } }> } | null, venue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
 
-export type UpdateVideoMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.UpdateVideoInput;
+export type CreateVenueMutationVariables = Types.Exact<{
+  input: Types.CreateVenueInput;
 }>;
 
 
-export type UpdateVideoMutation = { __typename?: 'Mutation', updateVideo?: { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
+export type CreateVenueMutation = { __typename?: 'Mutation', createVenue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
+export type UpdateVenueMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdateVenueInput;
+}>;
+
+
+export type UpdateVenueMutation = { __typename?: 'Mutation', updateVenue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
 
 export type VideosAdminQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
@@ -853,24 +860,17 @@ export type DeleteVideoMutationVariables = Types.Exact<{
 
 export type DeleteVideoMutation = { __typename?: 'Mutation', removeVideo?: boolean | null };
 
-export type MediaModalQueryVariables = Types.Exact<{
-  cursor?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  type?: Types.InputMaybe<Types.Scalars['String']['input']>;
+export type VideoEditQueryVariables = Types.Exact<{
+  id?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
-export type MediaModalQuery = { __typename?: 'Query', uploads?: { __typename?: 'MediaUploadConnection', edges: Array<{ __typename?: 'MediaUploadEdge', node:
-        | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null }
-        | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, title?: string | null, type: string }
-        | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-        | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, title?: string | null, type: string }
-       }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
+export type VideoEditQuery = { __typename?: 'Query', video?: { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
 
-export type VideoModalQueryVariables = Types.Exact<{
-  cursor?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+export type UpdateVideoMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdateVideoInput;
 }>;
 
 
-export type VideoModalQuery = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', edges: Array<{ __typename?: 'VideoEdge', node: { __typename?: 'Video', dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
+export type UpdateVideoMutation = { __typename?: 'Mutation', updateVideo?: { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };

@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
@@ -8,42 +7,25 @@ import Search from '#/components/Admin/ListTable/Search';
 import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Artwork from '#/components/Artist/Artwork';
 import Message from '#/components/Form/Message';
+import { deleteArtists, loadArtists, setArtistExcludeFromSearch } from '#/server/artists';
 import type { Columns } from '#/types';
-import type { ArtistsAdminQuery } from '#/types/graphql';
-import { handleDelete } from '#/utils/action';
-import { addPageOffset, addSearchParam } from '#/utils/listVariables';
-import mutate, { parseFormData } from '#/utils/mutate';
-import query from '#/utils/query';
+import { deleteAction, graphqlClient } from '#/utils/route.server';
 
 import type { Route } from './+types/index';
 
 export async function loader({ request, context, url }: Route.LoaderArgs) {
-  const variables = addSearchParam(url, addPageOffset(url));
-
-  return query<ArtistsAdminQuery>({
-    request,
-    context,
-    query: artistsQuery,
-    variables,
-  });
+  return loadArtists({ gql: graphqlClient({ request, context }), searchParams: url.searchParams });
 }
 
-export async function action({ request, context, url }: Route.ActionArgs) {
+export async function action(args: Route.ActionArgs) {
+  const { request } = args;
   if (request.method === 'POST') {
-    const { id, excludeFromSearch } = await parseFormData(request);
-    return mutate({
-      context,
-      request,
-      mutation: updateMutation,
-      variables: {
-        id,
-        input: {
-          excludeFromSearch,
-        },
-      },
+    return setArtistExcludeFromSearch({
+      gql: graphqlClient(args),
+      formData: await request.formData(),
     });
   }
-  return handleDelete({ request, url, context, mutation: deleteMutation });
+  return deleteAction(args, deleteArtists);
 }
 
 export default function Artists({ loaderData }: Route.ComponentProps) {
@@ -77,44 +59,3 @@ export default function Artists({ loaderData }: Route.ComponentProps) {
     </>
   );
 }
-
-const artistsQuery = gql`
-  query ArtistsAdmin($after: String, $first: Int, $search: String) {
-    artists(after: $after, first: $first, search: $search) @cache(key: "admin") {
-      count
-      edges {
-        node {
-          appleMusic {
-            artwork {
-              url
-            }
-            id
-            url
-          }
-          excludeFromSearch
-          id
-          name
-          slug
-          website
-        }
-      }
-      pageInfo {
-        hasNextPage
-      }
-    }
-  }
-`;
-
-const updateMutation = gql`
-  mutation UpdateArtistExclude($id: String!, $input: UpdateArtistInput!) {
-    updateArtist(id: $id, input: $input) {
-      id
-    }
-  }
-`;
-
-const deleteMutation = gql`
-  mutation DeleteArtist($ids: [String]!) {
-    removeArtist(ids: $ids)
-  }
-`;

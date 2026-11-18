@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -44,23 +43,5 @@ function VideoForm({ data = {}, heading, buttonLabel, children = null }: VideoFo
     </>
   );
 }
-
-VideoForm.fragments = {
-  video: gql`
-    fragment VideoForm_video on Video {
-      dataPlaylistId
-      dataType
-      id
-      slug
-      thumbnails {
-        height
-        url
-        width
-      }
-      title
-      year
-    }
-  `,
-};
 
 export default VideoForm;

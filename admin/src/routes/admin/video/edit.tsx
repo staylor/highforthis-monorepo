@@ -1,30 +1,21 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import VideoForm from '#/components/Admin/Video/Form';
-import type { VideoEditQuery, VideoThumbnail } from '#/types/graphql';
-import { handleSubmission } from '#/utils/action';
-import query from '#/utils/query';
+import { loadVideo, updateVideo } from '#/server/videos';
+import type { VideoThumbnail } from '#/types/graphql';
+import { graphqlClient, respond } from '#/utils/route.server';
 
 import type { Route } from './+types/edit';
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  return query<VideoEditQuery>({
-    request,
-    context,
-    query: videoQuery,
-    variables: { id: params.id },
-  });
+  return loadVideo({ gql: graphqlClient({ request, context }), id: params.id });
 }
 
 export async function action({ request, context, params, url }: Route.ActionArgs) {
-  return handleSubmission({
-    request,
-    url,
-    context,
-    mutation: videoMutation,
-    variables: { id: params.id },
-  });
+  const gql = graphqlClient({ request, context });
+  return respond(
+    await updateVideo({ gql, id: params.id, formData: await request.formData(), url })
+  );
 }
 
 export default function VideoEdit({ loaderData }: Route.ComponentProps) {
@@ -44,21 +35,3 @@ export default function VideoEdit({ loaderData }: Route.ComponentProps) {
     </VideoForm>
   );
 }
-
-const videoQuery = gql`
-  query VideoEdit($id: String) {
-    video(id: $id) {
-      ...VideoForm_video
-    }
-  }
-  ${VideoForm.fragments.video}
-`;
-
-const videoMutation = gql`
-  mutation UpdateVideo($id: String!, $input: UpdateVideoInput!) {
-    updateVideo(id: $id, input: $input) {
-      ...VideoForm_video
-    }
-  }
-  ${VideoForm.fragments.video}
-`;

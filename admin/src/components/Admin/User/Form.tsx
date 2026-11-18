@@ -1,4 +1,3 @@
-import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import Form from '#/components/Admin/Form';
@@ -44,17 +43,5 @@ function UserForm({ data = {} as User, heading, buttonLabel }: UserFormProps) {
     </>
   );
 }
-
-UserForm.fragments = {
-  user: gql`
-    fragment UserForm_user on User {
-      bio
-      email
-      id
-      name
-      roles
-    }
-  `,
-};
 
 export default UserForm;

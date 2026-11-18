@@ -1,5 +1,4 @@
 import cn from 'classnames';
-import { gql } from 'graphql-tag';
 import type { SyntheticEvent } from 'react';
 
 import Link, { type CustomLinkProps } from '#/components/Link';
@@ -98,21 +97,5 @@ function VideoComponent({ video, single = false, embed = false }: VideoProps) {
     </article>
   );
 }
-
-VideoComponent.fragments = {
-  video: gql`
-    fragment Video_video on Video {
-      dataId
-      id
-      slug
-      thumbnails {
-        height
-        url
-        width
-      }
-      title
-    }
-  `,
-};
 
 export default VideoComponent;
