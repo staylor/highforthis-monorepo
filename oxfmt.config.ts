@@ -10,6 +10,6 @@ export default createConfig({
     'graphql/generated/**',
     'graphql/public/**',
     'graphql/schema.graphql',
-    'shared/src/web/types/graphql.ts',
+    '{shared,web,admin}/src/types/graphql.ts',
   ],
 });

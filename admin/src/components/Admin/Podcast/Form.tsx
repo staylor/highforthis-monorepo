@@ -1,4 +1,3 @@
-import type { Podcast } from '@highforthis/shared/web/types/graphql';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +6,7 @@ import FeaturedMedia from '#/components/Admin/Form/FeaturedMedia';
 import { Heading } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import type { Fields } from '#/types';
+import type { Podcast } from '#/types/graphql';
 
 interface PodcastFormProps {
   data?: Podcast;

@@ -95,9 +95,10 @@ src/
 │   ├── podcast/       # Podcast pages
 │   ├── post/          # Editorial posts
 │   └── ...
-├── components/        # UI components (ones admin also uses are in shared/src/web)
+├── components/        # UI components (ones admin also uses are in shared/src)
 ├── hooks/             # Custom React hooks
 ├── styles/            # Global styles
+├── types/             # Generated GraphQL operation types (plus shared's schema types)
 └── utils/             # Utilities
 server.js              # Express server (SSR + proxy)
 ```

@@ -1,9 +1,9 @@
-import type { Video, VideoConnection, VideoThumbnail } from '@highforthis/shared/web/types/graphql';
 import type { SyntheticEvent } from 'react';
 import { useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 import Loading from '#/components/Loading';
+import type { Video, VideoConnection, VideoThumbnail } from '#/types/graphql';
 
 import CloseButton from './CloseButton';
 import { modalClass, frameClass, itemTitleClass } from './styles';

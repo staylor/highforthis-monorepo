@@ -13,8 +13,10 @@
   "sideEffects": false,
   "type": "module",
   "devDependencies": {
+    "@graphql-codegen/add": "8.0.0",
     "@graphql-codegen/cli": "6.1.2",
     "@graphql-codegen/fragment-matcher": "6.0.0",
+    "@graphql-codegen/import-types-preset": "5.0.0",
     "@graphql-codegen/introspection": "5.0.0",
     "@graphql-codegen/schema-ast": "5.0.0",
     "@graphql-codegen/typescript": "5.0.8",

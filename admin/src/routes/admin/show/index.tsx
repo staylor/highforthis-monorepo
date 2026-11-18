@@ -1,7 +1,5 @@
-import { formatShowLink } from '@highforthis/shared/web/components/Shows/utils';
-import type { Show, ShowsAdminQuery } from '@highforthis/shared/web/types/graphql';
-import mutate, { parseFormData } from '@highforthis/shared/web/utils/mutate';
-import query, { addPageOffset, addSearchParam } from '@highforthis/shared/web/utils/query';
+import { formatShowLink } from '@highforthis/shared/components/Shows/utils';
+import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useFetcher, useLocation, useSearchParams } from 'react-router';
@@ -11,7 +9,10 @@ import Search from '#/components/Admin/ListTable/Search';
 import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Checkbox from '#/components/Form/Checkbox';
 import Message from '#/components/Form/Message';
+import type { Show, ShowsAdminQuery } from '#/types/graphql';
 import { handleDelete } from '#/utils/action';
+import { addPageOffset, addSearchParam } from '#/utils/listVariables';
+import mutate, { parseFormData } from '#/utils/mutate';
 
 import type { Route } from './+types';
 

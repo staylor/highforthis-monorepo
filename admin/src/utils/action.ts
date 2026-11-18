@@ -1,9 +1,10 @@
 import type { OperationVariables } from '@apollo/client';
-import type { ParseFormDataArgs } from '@highforthis/shared/web/utils/mutate';
-import mutate, { parseFormData } from '@highforthis/shared/web/utils/mutate';
 import type { DocumentNode } from 'graphql';
 import type { ActionFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
+
+import type { ParseFormDataArgs } from '#/utils/mutate';
+import mutate, { parseFormData } from '#/utils/mutate';
 
 interface SubmittedNode {
   format?: unknown;

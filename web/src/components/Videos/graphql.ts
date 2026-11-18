@@ -1,4 +1,4 @@
-import Video from '@highforthis/shared/web/components/Videos/Video';
+import Video from '@highforthis/shared/components/Videos/Video';
 import { gql } from 'graphql-tag';
 
 export const videosQuery = gql`

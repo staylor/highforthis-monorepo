@@ -1,6 +1,6 @@
 import { PassThrough } from 'node:stream';
 
-import { i18nContext } from '@highforthis/shared/web/context';
+import { i18nContext } from '@highforthis/shared/context';
 import { createReadableStreamFromReadable } from '@react-router/node';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';

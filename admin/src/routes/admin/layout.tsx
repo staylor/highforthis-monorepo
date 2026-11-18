@@ -1,8 +1,8 @@
-import { isAuthenticated } from '@highforthis/shared/web/auth';
-import { graphqlHostContext } from '@highforthis/shared/web/context';
-import { sessionStorage } from '@highforthis/shared/web/session';
-import { rootData } from '@highforthis/shared/web/utils/rootData';
-import titleTemplate from '@highforthis/shared/web/utils/title';
+import { isAuthenticated } from '@highforthis/shared/auth';
+import { graphqlHostContext } from '@highforthis/shared/context';
+import { sessionStorage } from '@highforthis/shared/session';
+import { rootData } from '@highforthis/shared/utils/rootData';
+import titleTemplate from '@highforthis/shared/utils/title';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import type { MetaFunction } from 'react-router';

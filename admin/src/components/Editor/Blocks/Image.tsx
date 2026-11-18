@@ -1,5 +1,6 @@
-import type { ImageUpload } from '@highforthis/shared/web/types/graphql';
-import { uploadUrl } from '@highforthis/shared/web/utils/media';
+import { uploadUrl } from '@highforthis/shared/utils/media';
+
+import type { ImageUpload } from '#/types/graphql';
 
 const cropMap = {
   FEATURE: 640,

@@ -1,6 +1,7 @@
-import Icon from '@highforthis/shared/web/components/Icon';
 import cn from 'classnames';
 import type { CSSProperties } from 'react';
+
+import Icon from '#/components/Icon';
 
 interface Props {
   active: boolean;

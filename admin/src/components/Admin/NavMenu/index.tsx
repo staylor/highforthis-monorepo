@@ -1,10 +1,11 @@
-import Icon from '@highforthis/shared/web/components/Icon';
-import { getItem, setItem, removeItem } from '@highforthis/shared/web/utils/storage';
+import { getItem, setItem, removeItem } from '@highforthis/shared/utils/storage';
 import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, Link } from 'react-router';
+
+import Icon from '#/components/Icon';
 
 import CollapseButton from './CollapseButton';
 import NavLink from './NavLink';

@@ -1,8 +1,9 @@
-import type { ImageUpload } from '@highforthis/shared/web/types/graphql';
-import { uploadUrl } from '@highforthis/shared/web/utils/media';
+import { uploadUrl } from '@highforthis/shared/utils/media';
 import { filesize } from 'filesize';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import type { ImageUpload } from '#/types/graphql';
 
 export default function ImageInfo({ media }: { media: ImageUpload }) {
   const { t } = useTranslation();

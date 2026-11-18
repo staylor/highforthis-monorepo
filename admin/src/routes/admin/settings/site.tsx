@@ -1,10 +1,10 @@
-import type { SiteSettingsQuery } from '@highforthis/shared/web/types/graphql';
-import query from '@highforthis/shared/web/utils/query';
+import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import SettingsForm from '#/components/Admin/Settings/Form';
 import type { Fields } from '#/types';
+import type { SiteSettingsQuery } from '#/types/graphql';
 import { handleSubmission } from '#/utils/action';
 
 import type { Route } from './+types/site';

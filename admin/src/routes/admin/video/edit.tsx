@@ -1,9 +1,9 @@
-import type { VideoEditQuery, VideoThumbnail } from '@highforthis/shared/web/types/graphql';
-import query from '@highforthis/shared/web/utils/query';
+import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import VideoForm from '#/components/Admin/Video/Form';
+import type { VideoEditQuery, VideoThumbnail } from '#/types/graphql';
 import { handleSubmission } from '#/utils/action';
 
 import type { Route } from './+types/edit';

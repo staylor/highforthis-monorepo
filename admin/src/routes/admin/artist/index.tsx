@@ -1,7 +1,5 @@
-import Artwork from '@highforthis/shared/web/components/Artist/Artwork';
-import type { ArtistsAdminQuery } from '@highforthis/shared/web/types/graphql';
-import mutate, { parseFormData } from '@highforthis/shared/web/utils/mutate';
-import query, { addPageOffset, addSearchParam } from '@highforthis/shared/web/utils/query';
+import Artwork from '@highforthis/shared/components/Artist/Artwork';
+import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
@@ -12,7 +10,10 @@ import Search from '#/components/Admin/ListTable/Search';
 import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import type { Columns } from '#/types';
+import type { ArtistsAdminQuery } from '#/types/graphql';
 import { handleDelete } from '#/utils/action';
+import { addPageOffset, addSearchParam } from '#/utils/listVariables';
+import mutate, { parseFormData } from '#/utils/mutate';
 
 import type { Route } from './+types/index';
 

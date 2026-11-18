@@ -1,4 +1,4 @@
-import { sessionStorage } from '@highforthis/shared/web/session';
+import { sessionStorage } from '@highforthis/shared/session';
 import type { LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
 

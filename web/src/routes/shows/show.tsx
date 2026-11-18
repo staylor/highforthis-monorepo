@@ -1,12 +1,13 @@
-import Artwork from '@highforthis/shared/web/components/Artist/Artwork';
-import { Heading1, Heading2 } from '@highforthis/shared/web/components/Heading';
-import Link from '@highforthis/shared/web/components/Link';
-import { formatDate } from '@highforthis/shared/web/components/Shows/utils';
-import type { ShowQuery } from '@highforthis/shared/web/types/graphql';
-import query from '@highforthis/shared/web/utils/query';
+import Artwork from '@highforthis/shared/components/Artist/Artwork';
+import { Heading1, Heading2 } from '@highforthis/shared/components/Heading';
+import Link from '@highforthis/shared/components/Link';
+import { formatDate } from '@highforthis/shared/components/Shows/utils';
+import query from '@highforthis/shared/utils/query';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
+
+import type { ShowQuery } from '#/types/graphql';
 
 import type { Route } from './+types/show';
 

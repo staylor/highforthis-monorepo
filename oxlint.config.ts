@@ -16,7 +16,7 @@ export default createConfig(testingLibrary, {
   },
   overrides: [
     {
-      files: ['{web,admin}/**/*', 'shared/src/web/**/*'],
+      files: ['{web,admin}/**/*', 'shared/src/**/*'],
       rules: {
         '@lexical/rules-of-lexical': 'error',
         // classnames-order is left out: oxfmt sorts the classes

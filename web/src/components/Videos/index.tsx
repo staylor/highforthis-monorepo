@@ -1,9 +1,10 @@
-import Video from '@highforthis/shared/web/components/Videos/Video';
-import type { VideoConnection } from '@highforthis/shared/web/types/graphql';
+import Video from '@highforthis/shared/components/Videos/Video';
 import cn from 'classnames';
 import type { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
+
+import type { VideoConnection } from '#/types/graphql';
 
 function Videos({ videos, paginate = true }: { videos: VideoConnection; paginate?: boolean }) {
   const { t } = useTranslation();

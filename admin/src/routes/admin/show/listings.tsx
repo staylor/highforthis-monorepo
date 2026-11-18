@@ -1,10 +1,8 @@
-import Button from '@highforthis/shared/web/components/Button';
-import Select from '@highforthis/shared/web/components/Form/Select';
-import { inputBase } from '@highforthis/shared/web/components/Form/styles';
-import Link from '@highforthis/shared/web/components/Link';
-import type { VenueListingsAdminQuery } from '@highforthis/shared/web/types/graphql';
-import mutate from '@highforthis/shared/web/utils/mutate';
-import query from '@highforthis/shared/web/utils/query';
+import Button from '@highforthis/shared/components/Button';
+import Select from '@highforthis/shared/components/Form/Select';
+import { inputBase } from '@highforthis/shared/components/Form/styles';
+import Link from '@highforthis/shared/components/Link';
+import query from '@highforthis/shared/utils/query';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import type { ReactNode } from 'react';
@@ -21,6 +19,8 @@ import {
 
 import { Alert, Heading } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
+import type { VenueListingsAdminQuery } from '#/types/graphql';
+import mutate from '#/utils/mutate';
 
 import type { Route } from './+types/listings';
 

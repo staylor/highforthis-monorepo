@@ -1,7 +1,8 @@
-import type { PostArtwork_PostFragment } from '@highforthis/shared/web/types/graphql';
-import { uploadUrl } from '@highforthis/shared/web/utils/media';
+import { uploadUrl } from '@highforthis/shared/utils/media';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
+
+import type { PostArtwork_PostFragment } from '#/types/graphql';
 
 interface ArtworkImage {
   crops: { fileName: string; width: number }[];

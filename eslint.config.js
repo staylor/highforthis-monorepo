@@ -21,7 +21,7 @@ export default defineConfig([
   // oxlint lints JavaScript and TypeScript; ESLint only covers GraphQL, which oxlint cannot parse
   globalIgnores(['**/*.{js,cjs,mjs}']),
   {
-    files: ['{web,admin}/src/**/*.graphql', 'shared/src/web/**/*.graphql'],
+    files: ['{web,admin}/src/**/*.graphql', 'shared/src/**/*.graphql'],
     languageOptions: {
       parser: graphql.parser,
     },

@@ -1,15 +1,15 @@
-import type { Podcast, PodcastQuery } from '@highforthis/shared/web/types/graphql';
-import query from '@highforthis/shared/web/utils/query';
+import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
 import PodcastForm from '#/components/Admin/Podcast/Form';
+import type { Podcast, PodcastEditQuery } from '#/types/graphql';
 import { handleSubmission } from '#/utils/action';
 
 import type { Route } from './+types/edit';
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  return query<PodcastQuery>({
+  return query<PodcastEditQuery>({
     request,
     context,
     query: podcastQuery,

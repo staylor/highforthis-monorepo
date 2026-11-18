@@ -1,4 +1,4 @@
-import createI18n from '@highforthis/shared/web/i18n';
+import createI18n from '@highforthis/shared/i18n';
 import { startTransition, StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';

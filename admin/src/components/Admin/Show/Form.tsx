@@ -1,8 +1,3 @@
-import type {
-  ArtistConnection,
-  Show,
-  VenueConnection,
-} from '@highforthis/shared/web/types/graphql';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +6,7 @@ import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Checkbox from '#/components/Form/Checkbox';
 import Message from '#/components/Form/Message';
 import type { Fields } from '#/types';
+import type { ArtistConnection, Show, VenueConnection } from '#/types/graphql';
 
 import SelectEntities from './SelectEntities';
 import SelectEntity from './SelectEntity';

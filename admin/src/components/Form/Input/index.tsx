@@ -1,4 +1,4 @@
-import { inputBase } from '@highforthis/shared/web/components/Form/styles';
+import { inputBase } from '@highforthis/shared/components/Form/styles';
 import cn from 'classnames';
 import type { ChangeEvent, InputHTMLAttributes } from 'react';
 

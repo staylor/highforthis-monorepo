@@ -1,5 +1,5 @@
-import Button from '@highforthis/shared/web/components/Button';
-import { Heading1 } from '@highforthis/shared/web/components/Heading';
+import Button from '@highforthis/shared/components/Button';
+import { Heading1 } from '@highforthis/shared/components/Heading';
 import cn from 'classnames';
 import { createContext, useContext, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';

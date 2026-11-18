@@ -1,4 +1,4 @@
-import Link from '@highforthis/shared/web/components/Link';
+import Link from '@highforthis/shared/components/Link';
 import type { DragEvent } from 'react';
 import { useReducer } from 'react';
 import { useTranslation } from 'react-i18next';

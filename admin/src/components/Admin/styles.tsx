@@ -1,6 +1,6 @@
-import { buttonClasses } from '@highforthis/shared/web/components/Button';
-import { heading1 } from '@highforthis/shared/web/components/Heading';
-import Link, { type CustomLinkProps } from '@highforthis/shared/web/components/Link';
+import { buttonClasses } from '@highforthis/shared/components/Button';
+import { heading1 } from '@highforthis/shared/components/Heading';
+import Link, { type CustomLinkProps } from '@highforthis/shared/components/Link';
 import cn from 'classnames';
 import type { HTMLAttributes, PropsWithChildren } from 'react';
 import { useLocation } from 'react-router';

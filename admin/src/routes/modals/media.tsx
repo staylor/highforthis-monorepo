@@ -1,7 +1,8 @@
 import type { OperationVariables } from '@apollo/client';
-import type { MediaModalQuery } from '@highforthis/shared/web/types/graphql';
-import query from '@highforthis/shared/web/utils/query';
+import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
+
+import type { MediaModalQuery } from '#/types/graphql';
 
 import type { Route } from './+types/media';
 

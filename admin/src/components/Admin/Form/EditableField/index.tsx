@@ -1,4 +1,4 @@
-import Select from '@highforthis/shared/web/components/Form/Select';
+import Select from '@highforthis/shared/components/Form/Select';
 import { lazy, Suspense, useEffect, useState } from 'react';
 
 import Date from '#/components/Admin/Form/Date';
