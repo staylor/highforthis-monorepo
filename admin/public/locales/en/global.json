@@ -11,11 +11,9 @@
     "deleted_other": "Deleted {{count}} artists",
     "edit": "Edit Artist",
     "heading": "Artists",
-    "listen": "Listen on Apple Music",
     "search": "Search Artists",
     "updated": "Artist updated.",
-    "view": "View Artist",
-    "website": "Artist Website"
+    "view": "View Artist"
   },
   "audio": {
     "fileSize": "File Size",
@@ -42,15 +40,6 @@
     "noShows": "No associated shows.",
     "shows": "Shows",
     "slug": "Slug",
-    "stats": {
-      "artist": "Show Stats: Artists",
-      "venue": "Show Stats: Venues",
-      "see": {
-        "all": "See all shows I have attended",
-        "artist": "See artist stats",
-        "venue": "See venue stats"
-      }
-    },
     "website": "Website"
   },
   "image": {
@@ -130,14 +119,8 @@
     "addNew": "Add New",
     "closeMenu": "Close menu",
     "collapse": "Collapse menu",
-    "darkMode": "Enable Dark Mode!",
     "expand": "Expand menu",
-    "home": "Home",
-    "menu": "Menu",
-    "podcast": "Podcast",
-    "shows": "Shows",
-    "videos": "Videos",
-    "videosByYear": "-- Videos By Year --"
+    "menu": "Menu"
   },
   "pagination": {
     "items_one": "{{count}} item",
@@ -184,10 +167,7 @@
     "title": "Title",
     "update": "Update Post",
     "updated": "Post updated.",
-    "view": "View Post",
-    "viewAll": "All Posts →",
-    "featured": "Featured",
-    "latest": "Latest Posts"
+    "view": "View Post"
   },
   "settings": {
     "dashboard": {
@@ -249,15 +229,8 @@
     "all": "All Shows",
     "artists": "Artists",
     "attended": {
-      "artist_one": "<Bold>{{count}} Show</Bold> we have attended by this artist",
-      "artist_other": "<Bold>{{count}} Shows</Bold> we have attended by this artist",
-      "heading": "Shows I have attended",
-      "label": "Attended",
-      "venue_one": "<Bold>{{count}} Show</Bold> we have attended at this venue",
-      "venue_other": "<Bold>{{count}} Shows</Bold> we have attended at this venue"
+      "label": "Attended"
     },
-    "attendedIn_one": "Show attended in {{year}}",
-    "attendedIn_other": "Shows attended in {{year}}",
     "bulk": {
       "artistsHelp": "Separate multiple artists with semicolons. Artist and venue names are matched without regard to capitalization and are created when no match exists.",
       "csv": "Shows CSV",
@@ -311,39 +284,13 @@
       "tickets": "Tickets",
       "view": "View Listings"
     },
-    "noRecommended": "No recommended shows at this time. Please check back soon.",
     "notes": "Notes",
-    "recommended": "Recommended Shows",
     "search": "Search Shows",
     "title": "Title",
-    "todaysDate": "Today's date is",
-    "upcoming": "Upcoming Shows",
     "update": "Update Show",
     "updated": "Show updated.",
     "url": "URL",
-    "venue": "Venue",
-    "viewFullHistory": "View Full History",
-    "website": "Event Website"
-  },
-  "social": {
-    "youtube": "YouTube",
-    "instagram": "Instagram",
-    "twitter": "Twitter",
-    "tiktok": "TikTok"
-  },
-  "sphere": {
-    "encore": "Encore",
-    "heading": "Dead & Company at the Sphere, Las Vegas, NV",
-    "set1": "Set 1",
-    "set2": "Set 2",
-    "stats": {
-      "hide": "Hide stats",
-      "show": "Show stats",
-      "song_one": "{{song}} was played <strong>{{count}}</strong> time",
-      "song_other": "{{song}} was played <strong>{{count}}</strong> times",
-      "songs": "<strong>{{songCount}}</strong> songs played total during the residency (<strong>{{setlistCount}}</strong> shows)",
-      "weekend": "once per weekend"
-    }
+    "venue": "Venue"
   },
   "table": {
     "bulkActions": "Bulk Actions",
@@ -400,8 +347,7 @@
     "state": "State",
     "streetAddress": "Street Address",
     "updated": "Venue updated.",
-    "view": "View Venue",
-    "website": "Venue Website"
+    "view": "View Venue"
   },
   "videos": {
     "date": "Date",
@@ -411,10 +357,7 @@
     "duration": "<strong>Duration:</strong> {{minutes}} mins, {{seconds}} seconds",
     "edit": "Edit Video",
     "heading": "Videos",
-    "next": "NEXT",
-    "noFound": "No videos found.",
     "playlist": "Playlist",
-    "previous": "PREVIOUS",
     "published": "Published",
     "search": "Search Videos",
     "selectYear": "Select Year",
