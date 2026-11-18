@@ -68,7 +68,7 @@
     "observability:dev:docker": "bash observability/dev.sh docker",
     "observability:dev:podman": "bash observability/dev.sh podman",
     "build": "pnpm --filter @highforthis/shared build && pnpm --filter @highforthis/graphql build:service && pnpm --filter @highforthis/web build:service && pnpm --filter @highforthis/admin build:service",
-    "knip": "knip",
+    "knip": "pnpm --filter @highforthis/shared build && knip",
     "lint": "oxlint --report-unused-disable-directives-severity=error && oxfmt --check && pnpm lint:graphql",
     "lint-fix": "oxlint --fix && oxfmt && pnpm lint:graphql --fix",
     "lint:graphql": "eslint --cache --cache-strategy content --cache-location ./node_modules/.cache/eslint --report-unused-disable-directives .",
