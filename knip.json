@@ -26,12 +26,12 @@
       ]
     },
     "shared": {
-      "entry": [
-        "src/logger.ts",
-        "src/observability.ts"
-      ],
       "project": [
         "src/**/*.{ts,tsx,js}"
+      ],
+      "includeEntryExports": true,
+      "ignore": [
+        "src/types/graphql.ts"
       ]
     },
     "web": {

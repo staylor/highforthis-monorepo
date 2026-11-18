@@ -6,6 +6,8 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noEmit": true,
+    "outDir": "dist",
+    "rootDir": "src",
     "strict": true,
     "target": "ES2024",
     "types": ["node"]
