@@ -1,31 +1,22 @@
 {
-  "include": [
-    "env.d.ts",
-    "types/*.d.ts",
-    "**/*.js",
-    "**/*.ts",
-    "**/*.tsx",
-    ".react-router/types/**/*"
-  ],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2024"],
-    "types": ["vitest/globals", "@react-router/node", "vite/client"],
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "noUnusedParameters": true,
-    "resolveJsonModule": true,
-    "target": "ES2024",
     "strict": true,
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "types": ["node", "remix/assets/types/hmr"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
     "allowJs": true,
+    "checkJs": false,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "rootDirs": [".", "./.react-router/types"],
-    "paths": {
-      "#/*": ["./src/*", "../shared/src/*"]
-    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "remix/component",
     "noEmit": true
-  }
+  },
+  "exclude": ["dist", "node_modules"]
 }

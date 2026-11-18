@@ -35,12 +35,21 @@
       ]
     },
     "web": {
+      "entry": [
+        "app/actions/public/entry.ts",
+        "app/**/*.test.{ts,tsx}"
+      ],
       "project": [
-        "app.js",
-        "src/**/*.{ts,tsx}"
+        "*.ts",
+        "app/**/*.{ts,tsx}"
       ],
       "ignore": [
-        "src/types/graphql.ts"
+        "app/types/graphql.ts"
+      ],
+      "ignoreDependencies": [
+        "@openobserve/browser-core",
+        "@openobserve/browser-rum-core",
+        "@openobserve/js-core"
       ]
     },
     "admin": {

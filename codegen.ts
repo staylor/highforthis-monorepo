@@ -3,12 +3,12 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const SHARED_DOCUMENTS = 'shared/src/**/*.{ts,tsx}';
 const SHARED_TYPES = '@highforthis/shared/types/graphql';
 
-// The operations an app defines. Its documents include shared's, because its queries spread
-// shared fragments. Schema types come from shared's file, which the app's file re-exports,
+// The operations an app defines. Admin's documents include shared's, because its queries
+// spread shared fragments; web defines its own. Schema types come from shared's file, which the app's file re-exports,
 // so app code imports every GraphQL type from its own #/types/graphql.
-const appTypes = (app: 'admin' | 'web') => ({
-  [`./${app}/src/types/graphql.ts`]: {
-    documents: [`${app}/src/**/*.{ts,tsx}`, SHARED_DOCUMENTS],
+const appTypes = (path: string, documents: string[]) => ({
+  [path]: {
+    documents,
     preset: 'import-types' as const,
     presetConfig: { typesPath: SHARED_TYPES },
     plugins: [{ add: { content: `export * from '${SHARED_TYPES}';` } }, 'typescript-operations'],
@@ -51,11 +51,14 @@ const config: CodegenConfig = {
       plugins: ['typescript', 'typescript-operations'],
       config: {
         dedupeOperationSuffix: true,
+        // Constant objects instead of enums: web loads this file through Node's type
+        // stripping, which can't handle enums. HeadingTag.H1 and the like still work.
+        enumsAsConst: true,
         useTypeImports: true,
       },
     },
-    ...appTypes('web'),
-    ...appTypes('admin'),
+    ...appTypes('./web/app/types/graphql.ts', ['web/app/**/*.{ts,tsx}']),
+    ...appTypes('./admin/src/types/graphql.ts', ['admin/src/**/*.{ts,tsx}', SHARED_DOCUMENTS]),
   },
 };
 

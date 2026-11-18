@@ -1,0 +1,5 @@
+node_modules/
+tmp/
+.DS_Store
+# Tailwind CLI output, rebuilt by `pnpm css` / `pnpm css:watch`
+app/styles/public/

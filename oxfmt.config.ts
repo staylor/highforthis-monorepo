@@ -7,7 +7,7 @@ const sortImports = base.sortImports as {
 
 export default createConfig({
   sortTailwindcss: {
-    stylesheet: './web/src/styles/main.css',
+    stylesheet: './web/app/styles/main.css',
   },
   sortImports: {
     // This repo's own packages (@highforthis/*) get a group after other packages,
@@ -26,6 +26,7 @@ export default createConfig({
     'graphql/generated/**',
     'graphql/public/**',
     'graphql/schema.graphql',
-    '{shared,web,admin}/src/types/graphql.ts',
+    '{shared,admin}/src/types/graphql.ts',
+    'web/app/types/graphql.ts',
   ],
 });
