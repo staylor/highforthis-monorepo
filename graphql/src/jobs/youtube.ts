@@ -1,6 +1,6 @@
 import prisma from '#/database';
 import env from '#/env';
-import { slugify } from '#/models/utils';
+import { getUniqueSlug } from '#/models/utils';
 
 const API_HOST = 'https://www.googleapis.com';
 const PLAYLISTS_PATH = '/youtube/v3/playlists';
@@ -107,7 +107,6 @@ async function updateVideo(
       }))
     : [];
 
-  const slug = slugify(snippet.title);
   const data = {
     dataId: contentDetails.videoId,
     dataType: 'youtube',
@@ -119,11 +118,17 @@ async function updateVideo(
     position: snippet.position,
   };
 
-  const video = await prisma.video.upsert({
+  // Titles can share a slug ("Night 1" and "Night 2" both lose their digits), so a new
+  // video gets a unique one; an existing video keeps its slug.
+  const existing = await prisma.video.findUnique({
     where: { dataId: data.dataId },
-    create: { ...data, slug },
-    update: data,
+    select: { id: true },
   });
+  const video = existing
+    ? await prisma.video.update({ where: { id: existing.id }, data })
+    : await prisma.video.create({
+        data: { ...data, slug: await getUniqueSlug(prisma.video, snippet.title) },
+      });
 
   // Replace thumbnails
   await prisma.videoThumbnail.deleteMany({ where: { videoId: video.id } });
@@ -160,7 +165,11 @@ async function fetchPlaylist(year: string, playlistId: string): Promise<string[]
   });
   const existingIds = existing.map(({ dataId }) => dataId);
 
-  const updates = await Promise.all(validItems.map((item) => updateVideo(item, year, playlistId)));
+  // One at a time, so two new videos with the same title can't claim the same slug
+  const updates: string[] = [];
+  for (const item of validItems) {
+    updates.push(await updateVideo(item, year, playlistId));
+  }
 
   if (existingIds.length) {
     const orphans = existingIds.filter((id) => !newIds.has(id));
@@ -195,9 +204,9 @@ export default async () => {
     return;
   }
 
-  await Promise.all(
-    response.items
-      .filter((playlist) => /^\d{4}$/.test(playlist.snippet.title))
-      .map((playlist) => fetchPlaylist(playlist.snippet.title, playlist.id))
-  );
+  for (const playlist of response.items) {
+    if (/^\d{4}$/.test(playlist.snippet.title)) {
+      await fetchPlaylist(playlist.snippet.title, playlist.id);
+    }
+  }
 };
