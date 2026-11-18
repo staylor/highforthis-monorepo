@@ -7,17 +7,24 @@ import controller from './actions/controller.tsx';
 import podcastController from './actions/podcast/controller.tsx';
 import showsController from './actions/shows/controller.tsx';
 import { assets } from './assets.ts';
-import { graphql, proxies, rejectWordPress, translations } from './middleware/app.ts';
+import {
+  graphql,
+  openObserveBundles,
+  proxies,
+  rejectWordPress,
+  translations,
+} from './middleware/app.ts';
 import { routes } from './routes.ts';
 
-// Reject WordPress probes, compress, serve public/, forward API and admin paths to their
-// servers, then render. HTTP logging stays on the Node server in server.ts, because
+// Reject WordPress probes, compress, serve public/ and the OpenObserve SDK bundles, forward
+// API and admin paths to their servers, then render. HTTP logging stays on the Node server in server.ts, because
 // pino-http needs Node's req/res.
 export const router = createRouter({
   middleware: [
     rejectWordPress(),
     compression(),
     staticFiles('./public', { index: false, cacheControl: 'public, max-age=3600' }),
+    openObserveBundles(),
     proxies(),
     graphql(),
     translations(),

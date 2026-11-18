@@ -11,11 +11,8 @@
   "dependencies": {
     "@apollo/client": "4.1.6",
     "@highforthis/shared": "workspace:*",
-    "@openobserve/browser-core": "0.4.1",
     "@openobserve/browser-logs": "0.4.1",
     "@openobserve/browser-rum": "0.4.1",
-    "@openobserve/browser-rum-core": "0.4.1",
-    "@openobserve/js-core": "0.4.1",
     "graphql": "16.13.0",
     "graphql-tag": "2.12.6",
     "html-escape": "2.0.0",

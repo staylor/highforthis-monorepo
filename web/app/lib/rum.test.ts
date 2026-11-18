@@ -1,6 +1,7 @@
 import * as assert from 'remix/assert';
 import { describe, it } from 'remix/test';
 
+import { openObserveScripts } from './openobserve-bundles.ts';
 import { getOpenObserveRumConfig } from './rum.ts';
 
 describe('OpenObserve RUM configuration', () => {
@@ -17,6 +18,7 @@ describe('OpenObserve RUM configuration', () => {
         NODE_ENV: 'test',
       }),
       {
+        scripts: openObserveScripts,
         applicationId: 'highforthis-web',
         clientToken: 'client-token',
         site: 'localhost:5080',

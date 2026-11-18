@@ -1,7 +1,11 @@
 // Browser RUM configuration for OpenObserve, read from the server's environment. RUM stays
 // off unless its required variables are set, and fails fast when only some are.
 
+import { openObserveScripts } from './openobserve-bundles.ts';
+
 export interface OpenObserveRumConfig {
+  /** URLs of the SDK bundles the browser loads. */
+  scripts: { rum: string; logs: string };
   applicationId: string;
   clientToken: string;
   site: string;
@@ -68,6 +72,7 @@ export function getOpenObserveRumConfig(
   const { site, insecureHTTP } = parseSite(environment.OPENOBSERVE_RUM_SITE!);
 
   return {
+    scripts: openObserveScripts,
     applicationId: environment.OPENOBSERVE_RUM_APPLICATION_ID!.trim(),
     clientToken: environment.OPENOBSERVE_RUM_CLIENT_TOKEN!.trim(),
     site,

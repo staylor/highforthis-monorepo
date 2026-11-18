@@ -1,8 +1,11 @@
 import { createFetchProxy } from 'remix/fetch-proxy';
+import { openLazyFile } from 'remix/fs';
+import { createFileResponse } from 'remix/response/file';
 import { createContextKey, type Middleware } from 'remix/router';
 
 import { createGraphQLClient, graphqlHost, type GraphQLClient } from '../lib/graphql.ts';
 import { getT, type TFunction } from '../lib/i18n.ts';
+import { openObserveBundleFiles } from '../lib/openobserve-bundles.ts';
 
 const wpPattern = /^\/(?:wp-|xmlrpc\.php|\.env)/i;
 
@@ -12,6 +15,20 @@ export function rejectWordPress(): Middleware {
       return new Response(null, { status: 403 });
     }
     return next();
+  };
+}
+
+/** Serves the OpenObserve SDK bundles, and only those files, from their packages. */
+export function openObserveBundles(): Middleware {
+  return (context, next) => {
+    const path = openObserveBundleFiles.get(context.url.pathname);
+    const { method } = context.request;
+    if (!path || (method !== 'GET' && method !== 'HEAD')) {
+      return next();
+    }
+    return createFileResponse(openLazyFile(path), context.request, {
+      cacheControl: 'public, max-age=31536000, immutable',
+    });
   };
 }
 

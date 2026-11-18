@@ -1,6 +1,7 @@
 import * as assert from 'remix/assert';
 import { describe, it, type TestContext } from 'remix/test';
 
+import { openObserveBundleFiles, openObserveScripts } from '../lib/openobserve-bundles.ts';
 import { router } from '../router.ts';
 import { routes } from '../routes.ts';
 
@@ -45,6 +46,36 @@ describe('root controller', () => {
     const response = await router.fetch(new URL('/no/such/page', origin));
     assert.equal(response.status, 404);
     assert.match(await response.text(), /Yikes! Not Found!/);
+  });
+});
+
+describe('OpenObserve SDK bundles', () => {
+  it('serves each bundle as JavaScript that can be cached for good', async () => {
+    for (const script of Object.values(openObserveScripts)) {
+      const response = await router.fetch(new URL(script, origin));
+      assert.equal(response.status, 200, script);
+      assert.match(response.headers.get('content-type') ?? '', /^text\/javascript/);
+      assert.equal(response.headers.get('cache-control'), 'public, max-age=31536000, immutable');
+    }
+  });
+
+  it('serves the session replay chunk beside the RUM bundle', async () => {
+    const rumBase = openObserveScripts.rum.slice(0, openObserveScripts.rum.lastIndexOf('/'));
+    const recorder = [...openObserveBundleFiles.keys()].find((path) =>
+      path.startsWith(`${rumBase}/chunks/recorder-`)
+    );
+    assert.ok(recorder, 'the RUM bundle has a recorder chunk');
+    const response = await router.fetch(new URL(recorder, origin));
+    assert.equal(response.status, 200);
+  });
+
+  it('serves nothing else from the packages', async (t) => {
+    stubGraphQL(t, { 'graphql:App': () => ({ data: {} }) });
+    const rumBase = openObserveScripts.rum.slice(0, openObserveScripts.rum.lastIndexOf('/'));
+    for (const path of [`${rumBase}/package.json`, `${rumBase}/../browser-rum/package.json`]) {
+      const response = await router.fetch(new URL(path, origin));
+      assert.equal(response.status, 404, path);
+    }
   });
 });
 
