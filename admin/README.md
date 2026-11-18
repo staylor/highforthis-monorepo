@@ -44,7 +44,20 @@ pnpm build   # React Router / Vite build into build/
 pnpm start   # serves the app and its files under /admin/
 ```
 
-`railway.toml` describes the Railway service. The `web` service needs `ADMIN_HOST` set to this service's private URL, for example `http://admin.railway.internal:8080`.
+On Railway this is the `highforthis-admin` service. Railway no longer lets new services read a `railway.toml`, so its settings live on the service:
+
+| Setting         | Value                                   |
+| --------------- | --------------------------------------- |
+| Build command   | `pnpm --filter @highforthis/admin build` |
+| Start command   | `cd admin && exec node server.js`       |
+| Healthcheck     | `/health`                               |
+| Restart policy  | On failure, up to 3 times               |
+| Watch paths     | `shared/**`, `admin/**`                 |
+| Public domain   | None; `web` reaches it privately        |
+
+Its variables reference `highforthis-web`'s (for example `TOKEN_SECRET=${{highforthis-web.TOKEN_SECRET}}`), so the session cookie settings always match, plus `NODE_ENV=production` and `PORT=3001`. `highforthis-web` has `ADMIN_HOST=http://${{highforthis-admin.RAILWAY_PRIVATE_DOMAIN}}:${{highforthis-admin.PORT}}`.
+
+To send its telemetry to OpenObserve, set `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_EXPORTER_OTLP_HEADERS` on the service. Web's header is a sealed variable, which a reference can't read, so it has to be set on its own.
 
 ## Scripts
 
