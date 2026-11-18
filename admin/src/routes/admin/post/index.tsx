@@ -1,7 +1,8 @@
-import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useSearchParams } from 'react-router';
+
+import query from '@highforthis/shared/utils/query';
 
 import ListTable, { RowTitle, RowActions } from '#/components/Admin/ListTable';
 import Search from '#/components/Admin/ListTable/Search';

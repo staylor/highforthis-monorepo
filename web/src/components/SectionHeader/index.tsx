@@ -1,5 +1,6 @@
-import Link from '@highforthis/shared/components/Link';
 import cn from 'classnames';
+
+import Link from '@highforthis/shared/components/Link';
 
 interface SectionHeaderProps {
   label: string;

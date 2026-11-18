@@ -1,6 +1,7 @@
-import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
+
+import query from '@highforthis/shared/utils/query';
 
 import VenueForm from '#/components/Admin/Venue/Form';
 import type { VenueEditQuery } from '#/types/graphql';

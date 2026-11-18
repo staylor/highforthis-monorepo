@@ -1,12 +1,13 @@
+import cn from 'classnames';
+import { gql } from 'graphql-tag';
+import { Fragment } from 'react';
+
 import Link from '@highforthis/shared/components/Link';
 import {
   formatArtists,
   formatDate,
   formatShowLink,
 } from '@highforthis/shared/components/Shows/utils';
-import cn from 'classnames';
-import { gql } from 'graphql-tag';
-import { Fragment } from 'react';
 
 import type { ShowConnection } from '#/types/graphql';
 

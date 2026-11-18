@@ -1,9 +1,10 @@
-import Select from '@highforthis/shared/components/Form/Select';
-import Link from '@highforthis/shared/components/Link';
-import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
+
+import Select from '@highforthis/shared/components/Form/Select';
+import Link from '@highforthis/shared/components/Link';
+import query from '@highforthis/shared/utils/query';
 
 import ListTable, { Thumbnail, RowTitle, RowActions } from '#/components/Admin/ListTable';
 import Search from '#/components/Admin/ListTable/Search';

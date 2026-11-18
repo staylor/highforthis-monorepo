@@ -1,9 +1,10 @@
-import Link from '@highforthis/shared/components/Link';
 import cn from 'classnames';
 import type { ChangeEvent } from 'react';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router';
+
+import Link from '@highforthis/shared/components/Link';
 
 interface RowAction {
   ids?: string[];

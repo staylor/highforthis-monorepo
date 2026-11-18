@@ -1,6 +1,7 @@
-import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
+
+import query from '@highforthis/shared/utils/query';
 
 import UserForm from '#/components/Admin/User/Form';
 import type { UserEditQuery } from '#/types/graphql';

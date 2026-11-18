@@ -1,7 +1,8 @@
-import Image from '@highforthis/shared/components/Image';
-import { useRootData } from '@highforthis/shared/utils/rootData';
 import cn from 'classnames';
 import qs from 'qs';
+
+import Image from '@highforthis/shared/components/Image';
+import { useRootData } from '@highforthis/shared/utils/rootData';
 
 import type { VenueCoordinates } from '#/types/graphql';
 

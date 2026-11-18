@@ -1,13 +1,14 @@
-import factory from '@highforthis/shared/apollo/client';
-import { apolloClientContext, graphqlHostContext, i18nContext } from '@highforthis/shared/context';
-import createI18n from '@highforthis/shared/i18n';
-import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
 import { createRequestHandler } from '@react-router/express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { RouterContextProvider } from 'react-router';
+
+import factory from '@highforthis/shared/apollo/client';
+import { apolloClientContext, graphqlHostContext, i18nContext } from '@highforthis/shared/context';
+import createI18n from '@highforthis/shared/i18n';
+import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
 
 import rejectWordPress from './rejectWordPress.js';
 

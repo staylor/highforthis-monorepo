@@ -1,8 +1,9 @@
-import Video from '@highforthis/shared/components/Videos/Video';
 import cn from 'classnames';
 import type { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router';
+
+import Video from '@highforthis/shared/components/Videos/Video';
 
 import type { VideoConnection } from '#/types/graphql';
 

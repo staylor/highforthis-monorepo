@@ -1,8 +1,9 @@
+import cn from 'classnames';
+
 import { blockquoteBase } from '@highforthis/shared/components/Blockquote';
 import { headingBase, heading2, heading3, heading4 } from '@highforthis/shared/components/Heading';
 import { orderedListBase, unorderedListBase } from '@highforthis/shared/components/List';
 import { paragraphBase } from '@highforthis/shared/components/Paragraph';
-import cn from 'classnames';
 
 export default {
   code: cn('font-code p-2 text-base bg-[rgba(0,0,0,0.05)]'),

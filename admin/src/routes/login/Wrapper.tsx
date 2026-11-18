@@ -1,6 +1,7 @@
-import { useRootData } from '@highforthis/shared/utils/rootData';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { useRootData } from '@highforthis/shared/utils/rootData';
 
 const Wrapper = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation();

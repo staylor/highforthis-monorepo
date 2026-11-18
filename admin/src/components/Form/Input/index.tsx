@@ -1,6 +1,7 @@
-import { inputBase } from '@highforthis/shared/components/Form/styles';
 import cn from 'classnames';
 import type { ChangeEvent, InputHTMLAttributes } from 'react';
+
+import { inputBase } from '@highforthis/shared/components/Form/styles';
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   onChange?: (value: string) => void;

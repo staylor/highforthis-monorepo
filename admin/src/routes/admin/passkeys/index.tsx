@@ -1,9 +1,10 @@
-import { Heading1, Heading2 } from '@highforthis/shared/components/Heading';
 import { startRegistration } from '@simplewebauthn/browser';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { useFetcher, useLoaderData, useRevalidator } from 'react-router';
+
+import { Heading1, Heading2 } from '@highforthis/shared/components/Heading';
 
 import { passkeyApi } from './server';
 import type {

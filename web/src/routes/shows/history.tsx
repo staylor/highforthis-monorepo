@@ -1,12 +1,13 @@
+import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
+import type { MetaFunction } from 'react-router';
+
 import { Heading2 } from '@highforthis/shared/components/Heading';
 import Link from '@highforthis/shared/components/Link';
 import query from '@highforthis/shared/utils/query';
 import { rootData } from '@highforthis/shared/utils/rootData';
 import titleTemplate from '@highforthis/shared/utils/title';
-import { gql } from 'graphql-tag';
-import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
-import type { MetaFunction } from 'react-router';
 
 import Shows from '#/components/Shows';
 import ShowsGrid from '#/components/Shows/Grid';

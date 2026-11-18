@@ -1,11 +1,12 @@
+import cn from 'classnames';
+import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
+
 import Artwork from '@highforthis/shared/components/Artist/Artwork';
 import { Heading1, Heading2 } from '@highforthis/shared/components/Heading';
 import Link from '@highforthis/shared/components/Link';
 import { formatDate } from '@highforthis/shared/components/Shows/utils';
 import query from '@highforthis/shared/utils/query';
-import cn from 'classnames';
-import { gql } from 'graphql-tag';
-import { useTranslation } from 'react-i18next';
 
 import type { ShowQuery } from '#/types/graphql';
 

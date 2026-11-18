@@ -1,8 +1,9 @@
-import Link from '@highforthis/shared/components/Link';
-import { formatArtists, formatShowLink } from '@highforthis/shared/components/Shows/utils';
 import cn from 'classnames';
 import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import Link from '@highforthis/shared/components/Link';
+import { formatArtists, formatShowLink } from '@highforthis/shared/components/Shows/utils';
 
 import SectionHeader from '#/components/SectionHeader';
 import type { ShowConnection } from '#/types/graphql';

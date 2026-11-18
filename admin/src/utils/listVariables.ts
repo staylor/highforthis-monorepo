@@ -1,4 +1,5 @@
 import type { OperationVariables } from '@apollo/client';
+
 import { PER_PAGE } from '@highforthis/shared/constants';
 import { offsetToCursor } from '@highforthis/shared/utils/connection';
 

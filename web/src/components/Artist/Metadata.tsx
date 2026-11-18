@@ -1,7 +1,8 @@
-import Artwork, { DEFAULT_IMAGE_SIZE } from '@highforthis/shared/components/Artist/Artwork';
 import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import Artwork, { DEFAULT_IMAGE_SIZE } from '@highforthis/shared/components/Artist/Artwork';
 
 import type { AppleMusicData } from '#/types/graphql';
 

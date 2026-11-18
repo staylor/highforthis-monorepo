@@ -1,7 +1,8 @@
-import Link from '@highforthis/shared/components/Link';
 import { gql } from 'graphql-tag';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import Link from '@highforthis/shared/components/Link';
 
 import Form from '#/components/Admin/Form';
 import FeaturedMedia from '#/components/Admin/Form/FeaturedMedia';

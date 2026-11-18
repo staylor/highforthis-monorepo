@@ -1,5 +1,6 @@
-import type { Choice } from '@highforthis/shared/components/Form/Select';
 import type { ReactNode } from 'react';
+
+import type { Choice } from '@highforthis/shared/components/Form/Select';
 
 import type { IconName } from '#/components/Icon';
 

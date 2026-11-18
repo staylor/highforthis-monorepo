@@ -1,10 +1,11 @@
-import { Heading1 } from '@highforthis/shared/components/Heading';
-import Link from '@highforthis/shared/components/Link';
-import query from '@highforthis/shared/utils/query';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
+
+import { Heading1 } from '@highforthis/shared/components/Heading';
+import Link from '@highforthis/shared/components/Link';
+import query from '@highforthis/shared/utils/query';
 
 import type { ShowStat, ShowStatsQuery } from '#/types/graphql';
 

@@ -1,7 +1,8 @@
-import { Heading1 } from '@highforthis/shared/components/Heading';
-import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
+
+import { Heading1 } from '@highforthis/shared/components/Heading';
+import query from '@highforthis/shared/utils/query';
 
 import FeaturedMedia from '#/components/FeaturedMedia';
 import Map from '#/components/Map';

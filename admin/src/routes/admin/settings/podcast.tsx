@@ -1,6 +1,7 @@
-import query from '@highforthis/shared/utils/query';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
+
+import query from '@highforthis/shared/utils/query';
 
 import FeaturedMedia from '#/components/Admin/Form/FeaturedMedia';
 import SettingsForm from '#/components/Admin/Settings/Form';

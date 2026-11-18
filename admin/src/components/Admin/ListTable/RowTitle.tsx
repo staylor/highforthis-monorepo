@@ -1,6 +1,7 @@
-import Link from '@highforthis/shared/components/Link';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import Link from '@highforthis/shared/components/Link';
 
 interface RowTitleProps {
   url: string;
