@@ -28,12 +28,12 @@ import {
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
 
-export interface ObservabilityOptions {
+interface ObservabilityOptions {
   serviceName: string;
   serviceVersion?: string;
 }
 
-export interface Observability {
+interface Observability {
   enabled: boolean;
   shutdown: () => Promise<void>;
 }

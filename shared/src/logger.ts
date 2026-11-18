@@ -5,7 +5,7 @@ import { logs, SeverityNumber, type AnyValue, type AnyValueMap } from '@opentele
 import pino, { type DestinationStream, type Logger, type LoggerOptions as PinoOptions } from 'pino';
 import { pinoHttp, type HttpLogger } from 'pino-http';
 
-export interface LoggerOptions {
+interface LoggerOptions {
   serviceName: string;
 }
 
