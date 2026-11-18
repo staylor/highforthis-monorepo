@@ -107,7 +107,7 @@ interface DeleteSelectedArgs extends FormArgs {
 }
 
 // Deletes the list rows checked in a list page's form, then comes back to the list with
-// ?deleted=<count>
+// ?deleted=<count>, or ?deleteFailed=<count> when the mutation didn't succeed
 export async function deleteSelected({
   gql,
   formData,
@@ -115,10 +115,16 @@ export async function deleteSelected({
   mutation,
 }: DeleteSelectedArgs): Promise<RedirectResult> {
   const ids = formData.getAll('ids');
-  if (ids.length > 0) {
-    await gql.mutate(mutation, { ids });
-  }
   const redirectUrl = new URL(url);
+  if (ids.length > 0) {
+    // The remove mutations return true on success. The client turns a GraphQL error, such as
+    // a missing admin session, into empty data.
+    const result = await gql.mutate<Record<string, unknown>>(mutation, { ids });
+    if (!Object.values(result).includes(true)) {
+      redirectUrl.searchParams.set('deleteFailed', ids.length.toString());
+      return { redirectTo: redirectUrl.toString() };
+    }
+  }
   redirectUrl.searchParams.set('deleted', ids.length.toString());
   return { redirectTo: redirectUrl.toString() };
 }

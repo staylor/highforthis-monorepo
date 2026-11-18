@@ -57,6 +57,8 @@ pnpm start   # NODE_ENV=production; compiles, minifies and fingerprints modules 
 
 Assets are served from `/assets` by this server with immutable caching. On Railway, the CDN on the site's domain keeps them at the edge.
 
+On Railway (detected by `RAILWAY_ENVIRONMENT_NAME`), the server trusts the `X-Forwarded-*` headers from Railway's edge, which replaces any the client sends, so requests get their public `https://` URL. The admin proxy passes that on, which keeps the admin's redirects on https.
+
 ## Scripts
 
 | Script           | Description                                   |

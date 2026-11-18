@@ -28,7 +28,7 @@ describe('media', () => {
   });
 
   it('deletes the checked uploads', async () => {
-    const gql = stubGraphQL();
+    const gql = stubGraphQL({ mutate: { removeMediaUpload: true } });
     const result = await deleteMedia({
       gql,
       formData: form({ ids: ['m1', 'm2', 'm3'] }),

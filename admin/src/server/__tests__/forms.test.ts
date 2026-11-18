@@ -154,7 +154,7 @@ describe('submitForm', () => {
 
 describe('deleteSelected', () => {
   it('deletes the checked rows and says how many', async () => {
-    const gql = stubGraphQL();
+    const gql = stubGraphQL({ mutate: { removeThing: true } });
     const result = await deleteSelected({
       gql,
       formData: form({ ids: ['1', '2'] }),
@@ -166,6 +166,31 @@ describe('deleteSelected', () => {
       { operation: 'DeleteThing', variables: { ids: ['1', '2'] } },
     ]);
     expect(result).toEqual({ redirectTo: 'http://localhost/admin/thing?page=2&deleted=2' });
+  });
+
+  it('says the delete failed when GraphQL refuses it', async () => {
+    // The client logs a GraphQL error, such as a missing admin session, and returns no data
+    const gql = stubGraphQL({ mutate: {} });
+    const result = await deleteSelected({
+      gql,
+      formData: form({ ids: ['1', '2'] }),
+      url: new URL('http://localhost/admin/thing?page=2'),
+      mutation: deleteMutation,
+    });
+
+    expect(result).toEqual({ redirectTo: 'http://localhost/admin/thing?page=2&deleteFailed=2' });
+  });
+
+  it('says the delete failed when the server reports false', async () => {
+    const gql = stubGraphQL({ mutate: { removeThing: false } });
+    const result = await deleteSelected({
+      gql,
+      formData: form({ ids: ['1'] }),
+      url: new URL('http://localhost/admin/thing'),
+      mutation: deleteMutation,
+    });
+
+    expect(result).toEqual({ redirectTo: 'http://localhost/admin/thing?deleteFailed=1' });
   });
 
   it('skips the mutation when nothing is checked', async () => {
