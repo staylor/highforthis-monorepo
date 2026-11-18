@@ -1,0 +1,49 @@
+import type { ShowEditQuery } from '@highforthis/shared/web/types/graphql';
+import query from '@highforthis/shared/web/utils/query';
+import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
+
+import ShowForm from '#/components/Admin/Show/Form';
+import { handleSubmission } from '#/utils/action';
+
+import type { Route } from './+types/edit';
+
+export async function loader({ request, context, params }: Route.LoaderArgs) {
+  return query<ShowEditQuery>({ request, context, query: showQuery, variables: { id: params.id } });
+}
+
+export async function action({ request, context, params, url }: Route.ActionArgs) {
+  return handleSubmission({
+    request,
+    url,
+    context,
+    mutation: showMutation,
+    // the form leaves out empty fields and unchecked boxes, so these defaults clear them
+    variables: { id: params.id, input: { attended: false, notes: null, title: null, url: null } },
+  });
+}
+
+export default function ShowEdit({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
+  return <ShowForm data={loaderData} heading={t('shows.edit')} buttonLabel={t('shows.update')} />;
+}
+
+const showQuery = gql`
+  query ShowEdit($id: String!) {
+    show(id: $id) {
+      ...ShowForm_show
+    }
+    ...ShowForm_entities
+  }
+  ${ShowForm.fragments.show}
+  ${ShowForm.fragments.entities}
+`;
+
+const showMutation = gql`
+  mutation UpdateShow($id: String!, $input: UpdateShowInput!) {
+    updateShow(id: $id, input: $input) {
+      ...ShowForm_show
+    }
+  }
+  ${ShowForm.fragments.show}
+`;

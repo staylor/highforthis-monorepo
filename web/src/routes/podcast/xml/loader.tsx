@@ -1,13 +1,12 @@
-import escape from 'html-escape';
-
 import type {
   AudioUpload,
   PodcastConnection,
   PodcastFeedQuery,
   PodcastSettings,
-} from '#/types/graphql';
-import { uploadUrl } from '#/utils/media';
-import query from '#/utils/query';
+} from '@highforthis/shared/web/types/graphql';
+import { uploadUrl } from '@highforthis/shared/web/utils/media';
+import query from '@highforthis/shared/web/utils/query';
+import escape from 'html-escape';
 
 import type { Route } from './+types/loader';
 import feedQuery from './graphql';

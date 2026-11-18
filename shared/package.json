@@ -13,16 +13,54 @@
     "./observability": {
       "types": "./dist/observability.d.ts",
       "import": "./dist/observability.js"
-    }
+    },
+    "./web/apollo/client": "./src/web/apollo/client.js",
+    "./web/apollo/fragmentMatcher": "./src/web/apollo/fragmentMatcher.js",
+    "./web/apollo/typePolicies": "./src/web/apollo/typePolicies.js",
+    "./web/auth": "./src/web/auth.ts",
+    "./web/components/Artist/Artwork": "./src/web/components/Artist/Artwork.tsx",
+    "./web/components/Blockquote": "./src/web/components/Blockquote/index.tsx",
+    "./web/components/Button": "./src/web/components/Button/index.tsx",
+    "./web/components/Form/Select": "./src/web/components/Form/Select/index.tsx",
+    "./web/components/Form/styles": "./src/web/components/Form/styles.ts",
+    "./web/components/Heading": "./src/web/components/Heading/index.tsx",
+    "./web/components/Icon": "./src/web/components/Icon/index.tsx",
+    "./web/components/Image": "./src/web/components/Image/index.tsx",
+    "./web/components/Link": "./src/web/components/Link/index.tsx",
+    "./web/components/List": "./src/web/components/List/index.tsx",
+    "./web/components/Paragraph": "./src/web/components/Paragraph/index.tsx",
+    "./web/components/Post/TextNodes": "./src/web/components/Post/TextNodes.tsx",
+    "./web/components/Shows/utils": "./src/web/components/Shows/utils.ts",
+    "./web/components/TextTitle": "./src/web/components/TextTitle/index.tsx",
+    "./web/components/Videos/Video": "./src/web/components/Videos/Video.tsx",
+    "./web/constants": "./src/web/constants.ts",
+    "./web/context": "./src/web/context.js",
+    "./web/i18n": "./src/web/i18n.js",
+    "./web/root.graphql": "./src/web/root.graphql.ts",
+    "./web/session": "./src/web/session.js",
+    "./web/styles/theme.css": "./src/web/styles/theme.css",
+    "./web/types/graphql": "./src/web/types/graphql.ts",
+    "./web/utils/base64": "./src/web/utils/base64.ts",
+    "./web/utils/connection": "./src/web/utils/connection.ts",
+    "./web/utils/media": "./src/web/utils/media.ts",
+    "./web/utils/mutate": "./src/web/utils/mutate.ts",
+    "./web/utils/parseObject": "./src/web/utils/parseObject.ts",
+    "./web/utils/query": "./src/web/utils/query.ts",
+    "./web/utils/rootData": "./src/web/utils/rootData.ts",
+    "./web/utils/storage": "./src/web/utils/storage.ts",
+    "./web/utils/title": "./src/web/utils/title.ts"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/web"
   ],
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
-    "typecheck": "tsgo"
+    "test": "vitest run",
+    "typecheck": "tsgo && tsgo -p tsconfig.web.json"
   },
   "dependencies": {
+    "@apollo/client": "4.1.6",
     "@opentelemetry/api": "1.9.1",
     "@opentelemetry/api-logs": "0.220.0",
     "@opentelemetry/exporter-logs-otlp-http": "0.220.0",
@@ -40,7 +78,29 @@
     "@opentelemetry/sdk-metrics": "2.9.0",
     "@opentelemetry/sdk-trace-node": "2.9.0",
     "@opentelemetry/semantic-conventions": "1.43.0",
+    "@tailwindcss/forms": "0.5.11",
+    "classnames": "2.5.1",
+    "graphql": "16.13.0",
+    "graphql-tag": "2.12.6",
+    "i18next": "25.8.13",
+    "i18next-fs-backend": "2.6.1",
+    "i18next-http-backend": "3.0.2",
     "pino": "10.3.1",
-    "pino-http": "11.0.0"
+    "pino-http": "11.0.0",
+    "qs": "6.15.0",
+    "react": "19.2.8",
+    "react-i18next": "16.5.4",
+    "react-router": "8.3.0",
+    "tailwind-merge": "3.7.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
+    "@vitejs/plugin-react": "5.1.4",
+    "happy-dom": "20.7.0",
+    "vite": "7.3.1",
+    "vitest": "4.0.18"
   }
 }

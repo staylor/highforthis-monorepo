@@ -1,13 +1,12 @@
 import { PassThrough } from 'node:stream';
 
+import { i18nContext } from '@highforthis/shared/web/context';
 import { createReadableStreamFromReadable } from '@react-router/node';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
 import { ServerRouter } from 'react-router';
 import type { EntryContext, RouterContextProvider } from 'react-router';
-
-import { i18nContext } from './context.js';
 
 export default function handleRequest(
   request: Request,

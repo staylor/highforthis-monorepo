@@ -1,6 +1,5 @@
+import Video from '@highforthis/shared/web/components/Videos/Video';
 import { gql } from 'graphql-tag';
-
-import Video from './Video';
 
 export const videosQuery = gql`
   fragment Videos_videos on Query {

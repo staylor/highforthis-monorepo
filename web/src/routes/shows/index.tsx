@@ -1,15 +1,15 @@
+import { Heading1 } from '@highforthis/shared/web/components/Heading';
+import { formatDate } from '@highforthis/shared/web/components/Shows/utils';
+import type { ShowsQuery } from '@highforthis/shared/web/types/graphql';
+import query from '@highforthis/shared/web/utils/query';
+import { rootData } from '@highforthis/shared/web/utils/rootData';
+import titleTemplate from '@highforthis/shared/web/utils/title';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import type { MetaFunction } from 'react-router';
 
-import { Heading1 } from '#/components/Heading';
 import Shows from '#/components/Shows';
 import ShowsGrid from '#/components/Shows/Grid';
-import { formatDate } from '#/components/Shows/utils';
-import type { ShowsQuery } from '#/types/graphql';
-import query from '#/utils/query';
-import { rootData } from '#/utils/rootData';
-import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types/index';
 

@@ -1,0 +1,88 @@
+import Link from '@highforthis/shared/web/components/Link';
+import cn from 'classnames';
+import type { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useSearchParams } from 'react-router';
+
+const textClass = cn(
+  'border border-detail',
+  'inline-block text-base leading-none font-normal mx-0.5 pt-0.5 px-1.5 pb-1 rounded-sm text-center select-none'
+);
+
+const Count = ({ children }: PropsWithChildren) => (
+  <strong className="mx-1 inline-block px-2 text-center font-normal select-none">{children}</strong>
+);
+
+interface PaginationProps {
+  data: Record<string, any>;
+  perPage: number;
+  className: string;
+}
+
+export default function Pagination({ data, perPage, className }: PaginationProps) {
+  const { t } = useTranslation();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get('page');
+  const pages = data.count > 0 ? Math.ceil(data.count / perPage) : 0;
+  const firstPage = pages === 0 ? 0 : 1;
+  const currentPage = page ? Number(page) : firstPage;
+  const paginated = currentPage && currentPage > 1;
+  let previousPage = null;
+  let nextPage = null;
+  if (paginated) {
+    if (currentPage - 1 > 1) {
+      previousPage = currentPage - 1;
+    } else {
+      previousPage = 0;
+    }
+  }
+  if (currentPage !== pages && data.pageInfo.hasNextPage) {
+    nextPage = currentPage + 1;
+  }
+
+  const LinkTo = ({
+    page,
+    className,
+    children,
+  }: PropsWithChildren<{
+    page?: number;
+    className: string;
+  }>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (page) {
+      params.set('page', String(page));
+    } else if (page === 0) {
+      params.delete('page');
+    }
+    return (
+      <Link className={className} to={{ pathname: location.pathname, search: params.toString() }}>
+        {children}
+      </Link>
+    );
+  };
+
+  const Inactive = ({ children }: PropsWithChildren) => (
+    <span className={cn(textClass, 'bg-neutral-50')}>{children}</span>
+  );
+
+  const Active = ({ page, children }: PropsWithChildren<{ page?: number }>) => (
+    <LinkTo
+      className={cn(textClass, 'text-dark hover:bg-detail bg-white hover:text-black')}
+      page={page}
+    >
+      {children}
+    </LinkTo>
+  );
+
+  return (
+    <nav className={cn('text-sm select-none', className)}>
+      <Count>{t('pagination.items', { count: data.count })}</Count>
+      {paginated ? <Active>«</Active> : <Inactive>«</Inactive>}
+      {previousPage === null ? <Inactive>‹</Inactive> : <Active page={previousPage}>‹</Active>}
+      <Count>{t('pagination.pages', { page: paginated ? currentPage : firstPage, pages })}</Count>
+      {nextPage === null ? <Inactive>›</Inactive> : <Active page={nextPage}>›</Active>}
+      {currentPage !== pages ? <Active page={pages}>»</Active> : <Inactive>»</Inactive>}
+    </nav>
+  );
+}

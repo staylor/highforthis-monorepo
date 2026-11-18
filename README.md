@@ -7,8 +7,9 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 | Workspace                          | Description                                            |
 | ---------------------------------- | ------------------------------------------------------ |
 | [`graphql`](./graphql)             | GraphQL API server (Apollo Server, Prisma, PostgreSQL) |
-| [`web`](./web)                     | Web application (React Router v7, Vite, Tailwind CSS)  |
-| [`shared`](./shared)               | Shared structured logging and OpenTelemetry utilities  |
+| [`web`](./web)                     | Public site (React Router v7, Vite, Tailwind CSS)      |
+| [`admin`](./admin)                 | Admin and login, served under the public site's domain |
+| [`shared`](./shared)               | Logging, OpenTelemetry, and code both web apps use     |
 | [`observability`](./observability) | OpenObserve backend and GUI deployment                 |
 | [`xcode`](./xcode)                 | iOS, iPadOS, macOS and tvOS app (SwiftUI, Apollo iOS)  |
 
@@ -22,7 +23,7 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 
 ```bash
 pnpm bootstrap   # install Postgres and packages, create graphql/.env, load the seed data
-pnpm dev         # GraphQL at http://localhost:8081/graphql, web at http://localhost:3000
+pnpm dev         # GraphQL at http://localhost:8081/graphql, the site at http://localhost:3000, admin at /admin
 ```
 
 `pnpm bootstrap` is safe to run again: it only does what's missing and never replaces data. `pnpm db:reset` rebuilds the database from the seed, and `pnpm db:refresh` loads a production snapshot. The app runs without any API keys; add the ones a feature needs to `graphql/.env` (see [`graphql/README.md`](./graphql/README.md#environment-variables)).
@@ -37,6 +38,7 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 | `pnpm dev`                      | Start GraphQL and the web app in development               |
 | `pnpm graphql:dev`              | Start GraphQL server in development (watch mode)           |
 | `pnpm web:dev`                  | Start web app in development                               |
+| `pnpm admin:dev`                | Start the admin app in development (port 3001)             |
 | `pnpm observability:dev`        | Start OpenObserve with Docker                              |
 | `pnpm observability:dev:podman` | Start OpenObserve with Podman                              |
 | `pnpm build`                    | Build all workspaces for production                        |
@@ -48,6 +50,8 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 | `pnpm lint-fix`                 | Lint, auto-fix and format                                  |
 | `pnpm knip`                     | Find unused files, exports, and dependencies               |
 | `pnpm test:web`                 | Run web workspace tests                                    |
+| `pnpm test:admin`               | Run admin workspace tests                                  |
+| `pnpm test:shared`              | Run shared workspace tests                                 |
 | `pnpm typecheck`                | Type-check all workspaces                                  |
 
 ## GraphQL Codegen
@@ -87,7 +91,7 @@ WEBAUTHN_RP_NAME=High For This Admin
 PASSWORD_LOGIN_ENABLED=true
 ```
 
-Set the WebAuthn variables on `graphql` and `PASSWORD_LOGIN_ENABLED` on both Node services. Keep password login enabled until at least two passkeys have been registered and tested, then set `PASSWORD_LOGIN_ENABLED=false` on both services. For local registration, override the relying party values with `WEBAUTHN_RP_ID=localhost` and `WEBAUTHN_ORIGIN=http://localhost:3000`.
+Set the WebAuthn variables on `graphql` and `PASSWORD_LOGIN_ENABLED` on `graphql` and `admin`. Keep password login enabled until at least two passkeys have been registered and tested, then set `PASSWORD_LOGIN_ENABLED=false` on both. For local registration, override the relying party values with `WEBAUTHN_RP_ID=localhost` and `WEBAUTHN_ORIGIN=http://localhost:3000`.
 
 The GraphQL Railway pre-deploy command runs `prisma db push` so the passkey tables exist before the new application starts.
 

@@ -1,10 +1,8 @@
+import Artwork, { DEFAULT_IMAGE_SIZE } from '@highforthis/shared/web/components/Artist/Artwork';
+import type { AppleMusicData } from '@highforthis/shared/web/types/graphql';
 import cn from 'classnames';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import type { AppleMusicData } from '#/types/graphql';
-
-import Artwork, { DEFAULT_IMAGE_SIZE } from './Artwork';
 
 interface AppleMusicProps {
   name: string;

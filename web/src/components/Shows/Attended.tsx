@@ -1,12 +1,15 @@
+import Link from '@highforthis/shared/web/components/Link';
+import {
+  formatArtists,
+  formatDate,
+  formatShowLink,
+} from '@highforthis/shared/web/components/Shows/utils';
+import type { ShowConnection } from '@highforthis/shared/web/types/graphql';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import { Trans } from 'react-i18next';
 
-import Link from '#/components/Link';
-import type { ShowConnection } from '#/types/graphql';
-
 import { cellBase, rowBorder, rowHover } from './styles';
-import { formatArtists, formatDate, formatShowLink } from './utils';
 
 export default function Attended({
   shows,

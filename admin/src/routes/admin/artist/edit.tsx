@@ -1,0 +1,69 @@
+import type { ArtistEditQuery } from '@highforthis/shared/web/types/graphql';
+import query from '@highforthis/shared/web/utils/query';
+import { gql } from 'graphql-tag';
+import { useTranslation } from 'react-i18next';
+
+import ArtistForm from '#/components/Admin/Artist/Form';
+import { handleSubmission } from '#/utils/action';
+
+import type { Route } from './+types/edit';
+
+export async function loader({ request, context, params }: Route.LoaderArgs) {
+  return query<ArtistEditQuery>({
+    request,
+    context,
+    query: artistQuery,
+    variables: { id: params.id },
+  });
+}
+
+export async function action({ request, context, params, url }: Route.ActionArgs) {
+  return handleSubmission({
+    request,
+    url,
+    context,
+    mutation: artistMutation,
+    variables: { id: params.id, input: { excludeFromSearch: false } },
+  });
+}
+
+export default function ArtistEdit({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
+  const label = t('artists.edit');
+  return <ArtistForm data={loaderData} heading={label} buttonLabel={label} />;
+}
+
+const artistQuery = gql`
+  query ArtistEdit($id: String) {
+    artist(id: $id) {
+      ...ArtistForm_artist
+    }
+    shows(artist: { id: $id }, first: 200) {
+      edges {
+        node {
+          artists {
+            id
+            name
+          }
+          attended
+          date
+          id
+          venue {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+  ${ArtistForm.fragments.artist}
+`;
+
+const artistMutation = gql`
+  mutation UpdateArtist($id: String!, $input: UpdateArtistInput!) {
+    updateArtist(id: $id, input: $input) {
+      ...ArtistForm_artist
+    }
+  }
+  ${ArtistForm.fragments.artist}
+`;

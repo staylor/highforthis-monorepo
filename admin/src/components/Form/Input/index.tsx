@@ -1,0 +1,29 @@
+import { inputBase } from '@highforthis/shared/web/components/Form/styles';
+import cn from 'classnames';
+import type { ChangeEvent, InputHTMLAttributes } from 'react';
+
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  onChange?: (value: string) => void;
+  inputType?: 'url' | 'email' | 'number' | 'password';
+}
+
+export default function Input({ inputType, value, onChange, className, ...props }: InputProps) {
+  const inputOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!onChange) {
+      return;
+    }
+
+    const newValue = e.target.value || '';
+    onChange(newValue);
+  };
+
+  return (
+    <input
+      type={inputType || 'text'}
+      {...props}
+      onChange={onChange ? inputOnChange : undefined}
+      className={cn(inputBase, 'w-full', className)}
+      defaultValue={value}
+    />
+  );
+}

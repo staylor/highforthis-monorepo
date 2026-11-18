@@ -1,8 +1,7 @@
+import { ListType } from '@highforthis/shared/web/types/graphql';
+import type { EditorState } from '@highforthis/shared/web/types/graphql';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-
-import { ListType } from '#/types/graphql';
-import type { EditorState } from '#/types/graphql';
 
 import Content from '../Content';
 

@@ -1,7 +1,10 @@
-import Link from '#/components/Link';
-import type { ShowConnection } from '#/types/graphql';
-
-import { formatArtists, formatDate, formatShowLink } from './utils';
+import Link from '@highforthis/shared/web/components/Link';
+import {
+  formatArtists,
+  formatDate,
+  formatShowLink,
+} from '@highforthis/shared/web/components/Shows/utils';
+import type { ShowConnection } from '@highforthis/shared/web/types/graphql';
 
 export default function ShowsList({
   shows,

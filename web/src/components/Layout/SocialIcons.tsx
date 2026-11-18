@@ -1,11 +1,10 @@
-import type { PropsWithChildren } from 'react';
-
 import {
   YOUTUBE_USERNAME,
   INSTAGRAM_USERNAME,
   TWITTER_USERNAME,
   TIKTOK_USERNAME,
-} from '#/constants';
+} from '@highforthis/shared/web/constants';
+import type { PropsWithChildren } from 'react';
 
 type IconProps = PropsWithChildren<{
   url: string;

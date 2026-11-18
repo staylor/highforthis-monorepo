@@ -1,4 +1,11 @@
 import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
+import factory from '@highforthis/shared/web/apollo/client';
+import {
+  apolloClientContext,
+  graphqlHostContext,
+  i18nContext,
+} from '@highforthis/shared/web/context';
+import createI18n from '@highforthis/shared/web/i18n';
 import { createRequestHandler } from '@react-router/express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
@@ -6,11 +13,7 @@ import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { RouterContextProvider } from 'react-router';
 
-import factory from './apollo/client.js';
 import rejectWordPress from './rejectWordPress.js';
-import { apolloClientContext, graphqlHostContext, i18nContext } from './src/context.js';
-import createI18n from './src/i18n.js';
-import { sessionStorage } from './src/session.js';
 
 process.env.TZ = 'America/New_York';
 
@@ -33,7 +36,16 @@ function getLoadContext(_, res) {
 const proxy = createProxyMiddleware({
   target: gqlHost,
   changeOrigin: true,
-  pathFilter: ['/auth/passkeys', '/graphql', '/upload', '/uploads'],
+  pathFilter: ['/graphql', '/uploads'],
+});
+
+// The admin is its own app (admin/). Forwarding its paths keeps it on this domain, so the
+// session cookie, passkeys and signed-in live refresh on public pages work unchanged.
+const adminHost = (process.env.ADMIN_HOST || 'http://localhost:3001').replace(/\/$/, '');
+const adminProxy = createProxyMiddleware({
+  target: adminHost,
+  xfwd: true,
+  pathFilter: ['/admin', '/auth/passkeys', '/login', '/modals', '/upload'],
 });
 
 const viteDevServer =
@@ -62,18 +74,8 @@ app.use(cookieParser());
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable('x-powered-by');
 
-// The upload page posts from the browser, which can't read the httpOnly session cookie.
-// Attach its token so the GraphQL server can check that the uploader is an admin.
-app.use('/upload', async (req, _res, next) => {
-  const session = await sessionStorage.getSession(req.headers.cookie);
-  const token = session.get('token');
-  if (token) {
-    req.headers.authorization = `Bearer ${token}`;
-  }
-  next();
-});
-
-// Proxy API requests before Vite's development middleware can serve an HTML fallback.
+// Proxy API and admin requests before Vite's development middleware can serve an HTML fallback.
+app.use(adminProxy);
 app.use(proxy);
 
 // handle asset requests

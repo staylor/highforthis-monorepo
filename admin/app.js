@@ -1,0 +1,119 @@
+import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
+import factory from '@highforthis/shared/web/apollo/client';
+import {
+  apolloClientContext,
+  graphqlHostContext,
+  i18nContext,
+} from '@highforthis/shared/web/context';
+import createI18n from '@highforthis/shared/web/i18n';
+import { sessionStorage } from '@highforthis/shared/web/session';
+import { createRequestHandler } from '@react-router/express';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import { RouterContextProvider } from 'react-router';
+
+// The admin app: /admin, /login and /modals. The public site forwards those paths here,
+// so both share one domain, session cookie and passkey origin.
+
+process.env.TZ = 'America/New_York';
+
+// Matches the Vite base: the app's scripts, styles and public files are served under it
+const BASE = '/admin';
+const serverPort = parseInt(process.env.PORT || process.env.ADMIN_PORT || '3001', 10);
+const logger = createLogger({ serviceName: 'admin' });
+
+// use a local GQL server by default; accept either a base URL or a legacy /graphql URL
+const configuredGqlHost = process.env.GQL_HOST || 'http://localhost:8081';
+const gqlHost = configuredGqlHost.replace(/\/graphql\/?$/, '').replace(/\/$/, '');
+const getClient = factory(`${gqlHost}/graphql`);
+
+function getLoadContext(_, res) {
+  const context = new RouterContextProvider();
+  context.set(i18nContext, res.locals.i18n);
+  context.set(apolloClientContext, getClient());
+  context.set(graphqlHostContext, gqlHost);
+  return context;
+}
+
+const proxy = createProxyMiddleware({
+  target: gqlHost,
+  changeOrigin: true,
+  pathFilter: ['/auth/passkeys', '/graphql', '/upload', '/uploads'],
+});
+
+const viteDevServer =
+  process.env.NODE_ENV === 'production'
+    ? undefined
+    : await import('vite').then((vite) =>
+        vite.createServer({
+          server: {
+            middlewareMode: true,
+            // The public site's dev server uses Vite's default HMR port
+            hmr: { port: parseInt(process.env.ADMIN_HMR_PORT || '24679', 10) },
+          },
+        })
+      );
+
+const reactRouterHandler = createRequestHandler({
+  build: viteDevServer
+    ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
+    : await import('./build/server/index.js'),
+  getLoadContext,
+});
+
+const app = express();
+
+app.use(compression());
+app.use(createHttpLogger(logger));
+app.use(cookieParser());
+
+// http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
+app.disable('x-powered-by');
+
+// The upload page posts from the browser, which can't read the httpOnly session cookie.
+// Attach its token so the GraphQL server can check that the uploader is an admin.
+app.use('/upload', async (req, _res, next) => {
+  const session = await sessionStorage.getSession(req.headers.cookie);
+  const token = session.get('token');
+  if (token) {
+    req.headers.authorization = `Bearer ${token}`;
+  }
+  next();
+});
+
+// Proxy API requests before Vite's development middleware can serve an HTML fallback.
+app.use(proxy);
+
+// handle asset requests
+if (viteDevServer) {
+  app.use(viteDevServer.middlewares);
+} else {
+  app.use(
+    `${BASE}/assets`,
+    express.static('build/client/assets', {
+      immutable: true,
+      maxAge: '1y',
+    })
+  );
+  // Everything else in public/ (translations, editor icons, favicon). Without
+  // redirect: false, a request for /admin would be redirected to /admin/ as a folder.
+  app.use(BASE, express.static('build/client', { maxAge: '1h', index: false, redirect: false }));
+}
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// handle SSR requests
+app.all('/{*splat}', async (_, res, next) => {
+  // determine locale here
+  res.locals.i18n = await createI18n('en');
+  next();
+});
+app.all('/{*splat}', reactRouterHandler);
+
+app.listen(serverPort, () => {
+  logger.info({ port: serverPort }, 'Admin server ready');
+});
