@@ -17,12 +17,12 @@ import query from '@highforthis/shared/utils/query';
 import titleTemplate, { type TitleProps } from '@highforthis/shared/utils/title';
 
 import mainStylesheetUrl from '#/styles/main.css?url';
-import type { AppQuery } from '#/types/graphql';
 
 import type { Route } from './+types/root';
 import { Html, Body, Boundary, useLayout } from './components/Layout';
 import type { OpenObserveRumConfig } from './rum';
 import { getOpenObserveRumConfig } from './rum.server';
+import type { AppQuery } from './types/graphql';
 import { createClientCache } from './utils/cache';
 
 export const links: LinksFunction = () => {

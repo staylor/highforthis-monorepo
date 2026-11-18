@@ -5,6 +5,9 @@
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
+  "imports": {
+    "#/*": "./src/*"
+  },
   "exports": {
     "./logger": {
       "types": "./dist/logger.d.ts",

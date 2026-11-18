@@ -6,7 +6,7 @@ import type { RouterContextProvider } from 'react-router';
 import { isAuthenticated } from '@highforthis/shared/auth';
 import { apolloClientContext } from '@highforthis/shared/context';
 
-import parseObject from '#/utils/parseObject';
+import parseObject from './parseObject';
 
 export interface ParseFormDataArgs {
   skipKeys?: string[];
