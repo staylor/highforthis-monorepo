@@ -45,6 +45,19 @@ const disabledObservability: Observability = {
 
 let observability: Observability | undefined;
 
+// OpenObserve takes Basic auth. A Railway variable can reference its credentials but can't
+// base64-encode them into OTEL_EXPORTER_OTLP_HEADERS, so when that isn't set, build the
+// header from OPENOBSERVE_USER and OPENOBSERVE_PASSWORD.
+function openObserveHeaders(): Record<string, string> | undefined {
+  const user = process.env.OPENOBSERVE_USER;
+  const password = process.env.OPENOBSERVE_PASSWORD;
+  if (process.env.OTEL_EXPORTER_OTLP_HEADERS || !user || !password) {
+    return undefined;
+  }
+
+  return { Authorization: `Basic ${Buffer.from(`${user}:${password}`).toString('base64')}` };
+}
+
 function positiveInteger(value: string | undefined, fallback: number): number {
   const parsed = Number(value);
 
@@ -78,11 +91,13 @@ export function startObservability({
     })
   );
 
+  const headers = openObserveHeaders();
+
   // NodeSDK and auto-instrumentations-node load every exporter and 41 instrumentations,
   // about 24 MB of RSS per process; these are the only ones the apps use.
   const tracerProvider = new NodeTracerProvider({
     resource,
-    spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter())],
+    spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter({ headers }))],
   });
   tracerProvider.register();
 
@@ -90,7 +105,7 @@ export function startObservability({
     resource,
     readers: [
       new PeriodicExportingMetricReader({
-        exporter: new OTLPMetricExporter(),
+        exporter: new OTLPMetricExporter({ headers }),
         exportIntervalMillis: positiveInteger(process.env.OTEL_METRIC_EXPORT_INTERVAL, 60_000),
       }),
     ],
@@ -99,7 +114,7 @@ export function startObservability({
 
   const loggerProvider = new LoggerProvider({
     resource,
-    processors: [new BatchLogRecordProcessor({ exporter: new OTLPLogExporter() })],
+    processors: [new BatchLogRecordProcessor({ exporter: new OTLPLogExporter({ headers }) })],
   });
   logs.setGlobalLoggerProvider(loggerProvider);
 

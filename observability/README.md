@@ -16,22 +16,34 @@ The Dockerfile keeps three days of data (`ZO_COMPACT_DATA_RETENTION_DAYS`; OpenO
    PORT=5080
    ZO_ROOT_USER_EMAIL=<admin email>
    ZO_ROOT_USER_PASSWORD=<long, unique password>
+   ZO_CORS_ALLOWED_ORIGINS=https://highforthis.com
    ```
+
+   Browser RUM posts to OpenObserve from the site's origin, so that origin must be allowed. OpenObserve v0.91.3 sends no `Access-Control-Allow-Origin` header at all when `ZO_CORS_ALLOWED_ORIGINS` is unset, despite its docs saying an empty value allows every origin.
 
 4. Generate a public domain for the service and verify that `/healthz` responds successfully.
 5. Sign in, then use **Data Sources → Recommended → Traces → OpenTelemetry** to copy the OTLP endpoint and authorization header. Create a dedicated ingestion user instead of using the root user for long-term ingestion.
 
 The root credentials initialize the first user on a fresh `/data` volume. Keep them configured so a replacement volume can initialize successfully.
 
-## Configure `graphql` and `web`
+## Configure `graphql`, `web` and `admin`
 
-Set the following variables on both Railway services. The endpoint must include the OpenObserve organization (`default` below), but must not include a signal-specific suffix such as `/v1/traces`.
+Set the following variables on each Railway service. The endpoint must include the OpenObserve organization (`default` below), but must not include a signal-specific suffix such as `/v1/traces`.
 
 ```text
 OTEL_EXPORTER_OTLP_ENDPOINT=https://<openobserve-domain>/api/default
 OTEL_EXPORTER_OTLP_HEADERS=Authorization=Basic <base64-credentials-from-openobserve>
 OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 ```
+
+Instead of `OTEL_EXPORTER_OTLP_HEADERS`, a service can set `OPENOBSERVE_USER` and `OPENOBSERVE_PASSWORD`, and the apps build the Basic authorization header from them. On Railway these can reference the observability service's variables, which a sealed `OTEL_EXPORTER_OTLP_HEADERS` can't:
+
+```text
+OPENOBSERVE_USER=${{observability.ZO_ROOT_USER_EMAIL}}
+OPENOBSERVE_PASSWORD=${{observability.ZO_ROOT_USER_PASSWORD}}
+```
+
+`OTEL_EXPORTER_OTLP_HEADERS` wins when both are set.
 
 The standard OTLP exporters append `/v1/logs`, `/v1/metrics`, and `/v1/traces` to that endpoint. OpenObserve's ingestion screen is the source of truth for the endpoint and authorization value.
 

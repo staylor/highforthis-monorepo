@@ -57,7 +57,7 @@ On Railway this is the `highforthis-admin` service. Railway no longer lets new s
 
 Its variables reference `highforthis-web`'s (for example `TOKEN_SECRET=${{highforthis-web.TOKEN_SECRET}}`), so the session cookie settings always match, plus `NODE_ENV=production` and `PORT=3001`. `highforthis-web` has `ADMIN_HOST=http://${{highforthis-admin.RAILWAY_PRIVATE_DOMAIN}}:${{highforthis-admin.PORT}}`.
 
-To send its telemetry to OpenObserve, set `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_EXPORTER_OTLP_HEADERS` on the service. Web's header is a sealed variable, which a reference can't read, so it has to be set on its own.
+Its telemetry goes to OpenObserve with `OTEL_EXPORTER_OTLP_ENDPOINT` referencing web's, and `OPENOBSERVE_USER`/`OPENOBSERVE_PASSWORD` referencing the observability service's root credentials. Web's `OTEL_EXPORTER_OTLP_HEADERS` is sealed, so a reference can't copy it; the shared observability code builds the same header from those two variables instead.
 
 ## Scripts
 
