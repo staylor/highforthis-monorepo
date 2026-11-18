@@ -343,6 +343,8 @@ model SiteSettings {
   copyrightText String?
 }
 
+// No longer used: the Google Analytics IDs it held were removed. It stays so the
+// pre-deploy `prisma db push` doesn't have to drop a table that has data.
 model DashboardSettings {
   id               String  @id @default("dashboard")
   googleClientId   String?

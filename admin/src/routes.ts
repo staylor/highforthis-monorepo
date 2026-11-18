@@ -26,7 +26,6 @@ export default [
     ]),
     ...adminRoutes('post'),
     ...prefix('settings', [
-      route('dashboard', 'routes/admin/settings/dashboard.tsx'),
       route('media', 'routes/admin/settings/media.tsx'),
       route('podcast', 'routes/admin/settings/podcast.tsx'),
       route('site?', 'routes/admin/settings/site.tsx'),

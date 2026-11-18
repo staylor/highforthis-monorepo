@@ -243,11 +243,6 @@ export const siteSettingsSchema = z.object({
   tagline: z.string().nullish(),
 });
 
-export const dashboardSettingsSchema = z.object({
-  googleClientId: z.string().nullish(),
-  googleTrackingId: z.string().nullish(),
-});
-
 const mediaCropSettingInput = z.object({
   height: z.number().int().nullish(),
   name: z.string(),

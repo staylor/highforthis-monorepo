@@ -1,15 +1,13 @@
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import type { MetaFunction } from 'react-router';
-import { redirect, Outlet } from 'react-router';
+import { Outlet } from 'react-router';
 
-import { isAuthenticated } from '@highforthis/shared/auth';
-import { graphqlHostContext } from '@highforthis/shared/context';
-import { sessionStorage } from '@highforthis/shared/session';
 import { rootData } from '@highforthis/shared/utils/rootData';
 import titleTemplate from '@highforthis/shared/utils/title';
 
 import NavMenu, { AdminNavProvider, useAdminNav } from '#/components/Admin/NavMenu';
+import { requireAdminSession } from '#/utils/adminSession.server';
 
 import type { Route } from './+types/layout';
 
@@ -27,25 +25,8 @@ export const meta: MetaFunction = ({ matches }) => {
 };
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const token = await isAuthenticated(request);
-  if (!token) {
-    return redirect('/login/unauthorized');
-  }
-
-  const response = await fetch(`${context.get(graphqlHostContext)}/auth/session`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (response.ok) {
-    return {};
-  }
-  if (response.status !== 401 && response.status !== 403) {
-    throw new Response('Unable to validate the admin session', { status: 503 });
-  }
-
-  const session = await sessionStorage.getSession(request.headers.get('cookie'));
-  return redirect('/login/unauthorized', {
-    headers: { 'Set-Cookie': await sessionStorage.destroySession(session) },
-  });
+  await requireAdminSession({ request, context });
+  return {};
 }
 
 function AdminShell() {

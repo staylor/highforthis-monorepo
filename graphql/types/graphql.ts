@@ -227,18 +227,6 @@ export type CreateVideoInput = {
   year: Scalars['Int']['input'];
 };
 
-export type DashboardSettings = {
-  __typename?: 'DashboardSettings';
-  googleClientId?: Maybe<Scalars['String']['output']>;
-  googleTrackingId?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-};
-
-export type DashboardSettingsInput = {
-  googleClientId?: InputMaybe<Scalars['String']['input']>;
-  googleTrackingId?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type EditorNode =
   | CodeNode
   | ElementNode
@@ -541,7 +529,6 @@ export type Mutation = {
   removeVenue?: Maybe<Scalars['Boolean']['output']>;
   removeVideo?: Maybe<Scalars['Boolean']['output']>;
   updateArtist?: Maybe<Artist>;
-  updateDashboardSettings?: Maybe<DashboardSettings>;
   updateMediaSettings?: Maybe<MediaSettings>;
   updateMediaUpload?: Maybe<MediaUpload>;
   updatePodcast?: Maybe<Podcast>;
@@ -630,11 +617,6 @@ export type MutationRemoveVideoArgs = {
 export type MutationUpdateArtistArgs = {
   id: Scalars['String']['input'];
   input: UpdateArtistInput;
-};
-
-export type MutationUpdateDashboardSettingsArgs = {
-  id: Scalars['String']['input'];
-  input: DashboardSettingsInput;
 };
 
 export type MutationUpdateMediaSettingsArgs = {
@@ -794,7 +776,6 @@ export type Query = {
   appleMusicAlbums: AppleMusicAlbumResults;
   artist?: Maybe<Artist>;
   artists?: Maybe<ArtistConnection>;
-  dashboardSettings: DashboardSettings;
   media?: Maybe<MediaUpload>;
   mediaSettings: MediaSettings;
   podcast?: Maybe<Podcast>;

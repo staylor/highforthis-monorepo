@@ -223,18 +223,6 @@ export type CreateVideoInput = {
   year: Scalars['Int']['input'];
 };
 
-export type DashboardSettings = {
-  __typename?: 'DashboardSettings';
-  googleClientId?: Maybe<Scalars['String']['output']>;
-  googleTrackingId?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-};
-
-export type DashboardSettingsInput = {
-  googleClientId?: InputMaybe<Scalars['String']['input']>;
-  googleTrackingId?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type EditorNode = CodeNode | ElementNode | HeadingNode | ImageNode | LinebreakNode | ListItemNode | ListNode | QuoteNode | TextNode | VideoNode;
 
 export type EditorNodeInput = {
@@ -522,7 +510,6 @@ export type Mutation = {
   removeVenue?: Maybe<Scalars['Boolean']['output']>;
   removeVideo?: Maybe<Scalars['Boolean']['output']>;
   updateArtist?: Maybe<Artist>;
-  updateDashboardSettings?: Maybe<DashboardSettings>;
   updateMediaSettings?: Maybe<MediaSettings>;
   updateMediaUpload?: Maybe<MediaUpload>;
   updatePodcast?: Maybe<Podcast>;
@@ -630,12 +617,6 @@ export type MutationRemoveVideoArgs = {
 export type MutationUpdateArtistArgs = {
   id: Scalars['String']['input'];
   input: UpdateArtistInput;
-};
-
-
-export type MutationUpdateDashboardSettingsArgs = {
-  id: Scalars['String']['input'];
-  input: DashboardSettingsInput;
 };
 
 
@@ -805,7 +786,6 @@ export type Query = {
   appleMusicAlbums: AppleMusicAlbumResults;
   artist?: Maybe<Artist>;
   artists?: Maybe<ArtistConnection>;
-  dashboardSettings: DashboardSettings;
   media?: Maybe<MediaUpload>;
   mediaSettings: MediaSettings;
   podcast?: Maybe<Podcast>;
@@ -1307,4 +1287,4 @@ export type Video_VideoFragment = { __typename?: 'Video', dataId: string, id: st
 export type AppQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AppQuery = { __typename?: 'Query', apiKeys?: { __typename?: 'APIKeys', googleMaps?: string | null } | null, dashboardSettings: { __typename?: 'DashboardSettings', googleClientId?: string | null, googleTrackingId?: string | null, id: string }, podcastSettings: { __typename?: 'PodcastSettings', description?: string | null, feedLink?: string | null, id: string, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: string } | null }, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', id: string, name: string, slug: string } } }> } | null, siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };
+export type AppQuery = { __typename?: 'Query', apiKeys?: { __typename?: 'APIKeys', googleMaps?: string | null } | null, podcastSettings: { __typename?: 'PodcastSettings', description?: string | null, feedLink?: string | null, id: string, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: string } | null }, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', id: string, name: string, slug: string } } }> } | null, siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };

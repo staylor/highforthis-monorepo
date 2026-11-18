@@ -18,17 +18,6 @@ const Settings = `#graphql
     copyrightText: String
   }
 
-  type DashboardSettings {
-    id: String!
-    googleClientId: String
-    googleTrackingId: String
-  }
-
-  input DashboardSettingsInput {
-    googleClientId: String
-    googleTrackingId: String
-  }
-
   type PodcastSettings {
     id: String!
     title: String
@@ -85,14 +74,12 @@ const Settings = `#graphql
 
   extend type Query {
     siteSettings: SiteSettings!
-    dashboardSettings: DashboardSettings!
     mediaSettings: MediaSettings!
     podcastSettings: PodcastSettings!
   }
 
   extend type Mutation {
     updateSiteSettings(id: String!, input: SiteSettingsInput!): SiteSettings
-    updateDashboardSettings(id: String!, input: DashboardSettingsInput!): DashboardSettings
     updateMediaSettings(id: String!, input: MediaSettingsInput!): MediaSettings
     updatePodcastSettings(id: String!, input: PodcastSettingsInput!): PodcastSettings
   }

@@ -5,11 +5,6 @@ export const appQuery = gql`
     apiKeys {
       googleMaps
     }
-    dashboardSettings {
-      googleClientId
-      googleTrackingId
-      id
-    }
     podcastSettings {
       description
       feedLink

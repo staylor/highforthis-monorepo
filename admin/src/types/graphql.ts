@@ -589,19 +589,6 @@ export type DeletePostMutationVariables = Types.Exact<{
 
 export type DeletePostMutation = { __typename?: 'Mutation', removePost?: boolean | null };
 
-export type DashboardSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type DashboardSettingsQuery = { __typename?: 'Query', dashboardSettings: { __typename?: 'DashboardSettings', googleClientId?: string | null, googleTrackingId?: string | null, id: string } };
-
-export type UpdateDashboardSettingsMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.DashboardSettingsInput;
-}>;
-
-
-export type UpdateDashboardSettingsMutation = { __typename?: 'Mutation', updateDashboardSettings?: { __typename?: 'DashboardSettings', id: string } | null };
-
 export type MediaSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
@@ -886,4 +873,4 @@ export type Video_VideoFragment = { __typename?: 'Video', dataId: string, id: st
 export type AppQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AppQuery = { __typename?: 'Query', apiKeys?: { __typename?: 'APIKeys', googleMaps?: string | null } | null, dashboardSettings: { __typename?: 'DashboardSettings', googleClientId?: string | null, googleTrackingId?: string | null, id: string }, podcastSettings: { __typename?: 'PodcastSettings', description?: string | null, feedLink?: string | null, id: string, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: string } | null }, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', id: string, name: string, slug: string } } }> } | null, siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };
+export type AppQuery = { __typename?: 'Query', apiKeys?: { __typename?: 'APIKeys', googleMaps?: string | null } | null, podcastSettings: { __typename?: 'PodcastSettings', description?: string | null, feedLink?: string | null, id: string, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: string } | null }, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', id: string, name: string, slug: string } } }> } | null, siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };

@@ -4,15 +4,10 @@ import Form from '#/components/Admin/Form';
 import { Heading } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import type { Fields } from '#/types';
-import type {
-  DashboardSettings,
-  MediaSettings,
-  PodcastSettings,
-  SiteSettings,
-} from '#/types/graphql';
+import type { MediaSettings, PodcastSettings, SiteSettings } from '#/types/graphql';
 
 interface SettingsFormProps {
-  data?: SiteSettings | PodcastSettings | DashboardSettings | MediaSettings;
+  data?: SiteSettings | PodcastSettings | MediaSettings;
   heading: string;
   fields: Fields;
 }

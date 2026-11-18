@@ -21,6 +21,25 @@
     "otherCrops": "Other available images",
     "showing": "Showing"
   },
+  "dashboard": {
+    "chartLabel_one": "Page views per day over the last {{count}} day",
+    "chartLabel_other": "Page views per day over the last {{count}} days",
+    "empty": "No page views recorded yet.",
+    "error": "Couldn't load page views from OpenObserve. The admin server's logs have the details.",
+    "label": "Dashboard",
+    "page": "Page",
+    "pageViews": "Page views",
+    "peak_one": "Peak: {{count}} view",
+    "peak_other": "Peak: {{count}} views",
+    "range_one": "Last {{count}} day, from OpenObserve RUM",
+    "range_other": "Last {{count}} days, from OpenObserve RUM",
+    "sessions": "Sessions",
+    "topPages": "Top pages",
+    "unconfigured": "Page views come from OpenObserve. Set OPENOBSERVE_URL, OPENOBSERVE_USER and OPENOBSERVE_PASSWORD on the admin server to show them.",
+    "views": "Views",
+    "viewsOn_one": "{{count}} view on {{date}}",
+    "viewsOn_other": "{{count}} views on {{date}}"
+  },
   "editor": {
     "placeholder": "Start writing..."
   },
@@ -59,25 +78,6 @@
     "password": "Password",
     "required": "All fields are required.",
     "unauthorized": "You must login to access this area."
-  },
-  "passkeys": {
-    "addButton": "Add passkey",
-    "addHeading": "Register a new passkey",
-    "created": "Created {{date}}",
-    "description": "Use Face ID, Touch ID, a security key, or another nearby device to sign in without a password.",
-    "heading": "Passkeys",
-    "lastUsed": "Last used {{date}}",
-    "name": "Passkey name",
-    "namePlaceholder": "Scott’s iPhone",
-    "neverUsed": "Not used yet",
-    "none": "No passkeys are registered yet. Keep password login enabled until you register and test at least two passkeys.",
-    "registeredHeading": "Registered passkeys",
-    "registrationError": "Passkey registration failed.",
-    "remove": "Remove",
-    "removeConfirm": "Remove this passkey? You may lose access if you do not have another sign-in method.",
-    "synced": "Synced passkey",
-    "unnamed": "Unnamed passkey",
-    "waiting": "Waiting for passkey…"
   },
   "media": {
     "add": "Add Media",
@@ -127,6 +127,25 @@
     "items_other": "{{count}} items",
     "pages": "{{page}} of {{pages}}"
   },
+  "passkeys": {
+    "addButton": "Add passkey",
+    "addHeading": "Register a new passkey",
+    "created": "Created {{date}}",
+    "description": "Use Face ID, Touch ID, a security key, or another nearby device to sign in without a password.",
+    "heading": "Passkeys",
+    "lastUsed": "Last used {{date}}",
+    "name": "Passkey name",
+    "namePlaceholder": "Scott’s iPhone",
+    "neverUsed": "Not used yet",
+    "none": "No passkeys are registered yet. Keep password login enabled until you register and test at least two passkeys.",
+    "registeredHeading": "Registered passkeys",
+    "registrationError": "Passkey registration failed.",
+    "remove": "Remove",
+    "removeConfirm": "Remove this passkey? You may lose access if you do not have another sign-in method.",
+    "synced": "Synced passkey",
+    "unnamed": "Unnamed passkey",
+    "waiting": "Waiting for passkey…"
+  },
   "podcasts": {
     "add": "Add Podcast",
     "all": "All Podcasts",
@@ -170,14 +189,6 @@
     "view": "View Post"
   },
   "settings": {
-    "dashboard": {
-      "analytics": {
-        "googleClientId": "Google Analytics Client ID",
-        "googleTrackingId": "Google Analytics Tracking ID"
-      },
-      "heading": "Dashboard Settings",
-      "label": "Dashboard"
-    },
     "label": "Settings",
     "media": {
       "crops": {

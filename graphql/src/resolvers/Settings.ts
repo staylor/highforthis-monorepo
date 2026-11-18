@@ -2,12 +2,7 @@ import type { MediaSettings, PodcastSettings } from '@prisma/client';
 
 import prisma from '#/database';
 
-import {
-  siteSettingsSchema,
-  dashboardSettingsSchema,
-  mediaSettingsSchema,
-  podcastSettingsSchema,
-} from './validations';
+import { siteSettingsSchema, mediaSettingsSchema, podcastSettingsSchema } from './validations';
 
 const resolvers = {
   MediaSettings: {
@@ -26,10 +21,6 @@ const resolvers = {
       const settings = await prisma.siteSettings.findUnique({ where: { id: 'site' } });
       return settings || { id: 'site' };
     },
-    async dashboardSettings() {
-      const settings = await prisma.dashboardSettings.findUnique({ where: { id: 'dashboard' } });
-      return settings || { id: 'dashboard' };
-    },
     async mediaSettings() {
       const settings = await prisma.mediaSettings.findUnique({ where: { id: 'media' } });
       return settings || { id: 'media' };
@@ -46,14 +37,6 @@ const resolvers = {
     async updateSiteSettings(_: unknown, { id, input }: { id: string; input: unknown }) {
       const data = siteSettingsSchema.parse(input);
       return prisma.siteSettings.upsert({
-        where: { id },
-        create: { id, ...data },
-        update: data,
-      });
-    },
-    async updateDashboardSettings(_: unknown, { id, input }: { id: string; input: unknown }) {
-      const data = dashboardSettingsSchema.parse(input);
-      return prisma.dashboardSettings.upsert({
         where: { id },
         create: { id, ...data },
         update: data,

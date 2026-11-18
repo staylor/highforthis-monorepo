@@ -56,35 +56,17 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 export const clientLoader = createClientCache();
 
 const AppLinks = ({ data }: { data: AppQuery }) => {
-  const { podcastSettings, dashboardSettings } = data;
+  const { podcastSettings } = data;
+  if (!podcastSettings.feedLink || !podcastSettings.title) {
+    return null;
+  }
   return (
-    <>
-      <link rel="preconnect" href="https://www.google-analytics.com" />
-      <link rel="preconnect" href="https://www.googletagmanager.com" />
-      {podcastSettings.feedLink && podcastSettings.title && (
-        <link
-          rel="alternate"
-          type="application/rss+xml"
-          href={podcastSettings.feedLink}
-          title={podcastSettings.title}
-        />
-      )}
-      {dashboardSettings.googleTrackingId && (
-        <>
-          <script
-            suppressHydrationWarning
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=${dashboardSettings.googleTrackingId}`}
-          />
-          <script
-            suppressHydrationWarning
-            dangerouslySetInnerHTML={{
-              __html: `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${dashboardSettings.googleTrackingId}');`,
-            }}
-          />
-        </>
-      )}
-    </>
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      href={podcastSettings.feedLink}
+      title={podcastSettings.title}
+    />
   );
 };
 

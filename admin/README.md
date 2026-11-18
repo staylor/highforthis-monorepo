@@ -36,6 +36,10 @@ pnpm admin:dev   # just this app, on http://localhost:3001
 | `TOKEN_KEY`              | Session cookie name; must match `web`                                               |
 | `TOKEN_SECRET`           | Signs the session cookie; must match `web` (development has a default)              |
 | `PASSWORD_LOGIN_ENABLED` | Set to `false` to allow passkey sign-in only                                        |
+| `OPENOBSERVE_URL`        | OpenObserve's base URL, for the dashboard's page views                              |
+| `OPENOBSERVE_ORG`        | OpenObserve organization (default: `default`)                                       |
+| `OPENOBSERVE_USER`       | OpenObserve user, for the page views and telemetry                                  |
+| `OPENOBSERVE_PASSWORD`   | That user's password                                                                |
 
 ## Production
 
@@ -56,6 +60,8 @@ On Railway this is the `highforthis-admin` service. Railway no longer lets new s
 | Public domain   | None; `web` reaches it privately        |
 
 Its variables reference `highforthis-web`'s (for example `TOKEN_SECRET=${{highforthis-web.TOKEN_SECRET}}`), so the session cookie settings always match, plus `NODE_ENV=production` and `PORT=3001`. `highforthis-web` has `ADMIN_HOST=http://${{highforthis-admin.RAILWAY_PRIVATE_DOMAIN}}:${{highforthis-admin.PORT}}`.
+
+The dashboard shows the public site's page views for the last 30 days. It queries OpenObserve's search API from the server for the browser RUM's `view` events, counting distinct `view_id`s because the RUM SDK sends several updates per view. Without `OPENOBSERVE_URL`, `OPENOBSERVE_USER` and `OPENOBSERVE_PASSWORD` (as in local development) it says so instead. On Railway, `OPENOBSERVE_URL` is `http://${{observability.RAILWAY_PRIVATE_DOMAIN}}:${{observability.PORT}}`.
 
 Its telemetry goes to OpenObserve with `OTEL_EXPORTER_OTLP_ENDPOINT` referencing web's, and `OPENOBSERVE_USER`/`OPENOBSERVE_PASSWORD` referencing the observability service's root credentials. Web's `OTEL_EXPORTER_OTLP_HEADERS` is sealed, so a reference can't copy it; the shared observability code builds the same header from those two variables instead.
 

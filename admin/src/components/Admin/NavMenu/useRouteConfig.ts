@@ -11,7 +11,7 @@ const useRouteConfig = () => {
     [
       {
         path: '/',
-        label: t('settings.dashboard.label'),
+        label: t('dashboard.label'),
         icon: 'dashboard',
       },
       {
@@ -168,10 +168,6 @@ const useRouteConfig = () => {
           {
             path: '/settings/site',
             label: t('settings.site.label'),
-          },
-          {
-            path: '/settings/dashboard',
-            label: t('settings.dashboard.label'),
           },
           {
             path: '/settings/media',

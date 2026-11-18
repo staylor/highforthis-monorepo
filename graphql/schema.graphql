@@ -198,17 +198,6 @@ input CreateVideoInput {
   year: Int!
 }
 
-type DashboardSettings {
-  googleClientId: String
-  googleTrackingId: String
-  id: String!
-}
-
-input DashboardSettingsInput {
-  googleClientId: String
-  googleTrackingId: String
-}
-
 union EditorNode = CodeNode | ElementNode | HeadingNode | ImageNode | LinebreakNode | ListItemNode | ListNode | QuoteNode | TextNode | VideoNode
 
 input EditorNodeInput {
@@ -479,7 +468,6 @@ type Mutation {
   removeVenue(ids: [String]!): Boolean
   removeVideo(ids: [String]!): Boolean
   updateArtist(id: String!, input: UpdateArtistInput!): Artist
-  updateDashboardSettings(id: String!, input: DashboardSettingsInput!): DashboardSettings
   updateMediaSettings(id: String!, input: MediaSettingsInput!): MediaSettings
   updateMediaUpload(id: String!, input: UpdateMediaUploadInput!): MediaUpload
   updatePodcast(id: String!, input: UpdatePodcastInput!): Podcast
@@ -590,7 +578,6 @@ type Query {
   appleMusicAlbums(term: String!): AppleMusicAlbumResults!
   artist(id: String, slug: String): Artist
   artists(after: String, before: String, filtered: Boolean, first: Int, last: Int, search: String): ArtistConnection
-  dashboardSettings: DashboardSettings!
   media(id: String): MediaUpload
   mediaSettings: MediaSettings!
   podcast(id: String, slug: String): Podcast
