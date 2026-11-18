@@ -37,7 +37,7 @@
     "start": "NODE_ENV=production node --import remix/node-tsx server.ts",
     "css": "tailwindcss -i app/styles/main.css -o app/styles/public/main.css",
     "css:watch": "tailwindcss -i app/styles/main.css -o app/styles/public/main.css --watch=always",
-    "test": "NODE_ENV=test remix test",
+    "test": "pnpm css && NODE_ENV=test remix test",
     "typecheck": "tsgo"
   }
 }
