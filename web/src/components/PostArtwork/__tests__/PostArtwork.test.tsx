@@ -1,8 +1,8 @@
+import type { PostArtwork_PostFragment } from '@highforthis/shared/web/types/graphql';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import PostArtwork from '#/components/PostArtwork';
-import type { PostArtwork_PostFragment } from '#/types/graphql';
 
 function image(id: string, widths = [300, 640]) {
   return {

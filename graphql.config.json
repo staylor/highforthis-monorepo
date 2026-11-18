@@ -1,5 +1,5 @@
 {
   "schema": "./graphql/schema.graphql",
-  "documents": ["./web/src/**/*.{ts,tsx}", "./xcode/graphql/*.graphql"],
-  "operations": ["./web/src/**/*.{ts,tsx}", "./xcode/graphql/*.graphql"]
+  "documents": ["./{web,admin}/src/**/*.{ts,tsx}", "./shared/src/web/**/*.{ts,tsx}", "./xcode/graphql/*.graphql"],
+  "operations": ["./{web,admin}/src/**/*.{ts,tsx}", "./shared/src/web/**/*.{ts,tsx}", "./xcode/graphql/*.graphql"]
 }

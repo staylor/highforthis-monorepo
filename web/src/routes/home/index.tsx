@@ -1,12 +1,12 @@
+import type { HomeQuery } from '@highforthis/shared/web/types/graphql';
+import query from '@highforthis/shared/web/utils/query';
 import { gql } from 'graphql-tag';
 
 import PostArtwork from '#/components/PostArtwork';
 import SectionHeader, { AccentLine } from '#/components/SectionHeader';
 import Videos from '#/components/Videos';
 import { videosQuery } from '#/components/Videos/graphql';
-import type { HomeQuery } from '#/types/graphql';
 import { createClientCache } from '#/utils/cache';
-import query from '#/utils/query';
 
 import type { Route } from './+types';
 import Latest from './Latest';

@@ -1,6 +1,6 @@
 # @highforthis/web
 
-Web application for High For This, built with React Router v7 (SSR), Vite, and Tailwind CSS.
+The public High For This site, built with React Router v7 (SSR), Vite, and Tailwind CSS. The admin is a separate app in [`admin`](../admin), which this server forwards `/admin`, `/login`, `/modals`, `/upload` and `/auth/passkeys` to.
 
 ## Stack
 
@@ -8,7 +8,6 @@ Web application for High For This, built with React Router v7 (SSR), Vite, and T
 - **[Vite](https://vitejs.dev/)** — Build tool and dev server
 - **[Tailwind CSS v4](https://tailwindcss.com/)** — Utility-first CSS
 - **[Apollo Client](https://www.apollographql.com/docs/react/)** — GraphQL client
-- **[Lexical](https://lexical.dev/)** — Rich text editor (admin)
 - **[i18next](https://www.i18next.com/)** — Internationalization
 - **[Vitest](https://vitest.dev/)** — Unit testing
 
@@ -28,6 +27,9 @@ pnpm graphql:dev
 | --- | --- |
 | `SERVER_PORT` | Web server port (default: `3000`) |
 | `GQL_HOST` | GraphQL server URL (default: `http://localhost:8081`) |
+| `ADMIN_HOST` | Admin app URL that admin paths are forwarded to (default: `http://localhost:3001`) |
+| `TOKEN_KEY` | Session cookie name; must match `admin` |
+| `TOKEN_SECRET` | Signs the session cookie; must match `admin` (development has a default) |
 | `OPENOBSERVE_RUM_APPLICATION_ID` | OpenObserve RUM application ID; setting any required RUM variable enables browser monitoring |
 | `OPENOBSERVE_RUM_CLIENT_TOKEN` | Browser ingestion token from OpenObserve's RUM setup (this token is intentionally sent to browsers) |
 | `OPENOBSERVE_RUM_SITE` | OpenObserve host or URL, such as `https://openobserve.example.com` |
@@ -46,7 +48,7 @@ pnpm dev
 # Server starts at http://localhost:3000
 ```
 
-The dev server proxies `/graphql` and `/upload` requests to the GraphQL server.
+The server proxies `/graphql` and `/uploads` to the GraphQL server, and admin paths to the admin app. `pnpm dev` from the monorepo root starts all three.
 
 ## Production
 
@@ -92,13 +94,10 @@ src/
 │   ├── videos/        # Video pages
 │   ├── podcast/       # Podcast pages
 │   ├── post/          # Editorial posts
-│   ├── admin/         # Admin dashboard
-│   ├── login/         # Authentication
 │   └── ...
-├── components/        # Shared UI components
+├── components/        # UI components (ones admin also uses are in shared/src/web)
 ├── hooks/             # Custom React hooks
 ├── styles/            # Global styles
-├── types/             # Generated GraphQL types
 └── utils/             # Utilities
 server.js              # Express server (SSR + proxy)
 ```

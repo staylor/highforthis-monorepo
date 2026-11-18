@@ -1,6 +1,6 @@
-import type { ImageUpload, SiteSettings } from '#/types/graphql';
-import { uploadUrl } from '#/utils/media';
-import titleTemplate from '#/utils/title';
+import type { ImageUpload, SiteSettings } from '@highforthis/shared/web/types/graphql';
+import { uploadUrl } from '@highforthis/shared/web/utils/media';
+import titleTemplate from '@highforthis/shared/web/utils/title';
 
 interface MetaTags {
   title: string;

@@ -1,6 +1,5 @@
+import { Heading1 } from '@highforthis/shared/web/components/Heading';
 import type { PropsWithChildren } from 'react';
-
-import { Heading1 } from '../Heading';
 
 import AppleLogo from './Apple';
 import SpotifyLogo from './Spotify';

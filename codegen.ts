@@ -2,7 +2,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   schema: 'http://localhost:8081/graphql',
-  documents: ['web/src/**/*.tsx', 'web/src/**/*.ts'],
+  documents: ['{web,admin}/src/**/*.{ts,tsx}', 'shared/src/web/**/*.{ts,tsx}'],
   generates: {
     './graphql/schema.graphql': {
       plugins: ['schema-ast'],
@@ -24,10 +24,10 @@ const config: CodegenConfig = {
         useTypeImports: true,
       },
     },
-    './web/apollo/fragmentMatcher.js': {
+    './shared/src/web/apollo/fragmentMatcher.js': {
       plugins: ['fragment-matcher'],
     },
-    './web/src/types/graphql.ts': {
+    './shared/src/web/types/graphql.ts': {
       plugins: ['typescript', 'typescript-operations'],
       config: {
         dedupeOperationSuffix: true,

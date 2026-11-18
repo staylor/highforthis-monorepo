@@ -1,9 +1,10 @@
-import Blockquote from '#/components/Blockquote';
-import { Heading2, Heading3, Heading4 } from '#/components/Heading';
-import { OrderedList, UnorderedList } from '#/components/List';
-import Paragraph from '#/components/Paragraph';
-import VideoComponent from '#/components/Videos/Video';
-import { HeadingTag, ListType } from '#/types/graphql';
+import Blockquote from '@highforthis/shared/web/components/Blockquote';
+import { Heading2, Heading3, Heading4 } from '@highforthis/shared/web/components/Heading';
+import { OrderedList, UnorderedList } from '@highforthis/shared/web/components/List';
+import Paragraph from '@highforthis/shared/web/components/Paragraph';
+import TextNodes from '@highforthis/shared/web/components/Post/TextNodes';
+import VideoComponent from '@highforthis/shared/web/components/Videos/Video';
+import { HeadingTag, ListType } from '@highforthis/shared/web/types/graphql';
 import type {
   CodeNode,
   EditorState,
@@ -17,10 +18,8 @@ import type {
   TextNode,
   Video,
   VideoNode,
-} from '#/types/graphql';
-import { uploadUrl } from '#/utils/media';
-
-import TextNodes from '../../components/Post/TextNodes';
+} from '@highforthis/shared/web/types/graphql';
+import { uploadUrl } from '@highforthis/shared/web/utils/media';
 
 import PostTitle from './PostTitle';
 

@@ -1,9 +1,8 @@
+import Button from '@highforthis/shared/web/components/Button';
+import { Heading1 } from '@highforthis/shared/web/components/Heading';
 import cn from 'classnames';
 import { createContext, useContext, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-
-import Button from '#/components/Button';
-import { Heading1 } from '#/components/Heading';
 
 import type { Route } from './+types';
 import setlists from './setlists.json';

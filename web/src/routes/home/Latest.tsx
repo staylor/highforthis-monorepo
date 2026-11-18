@@ -1,10 +1,10 @@
+import Link from '@highforthis/shared/web/components/Link';
+import type { PostConnection } from '@highforthis/shared/web/types/graphql';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import Link from '#/components/Link';
 import PostArtwork from '#/components/PostArtwork';
 import SectionHeader from '#/components/SectionHeader';
-import type { PostConnection } from '#/types/graphql';
 
 interface LatestProps {
   artworkSeed: string;

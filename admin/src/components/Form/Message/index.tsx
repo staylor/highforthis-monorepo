@@ -1,0 +1,53 @@
+import Icon from '@highforthis/shared/web/components/Icon';
+import cn from 'classnames';
+import type { SyntheticEvent } from 'react';
+import { useSearchParams } from 'react-router';
+
+interface MessageProps {
+  dismissable?: boolean;
+  text?: string;
+  param?: string;
+}
+
+export default function Message({
+  dismissable = true,
+  text = '',
+  param = 'message',
+}: MessageProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentParam = searchParams.get(param) || '';
+  if (!text || (dismissable && !currentParam)) {
+    return null;
+  }
+
+  const onClick = (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    searchParams.delete(param);
+    setSearchParams(searchParams);
+  };
+
+  return (
+    <div
+      className={cn(
+        'border-pink border-l-4 bg-neutral-50 shadow-xs',
+        'relative mt-1 mb-4 block py-px pr-9 pl-3'
+      )}
+    >
+      <p className="my-2 p-0.5 text-sm text-dark">{text}</p>
+      {dismissable && (
+        <button
+          type="button"
+          aria-label="Dismiss"
+          className={cn(
+            'm-0 cursor-pointer border-none bg-none p-2',
+            'absolute top-0 right-1 text-neutral-400 transition-colors hover:text-neutral-900'
+          )}
+          onClick={onClick}
+        >
+          <Icon name="close" className="size-4" />
+        </button>
+      )}
+    </div>
+  );
+}

@@ -1,3 +1,10 @@
+import { isAuthenticated } from '@highforthis/shared/web/auth';
+import { TWITTER_USERNAME } from '@highforthis/shared/web/constants';
+import { graphqlHostContext } from '@highforthis/shared/web/context';
+import { appQuery } from '@highforthis/shared/web/root.graphql';
+import type { AppQuery } from '@highforthis/shared/web/types/graphql';
+import query from '@highforthis/shared/web/utils/query';
+import titleTemplate, { type TitleProps } from '@highforthis/shared/web/utils/title';
 import type { LinksFunction, MetaFunction } from 'react-router';
 import {
   Links,
@@ -12,17 +19,10 @@ import {
 import mainStylesheetUrl from '#/styles/main.css?url';
 
 import type { Route } from './+types/root';
-import { isAuthenticated } from './auth';
 import { Html, Body, Boundary, useLayout } from './components/Layout';
-import { TWITTER_USERNAME } from './constants';
-import { graphqlHostContext } from './context.js';
-import { appQuery } from './root.graphql';
 import type { OpenObserveRumConfig } from './rum';
 import { getOpenObserveRumConfig } from './rum.server';
-import type { AppQuery } from './types/graphql';
 import { createClientCache } from './utils/cache';
-import query from './utils/query';
-import titleTemplate, { type TitleProps } from './utils/title';
 
 export const links: LinksFunction = () => {
   return [
@@ -115,7 +115,7 @@ export default function Root({ loaderData }: Route.ComponentProps) {
         <Meta />
         <Links />
         <OpenObserveRumConfigScript config={openObserveRum} />
-        {layout !== 'admin' && <link rel="stylesheet" href={mainStylesheetUrl} />}
+        <link rel="stylesheet" href={mainStylesheetUrl} />
         {layout === 'app' && <AppLinks data={data} />}
       </head>
       <Body>

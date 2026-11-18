@@ -1,16 +1,16 @@
+import { Heading1 } from '@highforthis/shared/web/components/Heading';
+import Link from '@highforthis/shared/web/components/Link';
+import type { PostEdge, PostsQuery } from '@highforthis/shared/web/types/graphql';
+import query from '@highforthis/shared/web/utils/query';
+import { rootData } from '@highforthis/shared/web/utils/rootData';
+import titleTemplate from '@highforthis/shared/web/utils/title';
 import cn from 'classnames';
 import { gql } from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import type { MetaFunction } from 'react-router';
 
-import { Heading1 } from '#/components/Heading';
-import Link from '#/components/Link';
 import PostArtwork from '#/components/PostArtwork';
-import type { PostEdge, PostsQuery } from '#/types/graphql';
 import { createClientCache } from '#/utils/cache';
-import query from '#/utils/query';
-import { rootData } from '#/utils/rootData';
-import titleTemplate from '#/utils/title';
 
 import type { Route } from './+types/index';
 

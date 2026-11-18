@@ -16,7 +16,7 @@ export default createConfig(testingLibrary, {
   },
   overrides: [
     {
-      files: ['web/**/*'],
+      files: ['{web,admin}/**/*', 'shared/src/web/**/*'],
       rules: {
         '@lexical/rules-of-lexical': 'error',
         // classnames-order is left out: oxfmt sorts the classes
@@ -30,14 +30,14 @@ export default createConfig(testingLibrary, {
       },
     },
     {
-      files: ['web/**/*.test.ts', 'web/**/*.test.tsx'],
+      files: ['{web,admin,shared}/**/*.test.ts', '{web,admin,shared}/**/*.test.tsx'],
       rules: {
         'i18next/no-literal-string': 'off',
         'tailwindcss/no-custom-classname': 'off',
       },
     },
     {
-      files: ['web/src/components/Admin/**/*.tsx', 'web/src/routes/podcast/**/*.tsx'],
+      files: ['admin/src/components/Admin/**/*.tsx', 'web/src/routes/podcast/**/*.tsx'],
       rules: {
         'jsx-a11y/media-has-caption': 'off',
       },

@@ -1,7 +1,10 @@
 {
   "workspaces": {
     ".": {
-      "entry": ["oxfmt.config.ts", "oxlint.config.ts"],
+      "entry": [
+        "oxfmt.config.ts",
+        "oxlint.config.ts"
+      ],
       "ignoreDependencies": [
         "@lexical/eslint-plugin",
         "eslint-plugin-i18next",
@@ -14,20 +17,39 @@
       ]
     },
     "graphql": {
-      "entry": ["tools/**/*.ts"],
-      "project": ["src/**/*.ts", "tools/**/*.ts"]
+      "entry": [
+        "tools/**/*.ts"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "tools/**/*.ts"
+      ]
     },
     "shared": {
-      "entry": ["src/logger.ts", "src/observability.ts"],
-      "project": ["src/**/*.ts"]
+      "entry": [
+        "src/logger.ts",
+        "src/observability.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx,js}"
+      ]
     },
     "web": {
-      "project": ["app.js", "src/**/*.{ts,tsx}"],
-      "ignore": ["src/types/graphql.ts"],
+      "project": [
+        "app.js",
+        "src/**/*.{ts,tsx}"
+      ]
+    },
+    "admin": {
+      "project": [
+        "app.js",
+        "src/**/*.{ts,tsx}"
+      ],
       "ignoreDependencies": [
-        "i18next-fs-backend",
-        "i18next-http-backend",
-        "@tailwindcss/forms"
+        "tailwindcss"
+      ],
+      "ignoreUnresolved": [
+        "./build/server/index.js"
       ]
     }
   }

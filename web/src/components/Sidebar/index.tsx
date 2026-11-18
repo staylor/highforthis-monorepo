@@ -1,12 +1,11 @@
+import Link from '@highforthis/shared/web/components/Link';
+import { formatArtists, formatShowLink } from '@highforthis/shared/web/components/Shows/utils';
+import type { ShowConnection } from '@highforthis/shared/web/types/graphql';
 import cn from 'classnames';
 import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Link from '#/components/Link';
 import SectionHeader from '#/components/SectionHeader';
-import type { ShowConnection } from '#/types/graphql';
-
-import { formatArtists, formatShowLink } from '../Shows/utils';
 
 function groupShowsByMonth(shows: ShowConnection) {
   const groups: { key: string; label: string; shows: ShowConnection['edges'] }[] = [];

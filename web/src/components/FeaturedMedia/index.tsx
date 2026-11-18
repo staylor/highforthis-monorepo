@@ -1,5 +1,5 @@
-import type { ImageUpload, ImageUploadCrop } from '#/types/graphql';
-import { uploadUrl } from '#/utils/media';
+import type { ImageUpload, ImageUploadCrop } from '@highforthis/shared/web/types/graphql';
+import { uploadUrl } from '@highforthis/shared/web/utils/media';
 
 interface FeaturedMediaProps {
   featuredMedia: ImageUpload[];

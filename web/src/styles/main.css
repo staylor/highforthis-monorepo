@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import './theme.css';
+@import '@highforthis/shared/web/styles/theme.css';
 
 @layer base {
   body {

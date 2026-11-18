@@ -14,6 +14,7 @@ graphql/dist
 graphql/public/uploads
 shared/dist
 web/build
+admin/build
 
 *.log
 *.p8
