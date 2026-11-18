@@ -69,6 +69,18 @@ const app = express();
 // network addresses are trusted: web reaches admin over those, and admin has no public domain.
 app.set('trust proxy', ['loopback', 'uniquelocal']);
 
+// @react-router/express takes the port from the Host header when X-Forwarded-Host has none,
+// so highforthis.com became highforthis.com:3001 and still failed that check. Use the
+// forwarded host as the Host when Express trusted it, which is when req.hostname came from it.
+app.use((req, _res, next) => {
+  const forwardedHost = req.get('x-forwarded-host')?.split(',')[0].trim();
+  const forwardedUrl = forwardedHost && URL.parse(`http://${forwardedHost}`);
+  if (forwardedUrl && forwardedUrl.hostname === req.hostname) {
+    req.headers.host = forwardedHost;
+  }
+  next();
+});
+
 app.use(compression());
 app.use(createHttpLogger(logger));
 app.use(cookieParser());
