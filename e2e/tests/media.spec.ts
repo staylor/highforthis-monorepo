@@ -1,11 +1,11 @@
 import { expect, test } from '../support/test.ts';
-import { field } from '../support/ui.ts';
+import { field, hydrated } from '../support/ui.ts';
 
 test('filters the media list by type', async ({ page }) => {
   await page.goto('/admin/media');
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
-  // Choosing a type submits the filter once the select's client entry has loaded
-  await page.waitForLoadState('networkidle');
+  // Choosing a type submits the filter once the select's client entry has hydrated
+  await hydrated(page);
   await page.getByRole('combobox', { name: 'Select Media Type' }).selectOption('image');
   await expect(page).toHaveURL(/[?&]type=image/);
   const types = page.getByRole('row').getByRole('link', { name: 'image', exact: true });
@@ -42,7 +42,8 @@ test('uploads a file and links to its edit page', async ({ page }) => {
   );
   await page.goto('/admin/media/upload');
   await expect(page.getByRole('heading', { name: 'Upload Media' })).toBeVisible();
-  await page.waitForLoadState('networkidle');
+  // Chosen files upload once the uploader's client entry has hydrated
+  await hydrated(page);
   await page.getByLabel('Choose Files').setInputFiles({
     name: 'e2e.txt',
     mimeType: 'text/plain',
