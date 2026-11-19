@@ -37,7 +37,8 @@
     "web": {
       "entry": [
         "app/actions/public/entry.ts",
-        "app/**/*.test.{ts,tsx}"
+        "app/**/*.test.{ts,tsx}",
+        "app/**/*.test.browser.{ts,tsx}"
       ],
       "project": [
         "*.ts",
@@ -45,6 +46,14 @@
       ],
       "ignore": [
         "app/types/graphql.ts"
+      ],
+      "ignoreDependencies": [
+        "@lexical/a11y",
+        "@lexical/clipboard",
+        "@lexical/dragon",
+        "@lexical/extension",
+        "@lexical/html",
+        "@preact/signals-core"
       ]
     },
     "e2e": {

@@ -61,7 +61,7 @@ The public site in `web/` has run on Remix 3 since #45. The admin is still a Rea
 
 ### How the split works
 
-`web/app/router.ts` runs `proxies()` before rendering, and `web/app/middleware/app.ts` forwards `/admin`, `/auth/passkeys`, `/login` and `/modals` to the admin service, and `/upload` to GraphQL with the admin's token. Moving a section means adding its routes to web's `routes.ts` and listing its path in `shared/src/adminPaths.ts`, which `proxies()` checks before forwarding `/admin`. Links between migrated and unmigrated pages must load in full, in both directions. Remix's client navigation would merge the admin app's HTML into a Remix page without running its scripts, and React Router's would ask the admin app for `.data` it no longer has. The foundations handle both (see below).
+`web/app/router.ts` runs `proxies()` before rendering, and `web/app/middleware/app.ts` forwards `/admin`, `/auth/passkeys` and `/login` to the admin service, and `/upload` to GraphQL with the admin's token. Moving a section means adding its routes to web's `routes.ts` and listing its path in `shared/src/adminPaths.ts`, which `proxies()` checks before forwarding `/admin`. Links between migrated and unmigrated pages must load in full, in both directions. Remix's client navigation would merge the admin app's HTML into a Remix page without running its scripts, and React Router's would ask the admin app for `.data` it no longer has. The foundations handle both (see below).
 
 ### Sessions: nobody needs to be signed out
 
@@ -152,6 +152,14 @@ These are in web, and nothing is served there yet:
      - The admin app's media routes, media form, info panels, list thumbnail, `server/media.ts`, their tests and the `filesize` dependency are removed in the same change.
      - `e2e/tests/media.spec.ts` filters the list, edits an image's caption and puts it back, and uploads a file to a stubbed `/upload`, since GraphQL would store it.
 5. **Posts:** the editor client entry, the featured media field, and both pickers.
+   - **Posts have moved, with the editor and the pickers.** Web serves `/admin/post` (`web/app/actions/admin/posts/`), which leaves the admin app with the dashboard, passkeys and sign-in.
+     - The editor's framework-free core moved to `web/app/ui/admin/public/editor/` unchanged (`git mv`), and `post-editor.tsx` hosts it in a client entry: the `contenteditable`, the field the save reads, the placeholder and both toolbars, which redraw when the core's stores change. Its tests run in a browser (`editor.test.browser.ts`, `pnpm test:browser`, which runs from the monorepo root so Remix's browser harness can reach pnpm's `node_modules`; CI runs it in the end-to-end job, which installs Chromium).
+     - Web serves Lexical's packages (`allowPackages` in `assets.ts`), with a production loader that drops each entry's dev build.
+     - The pickers share `picker-dialog.tsx`, which the featured media field now uses too. `/admin/media-picker/video` pages through videos, and image items carry the data an image block keeps.
+     - The title is a client entry that grows and stays on one line (`heading-field.tsx`), the artists a tags input (`tags-input.tsx`), and the form's details box (`AdminForm`'s `info`) holds the date, the status and the save button, as the admin app's InfoColumn did.
+     - `uploadUrl` and the admin icons moved under `public/`, since the editor and the pickers use them in the browser.
+     - The admin app's posts routes, editor, pickers, `/modals` routes, form system, list table and the components only they used are removed in the same change, with their tests, Lexical and the other packages only they used. Web no longer forwards `/modals`.
+     - `e2e/tests/posts.spec.ts`, `media-picker.spec.ts` and `list.spec.ts` run against web.
 6. **Login and passkeys:** move sign-in, write the session cookie from web, stop forwarding, then retire the admin service, its Railway variables and web's `ADMIN_HOST`.
 
 Run the e2e suite after each step. It drives everything through web's URL, so it tests both halves throughout.

@@ -22,4 +22,4 @@ pnpm test
 pnpm typecheck
 ```
 
-From the monorepo root, also run `pnpm lint` and `pnpm knip`.
+From the monorepo root, also run `pnpm lint` and `pnpm knip`, and `pnpm test:browser` for tests that run in a browser (`*.test.browser.ts`, such as the post editor's). They run from the root so Remix's browser harness can reach pnpm's `node_modules`.

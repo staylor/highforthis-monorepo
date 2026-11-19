@@ -121,9 +121,16 @@ interface AdminFormProps {
   buttonLabel?: string;
   /** A box beside the fields on wide screens, such as an artist's shows. */
   meta?: RemixNode;
+  /**
+   * A box above `meta` with the save button, such as a post's date and status, from the admin
+   * app's InfoColumn. A long form, such as a post's, keeps its button there on wide screens and in
+   * a bar stuck to the bottom of narrow ones.
+   */
+  info?: RemixNode;
 }
 
-function FormField(handle: Handle<{ field: Field; data?: Record<string, unknown> | null }>) {
+/** A field with its label, for a form's own boxes, such as a post's date and status. */
+export function FormField(handle: Handle<{ field: Field; data?: Record<string, unknown> | null }>) {
   return () => {
     const { field, data } = handle.props;
     const id = `field-${field.prop}`;
@@ -148,10 +155,18 @@ function FormField(handle: Handle<{ field: Field; data?: Record<string, unknown>
   };
 }
 
+const boxBorder = 'border border-detail';
+
 export function AdminForm(handle: Handle<AdminFormProps>) {
   return () => {
     const { t } = getAdmin(handle);
-    const { fields, data, buttonLabel, meta } = handle.props;
+    const { fields, data, buttonLabel, meta, info } = handle.props;
+    const button = (
+      <button type="submit" class={buttonClass(true, 'h-7.5 px-3 pb-0.5 leading-7')}>
+        {buttonLabel || t('admin.submit')}
+      </button>
+    );
+    const sidebar = Boolean(meta || info);
     return (
       <div class="block after:clear-both after:table">
         <Message param="saveFailed" text={t('admin.saveFailed')} />
@@ -159,25 +174,47 @@ export function AdminForm(handle: Handle<AdminFormProps>) {
           <fieldset
             class={cn(
               'flex w-full flex-col gap-6',
-              Boolean(meta) && 'lg:flex-row lg:items-start lg:gap-8'
+              sidebar && 'lg:flex-row lg:items-start lg:gap-8'
             )}
           >
             <div class="w-full max-w-2xl min-w-0">
               {fields.map((field) => (
                 <FormField field={field} data={data} />
               ))}
-              <button type="submit" class={buttonClass(true, 'h-7.5 px-3 pb-0.5 leading-7')}>
-                {buttonLabel || t('admin.submit')}
-              </button>
+              {!info && button}
             </div>
-            {meta && (
+            {sidebar && (
               <section class="w-full shrink-0 lg:sticky lg:top-4 lg:w-70">
-                <aside class="mb-5 box-border block border border-detail shadow-sm">
-                  <div class="px-5 pt-1.5 pb-5 text-sm">{meta}</div>
-                </aside>
+                {info && (
+                  <aside class={cn(boxBorder, 'mb-5 box-border block shadow-sm')}>
+                    <h3 class={cn(boxBorder, 'px-3 py-2 text-sm font-bold text-dark select-none')}>
+                      {t('admin.details')}
+                    </h3>
+                    <div class="px-5 pt-1.5 pb-5 text-sm">
+                      {info}
+                      <span class="hidden lg:inline-block">{button}</span>
+                    </div>
+                  </aside>
+                )}
+                {meta && (
+                  <aside class={cn(boxBorder, 'mb-5 box-border block shadow-sm')}>
+                    <div class="px-5 pt-1.5 pb-5 text-sm">{meta}</div>
+                  </aside>
+                )}
               </section>
             )}
           </fieldset>
+          {info && (
+            <div
+              class={cn(
+                'sticky bottom-0 z-30 mt-6 flex justify-end lg:hidden',
+                '-mx-4 px-4 py-3 sm:-mx-6 sm:px-6',
+                'border-t border-neutral-200/80 bg-white/90 backdrop-blur-xl'
+              )}
+            >
+              {button}
+            </div>
+          )}
         </form>
       </div>
     );

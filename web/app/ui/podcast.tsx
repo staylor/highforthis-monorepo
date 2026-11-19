@@ -1,9 +1,9 @@
 import { unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 
 import type { MetaTag } from '../actions/document.tsx';
-import { uploadUrl } from '../lib/media.ts';
 
 import { Heading1 } from './heading.tsx';
+import { uploadUrl } from './public/media.ts';
 
 export function podcastMetaTags({
   title,

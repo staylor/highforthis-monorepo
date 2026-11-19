@@ -59,7 +59,7 @@ function forwardUpload(request: Request) {
 
 const forwards = [
   {
-    paths: ['/admin', '/auth/passkeys', '/login', '/modals'],
+    paths: ['/admin', '/auth/passkeys', '/login'],
     proxy: createFetchProxy(adminHost, { fetch: fetchNow, xForwardedHeaders: true }),
   },
   { paths: ['/upload'], proxy: forwardUpload },

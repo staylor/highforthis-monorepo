@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import type { Handle } from 'remix/component';
 
-import { uploadUrl } from '../lib/media.ts';
 import type { PostArtwork_PostFragment } from '../types/graphql.ts';
 
 import { cn } from './public/cn.ts';
+import { uploadUrl } from './public/media.ts';
 
 export const postArtworkFragment = gql`
   fragment PostArtwork_post on Post {

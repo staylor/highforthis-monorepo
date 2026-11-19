@@ -10,8 +10,8 @@ import { inputBase } from './styles.ts';
 
 interface DateTimeInputProps {
   name: string;
-  /** Milliseconds since the epoch. */
-  value: number;
+  /** Milliseconds since the epoch, or null for none yet, such as a new post's publish date. */
+  value: number | null;
   id?: string;
 }
 
@@ -33,11 +33,11 @@ export const DateTimeInput = clientEntry(
       const current = timestamp ?? handle.props.value;
       return (
         <>
-          <input type="hidden" name={name} value={String(current)} />
+          <input type="hidden" name={name} value={current === null ? '' : String(current)} />
           <input
             type="datetime-local"
             id={id}
-            value={localValue(current)}
+            value={current === null ? '' : localValue(current)}
             class={cn(inputBase, 'w-full sm:w-auto')}
             mix={on('change', (event) => {
               const parsed = Date.parse(event.currentTarget.value);

@@ -18,15 +18,16 @@ export function field(page: Page, label: string): Locator {
 }
 
 /**
- * Types into a list's search box, which filters the list as you type, and waits for the search to
- * reach the URL. Typing before the page hydrates is lost, as on a slow CI runner, so it types
- * again until the search takes.
+ * Searches a list: types into its search box, a GET form, presses Enter and waits for the search
+ * to reach the URL. It tries again until the search takes, as when a slow CI runner hasn't
+ * finished loading the page.
  */
 export async function search(page: Page, placeholder: string, text: string) {
   const box = page.getByPlaceholder(placeholder);
   await expect(async () => {
     await box.clear();
     await box.fill(text);
+    await box.press('Enter');
     await expect
       .poll(() => new URL(page.url()).searchParams.get('search'), { timeout: 2_000 })
       .toBe(text);

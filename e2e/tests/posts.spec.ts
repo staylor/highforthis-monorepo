@@ -8,7 +8,9 @@ test('creates a post with a heading, which is still there after a reload', async
   const heading = `Heading ${prefix}`;
   const paragraph = `Paragraph ${prefix}`;
 
+  // The editor is a client entry, which works once the page's scripts have loaded
   await page.goto('/admin/post/add');
+  await page.waitForLoadState('networkidle');
   await page.getByPlaceholder('Add a Title').fill(title);
 
   // Clicking the placeholder lands in the editor underneath, which starts with an empty line

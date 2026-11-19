@@ -12,6 +12,7 @@ import {
   mediaUpload,
 } from './actions/admin/media/library.tsx';
 import { podcastsAdd, podcastsEdit, podcastsList } from './actions/admin/podcasts/controller.tsx';
+import { postsAdd, postsEdit, postsList } from './actions/admin/posts/controller.tsx';
 import {
   settingsMedia,
   settingsPodcast,
@@ -88,4 +89,7 @@ router.map(routes.admin.media.list, mediaList);
 router.map(routes.admin.media.upload, mediaUpload);
 router.map(routes.admin.media.albumCovers, mediaAlbumCovers);
 router.map(routes.admin.media.edit, mediaEdit);
+router.map(routes.admin.posts.list, postsList);
+router.map(routes.admin.posts.add, postsAdd);
+router.map(routes.admin.posts.edit, postsEdit);
 router.map(routes.admin.mediaPicker, mediaPicker);

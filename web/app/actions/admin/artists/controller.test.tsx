@@ -302,8 +302,24 @@ describe('admin media picker', () => {
           thumb: `${storage}/2024/05/w-150.jpg`,
           preview: `${storage}/2024/05/w-300.jpg`,
           audio: null,
+          // What the post editor's image block keeps
+          image: {
+            id: 'm1',
+            destination: '2024/05',
+            crops: [
+              { fileName: 'w-150.jpg', width: 150 },
+              { fileName: 'w-300.jpg', width: 300 },
+            ],
+          },
         },
-        { id: 'm2', title: '', thumb: null, preview: null, audio: null },
+        {
+          id: 'm2',
+          title: '',
+          thumb: null,
+          preview: null,
+          audio: null,
+          image: { id: 'm2', destination: '2024/06', crops: [] },
+        },
       ],
       endCursor: 'next',
       hasNextPage: true,
@@ -341,6 +357,7 @@ describe('admin media picker', () => {
           thumb: `${storage}/2024/07/episode-1-150.jpg`,
           preview: null,
           audio: `${storage}/2024/07/episode-1.mp3`,
+          image: null,
         },
       ],
       endCursor: 'end',
@@ -349,9 +366,69 @@ describe('admin media picker', () => {
     assert.deepEqual(operations[0].variables, { first: 50, type: 'audio' });
   });
 
+  it("answers videos for the post editor's video block", async (t) => {
+    const operations = stubGraphQL(t, {
+      VideoPicker: {
+        videos: {
+          __typename: 'VideoConnection',
+          edges: [
+            {
+              node: {
+                __typename: 'Video',
+                id: 'v1',
+                dataId: 'yt1',
+                slug: 'live',
+                title: 'Live',
+                thumbnails: [
+                  {
+                    __typename: 'VideoThumbnail',
+                    url: 'https://i.ytimg.com/120.jpg',
+                    width: 120,
+                    height: 90,
+                  },
+                  {
+                    __typename: 'VideoThumbnail',
+                    url: 'https://i.ytimg.com/640.jpg',
+                    width: 640,
+                    height: 480,
+                  },
+                ],
+              },
+            },
+          ],
+          pageInfo: { endCursor: 'more', hasNextPage: true },
+        },
+      },
+    });
+    const response = await get('/admin/media-picker/video?cursor=abc');
+    assert.deepEqual(await response.json(), {
+      items: [
+        {
+          id: 'v1',
+          title: 'Live',
+          thumb: 'https://i.ytimg.com/120.jpg',
+          preview: null,
+          video: {
+            id: 'v1',
+            dataId: 'yt1',
+            slug: 'live',
+            title: 'Live',
+            thumbnails: [
+              { url: 'https://i.ytimg.com/120.jpg', width: 120, height: 90 },
+              { url: 'https://i.ytimg.com/640.jpg', width: 640, height: 480 },
+            ],
+          },
+        },
+      ],
+      endCursor: 'more',
+      hasNextPage: true,
+    });
+    assert.deepEqual(operations[0].variables, { first: 50, cursor: 'abc' });
+  });
+
   it('answers 404 for a type it has no picker for', async (t) => {
     const operations = stubGraphQL(t);
-    const response = await get('/admin/media-picker/video');
+    const response = await get('/admin/media-picker/podcast');
     assert.equal(response.status, 404);
     assert.deepEqual(operations, []);
   });

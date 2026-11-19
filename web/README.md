@@ -1,6 +1,6 @@
 # @highforthis/web
 
-The public High For This site, built with [Remix 3](https://github.com/remix-run/remix) and Tailwind CSS. The admin is a separate React Router app in [`admin`](../admin); this server forwards `/admin`, `/login`, `/modals` and `/auth/passkeys` to it, so both share one domain. It forwards media uploads (`/upload`) to GraphQL itself, adding the admin's token from the session cookie, which the upload page can't read.
+The public High For This site, built with [Remix 3](https://github.com/remix-run/remix) and Tailwind CSS. The admin is a separate React Router app in [`admin`](../admin); this server forwards `/admin`, `/login` and `/auth/passkeys` to it, so both share one domain. It forwards media uploads (`/upload`) to GraphQL itself, adding the admin's token from the session cookie, which the upload page can't read.
 
 Remix 3 has no bundler. The server renders every page, the browser runtime turns same-origin links into client navigations, and the few interactive parts (dark mode, the mobile menu, video thumbnails, the sphere setlists, live refresh) hydrate as client entries. The asset server compiles browser modules on request and serves them unbundled through an import map, fingerprinted in production.
 

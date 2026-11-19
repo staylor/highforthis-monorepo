@@ -1,5 +1,0 @@
-import { cn } from '#/utils/cn';
-
-export const inputBase = cn(
-  'my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 transition-colors'
-);

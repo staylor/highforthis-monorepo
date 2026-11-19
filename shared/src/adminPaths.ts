@@ -11,6 +11,7 @@ const adminPathsServedByWeb: readonly string[] = [
   '/admin/settings',
   '/admin/show',
   '/admin/media',
+  '/admin/post',
   // The featured media picker's data, for the sections above
   '/admin/media-picker',
 ];
