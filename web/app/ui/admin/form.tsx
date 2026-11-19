@@ -19,7 +19,8 @@ export interface Field {
   /** The form field's name, and the property of `data` that fills it. */
   prop: string;
   type?: 'text' | 'textarea' | 'select' | 'hidden' | 'checkbox' | 'custom';
-  inputType?: 'text' | 'email' | 'password';
+  /** The <input> type for a text field. */
+  inputType?: 'text' | 'email' | 'password' | 'url';
   autoComplete?: boolean;
   placeholder?: string;
   choices?: Choice[];
@@ -105,11 +106,13 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
       id,
     };
     // Remix types each input type's attributes separately
-    return field.inputType === 'email' ? (
-      <input type="email" {...props} />
-    ) : (
-      <input type="text" {...props} />
-    );
+    if (field.inputType === 'email') {
+      return <input type="email" {...props} />;
+    }
+    if (field.inputType === 'url') {
+      return <input type="url" {...props} />;
+    }
+    return <input type="text" {...props} />;
   };
 }
 

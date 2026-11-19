@@ -41,6 +41,14 @@ interface Entity {
   name: string;
 }
 
+interface Venue extends Entity {
+  capacity: string | null;
+  coordinates: { latitude: number; longitude: number } | null;
+  excludeFromSearch: boolean | null;
+  permanentlyClosed: boolean | null;
+  featuredMedia: { id: string }[] | null;
+}
+
 interface Artist extends Entity {
   description: string | null;
   excludeFromSearch: boolean | null;
@@ -107,8 +115,18 @@ export class GraphQL {
   }
 
   async venue(id: string) {
-    const { venue } = await this.query<{ venue: Entity | null }>(
-      `query ($id: String!) { venue(id: $id) { id name } }`,
+    const { venue } = await this.query<{ venue: Venue | null }>(
+      `query ($id: String!) {
+        venue(id: $id) {
+          id
+          name
+          capacity
+          coordinates { latitude longitude }
+          excludeFromSearch
+          permanentlyClosed
+          featuredMedia { id }
+        }
+      }`,
       { id }
     );
     return venue;

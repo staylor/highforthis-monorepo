@@ -138,6 +138,79 @@ export type UpdateUserMutationVariables = Types.Exact<{
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', bio?: string | null, email: string, id: string, name?: string | null, roles?: Array<string | null> | null } | null };
 
+export type VenueForm_VenueFragment = { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
+    | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+    | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+    | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+    | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+  > | null };
+
+export type VenuesAdminQueryVariables = Types.Exact<{
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type VenuesAdminQuery = { __typename?: 'Query', venues?: { __typename?: 'VenueConnection', count: number, edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', address?: string | null, capacity?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, permanentlyClosed?: boolean | null, slug: string, website?: string | null, featuredMedia?: Array<
+          | { __typename?: 'AudioUpload' }
+          | { __typename?: 'FileUpload' }
+          | { __typename?: 'ImageUpload', destination: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+          | { __typename?: 'VideoUpload' }
+        > | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type UpdateVenueFlagMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdateVenueInput;
+}>;
+
+
+export type UpdateVenueFlagMutation = { __typename?: 'Mutation', updateVenue?: { __typename?: 'Venue', id: string } | null };
+
+export type DeleteVenueMutationVariables = Types.Exact<{
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type DeleteVenueMutation = { __typename?: 'Mutation', removeVenue?: boolean | null };
+
+export type VenueEditQueryVariables = Types.Exact<{
+  id?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type VenueEditQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }> } }> } | null, venue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
+export type CreateVenueMutationVariables = Types.Exact<{
+  input: Types.CreateVenueInput;
+}>;
+
+
+export type CreateVenueMutation = { __typename?: 'Mutation', createVenue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
+export type UpdateVenueMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdateVenueInput;
+}>;
+
+
+export type UpdateVenueMutation = { __typename?: 'Mutation', updateVenue?: { __typename?: 'Venue', capacity?: string | null, city?: string | null, description?: string | null, excludeFromSearch?: boolean | null, id: string, listingsUrl?: string | null, name: string, permanentlyClosed?: boolean | null, postalCode?: string | null, slug: string, state?: string | null, streetAddress?: string | null, website?: string | null, coordinates?: { __typename?: 'VenueCoordinates', latitude?: number | null, longitude?: number | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
 export type ArtistQueryVariables = Types.Exact<{
   first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   slug: Types.Scalars['String']['input'];

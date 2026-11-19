@@ -239,16 +239,7 @@ export const artistsEdit = createController(artists.edit, {
             fields={artistFields(t, artist)}
             data={artist}
             buttonLabel={label}
-            meta={
-              artistShows.length > 0 && (
-                <div class="my-6 block">
-                  <span class="mb-1 block text-sm tracking-wide text-gray-700 dark:text-neutral-300">
-                    {t('entity.shows')}
-                  </span>
-                  <EntityShows shows={artistShows} />
-                </div>
-              )
-            }
+            meta={artistShows.length > 0 && <EntityShows shows={artistShows} />}
           />
         </>,
         { title: label }

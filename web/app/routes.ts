@@ -41,6 +41,11 @@ export const routes = route({
       add: form('/add'),
       edit: form('/:id'),
     }),
+    venues: route('/venue', {
+      list: form('/'),
+      add: form('/add'),
+      edit: form('/:id'),
+    }),
     // The pages of uploads the featured media field's picker scrolls through, as JSON
     mediaPicker: get('/media-picker/:type'),
   }),

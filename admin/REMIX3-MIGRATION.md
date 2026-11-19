@@ -102,6 +102,12 @@ These are in web, and nothing is served there yet:
      - Saving an edited artist now keeps a name like "311" a string, as adding one did.
      - The admin app's artist routes, artist form and `server/artists.ts` are removed in the same change.
      - `e2e/tests/artists.spec.ts` covers the section, the picker and the toggle in a browser.
+   - **Venues has moved.** Web serves `/admin/venue` (`web/app/actions/admin/venues/`), which finishes step 1.
+     - It reuses the featured media picker, the inline toggle (for both "exclude from search" and "permanently closed") and the shows box. The form gained `url` inputs, and the coordinates are a custom field of two inputs named `coordinates[latitude]` and `coordinates[longitude]`.
+     - The "View Listings" link goes to the admin app's listings page, which moves with shows.
+     - Saving keeps a name like "1015" a string, as with artists, alongside the capacity and postal code.
+     - The admin's own venue routes stay until this has been deployed, then go in the follow-up with the users and artists routes.
+     - `e2e/tests/venues.spec.ts` covers the section, and `delete-failure.spec.ts` now runs against web's venue list.
 2. **Podcast, videos, settings:** more forms, video list filters, and the crops editor.
 3. **Shows:** the bulk CSV page and the listings page are the largest route files.
 4. **Media:** upload, album covers, and the pickers.
