@@ -26,8 +26,9 @@ test('picks featured media for a post, scrolling the picker to load more', async
     expect(await buttons.count()).toBeGreaterThan(firstPage);
   }).toPass();
 
-  // Pick one from the page that just loaded
-  const upload = buttons.last();
+  // Pick the first upload on the page that just loaded. The picker can load another page before
+  // the click, so the button is picked by position rather than as the last one.
+  const upload = buttons.nth(firstPage);
   const thumbnail = await upload.locator('img').getAttribute('src');
   await upload.click();
   await expect(picker).toBeHidden();
