@@ -1,4 +1,5 @@
 import { expect, test } from '../support/test.ts';
+import { hydrated } from '../support/ui.ts';
 
 test('creates a post with a heading, which is still there after a reload', async ({
   page,
@@ -8,9 +9,9 @@ test('creates a post with a heading, which is still there after a reload', async
   const heading = `Heading ${prefix}`;
   const paragraph = `Paragraph ${prefix}`;
 
-  // The editor is a client entry, which works once the page's scripts have loaded
+  // The editor is a client entry, which works once it has hydrated
   await page.goto('/admin/post/add');
-  await page.waitForLoadState('networkidle');
+  await hydrated(page);
   await page.getByPlaceholder('Add a Title').fill(title);
 
   // Clicking the placeholder lands in the editor underneath, which starts with an empty line
