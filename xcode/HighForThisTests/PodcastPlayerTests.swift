@@ -79,4 +79,18 @@ struct PodcastPlayerTests {
         player.stop()
         activation.finish(.success(()))
     }
+
+    @Test func playingThePlayingEpisodeKeepsItPlaying() async {
+        let activation = Suspended<Void>()
+        let player = PodcastPlayer { active, _ in
+            if active { try await activation.value() }
+        }
+        player.play(episode)
+        await activation.waitUntilStarted()
+        player.play(episode)
+        #expect(player.isPlaying)
+        #expect(player.episode?.id == episode.id)
+        player.stop()
+        activation.finish(.success(()))
+    }
 }

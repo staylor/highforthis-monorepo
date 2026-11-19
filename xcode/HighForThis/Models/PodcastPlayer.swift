@@ -13,6 +13,9 @@ final class PodcastPlayer {
 
     typealias SessionControl = (_ active: Bool, _ revision: Int) async throws -> Void
 
+    /// The app's player, shared by its windows and CarPlay.
+    static let shared = PodcastPlayer()
+
     private(set) var episode: Episode?
     private(set) var isPreparing = false
     private(set) var error: (any Error)?
@@ -87,11 +90,16 @@ final class PodcastPlayer {
         if self.episode?.id == episode.id, isPlaying {
             pause()
         } else {
-            if self.episode != episode || error != nil || player.currentItem?.status == .failed {
-                load(episode)
-            }
-            play()
+            play(episode)
         }
+    }
+
+    /// Plays the episode, continuing it if it's already playing.
+    func play(_ episode: Episode) {
+        if self.episode != episode || error != nil || player.currentItem?.status == .failed {
+            load(episode)
+        }
+        play()
     }
 
     func togglePlayback() {
