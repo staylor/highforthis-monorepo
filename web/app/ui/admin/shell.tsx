@@ -8,9 +8,8 @@ import { getAdmin } from './context.tsx';
 import { Icon } from './icon.tsx';
 import { adminHref, adminNav, isSectionActive, type NavSection } from './nav.ts';
 
-// The admin's layout: a sidebar on wide screens and a menu under the header on narrow ones,
-// following the admin app's NavMenu. It renders on the server; the menu is a <details> element,
-// so it opens without JavaScript. The sidebar doesn't collapse to icons yet.
+// A sidebar on wide screens and a menu under the header on narrow ones. The menu is a
+// <details> element, so it opens without JavaScript.
 
 /**
  * Links to admin pages that haven't moved here load in full: Remix's client navigation would

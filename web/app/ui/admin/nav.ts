@@ -1,8 +1,6 @@
 import type { IconName } from './icon.tsx';
 
-// The admin's navigation, as data: the same sections and pages as the admin app's
-// useRouteConfig, with translation keys instead of translated labels. Paths are relative to
-// /admin, except the site link, which opens the public site.
+// Paths are relative to /admin, except the site link, which opens the public site.
 
 export interface NavPage {
   path: string;
@@ -99,10 +97,8 @@ export const adminNav: NavSection[][] = [
   ],
 ];
 
-/** The URL for a nav path. */
 export const adminHref = (path: string) => (path === '/' ? '/admin' : `/admin${path}`);
 
-/** Whether a section is the one being viewed, as in the admin app's isRouteActive. */
 export function isSectionActive(section: NavSection, pathname: string): boolean {
   if (section.site) {
     return false;

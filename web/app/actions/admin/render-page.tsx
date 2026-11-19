@@ -7,12 +7,10 @@ import { loadRootData, titleTemplate } from '../render-page.tsx';
 import { AdminDocument } from './document.tsx';
 
 interface AdminPageOptions {
-  /** The page's title, shown before "Admin" and the site's name. */
   title?: string;
   status?: number;
 }
 
-/** Renders an admin page in the admin's document and layout. */
 export async function renderAdminPage(
   context: AppContext,
   page: RemixNode,
