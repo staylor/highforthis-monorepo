@@ -3,6 +3,8 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '../support/test.ts';
 import { addedId, field, hydrated } from '../support/ui.ts';
 
+// The image and audio pickers are client entries.
+
 /** Opens the picker with this button, picks its first upload and says which one it was. */
 async function pick(page: Page, button: string, input: string) {
   const picker = page.getByRole('dialog', { name: 'Media' });

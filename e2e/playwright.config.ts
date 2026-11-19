@@ -2,11 +2,10 @@ import path from 'node:path';
 
 import { defineConfig, devices } from '@playwright/test';
 
-import { adminUrl, authFile, databaseUrl, graphqlUrl, ports, root, webUrl } from './support/env.ts';
+import { authFile, databaseUrl, graphqlUrl, ports, root, webUrl } from './support/env.ts';
 
-// The admin is driven through the public site's server, which forwards /admin, /login, /modals,
-// /upload and /auth/passkeys to it, as in production. Both run in production mode, the admin
-// from a fresh build.
+// The admin is part of the public site's server (web), which forwards /upload, /auth/passkeys
+// and the API to GraphQL, as in production. Web runs in production mode.
 
 const reuseExistingServer = !process.env.CI;
 const database = databaseUrl();
@@ -44,34 +43,23 @@ export default defineConfig({
         ...(database ? { DATABASE_URL: database } : {}),
         GRAPHQL_PORT: String(ports.graphql),
         PASSWORD_LOGIN_ENABLED: 'true',
+        // Passkeys belong to the site the tests sign in to
+        WEBAUTHN_ORIGIN: webUrl,
+        WEBAUTHN_RP_ID: 'localhost',
       },
-      reuseExistingServer,
-    },
-    {
-      name: 'admin',
-      command: 'pnpm build:service --logLevel error && node server.js',
-      cwd: path.join(root, 'admin'),
-      url: `${adminUrl}/health`,
-      env: {
-        NODE_ENV: 'production',
-        PORT: String(ports.admin),
-        GQL_HOST: graphqlUrl,
-        PASSWORD_LOGIN_ENABLED: 'true',
-      },
-      timeout: 180_000,
       reuseExistingServer,
     },
     {
       name: 'web',
-      // build:service builds the CSS and copies in the admin's strings, which aren't checked in
+      // build:service builds the CSS
       command: 'pnpm build:service && node --import remix/node-tsx server.ts',
       cwd: path.join(root, 'web'),
       url: `${webUrl}/health`,
       env: {
         NODE_ENV: 'production',
         PORT: String(ports.web),
-        ADMIN_HOST: adminUrl,
         GQL_HOST: graphqlUrl,
+        PASSWORD_LOGIN_ENABLED: 'true',
       },
       reuseExistingServer,
     },

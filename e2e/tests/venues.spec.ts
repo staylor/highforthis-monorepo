@@ -1,6 +1,8 @@
 import { expect, test } from '../support/test.ts';
 import { addedId, field, hydrated } from '../support/ui.ts';
 
+// The featured media picker and the list's boxes are client entries.
+
 test('adds a venue with its details, closes it from the list and deletes it', async ({
   page,
   prefix,

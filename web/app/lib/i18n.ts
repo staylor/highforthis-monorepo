@@ -26,8 +26,8 @@ export function getT(locale = 'en'): TFunction {
 }
 
 /**
- * Admin pages' strings, which `pnpm admin-strings` copies in from the admin app. They load on
- * first use, so public pages never read them.
+ * The translation function for admin pages. Their strings load on first use, so public pages
+ * never read them.
  */
 export function getAdminT(locale = 'en'): TFunction {
   if (!i18n.hasResourceBundle('en', 'admin')) {

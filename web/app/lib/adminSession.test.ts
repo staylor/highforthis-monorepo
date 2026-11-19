@@ -1,7 +1,7 @@
 import * as assert from 'remix/assert';
 import { afterEach, beforeEach, describe, it } from 'remix/test';
 
-import { adminToken } from './adminSession.ts';
+import { adminSessionCookie, adminToken, expiredAdminCookie } from './adminSession.ts';
 
 // Made by the admin app's React Router createCookieSessionStorage with the secret
 // 'test-secret': one session holds a token, the other doesn't.
@@ -32,5 +32,39 @@ describe('adminToken', () => {
   it('rejects a cookie signed with another secret', () => {
     process.env.TOKEN_SECRET = 'other-secret';
     assert.equal(adminToken(withToken), null);
+  });
+});
+
+describe('adminSessionCookie', () => {
+  beforeEach(() => {
+    process.env.TOKEN_SECRET = 'test-secret';
+  });
+  afterEach(() => {
+    delete process.env.TOKEN_SECRET;
+  });
+
+  it("writes the same cookie as the admin app's session, for 12 hours", () => {
+    assert.equal(
+      adminSessionCookie('test-token'),
+      `${withToken}; Path=/; Max-Age=43200; HttpOnly; SameSite=Lax`
+    );
+  });
+
+  it('is read back as the token', () => {
+    const cookie = adminSessionCookie('another-token').split(';')[0];
+    assert.equal(adminToken(cookie), 'another-token');
+  });
+
+  it('is secure in production, as is signing out', (t) => {
+    const nodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
+    t.after(() => {
+      process.env.NODE_ENV = nodeEnv;
+    });
+    assert.match(adminSessionCookie('test-token'), /; Secure$/);
+    assert.equal(
+      expiredAdminCookie(),
+      '__session=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax; Secure'
+    );
   });
 });

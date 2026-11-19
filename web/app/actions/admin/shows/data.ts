@@ -20,6 +20,9 @@ import type {
 
 import { parseBulkShowsCsv } from './bulk-csv.ts';
 
+// The shows section's data, moved from the admin app's src/server/shows.ts with the same GraphQL
+// operations.
+
 const showFormFragment = gql`
   fragment ShowForm_show on Show {
     artists {

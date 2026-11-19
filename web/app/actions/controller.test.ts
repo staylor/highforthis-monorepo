@@ -80,7 +80,7 @@ describe('OpenObserve SDK bundles', () => {
 });
 
 describe('admin', () => {
-  it('forwards admin paths to the admin app', async (t) => {
+  it('forwards passkey sign-in to GraphQL, and signs out', async (t) => {
     const forwarded: string[] = [];
     const realFetch = globalThis.fetch;
     t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -88,19 +88,18 @@ describe('admin', () => {
       if (url.origin === origin) {
         return realFetch(input, init);
       }
-      forwarded.push(`${url.origin}${url.pathname}`);
-      return new Response('from admin', { status: 200 });
+      forwarded.push(url.pathname);
+      return Response.json({ challengeId: 'c1' });
     });
-    for (const path of ['/admin', '/admin/passkeys', '/admin.data', '/login']) {
-      const response = await router.fetch(new URL(path, origin));
-      assert.equal(await response.text(), 'from admin', path);
-    }
-    assert.deepEqual(forwarded, [
-      'http://localhost:3001/admin',
-      'http://localhost:3001/admin/passkeys',
-      'http://localhost:3001/admin.data',
-      'http://localhost:3001/login',
-    ]);
+    const options = await router.fetch(
+      new Request(new URL('/auth/passkeys/authenticate/options', origin), { method: 'POST' })
+    );
+    assert.deepEqual(await options.json(), { challengeId: 'c1' });
+    assert.deepEqual(forwarded, ['/auth/passkeys/authenticate/options']);
+
+    // The admin's pages are rendered here: signed out, they send you to sign in
+    const dashboard = await router.fetch(new URL('/admin', origin));
+    assert.equal(dashboard.headers.get('location'), '/login/unauthorized');
   });
 
   it('turns on live refresh only for a signed-in admin', async (t) => {

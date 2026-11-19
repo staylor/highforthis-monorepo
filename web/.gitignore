@@ -3,5 +3,3 @@ tmp/
 .DS_Store
 # Tailwind CLI output, rebuilt by `pnpm css` / `pnpm css:watch`
 app/styles/public/
-# The admin app's strings, copied by `pnpm admin-strings`
-app/lib/admin/strings.en.json

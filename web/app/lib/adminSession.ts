@@ -1,8 +1,10 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
-// The admin's GraphQL token lives in a signed cookie in React Router's format: `base64(JSON)`,
-// signed with HMAC-SHA256, with the signature in unpadded base64 after a dot. Public pages read
-// it to know someone is signed in, which turns on live refresh.
+// Signing in keeps the admin's GraphQL token in a signed cookie. Public pages read it to know
+// someone is signed in, which turns on live refresh, and admin pages read the token to call
+// GraphQL. The format is the one the admin's React Router app used, so sessions it started keep
+// working: `base64(JSON)`, signed with HMAC-SHA256, with the signature in unpadded base64 after a
+// dot.
 
 const cookieName = () => process.env.TOKEN_KEY || '__session';
 const secrets = () => [process.env.TOKEN_SECRET || 's3cr3t'];
@@ -21,6 +23,9 @@ function cookieValue(cookieHeader: string | null, name: string): string | null {
   return null;
 }
 
+const sign = (value: string, secret: string) =>
+  createHmac('sha256', secret).update(value).digest('base64').replace(/=+$/, '');
+
 function verify(signed: string): string | null {
   const dot = signed.lastIndexOf('.');
   if (dot < 0) {
@@ -29,9 +34,7 @@ function verify(signed: string): string | null {
   const value = signed.slice(0, dot);
   const signature = Buffer.from(signed.slice(dot + 1));
   for (const secret of secrets()) {
-    const expected = Buffer.from(
-      createHmac('sha256', secret).update(value).digest('base64').replace(/=+$/, '')
-    );
+    const expected = Buffer.from(sign(value, secret));
     if (expected.length === signature.length && timingSafeEqual(expected, signature)) {
       return value;
     }
@@ -39,10 +42,24 @@ function verify(signed: string): string | null {
   return null;
 }
 
-/** Signs the admin out; the attributes must match the ones the cookie was set with. */
-export function expiredAdminCookie(): string {
+// Signing in lasts 12 hours
+const maxAge = 12 * 60 * 60;
+
+const attributes = (seconds: number) => {
   const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-  return `${cookieName()}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax${secure}`;
+  return `Path=/; Max-Age=${seconds}; HttpOnly; SameSite=Lax${secure}`;
+};
+
+/** A `Set-Cookie` value that signs the admin in with their GraphQL token. */
+export function adminSessionCookie(token: string): string {
+  const value = Buffer.from(JSON.stringify({ token })).toString('base64');
+  const signed = `${value}.${sign(value, secrets()[0])}`;
+  return `${cookieName()}=${encodeURIComponent(signed)}; ${attributes(maxAge)}`;
+}
+
+/** A `Set-Cookie` value that signs the admin out. */
+export function expiredAdminCookie(): string {
+  return `${cookieName()}=; ${attributes(0)}`;
 }
 
 /** The signed-in admin's token from the request's cookies, or null. */

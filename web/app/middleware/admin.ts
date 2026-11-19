@@ -5,8 +5,9 @@ import { createAdminGraphQLClient } from '../lib/admin/graphql.ts';
 import { adminToken, expiredAdminCookie } from '../lib/adminSession.ts';
 import { graphqlHost, type GraphQLClient } from '../lib/graphql.ts';
 
-// List both on every admin controller, `sameOrigin()` first: controller middleware doesn't
-// apply to nested route maps.
+// Middleware for the admin's pages. React Router gave the admin app both of these checks for
+// free before it moved here. List both on every admin controller, `sameOrigin()` first:
+// controller middleware doesn't apply to nested route maps.
 
 interface AdminSession {
   token: string;

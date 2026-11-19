@@ -3,8 +3,6 @@ import { openLazyFile } from 'remix/fs';
 import { createFileResponse } from 'remix/response/file';
 import { createContextKey, type Middleware } from 'remix/router';
 
-import { isServedByWeb } from '@highforthis/shared/adminPaths';
-
 import { adminToken } from '../lib/adminSession.ts';
 import { createGraphQLClient, graphqlHost, type GraphQLClient } from '../lib/graphql.ts';
 import { getT, type TFunction } from '../lib/i18n.ts';
@@ -35,9 +33,6 @@ export function openObserveBundles(): Middleware {
   };
 }
 
-// The admin is its own app (admin/). Forwarding its paths keeps it on this domain, so the
-// session cookie, passkeys and signed-in live refresh on public pages keep working.
-const adminHost = (process.env.ADMIN_HOST || 'http://localhost:3001').replace(/\/$/, '');
 // Looked up per request rather than captured at startup, so tests can stub fetch.
 const fetchNow: typeof fetch = (input, init) => globalThis.fetch(input, init);
 const graphqlProxy = createFetchProxy(graphqlHost, { fetch: fetchNow });
@@ -57,31 +52,20 @@ function forwardUpload(request: Request) {
   return graphqlProxy(new Request(request, { headers, duplex: 'half' } as RequestInit));
 }
 
+// Signing in with a passkey asks GraphQL for its options from the browser, so /auth/passkeys
+// stays on this domain, which is the passkeys' origin.
 const forwards = [
-  {
-    paths: ['/admin', '/auth/passkeys', '/login'],
-    proxy: createFetchProxy(adminHost, { fetch: fetchNow, xForwardedHeaders: true }),
-  },
   { paths: ['/upload'], proxy: forwardUpload },
-  { paths: ['/graphql', '/uploads'], proxy: graphqlProxy },
+  { paths: ['/auth/passkeys', '/graphql', '/uploads'], proxy: graphqlProxy },
 ];
 
 const matches = (pathname: string, path: string) =>
   pathname === path || pathname.startsWith(`${path}/`) || pathname.startsWith(`${path}.`);
 
-/**
- * Forwards admin and API paths to their servers, except the admin paths web renders itself
- * (`@highforthis/shared/adminPaths`). Their React Router `.data` requests still go to the admin.
- */
-export function proxies({
-  servedHere,
-  notYetMoved,
-}: { servedHere?: readonly string[]; notYetMoved?: readonly string[] } = {}): Middleware {
+/** Forwards API paths to GraphQL. */
+export function proxies(): Middleware {
   return (context, next) => {
     const { pathname } = context.url;
-    if (isServedByWeb(pathname, servedHere, notYetMoved)) {
-      return next();
-    }
     const forward = forwards.find(({ paths }) => paths.some((path) => matches(pathname, path)));
     return forward ? forward.proxy(context.request) : next();
   };

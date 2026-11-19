@@ -25,3 +25,13 @@ test('signs in, lands on the dashboard and signs out', async ({ page }) => {
   await page.goto('/admin');
   await expect(page).toHaveURL('/login/unauthorized');
 });
+
+test('says so when the password is wrong', async ({ page }) => {
+  const { email } = credentials();
+  await page.goto('/login');
+  await page.getByLabel('Email').fill(email);
+  await page.getByLabel('Password').fill('not-the-password');
+  await page.getByRole('button', { name: 'Log In' }).click();
+  await expect(page).toHaveURL('/login/failed');
+  await expect(page.getByRole('alert')).toHaveText(/Couldn’t sign you in/);
+});

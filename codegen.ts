@@ -56,10 +56,6 @@ const config: CodegenConfig = {
     },
     // Tests define stand-in operations against fields the schema doesn't have
     ...appTypes('./web/app/types/graphql.ts', ['web/app/**/*.{ts,tsx}', '!web/app/**/*.test.*']),
-    ...appTypes('./admin/src/types/graphql.ts', [
-      'admin/src/**/*.{ts,tsx}',
-      '!admin/src/**/__tests__/**',
-    ]),
   },
 };
 

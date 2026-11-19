@@ -18,7 +18,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm --filter @highforthis/graphql db:generate
-      - run: pnpm --filter @highforthis/admin exec react-router typegen
       # the root knip and typecheck scripts build @highforthis/shared first, so
       # packages importing its subpath exports (logger, observability) resolve
       - run: pnpm knip
@@ -69,7 +68,7 @@ jobs:
       # The post editor's tests run in a browser, from the root so the harness can reach pnpm's
       # node_modules
       - run: pnpm test:browser
-      # Creates the test admin, builds the admin and starts the servers; CI turns on retries
+      # Creates the test admin, builds web and starts the servers; CI turns on retries
       - run: pnpm test:e2e
       - if: failure()
         uses: actions/upload-artifact@v7

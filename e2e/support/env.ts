@@ -14,9 +14,8 @@ if (existsSync(envFile)) {
 }
 
 // Ports of their own, so the tests' servers don't clash with `pnpm dev`
-export const ports = { web: 3200, admin: 3201, graphql: 3202 };
+export const ports = { web: 3200, graphql: 3202 };
 export const webUrl = `http://localhost:${ports.web}`;
-export const adminUrl = `http://localhost:${ports.admin}`;
 export const graphqlUrl = `http://localhost:${ports.graphql}`;
 
 /** The test admin's email and password, from e2e/.env. */

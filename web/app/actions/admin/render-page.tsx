@@ -9,6 +9,8 @@ import { AdminDocument } from './document.tsx';
 interface AdminPageOptions {
   title?: string;
   status?: number;
+  /** Leaves out the nav, for signing in. */
+  bare?: boolean;
 }
 
 // What rendering needs from a request's context. Admin controllers' contexts also carry
@@ -28,7 +30,7 @@ export async function renderAdminPage(
   };
   const title = titleTemplate(options.title ? `${options.title} » Admin` : 'Admin', siteSettings);
   return context.render(
-    <AdminDocument admin={admin} title={title}>
+    <AdminDocument admin={admin} title={title} bare={options.bare}>
       {page}
     </AdminDocument>,
     { status: options.status }

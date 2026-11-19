@@ -55,7 +55,7 @@ export const assets = createAssetServer({
   // listed, and (under pnpm) be a direct dependency so it resolves from the app root. Each
   // module served gets an import map entry on every page, so large libraries are better
   // loaded as prebuilt bundles, as the OpenObserve SDKs are (lib/openobserve-bundles.ts).
-  allowPackages: ['remix', ...lexicalPackages],
+  allowPackages: ['remix', '@simplewebauthn/browser', ...lexicalPackages],
   denyFiles: ['app/**/*.test.*'],
   sourceMaps: isDevelopment ? 'external' : undefined,
   minify: !isDevelopment,
