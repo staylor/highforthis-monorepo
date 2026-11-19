@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 
 import { expect, test } from '../support/test.ts';
-import { field } from '../support/ui.ts';
+import { addedId, field } from '../support/ui.ts';
 
 test('adds a user, edits them and deletes them from the list', async ({
   page,
@@ -20,7 +20,7 @@ test('adds a user, edits them and deletes them from the list', async ({
 
   await expect(page.getByRole('heading', { name: 'Edit User' })).toBeVisible();
   await expect(page.getByText('User updated.')).toBeVisible();
-  const id = new URL(page.url()).pathname.split('/').pop() as string;
+  const id = await addedId(page, 'user');
   expect((await graphql.user(id))?.name).toBe(name);
 
   await field(page, 'Bio').fill('Added by the end-to-end tests');
