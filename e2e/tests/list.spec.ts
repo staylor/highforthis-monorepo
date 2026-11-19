@@ -1,4 +1,5 @@
 import { expect, test } from '../support/test.ts';
+import { search } from '../support/ui.ts';
 
 test('searches a list and pages through the results', async ({ page, prefix, graphql }) => {
   // 25 posts make two pages of 20. Newest first, so "Post 25" leads and "Post 05" starts page two.
@@ -11,8 +12,7 @@ test('searches a list and pages through the results', async ({ page, prefix, gra
   const titles = page.getByRole('link', { name: prefix });
 
   await page.goto('/admin/post');
-  await page.getByPlaceholder('Search Posts').fill(prefix);
-  await expect(page).toHaveURL(/[?&]search=/);
+  await search(page, 'Search Posts', prefix);
   await expect(page.getByText('25 items').first()).toBeVisible();
   await expect(page.getByText('1 of 2').first()).toBeVisible();
   await expect(titles).toHaveCount(20);
@@ -30,7 +30,7 @@ test('searches a list and pages through the results', async ({ page, prefix, gra
   await expect(titles).toHaveCount(20);
 
   // The search narrows the list down
-  await page.getByPlaceholder('Search Posts').fill(`${prefix} Post 07`);
+  await search(page, 'Search Posts', `${prefix} Post 07`);
   await expect(page.getByText('1 item', { exact: true }).first()).toBeVisible();
   await expect(titles).toContainText([`${prefix} Post 07`]);
 });
