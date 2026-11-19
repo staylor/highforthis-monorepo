@@ -8,9 +8,8 @@ import { getAdmin } from './context.tsx';
 import { Message } from './message.tsx';
 import { buttonClass, inputBase } from './styles.ts';
 
-// The admin's list pages, following the admin app's ListTable. It renders on the server and
-// works as plain HTML: each row's checkbox belongs to the bulk actions form through the `form`
-// attribute, search is a GET form, and paging is links. There's no select-all checkbox yet.
+// Works as plain HTML: each row's checkbox belongs to the bulk actions form through the `form`
+// attribute, search is a GET form, and paging is links.
 
 interface Column {
   label: string;
@@ -27,7 +26,6 @@ interface Connection {
 const BULK_FORM = 'bulk-actions';
 const cellHeading = 'text-sm py-2 px-2.5 text-left';
 
-/** A link to the row's edit page, in bold, as the first line of a row's main column. */
 export function RowTitle(handle: Handle<{ href: string; title?: string | null }>) {
   return () => {
     const { t } = getAdmin(handle);
@@ -39,7 +37,7 @@ export function RowTitle(handle: Handle<{ href: string; title?: string | null }>
   };
 }
 
-/** A row's edit link and delete button. Delete posts the row's ID with intent=delete. */
+/** Delete posts the row's ID with intent=delete. */
 export function RowActions(handle: Handle<{ editHref: string; id: string }>) {
   return () => {
     const { t } = getAdmin(handle);

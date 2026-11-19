@@ -2,7 +2,6 @@ import type { OperationVariables } from '@apollo/client';
 
 // Builds a list query's variables from the admin list pages' ?page= and ?search= params.
 
-/** Rows per page on the admin's list pages. */
 export const PER_PAGE = 20;
 
 /** The cursor GraphQL's connections use for an offset: base64 of 'arrayconnection:<offset>'. */

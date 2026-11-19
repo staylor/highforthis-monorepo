@@ -6,9 +6,7 @@ import { getAdmin } from './context.tsx';
 import { Message } from './message.tsx';
 import { buttonClass, inputBase } from './styles.ts';
 
-// The admin's add and edit forms, following the admin app's AdminForm and EditableField: a
-// plain POST form whose fields are described by data. The date, editor, tags and media fields
-// move here with the sections that use them.
+// A plain POST form whose fields are described by data.
 
 interface Choice {
   label: string;
@@ -20,7 +18,6 @@ export interface Field {
   /** The form field's name, and the property of `data` that fills it. */
   prop: string;
   type?: 'text' | 'textarea' | 'select' | 'hidden';
-  /** The <input> type for a text field. */
   inputType?: 'text' | 'email' | 'password';
   autoComplete?: boolean;
   placeholder?: string;

@@ -4,9 +4,8 @@ import type { DocumentNode } from 'graphql';
 
 import type { GraphQLClient } from '@highforthis/shared/admin/forms';
 
-// The admin's data functions (the other modules in this folder) take one of these instead
-// of a request, so they don't depend on React Router. Admin pages that have moved to the
-// public site's server use the same interface, so the functions can move there as they are.
+// The data functions take one of these instead of a request, so they don't depend on React
+// Router.
 export type { GraphQLClient };
 
 interface ClientOptions {
