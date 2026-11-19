@@ -2,13 +2,12 @@ import type { ApolloClient, OperationVariables } from '@apollo/client';
 import { ServerError } from '@apollo/client/errors';
 import type { DocumentNode } from 'graphql';
 
+import type { GraphQLClient } from '@highforthis/shared/admin/forms';
+
 // The admin's data functions (the other modules in this folder) take one of these instead
-// of a request, so they don't depend on React Router. It's the same interface as the public
-// site's client (web/app/lib/graphql.ts), so the functions can move to Remix as they are.
-export interface GraphQLClient {
-  query<T>(query: DocumentNode, variables?: OperationVariables): Promise<T>;
-  mutate<T>(mutation: DocumentNode, variables?: OperationVariables): Promise<T>;
-}
+// of a request, so they don't depend on React Router. Admin pages that have moved to the
+// public site's server use the same interface, so the functions can move there as they are.
+export type { GraphQLClient };
 
 interface ClientOptions {
   apolloClient: ApolloClient;

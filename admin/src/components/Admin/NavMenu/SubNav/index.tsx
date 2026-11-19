@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router';
 
+import { isServedByWeb } from '@highforthis/shared/adminPaths';
+
 import type { AdminTopLevelRoute } from '#/types';
 import { cn } from '#/utils/cn';
 
@@ -51,7 +53,13 @@ function SubNav({ item, isCollapsed, isExpanded, isHovered }: SubNavProps) {
       {item.routes?.map((route) => {
         const path = adminPath(route);
         return (
-          <NavLink className={linkClassName} end key={path} to={path}>
+          <NavLink
+            className={linkClassName}
+            end
+            key={path}
+            to={path}
+            reloadDocument={isServedByWeb(path)}
+          >
             {route.label}
           </NavLink>
         );

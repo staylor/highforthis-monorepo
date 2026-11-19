@@ -1,4 +1,4 @@
-import { get, route } from 'remix/routes';
+import { form, get, route } from 'remix/routes';
 
 /**
  * Every route's URL pattern, shared by the server and browser for type-safe hrefs.
@@ -28,5 +28,14 @@ export const routes = route({
   }),
   videos: get('/videos(/:year)'),
   video: get('/video/:slug'),
+  // Admin sections that have moved here from the admin app; the rest of /admin is forwarded
+  // to it (see shared/src/adminPaths.ts). Each form route is a GET page and its POST.
+  admin: route('/admin', {
+    users: route('/user', {
+      list: form('/'),
+      add: form('/add'),
+      edit: form('/:id'),
+    }),
+  }),
   notFound: '*path',
 });

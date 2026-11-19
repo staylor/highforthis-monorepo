@@ -1,5 +1,7 @@
 import { NavLink as RRNavLink } from 'react-router';
 
+import { isServedByWeb } from '@highforthis/shared/adminPaths';
+
 import Icon from '#/components/Icon';
 import type { AdminTopLevelRoute } from '#/types';
 import { cn } from '#/utils/cn';
@@ -24,6 +26,7 @@ function NavLink({ item, isActive, isCollapsed, isExpanded, hasSubNav, onToggle 
       <RRNavLink
         to={path}
         end
+        reloadDocument={isServedByWeb(path)}
         title={isCollapsed ? item.label : undefined}
         target={item.external ? '_blank' : undefined}
         rel={item.external ? 'noreferrer' : undefined}

@@ -1,3 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`connection > serialization 1`] = `"YXJyYXljb25uZWN0aW9uOjc="`;
