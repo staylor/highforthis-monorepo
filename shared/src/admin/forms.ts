@@ -2,14 +2,10 @@ import type { OperationVariables } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
 import qs from 'qs';
 
-// Saving the admin's forms and deleting list rows. The admin app and the admin pages that have
-// moved to web (see admin/REMIX3-MIGRATION.md) both use these, so the two can't drift apart.
-
 /**
  * What the admin's data functions take instead of a request, so they don't depend on a
- * framework. The admin app (admin/src/server/graphql.ts) and web (web/app/lib/admin/graphql.ts)
- * each make one that sends the signed-in admin's token. A failed operation is logged and comes
- * back as empty data, which is how `submitForm` and `deleteSelected` tell that it failed.
+ * framework. A failed operation is logged and comes back as empty data, which is how
+ * `submitForm` and `deleteSelected` tell that it failed.
  */
 export interface GraphQLClient {
   query<T>(query: DocumentNode, variables?: OperationVariables): Promise<T>;
@@ -74,7 +70,7 @@ function parseObject(obj: Record<string, any>, skipKeys?: string[]) {
     }
 
     const val = parseValue(obj[key]);
-    if (val !== null) result[key] = val; // ignore null values
+    if (val !== null) result[key] = val;
   }
   return result;
 }

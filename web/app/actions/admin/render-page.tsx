@@ -15,7 +15,6 @@ interface AdminPageOptions {
 // `context.admin`, which keeps them from being an `AppContext`.
 type AdminPageContext = Pick<AppContext, 'gql' | 'request' | 'render' | 'url'>;
 
-/** Renders an admin page in the admin's document and layout. */
 export async function renderAdminPage(
   context: AdminPageContext,
   page: RemixNode,

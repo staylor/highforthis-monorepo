@@ -15,8 +15,8 @@ import { renderAdminPage } from '../render-page.tsx';
 
 import { createUser, deleteUsers, loadUser, loadUsers, updateUser } from './data.ts';
 
-// The admin's users section, moved from the admin app's routes/admin/user. Each form route has
-// its own controller, since controller middleware doesn't apply to nested route maps.
+// Each form route has its own controller, since controller middleware doesn't apply to nested
+// route maps.
 
 const users = routes.admin.users;
 

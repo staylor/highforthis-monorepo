@@ -3,9 +3,6 @@ import { randomBytes } from 'node:crypto';
 import { expect, test } from '../support/test.ts';
 import { field } from '../support/ui.ts';
 
-// The users section is the first to move from the admin app to web (see
-// admin/REMIX3-MIGRATION.md), so these pages come from web's Remix server.
-
 test('adds a user, edits them and deletes them from the list', async ({
   page,
   prefix,
@@ -14,7 +11,6 @@ test('adds a user, edits them and deletes them from the list', async ({
   const name = `${prefix} User`;
 
   await page.goto('/admin/user/add');
-  // Served by web: its admin pages use the admin stylesheet its asset server builds
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
   await field(page, 'Name').fill(name);
   await field(page, 'Email').fill(`e2e-${prefix.slice(-8)}@example.com`);

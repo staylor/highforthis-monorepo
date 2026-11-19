@@ -28,8 +28,8 @@ export const routes = route({
   }),
   videos: get('/videos(/:year)'),
   video: get('/video/:slug'),
-  // Admin sections that have moved here from the admin app; the rest of /admin is forwarded
-  // to it (see shared/src/adminPaths.ts). Each form route is a GET page and its POST.
+  // The admin pages this app renders; the rest of /admin goes to the admin app (see
+  // shared/src/adminPaths.ts). Each form route is a GET page and its POST.
   admin: route('/admin', {
     users: route('/user', {
       list: form('/'),

@@ -10,9 +10,6 @@ import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVar
 
 import type { UserEditQuery, UsersAdminQuery } from '../../../types/graphql.ts';
 
-// The users section's data, moved from the admin app's src/server/users.ts with the same GraphQL
-// operations.
-
 const userFormFragment = gql`
   fragment UserForm_user on User {
     bio
