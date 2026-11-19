@@ -87,7 +87,7 @@ describe('block toolbar', () => {
     const editor = await renderEditor();
     await update(editor, () => {
       const empty = $createParagraphNode();
-      $getRoot().getFirstChildOrThrow<ParagraphNode>().append($createTextNode('First line'));
+      ($getRoot().getFirstChildOrThrow() as ParagraphNode).append($createTextNode('First line'));
       $getRoot().append(empty);
       empty.select();
     });
@@ -120,7 +120,7 @@ describe('block toolbar', () => {
   it('makes a line with mixed formatting a single list item', async () => {
     const editor = await renderEditor();
     await update(editor, () => {
-      const line = $getRoot().getFirstChildOrThrow<ParagraphNode>();
+      const line = $getRoot().getFirstChildOrThrow() as ParagraphNode;
       line.append($createTextNode('Bold').toggleFormat('bold'), $createTextNode(' and plain'));
       line.selectStart();
     });
@@ -149,7 +149,9 @@ describe('block toolbar', () => {
       expect(editor.getEditorState().toJSON().root.children[0]).toEqual(savedImage)
     );
     expect(screen.queryByText('An album cover')).not.toBeInTheDocument();
-    expect(screen.getByRole('textbox').querySelector('img')).toHaveAttribute(
+    expect(
+      screen.getByRole('textbox').querySelector('[data-lexical-decorator] img')
+    ).toHaveAttribute(
       'src',
       `https://storage.googleapis.com/wonderboymusic/${image.destination}/album-640x0.jpg`
     );

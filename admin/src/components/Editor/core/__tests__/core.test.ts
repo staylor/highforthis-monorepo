@@ -113,7 +113,7 @@ describe('post editor', () => {
 
     unmount();
     update(editor, () => {
-      $getRoot().getFirstChildOrThrow<ParagraphNode>().append($createTextNode('Later'));
+      ($getRoot().getFirstChildOrThrow() as ParagraphNode).append($createTextNode('Later'));
     });
 
     expect(editor.getRootElement()).toBeNull();
@@ -149,11 +149,11 @@ describe('block toolbar', () => {
   it('shows at the start of a line, with the line’s block type', () => {
     const { editor, toolbar } = setup(savedPost);
 
-    update(editor, () => $getRoot().getFirstChildOrThrow<ParagraphNode>().selectStart());
+    update(editor, () => ($getRoot().getFirstChildOrThrow() as ParagraphNode).selectStart());
     expect(toolbar.get()).toMatchObject({ visible: true, open: true, style: 'h3' });
 
     update(editor, () => {
-      const text = $getRoot().getFirstChildOrThrow<ParagraphNode>().getFirstChild();
+      const text = ($getRoot().getFirstChildOrThrow() as ParagraphNode).getFirstChild();
       if ($isTextNode(text)) {
         text.select(2, 2);
       }
@@ -212,7 +212,7 @@ describe('block toolbar', () => {
   it('inserts the video picked above a line with text', async () => {
     const { editor, toolbar, saved } = setup();
     update(editor, () => {
-      const line = $getRoot().getFirstChildOrThrow<ParagraphNode>();
+      const line = $getRoot().getFirstChildOrThrow() as ParagraphNode;
       line.append($createTextNode('Watch this'));
       line.selectStart();
     });
@@ -243,7 +243,7 @@ describe('inline toolbar', () => {
     // select "Key", in the page and in the editor
     window.getSelection()?.setBaseAndExtent(bold, 0, bold, 3);
     update(editor, () => {
-      const text = $getRoot().getChildAtIndex<ParagraphNode>(2)?.getFirstChild();
+      const text = ($getRoot().getChildAtIndex(2) as ParagraphNode | null)?.getFirstChild();
       if ($isTextNode(text)) {
         text.select(0, 3);
       }
