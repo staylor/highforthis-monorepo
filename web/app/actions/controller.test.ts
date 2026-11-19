@@ -37,6 +37,15 @@ describe('root controller', () => {
     assert.deepEqual(await response.json(), { status: 'ok' });
   });
 
+  it('reports where the time went in Server-Timing', async () => {
+    const response = await router.fetch(new URL(routes.health.href(), origin));
+    assert.equal(response.status, 200);
+    const timing = response.headers.get('server-timing') ?? '';
+    for (const name of ['compression', 'static', 'render', 'route', 'total']) {
+      assert.match(timing, new RegExp(`\\b${name};dur=\\d+\\.\\d{2}\\b`), name);
+    }
+  });
+
   it('rejects WordPress probes before routing', async () => {
     const response = await router.fetch(new URL('/wp-login.php', origin));
     assert.equal(response.status, 403);
