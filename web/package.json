@@ -28,10 +28,8 @@
     "@simplewebauthn/browser": "13.3.0",
     "graphql": "16.13.0",
     "graphql-tag": "2.12.6",
-    "html-escape": "2.0.0",
     "i18next": "25.8.13",
     "lexical": "0.53.0",
-    "qs": "6.15.0",
     "remix": "3.3.0"
   },
   "devDependencies": {

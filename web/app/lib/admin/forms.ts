@@ -1,6 +1,5 @@
 import type { OperationVariables } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
-import qs from 'qs';
 
 /**
  * What the admin's data functions take instead of a request, so they don't depend on a
@@ -45,12 +44,9 @@ function parseValue(val: any) {
   }
 }
 
-function parseArray(arr: any[]) {
-  const result: any[] = [];
-  for (let i = 0; i < arr.length; i++) {
-    result[i] = parseValue(arr[i]);
-  }
-  return result;
+// Object.values skips an array's holes, as from crops[0] and crops[2] without crops[1]
+function parseArray(arr: any[]): any[] {
+  return Object.values(arr).map(parseValue);
 }
 
 function parseNumber(val: any) {
@@ -89,18 +85,61 @@ interface ParseFormOptions {
   skipKeys?: string[];
 }
 
-// The admin forms name nested fields like foo[0][bar][baz], which FormData leaves flat, so
-// the fields go back through qs to build objects and arrays. parseObject then turns the
-// values into numbers and booleans, since GraphQL rejects an `Int` sent as a string, and
-// drops empty fields.
-export function parseForm(formData: FormData, options?: ParseFormOptions) {
-  const params = new URLSearchParams();
-  for (const [key, value] of formData) {
-    if (typeof value === 'string') {
-      params.append(key, value);
-    }
+// A field's name as the keys it nests under: crops[0][width] is crops, 0, width
+function fieldPath(name: string) {
+  const match = /^([^[\]]+)((?:\[[^[\]]*\])*)$/.exec(name);
+  if (!match) {
+    return [name];
   }
-  return parseObject(qs.parse(params.toString()), options?.skipKeys);
+  return [match[1], ...Array.from(match[2].matchAll(/\[([^[\]]*)\]/g), (key) => key[1])];
+}
+
+// Keys that would reach an object's prototype instead of setting a field
+const unsafeKeys = new Set(['__proto__', 'constructor', 'prototype']);
+
+/**
+ * The admin forms name nested fields like crops[0][width] and coordinates[latitude], which
+ * FormData leaves flat. This puts them back together: a number in brackets indexes an array, []
+ * adds to one, and a name given more than once, like a multiple select's, collects its values in
+ * an array. Uploaded files are left out.
+ */
+function nestFields(formData: FormData) {
+  const fields: Record<string, any> = {};
+  for (const [name, value] of formData) {
+    const path = fieldPath(name);
+    if (typeof value !== 'string' || path.some((key) => unsafeKeys.has(key))) {
+      continue;
+    }
+    let parent: any = fields;
+    path.forEach((key, i) => {
+      const last = i === path.length - 1;
+      if (key === '' && Array.isArray(parent)) {
+        if (last) {
+          parent.push(value);
+        } else {
+          parent = parent[parent.push(/^\d*$/.test(path[i + 1]) ? [] : {}) - 1];
+        }
+      } else if (last) {
+        const current = parent[key];
+        parent[key] =
+          current === undefined
+            ? value
+            : Array.isArray(current)
+              ? [...current, value]
+              : [current, value];
+      } else {
+        parent[key] ??= /^\d*$/.test(path[i + 1]) ? [] : {};
+        parent = parent[key];
+      }
+    });
+  }
+  return fields;
+}
+
+// parseObject turns the values into numbers and booleans, since GraphQL rejects an `Int` sent as
+// a string, and drops empty fields
+export function parseForm(formData: FormData, options?: ParseFormOptions) {
+  return parseObject(nestFields(formData), options?.skipKeys);
 }
 
 interface SubmittedNode {

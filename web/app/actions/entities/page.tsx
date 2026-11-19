@@ -1,5 +1,4 @@
 import { gql } from 'graphql-tag';
-import qs from 'qs';
 import { css, unsafeHTML, type Handle } from 'remix/component';
 
 import type { ArtistQuery, VenueQuery } from '../../types/graphql.ts';
@@ -108,15 +107,16 @@ function VenueMap(
     }
     const { name, coordinates } = handle.props;
     const center = `${coordinates.latitude},${coordinates.longitude}`;
-    const params = {
-      zoom: 15,
-      center,
-      size: `${size}x${size}`,
-      key,
-      style: 'feature:all|element:all|saturation:-100',
-      markers: `size:normal|color:0xe50082|label:${name}|${center}`,
-    };
-    const src = `https://maps.googleapis.com/maps/api/staticmap?${qs.stringify(params)}&${qs.stringify({ style: 'feature:poi|visibility:off' })}`;
+    const params = new URLSearchParams([
+      ['zoom', '15'],
+      ['center', center],
+      ['size', `${size}x${size}`],
+      ['key', key],
+      ['style', 'feature:all|element:all|saturation:-100'],
+      ['markers', `size:normal|color:0xe50082|label:${name}|${center}`],
+      ['style', 'feature:poi|visibility:off'],
+    ]);
+    const src = `https://maps.googleapis.com/maps/api/staticmap?${params}`;
     return (
       <a
         mix={css({
@@ -125,7 +125,7 @@ function VenueMap(
           [md]: { marginBottom: 0 },
         })}
         style={{ width: size, height: size }}
-        href={`http://maps.apple.com/?${qs.stringify({ q: name, ll: center, z: 18 })}`}
+        href={`http://maps.apple.com/?${new URLSearchParams({ q: name, ll: center, z: '18' })}`}
       >
         <img
           width={size}

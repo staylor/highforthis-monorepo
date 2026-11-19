@@ -77,6 +77,21 @@ describe('parseForm', () => {
     });
   });
 
+  it('collects a name given more than once, and keeps a name given once as a value', () => {
+    const formData = form({ tags: ['rock', 'live'], venue: 'v1', 'coordinates[latitude]': '40.7' });
+    assert.deepEqual(parseForm(formData), {
+      tags: ['rock', 'live'],
+      venue: 'v1',
+      coordinates: { latitude: 40.7 },
+    });
+  });
+
+  it('ignores names that would reach an object prototype', () => {
+    const formData = form({ '__proto__[admin]': 'true', 'title[constructor]': 'x', title: 'Hi' });
+    assert.deepEqual(parseForm(formData), { title: 'Hi' });
+    assert.equal(({} as Record<string, unknown>).admin, undefined);
+  });
+
   it('turns numbers and booleans into values and drops empty fields', () => {
     const formData = form({ title: 'Hello world', year: '2026', closed: 'false', notes: '' });
     assert.deepEqual(parseForm(formData), { title: 'Hello world', year: 2026, closed: false });
