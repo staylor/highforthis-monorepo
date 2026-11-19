@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { hydrated } from '../support/ui.ts';
+import { addedId, hydrated } from '../support/ui.ts';
 
 test('creates a post with a heading, which is still there after a reload', async ({
   page,
@@ -26,6 +26,8 @@ test('creates a post with a heading, which is still there after a reload', async
   await page.getByRole('button', { name: 'Add Post' }).click();
   await expect(page.getByText('Post updated.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Edit Post' })).toBeVisible();
+  // Remix shows the edit page before it replaces the URL, which the reload needs
+  await addedId(page, 'post');
 
   await page.reload();
   await expect(page.getByPlaceholder('Add a Title')).toHaveValue(title);
