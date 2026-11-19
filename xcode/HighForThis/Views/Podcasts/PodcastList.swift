@@ -12,7 +12,7 @@ struct PodcastList: View {
                         Text(episode.title)
                             .font(.headline)
                         if let date = episode.date {
-                            Text(Date(apiTimestamp: date), format: .dateTime.month(.abbreviated).day().year())
+                            Text(Date(apiTimestamp: date), format: .episodeDate)
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }

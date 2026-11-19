@@ -30,7 +30,7 @@ struct ShowList: View {
                         .accessibilityIdentifier("show-\(show.id)")
                     }
                 } header: {
-                    Text(day.date, format: .dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
+                    Text(day.date, format: .showDay)
                 }
             }
         }

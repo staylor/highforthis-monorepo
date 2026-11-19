@@ -84,7 +84,9 @@ final class PodcastPlayer {
         return seconds
     }
 
-    func isPlaying(_ episode: Episode) -> Bool { self.episode?.id == episode.id && isPlaying }
+    func isPlaying(_ episode: Episode) -> Bool { isPlaying(id: episode.id) }
+
+    func isPlaying(id: Episode.ID) -> Bool { episode?.id == id && isPlaying }
 
     func toggle(_ episode: Episode) {
         if self.episode?.id == episode.id, isPlaying {
