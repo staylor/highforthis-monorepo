@@ -1,0 +1,324 @@
+import * as assert from 'remix/assert';
+import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
+
+import { router } from '../../../router.ts';
+
+const origin = 'http://localhost';
+
+// Made by the admin app's React Router createCookieSessionStorage with the secret
+// 'test-secret', holding the token 'test-token'.
+const session =
+  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ%3D%3D.0jvC0SjKdfmXr5Rw%2F6679ia0w0xRgH4hIpEzB3aJ9Fc';
+
+type Operation = { operationName: string; variables: Record<string, any> };
+
+/**
+ * Stands in for GraphQL: accepts the session, answers each operation by name, and records the
+ * operations it was sent.
+ */
+function stubGraphQL(t: TestContext, answers: Record<string, unknown> = {}) {
+  const operations: Operation[] = [];
+  t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
+    const url = new URL(input instanceof Request ? input.url : input);
+    if (url.pathname === '/auth/session') {
+      return new Response(null, { status: 200 });
+    }
+    const { operationName, variables } = JSON.parse(String(init?.body));
+    operations.push({ operationName, variables });
+    return Response.json({ data: answers[operationName] ?? {} });
+  });
+  return operations;
+}
+
+const get = (path: string, cookie = session) =>
+  router.fetch(new Request(new URL(path, origin), { headers: cookie ? { cookie } : {} }));
+
+const post = (path: string, body: string) =>
+  router.fetch(
+    new Request(new URL(path, origin), {
+      method: 'POST',
+      body: new URLSearchParams(body),
+      headers: { cookie: session, origin },
+    })
+  );
+
+const storage = 'https://storage.googleapis.com/wonderboymusic';
+
+const artists = {
+  count: 2,
+  edges: [
+    {
+      node: {
+        id: 'a1',
+        name: 'Wilco',
+        slug: 'wilco',
+        website: 'https://wilcoworld.net',
+        excludeFromSearch: false,
+        appleMusic: {
+          id: 'am1',
+          url: 'https://music.apple.com/wilco',
+          artwork: { url: 'https://art.example/{w}x{h}.jpg' },
+        },
+      },
+    },
+    {
+      node: {
+        id: 'a2',
+        name: 'Spoon',
+        slug: 'spoon',
+        website: null,
+        excludeFromSearch: true,
+        appleMusic: null,
+      },
+    },
+  ],
+  pageInfo: { hasNextPage: false },
+};
+
+// GraphQL answers with __typename, which Apollo needs to fill the form's fragments
+const artist = {
+  __typename: 'Artist',
+  id: 'a1',
+  name: 'Wilco',
+  slug: 'wilco',
+  description: 'From Chicago',
+  website: 'https://wilcoworld.net',
+  excludeFromSearch: true,
+  appleMusic: { __typename: 'AppleMusicData', id: 'am1', artwork: { url: 'https://art/{w}.jpg' } },
+  featuredMedia: [
+    {
+      __typename: 'ImageUpload',
+      id: 'm1',
+      destination: '2024/05',
+      fileName: 'wilco.jpg',
+      type: 'image',
+      crops: [
+        { fileName: 'wilco-150.jpg', width: 150 },
+        { fileName: 'wilco-300.jpg', width: 300 },
+      ],
+    },
+  ],
+};
+
+const shows = Array.from({ length: 12 }, (_, i) => ({
+  node: {
+    __typename: 'Show',
+    id: `s${i}`,
+    date: Date.UTC(2024, 4, 10 + i, 12),
+    attended: true,
+    venue: { __typename: 'Venue', id: 'v1', name: 'Ryman' },
+  },
+}));
+
+describe('admin artists', () => {
+  beforeEach(() => {
+    process.env.TOKEN_SECRET = 'test-secret';
+  });
+  afterEach(() => {
+    delete process.env.TOKEN_SECRET;
+  });
+
+  it('lists artists with artwork, links, "exclude from search" boxes and websites', async (t) => {
+    const operations = stubGraphQL(t, { ArtistsAdmin: { artists } });
+    const html = await (await get('/admin/artist?search=w')).text();
+    assert.match(html, /<img src="https:\/\/art.example\/44x44.jpg" alt="Wilco"/);
+    assert.match(html, /<a href="\/admin\/artist\/a1">Wilco<\/a>/);
+    assert.match(html, /<a href="\/admin\/artist\/a2">Spoon<\/a>/);
+    assert.match(html, /<input type="checkbox" checked aria-label="Exclude from search: Spoon"/);
+    assert.match(html, /<input type="checkbox" aria-label="Exclude from search: Wilco"/);
+    assert.match(html, /href="https:\/\/wilcoworld.net"/);
+    assert.deepEqual(operations.find((op) => op.operationName === 'ArtistsAdmin')?.variables, {
+      first: 20,
+      search: 'w',
+    });
+  });
+
+  it('saves a row\'s "exclude from search" box and answers 204', async (t) => {
+    const operations = stubGraphQL(t, { UpdateArtistExclude: { updateArtist: { id: 'a1' } } });
+    let response = await post(
+      '/admin/artist',
+      'intent=excludeFromSearch&id=a1&excludeFromSearch=true'
+    );
+    assert.equal(response.status, 204);
+    response = await post(
+      '/admin/artist',
+      'intent=excludeFromSearch&id=a1&excludeFromSearch=false'
+    );
+    assert.equal(response.status, 204);
+    assert.deepEqual(operations, [
+      {
+        operationName: 'UpdateArtistExclude',
+        variables: { id: 'a1', input: { excludeFromSearch: true } },
+      },
+      {
+        operationName: 'UpdateArtistExclude',
+        variables: { id: 'a1', input: { excludeFromSearch: false } },
+      },
+    ]);
+  });
+
+  it("answers 500 when the box didn't save, so it goes back", async (t) => {
+    stubGraphQL(t);
+    const response = await post(
+      '/admin/artist',
+      'intent=excludeFromSearch&id=a1&excludeFromSearch=true'
+    );
+    assert.equal(response.status, 500);
+  });
+
+  it('deletes the checked artists and says how many', async (t) => {
+    const operations = stubGraphQL(t, { DeleteArtist: { removeArtist: true } });
+    const response = await post('/admin/artist', 'intent=delete&ids=a1');
+    assert.equal(response.status, 303);
+    assert.equal(response.headers.get('location'), 'http://localhost/admin/artist?deleted=1');
+    assert.deepEqual(operations, [{ operationName: 'DeleteArtist', variables: { ids: ['a1'] } }]);
+  });
+
+  it('adds an artist, keeping a name like "311" a string', async (t) => {
+    const operations = stubGraphQL(t, { CreateArtist: { createArtist: { ...artist, id: 'a9' } } });
+    const form = await (await get('/admin/artist/add')).text();
+    assert.match(form, /<input type="text" name="name"/);
+    assert.doesNotMatch(form, /name="slug"/);
+    assert.match(form, /Set Featured Media/);
+
+    const response = await post('/admin/artist/add', 'name=311&description=&website=');
+    assert.equal(response.status, 303);
+    assert.equal(
+      response.headers.get('location'),
+      'http://localhost/admin/artist/a9?message=updated'
+    );
+    assert.deepEqual(operations.at(-1), {
+      operationName: 'CreateArtist',
+      variables: { input: { name: '311' } },
+    });
+  });
+
+  it('shows an artist with their artwork, featured media and shows', async (t) => {
+    stubGraphQL(t, {
+      ArtistEdit: { artist, shows: { __typename: 'ShowConnection', edges: shows } },
+    });
+    const html = await (await get('/admin/artist/a1?message=updated')).text();
+    assert.match(html, /<img src="https:\/\/art\/300.jpg" alt="Wilco"/);
+    assert.match(html, /<a href="\/artist\/wilco" target="_blank"/);
+    assert.match(html, /<input type="text" name="slug" value="wilco"/);
+    assert.match(html, /<textarea name="description"[^>]*>From Chicago<\/textarea>/);
+    assert.match(html, /<input type="hidden" name="featuredMedia" value="m1"/);
+    assert.ok(html.includes(`<img alt="" src="${storage}/2024/05/wilco-300.jpg"`));
+    assert.match(html, /<input type="checkbox" name="excludeFromSearch" value="true" checked/);
+    // Shows link to the admin app's show pages, which load in full
+    assert.match(
+      html,
+      /<a href="\/admin\/show\/s0" data-rmx-document[^>]*>05\/10\/2024 Ryman<\/a>/
+    );
+    assert.match(html, /<summary[^>]*>Show More<\/summary>/);
+    assert.match(html, /Artist updated\./);
+  });
+
+  it('leaves the shows box out when an artist has none', async (t) => {
+    stubGraphQL(t, { ArtistEdit: { artist, shows: { __typename: 'ShowConnection', edges: [] } } });
+    const html = await (await get('/admin/artist/a1')).text();
+    assert.match(html, /<h1[^>]*>Edit Artist<\/h1>/);
+    assert.doesNotMatch(html, /Add Show/);
+  });
+
+  it('saves an edit, clearing "exclude from search" when the box is unchecked', async (t) => {
+    const operations = stubGraphQL(t, { UpdateArtist: { updateArtist: artist } });
+    const response = await post(
+      '/admin/artist/a1',
+      'name=311&slug=311&description=Hi&website=&featuredMedia=m2'
+    );
+    assert.equal(
+      response.headers.get('location'),
+      'http://localhost/admin/artist/a1?message=updated'
+    );
+    assert.deepEqual(operations.at(-1), {
+      operationName: 'UpdateArtist',
+      variables: {
+        id: 'a1',
+        input: {
+          excludeFromSearch: false,
+          name: '311',
+          slug: '311',
+          description: 'Hi',
+          featuredMedia: 'm2',
+        },
+      },
+    });
+  });
+
+  it("answers 404 for an artist that doesn't exist", async (t) => {
+    stubGraphQL(t, { ArtistEdit: { artist: null, shows: null } });
+    const response = await get('/admin/artist/nobody');
+    assert.equal(response.status, 404);
+  });
+});
+
+describe('admin media picker', () => {
+  beforeEach(() => {
+    process.env.TOKEN_SECRET = 'test-secret';
+  });
+  afterEach(() => {
+    delete process.env.TOKEN_SECRET;
+  });
+
+  const uploads = {
+    __typename: 'MediaUploadConnection',
+    edges: [
+      {
+        node: {
+          __typename: 'ImageUpload',
+          id: 'm1',
+          title: 'Wilco live',
+          destination: '2024/05',
+          crops: [
+            { fileName: 'w-150.jpg', width: 150 },
+            { fileName: 'w-300.jpg', width: 300 },
+          ],
+        },
+      },
+      {
+        node: {
+          __typename: 'ImageUpload',
+          id: 'm2',
+          title: null,
+          destination: '2024/06',
+          crops: [],
+        },
+      },
+    ],
+    pageInfo: { endCursor: 'next', hasNextPage: true },
+  };
+
+  it('answers a page of uploads with their thumbnails, and pages on with ?cursor', async (t) => {
+    const operations = stubGraphQL(t, { MediaPicker: { uploads } });
+    const response = await get('/admin/media-picker/image?cursor=abc');
+    assert.equal(response.headers.get('cache-control'), 'private, no-store');
+    assert.deepEqual(await response.json(), {
+      items: [
+        {
+          id: 'm1',
+          title: 'Wilco live',
+          thumb: `${storage}/2024/05/w-150.jpg`,
+          preview: `${storage}/2024/05/w-300.jpg`,
+        },
+        { id: 'm2', title: '', thumb: null, preview: null },
+      ],
+      endCursor: 'next',
+      hasNextPage: true,
+    });
+    assert.deepEqual(operations[0].variables, { first: 50, type: 'image', cursor: 'abc' });
+  });
+
+  it('answers 404 for a type it has no picker for', async (t) => {
+    const operations = stubGraphQL(t);
+    const response = await get('/admin/media-picker/video');
+    assert.equal(response.status, 404);
+    assert.deepEqual(operations, []);
+  });
+
+  it('sends someone who is signed out to the login page', async (t) => {
+    stubGraphQL(t);
+    const response = await get('/admin/media-picker/image', '');
+    assert.equal(response.status, 302);
+  });
+});

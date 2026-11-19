@@ -1,6 +1,103 @@
 import type * as Types from '@highforthis/shared/types/graphql';
 
 export * from '@highforthis/shared/types/graphql';
+export type ArtistForm_ArtistFragment = { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
+    | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+    | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+    | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+    | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+  > | null };
+
+export type ArtistsAdminQueryVariables = Types.Exact<{
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type ArtistsAdminQuery = { __typename?: 'Query', artists?: { __typename?: 'ArtistConnection', count: number, edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, url?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type UpdateArtistExcludeMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdateArtistInput;
+}>;
+
+
+export type UpdateArtistExcludeMutation = { __typename?: 'Mutation', updateArtist?: { __typename?: 'Artist', id: string } | null };
+
+export type DeleteArtistMutationVariables = Types.Exact<{
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type DeleteArtistMutation = { __typename?: 'Mutation', removeArtist?: boolean | null };
+
+export type ArtistEditQueryVariables = Types.Exact<{
+  id?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type ArtistEditQuery = { __typename?: 'Query', artist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, venue: { __typename?: 'Venue', id: string, name: string } } }> } | null };
+
+export type CreateArtistMutationVariables = Types.Exact<{
+  input: Types.CreateArtistInput;
+}>;
+
+
+export type CreateArtistMutation = { __typename?: 'Mutation', createArtist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
+export type UpdateArtistMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdateArtistInput;
+}>;
+
+
+export type UpdateArtistMutation = { __typename?: 'Mutation', updateArtist?: { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
+type FeaturedMedia_Media_AudioUpload_Fragment = { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string };
+
+type FeaturedMedia_Media_FileUpload_Fragment = { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string };
+
+type FeaturedMedia_Media_ImageUpload_Fragment = { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> };
+
+type FeaturedMedia_Media_VideoUpload_Fragment = { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string };
+
+export type FeaturedMedia_MediaFragment =
+  | FeaturedMedia_Media_AudioUpload_Fragment
+  | FeaturedMedia_Media_FileUpload_Fragment
+  | FeaturedMedia_Media_ImageUpload_Fragment
+  | FeaturedMedia_Media_VideoUpload_Fragment
+;
+
+export type MediaPickerQueryVariables = Types.Exact<{
+  cursor?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  type?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type MediaPickerQuery = { __typename?: 'Query', uploads?: { __typename?: 'MediaUploadConnection', edges: Array<{ __typename?: 'MediaUploadEdge', node:
+        | { __typename?: 'AudioUpload', destination: string, id: string, title?: string | null, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null }
+        | { __typename?: 'FileUpload', destination: string, id: string, title?: string | null }
+        | { __typename?: 'ImageUpload', destination: string, id: string, title?: string | null, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+        | { __typename?: 'VideoUpload', destination: string, id: string, title?: string | null }
+       }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
+
 export type UserForm_UserFragment = { __typename?: 'User', bio?: string | null, email: string, id: string, name?: string | null, roles?: Array<string | null> | null };
 
 export type UsersAdminQueryVariables = Types.Exact<{

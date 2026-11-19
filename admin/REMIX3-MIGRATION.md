@@ -95,6 +95,13 @@ These are in web, and nothing is served there yet:
      - The list table (row and bulk delete, search, paging) and the field-driven form are in `web/app/ui/admin/`. They're plain HTML: rows join the bulk form through the `form` attribute, search is a GET form, and there's no select-all checkbox yet. The form covers text, email, password, textarea, select and hidden fields so far.
      - The admin app's users routes and `server/users.ts` are removed in the same change.
      - `e2e/tests/users.spec.ts` covers the section in a browser.
+   - **Artists has moved.** Web serves `/admin/artist` (`web/app/actions/admin/artists/`).
+     - The featured media field moved ahead of the media step, since artists and venues both need it. It's a client entry (`web/app/ui/admin/public/featured-media.tsx`): a `<dialog>` that pages through `/admin/media-picker/:type`, which answers JSON. It lists images so far; the podcast's audio picker can use the same endpoint.
+     - The list's "exclude from search" box is a client entry (`inline-toggle.tsx`) that posts the intent, the row's ID and the value to the list's action, which answers 204. The shows list's "attended" box and the venues' "permanently closed" box can use it too.
+     - The form gained checkbox and custom fields and a box beside the fields for the artist's shows. Links from web's admin pages to pages the admin app still serves set `data-rmx-document` (`web/app/ui/admin/links.ts`).
+     - Saving an edited artist now keeps a name like "311" a string, as adding one did.
+     - The admin's own artist routes stay until this has been deployed, then go in a follow-up with the users routes.
+     - `e2e/tests/artists.spec.ts` covers the section, the picker and the toggle in a browser.
 2. **Podcast, videos, settings:** more forms, video list filters, and the crops editor.
 3. **Shows:** the bulk CSV page and the listings page are the largest route files.
 4. **Media:** upload, album covers, and the pickers.

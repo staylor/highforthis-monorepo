@@ -41,6 +41,12 @@ interface Entity {
   name: string;
 }
 
+interface Artist extends Entity {
+  description: string | null;
+  excludeFromSearch: boolean | null;
+  featuredMedia: { id: string }[] | null;
+}
+
 export class GraphQL {
   private constructor(
     private readonly request: APIRequestContext,
@@ -113,6 +119,16 @@ export class GraphQL {
       `{ artists(first: 1) { count edges { node { id name } } } }`
     );
     return artists.edges[0].node;
+  }
+
+  async artist(id: string) {
+    const { artist } = await this.query<{ artist: Artist | null }>(
+      `query ($id: String!) {
+        artist(id: $id) { id name description excludeFromSearch featuredMedia { id } }
+      }`,
+      { id }
+    );
+    return artist;
   }
 
   async createShow(input: { title: string; artists: string[]; venue: string }) {

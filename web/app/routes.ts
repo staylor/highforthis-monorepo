@@ -36,6 +36,13 @@ export const routes = route({
       add: form('/add'),
       edit: form('/:id'),
     }),
+    artists: route('/artist', {
+      list: form('/'),
+      add: form('/add'),
+      edit: form('/:id'),
+    }),
+    // The pages of uploads the featured media field's picker scrolls through, as JSON
+    mediaPicker: get('/media-picker/:type'),
   }),
   notFound: '*path',
 });
