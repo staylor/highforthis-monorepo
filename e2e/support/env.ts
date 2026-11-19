@@ -28,15 +28,16 @@ export function credentials() {
   return { email, password };
 }
 
-/** The database the tests' GraphQL server uses: E2E_DATABASE_URL, or GraphQL's own. */
+/**
+ * The database the tests' GraphQL server uses: E2E_DATABASE_URL, or GraphQL's own. Undefined
+ * when there's neither, as in CI's lint job, which loads the config without running the tests;
+ * `pnpm e2e:admin` says what's missing before the tests start.
+ */
 export function databaseUrl() {
   const graphqlEnv = new URL('../../graphql/.env', import.meta.url);
-  const url =
+  return (
     process.env.E2E_DATABASE_URL ||
     process.env.DATABASE_URL ||
-    (existsSync(graphqlEnv) ? parseEnv(readFileSync(graphqlEnv, 'utf8')).DATABASE_URL : undefined);
-  if (!url) {
-    throw new Error('DATABASE_URL is not set. Run `pnpm bootstrap` to create graphql/.env.');
-  }
-  return url;
+    (existsSync(graphqlEnv) ? parseEnv(readFileSync(graphqlEnv, 'utf8')).DATABASE_URL : undefined)
+  );
 }
