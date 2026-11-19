@@ -1,16 +1,15 @@
 import type { Page } from '@playwright/test';
 
 import { expect, test } from '../support/test.ts';
-import { addedId, field } from '../support/ui.ts';
+import { addedId, field, hydrated } from '../support/ui.ts';
 
 /** Opens the picker with this button, picks its first upload and says which one it was. */
 async function pick(page: Page, button: string, input: string) {
   const picker = page.getByRole('dialog', { name: 'Media' });
-  // The picker opens once its client entry has loaded
-  await expect(async () => {
-    await page.getByRole('button', { name: button }).click();
-    await expect(picker).toBeVisible({ timeout: 1_000 });
-  }).toPass();
+  // The picker opens once its client entry has hydrated
+  await hydrated(page);
+  await page.getByRole('button', { name: button }).click();
+  await expect(picker).toBeVisible();
   // The uploads, and the close button
   const uploads = picker.getByRole('button');
   await expect.poll(() => uploads.count()).toBeGreaterThan(1);
