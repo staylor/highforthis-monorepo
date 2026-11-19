@@ -36,7 +36,6 @@ export default [
       route('listings/:venueId?', 'routes/admin/show/listings.tsx'),
       route(':id', 'routes/admin/show/edit.tsx'),
     ]),
-    ...adminRoutes('venue'),
     ...prefix('video', [
       index('routes/admin/video/index.tsx'),
       route(':id', 'routes/admin/video/edit.tsx'),
