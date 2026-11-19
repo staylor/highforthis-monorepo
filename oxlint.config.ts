@@ -22,6 +22,14 @@ export default createConfig(testingLibrary, {
   },
   overrides: [
     {
+      // describe() blocks are named after the component they test, e.g. describe('ListTable').
+      // The shared vitest preset turns this on for the same glob, so it's turned off here.
+      files: ['**/*.test.*'],
+      rules: {
+        'vitest/prefer-lowercase-title': 'off',
+      },
+    },
+    {
       files: ['{web,admin}/**/*'],
       rules: {
         '@lexical/rules-of-lexical': 'error',
