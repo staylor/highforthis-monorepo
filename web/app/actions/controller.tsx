@@ -1,7 +1,6 @@
 import { createController } from 'remix/router';
 
 import { assets } from '../assets.ts';
-import { uploadUrl } from '../lib/media.ts';
 import { routes } from '../routes.ts';
 import type {
   ArtistQuery,
@@ -14,6 +13,7 @@ import type {
   VideosQuery,
 } from '../types/graphql.ts';
 import { Heading1 } from '../ui/heading.tsx';
+import { uploadUrl } from '../ui/public/media.ts';
 import { Video } from '../ui/videos.tsx';
 
 import { ArtistPage, artistQuery, VenuePage, venueQuery } from './entities/page.tsx';

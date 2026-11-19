@@ -9,7 +9,6 @@ import {
 } from '@highforthis/shared/admin/forms';
 
 import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { uploadUrl } from '../../../lib/media.ts';
 import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
 import { routes } from '../../../routes.ts';
 import type { MediaAdminQuery, UploadsAdminQuery } from '../../../types/graphql.ts';
@@ -27,6 +26,7 @@ import { CoverPicker } from '../../../ui/admin/public/cover-picker.tsx';
 import { MediaUploader } from '../../../ui/admin/public/media-uploader.tsx';
 import { inputBase } from '../../../ui/admin/public/styles.ts';
 import { cn } from '../../../ui/public/cn.ts';
+import { uploadUrl } from '../../../ui/public/media.ts';
 import { renderAdminPage, type AdminPageContext } from '../render-page.tsx';
 
 import {

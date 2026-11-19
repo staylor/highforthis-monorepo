@@ -1,4 +1,4 @@
-import type { IconName } from './icon.tsx';
+import type { IconName } from './public/icon.tsx';
 
 // Paths are relative to /admin, except the site link, which opens the public site.
 

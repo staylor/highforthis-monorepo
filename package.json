@@ -74,6 +74,7 @@
     "test:graphql": "pnpm --filter @highforthis/graphql test",
     "test:admin": "pnpm --filter @highforthis/admin test",
     "test:web": "pnpm --filter @highforthis/web test",
+    "test:browser": "NODE_ENV=test node web/node_modules/remix/dist/cli-entry.js test --type browser 'web/app/**/*.test.browser.ts'",
     "test:e2e": "pnpm --filter @highforthis/shared build && pnpm e2e:admin && pnpm --filter @highforthis/e2e e2e",
     "e2e:admin": "pnpm --filter @highforthis/graphql db:e2e-admin",
     "typecheck": "pnpm --filter @highforthis/shared build && pnpm -r typecheck"

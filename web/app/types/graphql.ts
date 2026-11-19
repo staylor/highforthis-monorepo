@@ -98,6 +98,14 @@ export type MediaPickerQuery = { __typename?: 'Query', uploads?: { __typename?: 
         | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, title?: string | null }
        }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
 
+export type VideoPickerQueryVariables = Types.Exact<{
+  cursor?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+}>;
+
+
+export type VideoPickerQuery = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', edges: Array<{ __typename?: 'VideoEdge', node: { __typename?: 'Video', dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
+
 type MediaForm_Media_AudioUpload_Fragment = { __typename?: 'AudioUpload', description?: string | null, duration?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, fileSize: number, height: number, width: number } | null> | null };
 
 type MediaForm_Media_FileUpload_Fragment = { __typename?: 'FileUpload', description?: string | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string };
@@ -219,6 +227,374 @@ export type UpdatePodcastMutationVariables = Types.Exact<{
 
 
 export type UpdatePodcastMutation = { __typename?: 'Mutation', updatePodcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
+
+export type PostForm_PostFragment = { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: string, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+        | { __typename?: 'CodeNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, language?: string | null, children?: Array<
+            | { __typename?: 'CodeNode' }
+            | { __typename?: 'ElementNode' }
+            | { __typename?: 'HeadingNode' }
+            | { __typename?: 'ImageNode' }
+            | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+            | { __typename?: 'ListItemNode' }
+            | { __typename?: 'ListNode' }
+            | { __typename?: 'QuoteNode' }
+            | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+            | { __typename?: 'VideoNode' }
+           | null> | null }
+        | { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+            | { __typename?: 'CodeNode' }
+            | { __typename?: 'ElementNode' }
+            | { __typename?: 'HeadingNode' }
+            | { __typename?: 'ImageNode' }
+            | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+            | { __typename?: 'ListItemNode' }
+            | { __typename?: 'ListNode' }
+            | { __typename?: 'QuoteNode' }
+            | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+            | { __typename?: 'VideoNode' }
+           | null> | null }
+        | { __typename?: 'HeadingNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, tag?: Types.HeadingTag | null, children?: Array<
+            | { __typename?: 'CodeNode' }
+            | { __typename?: 'ElementNode' }
+            | { __typename?: 'HeadingNode' }
+            | { __typename?: 'ImageNode' }
+            | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+            | { __typename?: 'ListItemNode' }
+            | { __typename?: 'ListNode' }
+            | { __typename?: 'QuoteNode' }
+            | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+            | { __typename?: 'VideoNode' }
+           | null> | null }
+        | { __typename?: 'ImageNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, size?: string | null, image?: { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null }
+        | { __typename?: 'LinebreakNode' }
+        | { __typename?: 'ListItemNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null }
+        | { __typename?: 'ListNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, listType?: Types.ListType | null, start?: number | null, children?: Array<
+            | { __typename?: 'CodeNode' }
+            | { __typename?: 'ElementNode' }
+            | { __typename?: 'HeadingNode' }
+            | { __typename?: 'ImageNode' }
+            | { __typename?: 'LinebreakNode' }
+            | { __typename?: 'ListItemNode', checked?: boolean | null, direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, value?: number | null, version?: number | null, children?: Array<
+                | { __typename?: 'CodeNode' }
+                | { __typename?: 'ElementNode' }
+                | { __typename?: 'HeadingNode' }
+                | { __typename?: 'ImageNode' }
+                | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+                | { __typename?: 'ListItemNode' }
+                | { __typename?: 'ListNode' }
+                | { __typename?: 'QuoteNode' }
+                | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+                | { __typename?: 'VideoNode' }
+               | null> | null }
+            | { __typename?: 'ListNode' }
+            | { __typename?: 'QuoteNode' }
+            | { __typename?: 'TextNode' }
+            | { __typename?: 'VideoNode' }
+           | null> | null }
+        | { __typename?: 'QuoteNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+            | { __typename?: 'CodeNode' }
+            | { __typename?: 'ElementNode' }
+            | { __typename?: 'HeadingNode' }
+            | { __typename?: 'ImageNode' }
+            | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+            | { __typename?: 'ListItemNode' }
+            | { __typename?: 'ListNode' }
+            | { __typename?: 'QuoteNode' }
+            | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+            | { __typename?: 'VideoNode' }
+           | null> | null }
+        | { __typename?: 'TextNode' }
+        | { __typename?: 'VideoNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, video?: { __typename?: 'Video', dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null }
+       | null> | null } | null } | null, featuredMedia?: Array<
+    | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+    | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+    | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+    | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+  > | null };
+
+export type PostsAdminQueryVariables = Types.Exact<{
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type PostsAdminQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', count: number, edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, title: string } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type DeletePostMutationVariables = Types.Exact<{
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'Mutation', removePost?: boolean | null };
+
+export type PostEditQueryVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+}>;
+
+
+export type PostEditQuery = { __typename?: 'Query', post?: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: string, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+          | { __typename?: 'CodeNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, language?: string | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'HeadingNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, tag?: Types.HeadingTag | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'ImageNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, size?: string | null, image?: { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null }
+          | { __typename?: 'LinebreakNode' }
+          | { __typename?: 'ListItemNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null }
+          | { __typename?: 'ListNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, listType?: Types.ListType | null, start?: number | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode' }
+              | { __typename?: 'ListItemNode', checked?: boolean | null, direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, value?: number | null, version?: number | null, children?: Array<
+                  | { __typename?: 'CodeNode' }
+                  | { __typename?: 'ElementNode' }
+                  | { __typename?: 'HeadingNode' }
+                  | { __typename?: 'ImageNode' }
+                  | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+                  | { __typename?: 'ListItemNode' }
+                  | { __typename?: 'ListNode' }
+                  | { __typename?: 'QuoteNode' }
+                  | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+                  | { __typename?: 'VideoNode' }
+                 | null> | null }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode' }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'QuoteNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'TextNode' }
+          | { __typename?: 'VideoNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, video?: { __typename?: 'Video', dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null }
+         | null> | null } | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
+export type CreatePostMutationVariables = Types.Exact<{
+  input: Types.CreatePostInput;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: string, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+          | { __typename?: 'CodeNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, language?: string | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'HeadingNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, tag?: Types.HeadingTag | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'ImageNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, size?: string | null, image?: { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null }
+          | { __typename?: 'LinebreakNode' }
+          | { __typename?: 'ListItemNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null }
+          | { __typename?: 'ListNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, listType?: Types.ListType | null, start?: number | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode' }
+              | { __typename?: 'ListItemNode', checked?: boolean | null, direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, value?: number | null, version?: number | null, children?: Array<
+                  | { __typename?: 'CodeNode' }
+                  | { __typename?: 'ElementNode' }
+                  | { __typename?: 'HeadingNode' }
+                  | { __typename?: 'ImageNode' }
+                  | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+                  | { __typename?: 'ListItemNode' }
+                  | { __typename?: 'ListNode' }
+                  | { __typename?: 'QuoteNode' }
+                  | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+                  | { __typename?: 'VideoNode' }
+                 | null> | null }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode' }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'QuoteNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'TextNode' }
+          | { __typename?: 'VideoNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, video?: { __typename?: 'Video', dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null }
+         | null> | null } | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
+
+export type UpdatePostMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdatePostInput;
+}>;
+
+
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: { __typename?: 'Post', date?: number | null, id: string, slug: string, status?: Types.PostStatus | null, summary?: string | null, title: string, artists?: Array<{ __typename?: 'Artist', id: string, name: string } | null> | null, editorState?: { __typename?: 'EditorState', root?: { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+          | { __typename?: 'CodeNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, language?: string | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'ElementNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'HeadingNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, tag?: Types.HeadingTag | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'ImageNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, size?: string | null, image?: { __typename?: 'ImageUpload', destination: string, id: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null }
+          | { __typename?: 'LinebreakNode' }
+          | { __typename?: 'ListItemNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null }
+          | { __typename?: 'ListNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, listType?: Types.ListType | null, start?: number | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode' }
+              | { __typename?: 'ListItemNode', checked?: boolean | null, direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, value?: number | null, version?: number | null, children?: Array<
+                  | { __typename?: 'CodeNode' }
+                  | { __typename?: 'ElementNode' }
+                  | { __typename?: 'HeadingNode' }
+                  | { __typename?: 'ImageNode' }
+                  | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+                  | { __typename?: 'ListItemNode' }
+                  | { __typename?: 'ListNode' }
+                  | { __typename?: 'QuoteNode' }
+                  | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+                  | { __typename?: 'VideoNode' }
+                 | null> | null }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode' }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'QuoteNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, children?: Array<
+              | { __typename?: 'CodeNode' }
+              | { __typename?: 'ElementNode' }
+              | { __typename?: 'HeadingNode' }
+              | { __typename?: 'ImageNode' }
+              | { __typename?: 'LinebreakNode', type?: string | null, version?: number | null }
+              | { __typename?: 'ListItemNode' }
+              | { __typename?: 'ListNode' }
+              | { __typename?: 'QuoteNode' }
+              | { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null }
+              | { __typename?: 'VideoNode' }
+             | null> | null }
+          | { __typename?: 'TextNode' }
+          | { __typename?: 'VideoNode', direction?: Types.ElementDirection | null, format?: number | null, indent?: number | null, type?: string | null, version?: number | null, video?: { __typename?: 'Video', dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null }
+         | null> | null } | null } | null, featuredMedia?: Array<
+      | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }
+      | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+      | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
+    > | null } | null };
 
 export type SiteSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 

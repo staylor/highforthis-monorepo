@@ -1,7 +1,6 @@
 import { gql } from 'graphql-tag';
 import type { Handle, RemixNode } from 'remix/component';
 
-import { uploadUrl } from '../lib/media.ts';
 import { ListType } from '../types/graphql.ts';
 import type {
   CodeNode,
@@ -19,6 +18,7 @@ import type {
 } from '../types/graphql.ts';
 
 import { Heading2, Heading3, Heading4, PostTitle } from './heading.tsx';
+import { uploadUrl } from './public/media.ts';
 import { Video } from './videos.tsx';
 
 export const textNodeFragments = gql`

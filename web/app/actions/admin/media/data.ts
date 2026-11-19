@@ -2,9 +2,14 @@ import { gql } from 'graphql-tag';
 
 import type { GraphQLClient } from '@highforthis/shared/admin/forms';
 
-import { uploadUrl } from '../../../lib/media.ts';
-import type { FeaturedMedia_MediaFragment, MediaPickerQuery } from '../../../types/graphql.ts';
-import type { MediaPickerItem, SelectedMedia } from '../../../ui/admin/public/featured-media.tsx';
+import type {
+  FeaturedMedia_MediaFragment,
+  MediaPickerQuery,
+  VideoPickerQuery,
+} from '../../../types/graphql.ts';
+import type { SelectedMedia } from '../../../ui/admin/public/featured-media.tsx';
+import type { MediaPickerItem } from '../../../ui/admin/public/picker-dialog.tsx';
+import { uploadUrl } from '../../../ui/public/media.ts';
 
 // The browser gets URLs it can show, not the uploads themselves.
 
@@ -45,6 +50,30 @@ const mediaPickerQuery = gql`
               width
             }
           }
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+`;
+
+const videoPickerQuery = gql`
+  query VideoPicker($cursor: String, $first: Int) {
+    videos(after: $cursor, first: $first) @cache(key: "modal") {
+      edges {
+        node {
+          dataId
+          id
+          slug
+          thumbnails {
+            height
+            url
+            width
+          }
+          title
         }
       }
       pageInfo {
@@ -100,6 +129,9 @@ export async function loadMediaPickerPage({
   type: string;
   cursor?: string | null;
 }): Promise<MediaPickerPage> {
+  if (type === 'video') {
+    return loadVideoPickerPage({ gql: client, cursor });
+  }
   const { uploads } = await client.query<MediaPickerQuery>(mediaPickerQuery, {
     first: PAGE_SIZE,
     type,
@@ -113,11 +145,55 @@ export async function loadMediaPickerPage({
       thumb: cropUrl(node.destination, crops, 150),
       preview: cropUrl(node.destination, crops, 300),
       audio: 'images' in node ? uploadUrl(node.destination, node.fileName) : null,
+      // What the post editor's image block keeps
+      image:
+        'crops' in node
+          ? {
+              id: node.id,
+              destination: node.destination,
+              crops: node.crops.filter(Boolean).map((crop) => ({
+                fileName: crop!.fileName,
+                width: crop!.width,
+              })),
+            }
+          : null,
     };
   });
   return {
     items,
     endCursor: uploads?.pageInfo.endCursor ?? null,
     hasNextPage: Boolean(uploads?.pageInfo.hasNextPage),
+  };
+}
+
+/** A page of videos for the post editor's video block, with their 120px thumbnails. */
+async function loadVideoPickerPage({
+  gql: client,
+  cursor,
+}: {
+  gql: GraphQLClient;
+  cursor?: string | null;
+}): Promise<MediaPickerPage> {
+  const { videos } = await client.query<VideoPickerQuery>(videoPickerQuery, {
+    first: PAGE_SIZE,
+    ...(cursor ? { cursor } : {}),
+  });
+  const items = (videos?.edges ?? []).map(({ node }) => ({
+    id: node.id,
+    title: node.title,
+    thumb: node.thumbnails.find((thumb) => thumb.width === 120)?.url ?? null,
+    preview: null,
+    video: {
+      id: node.id,
+      dataId: node.dataId,
+      slug: node.slug,
+      title: node.title,
+      thumbnails: node.thumbnails.map(({ url, width, height }) => ({ url, width, height })),
+    },
+  }));
+  return {
+    items,
+    endCursor: videos?.pageInfo.endCursor ?? null,
+    hasNextPage: Boolean(videos?.pageInfo.hasNextPage),
   };
 }

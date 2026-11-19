@@ -3,7 +3,7 @@ import type { Handle } from 'remix/component';
 import { cn } from '../public/cn.ts';
 
 import { getAdmin } from './context.tsx';
-import { Icon } from './icon.tsx';
+import { Icon } from './public/icon.tsx';
 
 interface MessageProps {
   text: string;

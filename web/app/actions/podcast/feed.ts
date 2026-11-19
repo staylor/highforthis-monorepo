@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 import escape from 'html-escape';
 
-import { uploadUrl } from '../../lib/media.ts';
 import type { AudioUpload, PodcastConnection, PodcastSettings } from '../../types/graphql.ts';
+import { uploadUrl } from '../../ui/public/media.ts';
 
 // Ported unchanged from routes/podcast/xml: a resource route was already just a Response.
 export const feedQuery = gql`

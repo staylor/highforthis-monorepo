@@ -91,16 +91,15 @@ describe('admin', () => {
       forwarded.push(`${url.origin}${url.pathname}`);
       return new Response('from admin', { status: 200 });
     });
-    for (const path of ['/admin', '/admin/post', '/admin.data', '/login', '/modals/video']) {
+    for (const path of ['/admin', '/admin/passkeys', '/admin.data', '/login']) {
       const response = await router.fetch(new URL(path, origin));
       assert.equal(await response.text(), 'from admin', path);
     }
     assert.deepEqual(forwarded, [
       'http://localhost:3001/admin',
-      'http://localhost:3001/admin/post',
+      'http://localhost:3001/admin/passkeys',
       'http://localhost:3001/admin.data',
       'http://localhost:3001/login',
-      'http://localhost:3001/modals/video',
     ]);
   });
 

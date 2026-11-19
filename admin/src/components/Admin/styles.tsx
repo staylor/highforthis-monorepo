@@ -1,9 +1,6 @@
 import type { HTMLAttributes, PropsWithChildren } from 'react';
-import { useLocation } from 'react-router';
 
-import { buttonClasses } from '#/components/Button';
 import { heading1 } from '#/components/Heading';
-import Link, { type CustomLinkProps } from '#/components/Link';
 import { cn } from '#/utils/cn';
 
 export const Heading = ({ className, children, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
@@ -13,27 +10,6 @@ export const Heading = ({ className, children, ...props }: HTMLAttributes<HTMLHe
   >
     {children}
   </h1>
-);
-
-export const HeaderAdd = ({
-  label,
-  to,
-  ...props
-}: Partial<CustomLinkProps> & { label: string }) => {
-  const location = useLocation();
-  return (
-    <Link
-      className={buttonClasses(undefined, 'mb-4 align-middle')}
-      to={to || `${location.pathname}/add`}
-      {...props}
-    >
-      {label}
-    </Link>
-  );
-};
-
-export const FormWrap = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
-  <div {...props} className={cn('block after:clear-both after:table', className)} />
 );
 
 export const Alert = ({ children }: PropsWithChildren) => (

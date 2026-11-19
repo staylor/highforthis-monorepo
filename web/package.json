@@ -11,12 +11,25 @@
   "dependencies": {
     "@apollo/client": "4.1.6",
     "@highforthis/shared": "workspace:*",
+    "@lexical/a11y": "0.53.0",
+    "@lexical/clipboard": "0.53.0",
+    "@lexical/code-core": "0.53.0",
+    "@lexical/dragon": "0.53.0",
+    "@lexical/extension": "0.53.0",
+    "@lexical/history": "0.53.0",
+    "@lexical/html": "0.53.0",
+    "@lexical/list": "0.53.0",
+    "@lexical/rich-text": "0.53.0",
+    "@lexical/selection": "0.53.0",
+    "@lexical/utils": "0.53.0",
     "@openobserve/browser-logs": "0.4.1",
     "@openobserve/browser-rum": "0.4.1",
+    "@preact/signals-core": "1.14.5",
     "graphql": "16.13.0",
     "graphql-tag": "2.12.6",
     "html-escape": "2.0.0",
     "i18next": "25.8.13",
+    "lexical": "0.53.0",
     "qs": "6.15.0",
     "remix": "3.2.0"
   },
@@ -35,7 +48,7 @@
     "css": "tailwindcss -i app/styles/main.css -o app/styles/public/main.css && tailwindcss -i app/styles/admin.css -o app/styles/public/admin.css",
     "css:watch": "tailwindcss -i app/styles/admin.css -o app/styles/public/admin.css --watch=always & tailwindcss -i app/styles/main.css -o app/styles/public/main.css --watch=always",
     "admin-strings": "cp ../admin/public/locales/en/global.json app/lib/admin/strings.en.json",
-    "test": "pnpm css && pnpm admin-strings && NODE_ENV=test remix test",
+    "test": "pnpm css && pnpm admin-strings && NODE_ENV=test remix test --type server",
     "typecheck": "tsgo"
   }
 }

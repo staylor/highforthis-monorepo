@@ -2,12 +2,12 @@ import { gql } from 'graphql-tag';
 import { unsafeHTML } from 'remix/component';
 import { createController } from 'remix/router';
 
-import { uploadUrl } from '../../lib/media.ts';
 import { routes } from '../../routes.ts';
 import type { PodcastQuery, PodcastsQuery } from '../../types/graphql.ts';
 import { Link } from '../../ui/link.tsx';
 import { Podcast, podcastMetaTags } from '../../ui/podcast.tsx';
 import { cn } from '../../ui/public/cn.ts';
+import { uploadUrl } from '../../ui/public/media.ts';
 import { loadRootData, prefetchRootData, renderPage } from '../render-page.tsx';
 
 const podcastsQuery = gql`

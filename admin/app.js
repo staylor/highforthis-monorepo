@@ -11,7 +11,7 @@ import factory from './src/apollo/client.js';
 import { apolloClientContext, graphqlHostContext, i18nContext } from './src/context.js';
 import createI18n from './src/i18n.js';
 
-// The admin app: /admin, /login and /modals. The public site forwards those paths here,
+// The admin app: /admin and /login. The public site forwards those paths here,
 // so both share one domain, session cookie and passkey origin.
 
 process.env.TZ = 'America/New_York';

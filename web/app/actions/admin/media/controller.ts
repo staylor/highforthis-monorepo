@@ -5,10 +5,11 @@ import { routes } from '../../../routes.ts';
 
 import { loadMediaPickerPage } from './data.ts';
 
-const mediaTypes = new Set(['image', 'audio']);
+// Uploads by type, and videos for the post editor's video block
+const mediaTypes = new Set(['image', 'audio', 'video']);
 
 /**
- * The featured media picker's pages, as JSON: /admin/media-picker/image, then ?cursor= the
+ * The pickers' pages, as JSON: /admin/media-picker/image (or audio, or video), then ?cursor= the
  * last page's endCursor as the picker scrolls.
  */
 export const mediaPicker = createAction(routes.admin.mediaPicker, {

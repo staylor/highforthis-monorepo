@@ -2,11 +2,11 @@ import { gql } from 'graphql-tag';
 import qs from 'qs';
 import { unsafeHTML, type Handle } from 'remix/component';
 
-import { uploadUrl } from '../../lib/media.ts';
 import type { ArtistQuery, VenueQuery } from '../../types/graphql.ts';
 import { getApp } from '../../ui/app-context.tsx';
 import { Metadata } from '../../ui/artist.tsx';
 import { Heading1 } from '../../ui/heading.tsx';
+import { uploadUrl } from '../../ui/public/media.ts';
 import { Attended, attendedFragment, Shows, showsGridFragment } from '../../ui/shows/shows.tsx';
 
 export const artistQuery = gql`

@@ -4,7 +4,6 @@ import { createController } from 'remix/router';
 import type { RedirectResult } from '@highforthis/shared/admin/forms';
 
 import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { uploadUrl } from '../../../lib/media.ts';
 import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
 import { routes } from '../../../routes.ts';
 import type { VenueEditQuery, VenuesAdminQuery } from '../../../types/graphql.ts';
@@ -17,6 +16,7 @@ import { FeaturedMedia } from '../../../ui/admin/public/featured-media.tsx';
 import { InlineToggle } from '../../../ui/admin/public/inline-toggle.tsx';
 import { inputBase } from '../../../ui/admin/public/styles.ts';
 import { cn } from '../../../ui/public/cn.ts';
+import { uploadUrl } from '../../../ui/public/media.ts';
 import { selectedMedia } from '../media/data.ts';
 import { renderAdminPage } from '../render-page.tsx';
 

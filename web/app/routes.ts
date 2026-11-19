@@ -54,6 +54,11 @@ export const routes = route({
       listings: form('/listings(/:venueId)'),
       edit: form('/:id'),
     }),
+    posts: route('/post', {
+      list: form('/'),
+      add: form('/add'),
+      edit: form('/:id'),
+    }),
     // Each settings page edits one settings document. General settings are also at /settings.
     settings: route('/settings', {
       site: form('(/site)'),

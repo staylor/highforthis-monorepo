@@ -3,9 +3,9 @@ import type { Handle, RemixNode } from 'remix/component';
 import { cn } from '../public/cn.ts';
 
 import { getAdmin } from './context.tsx';
-import { Icon } from './icon.tsx';
 import { documentLoad } from './links.ts';
 import { adminHref, adminNav, isSectionActive, type NavSection } from './nav.ts';
+import { Icon } from './public/icon.tsx';
 
 // A sidebar on wide screens and a menu under the header on narrow ones. The menu is a
 // <details> element, so it opens without JavaScript.

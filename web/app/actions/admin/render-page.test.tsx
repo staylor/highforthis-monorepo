@@ -55,8 +55,10 @@ describe('renderAdminPage', () => {
   it("loads admin pages that haven't moved here in full, and opens the site in a new tab", async (t) => {
     stubAppQuery(t);
     const html = await page('/admin/user');
-    assert.match(link(html, '/admin/post') ?? '', /data-rmx-document/);
+    // The passkeys page and logging out are still the admin app's; posts are served here
+    assert.match(link(html, '/admin/passkeys') ?? '', /data-rmx-document/);
     assert.match(link(html, '/admin/logout') ?? '', /data-rmx-document/);
+    assert.doesNotMatch(link(html, '/admin/post') ?? '', /data-rmx-document/);
     assert.match(link(html, '/') ?? '', /target="_blank"/);
   });
 
