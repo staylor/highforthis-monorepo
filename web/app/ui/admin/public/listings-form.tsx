@@ -5,10 +5,9 @@ import { cn } from '../../public/cn.ts';
 import { splitArtists } from './split-artists.ts';
 import { buttonClass, inputBase } from './styles.ts';
 
-// The venue listings page's table, from the admin app's routes/admin/show/listings: a row per
-// upcoming show, with a box to pick it and the artists to add it with. The page translates and
-// formats everything on the server, since the browser has no translations; the labels that
-// depend on what's typed come as templates or as one per case.
+// A row per upcoming show, with a box to pick it and the artists to add it with. The page
+// translates and formats everything on the server, since the browser has no translations; the
+// labels that depend on what's typed come as templates or as one per case.
 
 /** A listed artist's pill, shown while the artists field holds their name. */
 interface Pill {

@@ -16,9 +16,9 @@ import type { AdminPageContext } from '../render-page.tsx';
 
 import { importListings, loadVenueListings } from './listings-data.ts';
 
-// The venue listings page, moved from the admin app's routes/admin/show/listings: a venue's
-// upcoming shows from its listings page (Bowery Presents or Ticketmaster), to pick from and add
-// to the shows with their artists. Choosing a venue goes to /admin/show/listings/:venueId.
+// A venue's upcoming shows from its listings page (Bowery Presents or Ticketmaster), to pick
+// from and add to the shows with their artists. Choosing a venue goes to
+// /admin/show/listings/:venueId.
 
 const listingsRoute = routes.admin.shows.listings;
 
