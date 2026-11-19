@@ -71,10 +71,6 @@ const cropUrl = (
   return crop ? uploadUrl(destination, crop.fileName) : null;
 };
 
-/**
- * The field's current media, as the admin app showed it: an image by its 300px crop, and audio
- * in a player.
- */
 export function selectedMedia(
   media: ReadonlyArray<FeaturedMedia_MediaFragment | null> | null | undefined
 ): SelectedMedia[] {

@@ -11,9 +11,6 @@ import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVar
 import type { PodcastEditQuery, PodcastsAdminQuery } from '../../../types/graphql.ts';
 import { featuredMediaFragment } from '../media/data.ts';
 
-// The podcasts section's data, moved from the admin app's src/server/podcasts.ts with the same
-// GraphQL operations. The list asks only for what it shows.
-
 const podcastFormFragment = gql`
   fragment PodcastForm_podcast on Podcast {
     audio {
@@ -80,7 +77,7 @@ const updatePodcastMutation = gql`
   ${podcastFormFragment}
 `;
 
-// Keeps a title like "2024" a string, as with artists' and venues' names
+// Keeps a title like "2024" a string
 const skipKeys = ['title'];
 
 export function loadPodcasts({
