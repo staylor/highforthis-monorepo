@@ -13,6 +13,8 @@ const appTypes = (path: string, documents: string[]) => ({
     plugins: [{ add: { content: `export * from '${SCHEMA_TYPES}';` } }, 'typescript-operations'],
     config: {
       dedupeOperationSuffix: true,
+      // The enums the operations use, as constant objects like schema.ts's
+      enumType: 'const' as const,
       useTypeImports: true,
     },
   },

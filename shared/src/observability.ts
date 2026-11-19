@@ -1,5 +1,10 @@
-import { metrics } from '@opentelemetry/api';
-import { logs } from '@opentelemetry/api-logs';
+import { context, logs, metrics, propagation, trace } from '@opentelemetry/api';
+import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks';
+import {
+  CompositePropagator,
+  W3CBaggagePropagator,
+  W3CTraceContextPropagator,
+} from '@opentelemetry/core';
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
@@ -18,7 +23,7 @@ import {
 } from '@opentelemetry/resources';
 import { BatchLogRecordProcessor, LoggerProvider } from '@opentelemetry/sdk-logs';
 import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
-import { BatchSpanProcessor, NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
+import { BatchSpanProcessor, TracerProvider } from '@opentelemetry/sdk-trace';
 import {
   ATTR_DEPLOYMENT_ENVIRONMENT_NAME,
   ATTR_SERVICE_INSTANCE_ID,
@@ -94,11 +99,19 @@ export function startObservability({
 
   // NodeSDK and auto-instrumentations-node load every exporter and 41 instrumentations,
   // about 24 MB of RSS per process; these are the only ones the apps use.
-  const tracerProvider = new NodeTracerProvider({
+  // Spans follow async work within a process, and W3C trace context and baggage headers carry
+  // them between services
+  context.setGlobalContextManager(new AsyncLocalStorageContextManager().enable());
+  propagation.setGlobalPropagator(
+    new CompositePropagator({
+      propagators: [new W3CTraceContextPropagator(), new W3CBaggagePropagator()],
+    })
+  );
+  const tracerProvider = new TracerProvider({
     resource,
-    spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter({ headers }))],
+    spanProcessors: [new BatchSpanProcessor({ exporter: new OTLPTraceExporter({ headers }) })],
   });
-  tracerProvider.register();
+  trace.setGlobalTracerProvider(tracerProvider);
 
   const meterProvider = new MeterProvider({
     resource,

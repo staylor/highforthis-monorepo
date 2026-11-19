@@ -16,7 +16,6 @@ await i18n.init({
   ns: ['global'],
   resources: { en: { global } },
   interpolation: { escapeValue: false },
-  showSupportNotice: false,
 });
 
 export type { TFunction };

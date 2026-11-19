@@ -1,6 +1,6 @@
 // What GraphQL's /auth/passkeys answers with
 
-export interface PasskeyRecord {
+interface PasskeyRecord {
   id: string;
   name: string | null;
   backedUp: boolean;

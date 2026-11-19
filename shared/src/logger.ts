@@ -1,7 +1,14 @@
 import { randomUUID } from 'node:crypto';
 
-import { context, isSpanContextValid, trace } from '@opentelemetry/api';
-import { logs, SeverityNumber, type AnyValue, type AnyValueMap } from '@opentelemetry/api-logs';
+import {
+  context,
+  isSpanContextValid,
+  logs,
+  SeverityNumber,
+  trace,
+  type AnyValue,
+  type Attributes,
+} from '@opentelemetry/api';
 import pino, { type DestinationStream, type Logger, type LoggerOptions as PinoOptions } from 'pino';
 import { pinoHttp, type HttpLogger } from 'pino-http';
 
@@ -68,7 +75,7 @@ function createOpenTelemetryStream(serviceName: string): DestinationStream {
           Object.entries(record)
             .filter(([key]) => !['level', 'message', 'time'].includes(key))
             .map(([key, value]) => [key, toAnyValue(value)])
-        ) as AnyValueMap;
+        ) as Attributes;
 
         otelLogger.emit({
           attributes,
