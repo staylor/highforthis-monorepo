@@ -5,8 +5,8 @@ import { cn } from '../../public/cn.ts';
 import { Icon } from './icon.tsx';
 import { inputBase } from './styles.ts';
 
-// The post form's artists, from the admin app's Form/Tags: Enter adds what's typed as a tag, each
-// tag has a button to remove it, and the form submits them as hidden inputs sharing a name.
+// Enter adds what's typed as a tag, each tag has a button to remove it, and the form submits
+// them as hidden inputs sharing a name.
 
 interface TagsInputProps {
   name: string;

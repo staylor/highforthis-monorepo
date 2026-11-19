@@ -2,7 +2,7 @@ type Listener = () => void;
 
 /**
  * A value that changes as the editor does, for whatever draws the editor's controls to read and
- * watch: React through `useSyncExternalStore`, or any other UI framework.
+ * watch.
  */
 export interface Store<T> {
   get: () => T;

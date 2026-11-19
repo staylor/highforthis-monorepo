@@ -1,8 +1,7 @@
 import type { EditorThemeClasses } from 'lexical';
 
-// The classes Lexical gives a post's blocks and text, from the admin app's Editor/theme.ts. The
-// blocks look as they do on the public site; their class strings are inlined from the admin app's
-// Heading, Blockquote, List and Paragraph components.
+// The classes Lexical gives a post's blocks and text. The blocks look as they do on the public
+// site.
 
 const headingBase = 'block mb-2 lg:mb-3 dark:text-white';
 

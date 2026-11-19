@@ -1,4 +1,4 @@
-// An image, a video and a saved post, for the editor's tests. Moved from the admin app.
+// An image, a video and a saved post, for the editor's tests.
 import type { SerializedEditorState } from 'lexical';
 
 import type { ImageUpload, Video } from '../../../../types/graphql.ts';

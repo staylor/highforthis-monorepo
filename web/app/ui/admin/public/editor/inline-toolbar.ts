@@ -11,7 +11,6 @@ import type { LexicalEditor, TextFormatType } from 'lexical';
 import { createStore, shallowEqual } from './store.ts';
 import type { Store } from './store.ts';
 
-/** The inline toolbar's buttons, in order. */
 export const INLINE_FORMATS = [
   'bold',
   'italic',
