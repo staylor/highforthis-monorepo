@@ -31,7 +31,7 @@ export function requireAdmin(): Middleware<{
   property: 'admin';
 }> {
   return async (context, next) => {
-    const token = adminToken(context.request.headers.get('cookie'));
+    const token = await adminToken(context.request.headers.get('cookie'));
     if (!token) {
       return loginRedirect();
     }
@@ -41,7 +41,7 @@ export function requireAdmin(): Middleware<{
     });
     await response.body?.cancel();
     if (response.status === 401 || response.status === 403) {
-      return loginRedirect({ headers: { 'Set-Cookie': expiredAdminCookie() } });
+      return loginRedirect({ headers: { 'Set-Cookie': await expiredAdminCookie() } });
     }
     if (!response.ok) {
       return new Response('Unable to validate the admin session', { status: 503 });

@@ -65,7 +65,7 @@ export const login = createController(routes.login, {
     async index(context) {
       // Someone signed in goes on to the admin. requireAdmin() checks the token with GraphQL, and
       // sends them back here with the session removed if it's no longer good.
-      if (adminToken(context.request.headers.get('cookie'))) {
+      if (await adminToken(context.request.headers.get('cookie'))) {
         return createRedirectResponse(routes.admin.dashboard.href());
       }
       const t = getAdminT();
@@ -180,16 +180,16 @@ export const login = createController(routes.login, {
       }
       return createRedirectResponse(routes.admin.dashboard.href(), {
         status: 303,
-        headers: { 'Set-Cookie': adminSessionCookie(token) },
+        headers: { 'Set-Cookie': await adminSessionCookie(token) },
       });
     },
   },
 });
 
 export const logout = createAction(routes.admin.logout, {
-  handler() {
+  async handler() {
     return createRedirectResponse(routes.login.index.href({}), {
-      headers: { 'Set-Cookie': expiredAdminCookie() },
+      headers: { 'Set-Cookie': await expiredAdminCookie() },
     });
   },
 });
