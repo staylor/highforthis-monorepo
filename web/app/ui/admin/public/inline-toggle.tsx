@@ -1,14 +1,12 @@
 import { clientEntry, on, type Handle } from 'remix/component';
 
-// A checkbox in a list row that saves as soon as it changes, like the admin app's
-// ExcludeFromSearch, which posted with a fetcher. This one posts the same fields to the list's
-// action: the intent, the row's ID, and `name` as true or false. The action answers 204 when it
-// saved, and the box goes back if it didn't. Without JavaScript the box can't save.
+// Saves as soon as it changes, posting the intent, the row's ID and `name` as true or false to
+// the list's action. The action answers 204 when it saved, and the box goes back if it didn't.
+// Without JavaScript the box can't save.
 
 interface InlineToggleProps {
   /** What the list's action does with it, such as `excludeFromSearch`. */
   intent: string;
-  /** The field that holds true or false. */
   name: string;
   id: string;
   checked: boolean;

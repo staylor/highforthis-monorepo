@@ -1,10 +1,6 @@
 import { expect, test } from '../support/test.ts';
 import { field } from '../support/ui.ts';
 
-// The artists section has moved from the admin app to web (see admin/REMIX3-MIGRATION.md), so
-// these pages, the featured media picker and the list's "exclude from search" box come from
-// web's Remix server and its client entries.
-
 test('adds an artist with featured media, edits them, toggles search and deletes them', async ({
   page,
   prefix,
@@ -13,7 +9,6 @@ test('adds an artist with featured media, edits them, toggles search and deletes
   const name = `${prefix} Artist`;
 
   await page.goto('/admin/artist/add');
-  // Served by web: its admin pages use the admin stylesheet its asset server builds
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
   await field(page, 'Name').fill(name);
   await field(page, 'Description').fill('Added by the end-to-end tests');

@@ -5,9 +5,6 @@ import { formatDate } from '../shows/utils.ts';
 import { getAdmin } from './context.tsx';
 import { documentLoad } from './links.ts';
 
-// What the artist and venue pages share, from the admin app's components/Admin/Entity.
-
-/** A link to the artist's or venue's public page, which opens in a new tab. */
 export function PageLink(handle: Handle<{ href: string; children?: RemixNode }>) {
   return () => (
     <a

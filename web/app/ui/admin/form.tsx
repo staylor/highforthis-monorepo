@@ -6,10 +6,8 @@ import { getAdmin } from './context.tsx';
 import { Message } from './message.tsx';
 import { buttonClass, inputBase } from './public/styles.ts';
 
-// The admin's add and edit forms, following the admin app's AdminForm and EditableField: a
-// plain POST form whose fields are described by data. A custom field renders what it's given,
-// such as the featured media field. The date, editor and tags fields move here with the
-// sections that use them.
+// A plain POST form whose fields are described by data. A custom field renders what it's
+// given, such as the featured media field.
 
 interface Choice {
   label: string;
@@ -21,13 +19,11 @@ export interface Field {
   /** The form field's name, and the property of `data` that fills it. */
   prop: string;
   type?: 'text' | 'textarea' | 'select' | 'hidden' | 'checkbox' | 'custom';
-  /** The <input> type for a text field. */
   inputType?: 'text' | 'email' | 'password';
   autoComplete?: boolean;
   placeholder?: string;
   choices?: Choice[];
   multiple?: boolean;
-  /** A custom field's content, under its label. */
   render?: () => RemixNode;
 }
 

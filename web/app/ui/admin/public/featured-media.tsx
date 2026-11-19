@@ -4,29 +4,24 @@ import { cn } from '../../public/cn.ts';
 
 import { buttonClass } from './styles.ts';
 
-// The featured media field, from the admin app's FeaturedMedia field and media modal. The form
-// submits the picked upload's ID in a hidden input. The picker is a <dialog>, which brings focus
-// handling and Escape, and it pages through /admin/media-picker/:type as it scrolls.
+// The form submits the picked upload's ID in a hidden input. The picker is a <dialog>, which
+// brings focus handling and Escape, and it pages through /admin/media-picker/:type as it
+// scrolls.
 
-/** An upload the field holds, shown by its 300px crop when it has one. */
 export interface SelectedMedia {
   id: string;
   preview: string | null;
 }
 
-/** An upload in the picker, with its 150px thumbnail. */
 export interface MediaPickerItem extends SelectedMedia {
   title: string;
   thumb: string | null;
 }
 
 interface FeaturedMediaProps {
-  /** The form field's name, such as `featuredMedia`. */
   name: string;
-  /** The upload type the picker lists, such as `image`. */
   type: string;
   media: SelectedMedia[];
-  /** Translated text: the button that opens the picker, the picker's name and its close button. */
   buttonText: string;
   heading: string;
   closeLabel: string;
