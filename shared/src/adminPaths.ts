@@ -8,6 +8,7 @@ const adminPathsServedByWeb: readonly string[] = [
   '/admin/venue',
   '/admin/podcast',
   '/admin/video',
+  '/admin/settings',
   // The featured media picker's data, for the sections above
   '/admin/media-picker',
 ];

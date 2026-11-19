@@ -121,6 +121,12 @@ These are in web, and nothing is served there yet:
      - GraphQL's `updateVideo` set an invalid date whenever the input left `publishedAt` out, which the edit form always does, so saving a video failed in the admin app too. It now keeps the saved date.
      - The admin app's video routes, video form and `server/videos.ts` are removed in the same change.
      - `e2e/tests/videos.spec.ts` covers the filter, the search, an edit and a delete in a browser.
+   - **Settings has moved**, which finishes step 2. Web serves `/admin/settings` (`web/app/actions/admin/settings/`): general settings at `/settings` and `/settings/site`, media settings and podcast settings.
+     - The crop sizes are a client entry (`crops-editor.tsx`) with a row each and buttons to add and remove rows. Its inputs are uncontrolled (`defaultValue`) with a key per row: a client entry's controlled `value` goes back to the rendered value unless the component re-renders. Without JavaScript the rendered rows can still be edited and saved.
+     - The media save builds the crop list from the rows itself. It leaves out rows without a name, which GraphQL requires, and keeps a name like "300" a string, which the shared form parsing would make a number.
+     - Every settings field is a string in the schema, so the site and podcast saves keep them all strings, such as a copyright year or an "explicit" of "false". An emptied field is now saved empty, so a setting can be cleared.
+     - The admin app's settings routes, settings form, crops editor and `server/settings.ts` are removed in the same change. The `loadApp` test moves to its own file.
+     - `e2e/tests/settings.spec.ts` saves the general settings and adds and removes a crop size, putting each back afterwards.
 3. **Shows:** the bulk CSV page and the listings page are the largest route files.
 4. **Media:** upload, album covers, and the pickers.
 5. **Posts:** the editor client entry, the featured media field, and both pickers.

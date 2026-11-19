@@ -519,45 +519,6 @@ export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: { __typ
       | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
     > | null } | null };
 
-export type SiteSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type SiteSettingsQuery = { __typename?: 'Query', siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, emailAddress?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };
-
-export type UpdateSiteSettingsMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.SiteSettingsInput;
-}>;
-
-
-export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings?: { __typename?: 'SiteSettings', id: string } | null };
-
-export type MediaSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type MediaSettingsQuery = { __typename?: 'Query', mediaSettings: { __typename?: 'MediaSettings', id: string, crops: Array<{ __typename?: 'MediaCropSetting', height?: number | null, name: string, width?: number | null }> } };
-
-export type UpdateMediaSettingsMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.MediaSettingsInput;
-}>;
-
-
-export type UpdateMediaSettingsMutation = { __typename?: 'Mutation', updateMediaSettings?: { __typename?: 'MediaSettings', id: string } | null };
-
-export type PodcastSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type PodcastSettingsQuery = { __typename?: 'Query', podcastSettings: { __typename?: 'PodcastSettings', category?: string | null, copyrightText?: string | null, description?: string | null, explicit?: string | null, feedLink?: string | null, generator?: string | null, id: string, itunesEmail?: string | null, itunesName?: string | null, language?: string | null, managingEditor?: string | null, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } };
-
-export type UpdatePodcastSettingsMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.PodcastSettingsInput;
-}>;
-
-
-export type UpdatePodcastSettingsMutation = { __typename?: 'Mutation', updatePodcastSettings?: { __typename?: 'PodcastSettings', id: string } | null };
-
 export type ShowsAdminQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
   artist?: Types.InputMaybe<Types.EntityArg>;

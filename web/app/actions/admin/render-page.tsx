@@ -13,7 +13,7 @@ interface AdminPageOptions {
 
 // What rendering needs from a request's context. Admin controllers' contexts also carry
 // `context.admin`, which keeps them from being an `AppContext`.
-type AdminPageContext = Pick<AppContext, 'gql' | 'request' | 'render' | 'url'>;
+export type AdminPageContext = Pick<AppContext, 'gql' | 'request' | 'render' | 'url'>;
 
 export async function renderAdminPage(
   context: AdminPageContext,

@@ -23,11 +23,6 @@ export default [
       route('verify', 'routes/admin/passkeys/verify.ts'),
     ]),
     ...adminRoutes('post'),
-    ...prefix('settings', [
-      route('media', 'routes/admin/settings/media.tsx'),
-      route('podcast', 'routes/admin/settings/podcast.tsx'),
-      route('site?', 'routes/admin/settings/site.tsx'),
-    ]),
     ...prefix('show', [
       index('routes/admin/show/index.tsx'),
       route('add', 'routes/admin/show/add.tsx'),
