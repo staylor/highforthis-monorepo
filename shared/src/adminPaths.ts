@@ -23,10 +23,6 @@ const adminPathsNotYetMoved: readonly string[] = ['/admin/show/listings'];
 const isUnder = (pathname: string, path: string) =>
   pathname === path || pathname.startsWith(`${path}/`);
 
-/**
- * Whether web renders this admin path: one of the paths above, or a page under one, unless it's
- * one of the pages that haven't moved yet.
- */
 export function isServedByWeb(
   pathname: string,
   paths = adminPathsServedByWeb,

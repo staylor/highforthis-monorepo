@@ -4,12 +4,11 @@ import { cn } from '../../public/cn.ts';
 
 import { inputBase } from './styles.ts';
 
-// A date and time field, from the admin app's Form/Date: a datetime-local input in the browser's
-// time zone, and a hidden input with the timestamp, which is what the form submits. The page
-// renders the time in the server's time zone until the browser runs this.
+// A datetime-local input in the browser's time zone, and a hidden input with the timestamp,
+// which is what the form submits. The page renders the time in the server's time zone until
+// the browser runs this.
 
 interface DateTimeInputProps {
-  /** The hidden input's name, such as `date`. */
   name: string;
   /** Milliseconds since the epoch. */
   value: number;

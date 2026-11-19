@@ -3,9 +3,8 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '../support/test.ts';
 import { cell, field } from '../support/ui.ts';
 
-// The shows pages have moved from the admin app to web (see admin/REMIX3-MIGRATION.md). The
-// artists picker, the date and the list's "attended" box are client entries, which work once the
-// page's scripts have loaded.
+// The artists picker, the date and the list's "attended" box are client entries, which work once
+// the page's scripts have loaded.
 async function openAddForm(page: Page) {
   await page.goto('/admin/show/add');
   await page.waitForLoadState('networkidle');

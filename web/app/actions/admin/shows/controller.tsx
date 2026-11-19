@@ -31,9 +31,8 @@ import {
   type BulkImportErrors,
 } from './data.ts';
 
-// The admin's shows section, moved from the admin app's routes/admin/show: the list, the add and
-// edit pages, and the bulk add page. The venue listings page is still the admin app's. Each form
-// route has its own controller, since controller middleware doesn't apply to nested route maps.
+// Each form route has its own controller, since controller middleware doesn't apply to nested
+// route maps.
 
 const shows = routes.admin.shows;
 
@@ -44,7 +43,6 @@ const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redire
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
-/** A show's date and time as the admin app's list showed it: 05/10/2024 at 8:00pm. */
 function showDate(timestamp: number) {
   const d = new Date(timestamp);
   const hours = d.getHours();
@@ -74,7 +72,7 @@ function choices(saved: Entity[], connection?: { edges: { node: Entity }[] } | n
   return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
-/** A new show's date before anything sets it: today at 8:00 PM, as the admin app's form had it. */
+/** A new show's date before anything sets it: today at 8:00 PM. */
 function tonight() {
   const date = new Date();
   date.setHours(20, 0, 0, 0);
@@ -324,7 +322,6 @@ export const showsEdit = createController(shows.edit, {
 const exampleCsv =
   'artists,venue,date,attended\n"Artist One; Artist Two","The Venue",8/15/26,false\nArtist Three,"Venue, Inc.",5/10/24,true';
 
-/** The bulk add page, with the CSV and its errors when an import was turned back. */
 function bulkPage(t: TFunction, result?: BulkImportErrors) {
   const errors = result?.errors ?? [];
   return (

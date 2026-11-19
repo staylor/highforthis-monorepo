@@ -4,9 +4,8 @@ import { cn } from '../../public/cn.ts';
 
 import { inputBase } from './styles.ts';
 
-// The show form's artists, from the admin app's Show/SelectEntities: picking from the select adds
-// one, each has a button to remove it, and the form submits them as hidden artists[0],
-// artists[1] and so on. A show lists an artist once.
+// Picking from the select adds an artist, each has a button to remove it, and the form submits
+// them as hidden artists[0], artists[1] and so on. A show lists an artist once.
 
 interface Entity {
   id: string;
@@ -14,10 +13,8 @@ interface Entity {
 }
 
 interface EntitiesPickerProps {
-  /** The hidden inputs' name, such as `artists`. */
   name: string;
   selected: Entity[];
-  /** Everything there is to pick from, sorted by name. */
   choices: Entity[];
   placeholder: string;
   /** Translated "Remove", which each remove button's label starts with. */
