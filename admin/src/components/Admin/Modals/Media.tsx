@@ -1,6 +1,7 @@
 import type { SyntheticEvent } from 'react';
 import { useRef } from 'react';
 import ReactDOM from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
 import Loading from '#/components/Loading';
 import type { SelectedImage, SelectedImageData } from '#/types/admin';
@@ -19,6 +20,7 @@ interface MediaModalProps {
 }
 
 function MediaModal({ type = 'image', onClose, selectAudio, selectImage }: MediaModalProps) {
+  const { t } = useTranslation();
   const basePath = `/modals/media/${type}`;
   const frameRef = useRef(null);
   const { fetcher, connection } = useInfiniteScroll<MediaUpload>(frameRef, basePath);
@@ -30,7 +32,13 @@ function MediaModal({ type = 'image', onClose, selectAudio, selectImage }: Media
   }
 
   return ReactDOM.createPortal(
-    <div className={modalClass} id="media-modal">
+    <div
+      className={modalClass}
+      id="media-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label={t('media.heading')}
+    >
       <CloseButton onClick={onClose} />
       <div className={frameClass} ref={frameRef}>
         {uploads.edges?.map(({ node }) => {

@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Icon from '#/components/Icon';
 import { cn } from '#/utils/cn';
@@ -10,6 +11,7 @@ interface Props {
 }
 
 function BlockButton({ active, onMouseDown, style }: Props) {
+  const { t } = useTranslation();
   return (
     <div
       className={cn(
@@ -18,6 +20,8 @@ function BlockButton({ active, onMouseDown, style }: Props) {
       )}
       style={style}
       role="button"
+      aria-label={t('editor.blockTypes')}
+      aria-expanded={active}
       tabIndex={0}
       onMouseDown={(e) => {
         e.preventDefault();

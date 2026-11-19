@@ -10,6 +10,7 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 | [`web`](./web)                     | Public site (Remix 3, Tailwind CSS)                    |
 | [`admin`](./admin)                 | Admin and login, served under the public site's domain |
 | [`shared`](./shared)               | Logging, OpenTelemetry, GraphQL schema types, theme    |
+| [`e2e`](./e2e)                     | Playwright end-to-end tests of the admin               |
 | [`observability`](./observability) | OpenObserve backend and GUI deployment                 |
 | [`xcode`](./xcode)                 | iOS, iPadOS, macOS and tvOS app (SwiftUI, Apollo iOS)  |
 
@@ -51,7 +52,24 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 | `pnpm knip`                     | Find unused files, exports, and dependencies               |
 | `pnpm test:web`                 | Run web workspace tests                                    |
 | `pnpm test:admin`               | Run admin workspace tests                                  |
+| `pnpm test:e2e`                 | Run the end-to-end tests of the admin (see below)          |
+| `pnpm e2e:admin`                | Create the local test admin, or reset its password         |
 | `pnpm typecheck`                | Type-check all workspaces                                  |
+
+## End-to-end tests
+
+[`e2e`](./e2e) is a [Playwright](https://playwright.dev) suite that signs in to the admin and drives it through the public site's server, as production does. It finds things by URL, role, label and visible text, so the same tests can check a rewrite of the admin. With Postgres running and `graphql/.env` in place (`pnpm bootstrap` does both):
+
+```bash
+pnpm test:e2e
+```
+
+That builds `shared`, runs `pnpm e2e:admin`, installs Playwright's Chromium if it's missing, and starts GraphQL on port 3202, the admin's production build on 3201 and the public site on 3200, so it can run alongside `pnpm dev`. The tests sign in once, keep the session in `e2e/.auth/`, and run in parallel against http://localhost:3200.
+
+- **Test admin:** `pnpm e2e:admin` copies `e2e/.env.example` to `e2e/.env` (gitignored), fills in a random password, and creates `e2e-admin@highforthis.test` in the local database or resets its password. It only accepts `.test` addresses and databases on this machine.
+- **Data:** the tests use the database in `graphql/.env`, or `E2E_DATABASE_URL` from `e2e/.env`. They create what they need through GraphQL, name it with an `[e2e]` prefix, and remove it afterwards; each run also removes anything an interrupted run left behind. The media picker test needs more than 50 images, which the seed has.
+- **Debugging:** `pnpm --filter @highforthis/e2e test:ui` opens Playwright's UI mode. A failed test keeps a screenshot and a trace in `e2e/test-results/`.
+- **Running servers:** outside CI, servers already listening on those ports are reused, and the admin isn't rebuilt. Stop them to test admin changes.
 
 ## GraphQL Codegen
 

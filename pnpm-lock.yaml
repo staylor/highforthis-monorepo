@@ -256,6 +256,12 @@ importers:
         specifier: 4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.1)(@types/node@25.3.2)(happy-dom@20.7.0)(jiti@2.7.0)(jsdom@28.1.0)(lightningcss@1.33.0)(tsx@4.21.0)(yaml@2.9.0)
 
+  e2e:
+    devDependencies:
+      '@playwright/test':
+        specifier: 1.65.1
+        version: 1.65.1
+
   graphql:
     dependencies:
       '@apollo/server':
@@ -444,7 +450,7 @@ importers:
         version: 6.15.0
       remix:
         specifier: 3.2.0
-        version: 3.2.0(mysql2@3.15.3)(pg@8.19.0)
+        version: 3.2.0(mysql2@3.15.3)(pg@8.19.0)(playwright@1.65.1)
     devDependencies:
       '@tailwindcss/cli':
         specifier: 4.3.4
@@ -3036,6 +3042,11 @@ packages:
   '@pkgr/core@0.3.6':
     resolution: {integrity: sha512-SEeaJLb3qBNF/OaXnaR1NmmBbFYk1zC0ZH/52fATcRPLFg/p791YrcyFFy44Bo9sLaGuSuLp5Q6axbb/O+v/RA==}
     engines: {node: ^14.18.0 || >=16.0.0}
+
+  '@playwright/test@1.65.1':
+    resolution: {integrity: sha512-y+NCIRm2LvY4slUVWvGh1nujJ8RF/hEisIsq2mtUPgdQC4L701bq5hZGMhrpeXjACvwvO9tj5dJqhvM6TP9lbw==}
+    engines: {node: '>=20'}
+    hasBin: true
 
   '@preact/signals-core@1.13.0':
     resolution: {integrity: sha512-slT6XeTCAbdql61GVLlGU4x7XHI7kCZV5Um5uhE4zLX4ApgiiXc0UYFvVOKq06xcovzp7p+61l68oPi563ARKg==}
@@ -5918,6 +5929,16 @@ packages:
 
   pkg-types@2.3.1:
     resolution: {integrity: sha512-y+ichcgc2LrADuhLNAx8DFjVfgz91pRxfZdI3UDhxHvcVEZsenLO+7XaU5vOp0u/7V/wZ+plyuQxtrDlZJ+yeg==}
+
+  playwright-core@1.65.1:
+    resolution: {integrity: sha512-hqPpz7blSMPxWVdoeE1yiBSzXsKiVOd2k+kjCvmUywD2GPO2Dd9HfcWnq9NN0GHbNZDFgZ9JfBFr+X5/BLo0qw==}
+    engines: {node: '>=20'}
+    hasBin: true
+
+  playwright@1.65.1:
+    resolution: {integrity: sha512-vJ1FuoOrNwOKHUIVEvSt3jT1L+wjjDpwhwIstKtfvTh8XIG4FG4bIFuvNdMxi81LGfAhUgUZleVFaOLY4RIUUw==}
+    engines: {node: '>=20'}
+    hasBin: true
 
   possible-typed-array-names@1.1.0:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
@@ -9439,6 +9460,10 @@ snapshots:
 
   '@pkgr/core@0.3.6': {}
 
+  '@playwright/test@1.65.1':
+    dependencies:
+      playwright: 1.65.1
+
   '@preact/signals-core@1.13.0': {}
 
   '@prisma/adapter-pg@7.4.1':
@@ -9636,7 +9661,7 @@ snapshots:
       '@remix-run/fetch-router': 1.0.0
       '@remix-run/session': 1.0.1
 
-  '@remix-run/cli@1.0.2(mysql2@3.15.3)(pg@8.19.0)':
+  '@remix-run/cli@1.0.2(mysql2@3.15.3)(pg@8.19.0)(playwright@1.65.1)':
     dependencies:
       '@remix-run/assets': 1.0.2
       '@remix-run/data-table': 1.0.0
@@ -9644,7 +9669,7 @@ snapshots:
       '@remix-run/data-table-postgres': 1.0.0(pg@8.19.0)
       '@remix-run/data-table-sqlite': 1.0.0
       '@remix-run/terminal': 1.0.0
-      '@remix-run/test': 1.1.0
+      '@remix-run/test': 1.1.0(playwright@1.65.1)
       jsonc-parser: 3.3.1
       semver: 7.8.5
     transitivePeerDependencies:
@@ -9840,7 +9865,7 @@ snapshots:
 
   '@remix-run/terminal@1.0.0': {}
 
-  '@remix-run/test@1.1.0':
+  '@remix-run/test@1.1.0(playwright@1.65.1)':
     dependencies:
       '@remix-run/node-tsx': 1.0.0
       '@remix-run/terminal': 1.0.0
@@ -9854,6 +9879,8 @@ snapshots:
       oxc-resolver: 11.24.2
       source-map-js: 1.2.1
       v8-to-istanbul: 9.3.0
+    optionalDependencies:
+      playwright: 1.65.1
 
   '@repeaterjs/repeater@3.0.6': {}
 
@@ -12594,6 +12621,12 @@ snapshots:
       exsolve: 1.0.8
       pathe: 2.0.3
 
+  playwright-core@1.65.1: {}
+
+  playwright@1.65.1:
+    dependencies:
+      playwright-core: 1.65.1
+
   possible-typed-array-names@1.1.0: {}
 
   postcss-nested@7.0.2(postcss@8.5.6):
@@ -12772,14 +12805,14 @@ snapshots:
 
   remedial@1.0.8: {}
 
-  remix@3.2.0(mysql2@3.15.3)(pg@8.19.0):
+  remix@3.2.0(mysql2@3.15.3)(pg@8.19.0)(playwright@1.65.1):
     dependencies:
       '@remix-run/assert': 1.0.0
       '@remix-run/assets': 1.0.2
       '@remix-run/async-context-middleware': 1.0.0
       '@remix-run/auth': 1.0.1
       '@remix-run/auth-middleware': 1.0.1
-      '@remix-run/cli': 1.0.2(mysql2@3.15.3)(pg@8.19.0)
+      '@remix-run/cli': 1.0.2(mysql2@3.15.3)(pg@8.19.0)(playwright@1.65.1)
       '@remix-run/component': 1.2.0
       '@remix-run/component-hmr': 1.0.1
       '@remix-run/compression-middleware': 1.0.2
@@ -12822,10 +12855,11 @@ snapshots:
       '@remix-run/static-middleware': 1.0.2
       '@remix-run/tar-parser': 1.0.1
       '@remix-run/terminal': 1.0.0
-      '@remix-run/test': 1.1.0
+      '@remix-run/test': 1.1.0(playwright@1.65.1)
     optionalDependencies:
       mysql2: 3.15.3
       pg: 8.19.0
+      playwright: 1.65.1
 
   remove-trailing-separator@1.1.0: {}
 

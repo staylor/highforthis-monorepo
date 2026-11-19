@@ -47,6 +47,11 @@
         "app/types/graphql.ts"
       ]
     },
+    "e2e": {
+      "entry": [
+        "tests/*.setup.ts"
+      ]
+    },
     "admin": {
       "project": [
         "app.js",

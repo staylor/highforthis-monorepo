@@ -74,6 +74,8 @@
     "test:graphql": "pnpm --filter @highforthis/graphql test",
     "test:admin": "pnpm --filter @highforthis/admin test",
     "test:web": "pnpm --filter @highforthis/web test",
+    "test:e2e": "pnpm --filter @highforthis/shared build && pnpm e2e:admin && pnpm --filter @highforthis/e2e test",
+    "e2e:admin": "pnpm --filter @highforthis/graphql db:e2e-admin",
     "typecheck": "pnpm --filter @highforthis/shared build && pnpm -r typecheck"
   }
 }
