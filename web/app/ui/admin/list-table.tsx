@@ -204,7 +204,6 @@ interface ListTableProps {
   connection?: Connection | null;
   columns: Column[];
   deletable?: boolean;
-  /** Filters beside the bulk actions, such as a `ListFilter`. */
   filters?: RemixNode;
   perPage?: number;
 }

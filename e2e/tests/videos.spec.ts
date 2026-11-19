@@ -1,9 +1,7 @@
 import { expect, test } from '../support/test.ts';
 import { field } from '../support/ui.ts';
 
-// The videos section has moved from the admin app to web (see admin/REMIX3-MIGRATION.md), so
-// the list, its year filter and the edit page come from web's Remix server. Videos come from
-// YouTube's import, so the test adds one through GraphQL.
+// Videos come from YouTube's import, so the test adds one through GraphQL.
 
 test('filters videos by year, edits one and deletes it', async ({ page, prefix, graphql }) => {
   // A year no real video has, so the filter finds only this one
@@ -15,7 +13,6 @@ test('filters videos by year, edits one and deletes it', async ({ page, prefix, 
   });
 
   await page.goto('/admin/video');
-  // Served by web: its admin pages use the admin stylesheet its asset server builds
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
   const row = page.getByRole('row').filter({ hasText: video.title });
 

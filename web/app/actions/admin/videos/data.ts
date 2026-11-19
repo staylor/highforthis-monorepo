@@ -10,9 +10,6 @@ import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVar
 
 import type { VideoEditQuery, VideosAdminQuery } from '../../../types/graphql.ts';
 
-// The videos section's data, moved from the admin app's src/server/videos.ts with the same
-// GraphQL operations.
-
 const videoFormFragment = gql`
   fragment VideoForm_video on Video {
     dataPlaylistId
@@ -74,10 +71,9 @@ const updateVideoMutation = gql`
   ${videoFormFragment}
 `;
 
-// Keeps a title like "1999" a string, as with artists' and venues' names
+// Keeps a title like "1999" a string
 const skipKeys = ['title', 'slug'];
 
-/** The videos list, filtered by ?search= and ?year=. */
 export function loadVideos({
   gql: client,
   searchParams,
