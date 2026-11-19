@@ -2,12 +2,7 @@ import { unsafeHTML } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
-import {
-  isRedirect,
-  type GraphQLClient,
-  type RedirectResult,
-} from '@highforthis/shared/admin/forms';
-
+import { isRedirect, type GraphQLClient, type RedirectResult } from '../../../lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
 import { routes } from '../../../routes.ts';

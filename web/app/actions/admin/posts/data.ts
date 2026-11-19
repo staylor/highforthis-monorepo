@@ -5,9 +5,8 @@ import {
   submitForm,
   type FormArgs,
   type GraphQLClient,
-} from '@highforthis/shared/admin/forms';
-import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVariables';
-
+} from '../../../lib/admin/forms.ts';
+import { addPageOffset, addSearchParam } from '../../../lib/admin/list-variables.ts';
 import type { PostEditQuery, PostsAdminQuery } from '../../../types/graphql.ts';
 import { textNodeFragments } from '../../../ui/post-content.tsx';
 import { videoFragment } from '../../../ui/videos.tsx';

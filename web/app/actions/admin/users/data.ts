@@ -5,9 +5,8 @@ import {
   submitForm,
   type FormArgs,
   type GraphQLClient,
-} from '@highforthis/shared/admin/forms';
-import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVariables';
-
+} from '../../../lib/admin/forms.ts';
+import { addPageOffset, addSearchParam } from '../../../lib/admin/list-variables.ts';
 import type { UserEditQuery, UsersAdminQuery } from '../../../types/graphql.ts';
 
 const userFormFragment = gql`

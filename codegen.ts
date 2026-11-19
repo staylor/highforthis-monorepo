@@ -1,15 +1,16 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
-const SHARED_TYPES = '@highforthis/shared/types/graphql';
+// The schema types, which web's operation types build on and re-export, so web's code imports
+// every GraphQL type from app/types/graphql.ts
+const SCHEMA_TYPES = './schema.ts';
 
-// The operations an app defines. Schema types come from shared's file, which the app's file
-// re-exports, so app code imports every GraphQL type from its own types file.
+// An app's operation types
 const appTypes = (path: string, documents: string[]) => ({
   [path]: {
     documents,
     preset: 'import-types' as const,
-    presetConfig: { typesPath: SHARED_TYPES },
-    plugins: [{ add: { content: `export * from '${SHARED_TYPES}';` } }, 'typescript-operations'],
+    presetConfig: { typesPath: SCHEMA_TYPES },
+    plugins: [{ add: { content: `export * from '${SCHEMA_TYPES}';` } }, 'typescript-operations'],
     config: {
       dedupeOperationSuffix: true,
       useTypeImports: true,
@@ -40,11 +41,10 @@ const config: CodegenConfig = {
         useTypeImports: true,
       },
     },
-    './shared/src/apollo/fragmentMatcher.js': {
+    './web/app/lib/apollo/fragment-matcher.js': {
       plugins: ['fragment-matcher'],
     },
-    // Schema types both apps' operation types build on
-    './shared/src/types/graphql.ts': {
+    './web/app/types/schema.ts': {
       plugins: ['typescript'],
       config: {
         dedupeOperationSuffix: true,

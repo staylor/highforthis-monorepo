@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import '@highforthis/shared/styles/theme.css';
+@import './theme.css';
 
 /* The admin pages have their own stylesheet, admin.css */
 @source not '../ui/admin';

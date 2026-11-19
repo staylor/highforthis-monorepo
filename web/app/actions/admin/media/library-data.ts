@@ -6,9 +6,8 @@ import {
   type FormArgs,
   type GraphQLClient,
   type RedirectResult,
-} from '@highforthis/shared/admin/forms';
-import { addPageOffset } from '@highforthis/shared/admin/listVariables';
-
+} from '../../../lib/admin/forms.ts';
+import { addPageOffset } from '../../../lib/admin/list-variables.ts';
 import type {
   AddAlbumCoversMutation,
   AlbumCoversAdminQuery,

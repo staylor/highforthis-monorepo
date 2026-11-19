@@ -25,12 +25,9 @@
     },
     "shared": {
       "project": [
-        "src/**/*.{ts,tsx,js}"
+        "src/**/*.ts"
       ],
-      "includeEntryExports": true,
-      "ignore": [
-        "src/types/graphql.ts"
-      ]
+      "includeEntryExports": true
     },
     "web": {
       "entry": [
@@ -43,7 +40,8 @@
         "app/**/*.{ts,tsx}"
       ],
       "ignore": [
-        "app/types/graphql.ts"
+        "app/types/graphql.ts",
+        "app/types/schema.ts"
       ],
       "ignoreDependencies": [
         "@lexical/a11y",
@@ -51,7 +49,8 @@
         "@lexical/dragon",
         "@lexical/extension",
         "@lexical/html",
-        "@preact/signals-core"
+        "@preact/signals-core",
+        "@tailwindcss/forms"
       ]
     },
     "e2e": {

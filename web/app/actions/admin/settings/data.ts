@@ -1,7 +1,6 @@
 import { gql } from 'graphql-tag';
 
-import { submitForm, type FormArgs, type GraphQLClient } from '@highforthis/shared/admin/forms';
-
+import { submitForm, type FormArgs, type GraphQLClient } from '../../../lib/admin/forms.ts';
 import type {
   MediaSettingsQuery,
   PodcastSettingsQuery,

@@ -1,6 +1,6 @@
-import type * as Types from '@highforthis/shared/types/graphql';
+import type * as Types from './schema.ts';
 
-export * from '@highforthis/shared/types/graphql';
+export * from './schema.ts';
 export type ArtistForm_ArtistFragment = { __typename?: 'Artist', description?: string | null, excludeFromSearch?: boolean | null, id: string, name: string, slug: string, website?: string | null, appleMusic?: { __typename?: 'AppleMusicData', id?: string | null, artwork?: { __typename?: 'AppleMusicArtwork', url?: string | null } | null } | null, featuredMedia?: Array<
     | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, type: string }
     | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, type: string }

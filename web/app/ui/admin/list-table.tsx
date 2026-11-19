@@ -1,7 +1,6 @@
 import type { Handle, RemixNode } from 'remix/component';
 
-import { PER_PAGE } from '@highforthis/shared/admin/listVariables';
-
+import { PER_PAGE } from '../../lib/admin/list-variables.ts';
 import { cn } from '../public/cn.ts';
 
 import { getAdmin } from './context.tsx';

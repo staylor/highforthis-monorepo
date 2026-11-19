@@ -13,24 +13,16 @@
     "./observability": {
       "types": "./dist/observability.d.ts",
       "import": "./dist/observability.js"
-    },
-    "./admin/forms": "./src/admin/forms.ts",
-    "./admin/listVariables": "./src/admin/listVariables.ts",
-    "./apollo/fragmentMatcher": "./src/apollo/fragmentMatcher.js",
-    "./apollo/typePolicies": "./src/apollo/typePolicies.js",
-    "./styles/theme.css": "./src/styles/theme.css",
-    "./types/graphql": "./src/types/graphql.ts"
+    }
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
     "typecheck": "tsgo"
   },
   "dependencies": {
-    "@apollo/client": "4.1.6",
     "@opentelemetry/api": "1.9.1",
     "@opentelemetry/api-logs": "0.220.0",
     "@opentelemetry/exporter-logs-otlp-http": "0.220.0",
@@ -48,10 +40,7 @@
     "@opentelemetry/sdk-metrics": "2.9.0",
     "@opentelemetry/sdk-trace-node": "2.9.0",
     "@opentelemetry/semantic-conventions": "1.43.0",
-    "@tailwindcss/forms": "0.5.11",
-    "graphql": "16.13.0",
     "pino": "10.3.1",
-    "pino-http": "11.0.0",
-    "qs": "6.15.0"
+    "pino-http": "11.0.0"
   }
 }

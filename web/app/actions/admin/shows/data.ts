@@ -7,9 +7,8 @@ import {
   type FormArgs,
   type GraphQLClient,
   type RedirectResult,
-} from '@highforthis/shared/admin/forms';
-import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVariables';
-
+} from '../../../lib/admin/forms.ts';
+import { addPageOffset, addSearchParam } from '../../../lib/admin/list-variables.ts';
 import type {
   BulkCreateShowsMutation,
   ShowEditQuery,

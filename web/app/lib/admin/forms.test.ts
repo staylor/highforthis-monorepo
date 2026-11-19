@@ -4,14 +4,8 @@ import { gql } from 'graphql-tag';
 import * as assert from 'remix/assert';
 import { describe, it } from 'remix/test';
 
-import {
-  deleteSelected,
-  isRedirect,
-  parseForm,
-  submitForm,
-  type GraphQLClient,
-} from '@highforthis/shared/admin/forms';
-import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVariables';
+import { deleteSelected, isRedirect, parseForm, submitForm, type GraphQLClient } from './forms.ts';
+import { addPageOffset, addSearchParam } from './list-variables.ts';
 
 // The admin's shared form and list helpers, which every section's data functions use.
 

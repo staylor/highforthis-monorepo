@@ -91,10 +91,10 @@ app/
 ├── actions/           # Controllers and pages, by route
 │   └── public/        # Browser entry, RUM and other client modules
 ├── ui/                # Components (ui/public/ holds client entries)
-├── lib/               # GraphQL clients, i18n, RUM config, admin session
+├── lib/               # GraphQL clients and Apollo cache config, i18n, RUM config, admin session and forms
 ├── middleware/        # Proxies, GraphQL client, translations, admin session checks
-├── styles/            # Tailwind input (public/ is the built CSS)
-└── types/             # Generated GraphQL operation types
+├── styles/            # Tailwind input and theme (public/ is the built CSS)
+└── types/             # Generated GraphQL schema and operation types
 server.ts              # Node HTTP server and logging
 public/                # Static files and translations
 ```
