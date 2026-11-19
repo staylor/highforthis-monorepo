@@ -63,7 +63,8 @@ export default defineConfig({
     },
     {
       name: 'web',
-      command: 'pnpm css && node --import remix/node-tsx server.ts',
+      // build:service builds the CSS and copies in the admin's strings, which aren't checked in
+      command: 'pnpm build:service && node --import remix/node-tsx server.ts',
       cwd: path.join(root, 'web'),
       url: `${webUrl}/health`,
       env: {
