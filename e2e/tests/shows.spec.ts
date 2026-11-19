@@ -3,6 +3,14 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '../support/test.ts';
 import { cell, field } from '../support/ui.ts';
 
+// The shows pages have moved from the admin app to web (see admin/REMIX3-MIGRATION.md). The
+// artists picker, the date and the list's "attended" box are client entries, which work once the
+// page's scripts have loaded.
+async function openAddForm(page: Page) {
+  await page.goto('/admin/show/add');
+  await page.waitForLoadState('networkidle');
+}
+
 // The add form starts out like the last show added, artists included
 async function removeArtists(page: Page) {
   const remove = page.getByRole('main').getByRole('button', { name: /^Remove / });
@@ -19,7 +27,7 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
   const title = `${prefix} Show`;
   const editedTitle = `${title} (edited)`;
 
-  await page.goto('/admin/show/add');
+  await openAddForm(page);
   await field(page, 'Title').fill(title);
   // Any one artist and venue will do
   await removeArtists(page);
@@ -42,12 +50,14 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
   await expect(field(page, 'Notes')).toHaveValue('Added by the end-to-end tests');
 
   await page.goto(`/admin/show?search=${encodeURIComponent(prefix)}`);
+  await page.waitForLoadState('networkidle');
   const row = page.getByRole('row').filter({ hasText: editedTitle });
   const attended = (await cell(page, row, 'Attended')).getByRole('checkbox');
   await expect(attended).not.toBeChecked();
   await attended.check();
   await expect.poll(async () => (await graphql.show(id))?.attended).toBe(true);
   await page.reload();
+  await page.waitForLoadState('networkidle');
   await expect(attended).toBeChecked();
   await attended.uncheck();
   await expect.poll(async () => (await graphql.show(id))?.attended).toBe(false);
@@ -59,7 +69,7 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
 });
 
 test("lists an artist once, and says so when a show can't be saved", async ({ page, prefix }) => {
-  await page.goto('/admin/show/add');
+  await openAddForm(page);
   await field(page, 'Title').fill(`${prefix} Show`);
   await removeArtists(page);
   const artists = field(page, 'Artists');
@@ -73,4 +83,29 @@ test("lists an artist once, and says so when a show can't be saved", async ({ pa
   await page.getByRole('button', { name: 'Add Show' }).click();
   await expect(page.getByText("Couldn't save. Check the form and try again.")).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Add Show' })).toBeVisible();
+});
+
+test('imports shows from CSV, creating their artists and venue', async ({ page, prefix }) => {
+  const venue = `${prefix} Venue`;
+  await page.goto('/admin/show/bulk');
+  await expect(page.getByRole('heading', { name: 'Bulk Add Shows' })).toBeVisible();
+
+  // A line without an artist comes back with the CSV kept
+  const csv = page.getByLabel('Shows CSV');
+  await csv.fill(`artists,venue,date\n,"${venue}",1/1/26`);
+  await page.getByRole('button', { name: 'Import Shows' }).click();
+  await expect(page.getByText('Line 2: At least one artist is required.')).toBeVisible();
+  await expect(csv).toHaveValue(`artists,venue,date\n,"${venue}",1/1/26`);
+
+  await csv.fill(
+    `artists,venue,date,attended\n"${prefix} One; ${prefix} Two","${venue}",1/1/26,yes\n${prefix} One,"${venue}",2026-01-02,no`
+  );
+  await page.getByRole('button', { name: 'Import Shows' }).click();
+  await expect(
+    page.getByText('Imported 2 shows. Created 2 new artists and 1 new venues.')
+  ).toBeVisible();
+
+  // The cleanup removes them, by the venue's name
+  await page.goto(`/admin/show?search=${encodeURIComponent(venue)}`);
+  await expect(page.getByRole('row').filter({ hasText: venue })).toHaveCount(2);
 });

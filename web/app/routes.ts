@@ -46,6 +46,13 @@ export const routes = route({
       add: form('/add'),
       edit: form('/:id'),
     }),
+    // The venue listings page (/show/listings) is still the admin app's
+    shows: route('/show', {
+      list: form('/'),
+      add: form('/add'),
+      bulk: form('/bulk'),
+      edit: form('/:id'),
+    }),
     // Each settings page edits one settings document. General settings are also at /settings.
     settings: route('/settings', {
       site: form('(/site)'),

@@ -204,10 +204,10 @@ describe('admin artists', () => {
     assert.match(html, /<input type="hidden" name="featuredMedia" value="m1"/);
     assert.ok(html.includes(`<img alt="" src="${storage}/2024/05/wilco-300.jpg"`));
     assert.match(html, /<input type="checkbox" name="excludeFromSearch" value="true" checked/);
-    // Shows link to the admin app's show pages, which load in full
+    // Shows link to their edit pages, which web serves, so they don't need a full load
     assert.match(
       html,
-      /<a href="\/admin\/show\/s0" data-rmx-document[^>]*>05\/10\/2024 Ryman<\/a>/
+      /<a href="\/admin\/show\/s0" class="text-pink underline">05\/10\/2024 Ryman<\/a>/
     );
     assert.match(html, /<summary[^>]*>Show More<\/summary>/);
     assert.match(html, /Artist updated\./);

@@ -20,7 +20,7 @@ interface Column {
 }
 
 interface Connection {
-  count: number;
+  count?: number | null;
   edges: { node: { id: string } }[];
   pageInfo: { hasNextPage?: boolean | null };
 }
@@ -39,32 +39,41 @@ export function RowTitle(handle: Handle<{ href: string; title?: string | null }>
   };
 }
 
-/** Delete posts the row's ID with intent=delete. */
-export function RowActions(handle: Handle<{ editHref: string; viewHref?: string; id: string }>) {
+/**
+ * A row's edit link, a link to its public page when it has one, and, given the row's ID, its
+ * delete button. Delete posts the ID with intent=delete. A column about something else, such as a
+ * show's venue, leaves the ID out.
+ */
+export function RowActions(handle: Handle<{ editHref: string; viewHref?: string; id?: string }>) {
   return () => {
     const { t } = getAdmin(handle);
-    const { viewHref } = handle.props;
-    return (
-      <nav class="text-sm">
-        <a class="hover:underline" href={handle.props.editHref}>
-          {t('table.edit')}
+    const { editHref, viewHref, id } = handle.props;
+    const actions: RemixNode[] = [
+      <a class="hover:underline" href={editHref} data-rmx-document={documentLoad(editHref)}>
+        {t('table.edit')}
+      </a>,
+    ];
+    if (viewHref) {
+      actions.push(
+        <a class="hover:underline" href={viewHref} data-rmx-document={documentLoad(viewHref)}>
+          {t('table.view')}
         </a>
-        {' | '}
-        {viewHref && (
-          <>
-            <a class="hover:underline" href={viewHref} data-rmx-document={documentLoad(viewHref)}>
-              {t('table.view')}
-            </a>
-            {' | '}
-          </>
-        )}
+      );
+    }
+    if (id) {
+      actions.push(
         <form method="post" class="inline">
           <input type="hidden" name="intent" value="delete" />
-          <input type="hidden" name="ids" value={handle.props.id} />
+          <input type="hidden" name="ids" value={id} />
           <button type="submit" class="cursor-pointer text-pink hover:underline">
             {t('table.delete')}
           </button>
         </form>
+      );
+    }
+    return (
+      <nav class="text-sm">
+        {actions.flatMap((action, i) => (i === 0 ? [action] : [' | ', action]))}
       </nav>
     );
   };
@@ -153,7 +162,8 @@ function Pagination(handle: Handle<{ connection: Connection; perPage: number; cl
   return () => {
     const { t, url } = getAdmin(handle);
     const { connection, perPage } = handle.props;
-    const pages = connection.count > 0 ? Math.ceil(connection.count / perPage) : 0;
+    const total = connection.count ?? 0;
+    const pages = total > 0 ? Math.ceil(total / perPage) : 0;
     const firstPage = pages === 0 ? 0 : 1;
     const page = url.searchParams.get('page');
     const currentPage = page ? Number(page) : firstPage;
@@ -189,7 +199,7 @@ function Pagination(handle: Handle<{ connection: Connection; perPage: number; cl
 
     return (
       <nav class={cn('text-sm select-none', handle.props.class)}>
-        {count(t('pagination.items', { count: connection.count }))}
+        {count(t('pagination.items', { count: total }))}
         {step(paginated ? 1 : null, '«')}
         {step(previousPage, '‹')}
         {count(t('pagination.pages', { page: paginated ? currentPage : firstPage, pages }))}

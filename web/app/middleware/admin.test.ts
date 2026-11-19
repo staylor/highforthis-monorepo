@@ -128,4 +128,20 @@ describe('proxies', () => {
     assert.equal(await text('/admin/post'), 'from admin');
     assert.deepEqual(forwarded, ['/admin/user.data', '/admin/userland', '/admin/post']);
   });
+
+  it("forwards a moved section's pages that haven't moved yet, such as the venue listings", async (t) => {
+    const showsRouter = createRouter({ middleware: [proxies({ servedHere: ['/admin/show'] })] });
+    showsRouter.get('/admin/show', () => new Response('from web'));
+    const forwarded: string[] = [];
+    t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL) => {
+      forwarded.push(new URL(input instanceof Request ? input.url : input).pathname);
+      return new Response('from admin');
+    });
+    const text = async (path: string) => (await showsRouter.fetch(new URL(path, origin))).text();
+
+    assert.equal(await text('/admin/show'), 'from web');
+    assert.equal(await text('/admin/show/listings'), 'from admin');
+    assert.equal(await text('/admin/show/listings/v1'), 'from admin');
+    assert.deepEqual(forwarded, ['/admin/show/listings', '/admin/show/listings/v1']);
+  });
 });

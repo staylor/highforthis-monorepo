@@ -128,6 +128,13 @@ These are in web, and nothing is served there yet:
      - The admin app's settings routes, settings form, crops editor and `server/settings.ts` are removed in the same change. The `loadApp` test moves to its own file.
      - `e2e/tests/settings.spec.ts` saves the general settings and adds and removes a crop size, putting each back afterwards.
 3. **Shows:** the bulk CSV page and the listings page are the largest route files.
+   - **The shows list, add, edit and bulk add pages have moved.** Web serves `/admin/show` (`web/app/actions/admin/shows/`), except the venue listings page, which moves next.
+     - `shared/src/adminPaths.ts` has a list of pages that haven't moved yet, `/admin/show/listings`, which web still forwards to the admin app and links to in full.
+     - The form's date is a client entry (`date-time-input.tsx`): a datetime-local input in the browser's time zone and a hidden timestamp, which is what's submitted. The artists are a client entry (`entities-picker.tsx`) that adds one from a select and removes each with a button, submitting hidden `artists[0]`, `artists[1]` and so on. The venue is a plain select.
+     - The list's "attended" box is the inline toggle. `RowActions` leaves the delete button out when it isn't given an ID, for the artist and venue columns.
+     - The bulk add page's CSV parser moved to web with its tests (`bulk-csv.ts`). A turned-back import renders the page again with the CSV and a message per line, with status 422.
+     - The admin app's shows list, add, edit and bulk routes, the show form, its selectors, `server/shows.ts` and their tests are removed in the same change.
+     - `e2e/tests/shows.spec.ts` runs against web, and adds a bulk import test.
 4. **Media:** upload, album covers, and the pickers.
 5. **Posts:** the editor client entry, the featured media field, and both pickers.
 6. **Login and passkeys:** move sign-in, write the session cookie from web, stop forwarding, then retire the admin service, its Railway variables and web's `ADMIN_HOST`.

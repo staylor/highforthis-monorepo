@@ -23,13 +23,8 @@ export default [
       route('verify', 'routes/admin/passkeys/verify.ts'),
     ]),
     ...adminRoutes('post'),
-    ...prefix('show', [
-      index('routes/admin/show/index.tsx'),
-      route('add', 'routes/admin/show/add.tsx'),
-      route('bulk', 'routes/admin/show/bulk.tsx'),
-      route('listings/:venueId?', 'routes/admin/show/listings.tsx'),
-      route(':id', 'routes/admin/show/edit.tsx'),
-    ]),
+    // The rest of the shows section has moved to web
+    ...prefix('show', [route('listings/:venueId?', 'routes/admin/show/listings.tsx')]),
   ]),
   route('login', 'routes/login/layout.tsx', [route(':error?', 'routes/login/index.tsx')]),
   ...prefix('modals', [
