@@ -3,13 +3,11 @@ import { clientEntry, navigate, on, ref, type Handle } from 'remix/component';
 
 import { buttonClass, inputBase } from './styles.ts';
 
-// Adding a passkey, from the admin app's passkeys page: asks for the registration options, runs
-// the browser's WebAuthn prompt, sends its answer to be checked, then reloads the list. The name
-// field is read when the button is pressed, so a name typed before the page's scripts load is
-// kept.
+// Asks for the registration options, runs the browser's WebAuthn prompt, sends its answer to be
+// checked, then reloads the list. The name field is read when the button is pressed, so a name
+// typed before the page's scripts load is kept.
 
 interface PasskeyRegisterProps {
-  /** Where to ask for the options and send the answer. */
   optionsHref: string;
   verifyHref: string;
   labels: {

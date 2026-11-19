@@ -1,7 +1,6 @@
 /*
- * Styles for the admin's pages. The Tailwind CLI builds it into public/admin.css next to main.css.
- * It scans only the admin's UI and main.css skips it, so neither stylesheet carries the other's
- * classes. The base rules and the post editor's came from the admin app's styles.
+ * The Tailwind CLI builds this into public/admin.css. It scans only the admin's UI and main.css
+ * skips it, so neither stylesheet carries the other's classes.
  */
 @import 'tailwindcss' source(none);
 @import '@highforthis/shared/styles/theme.css';

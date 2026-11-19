@@ -13,8 +13,7 @@ import {
 } from '@highforthis/shared/admin/forms';
 import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVariables';
 
-// The admin's shared form and list helpers, which every section's data functions use. Moved from
-// the admin app's tests when it was retired.
+// The admin's shared form and list helpers, which every section's data functions use.
 
 const saveMutation = gql`
   mutation SaveThing($id: String, $input: ThingInput!) {

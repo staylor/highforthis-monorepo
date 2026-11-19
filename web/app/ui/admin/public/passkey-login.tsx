@@ -1,12 +1,11 @@
 import { browserSupportsWebAuthn, startAuthentication } from '@simplewebauthn/browser';
 import { clientEntry, on, ref, type Handle } from 'remix/component';
 
-// Signing in with a passkey, from the admin app's login form. The button asks GraphQL for the
-// options (web forwards /auth/passkeys to it), runs the browser's WebAuthn prompt, then posts the
-// answer with a hidden form, which the sign-in action checks.
+// The button asks GraphQL for the options (web forwards /auth/passkeys to it), runs the
+// browser's WebAuthn prompt, then posts the answer with a hidden form, which the sign-in action
+// checks.
 
 interface PasskeyLoginProps {
-  /** Where the sign-in form posts. */
   action: string;
   labels: { button: string; waiting: string; unsupported: string; failed: string };
 }

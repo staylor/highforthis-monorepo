@@ -62,7 +62,6 @@ const forwards = [
 const matches = (pathname: string, path: string) =>
   pathname === path || pathname.startsWith(`${path}/`) || pathname.startsWith(`${path}.`);
 
-/** Forwards API paths to GraphQL. */
 export function proxies(): Middleware {
   return (context, next) => {
     const { pathname } = context.url;

@@ -1,7 +1,5 @@
 import { graphqlHost } from '../../../lib/graphql.ts';
 
-// Signing in through GraphQL's /auth endpoints, moved from the admin app's server/auth.ts.
-
 // Looked up per request rather than captured at startup, so tests can stub fetch.
 const fetchNow: typeof fetch = (input, init) => globalThis.fetch(input, init);
 

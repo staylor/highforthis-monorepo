@@ -12,8 +12,7 @@ import { renderAdminPage } from '../render-page.tsx';
 
 import { deletePasskey, listPasskeys, passkeyApi } from './data.ts';
 
-// The signed-in admin's passkeys: the list, removing one, and adding one, which the browser does
-// through the options and verify endpoints. Moved from the admin app's routes/admin/passkeys.
+// Adding a passkey happens in the browser, through the options and verify endpoints.
 
 const passkeys = routes.admin.passkeys;
 

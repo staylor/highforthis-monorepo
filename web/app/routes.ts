@@ -30,7 +30,7 @@ export const routes = route({
   video: get('/video/:slug'),
   // Signing in to the admin, with an optional error to show: unauthorized or failed
   login: form('/login(/:error)'),
-  // The admin. Each form route is a GET page and its POST.
+  // Each form route is a GET page and its POST.
   admin: route('/admin', {
     dashboard: get('/'),
     logout: get('/logout'),

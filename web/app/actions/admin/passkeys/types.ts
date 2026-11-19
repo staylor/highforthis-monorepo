@@ -1,4 +1,4 @@
-// What GraphQL's /auth/passkeys answers with, from the admin app's types/passkeys.ts
+// What GraphQL's /auth/passkeys answers with
 
 export interface PasskeyRecord {
   id: string;
