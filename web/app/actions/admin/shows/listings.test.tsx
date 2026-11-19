@@ -5,8 +5,7 @@ import { router } from '../../../router.ts';
 
 const origin = 'http://localhost';
 
-// Made by the admin app's React Router createCookieSessionStorage with the secret
-// 'test-secret', holding the token 'test-token'.
+// A session cookie signed with the secret 'test-secret', holding the token 'test-token'
 const session =
   '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ%3D%3D.0jvC0SjKdfmXr5Rw%2F6679ia0w0xRgH4hIpEzB3aJ9Fc';
 

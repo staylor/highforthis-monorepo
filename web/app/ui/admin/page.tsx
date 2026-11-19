@@ -20,7 +20,6 @@ export function HeaderAdd(handle: Handle<{ href: string; label: string }>) {
   );
 }
 
-/** A notice that something went wrong, as the admin app's `Alert`. */
 export function Alert(handle: Handle<{ children?: RemixNode }>) {
   return () => (
     <div

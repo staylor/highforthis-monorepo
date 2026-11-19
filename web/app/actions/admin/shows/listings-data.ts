@@ -5,9 +5,6 @@ import type { GraphQLClient, RedirectResult } from '@highforthis/shared/admin/fo
 import type { ImportListingsMutation, VenueListingsAdminQuery } from '../../../types/graphql.ts';
 import { splitArtists } from '../../../ui/admin/public/split-artists.ts';
 
-// A venue's upcoming shows from its listings page, to add to the shows. Moved from the admin
-// app's src/server/listings.ts with the same GraphQL operations.
-
 const listingsQuery = gql`
   query VenueListingsAdmin($venueId: String!, $withListings: Boolean!) {
     venues(first: 500) {
@@ -50,7 +47,6 @@ const importMutation = gql`
   }
 `;
 
-/** The venues to choose from, and the chosen venue's listings. */
 export function loadVenueListings({
   gql: client,
   venueId,

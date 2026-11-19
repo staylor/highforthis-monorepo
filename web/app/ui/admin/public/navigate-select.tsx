@@ -8,7 +8,6 @@ import { inputBase } from './styles.ts';
 // such as the venue on /admin/show/listings/:venueId. Choosing one goes to its page.
 
 interface NavigateSelectProps {
-  /** The page that's chosen now, if any. */
   value: string;
   placeholder: string;
   choices: { label: string; href: string }[];

@@ -1,6 +1,5 @@
 import { expect, test } from '../support/test.ts';
 
-// The venue listings page has moved from the admin app to web (see admin/REMIX3-MIGRATION.md).
 // Real listings come from Bowery Presents or Ticketmaster, which the tests can't reach, so this
 // uses a venue whose listings page is a Ticketmaster page but not a venue's: GraphQL turns it
 // down without a request, and the page says why. The controller tests cover adding listings.
@@ -14,7 +13,6 @@ test('chooses a venue and says why its listings could not be loaded', async ({
   const venue = await graphql.createVenue(`${prefix} Venue`, { listingsUrl });
 
   await page.goto('/admin/show/listings');
-  // Served by web: its admin pages use the admin stylesheet its asset server builds
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
   await expect(page.getByRole('heading', { name: 'Venue Listings' })).toBeVisible();
 
