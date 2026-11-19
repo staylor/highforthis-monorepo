@@ -38,6 +38,10 @@ Uploads use the CMS's Cloud Storage bucket (`UPLOADS_URL`) at `destination/fileN
 - Item failures are observed with KVO and notifications, displayed in the player, and retryable. Observers and remote-command handlers are removed when the player is released.
 - A one-second time observer updates only the controls that read elapsed time, not the browsing screens.
 
+## CarPlay
+
+`CarPlaySceneDelegate` (iOS only) connects through the `AppDelegate`'s scene configuration and the Info.plist scene manifest. Its tab bar holds the recommended shows, in sections by day (or one dated list when there are more days than `CPListTemplate.maximumSectionCount`), and the podcast episodes. Both are `CursorFeed`s, so the lists end with Load More, or Try Again after a failure, rather than being cut short. Observation tracking rebuilds the lists when a feed or the playing episode changes. Shows only list, as an audio app's templates can't show details. Choosing an episode fetches its audio and plays it with `PodcastPlayer.shared`, the player the app's windows use, then pushes the shared Now Playing template, which `MPNowPlayingSession` already feeds.
+
 ## Tests and generation
 
 `HighForThisTests` uses Swift Testing for loading races, cancellation, pagination, cache errors, media URLs, rendering and playback activation. Generated Apollo mocks build typed fixtures. `HighForThisUITests` covers navigation, pagination, empty filters, retries, playback, dark mode and accessibility text on iPhone and iPad. `TVNavigationTests` drives the same flows on Apple TV with `XCUIRemote`, waiting for focus rather than tapping.

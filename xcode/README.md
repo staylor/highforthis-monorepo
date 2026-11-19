@@ -12,6 +12,8 @@ The iPhone, iPad, Mac and Apple TV app for [highforthis.com](https://highforthis
 
 Apple TV has no web browser and can't open YouTube, so it leaves out the Videos tab and links to websites. While an episode is loaded, a Now Playing tab holds the player, and the remote's Play/Pause button controls it.
 
+In CarPlay, the app lists the recommended shows, by day, and the podcast episodes, which play in Now Playing. CarPlay needs the CarPlay audio entitlement (`com.apple.developer.carplay-audio`) on the app ID.
+
 ## Building
 
 Requirements: Xcode 26 or later. Releases build with Xcode 27.2.

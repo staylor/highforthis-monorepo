@@ -48,16 +48,10 @@ struct PodcastDetail: View {
     }
 
     @ViewBuilder private func playback(_ podcast: PodcastQuery.Data.Podcast) -> some View {
-        if let audio = podcast.audio {
-            PlaybackControls(
-                episode: PodcastPlayer.Episode(
-                    id: podcast.id,
-                    title: podcast.title,
-                    url: AppConfiguration.uploadURL(destination: audio.destination, fileName: audio.fileName)
-                )
-            )
-            .frame(maxWidth: .infinity)
-            .padding(.vertical)
+        if let episode = PodcastPlayer.Episode(podcast) {
+            PlaybackControls(episode: episode)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical)
         } else {
             Label(.audioUnavailable, systemImage: "speaker.slash")
                 .foregroundStyle(.secondary)
