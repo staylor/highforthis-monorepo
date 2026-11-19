@@ -8,16 +8,22 @@ import { AdminShell } from '../../ui/admin/shell.tsx';
 interface AdminDocumentProps {
   admin: AdminValue;
   title: string;
+  /** Leaves out the nav, for signing in. */
+  bare?: boolean;
   children?: RemixNode;
 }
 
 // Runs before first paint so dark mode doesn't flash
 const darkModeScript = `try{if(localStorage.getItem('darkMode'))document.documentElement.classList.add('dark')}catch(e){}`;
 
-/** No RUM: page views count public pages only. */
+/**
+ * The <html> shell for admin pages: the admin's stylesheet and layout, and the same
+ * browser entry as public pages, for client navigation and client entries. No RUM: page views
+ * count public pages only.
+ */
 export function AdminDocument(handle: Handle<AdminDocumentProps>) {
   return () => {
-    const { admin, title, children } = handle.props;
+    const { admin, title, bare, children } = handle.props;
     const { href, importMap, preloads } = scriptEntry;
 
     return (
@@ -44,7 +50,7 @@ export function AdminDocument(handle: Handle<AdminDocumentProps>) {
         </head>
         <body class="h-full font-body">
           <AdminProvider value={admin}>
-            <AdminShell>{children}</AdminShell>
+            {bare ? children : <AdminShell>{children}</AdminShell>}
           </AdminProvider>
         </body>
       </html>

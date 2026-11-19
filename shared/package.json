@@ -14,7 +14,6 @@
       "types": "./dist/observability.d.ts",
       "import": "./dist/observability.js"
     },
-    "./adminPaths": "./src/adminPaths.ts",
     "./admin/forms": "./src/admin/forms.ts",
     "./admin/listVariables": "./src/admin/listVariables.ts",
     "./apollo/fragmentMatcher": "./src/apollo/fragmentMatcher.js",

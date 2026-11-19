@@ -3,8 +3,8 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '../support/test.ts';
 import { addedId, cell, field, hydrated } from '../support/ui.ts';
 
-// The artists picker, the date and the list's "attended" box are client entries, which work once
-// the page's scripts have loaded.
+// The artists picker, the date and the list's "attended" box are client entries, which work once the
+// page's scripts have loaded.
 async function openAddForm(page: Page) {
   await page.goto('/admin/show/add');
   await hydrated(page);

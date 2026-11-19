@@ -52,13 +52,12 @@ describe('renderAdminPage', () => {
     assert.ok(!html.includes(translate('posts.all')), "other sections' pages stay hidden");
   });
 
-  it("loads admin pages that haven't moved here in full, and opens the site in a new tab", async (t) => {
+  it('signs out with a full page load, and opens the site in a new tab', async (t) => {
     stubAppQuery(t);
     const html = await page('/admin/user');
-    // The passkeys page and logging out are still the admin app's; posts are served here
-    assert.match(link(html, '/admin/passkeys') ?? '', /data-rmx-document/);
     assert.match(link(html, '/admin/logout') ?? '', /data-rmx-document/);
-    assert.doesNotMatch(link(html, '/admin/post') ?? '', /data-rmx-document/);
+    assert.doesNotMatch(link(html, '/admin/passkeys') ?? '', /data-rmx-document/);
+    assert.doesNotMatch(link(html, '/admin') ?? '', /data-rmx-document/);
     assert.match(link(html, '/') ?? '', /target="_blank"/);
   });
 

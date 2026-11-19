@@ -1,3 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`media > uploadUrl 1`] = `"https://storage.googleapis.com/wonderboymusic/2018/01/31/foo.png"`;

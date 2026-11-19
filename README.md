@@ -7,8 +7,7 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 | Workspace                          | Description                                            |
 | ---------------------------------- | ------------------------------------------------------ |
 | [`graphql`](./graphql)             | GraphQL API server (Apollo Server, Prisma, PostgreSQL) |
-| [`web`](./web)                     | Public site (Remix 3, Tailwind CSS)                    |
-| [`admin`](./admin)                 | Admin and login, served under the public site's domain |
+| [`web`](./web)                     | Public site and admin (Remix 3, Tailwind CSS)          |
 | [`shared`](./shared)               | Logging, OpenTelemetry, GraphQL schema types, theme    |
 | [`e2e`](./e2e)                     | Playwright end-to-end tests of the admin               |
 | [`observability`](./observability) | OpenObserve backend and GUI deployment                 |
@@ -39,7 +38,6 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 | `pnpm dev`                      | Start GraphQL and the web app in development               |
 | `pnpm graphql:dev`              | Start GraphQL server in development (watch mode)           |
 | `pnpm web:dev`                  | Start web app in development                               |
-| `pnpm admin:dev`                | Start the admin app in development (port 3001)             |
 | `pnpm observability:dev`        | Start OpenObserve with Docker                              |
 | `pnpm observability:dev:podman` | Start OpenObserve with Podman                              |
 | `pnpm build`                    | Build all workspaces for production                        |
@@ -51,25 +49,25 @@ Both Node services emit structured JSON logs. When an `OTEL_EXPORTER_OTLP_ENDPOI
 | `pnpm lint-fix`                 | Lint, auto-fix and format                                  |
 | `pnpm knip`                     | Find unused files, exports, and dependencies               |
 | `pnpm test:web`                 | Run web workspace tests                                    |
-| `pnpm test:admin`               | Run admin workspace tests                                  |
+| `pnpm test:browser`             | Run web's in-browser tests, such as the post editor's      |
 | `pnpm test:e2e`                 | Run the end-to-end tests of the admin (see below)          |
 | `pnpm e2e:admin`                | Create the local test admin, or reset its password         |
 | `pnpm typecheck`                | Type-check all workspaces                                  |
 
 ## End-to-end tests
 
-[`e2e`](./e2e) is a [Playwright](https://playwright.dev) suite that signs in to the admin and drives it through the public site's server, as production does. It finds things by URL, role, label and visible text, so the same tests can check a rewrite of the admin. With Postgres running and `graphql/.env` in place (`pnpm bootstrap` does both):
+[`e2e`](./e2e) is a [Playwright](https://playwright.dev) suite that signs in to the admin and drives it, as production does. It finds things by URL, role, label and visible text. With Postgres running and `graphql/.env` in place (`pnpm bootstrap` does both):
 
 ```bash
 pnpm test:e2e
 ```
 
-That builds `shared`, runs `pnpm e2e:admin`, installs Playwright's Chromium if it's missing, and starts GraphQL on port 3202, the admin's production build on 3201 and the public site on 3200, so it can run alongside `pnpm dev`. The tests sign in once, keep the session in `e2e/.auth/`, and run in parallel against http://localhost:3200.
+That builds `shared`, runs `pnpm e2e:admin`, installs Playwright's Chromium if it's missing, and starts GraphQL on port 3202 and the public site, with the admin, on 3200, so it can run alongside `pnpm dev`. The tests sign in once, keep the session in `e2e/.auth/`, and run in parallel against http://localhost:3200.
 
 - **Test admin:** `pnpm e2e:admin` copies `e2e/.env.example` to `e2e/.env` (gitignored), fills in a random password, and creates `e2e-admin@highforthis.test` in the local database or resets its password. It only accepts `.test` addresses and databases on this machine.
 - **Data:** the tests use the database in `graphql/.env`, or `E2E_DATABASE_URL` from `e2e/.env`. They create what they need through GraphQL, name it with an `[e2e]` prefix, and remove it afterwards; each run also removes anything an interrupted run left behind. The media picker test needs more than 50 images, which the seed has.
 - **Debugging:** `pnpm --filter @highforthis/e2e test:ui` opens Playwright's UI mode. A failed test keeps a screenshot and a trace in `e2e/test-results/`.
-- **Running servers:** outside CI, servers already listening on those ports are reused, and the admin isn't rebuilt. Stop them to test admin changes.
+- **Running servers:** outside CI, servers already listening on those ports are reused, and web's CSS isn't rebuilt. Stop them to test changes.
 - **CI:** the "End-to-end tests" job in [`ci.yml`](./.github/workflows/ci.yml) runs the suite on every pull request, against a Postgres 18 service loaded from the seed, with retries. When it fails, the report, screenshots and traces are uploaded as the `playwright-report` artifact.
 
 ## GraphQL Codegen
@@ -79,8 +77,8 @@ The root `codegen.ts` generates:
 - `graphql/schema.graphql` — SDL schema file
 - `graphql/schema.json` — Introspection JSON
 - `graphql/types/graphql.ts` — TypeScript types for the server
-- `web/src/types/graphql.ts` — TypeScript types + operations for the client
-- `web/apollo/fragmentMatcher.js` — Fragment matcher for Apollo Client
+- `web/app/types/graphql.ts` — TypeScript types + operations for the site and admin
+- `shared/src/types/graphql.ts` and `shared/src/apollo/fragmentMatcher.js` — schema types and the fragment matcher for Apollo Client
 - `xcode/HighForThisAPI/` — Swift types for the app (via Apollo iOS, from `graphql/schema.graphql`)
 
 Requires the GraphQL server to be running locally:
@@ -94,7 +92,7 @@ pnpm codegen
 
 ## Observability
 
-The shared [`@highforthis/shared`](./shared) workspace initializes OpenTelemetry before either application loads, allowing automatic HTTP, Express, GraphQL, and runtime instrumentation plus structured Pino logging. It also holds what both web apps share: the generated GraphQL schema types, the Apollo cache configuration and the Tailwind theme. Requests receive an `x-request-id`; logs produced inside a trace also contain OpenTelemetry trace and span IDs.
+The shared [`@highforthis/shared`](./shared) workspace initializes OpenTelemetry before either application loads, allowing automatic HTTP, Express, GraphQL, and runtime instrumentation plus structured Pino logging. It also holds the generated GraphQL schema types, the Apollo cache configuration and the Tailwind theme. Requests receive an `x-request-id`; logs produced inside a trace also contain OpenTelemetry trace and span IDs.
 
 OpenObserve runs as a separate Railway service using the pinned image and configuration in [`observability`](./observability). A persistent Railway volume mounted at `/data` is required.
 
@@ -109,7 +107,7 @@ WEBAUTHN_RP_NAME=High For This Admin
 PASSWORD_LOGIN_ENABLED=true
 ```
 
-Set the WebAuthn variables on `graphql` and `PASSWORD_LOGIN_ENABLED` on `graphql` and `admin`. Keep password login enabled until at least two passkeys have been registered and tested, then set `PASSWORD_LOGIN_ENABLED=false` on both. For local registration, override the relying party values with `WEBAUTHN_RP_ID=localhost` and `WEBAUTHN_ORIGIN=http://localhost:3000`.
+Set the WebAuthn variables on `graphql` and `PASSWORD_LOGIN_ENABLED` on `graphql` and `web`. Keep password login enabled until at least two passkeys have been registered and tested, then set `PASSWORD_LOGIN_ENABLED=false` on both. For local registration, override the relying party values with `WEBAUTHN_RP_ID=localhost` and `WEBAUTHN_ORIGIN=http://localhost:3000`.
 
 The GraphQL Railway pre-deploy command runs `prisma db push` so the passkey tables exist before the new application starts.
 

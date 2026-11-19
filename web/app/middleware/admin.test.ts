@@ -109,25 +109,8 @@ describe('sameOrigin', () => {
 });
 
 describe('proxies', () => {
-  const router = createRouter({ middleware: [proxies({ servedHere: ['/admin/user'] })] });
+  const router = createRouter({ middleware: [proxies()] });
   router.get('/admin/user', () => new Response('from web'));
-  router.get('/admin/user/add', () => new Response('from web'));
-
-  it("serves the admin paths that moved here and forwards the rest, and the admin's data requests", async (t) => {
-    const forwarded: string[] = [];
-    t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL) => {
-      forwarded.push(new URL(input instanceof Request ? input.url : input).pathname);
-      return new Response('from admin');
-    });
-    const text = async (path: string) => (await router.fetch(new URL(path, origin))).text();
-
-    assert.equal(await text('/admin/user'), 'from web');
-    assert.equal(await text('/admin/user/add'), 'from web');
-    assert.equal(await text('/admin/user.data'), 'from admin');
-    assert.equal(await text('/admin/userland'), 'from admin');
-    assert.equal(await text('/admin/post'), 'from admin');
-    assert.deepEqual(forwarded, ['/admin/user.data', '/admin/userland', '/admin/post']);
-  });
 
   it("forwards uploads to GraphQL with the admin's token, which the browser can't read", async (t) => {
     process.env.TOKEN_SECRET = 'test-secret';
@@ -165,21 +148,22 @@ describe('proxies', () => {
     assert.equal(forwarded[1].authorization, null);
   });
 
-  it("forwards a moved section's pages that haven't moved yet", async (t) => {
-    const showsRouter = createRouter({
-      middleware: [proxies({ servedHere: ['/admin/show'], notYetMoved: ['/admin/show/listings'] })],
-    });
-    showsRouter.get('/admin/show', () => new Response('from web'));
+  it('forwards passkey sign-in and the API to GraphQL, and leaves the admin to this app', async (t) => {
     const forwarded: string[] = [];
     t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL) => {
       forwarded.push(new URL(input instanceof Request ? input.url : input).pathname);
-      return new Response('from admin');
+      return new Response('from graphql');
     });
-    const text = async (path: string) => (await showsRouter.fetch(new URL(path, origin))).text();
+    const text = async (path: string) => (await router.fetch(new URL(path, origin))).text();
 
-    assert.equal(await text('/admin/show'), 'from web');
-    assert.equal(await text('/admin/show/listings'), 'from admin');
-    assert.equal(await text('/admin/show/listings/v1'), 'from admin');
-    assert.deepEqual(forwarded, ['/admin/show/listings', '/admin/show/listings/v1']);
+    assert.equal(await text('/admin/user'), 'from web');
+    assert.equal(await text('/auth/passkeys/authenticate/options'), 'from graphql');
+    assert.equal(await text('/graphql'), 'from graphql');
+    assert.equal(await text('/uploads/image.jpg'), 'from graphql');
+    assert.deepEqual(forwarded, [
+      '/auth/passkeys/authenticate/options',
+      '/graphql',
+      '/uploads/image.jpg',
+    ]);
   });
 });

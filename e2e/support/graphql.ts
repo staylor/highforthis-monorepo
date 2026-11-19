@@ -64,6 +64,11 @@ interface Video {
   year: number;
 }
 
+interface Passkey {
+  id: string;
+  name: string | null;
+}
+
 interface SiteSettings {
   siteTitle: string | null;
   tagline: string | null;
@@ -355,6 +360,33 @@ export class GraphQL {
       if (!result[mutation]) {
         throw new Error(`${mutation} failed for ${removing.join(', ')}`);
       }
+    }
+
+    for (const passkey of await this.passkeys()) {
+      if (passkey.name?.startsWith(prefix)) {
+        await this.removePasskey(passkey.id);
+      }
+    }
+  }
+
+  /** The test admin's passkeys, from GraphQL's /auth/passkeys. */
+  async passkeys(): Promise<Passkey[]> {
+    const response = await this.request.get('/auth/passkeys', {
+      headers: { Authorization: `Bearer ${this.token}` },
+    });
+    const { passkeys, error } = await response.json();
+    if (!passkeys) {
+      throw new Error(`Listing passkeys failed: ${error ?? response.status()}`);
+    }
+    return passkeys;
+  }
+
+  async removePasskey(id: string) {
+    const response = await this.request.delete(`/auth/passkeys/${encodeURIComponent(id)}`, {
+      headers: { Authorization: `Bearer ${this.token}` },
+    });
+    if (!response.ok()) {
+      throw new Error(`Removing passkey ${id} failed: ${response.status()}`);
     }
   }
 }

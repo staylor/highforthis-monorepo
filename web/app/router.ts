@@ -4,6 +4,8 @@ import { staticFiles } from 'remix/middleware/static';
 import { createRouter, type RouterContext } from 'remix/router';
 
 import { artistsAdd, artistsEdit, artistsList } from './actions/admin/artists/controller.tsx';
+import { dashboard } from './actions/admin/dashboard/controller.tsx';
+import { login, logout } from './actions/admin/login/controller.tsx';
 import { mediaPicker } from './actions/admin/media/controller.ts';
 import {
   mediaAlbumCovers,
@@ -11,6 +13,11 @@ import {
   mediaList,
   mediaUpload,
 } from './actions/admin/media/library.tsx';
+import {
+  passkeyOptions,
+  passkeysList,
+  passkeyVerify,
+} from './actions/admin/passkeys/controller.tsx';
 import { podcastsAdd, podcastsEdit, podcastsList } from './actions/admin/podcasts/controller.tsx';
 import { postsAdd, postsEdit, postsList } from './actions/admin/posts/controller.tsx';
 import {
@@ -37,7 +44,7 @@ import {
 import { routes } from './routes.ts';
 
 // Reject WordPress probes, compress, serve public/ and the OpenObserve SDK bundles, forward
-// API and admin paths to their servers, then render. HTTP logging stays on the Node server in server.ts, because
+// API paths to GraphQL, then render. HTTP logging stays on the Node server in server.ts, because
 // pino-http needs Node's req/res.
 export const router = createRouter({
   middleware: [
@@ -63,6 +70,12 @@ declare module 'remix' {
 router.map(routes, controller);
 router.map(routes.podcast, podcastController);
 router.map(routes.shows, showsController);
+router.map(routes.login, login);
+router.map(routes.admin.dashboard, dashboard);
+router.map(routes.admin.logout, logout);
+router.map(routes.admin.passkeys.list, passkeysList);
+router.map(routes.admin.passkeys.options, passkeyOptions);
+router.map(routes.admin.passkeys.verify, passkeyVerify);
 router.map(routes.admin.users.list, usersList);
 router.map(routes.admin.users.add, usersAdd);
 router.map(routes.admin.users.edit, usersEdit);

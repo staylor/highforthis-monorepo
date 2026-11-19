@@ -3,7 +3,6 @@ import type { Handle, RemixNode } from 'remix/component';
 import { cn } from '../public/cn.ts';
 
 import { getAdmin } from './context.tsx';
-import { documentLoad } from './links.ts';
 import { adminHref, adminNav, isSectionActive, type NavSection } from './nav.ts';
 import { Icon } from './public/icon.tsx';
 
@@ -41,7 +40,7 @@ function SectionLink(handle: Handle<{ section: NavSection }>) {
         <a
           href={href}
           aria-current={active ? 'page' : undefined}
-          data-rmx-document={documentLoad(href)}
+          data-rmx-document={section.fullLoad || undefined}
           class={cn(linkBase, active ? linkActive : linkIdle)}
         >
           <Icon name={section.icon} class="size-5" />
@@ -57,7 +56,6 @@ function SectionLink(handle: Handle<{ section: NavSection }>) {
                   <a
                     href={pageHref}
                     aria-current={current ? 'page' : undefined}
-                    data-rmx-document={documentLoad(pageHref)}
                     class={cn(
                       'block rounded-md px-2 py-1 text-sm no-underline',
                       current
@@ -105,7 +103,6 @@ function Brand(handle: Handle) {
     return (
       <a
         href="/admin"
-        data-rmx-document={documentLoad('/admin')}
         class="truncate font-title text-2xl tracking-tight text-neutral-900 uppercase no-underline hover:text-pink dark:text-white"
       >
         {t('title')}

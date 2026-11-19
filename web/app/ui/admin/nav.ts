@@ -11,6 +11,8 @@ export interface NavSection extends NavPage {
   icon: IconName;
   /** Opens the public site in a new tab. */
   site?: boolean;
+  /** Loads the page in full rather than navigating in place, as signing out does. */
+  fullLoad?: boolean;
   pages?: NavPage[];
 }
 
@@ -23,7 +25,7 @@ export const adminNav: NavSection[][] = [
   [
     { path: '/', label: 'dashboard.label', icon: 'dashboard' },
     { path: '', label: 'admin.viewSite', icon: 'external', site: true },
-    { path: '/logout', label: 'login.logout', icon: 'logout' },
+    { path: '/logout', label: 'login.logout', icon: 'logout', fullLoad: true },
   ],
   [
     {

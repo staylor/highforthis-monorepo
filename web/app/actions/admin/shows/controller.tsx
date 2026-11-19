@@ -31,8 +31,9 @@ import {
   type BulkImportErrors,
 } from './data.ts';
 
-// Each form route has its own controller, since controller middleware doesn't apply to nested
-// route maps.
+// The admin's shows section, moved from the admin app's routes/admin/show: the list, the add and
+// edit pages, and the bulk add page (the venue listings page is in listings.tsx). Each form route
+// has its own controller, since controller middleware doesn't apply to nested route maps.
 
 const shows = routes.admin.shows;
 

@@ -1,4 +1,4 @@
-import { form, get, route } from 'remix/routes';
+import { form, get, post, route } from 'remix/routes';
 
 /**
  * Every route's URL pattern, shared by the server and browser for type-safe hrefs.
@@ -28,9 +28,18 @@ export const routes = route({
   }),
   videos: get('/videos(/:year)'),
   video: get('/video/:slug'),
-  // The admin pages this app renders; the rest of /admin goes to the admin app (see
-  // shared/src/adminPaths.ts). Each form route is a GET page and its POST.
+  // Signing in to the admin, with an optional error to show: unauthorized or failed
+  login: form('/login(/:error)'),
+  // The admin. Each form route is a GET page and its POST.
   admin: route('/admin', {
+    dashboard: get('/'),
+    logout: get('/logout'),
+    passkeys: route('/passkeys', {
+      list: form('/'),
+      // JSON for the browser's WebAuthn calls, forwarded to GraphQL with the admin's token
+      options: post('/options'),
+      verify: post('/verify'),
+    }),
     users: route('/user', {
       list: form('/'),
       add: form('/add'),

@@ -2,10 +2,13 @@ import type { OperationVariables } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
 import qs from 'qs';
 
+// Saving the admin's forms and deleting list rows. Its tests are in web/app/lib/admin.
+
 /**
  * What the admin's data functions take instead of a request, so they don't depend on a
- * framework. A failed operation is logged and comes back as empty data, which is how
- * `submitForm` and `deleteSelected` tell that it failed.
+ * framework. Web makes one (web/app/lib/admin/graphql.ts) that sends the signed-in admin's
+ * token. A failed operation is logged and comes back as empty data, which is how `submitForm`
+ * and `deleteSelected` tell that it failed.
  */
 export interface GraphQLClient {
   query<T>(query: DocumentNode, variables?: OperationVariables): Promise<T>;
