@@ -1,6 +1,7 @@
 import http from 'node:http';
 
 import { ApolloServer } from '@apollo/server';
+import { ApolloServerPluginCacheControlDisabled } from '@apollo/server/plugin/disabled';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { createRequestListener } from 'remix/node-fetch-server';
 
@@ -35,7 +36,12 @@ async function startServer(): Promise<void> {
   const server = new ApolloServer<AppContext>({
     typeDefs,
     resolvers,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      // No type or field sets a cache hint, so every answer was "no-store" (createApp still
+      // says so), and the plugin wrapped every field's resolver to find that out
+      ApolloServerPluginCacheControlDisabled(),
+    ],
   });
   await server.start();
 

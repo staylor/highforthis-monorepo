@@ -68,6 +68,10 @@ function graphqlHandler(server: ApolloServer<AppContext>) {
       context: async (): Promise<AppContext> => ({ authUser: authUser ?? undefined }),
     });
 
+    // What Apollo's cache-control plugin, turned off in server.ts, answered without cache hints
+    if (!httpGraphQLResponse.headers.has('cache-control')) {
+      httpGraphQLResponse.headers.set('cache-control', 'no-store');
+    }
     const init = {
       status: httpGraphQLResponse.status || 200,
       headers: [...httpGraphQLResponse.headers],
