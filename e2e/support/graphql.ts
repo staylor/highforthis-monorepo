@@ -75,6 +75,12 @@ interface MediaCrop {
   height: number | null;
 }
 
+interface Image {
+  id: string;
+  title: string | null;
+  caption: string | null;
+}
+
 interface Artist extends Entity {
   description: string | null;
   excludeFromSearch: boolean | null;
@@ -237,6 +243,30 @@ export class GraphQL {
     await this.query(
       `mutation ($input: MediaSettingsInput!) { updateMediaSettings(id: "media", input: $input) { id } }`,
       { input: { crops } }
+    );
+  }
+
+  /** The newest image in the media library. */
+  async firstImage() {
+    const { uploads } = await this.query<{ uploads: Connection<Image> }>(
+      `{ uploads(type: "image", first: 1) { count edges { node { id title ... on ImageUpload { caption } } } } }`
+    );
+    return uploads.edges[0].node;
+  }
+
+  async image(id: string) {
+    const { media } = await this.query<{ media: Image | null }>(
+      `query ($id: String!) { media(id: $id) { id title ... on ImageUpload { caption } } }`,
+      { id }
+    );
+    return media;
+  }
+
+  /** Puts an image's caption back, as a test that changes it must. */
+  async updateImageCaption(id: string, caption: string | null) {
+    await this.query(
+      `mutation ($id: String!, $input: UpdateMediaUploadInput!) { updateMediaUpload(id: $id, input: $input) { id } }`,
+      { id, input: { caption } }
     );
   }
 

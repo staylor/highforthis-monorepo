@@ -1,16 +1,67 @@
 import { gql } from 'graphql-tag';
 
-import { mediaFormFragment } from '#/components/Admin/Media/Form.graphql';
+import {
+  deleteSelected,
+  submitForm,
+  type FormArgs,
+  type GraphQLClient,
+  type RedirectResult,
+} from '@highforthis/shared/admin/forms';
+import { addPageOffset } from '@highforthis/shared/admin/listVariables';
+
 import type {
   AddAlbumCoversMutation,
   AlbumCoversAdminQuery,
   MediaAdminQuery,
   UploadsAdminQuery,
-} from '#/types/graphql';
-import { addPageOffset } from '#/utils/listVariables';
+} from '../../../types/graphql.ts';
 
-import { deleteSelected, submitForm, type FormArgs, type RedirectResult } from './forms';
-import type { GraphQLClient } from './graphql';
+// The media library's data, moved from the admin app's src/server/media.ts with the same GraphQL
+// operations. The featured media field's picker has its own, in data.ts.
+
+const mediaFormFragment = gql`
+  fragment MediaForm_media on MediaUpload {
+    destination
+    fileName
+    fileSize
+    id
+    mimeType
+    originalName
+    title
+    type
+    ... on ImageUpload {
+      altText
+      caption
+      crops {
+        fileName
+        fileSize
+        height
+        width
+      }
+      height
+      width
+    }
+    ... on AudioUpload {
+      description
+      duration
+      images {
+        fileName
+        fileSize
+        height
+        width
+      }
+    }
+    ... on VideoUpload {
+      description
+      duration
+      height
+      width
+    }
+    ... on FileUpload {
+      description
+    }
+  }
+`;
 
 const uploadsQuery = gql`
   query UploadsAdmin(
@@ -105,61 +156,67 @@ const addAlbumCoversMutation = gql`
   }
 `;
 
-// The media list, filtered by ?type=, ?mimeType= and ?search=
+/** The media list, filtered by ?type=, ?mimeType= and ?search=. */
 export function loadMediaList({
-  gql,
+  gql: client,
   searchParams,
 }: {
   gql: GraphQLClient;
   searchParams: URLSearchParams;
 }) {
   const variables = addPageOffset(searchParams);
-  ['type', 'mimeType', 'search'].forEach((key) => {
+  for (const key of ['type', 'mimeType', 'search']) {
     const value = searchParams.get(key);
     if (value) {
       variables[key] = value;
     }
-  });
-  return gql.query<UploadsAdminQuery>(uploadsQuery, variables);
+  }
+  return client.query<UploadsAdminQuery>(uploadsQuery, variables);
 }
 
 export function deleteMedia(args: FormArgs) {
   return deleteSelected({ ...args, mutation: deleteMediaMutation });
 }
 
-export function loadMedia({ gql, id }: { gql: GraphQLClient; id: string }) {
-  return gql.query<MediaAdminQuery>(mediaQuery, { id });
+export function loadMedia({ gql: client, id }: { gql: GraphQLClient; id: string }) {
+  return client.query<MediaAdminQuery>(mediaQuery, { id });
 }
 
 export function updateMedia({ id, ...args }: FormArgs & { id: string }) {
-  return submitForm({ ...args, mutation: updateMediaMutation, variables: { id } });
+  return submitForm({
+    ...args,
+    mutation: updateMediaMutation,
+    variables: { id },
+    // Text fields stay strings, such as a title of "2024", and emptying one clears it
+    skipKeys: ['title', 'description', 'caption', 'altText'],
+  });
 }
 
-// Searches Apple Music for albums by ?search=; without a search there's nothing to show yet
+/** Searches Apple Music for albums by ?search=. Without a search there's nothing to show yet. */
 export async function searchAlbumCovers({
-  gql,
+  gql: client,
   searchParams,
 }: {
   gql: GraphQLClient;
   searchParams: URLSearchParams;
-}) {
+}): Promise<{ appleMusicAlbums?: AlbumCoversAdminQuery['appleMusicAlbums'] | null }> {
   const term = searchParams.get('search')?.trim();
   if (!term) {
     return { appleMusicAlbums: null };
   }
-  return gql.query<AlbumCoversAdminQuery>(albumsQuery, { term });
+  return client.query<AlbumCoversAdminQuery>(albumsQuery, { term });
 }
 
-// Adds the checked albums' covers to the media library
+/** Adds the checked albums' covers to the media library. */
 export async function addAlbumCovers({
-  gql,
+  gql: client,
   formData,
 }: {
   gql: GraphQLClient;
   formData: FormData;
 }): Promise<{ failed: true } | RedirectResult> {
   const ids = formData.getAll('selected').map(String);
-  const result = await gql.mutate<Partial<AddAlbumCoversMutation>>(addAlbumCoversMutation, {
+  const result = await client.mutate<Partial<AddAlbumCoversMutation>>(addAlbumCoversMutation, {
     ids,
   });
   const added = result.addAlbumCovers;

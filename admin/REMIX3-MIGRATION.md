@@ -61,7 +61,7 @@ The public site in `web/` has run on Remix 3 since #45. The admin is still a Rea
 
 ### How the split works
 
-`web/app/router.ts` runs `proxies()` before rendering, and `web/app/middleware/app.ts` forwards `/admin`, `/auth/passkeys`, `/login`, `/modals` and `/upload` to the admin service. Moving a section means adding its routes to web's `routes.ts` and listing its path in `shared/src/adminPaths.ts`, which `proxies()` checks before forwarding `/admin`. Links between migrated and unmigrated pages must load in full, in both directions. Remix's client navigation would merge the admin app's HTML into a Remix page without running its scripts, and React Router's would ask the admin app for `.data` it no longer has. The foundations handle both (see below).
+`web/app/router.ts` runs `proxies()` before rendering, and `web/app/middleware/app.ts` forwards `/admin`, `/auth/passkeys`, `/login` and `/modals` to the admin service, and `/upload` to GraphQL with the admin's token. Moving a section means adding its routes to web's `routes.ts` and listing its path in `shared/src/adminPaths.ts`, which `proxies()` checks before forwarding `/admin`. Links between migrated and unmigrated pages must load in full, in both directions. Remix's client navigation would merge the admin app's HTML into a Remix page without running its scripts, and React Router's would ask the admin app for `.data` it no longer has. The foundations handle both (see below).
 
 ### Sessions: nobody needs to be signed out
 
@@ -144,6 +144,13 @@ These are in web, and nothing is served there yet:
      - The admin app's listings route, `server/listings.ts` and `utils/splitArtists.ts` are removed in the same change, which leaves the admin app with no shows routes.
      - `e2e/tests/listings.spec.ts` chooses a venue whose listings page Ticketmaster can't use, which fails without a request, and checks the page says why. Real listings come from Bowery Presents and Ticketmaster, which the tests can't reach, so the controller tests cover adding them.
 4. **Media:** upload, album covers, and the pickers.
+   - **The media library has moved**: web serves `/admin/media`, with the list, the upload page, the album covers page and the edit page (`web/app/actions/admin/media/library.tsx`). The featured media picker moved with artists. The admin app keeps `/modals/media` and `/modals/video` and its own pickers for the post editor, which move with posts.
+     - The list filters by type and MIME type with two `ListFilter`s, and `RowTitle` shows the file name under the title.
+     - The upload page is a client entry (`media-uploader.tsx`) that posts each dropped or chosen file to `/upload` with its progress. It gained a file input beside the drop zone, and says when an upload fails. Web now forwards `/upload` to GraphQL itself with the admin's token, so the admin app's upload middleware is gone.
+     - The album covers page searches Apple Music with the list's search box, and its results are a client entry (`cover-picker.tsx`) that counts the picked covers.
+     - The edit page shows the title, the upload (an image's 300px crop, or a player) and its text fields, with a details box for the file's type, size and crops. File sizes are formatted as the admin app's `filesize` package did, without the package. Text fields stay strings, and emptying one clears it.
+     - The admin app's media routes, media form, info panels, list thumbnail, `server/media.ts`, their tests and the `filesize` dependency are removed in the same change.
+     - `e2e/tests/media.spec.ts` filters the list, edits an image's caption and puts it back, and uploads a file to a stubbed `/upload`, since GraphQL would store it.
 5. **Posts:** the editor client entry, the featured media field, and both pickers.
 6. **Login and passkeys:** move sign-in, write the session cookie from web, stop forwarding, then retire the admin service, its Railway variables and web's `ADMIN_HOST`.
 
@@ -157,7 +164,7 @@ Run the e2e suite after each step. It drives everything through web's URL, so it
 - **Inline toggles:** each becomes a client entry that posts a small form (or `fetch`) and re-renders. These are the simplest client entries in the admin.
 - **Pickers:** the `/modals/*` routes already return the picker's data per cursor. Remix frames (`<Frame>`, see the "Streaming UI with Frames" guide) load another route's HTML into the page and reload it in place, which fits a picker. The alternative is a client entry that fetches the next page.
 - **Editor:** `core/editor.ts`, `inlineToolbar.ts` and `blockToolbar.ts` have no React. Their stores currently feed React through `useSyncExternalStore`. In Remix, a client entry subscribes and calls `handle.update()`. The trial's spike (`app/actions/admin/post/public/post-editor.tsx` on `explore/remix-3`) shows core Lexical binding to a `contenteditable` from a `ref()` mixin. Image and video nodes already render their own DOM.
-- **Uploads:** the admin's Express middleware adds the session token to `/upload` requests before proxying them to GraphQL. Web's `remix/fetch-proxy` can do the same; the trial kept that injection.
+- **Uploads:** done. Web forwards `/upload` to GraphQL itself and adds the session token, as the admin's Express middleware did (`forwardUpload` in `web/app/middleware/app.ts`).
 - **Passkeys and login:** ported in the trial (`app/actions/login/`, `app/actions/admin/passkeys/`), with `@simplewebauthn/browser` served unbundled.
 - **Translations:** `react-i18next` doesn't apply. Server components read `t` from context, as web's do, and client entries get their strings as props.
 - **Browser packages:** web's `assets.ts` serves only packages in `allowPackages`, and under pnpm each must be a direct dependency of web. On Lexical 0.53 the editor needs `lexical`, `@lexical/rich-text`, `list`, `history`, `selection`, `utils` and `code-core`, and their dependencies `@lexical/clipboard`, `dragon`, `extension`, `html` and `a11y`, plus `@preact/signals-core` at the version `@lexical/extension` asks for (`^1.14.4`), so the browser doesn't get an older copy from web. `@lexical/internal` is build-time only and isn't needed.

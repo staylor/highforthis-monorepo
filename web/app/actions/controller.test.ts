@@ -91,14 +91,7 @@ describe('admin', () => {
       forwarded.push(`${url.origin}${url.pathname}`);
       return new Response('from admin', { status: 200 });
     });
-    for (const path of [
-      '/admin',
-      '/admin/post',
-      '/admin.data',
-      '/login',
-      '/modals/video',
-      '/upload',
-    ]) {
+    for (const path of ['/admin', '/admin/post', '/admin.data', '/login', '/modals/video']) {
       const response = await router.fetch(new URL(path, origin));
       assert.equal(await response.text(), 'from admin', path);
     }
@@ -108,7 +101,6 @@ describe('admin', () => {
       'http://localhost:3001/admin.data',
       'http://localhost:3001/login',
       'http://localhost:3001/modals/video',
-      'http://localhost:3001/upload',
     ]);
   });
 
