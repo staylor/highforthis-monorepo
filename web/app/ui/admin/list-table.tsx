@@ -7,6 +7,7 @@ import { cn } from '../public/cn.ts';
 import { getAdmin } from './context.tsx';
 import { documentLoad } from './links.ts';
 import { Message } from './message.tsx';
+import { AutoSubmitSelect } from './public/auto-submit-select.tsx';
 import { buttonClass, inputBase } from './public/styles.ts';
 
 // Works as plain HTML: each row's checkbox belongs to the bulk actions form through the `form`
@@ -69,12 +70,31 @@ export function RowActions(handle: Handle<{ editHref: string; viewHref?: string;
   };
 }
 
-/** The search box above a list: a GET form, so searching starts again from the first page. */
+// What a list's GET forms leave out when they keep the page's other query parameters: the page
+// number, since a new search or filter starts again from the first page, and the messages a
+// redirect showed.
+const notKept = new Set(['page', 'deleted', 'deleteFailed', 'message', 'saveFailed']);
+
+/** Hidden inputs for the page's query parameters other than `name`, so a GET form keeps them. */
+function KeptParams(handle: Handle<{ name: string }>) {
+  return () => {
+    const { url } = getAdmin(handle);
+    return [...url.searchParams]
+      .filter(([key]) => key !== handle.props.name && !notKept.has(key))
+      .map(([key, value]) => <input type="hidden" name={key} value={value} />);
+  };
+}
+
+/**
+ * The search box above a list: a GET form, so searching starts again from the first page. It
+ * keeps the list's filters.
+ */
 export function Search(handle: Handle<{ placeholder: string }>) {
   return () => {
     const { url } = getAdmin(handle);
     return (
       <form method="get" class="mb-2 w-full sm:float-right sm:w-64">
+        <KeptParams name="search" />
         <input
           type="search"
           name="search"
@@ -83,6 +103,42 @@ export function Search(handle: Handle<{ placeholder: string }>) {
           aria-label={handle.props.placeholder}
           class={cn(inputBase, 'w-full')}
         />
+      </form>
+    );
+  };
+}
+
+interface ListFilterProps {
+  /** The query parameter it sets, such as `year`. */
+  name: string;
+  /** The empty choice, which removes the filter. */
+  placeholder: string;
+  choices: { label: string; value: string }[];
+}
+
+/**
+ * A filter beside a list's bulk actions, such as the videos' year: a GET form that keeps the
+ * search and starts again from the first page. It submits as soon as it changes, or with Apply
+ * without JavaScript.
+ */
+export function ListFilter(handle: Handle<ListFilterProps>) {
+  return () => {
+    const { t, url } = getAdmin(handle);
+    const { name, placeholder, choices } = handle.props;
+    return (
+      <form method="get" class="flex items-center gap-2">
+        <KeptParams name={name} />
+        <AutoSubmitSelect
+          name={name}
+          value={url.searchParams.get(name) ?? ''}
+          placeholder={placeholder}
+          choices={choices}
+        />
+        <noscript>
+          <button type="submit" class={buttonClass()}>
+            {t('table.apply')}
+          </button>
+        </noscript>
       </form>
     );
   };
@@ -148,13 +204,15 @@ interface ListTableProps {
   connection?: Connection | null;
   columns: Column[];
   deletable?: boolean;
+  /** Filters beside the bulk actions, such as a `ListFilter`. */
+  filters?: RemixNode;
   perPage?: number;
 }
 
 export function ListTable(handle: Handle<ListTableProps>) {
   return () => {
     const { t, url } = getAdmin(handle);
-    const { connection, columns, deletable = true, perPage = PER_PAGE } = handle.props;
+    const { connection, columns, deletable = true, filters, perPage = PER_PAGE } = handle.props;
     const deleteFailed = Number(url.searchParams.get('deleteFailed') || 0);
     const failedMessage =
       deleteFailed > 0 ? (
@@ -162,9 +220,11 @@ export function ListTable(handle: Handle<ListTableProps>) {
       ) : null;
 
     if (!connection?.edges.length) {
+      // The filters stay, so a filter that matches nothing can be changed
       return (
         <>
           {failedMessage}
+          {filters && <section class="clear-both my-1.5 flex flex-wrap gap-2">{filters}</section>}
           <p class="my-10">{t('table.noItems')}</p>
         </>
       );
@@ -203,6 +263,7 @@ export function ListTable(handle: Handle<ListTableProps>) {
                 </button>
               </form>
             )}
+            {filters}
           </div>
           <Pagination connection={connection} perPage={perPage} class="text-right" />
         </section>
