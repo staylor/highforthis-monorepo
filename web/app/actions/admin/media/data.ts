@@ -30,6 +30,7 @@ const mediaPickerQuery = gql`
       edges {
         node {
           destination
+          fileName
           id
           title
           ... on ImageUpload {
@@ -70,12 +71,17 @@ const cropUrl = (
   return crop ? uploadUrl(destination, crop.fileName) : null;
 };
 
+/**
+ * The field's current media, as the admin app showed it: an image by its 300px crop, and audio
+ * in a player.
+ */
 export function selectedMedia(
   media: ReadonlyArray<FeaturedMedia_MediaFragment | null> | null | undefined
 ): SelectedMedia[] {
   return (media ?? []).filter(Boolean).map((upload) => ({
     id: upload!.id,
     preview: 'crops' in upload! ? cropUrl(upload!.destination, upload!.crops, 300) : null,
+    audio: upload!.type === 'audio' ? uploadUrl(upload!.destination, upload!.fileName) : null,
   }));
 }
 
@@ -85,7 +91,10 @@ interface MediaPickerPage {
   hasNextPage: boolean;
 }
 
-/** A page of uploads of one type for the picker: 150px thumbnails, and the crop it shows once picked. */
+/**
+ * A page of uploads of one type for the picker: 150px thumbnails, and what the field shows once
+ * one is picked, its 300px crop or, for audio, the file to play.
+ */
 export async function loadMediaPickerPage({
   gql: client,
   type,
@@ -107,6 +116,7 @@ export async function loadMediaPickerPage({
       title: node.title ?? '',
       thumb: cropUrl(node.destination, crops, 150),
       preview: cropUrl(node.destination, crops, 300),
+      audio: 'images' in node ? uploadUrl(node.destination, node.fileName) : null,
     };
   });
   return {

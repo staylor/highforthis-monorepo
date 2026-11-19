@@ -109,6 +109,12 @@ These are in web, and nothing is served there yet:
      - The admin app's venue routes, venue form, `server/venues.ts` and the `Entity` components artists and venues shared are removed in the same change.
      - `e2e/tests/venues.spec.ts` covers the section, and `delete-failure.spec.ts` now runs against web's venue list.
 2. **Podcast, videos, settings:** more forms, video list filters, and the crops editor.
+   - **Podcasts has moved.** Web serves `/admin/podcast` (`web/app/actions/admin/podcasts/`).
+     - The featured media field now picks audio too: `/admin/media-picker/audio` lists audio with its cover art, and the field plays the picked file. The form names its two fields `image` and `audio`.
+     - A list row can link to its public page (`RowActions`' `viewHref`), which loads in full.
+     - Saving keeps a title like "2024" a string.
+     - The admin app's podcast routes, podcast form and `server/podcasts.ts` are removed in the same change.
+     - `e2e/tests/podcasts.spec.ts` covers the section and both pickers in a browser.
 3. **Shows:** the bulk CSV page and the listings page are the largest route files.
 4. **Media:** upload, album covers, and the pickers.
 5. **Posts:** the editor client entry, the featured media field, and both pickers.

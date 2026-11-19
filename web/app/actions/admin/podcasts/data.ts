@@ -1,11 +1,35 @@
 import { gql } from 'graphql-tag';
 
-import { podcastFormFragment } from '#/components/Admin/Podcast/Form.graphql';
-import type { PodcastEditQuery, PodcastsAdminQuery } from '#/types/graphql';
-import { addPageOffset, addSearchParam } from '#/utils/listVariables';
+import {
+  deleteSelected,
+  submitForm,
+  type FormArgs,
+  type GraphQLClient,
+} from '@highforthis/shared/admin/forms';
+import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVariables';
 
-import { deleteSelected, submitForm, type FormArgs } from './forms';
-import type { GraphQLClient } from './graphql';
+import type { PodcastEditQuery, PodcastsAdminQuery } from '../../../types/graphql.ts';
+import { featuredMediaFragment } from '../media/data.ts';
+
+// The podcasts section's data, moved from the admin app's src/server/podcasts.ts with the same
+// GraphQL operations. The list asks only for what it shows.
+
+const podcastFormFragment = gql`
+  fragment PodcastForm_podcast on Podcast {
+    audio {
+      ...FeaturedMedia_media
+      id
+    }
+    description
+    id
+    image {
+      ...FeaturedMedia_media
+      id
+    }
+    title
+  }
+  ${featuredMediaFragment}
+`;
 
 const podcastsQuery = gql`
   query PodcastsAdmin($after: String, $first: Int, $search: String) {
@@ -13,25 +37,7 @@ const podcastsQuery = gql`
       count
       edges {
         node {
-          audio {
-            destination
-            id
-            images {
-              fileName
-              width
-            }
-            type
-          }
           id
-          image {
-            crops {
-              fileName
-              width
-            }
-            destination
-            id
-            type
-          }
           title
         }
       }
@@ -74,23 +80,26 @@ const updatePodcastMutation = gql`
   ${podcastFormFragment}
 `;
 
+// Keeps a title like "2024" a string, as with artists' and venues' names
+const skipKeys = ['title'];
+
 export function loadPodcasts({
-  gql,
+  gql: client,
   searchParams,
 }: {
   gql: GraphQLClient;
   searchParams: URLSearchParams;
 }) {
   const variables = addSearchParam(searchParams, addPageOffset(searchParams));
-  return gql.query<PodcastsAdminQuery>(podcastsQuery, variables);
+  return client.query<PodcastsAdminQuery>(podcastsQuery, variables);
 }
 
 export function deletePodcasts(args: FormArgs) {
   return deleteSelected({ ...args, mutation: deletePodcastMutation });
 }
 
-export function loadPodcast({ gql, id }: { gql: GraphQLClient; id: string }) {
-  return gql.query<PodcastEditQuery>(podcastQuery, { id });
+export function loadPodcast({ gql: client, id }: { gql: GraphQLClient; id: string }) {
+  return client.query<PodcastEditQuery>(podcastQuery, { id });
 }
 
 export function createPodcast(args: FormArgs) {
@@ -98,9 +107,10 @@ export function createPodcast(args: FormArgs) {
     ...args,
     mutation: createPodcastMutation,
     createMutation: 'createPodcast',
+    skipKeys,
   });
 }
 
 export function updatePodcast({ id, ...args }: FormArgs & { id: string }) {
-  return submitForm({ ...args, mutation: updatePodcastMutation, variables: { id } });
+  return submitForm({ ...args, mutation: updatePodcastMutation, variables: { id }, skipKeys });
 }

@@ -41,6 +41,11 @@ export const routes = route({
       add: form('/add'),
       edit: form('/:id'),
     }),
+    podcasts: route('/podcast', {
+      list: form('/'),
+      add: form('/add'),
+      edit: form('/:id'),
+    }),
     venues: route('/venue', {
       list: form('/'),
       add: form('/add'),

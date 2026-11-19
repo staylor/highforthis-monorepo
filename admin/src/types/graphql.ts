@@ -31,8 +31,6 @@ export type MediaForm_MediaFragment =
   | MediaForm_Media_VideoUpload_Fragment
 ;
 
-export type PodcastForm_PodcastFragment = { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null };
-
 export type TextNodes_LinebreakNodeFragment = { __typename?: 'LinebreakNode', type?: string | null, version?: number | null };
 
 export type TextNodes_TextNodeFragment = { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null };
@@ -238,44 +236,6 @@ export type VideoModalQueryVariables = Types.Exact<{
 
 
 export type VideoModalQuery = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', edges: Array<{ __typename?: 'VideoEdge', node: { __typename?: 'Video', dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
-
-export type PodcastsAdminQueryVariables = Types.Exact<{
-  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
-}>;
-
-
-export type PodcastsAdminQuery = { __typename?: 'Query', podcasts?: { __typename?: 'PodcastConnection', count: number, edges: Array<{ __typename?: 'PodcastEdge', node: { __typename?: 'Podcast', id: string, title: string, audio?: { __typename?: 'AudioUpload', destination: string, id: string, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null } | null, image?: { __typename?: 'ImageUpload', destination: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
-
-export type DeletePodcastMutationVariables = Types.Exact<{
-  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
-}>;
-
-
-export type DeletePodcastMutation = { __typename?: 'Mutation', removePodcast?: boolean | null };
-
-export type PodcastEditQueryVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-}>;
-
-
-export type PodcastEditQuery = { __typename?: 'Query', podcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
-
-export type CreatePodcastMutationVariables = Types.Exact<{
-  input: Types.CreatePodcastInput;
-}>;
-
-
-export type CreatePodcastMutation = { __typename?: 'Mutation', createPodcast?: { __typename?: 'Podcast', id: string } | null };
-
-export type UpdatePodcastMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.UpdatePodcastInput;
-}>;
-
-
-export type UpdatePodcastMutation = { __typename?: 'Mutation', updatePodcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
 
 export type PostsAdminQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
