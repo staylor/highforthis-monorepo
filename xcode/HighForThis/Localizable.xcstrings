@@ -152,6 +152,18 @@
         }
       }
     },
+    "dateAndVenue %@ %@" : {
+      "comment" : "A show's date and venue, in one line.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
     "done" : {
       "extractionState": "manual",
       "localizations": {
