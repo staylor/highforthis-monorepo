@@ -50,8 +50,7 @@ test('adds a venue with its details, closes it from the list and deletes it', as
   const row = page.getByRole('row').filter({ hasText: name });
   const closed = row.getByRole('checkbox', { name: `Permanently Closed: ${name}` });
   await expect(closed).not.toBeChecked();
-  // A click before the box's client entry hydrates doesn't save
-  await hydrated(page);
+  // A click before the box's client entry hydrates is replayed, and saves, once it has
   await closed.check();
   await expect.poll(async () => (await graphql.venue(id))?.permanentlyClosed).toBe(true);
   await page.reload();

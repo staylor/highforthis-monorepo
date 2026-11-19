@@ -47,7 +47,10 @@ export async function addedId(page: Page, section: string): Promise<string> {
   return editPage.exec(page.url())![1];
 }
 
-/** Waits for the page's client entries to hydrate; until then, their controls do nothing. */
+/**
+ * Waits for the page's client entries to hydrate. Until then their buttons and selects do nothing;
+ * text typed, boxes toggled and files chosen are replayed once they hydrate.
+ */
 export async function hydrated(page: Page) {
   await expect(page.locator('html[data-hydrated]')).toHaveCount(1);
 }

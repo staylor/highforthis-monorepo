@@ -52,8 +52,7 @@ test('adds an artist with featured media, edits them, toggles search and deletes
   const row = page.getByRole('row').filter({ hasText: name });
   const toggle = row.getByRole('checkbox', { name: `Exclude from search: ${name}` });
   await expect(toggle).toBeChecked();
-  // A click before the box's client entry hydrates doesn't save
-  await hydrated(page);
+  // A click before the box's client entry hydrates is replayed, and saves, once it has
   await toggle.uncheck();
   await expect.poll(async () => (await graphql.artist(id))?.excludeFromSearch).toBe(false);
   await page.reload();

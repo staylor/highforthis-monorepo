@@ -56,11 +56,8 @@ describe('adminSessionCookie', () => {
   });
 
   it('is secure in production, as is signing out', (t) => {
-    const nodeEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'production';
-    t.after(() => {
-      process.env.NODE_ENV = nodeEnv;
-    });
+    // process.env takes only plain values, so the whole object is swapped for a copy
+    t.mock.property(process, 'env', { ...process.env, NODE_ENV: 'production' });
     assert.match(adminSessionCookie('test-token'), /; Secure$/);
     assert.equal(
       expiredAdminCookie(),
