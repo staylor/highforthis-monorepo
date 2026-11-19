@@ -43,7 +43,8 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
   await field(page, 'Title').fill(editedTitle);
   await field(page, 'Notes').fill('Added by the end-to-end tests');
   await page.getByRole('button', { name: 'Update Show' }).click();
-  await expect(page.getByText('Show updated.')).toBeVisible();
+  // The message is already showing from the add, so wait for the save itself
+  await expect.poll(async () => (await graphql.show(id))?.title).toBe(editedTitle);
   await page.reload();
   await expect(field(page, 'Title')).toHaveValue(editedTitle);
   await expect(field(page, 'Notes')).toHaveValue('Added by the end-to-end tests');
