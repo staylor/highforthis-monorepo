@@ -11,7 +11,6 @@ export default [
   route('admin', 'routes/admin/layout.tsx', [
     index('routes/admin/index.tsx'),
     route('logout', 'routes/admin/logout.ts'),
-    ...adminRoutes('artist'),
     ...prefix('media', [
       index('routes/admin/media/index.tsx'),
       route('upload', 'routes/admin/media/upload.tsx'),
