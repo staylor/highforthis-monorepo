@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { addedId, field } from '../support/ui.ts';
+import { addedId, field, hydrated } from '../support/ui.ts';
 
 test('adds a venue with its details, closes it from the list and deletes it', async ({
   page,
@@ -51,8 +51,8 @@ test('adds a venue with its details, closes it from the list and deletes it', as
   const row = page.getByRole('row').filter({ hasText: name });
   const closed = row.getByRole('checkbox', { name: `Permanently Closed: ${name}` });
   await expect(closed).not.toBeChecked();
-  // A click before the box's client entry has loaded doesn't save, so it waits for the scripts
-  await page.waitForLoadState('networkidle');
+  // A click before the box's client entry hydrates doesn't save
+  await hydrated(page);
   await closed.check();
   await expect.poll(async () => (await graphql.venue(id))?.permanentlyClosed).toBe(true);
   await page.reload();
