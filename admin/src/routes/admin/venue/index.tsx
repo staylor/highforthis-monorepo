@@ -9,7 +9,7 @@ import { Heading, HeaderAdd } from '#/components/Admin/styles';
 import Message from '#/components/Form/Message';
 import { deleteVenues, loadVenues, setVenueFlag } from '#/server/venues';
 import type { Columns } from '#/types';
-import { deleteAction, graphqlClient, isDeleteIntent } from '#/utils/route.server';
+import { deleteAction, graphqlClient, isListTableIntent } from '#/utils/route.server';
 
 import type { Route } from './+types/index';
 
@@ -19,7 +19,7 @@ export async function loader({ request, context, url }: Route.LoaderArgs) {
 
 export async function action(args: Route.ActionArgs) {
   const { request } = args;
-  if (!(await isDeleteIntent(request))) {
+  if (!(await isListTableIntent(request))) {
     return setVenueFlag({ gql: graphqlClient(args), formData: await request.formData() });
   }
   return deleteAction(args, deleteVenues);

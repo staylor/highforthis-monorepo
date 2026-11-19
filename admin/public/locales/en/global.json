@@ -304,6 +304,7 @@
     "venue": "Venue"
   },
   "table": {
+    "apply": "Apply",
     "bulkActions": "Bulk Actions",
     "delete": "Delete",
     "deleteFailed_one": "Couldn't delete the selected item. If your session has expired, sign in and try again.",

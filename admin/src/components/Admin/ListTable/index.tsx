@@ -1,8 +1,9 @@
 import type { ReactNode, ChangeEvent } from 'react';
 import { useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, useSubmit } from 'react-router';
+import { Form, useSearchParams } from 'react-router';
 
+import Button from '#/components/Button';
 import Checkbox from '#/components/Form/Checkbox';
 import Message from '#/components/Form/Message';
 import Select from '#/components/Form/Select';
@@ -62,7 +63,6 @@ function ListTable({
   perPage = 20,
 }: ListTableProps) {
   const { t } = useTranslation();
-  const submit = useSubmit();
   const [searchParams] = useSearchParams();
   const deleteFailed = Number(searchParams.get('deleteFailed') || 0);
   const deleteFailedMessage = deleteFailed > 0 && (
@@ -72,14 +72,6 @@ function ListTable({
     checked: [],
     all: false,
   });
-
-  function handleChange(e: ChangeEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    if (e.currentTarget.bulkActions.value === 'deleteAll') {
-      submit(e.currentTarget, { method: 'post' });
-    }
-  }
 
   const toggleAll = (e: ChangeEvent<HTMLInputElement>) => {
     const checkbox = e.target as HTMLInputElement;
@@ -128,18 +120,20 @@ function ListTable({
       <section className={cn(toolbarClass, 'my-1.5')}>
         <div className="flex grow flex-wrap items-center gap-2">
           {deletable && (
-            <form method="post" onChange={handleChange}>
-              <input type="hidden" name="intent" value="delete" />
+            // The chosen action is the form's intent, so Apply with none chosen does nothing
+            <Form method="post" className="flex items-center gap-2">
               {state.checked.map((id: string) => (
                 <input key={id} type="hidden" name="ids" value={id} />
               ))}
               <Select
                 key="bulk"
-                name="bulkActions"
+                name="intent"
+                aria-label={t('table.bulkActions')}
                 placeholder={t('table.bulkActions')}
-                choices={[{ label: t('table.delete'), value: 'deleteAll' }]}
+                choices={[{ label: t('table.delete'), value: 'delete' }]}
               />
-            </form>
+              <Button type="submit">{t('table.apply')}</Button>
+            </Form>
           )}
           {filters}
         </div>
