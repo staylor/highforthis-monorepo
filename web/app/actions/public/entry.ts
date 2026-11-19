@@ -23,9 +23,9 @@ const app = run({
 });
 
 // Marks the page once its client entries have hydrated, which the end-to-end tests wait for:
-// until then, their controls do nothing. A navigation in place renders the next page into this
-// document and settles once its client entries have hydrated, so the mark comes off when one
-// starts and goes back on when it settles.
+// until then, their buttons and selects do nothing. A navigation in place renders the next page
+// into this document and settles once its client entries have hydrated, so the mark comes off
+// when one starts and goes back on when it settles.
 const root = document.documentElement;
 const markHydrated = () => root.setAttribute('data-hydrated', '');
 app

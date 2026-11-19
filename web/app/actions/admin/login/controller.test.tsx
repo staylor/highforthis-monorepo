@@ -40,7 +40,6 @@ describe('signing in', () => {
   });
   afterEach(() => {
     delete process.env.TOKEN_SECRET;
-    delete process.env.PASSWORD_LOGIN_ENABLED;
   });
 
   it('shows the passkey button and the password form, without the nav', async (t) => {
@@ -65,7 +64,7 @@ describe('signing in', () => {
   });
 
   it('leaves out the password form when password login is off', async (t) => {
-    process.env.PASSWORD_LOGIN_ENABLED = 'false';
+    t.mock.property(process, 'env', { ...process.env, PASSWORD_LOGIN_ENABLED: 'false' });
     stubGraphQL(t, {});
     const html = await (await router.fetch(new URL('/login', origin))).text();
     assert.match(html, /Sign in with a passkey/);

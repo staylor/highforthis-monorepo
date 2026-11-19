@@ -42,8 +42,7 @@ test('uploads a file and links to its edit page', async ({ page }) => {
   );
   await page.goto('/admin/media/upload');
   await expect(page.getByRole('heading', { name: 'Upload Media' })).toBeVisible();
-  // Chosen files upload once the uploader's client entry has hydrated
-  await hydrated(page);
+  // Files chosen before the uploader's client entry hydrates are replayed, and upload, once it has
   await page.getByLabel('Choose Files').setInputFiles({
     name: 'e2e.txt',
     mimeType: 'text/plain',

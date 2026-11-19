@@ -3,8 +3,8 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '../support/test.ts';
 import { addedId, cell, field, hydrated } from '../support/ui.ts';
 
-// The artists picker, the date and the list's "attended" box are client entries, which work once the
-// page's scripts have loaded.
+// The artists picker and the date are client entries, which work once the page's scripts have
+// loaded.
 async function openAddForm(page: Page) {
   await page.goto('/admin/show/add');
   await hydrated(page);
@@ -50,15 +50,13 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
   await expect(field(page, 'Notes')).toHaveValue('Added by the end-to-end tests');
 
   await page.goto(`/admin/show?search=${encodeURIComponent(prefix)}`);
-  // A click before the "attended" box's client entry hydrates doesn't save
-  await hydrated(page);
+  // A click before the "attended" box's client entry hydrates is replayed, and saves, once it has
   const row = page.getByRole('row').filter({ hasText: editedTitle });
   const attended = (await cell(page, row, 'Attended')).getByRole('checkbox');
   await expect(attended).not.toBeChecked();
   await attended.check();
   await expect.poll(async () => (await graphql.show(id))?.attended).toBe(true);
   await page.reload();
-  await hydrated(page);
   await expect(attended).toBeChecked();
   await attended.uncheck();
   await expect.poll(async () => (await graphql.show(id))?.attended).toBe(false);

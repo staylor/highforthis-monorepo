@@ -362,8 +362,8 @@ export class GraphQL {
       }
     }
 
-    // The test admin only has the passkeys tests added. One added without its name, as when the
-    // name field was typed in too early, is removed too.
+    // The test admin only has the passkeys tests added, so one added without its name is removed
+    // too.
     for (const passkey of await this.passkeys()) {
       if (passkey.name === null || passkey.name.startsWith(prefix)) {
         await this.removePasskey(passkey.id);
