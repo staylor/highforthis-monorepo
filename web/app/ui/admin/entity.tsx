@@ -28,8 +28,9 @@ interface EntityShow {
 const SHOWN = 10;
 
 /**
- * An artist's or venue's shows, newest first, each linking to its edit page. The first ten
- * show, and the rest are under "Show More", a <details> element, so it opens without JavaScript.
+ * An artist's or venue's shows under a "Shows" label, newest first, each linking to its edit
+ * page. The first ten show, and the rest are under "Show More", a <details> element, so it opens
+ * without JavaScript.
  */
 export function EntityShows(handle: Handle<{ shows: EntityShow[] }>) {
   return () => {
@@ -48,7 +49,10 @@ export function EntityShows(handle: Handle<{ shows: EntityShow[] }>) {
     };
     const addHref = '/admin/show/add';
     return (
-      <>
+      <div class="my-6 block">
+        <span class="mb-1 block text-sm tracking-wide text-gray-700 dark:text-neutral-300">
+          {t('entity.shows')}
+        </span>
         <ul>{shows.slice(0, SHOWN).map(item)}</ul>
         {shows.length > SHOWN && (
           <details>
@@ -63,7 +67,7 @@ export function EntityShows(handle: Handle<{ shows: EntityShow[] }>) {
         >
           {t('shows.add')}
         </a>
-      </>
+      </div>
     );
   };
 }
