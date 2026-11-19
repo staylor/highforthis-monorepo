@@ -5,15 +5,11 @@ import { createAdminGraphQLClient } from '../lib/admin/graphql.ts';
 import { adminToken, expiredAdminCookie } from '../lib/adminSession.ts';
 import { graphqlHost, type GraphQLClient } from '../lib/graphql.ts';
 
-// Middleware for the admin pages this app serves as the admin moves here from its React Router
-// app (see admin/REMIX3-MIGRATION.md). React Router gave the admin both of these checks for
-// free. List both on every admin controller, `sameOrigin()` first: controller middleware doesn't
+// List both on every admin controller, `sameOrigin()` first: controller middleware doesn't
 // apply to nested route maps.
 
 interface AdminSession {
-  /** The signed-in admin's token, which GraphQL accepted for this request. */
   token: string;
-  /** A GraphQL client that sends the token, with the admin's error handling. */
   gql: GraphQLClient;
 }
 
@@ -26,8 +22,8 @@ const loginRedirect = (init?: ResponseInit) => createRedirectResponse('/login/un
 
 /**
  * Lets the request through only with an admin session GraphQL accepts, and puts it on
- * `context.admin`. Like the admin app's `requireAdminSession`, it sends signed-out people to the
- * login page, removes a session GraphQL rejects, and answers 503 when GraphQL can't say.
+ * `context.admin`. Signed-out people go to the login page, a session GraphQL rejects is
+ * removed, and it answers 503 when GraphQL can't say.
  */
 export function requireAdmin(): Middleware<{
   key: typeof Admin;
@@ -70,10 +66,9 @@ function originHost(origin: string): string | null {
 }
 
 /**
- * Rejects form posts from other sites, as React Router did for the admin app: an unsafe request
- * whose `Origin` doesn't match this request's host gets a 400. Requests without an `Origin`
- * header pass, as they did there. On Railway the request URL has the public host, because the
- * server trusts the edge's forwarded headers.
+ * Rejects form posts from other sites: an unsafe request whose `Origin` doesn't match this
+ * request's host gets a 400. Requests without an `Origin` header pass. On Railway the request
+ * URL has the public host, because the server trusts the edge's forwarded headers.
  */
 export function sameOrigin(): Middleware {
   return (context, next) => {

@@ -26,8 +26,7 @@ export function getT(locale = 'en'): TFunction {
 }
 
 /**
- * The translation function for admin pages served here. Until the admin has moved, its strings
- * stay in the admin app; `pnpm admin-strings` copies them in when this app builds. They load on
+ * Admin pages' strings, which `pnpm admin-strings` copies in from the admin app. They load on
  * first use, so public pages never read them.
  */
 export function getAdminT(locale = 'en'): TFunction {

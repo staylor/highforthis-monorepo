@@ -51,9 +51,8 @@ const matches = (pathname: string, path: string) =>
   pathname === path || pathname.startsWith(`${path}/`) || pathname.startsWith(`${path}.`);
 
 /**
- * Forwards admin and API paths to their servers. Admin paths that have moved here (see
- * `@highforthis/shared/adminPaths`) are rendered by this app instead. Their React Router `.data`
- * requests still go to the admin, which hasn't been told they moved.
+ * Forwards admin and API paths to their servers, except the admin paths web renders itself
+ * (`@highforthis/shared/adminPaths`). Their React Router `.data` requests still go to the admin.
  */
 export function proxies({ servedHere }: { servedHere?: readonly string[] } = {}): Middleware {
   return (context, next) => {

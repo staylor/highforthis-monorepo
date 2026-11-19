@@ -14,7 +14,7 @@ import { renderAdminPage } from './render-page.tsx';
 const origin = 'http://localhost';
 const translate = getAdminT();
 
-// An admin page the way a migrated section renders one, without its controller's middleware
+// Without the controllers' middleware, so no session is needed
 const router = createRouter({ middleware: [graphql(), render({ assets })] });
 router.get('/admin/user', (context) =>
   renderAdminPage(
@@ -24,7 +24,6 @@ router.get('/admin/user', (context) =>
   )
 );
 
-/** The App query the page loads for the site's settings, answered with no data. */
 function stubAppQuery(t: TestContext) {
   t.mock.method(globalThis, 'fetch', async () => Response.json({ data: {} }));
 }

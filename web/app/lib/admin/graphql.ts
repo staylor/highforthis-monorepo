@@ -4,10 +4,8 @@ import type { DocumentNode } from 'graphql';
 import { createApolloClient, logError, type GraphQLClient } from '../graphql.ts';
 
 /**
- * GraphQL for admin pages: every operation sends the admin's token, and a failed query or
- * mutation is logged and comes back as empty data, as in the admin app's client
- * (admin/src/server/graphql.ts). The admin's data functions check for empty data to report a
- * failed save or delete, so they can move here as they are.
+ * Every operation sends the admin's token, and a failed query or mutation is logged and comes
+ * back as empty data, which is how the data functions tell that a save or delete failed.
  */
 export function createAdminGraphQLClient(token: string): GraphQLClient {
   const client = createApolloClient();

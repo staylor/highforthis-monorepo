@@ -11,14 +11,10 @@ interface AdminDocumentProps {
   children?: RemixNode;
 }
 
-// Runs before first paint so dark mode doesn't flash, as on public pages.
+// Runs before first paint so dark mode doesn't flash
 const darkModeScript = `try{if(localStorage.getItem('darkMode'))document.documentElement.classList.add('dark')}catch(e){}`;
 
-/**
- * The <html> shell for admin pages served here: the admin's stylesheet and layout, and the same
- * browser entry as public pages, for client navigation and client entries. No RUM: page views
- * count public pages only.
- */
+/** No RUM: page views count public pages only. */
 export function AdminDocument(handle: Handle<AdminDocumentProps>) {
   return () => {
     const { admin, title, children } = handle.props;

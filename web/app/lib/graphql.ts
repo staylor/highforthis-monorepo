@@ -15,10 +15,6 @@ export interface GraphQLClient {
   mutate<T>(mutation: DocumentNode, variables?: OperationVariables): Promise<T>;
 }
 
-/**
- * An Apollo client for one request. Apollo Client's core has no React dependency, so the cache
- * config and type policies are the same as the admin app's.
- */
 export function createApolloClient() {
   return new ApolloClient({
     link: new HttpLink({ uri: `${graphqlHost}/graphql` }),
