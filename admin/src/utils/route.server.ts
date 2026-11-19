@@ -47,6 +47,12 @@ export async function isDeleteIntent(request: Request) {
   return request.method === 'POST' && (await request.clone().formData()).get('intent') === 'delete';
 }
 
+// The list table's row and bulk forms always post an intent, even an empty one when no bulk
+// action is chosen. The inline toggles on some list pages post without one.
+export async function isListTableIntent(request: Request) {
+  return request.method === 'POST' && (await request.clone().formData()).has('intent');
+}
+
 // A list page's delete form removes the checked rows; anything else comes back to the list
 export async function deleteAction(
   { request, context, url }: RouteArgs & { url: URL },

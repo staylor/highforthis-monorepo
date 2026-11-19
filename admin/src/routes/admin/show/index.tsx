@@ -9,7 +9,7 @@ import Message from '#/components/Form/Message';
 import { formatShowLink } from '#/components/Shows/utils';
 import { deleteShows, loadShows, setShowAttended } from '#/server/shows';
 import type { Show } from '#/types/graphql';
-import { deleteAction, graphqlClient, isDeleteIntent } from '#/utils/route.server';
+import { deleteAction, graphqlClient, isListTableIntent } from '#/utils/route.server';
 
 import type { Route } from './+types';
 
@@ -19,7 +19,7 @@ export async function loader({ request, context, url }: Route.LoaderArgs) {
 
 export async function action(args: Route.ActionArgs) {
   const { request } = args;
-  if (!(await isDeleteIntent(request))) {
+  if (!(await isListTableIntent(request))) {
     return setShowAttended({ gql: graphqlClient(args), formData: await request.formData() });
   }
   return deleteAction(args, deleteShows);

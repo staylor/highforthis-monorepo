@@ -1,7 +1,6 @@
-import type { ChangeEvent } from 'react';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSubmit } from 'react-router';
+import { Form } from 'react-router';
 
 import Link from '#/components/Link';
 import { cn } from '#/utils/cn';
@@ -15,7 +14,6 @@ interface RowAction {
 
 export default function RowActions({ actions }: { actions: RowAction[] }) {
   const { t } = useTranslation();
-  const submit = useSubmit();
   const lastIndex = actions.length - 1;
   const linkClass = cn('hover:underline');
   return (
@@ -40,15 +38,7 @@ export default function RowActions({ actions }: { actions: RowAction[] }) {
             break;
           case 'delete':
             elem = (
-              <form
-                method="post"
-                className="inline"
-                onSubmit={(e: ChangeEvent<HTMLFormElement>) => {
-                  e.preventDefault();
-
-                  submit(e.currentTarget, { method: 'post' });
-                }}
-              >
+              <Form method="post" className="inline">
                 <input type="hidden" name="intent" value="delete" />
                 {action.ids?.map((id: string) => (
                   <input key={id} type="hidden" name="ids" value={id} />
@@ -56,7 +46,7 @@ export default function RowActions({ actions }: { actions: RowAction[] }) {
                 <button type="submit" className={cn(linkClass, 'text-pink')} {...props}>
                   {label || t('table.delete')}
                 </button>
-              </form>
+              </Form>
             );
             break;
           default:
