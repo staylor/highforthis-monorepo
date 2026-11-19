@@ -9,8 +9,7 @@ import type {
 } from '../../../types/graphql.ts';
 import { featuredMediaFragment } from '../media/data.ts';
 
-// The settings pages' data, moved from the admin app's src/server/settings.ts with the same
-// GraphQL operations. Each page edits one settings document, saved under a fixed ID.
+// Each page edits one settings document, saved under a fixed ID.
 
 const siteSettingsQuery = gql`
   query SiteSettings {
