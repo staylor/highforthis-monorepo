@@ -27,8 +27,13 @@ const resolvers = {
     ),
   },
   ImageNode: {
+    // Prisma batches the findUnique calls of one tick into one query, and the crops come with
+    // it, instead of a query per image from ImageUpload.crops
     image(data: EditorNodeData) {
-      return prisma.mediaUpload.findUnique({ where: { id: data.imageId } });
+      return prisma.mediaUpload.findUnique({
+        where: { id: data.imageId },
+        include: { crops: true },
+      });
     },
   },
   VideoNode: {
