@@ -27,6 +27,35 @@ const showIncludes = {
   venue: true,
 };
 
+/**
+ * Adds each show's venue and artists, as `include: showIncludes` would. That include finds the
+ * artists with an IN list of every show's ID on ShowArtist.showId, and Postgres plans one by
+ * checking each ID against the column's most common values: for the ~550 shows on the history
+ * page, planning took 3.5 ms of a 5 ms query. Going through Show's IDs, which have no common
+ * values, plans in about 0.4 ms.
+ */
+async function includeVenuesAndArtists(shows: Show[]) {
+  if (shows.length === 0) return;
+  const [venues, showArtists] = await Promise.all([
+    prisma.venue.findMany({
+      where: { id: { in: [...new Set(shows.map((show) => show.venueId))] } },
+    }),
+    prisma.showArtist.findMany({
+      where: { show: { id: { in: shows.map((show) => show.id) } } },
+      include: { artist: true },
+    }),
+  ]);
+
+  const venuesById = new Map(venues.map((venue) => [venue.id, venue]));
+  const showArtistsByShow = Map.groupBy(showArtists, (showArtist) => showArtist.showId);
+  for (const show of shows) {
+    Object.assign(show, {
+      venue: venuesById.get(show.venueId) ?? null,
+      artists: showArtistsByShow.get(show.id) ?? [],
+    });
+  }
+}
+
 async function getEntityStats(
   counts: { id: string; count: number }[],
   lookup: (ids: string[]) => Promise<(Artist | Venue)[]>,
@@ -128,11 +157,12 @@ const resolvers = {
         ];
       }
 
-      return parseConnection(prisma.show, connectionArgs, {
+      const connection = await parseConnection(prisma.show, connectionArgs, {
         where,
         orderBy: { date: order === 'ASC' || (!order && latest) ? 'asc' : 'desc' },
-        include: showIncludes,
       });
+      await includeVenuesAndArtists(connection.edges.map(({ node }) => node as Show));
+      return connection;
     },
 
     async show(_: unknown, { id, lastAdded }: QueryShowArgs) {
