@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { field } from '../support/ui.ts';
+import { addedId, field } from '../support/ui.ts';
 
 test('adds a venue with its details, closes it from the list and deletes it', async ({
   page,
@@ -32,7 +32,7 @@ test('adds a venue with its details, closes it from the list and deletes it', as
   await page.getByRole('button', { name: 'Add Venue' }).click();
   await expect(page.getByRole('heading', { name: 'Edit Venue' })).toBeVisible();
   await expect(page.getByText('Venue updated.')).toBeVisible();
-  const id = new URL(page.url()).pathname.split('/').pop() as string;
+  const id = await addedId(page, 'venue');
   const added = await graphql.venue(id);
   expect(added).toMatchObject({
     name,
