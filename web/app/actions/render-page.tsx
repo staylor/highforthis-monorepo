@@ -12,7 +12,7 @@ import { Document, type MetaTag } from './document.tsx';
 const SITE_TITLE = 'High for This';
 const SITE_TAGLINE = 'Music as it happens.';
 
-function titleTemplate(title: string | undefined | null, siteSettings?: SiteSettings) {
+export function titleTemplate(title: string | undefined | null, siteSettings?: SiteSettings) {
   const template = `%s » ${siteSettings?.siteTitle || SITE_TITLE}`;
   return template.replace('%s', title || siteSettings?.tagline || SITE_TAGLINE);
 }

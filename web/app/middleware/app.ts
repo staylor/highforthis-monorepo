@@ -3,6 +3,8 @@ import { openLazyFile } from 'remix/fs';
 import { createFileResponse } from 'remix/response/file';
 import { createContextKey, type Middleware } from 'remix/router';
 
+import { isServedByWeb } from '@highforthis/shared/adminPaths';
+
 import { createGraphQLClient, graphqlHost, type GraphQLClient } from '../lib/graphql.ts';
 import { getT, type TFunction } from '../lib/i18n.ts';
 import { openObserveBundleFiles } from '../lib/openobserve-bundles.ts';
@@ -48,9 +50,17 @@ const forwards = [
 const matches = (pathname: string, path: string) =>
   pathname === path || pathname.startsWith(`${path}/`) || pathname.startsWith(`${path}.`);
 
-export function proxies(): Middleware {
+/**
+ * Forwards admin and API paths to their servers. Admin paths that have moved here (see
+ * `@highforthis/shared/adminPaths`) are rendered by this app instead. Their React Router `.data`
+ * requests still go to the admin, which hasn't been told they moved.
+ */
+export function proxies({ servedHere }: { servedHere?: readonly string[] } = {}): Middleware {
   return (context, next) => {
     const { pathname } = context.url;
+    if (isServedByWeb(pathname, servedHere)) {
+      return next();
+    }
     const forward = forwards.find(({ paths }) => paths.some((path) => matches(pathname, path)));
     return forward ? forward.proxy(context.request) : next();
   };
