@@ -70,6 +70,7 @@ That builds `shared`, runs `pnpm e2e:admin`, installs Playwright's Chromium if i
 - **Data:** the tests use the database in `graphql/.env`, or `E2E_DATABASE_URL` from `e2e/.env`. They create what they need through GraphQL, name it with an `[e2e]` prefix, and remove it afterwards; each run also removes anything an interrupted run left behind. The media picker test needs more than 50 images, which the seed has.
 - **Debugging:** `pnpm --filter @highforthis/e2e test:ui` opens Playwright's UI mode. A failed test keeps a screenshot and a trace in `e2e/test-results/`.
 - **Running servers:** outside CI, servers already listening on those ports are reused, and the admin isn't rebuilt. Stop them to test admin changes.
+- **CI:** the "End-to-end tests" job in [`ci.yml`](./.github/workflows/ci.yml) runs the suite on every pull request, against a Postgres 18 service loaded from the seed, with retries. When it fails, the report, screenshots and traces are uploaded as the `playwright-report` artifact.
 
 ## GraphQL Codegen
 

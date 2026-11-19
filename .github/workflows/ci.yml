@@ -24,3 +24,55 @@ jobs:
       - run: pnpm knip
       - run: pnpm typecheck
       - run: pnpm -r test
+
+  e2e:
+    name: End-to-end tests
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: highforthis
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready --username=postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/highforthis
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      # The same steps as `pnpm db:setup`. pg_restore runs in the Postgres container, so its
+      # version matches the server's, whatever the runner has installed.
+      - run: pnpm --filter @highforthis/graphql db:generate
+      - run: pnpm --filter @highforthis/graphql db:push
+      - name: Load the seed data
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: >-
+          docker exec --interactive "$POSTGRES_CONTAINER"
+          pg_restore --username=postgres --dbname=highforthis
+          --no-owner --no-privileges --data-only --disable-triggers --exit-on-error
+          < graphql/dump/highforthis-seed.dump
+      - run: pnpm --filter @highforthis/e2e exec playwright install --with-deps chromium
+      # Creates the test admin, builds the admin and starts the servers; CI turns on retries
+      - run: pnpm test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            e2e/playwright-report
+            e2e/test-results
+          retention-days: 14
