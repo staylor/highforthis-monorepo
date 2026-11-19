@@ -16,9 +16,6 @@ import type {
 } from '../../../types/graphql.ts';
 import { featuredMediaFragment } from '../media/data.ts';
 
-// The artists section's data, moved from the admin app's src/server/artists.ts with the same
-// GraphQL operations.
-
 const artistFormFragment = gql`
   fragment ArtistForm_artist on Artist {
     appleMusic {

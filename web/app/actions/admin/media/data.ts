@@ -6,8 +6,7 @@ import { uploadUrl } from '../../../lib/media.ts';
 import type { FeaturedMedia_MediaFragment, MediaPickerQuery } from '../../../types/graphql.ts';
 import type { MediaPickerItem, SelectedMedia } from '../../../ui/admin/public/featured-media.tsx';
 
-// The featured media field's data, moved from the admin app's FeaturedMedia field and media
-// modal (src/server/modals.ts). The browser gets URLs it can show, not the uploads themselves.
+// The browser gets URLs it can show, not the uploads themselves.
 
 /** What a form's query asks for to fill its featured media field. */
 export const featuredMediaFragment = gql`
@@ -71,7 +70,6 @@ const cropUrl = (
   return crop ? uploadUrl(destination, crop.fileName) : null;
 };
 
-/** The field's current media, each shown by its 300px crop, as the admin app showed it. */
 export function selectedMedia(
   media: ReadonlyArray<FeaturedMedia_MediaFragment | null> | null | undefined
 ): SelectedMedia[] {

@@ -26,8 +26,8 @@ import {
   updateArtist,
 } from './data.ts';
 
-// The admin's artists section, moved from the admin app's routes/admin/artist. Each form route
-// has its own controller, since controller middleware doesn't apply to nested route maps.
+// Each form route has its own controller, since controller middleware doesn't apply to nested
+// route maps.
 
 const artists = routes.admin.artists;
 
