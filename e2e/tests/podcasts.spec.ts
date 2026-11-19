@@ -3,10 +3,6 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '../support/test.ts';
 import { field } from '../support/ui.ts';
 
-// The podcasts section has moved from the admin app to web (see admin/REMIX3-MIGRATION.md), so
-// these pages and their image and audio pickers come from web's Remix server and its client
-// entries.
-
 /** Opens the picker with this button, picks its first upload and says which one it was. */
 async function pick(page: Page, button: string, input: string) {
   const picker = page.getByRole('dialog', { name: 'Media' });
@@ -31,7 +27,6 @@ test('adds a podcast with an image and audio, edits it and deletes it', async ({
   const title = `${prefix} Podcast`;
 
   await page.goto('/admin/podcast/add');
-  // Served by web: its admin pages use the admin stylesheet its asset server builds
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
   await field(page, 'Title').fill(title);
   const image = await pick(page, 'Set Image', 'image');

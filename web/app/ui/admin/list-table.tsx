@@ -38,10 +38,7 @@ export function RowTitle(handle: Handle<{ href: string; title?: string | null }>
   };
 }
 
-/**
- * A row's edit link, a link to its public page when it has one, and its delete button. Delete
- * posts the row's ID with intent=delete.
- */
+/** Delete posts the row's ID with intent=delete. */
 export function RowActions(handle: Handle<{ editHref: string; viewHref?: string; id: string }>) {
   return () => {
     const { t } = getAdmin(handle);

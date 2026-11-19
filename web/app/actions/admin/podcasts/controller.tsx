@@ -17,8 +17,8 @@ import { renderAdminPage } from '../render-page.tsx';
 
 import { createPodcast, deletePodcasts, loadPodcast, loadPodcasts, updatePodcast } from './data.ts';
 
-// The admin's podcasts section, moved from the admin app's routes/admin/podcast. Each form route
-// has its own controller, since controller middleware doesn't apply to nested route maps.
+// Each form route has its own controller, since controller middleware doesn't apply to nested
+// route maps.
 
 const podcasts = routes.admin.podcasts;
 

@@ -8,7 +8,6 @@ import { buttonClass } from './styles.ts';
 // brings focus handling and Escape, and it pages through /admin/media-picker/:type as it
 // scrolls.
 
-/** An upload the field holds, shown by its 300px crop when it has one, or played if it's audio. */
 export interface SelectedMedia {
   id: string;
   preview: string | null;
