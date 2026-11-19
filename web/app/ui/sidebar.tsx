@@ -6,7 +6,7 @@ import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';
 import { card, colorTransition, lg, linkHover, merge, sm, text } from './public/styles.ts';
 import { SectionHeader } from './section-header.tsx';
-import { formatArtists, formatShowLink } from './shows/utils.ts';
+import { formatArtists, formatShowLink, monthNames, weekdayNames } from './shows/utils.ts';
 
 type Shows = NonNullable<AppQuery['shows']>;
 type Edges = Shows['edges'];
@@ -18,10 +18,7 @@ function groupShowsByMonth(edges: Edges) {
   for (const edge of edges) {
     const date = new Date(edge.node.date);
     const key = `${date.getFullYear()}-${date.getMonth()}`;
-    const label = date.toLocaleString('en-us', {
-      month: 'long',
-      year: 'numeric',
-    });
+    const label = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
 
     if (seen.has(key)) {
       groups[seen.get(key)!].shows.push(edge);
@@ -121,7 +118,7 @@ export function Sidebar(handle: Handle<{ shows: Shows }>) {
                             fontVariantNumeric: 'tabular-nums',
                           })}
                         >
-                          {date.toLocaleString('en-us', { weekday: 'short' })}
+                          {weekdayNames[date.getDay()]}
                         </div>
                       </div>
                       <div mix={css({ minWidth: 0, flex: '1 1 0%' })}>
