@@ -49,7 +49,7 @@ describe('handleUploads', () => {
       uploadDir
     );
 
-    expect(await response.json()).toEqual(['media-1', 'media-2']);
+    await expect(response.json()).resolves.toEqual(['media-1', 'media-2']);
     const records = db.mediaUpload.create.mock.calls.map(([{ data }]) => data);
     expect(records).toEqual([
       expect.objectContaining({ originalName: 'one.txt', mimeType: 'text/plain', fileSize: 5 }),
@@ -69,7 +69,7 @@ describe('handleUploads', () => {
       uploadDir
     );
 
-    expect(await response.json()).toEqual(['media-1']);
+    await expect(response.json()).resolves.toEqual(['media-1']);
   });
 
   it('streams the next file in while the last one is copied to the bucket', async () => {
@@ -85,7 +85,7 @@ describe('handleUploads', () => {
       uploadDir
     );
 
-    expect(await response.json()).toEqual(['media-1', 'media-2']);
+    await expect(response.json()).resolves.toEqual(['media-1', 'media-2']);
   });
 
   it('rejects a file in another field', async () => {
@@ -114,6 +114,6 @@ describe('handleUploads', () => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-    expect(await (await handleUploads(request, uploadDir)).json()).toEqual([]);
+    await expect((await handleUploads(request, uploadDir)).json()).resolves.toEqual([]);
   });
 });
