@@ -29,12 +29,11 @@ test('adds a crop size and removes it again', async ({ page, prefix, graphql }) 
     const names = page.getByRole('textbox', { name: /^Name \d+$/ });
     await expect(names).toHaveCount(Math.max(before.length, 1));
 
-    // Adding a row needs the editor's client entry
+    // Adding a row needs the editor's client entry to have hydrated
     const rows = await names.count();
-    await expect(async () => {
-      await page.getByRole('button', { name: 'Add Crop' }).click();
-      await expect(names).toHaveCount(rows + 1, { timeout: 1_000 });
-    }).toPass();
+    await hydrated(page);
+    await page.getByRole('button', { name: 'Add Crop' }).click();
+    await expect(names).toHaveCount(rows + 1);
     const row = rows + 1;
     await page.getByRole('textbox', { name: `Name ${row}` }).fill(name);
     await page.getByRole('spinbutton', { name: `Width ${row}` }).fill('640');
