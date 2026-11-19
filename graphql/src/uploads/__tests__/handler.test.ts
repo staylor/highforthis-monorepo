@@ -25,7 +25,9 @@ const upload = (...files: [string, File][]) => {
   }
   return new Request('http://localhost/upload', { method: 'POST', body });
 };
-const text = (name: string, contents: string) => new File([contents], name, { type: 'text/plain' });
+// Audio whose metadata can't be read is still stored, so text stands in for it
+const audio = (name: string, contents: string, type = 'audio/mpeg') =>
+  new File([contents], name, { type });
 
 describe('handleUploads', () => {
   let uploadDir: string;
@@ -45,15 +47,15 @@ describe('handleUploads', () => {
 
   it('stores each file, copies it to the bucket, and answers the media IDs in order', async () => {
     const response = await handleUploads(
-      upload(['uploads', text('one.txt', 'first')], ['uploads', text('two.txt', 'second')]),
+      upload(['uploads', audio('one.txt', 'first')], ['uploads', audio('two.txt', 'second')]),
       uploadDir
     );
 
     await expect(response.json()).resolves.toEqual(['media-1', 'media-2']);
     const records = db.mediaUpload.create.mock.calls.map(([{ data }]) => data);
     expect(records).toEqual([
-      expect.objectContaining({ originalName: 'one.txt', mimeType: 'text/plain', fileSize: 5 }),
-      expect.objectContaining({ originalName: 'two.txt', mimeType: 'text/plain', fileSize: 6 }),
+      expect.objectContaining({ originalName: 'one.txt', mimeType: 'audio/mpeg', fileSize: 5 }),
+      expect.objectContaining({ originalName: 'two.txt', mimeType: 'audio/mpeg', fileSize: 6 }),
     ]);
     const stored = await fs.readFile(
       path.join(uploadDir, records[1].destination, records[1].fileName),
@@ -65,7 +67,7 @@ describe('handleUploads', () => {
 
   it('takes files over 2 MB', async () => {
     const response = await handleUploads(
-      upload(['uploads', text('big.txt', 'x'.repeat(3 * 1024 * 1024))]),
+      upload(['uploads', audio('big.txt', 'x'.repeat(3 * 1024 * 1024))]),
       uploadDir
     );
 
@@ -81,17 +83,65 @@ describe('handleUploads', () => {
     });
 
     const response = await handleUploads(
-      upload(['uploads', text('one.txt', 'first')], ['uploads', text('two.txt', 'second')]),
+      upload(['uploads', audio('one.txt', 'first')], ['uploads', audio('two.txt', 'second')]),
       uploadDir
     );
 
     await expect(response.json()).resolves.toEqual(['media-1', 'media-2']);
   });
 
-  it('rejects a file in another field', async () => {
-    await expect(
-      handleUploads(upload(['avatar', text('one.txt', 'first')]), uploadDir)
-    ).rejects.toThrow('Unexpected field: avatar');
+  it('refuses a file in another field', async () => {
+    const response = await handleUploads(upload(['avatar', audio('one.txt', 'first')]), uploadDir);
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({ error: 'Unexpected field: avatar' });
+    expect(db.mediaUpload.create).not.toHaveBeenCalled();
+  });
+
+  it('refuses a file that is not an image, audio or video, without storing it', async () => {
+    for (const type of ['text/html', 'image/svg+xml', 'application/octet-stream', '']) {
+      const response = await handleUploads(
+        upload(['uploads', audio('page.html', '<script>alert(1)</script>', type)]),
+        uploadDir
+      );
+
+      expect(response.status, type).toBe(415);
+    }
+    expect(db.mediaUpload.create).not.toHaveBeenCalled();
+    await expect(fs.readdir(uploadDir)).resolves.toEqual([]);
+  });
+
+  it("stores a file under its type's extension, whatever its name says", async () => {
+    await handleUploads(upload(['uploads', audio('song.html', 'first')]), uploadDir);
+
+    const [[{ data }]] = db.mediaUpload.create.mock.calls;
+    expect(data).toEqual(
+      expect.objectContaining({
+        originalName: 'song.html',
+        fileName: expect.stringMatching(/^[0-9a-f]{16}\.mp3$/),
+      })
+    );
+  });
+
+  it('refuses a file labelled as an image that is not one', async () => {
+    const response = await handleUploads(
+      upload(['uploads', audio('page.png', '<script>alert(1)</script>', 'image/png')]),
+      uploadDir
+    );
+
+    expect(response.status).toBe(415);
+    expect(db.mediaUpload.create).not.toHaveBeenCalled();
+  });
+
+  it('refuses more than 10 files in a request', async () => {
+    const files = Array.from({ length: 11 }, (_, i): [string, File] => [
+      'uploads',
+      audio(`${i}.mp3`, 'x'),
+    ]);
+
+    const response = await handleUploads(upload(...files), uploadDir);
+
+    expect(response.status).toBe(413);
     expect(db.mediaUpload.create).not.toHaveBeenCalled();
   });
 
@@ -100,7 +150,7 @@ describe('handleUploads', () => {
 
     await expect(
       handleUploads(
-        upload(['uploads', text('one.txt', 'first')], ['uploads', text('two.txt', 'second')]),
+        upload(['uploads', audio('one.txt', 'first')], ['uploads', audio('two.txt', 'second')]),
         uploadDir
       )
     ).rejects.toThrow('bucket unavailable');

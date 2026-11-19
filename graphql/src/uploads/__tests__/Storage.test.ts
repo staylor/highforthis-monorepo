@@ -50,10 +50,12 @@ describe('storeFile', () => {
     ).resolves.toBeUndefined();
   });
 
-  it('rejects a file that is not an image', async () => {
+  it('turns down a file that is not an image, and removes what it wrote', async () => {
     await expect(storeFile(imageFile(Buffer.from('not an image')), uploadDir)).rejects.toThrow(
-      'unsupported image format'
+      'not an image that can be read'
     );
+    const written = await fs.readdir(uploadDir, { recursive: true, withFileTypes: true });
+    expect(written.filter((entry) => entry.isFile())).toEqual([]);
   });
 
   it('rejects when a crop fails', async () => {

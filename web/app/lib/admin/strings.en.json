@@ -85,6 +85,7 @@
     "passkeyWaiting": "Waiting for passkey…",
     "password": "Password",
     "required": "All fields are required.",
+    "throttled": "Too many sign-in attempts. Try again in a few minutes.",
     "unauthorized": "You must login to access this area."
   },
   "media": {

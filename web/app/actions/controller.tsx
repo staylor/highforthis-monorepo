@@ -186,17 +186,6 @@ export default createController(routes, {
       });
     },
 
-    async oembed(context) {
-      const provider = context.url.searchParams.get('provider');
-      const url = context.url.searchParams.get('url');
-      if (!(provider && url)) {
-        return Response.json(null);
-      }
-      const oembedUrl = new URL(provider);
-      oembedUrl.searchParams.set('url', url);
-      return Response.json(await fetch(oembedUrl).then((response) => response.json()));
-    },
-
     sphere(context) {
       const { t } = context;
       const stats: Stats = {};

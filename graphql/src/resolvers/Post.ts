@@ -84,9 +84,9 @@ const resolvers = {
 
       if (!post) return null;
 
-      const userCanSee = isAdmin(authUser);
-      if (post.status === 'DRAFT' && !userCanSee) {
-        throw new Error('You do not have permission');
+      // A draft is as missing as a post that doesn't exist, so its slug can't be found out
+      if (post.status === 'DRAFT' && !isAdmin(authUser)) {
+        return null;
       }
 
       return post;

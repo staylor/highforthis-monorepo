@@ -3,7 +3,9 @@ import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
 import { adminSessionCookie, adminToken, expiredAdminCookie } from '../../../lib/adminSession.ts';
+import { clientAddress } from '../../../lib/client.ts';
 import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
+import { signInAttempts } from '../../../lib/rate-limits.ts';
 import { sameOrigin } from '../../../middleware/admin.ts';
 import { routes } from '../../../routes.ts';
 import { PasskeyLogin } from '../../../ui/admin/public/passkey-login.tsx';
@@ -11,7 +13,7 @@ import { text } from '../../../ui/public/styles.ts';
 import { loadRootData } from '../../render-page.tsx';
 import { renderAdminPage } from '../render-page.tsx';
 
-import { passwordLoginEnabled, signIn } from './sign-in.ts';
+import { passwordLoginEnabled, signIn, signOut } from './sign-in.ts';
 
 // Big fields that lift when focused
 const input = css({
@@ -54,6 +56,8 @@ function errorMessage(t: TFunction, error?: string) {
       return t('login.failed');
     case 'required':
       return t('login.required');
+    case 'throttled':
+      return t('login.throttled');
     default:
       return undefined;
   }
@@ -174,21 +178,36 @@ export const login = createController(routes.login, {
     },
 
     async action(context) {
-      const token = await signIn(await context.request.formData());
-      if (!token) {
-        return createRedirectResponse(routes.login.index.href({ error: 'failed' }), 303);
+      // Each address gets a few tries, by password or passkey, before it has to wait
+      const address = clientAddress(context.request);
+      if (address && !signInAttempts.attempt(address)) {
+        return createRedirectResponse(routes.login.index.href({ error: 'throttled' }), 303);
+      }
+      const result = await signIn(await context.request.formData());
+      if ('error' in result) {
+        return createRedirectResponse(routes.login.index.href({ error: result.error }), 303);
       }
       return createRedirectResponse(routes.admin.dashboard.href(), {
         status: 303,
-        headers: { 'Set-Cookie': await adminSessionCookie(token) },
+        headers: { 'Set-Cookie': await adminSessionCookie(result.token) },
       });
     },
   },
 });
 
+/**
+ * Signing out is a post, so a link on another site can't do it. It ends the token in GraphQL as
+ * well as removing the cookie.
+ */
 export const logout = createAction(routes.admin.logout, {
-  async handler() {
+  middleware: [sameOrigin()],
+  async handler(context) {
+    const token = await adminToken(context.request.headers.get('cookie'));
+    if (token) {
+      await signOut(token);
+    }
     return createRedirectResponse(routes.login.index.href({}), {
+      status: 303,
       headers: { 'Set-Cookie': await expiredAdminCookie() },
     });
   },

@@ -225,6 +225,8 @@ model User {
   email              String              @unique
   bio                String?
   hash               String
+  // Goes up when the user signs out or their password changes, which ends their tokens
+  tokenVersion       Int                 @default(0)
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   roles              UserRole[]

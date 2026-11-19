@@ -1,9 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "allowImportingTsExtensions": false,
     "declarationMap": false,
     "noEmit": false,
     "sourceMap": true
   },
-  "include": ["src/logger.ts", "src/observability.ts"]
+  "include": ["src/logger.ts", "src/observability.ts", "src/rate-limit.ts"]
 }

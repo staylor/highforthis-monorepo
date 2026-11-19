@@ -44,6 +44,7 @@ import {
   rejectWordPress,
   translations,
 } from './middleware/app.ts';
+import { securityHeaders } from './middleware/headers.ts';
 import { serverTiming, timed } from './middleware/timing.ts';
 import { routes } from './routes.ts';
 
@@ -52,11 +53,12 @@ import { routes } from './routes.ts';
 const publicEntries = new Set(readdirSync('./public'));
 const inPublic = (path: string) => publicEntries.has(path.split('/', 1)[0]);
 
-// Time each request, reject WordPress probes, compress, serve public/ and the OpenObserve SDK
-// bundles, forward API paths to GraphQL, then render. HTTP logging stays on the Node server in
-// server.ts, because pino-http needs Node's req/res.
+// Add the security headers, time each request, reject WordPress probes, compress, serve public/
+// and the OpenObserve SDK bundles, forward API paths to GraphQL, then render. HTTP logging stays
+// on the Node server in server.ts, because pino-http needs Node's req/res.
 export const router = createRouter({
   middleware: [
+    securityHeaders(),
     serverTiming(),
     timed('rejectWordPress', rejectWordPress()),
     // Brotli's default quality, 11, takes 30-70ms a page. 5 takes under half a millisecond, and

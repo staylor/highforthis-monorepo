@@ -13,6 +13,10 @@
     "./observability": {
       "types": "./dist/observability.d.ts",
       "import": "./dist/observability.js"
+    },
+    "./rate-limit": {
+      "types": "./dist/rate-limit.d.ts",
+      "import": "./dist/rate-limit.js"
     }
   },
   "files": [
@@ -20,6 +24,7 @@
   ],
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
+    "test": "node --test 'src/**/*.test.ts'",
     "typecheck": "tsgo"
   },
   "dependencies": {

@@ -3,6 +3,7 @@ import path from 'node:path';
 import { pipeline } from 'node:stream/promises';
 
 import type { Callback } from '../Storage';
+import { UploadError } from '../mediaTypes';
 
 import Upload, { type FileData, type IncomingFile } from './Upload';
 
@@ -72,8 +73,17 @@ export default class Image extends Upload {
         original.fileSize = info.size;
       });
 
-      // Rejects if any stream fails, such as sharp on a file that isn't a readable image
-      await pipeline(file.stream(), imageMeta, fs.createWriteStream(finalPath));
+      // Rejects if any stream fails, such as sharp on a file that isn't a readable image, which
+      // is turned down and its empty file removed
+      try {
+        await pipeline(file.stream(), imageMeta, fs.createWriteStream(finalPath));
+      } catch (error) {
+        await fs.promises.rm(finalPath, { force: true });
+        const message = error instanceof Error ? error.message : '';
+        throw /unsupported image format|corrupt|premature end/i.test(message)
+          ? new UploadError(415, `${file.type} upload is not an image that can be read`)
+          : error;
+      }
 
       const sizes = this.settings.crops.map(({ width, height }: CropSetting) => {
         const w = width ?? 0;

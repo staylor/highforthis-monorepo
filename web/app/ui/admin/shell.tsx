@@ -45,6 +45,18 @@ const sectionLink = css({
 
 const truncate = css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' });
 
+// The sign-out button, looking like the links around it
+const sectionButton = css({
+  boxSizing: 'border-box',
+  width: '100%',
+  cursor: 'pointer',
+  appearance: 'none',
+  border: 'none',
+  backgroundColor: 'transparent',
+  textAlign: 'left',
+  fontFamily: 'inherit',
+});
+
 // A page within the current section
 const pageLink = css({
   display: 'block',
@@ -78,14 +90,19 @@ function SectionLink(handle: Handle<{ section: NavSection }>) {
     }
 
     const href = adminHref(section.path);
+    if (section.signOut) {
+      return (
+        <form method="post" action={href} data-rmx-document>
+          <button type="submit" mix={[sectionLink, sectionButton]}>
+            <Icon name={section.icon} size="1.25rem" />
+            <span mix={truncate}>{t(section.label)}</span>
+          </button>
+        </form>
+      );
+    }
     return (
       <div>
-        <a
-          href={href}
-          aria-current={active ? 'page' : undefined}
-          data-rmx-document={section.fullLoad || undefined}
-          mix={sectionLink}
-        >
+        <a href={href} aria-current={active ? 'page' : undefined} mix={sectionLink}>
           <Icon name={section.icon} size="1.25rem" />
           <span mix={truncate}>{t(section.label)}</span>
         </a>

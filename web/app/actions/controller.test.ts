@@ -63,6 +63,47 @@ describe('root controller', () => {
     }
   });
 
+  it('keeps Server-Timing for signed-in admins in production', async (t) => {
+    t.mock.property(process, 'env', {
+      ...process.env,
+      NODE_ENV: 'production',
+      TOKEN_SECRET: testSecret,
+    });
+    const health = (cookie?: string) =>
+      router.fetch(
+        new Request(new URL(routes.health.href(), origin), { headers: cookie ? { cookie } : {} })
+      );
+    assert.equal((await health()).headers.get('server-timing'), null);
+    assert.equal((await health('__session=forged')).headers.get('server-timing'), null);
+    assert.match((await health(testSession)).headers.get('server-timing') ?? '', /total;dur=/);
+  });
+
+  it('sends the security headers, and HSTS over HTTPS', async (t) => {
+    const fetch = t.mock.method(globalThis, 'fetch', async () => Response.json({ data: {} }));
+    const response = await router.fetch(new URL(routes.health.href(), origin));
+    assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(response.headers.get('x-frame-options'), 'SAMEORIGIN');
+    assert.equal(response.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+    assert.match(response.headers.get('content-security-policy') ?? '', /frame-ancestors 'self'/);
+    assert.equal(response.headers.get('strict-transport-security'), null, 'not over HTTP');
+
+    const secure = await router.fetch(new URL(routes.health.href(), 'https://localhost'));
+    assert.equal(secure.headers.get('strict-transport-security'), 'max-age=31536000');
+
+    // Proxied responses too, whose headers can't be changed in place
+    const proxied = await router.fetch(new URL('/graphql', origin));
+    assert.equal(proxied.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(fetch.mock.calls.length, 1);
+  });
+
+  it('no longer fetches whatever URL /oembed is given', async (t) => {
+    stubGraphQL(t, { 'graphql:App': () => ({ data: {} }) });
+    const response = await router.fetch(
+      new URL('/oembed?provider=http://127.0.0.1:9/&url=x', origin)
+    );
+    assert.equal(response.status, 404);
+  });
+
   it('rejects WordPress probes before routing', async () => {
     const response = await router.fetch(new URL('/wp-login.php', origin));
     assert.equal(response.status, 403);

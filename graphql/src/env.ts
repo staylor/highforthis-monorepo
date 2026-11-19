@@ -35,8 +35,10 @@ const envSchema = z
     // YouTube, for the job that imports videos
     YOUTUBE_API_KEY: z.string().min(1).optional(),
 
-    // Optional API keys
+    // Optional API keys. The geolocation key stays on the server; the browser key is public, in
+    // every venue page's map, so restrict it to the Maps Static API and this site's referrers.
     GOOGLE_MAPS_GEOLOCATION_API_KEY: z.string().optional(),
+    GOOGLE_MAPS_BROWSER_API_KEY: z.string().optional(),
     TICKETMASTER_API_KEY: z.string().optional(),
 
     // Apple Music, for album covers: a MusicKit key and the team it belongs to

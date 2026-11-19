@@ -19,6 +19,7 @@ const admin = {
   email: 'admin@example.test',
   name: 'Admin',
   hash: bcrypt.hashSync('secret', 4),
+  tokenVersion: 0,
   roles: [{ id: 'role-admin', name: 'admin', userId: 'admin-1' }],
 } as UserWithRoles;
 const editor = { ...admin, id: 'editor-1', roles: [] } as UserWithRoles;
@@ -28,7 +29,7 @@ let app: ReturnType<typeof createApp>;
 
 const request = (path: string, init?: RequestInit) =>
   app.fetch(new Request(`http://localhost${path}`, init));
-const signedIn = (user: UserWithRoles) => ({ Authorization: `Bearer ${issueToken(user.id)}` });
+const signedIn = (user: UserWithRoles) => ({ Authorization: `Bearer ${issueToken(user)}` });
 const json = (body: unknown, headers: Record<string, string> = {}) => ({
   method: 'POST',
   body: JSON.stringify(body),
@@ -172,13 +173,11 @@ describe('createApp', () => {
       await expect(response.json()).resolves.toEqual({ token: expect.any(String) });
     });
 
-    it('answers an error for the wrong password', async () => {
+    it('answers 401 for the wrong password', async () => {
       const response = await request('/auth', json({ email: admin.email, password: 'wrong' }));
 
-      expect(response.status).toBe(200);
-      await expect(response.json()).resolves.toEqual({
-        error: 'User not found matching email/password combination',
-      });
+      expect(response.status).toBe(401);
+      await expect(response.json()).resolves.toEqual({ error: 'Wrong email or password' });
     });
   });
 
@@ -254,7 +253,7 @@ describe('createApp', () => {
 
       expect(response.status).toBe(401);
       await expect(response.json()).resolves.toEqual({
-        error: expect.stringContaining('challengeId'),
+        error: 'The passkey request is incomplete',
       });
     });
   });

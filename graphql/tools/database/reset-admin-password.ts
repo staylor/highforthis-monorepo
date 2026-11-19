@@ -65,7 +65,7 @@ try {
   const hash = await bcrypt.hash(password, SALT_ROUNDS);
   await prisma.user.update({
     where: { id: user.id },
-    data: { hash },
+    data: { hash, tokenVersion: { increment: 1 } },
   });
 
   stdout.write(`Password reset for ${user.email}.\n`);

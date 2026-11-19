@@ -1,3 +1,4 @@
+import { cop } from 'remix/middleware/cop';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createContextKey, type Middleware } from 'remix/router';
 
@@ -52,33 +53,18 @@ export function requireAdmin(): Middleware<{
   };
 }
 
-const safeMethods = new Set(['GET', 'HEAD', 'OPTIONS']);
-
-function originHost(origin: string): string | null {
-  if (origin === 'null') {
-    return origin;
-  }
-  try {
-    return new URL(origin).host;
-  } catch {
-    return null;
-  }
-}
+const crossOriginProtection = cop({
+  onDeny: () => new Response('Bad Request', { status: 400 }),
+});
 
 /**
- * Rejects form posts from other sites: an unsafe request whose `Origin` doesn't match this
- * request's host gets a 400. Requests without an `Origin` header pass. On Railway the request
- * URL has the public host, because the server trusts the edge's forwarded headers.
+ * Rejects posts from anywhere but this site with a 400. Browsers say where a request came from in
+ * `Sec-Fetch-Site`, which pages can't set: anything but `same-origin` (or `none`, typed into the
+ * address bar) is turned away, other subdomains of this site included. Without it, an `Origin`
+ * that doesn't match this request's host is. A request with neither didn't come from a browser,
+ * so it can't carry an admin's cookie, and passes. On Railway the request URL has the public
+ * host, because the server trusts the edge's forwarded headers.
  */
 export function sameOrigin(): Middleware {
-  return (context, next) => {
-    if (safeMethods.has(context.request.method)) {
-      return next();
-    }
-    const origin = context.request.headers.get('origin');
-    if (origin !== null && originHost(origin) !== context.url.host) {
-      return new Response('Bad Request', { status: 400 });
-    }
-    return next();
-  };
+  return crossOriginProtection;
 }

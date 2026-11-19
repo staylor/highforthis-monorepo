@@ -1,9 +1,11 @@
 import prisma from '#/database';
 
 import type { StorageAdapter } from './adapter';
+import { mediaExtension, UploadError } from './mediaTypes';
 import Audio from './types/Audio';
 import Image from './types/Image';
-import Upload, { type FileData, type IncomingFile } from './types/Upload';
+import type Upload from './types/Upload';
+import type { FileData, IncomingFile } from './types/Upload';
 import Video from './types/Video';
 
 export type Callback = (error: Error | null, info?: FileData) => void;
@@ -14,8 +16,14 @@ export interface UploadOpts {
 }
 
 // Saves a file as the kind of upload its MIME type calls for, with an image's crops, and copies
-// the results to the bucket
+// the results to the bucket. Only images, audio and video are taken.
 export async function storeFile(file: IncomingFile, uploadDir: string, adapter?: StorageAdapter) {
+  if (!mediaExtension(file.type)) {
+    throw new UploadError(
+      415,
+      `Uploads must be images, audio or video, not ${file.type || 'untyped files'}`
+    );
+  }
   const mediaSettings = await prisma.mediaSettings.findUnique({
     where: { id: 'media' },
   });
@@ -29,10 +37,8 @@ export async function storeFile(file: IncomingFile, uploadDir: string, adapter?:
     upload = new Image(uploadOpts);
   } else if (file.type.startsWith('audio/')) {
     upload = new Audio(uploadOpts);
-  } else if (file.type.startsWith('video/')) {
-    upload = new Video(uploadOpts);
   } else {
-    upload = new Upload(uploadOpts);
+    upload = new Video(uploadOpts);
   }
   const { promise, resolve, reject } = Promise.withResolvers<FileData>();
   upload

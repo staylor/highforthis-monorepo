@@ -5,6 +5,7 @@ import { pipeline } from 'node:stream/promises';
 
 import type { Callback, UploadOpts } from '../Storage';
 import type { StorageAdapter } from '../adapter';
+import { mediaExtension } from '../mediaTypes';
 
 import { type CropSetting } from './Image';
 
@@ -46,7 +47,7 @@ export default class Upload {
   destination: string = '';
   // the obfuscated filename, without an extension
   basename: string = '';
-  // the extension of the file
+  // the extension for the file's MIME type, whatever its name says
   ext: string = '';
   // the obfuscated fileName + it's extension
   fileName: string = '';
@@ -66,7 +67,7 @@ export default class Upload {
 
   async setFileProps(file: IncomingFile): Promise<void> {
     await this.setDestination();
-    this.ext = path.extname(file.name);
+    this.ext = mediaExtension(file.type) ?? '';
     return new Promise((resolve, reject) => {
       crypto.randomBytes(8, (err, raw) => {
         if (err) {

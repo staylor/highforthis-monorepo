@@ -1,12 +1,16 @@
 import { createFetchProxy } from 'remix/fetch-proxy';
 import { openLazyFile } from 'remix/fs';
 import { createFileResponse } from 'remix/response/file';
-import { createContextKey, type Middleware } from 'remix/router';
+import { createContextKey, type Middleware, type RequestContext } from 'remix/router';
 
 import { adminToken } from '../lib/adminSession.ts';
+import { clientAddress } from '../lib/client.ts';
 import { createGraphQLClient, graphqlHost, type GraphQLClient } from '../lib/graphql.ts';
 import { getT, type TFunction } from '../lib/i18n.ts';
 import { openObserveBundleFiles } from '../lib/openobserve-bundles.ts';
+import { passkeyStarts } from '../lib/rate-limits.ts';
+
+import { sameOrigin } from './admin.ts';
 
 const wpPattern = /^\/(?:wp-|xmlrpc\.php|\.env)/i;
 
@@ -37,36 +41,68 @@ export function openObserveBundles(): Middleware {
 const fetchNow: typeof fetch = (input, init) => globalThis.fetch(input, init);
 const graphqlProxy = createFetchProxy(graphqlHost, { fetch: fetchNow });
 
+const onlyPost = () =>
+  new Response('Method Not Allowed', { status: 405, headers: { Allow: 'POST' } });
+const checkOrigin = sameOrigin();
+
 /**
  * The media upload page posts files from the browser, which can't read the httpOnly session
  * cookie, so the admin's token goes with them for GraphQL to check that the uploader is an admin.
+ * Turning the cookie into a token is what a forged post from another site would want, so only
+ * this site's own posts get it.
  */
-async function forwardUpload(request: Request) {
-  const token = await adminToken(request.headers.get('cookie'));
-  if (!token) {
-    return graphqlProxy(request);
+function forwardUpload(context: RequestContext) {
+  const { request } = context;
+  if (request.method !== 'POST') {
+    return onlyPost();
   }
-  const headers = new Headers(request.headers);
-  headers.set('Authorization', `Bearer ${token}`);
-  // A streamed body needs duplex: 'half' to be passed on
-  return graphqlProxy(new Request(request, { headers, duplex: 'half' } as RequestInit));
+  return checkOrigin(context, async () => {
+    const token = await adminToken(request.headers.get('cookie'));
+    if (!token) {
+      return graphqlProxy(request);
+    }
+    const headers = new Headers(request.headers);
+    headers.set('Authorization', `Bearer ${token}`);
+    // A streamed body needs duplex: 'half' to be passed on
+    return graphqlProxy(new Request(request, { headers, duplex: 'half' } as RequestInit));
+  });
 }
 
-// Signing in with a passkey asks GraphQL for its options from the browser, so /auth/passkeys
-// stays on this domain, which is the passkeys' origin.
-const forwards = [
-  { paths: ['/upload'], proxy: forwardUpload },
-  { paths: ['/auth/passkeys', '/graphql', '/uploads'], proxy: graphqlProxy },
-];
+/**
+ * Signing in with a passkey asks GraphQL for its options from the browser, so this stays on this
+ * domain, which is the passkeys' origin. Each start saves a challenge, so each address gets a few.
+ */
+function forwardPasskeyStart({ request }: RequestContext) {
+  if (request.method !== 'POST') {
+    return onlyPost();
+  }
+  const address = clientAddress(request);
+  if (address && !passkeyStarts.attempt(address)) {
+    return Response.json(
+      { error: 'Too many sign-in attempts. Try again in a few minutes.' },
+      { status: 429, headers: { 'Retry-After': String(passkeyStarts.retryAfter(address)) } }
+    );
+  }
+  return graphqlProxy(request);
+}
 
-const matches = (pathname: string, path: string) =>
-  pathname === path || pathname.startsWith(`${path}/`) || pathname.startsWith(`${path}.`);
+// The only GraphQL paths the browser needs on this domain, besides the API itself
+const exact: Record<string, (context: RequestContext) => Response | Promise<Response>> = {
+  '/upload': forwardUpload,
+  '/auth/passkeys/authenticate/options': forwardPasskeyStart,
+};
+
+const isGraphQL = (pathname: string) =>
+  pathname === '/graphql' || pathname.startsWith('/graphql/') || pathname.startsWith('/graphql.');
 
 export function proxies(): Middleware {
   return (context, next) => {
     const { pathname } = context.url;
-    const forward = forwards.find(({ paths }) => paths.some((path) => matches(pathname, path)));
-    return forward ? forward.proxy(context.request) : next();
+    const forward = exact[pathname];
+    if (forward) {
+      return forward(context);
+    }
+    return isGraphQL(pathname) ? graphqlProxy(context.request) : next();
   };
 }
 
