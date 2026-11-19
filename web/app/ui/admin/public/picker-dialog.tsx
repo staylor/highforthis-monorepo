@@ -9,14 +9,14 @@ import { Icon } from './icon.tsx';
 // and video blocks use it.
 
 /** An image as the post editor's image block keeps it. */
-export interface PickerImage {
+interface PickerImage {
   id: string;
   destination: string;
   crops: { fileName: string; width: number }[];
 }
 
 /** A video as the post editor's video block keeps it. */
-export interface PickerVideo {
+interface PickerVideo {
   id: string;
   dataId: string;
   slug: string;

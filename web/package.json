@@ -9,7 +9,7 @@
     "node": ">=24.3.0"
   },
   "dependencies": {
-    "@apollo/client": "4.1.6",
+    "@apollo/client": "4.3.8",
     "@highforthis/shared": "workspace:*",
     "@lexical/a11y": "0.53.0",
     "@lexical/clipboard": "0.53.0",
@@ -22,18 +22,18 @@
     "@lexical/rich-text": "0.53.0",
     "@lexical/selection": "0.53.0",
     "@lexical/utils": "0.53.0",
-    "@openobserve/browser-logs": "0.4.1",
-    "@openobserve/browser-rum": "0.4.1",
+    "@openobserve/browser-logs": "0.4.3",
+    "@openobserve/browser-rum": "0.4.3",
     "@preact/signals-core": "1.14.5",
-    "@simplewebauthn/browser": "13.3.0",
-    "graphql": "16.13.0",
-    "graphql-tag": "2.12.6",
-    "i18next": "25.8.13",
+    "@simplewebauthn/browser": "14.0.0",
+    "graphql": "16.15.0",
+    "graphql-tag": "2.12.7",
+    "i18next": "27.2.2",
     "lexical": "0.53.0",
     "remix": "3.3.0"
   },
   "devDependencies": {
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   },
   "scripts": {
     "dev": "pnpm --filter @highforthis/shared build && pnpm dev:service",

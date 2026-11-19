@@ -1,8 +1,4 @@
-import type {
-  AuthenticationResponseJSON,
-  AuthenticatorTransportFuture,
-  RegistrationResponseJSON,
-} from '@simplewebauthn/server';
+import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server';
 import { z } from 'zod';
 
 import { issueToken } from '#/authentication';
@@ -24,16 +20,6 @@ const registrationVerificationSchema = authenticationVerificationSchema.extend({
   name: z.string().trim().max(100).optional(),
 });
 
-const authenticatorTransports = new Set<AuthenticatorTransportFuture>([
-  'ble',
-  'cable',
-  'hybrid',
-  'internal',
-  'nfc',
-  'smart-card',
-  'usb',
-]);
-
 // What the passkey routes read from the request context
 interface PasskeyContext {
   authUser: UserWithRoles | null;
@@ -42,12 +28,6 @@ interface PasskeyContext {
 
 function getAdminUser({ authUser }: PasskeyContext): UserWithRoles | null {
   return isAdmin(authUser) ? authUser : null;
-}
-
-function parseTransports(transports: string[]): AuthenticatorTransportFuture[] {
-  return transports.filter((transport): transport is AuthenticatorTransportFuture =>
-    authenticatorTransports.has(transport as AuthenticatorTransportFuture)
-  );
 }
 
 async function saveChallenge({
@@ -154,7 +134,7 @@ export async function authenticationVerificationHandler(
         id: passkey.id,
         publicKey: passkey.publicKey,
         counter: Number(passkey.counter),
-        transports: parseTransports(passkey.transports),
+        transports: passkey.transports,
       },
       requireUserVerification: true,
     });
@@ -198,7 +178,7 @@ export async function registrationOptionsHandler(context: PasskeyContext): Promi
       attestationType: 'none',
       excludeCredentials: passkeys.map((passkey) => ({
         id: passkey.id,
-        transports: parseTransports(passkey.transports),
+        transports: passkey.transports,
       })),
       authenticatorSelection: {
         residentKey: 'required',

@@ -2,7 +2,7 @@ import type { IconName } from './public/icon.tsx';
 
 // Paths are relative to /admin, except the site link, which opens the public site.
 
-export interface NavPage {
+interface NavPage {
   path: string;
   label: string;
 }

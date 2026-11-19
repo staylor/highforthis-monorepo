@@ -1,13 +1,7 @@
 {
   "workspaces": {
     ".": {
-      "entry": [
-        "oxfmt.config.ts",
-        "oxlint.config.ts"
-      ],
       "ignoreDependencies": [
-        "@lexical/eslint-plugin",
-        "eslint-plugin-i18next",
         "esbuild",
         "tsconfig-paths",
         "tsx"
@@ -37,10 +31,6 @@
       "project": [
         "*.ts",
         "app/**/*.{ts,tsx}"
-      ],
-      "ignore": [
-        "app/types/graphql.ts",
-        "app/types/schema.ts"
       ],
       "ignoreDependencies": [
         "@lexical/a11y",
