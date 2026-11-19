@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { field } from '../support/ui.ts';
+import { field, hydrated } from '../support/ui.ts';
 
 // Videos come from YouTube's import, so the test adds one through GraphQL.
 
@@ -16,9 +16,9 @@ test('filters videos by year, edits one and deletes it', async ({ page, prefix, 
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
   const row = page.getByRole('row').filter({ hasText: video.title });
 
-  // Choosing a year submits the filter once the select's client entry has loaded
+  // Choosing a year submits the filter once the select's client entry has hydrated
   const filter = page.getByRole('combobox', { name: 'Select Year' });
-  await page.waitForLoadState('networkidle');
+  await hydrated(page);
   await filter.selectOption(String(year));
   await expect(page).toHaveURL(new RegExp(`[?&]year=${year}`));
   await expect(page.getByText('1 item', { exact: true }).first()).toBeVisible();
