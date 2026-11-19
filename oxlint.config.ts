@@ -52,6 +52,13 @@ export default createConfig(testingLibrary, {
       },
     },
     {
+      // Playwright fixtures hand over their value with use(), which isn't React's hook
+      files: ['e2e/**/*'],
+      rules: {
+        'react-hooks/rules-of-hooks': 'off',
+      },
+    },
+    {
       files: ['admin/src/components/Admin/**/*.tsx', 'web/app/actions/podcast/**/*.tsx'],
       rules: {
         'jsx-a11y/media-has-caption': 'off',

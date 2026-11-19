@@ -41,6 +41,7 @@
     "viewsOn_other": "{{count}} views on {{date}}"
   },
   "editor": {
+    "blockTypes": "Block types",
     "placeholder": "Start writing..."
   },
   "entity": {

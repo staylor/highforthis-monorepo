@@ -1,6 +1,7 @@
 import type { SyntheticEvent } from 'react';
 import { useRef } from 'react';
 import ReactDOM from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
 import Loading from '#/components/Loading';
 import type { Video, VideoConnection, VideoThumbnail } from '#/types/graphql';
@@ -27,6 +28,7 @@ interface VideoModalProps {
 }
 
 function VideoModal({ selectVideo, onClose }: VideoModalProps) {
+  const { t } = useTranslation();
   const basePath = `/modals/video`;
   const frameRef = useRef(null);
   const { fetcher, connection } = useInfiniteScroll<Video>(frameRef, basePath);
@@ -38,7 +40,7 @@ function VideoModal({ selectVideo, onClose }: VideoModalProps) {
   }
 
   return ReactDOM.createPortal(
-    <div className={modalClass}>
+    <div className={modalClass} role="dialog" aria-modal="true" aria-label={t('videos.heading')}>
       <CloseButton onClick={onClose} />
       <div className={frameClass} ref={frameRef}>
         {videos.edges?.map(({ node }) => {

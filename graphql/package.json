@@ -55,6 +55,7 @@
     "db:reset": "bash tools/database/reset",
     "db:setup": "bash tools/database/setup",
     "db:reset-admin-password": "tsx --env-file-if-exists=.env tools/database/reset-admin-password.ts",
+    "db:e2e-admin": "tsx --env-file-if-exists=.env tools/database/e2e-admin.ts",
     "tools:script:dev": "tsx --env-file-if-exists=.env",
     "tools:script:prod": "tsx --env-file-if-exists=.env.production",
     "test": "vitest run",

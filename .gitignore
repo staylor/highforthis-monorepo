@@ -15,6 +15,9 @@ graphql/public/uploads
 shared/dist
 web/build
 admin/build
+e2e/.auth
+e2e/playwright-report
+e2e/test-results
 
 *.log
 *.p8
