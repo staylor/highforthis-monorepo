@@ -16,9 +16,6 @@ import type {
 } from '../../../types/graphql.ts';
 import { featuredMediaFragment } from '../media/data.ts';
 
-// The venues section's data, moved from the admin app's src/server/venues.ts with the same
-// GraphQL operations.
-
 const venueFormFragment = gql`
   fragment VenueForm_venue on Venue {
     capacity
@@ -133,7 +130,7 @@ const updateVenueMutation = gql`
   ${venueFormFragment}
 `;
 
-// String fields in the schema that a form can fill with digits, as with artists' names
+// String fields in the schema that a form can fill with digits
 const skipKeys = ['name', 'slug', 'capacity', 'postalCode'];
 
 export function loadVenues({

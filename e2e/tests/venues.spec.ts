@@ -1,10 +1,6 @@
 import { expect, test } from '../support/test.ts';
 import { field } from '../support/ui.ts';
 
-// The venues section has moved from the admin app to web (see admin/REMIX3-MIGRATION.md), so
-// these pages, the featured media picker and the list's boxes come from web's Remix server and
-// its client entries.
-
 test('adds a venue with its details, closes it from the list and deletes it', async ({
   page,
   prefix,
@@ -13,7 +9,6 @@ test('adds a venue with its details, closes it from the list and deletes it', as
   const name = `${prefix} Venue`;
 
   await page.goto('/admin/venue/add');
-  // Served by web: its admin pages use the admin stylesheet its asset server builds
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
   await field(page, 'Name').fill(name);
   await field(page, 'Capacity').fill('2362');
