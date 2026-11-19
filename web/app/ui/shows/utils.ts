@@ -10,6 +10,18 @@ export const row = {
   },
 };
 
+// toLocaleString() builds a new formatter on every call, which made formatting dates most of the
+// shows pages' render time. Names are looked up like the date's other parts, in the server's zone.
+const names = (options: Intl.DateTimeFormatOptions, count: number, date: (i: number) => number) => {
+  const format = new Intl.DateTimeFormat('en-US', { ...options, timeZone: 'UTC' });
+  return Array.from({ length: count }, (_, i) => format.format(date(i)));
+};
+
+/** January to December, by `getMonth()` */
+export const monthNames = names({ month: 'long' }, 12, (i) => Date.UTC(2000, i, 1));
+/** Sun to Sat, by `getDay()`. January 2, 2000 was a Sunday. */
+export const weekdayNames = names({ weekday: 'short' }, 7, (i) => Date.UTC(2000, 0, 2 + i));
+
 export const formatDate = (date?: number) => {
   const d = date ? new Date(date) : new Date();
   const month = d.getMonth() + 1;
@@ -20,7 +32,7 @@ export const formatDate = (date?: number) => {
   return {
     month,
     day,
-    monthName: d.toLocaleString('en-us', { month: 'long' }),
+    monthName: monthNames[d.getMonth()],
     year,
     time: `${hours % 12 || 12}:${String(minutes).padStart(2, '0')}${hours < 12 ? 'AM' : 'PM'}`,
     formatted: `${month < 10 ? `0${month}` : month}/${day < 10 ? `0${day}` : day}`,
