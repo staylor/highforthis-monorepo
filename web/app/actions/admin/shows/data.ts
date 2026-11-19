@@ -1,38 +1,71 @@
 import { gql } from 'graphql-tag';
 
-import { showFormEntitiesFragment, showFormFragment } from '#/components/Admin/Show/Form.graphql';
+import {
+  deleteSelected,
+  parseForm,
+  submitForm,
+  type FormArgs,
+  type GraphQLClient,
+  type RedirectResult,
+} from '@highforthis/shared/admin/forms';
+import { addPageOffset, addSearchParam } from '@highforthis/shared/admin/listVariables';
+
 import type {
   BulkCreateShowsMutation,
   ShowEditQuery,
   ShowEntitiesQuery,
   ShowsAdminQuery,
   UpdateShowAttendedMutation,
-} from '#/types/graphql';
-import { addPageOffset, addSearchParam } from '#/utils/listVariables';
+} from '../../../types/graphql.ts';
 
-import { parseBulkShowsCsv } from './bulkShowsCsv';
-import { deleteSelected, parseForm, submitForm, type FormArgs, type RedirectResult } from './forms';
-import type { GraphQLClient } from './graphql';
+import { parseBulkShowsCsv } from './bulk-csv.ts';
+
+// The shows section's data, moved from the admin app's src/server/shows.ts with the same GraphQL
+// operations. The venue listings page is still the admin app's.
+
+const showFormFragment = gql`
+  fragment ShowForm_show on Show {
+    artists {
+      id
+      name
+    }
+    attended
+    date
+    id
+    notes
+    title
+    url
+    venue {
+      id
+      name
+    }
+  }
+`;
+
+const showFormEntitiesFragment = gql`
+  fragment ShowForm_entities on Query {
+    artists(filtered: true, first: 500) @cache(key: "admin") {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+    venues(filtered: true, first: 500) @cache(key: "admin") {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
 
 const showsQuery = gql`
-  query ShowsAdmin(
-    $after: String
-    $artist: EntityArg
-    $date: Float
-    $first: Int
-    $order: ShowOrder
-    $search: String
-    $venue: EntityArg
-  ) {
-    shows(
-      after: $after
-      artist: $artist
-      date: $date
-      first: $first
-      order: $order
-      search: $search
-      venue: $venue
-    ) @cache(key: "admin") {
+  query ShowsAdmin($after: String, $first: Int, $order: ShowOrder, $search: String) {
+    shows(after: $after, first: $first, order: $order, search: $search) @cache(key: "admin") {
       count
       edges {
         node {
@@ -45,6 +78,7 @@ const showsQuery = gql`
           date
           id
           title
+          url
           venue {
             id
             name
@@ -122,30 +156,41 @@ const bulkCreateShowsMutation = gql`
   }
 `;
 
+/** The shows list, newest first, filtered by ?search=. */
 export function loadShows({
-  gql,
+  gql: client,
   searchParams,
 }: {
   gql: GraphQLClient;
   searchParams: URLSearchParams;
 }) {
   const variables = addSearchParam(searchParams, addPageOffset(searchParams, { order: 'DESC' }));
-  return gql.query<ShowsAdminQuery>(showsQuery, variables);
+  return client.query<ShowsAdminQuery>(showsQuery, variables);
 }
 
-// The list's "attended" checkbox
-export function setShowAttended({ gql, formData }: { gql: GraphQLClient; formData: FormData }) {
+/** The list's "attended" box. Resolves to whether it saved. */
+export async function setShowAttended({
+  gql: client,
+  formData,
+}: {
+  gql: GraphQLClient;
+  formData: FormData;
+}) {
   const { id, attended } = parseForm(formData);
-  return gql.mutate<UpdateShowAttendedMutation>(attendedMutation, { id, input: { attended } });
+  const result = await client.mutate<UpdateShowAttendedMutation>(attendedMutation, {
+    id,
+    input: { attended: attended === true },
+  });
+  return Boolean(result.updateShow);
 }
 
 export function deleteShows(args: FormArgs) {
   return deleteSelected({ ...args, mutation: deleteShowMutation });
 }
 
-// The add form starts from the last show added, along with the artists and venues to pick from
-export function loadNewShow({ gql }: { gql: GraphQLClient }) {
-  return gql.query<ShowEntitiesQuery>(newShowQuery);
+/** The add form starts from the last show added, with the artists and venues to pick from. */
+export function loadNewShow({ gql: client }: { gql: GraphQLClient }) {
+  return client.query<ShowEntitiesQuery>(newShowQuery);
 }
 
 export function createShow(args: FormArgs) {
@@ -153,33 +198,36 @@ export function createShow(args: FormArgs) {
     ...args,
     mutation: createShowMutation,
     createMutation: 'createShow',
-    // an unchecked box isn't submitted
+    // An unchecked box isn't submitted
     variables: { input: { attended: false } },
   });
 }
 
-export function loadShow({ gql, id }: { gql: GraphQLClient; id: string }) {
-  return gql.query<ShowEditQuery>(showQuery, { id });
+export function loadShow({ gql: client, id }: { gql: GraphQLClient; id: string }) {
+  return client.query<ShowEditQuery>(showQuery, { id });
 }
 
 export function updateShow({ id, ...args }: FormArgs & { id: string }) {
   return submitForm({
     ...args,
     mutation: updateShowMutation,
-    // the form leaves out empty fields and unchecked boxes, so these defaults clear them
+    // The form leaves out empty fields and unchecked boxes, so these defaults clear them
     variables: { id, input: { attended: false, notes: null, title: null, url: null } },
   });
 }
 
-interface BulkImportErrors {
+/** The CSV the bulk add page posted back, with a message for each line that's wrong. */
+export interface BulkImportErrors {
   csv: string;
   errors: { line: number; message: string }[];
 }
 
-// Imports the shows pasted into the bulk form as CSV. On errors the form comes back with the
-// CSV and a message per line; otherwise the shows list says how many were created.
+/**
+ * Imports the shows pasted into the bulk add page. On errors the page comes back with the CSV and
+ * a message per line; otherwise the shows list says how many were created.
+ */
 export async function importShows({
-  gql,
+  gql: client,
   formData,
 }: {
   gql: GraphQLClient;
@@ -192,7 +240,7 @@ export async function importShows({
     return { csv, errors: parsed.errors };
   }
 
-  const result = await gql.mutate<Partial<BulkCreateShowsMutation>>(bulkCreateShowsMutation, {
+  const result = await client.mutate<Partial<BulkCreateShowsMutation>>(bulkCreateShowsMutation, {
     input: parsed.shows,
   });
   const imported = result.bulkCreateShows;

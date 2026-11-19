@@ -119,10 +119,6 @@ export type PostForm_PostFragment = { __typename?: 'Post', date?: number | null,
     | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
   > | null };
 
-export type ShowForm_ShowFragment = { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } };
-
-export type ShowForm_EntitiesFragment = { __typename?: 'Query', artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: string, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, name: string } }> } | null };
-
 export type Video_VideoFragment = { __typename?: 'Video', dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> };
 
 export type AppQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -518,65 +514,3 @@ export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: { __typ
       | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
       | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
     > | null } | null };
-
-export type ShowsAdminQueryVariables = Types.Exact<{
-  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  artist?: Types.InputMaybe<Types.EntityArg>;
-  date?: Types.InputMaybe<Types.Scalars['Float']['input']>;
-  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  order?: Types.InputMaybe<Types.ShowOrder>;
-  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  venue?: Types.InputMaybe<Types.EntityArg>;
-}>;
-
-
-export type ShowsAdminQuery = { __typename?: 'Query', shows?: { __typename?: 'ShowConnection', count?: number | null, edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, title?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', id: string, name: string, slug: string } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
-
-export type UpdateShowAttendedMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.UpdateShowInput;
-}>;
-
-
-export type UpdateShowAttendedMutation = { __typename?: 'Mutation', updateShow?: { __typename?: 'Show', id: string } | null };
-
-export type DeleteShowMutationVariables = Types.Exact<{
-  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
-}>;
-
-
-export type DeleteShowMutation = { __typename?: 'Mutation', removeShow?: boolean | null };
-
-export type ShowEntitiesQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type ShowEntitiesQuery = { __typename?: 'Query', show?: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } | null, artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: string, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, name: string } }> } | null };
-
-export type CreateShowMutationVariables = Types.Exact<{
-  input: Types.CreateShowInput;
-}>;
-
-
-export type CreateShowMutation = { __typename?: 'Mutation', createShow?: { __typename?: 'Show', id: string } | null };
-
-export type ShowEditQueryVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-}>;
-
-
-export type ShowEditQuery = { __typename?: 'Query', show?: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } | null, artists?: { __typename?: 'ArtistConnection', edges: Array<{ __typename?: 'ArtistEdge', node: { __typename?: 'Artist', id: string, name: string } }> } | null, venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, name: string } }> } | null };
-
-export type UpdateShowMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.UpdateShowInput;
-}>;
-
-
-export type UpdateShowMutation = { __typename?: 'Mutation', updateShow?: { __typename?: 'Show', attended?: boolean | null, date: number, id: string, notes?: string | null, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string }>, venue: { __typename?: 'Venue', id: string, name: string } } | null };
-
-export type BulkCreateShowsMutationVariables = Types.Exact<{
-  input: Array<Types.BulkCreateShowInput> | Types.BulkCreateShowInput;
-}>;
-
-
-export type BulkCreateShowsMutation = { __typename?: 'Mutation', bulkCreateShows: { __typename?: 'BulkCreateShowsResult', artistsCreated: number, showsCreated: number, venuesCreated: number } };
