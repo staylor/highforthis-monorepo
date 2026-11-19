@@ -16,12 +16,11 @@ test('adds a venue with its details, closes it from the list and deletes it', as
   await page.getByRole('textbox', { name: 'Latitude' }).fill('36.1612');
   await page.getByRole('textbox', { name: 'Longitude' }).fill('-86.7785');
 
-  // The picker opens once its client entry has loaded
+  // The picker opens once its client entry has hydrated
   const picker = page.getByRole('dialog', { name: 'Media' });
-  await expect(async () => {
-    await page.getByRole('button', { name: 'Set Featured Media' }).click();
-    await expect(picker).toBeVisible({ timeout: 1_000 });
-  }).toPass();
+  await hydrated(page);
+  await page.getByRole('button', { name: 'Set Featured Media' }).click();
+  await expect(picker).toBeVisible();
   // The uploads, and the close button
   const uploads = picker.getByRole('button');
   await expect.poll(() => uploads.count()).toBeGreaterThan(1);
