@@ -41,21 +41,26 @@ import {
   rejectWordPress,
   translations,
 } from './middleware/app.ts';
+import { serverTiming, timed } from './middleware/timing.ts';
 import { routes } from './routes.ts';
 
-// Reject WordPress probes, compress, serve public/ and the OpenObserve SDK bundles, forward
-// API paths to GraphQL, then render. HTTP logging stays on the Node server in server.ts, because
-// pino-http needs Node's req/res.
+// Time each request, reject WordPress probes, compress, serve public/ and the OpenObserve SDK
+// bundles, forward API paths to GraphQL, then render. HTTP logging stays on the Node server in
+// server.ts, because pino-http needs Node's req/res.
 export const router = createRouter({
   middleware: [
-    rejectWordPress(),
-    compression(),
-    staticFiles('./public', { index: false, cacheControl: 'public, max-age=3600' }),
-    openObserveBundles(),
-    proxies(),
-    graphql(),
-    translations(),
-    render({ assets }),
+    serverTiming(),
+    timed('rejectWordPress', rejectWordPress()),
+    timed('compression', compression()),
+    timed(
+      'static',
+      staticFiles('./public', { index: false, cacheControl: 'public, max-age=3600' })
+    ),
+    timed('openObserveBundles', openObserveBundles()),
+    timed('proxies', proxies()),
+    timed('graphql', graphql()),
+    timed('translations', translations()),
+    timed('render', render({ assets })),
   ],
 });
 
