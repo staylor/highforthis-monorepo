@@ -25,15 +25,13 @@ import {
   updateSiteSettings,
 } from './data.ts';
 
-// The admin's settings pages, moved from the admin app's routes/admin/settings. Each edits one
-// settings document and has its own controller, since controller middleware doesn't apply to
-// nested route maps.
+// Each page edits one settings document and has its own controller, since controller
+// middleware doesn't apply to nested route maps.
 
 const settings = routes.admin.settings;
 
 const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
 
-/** A settings page: its heading, the "Settings Updated." message and its form. */
 function renderSettingsPage(
   context: AdminPageContext,
   t: TFunction,

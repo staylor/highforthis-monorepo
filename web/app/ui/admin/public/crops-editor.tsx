@@ -4,9 +4,9 @@ import { cn } from '../../public/cn.ts';
 
 import { buttonClass, inputBase } from './styles.ts';
 
-// The media settings' crop sizes, from the admin app's Settings/Crops: a row each, named
-// crops[0][name], crops[0][width] and crops[0][height], with buttons to add and remove rows.
-// Without JavaScript the rows the server rendered can still be edited and saved.
+// A row per crop size, named crops[0][name], crops[0][width] and crops[0][height], with
+// buttons to add and remove rows. Without JavaScript the rows the server rendered can still be
+// edited and saved.
 
 interface Crop {
   name: string;
@@ -16,7 +16,6 @@ interface Crop {
 
 interface CropsEditorProps {
   crops: Crop[];
-  /** Translated text: the add and remove buttons and the table's headings. */
   labels: {
     add: string;
     remove: string;

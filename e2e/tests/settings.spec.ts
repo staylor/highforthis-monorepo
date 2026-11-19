@@ -1,14 +1,12 @@
 import { expect, test } from '../support/test.ts';
 import { field } from '../support/ui.ts';
 
-// The settings pages have moved from the admin app to web (see admin/REMIX3-MIGRATION.md).
 // Settings are shared by the whole site, so each test puts back what it changes.
 
 test('saves the general settings, from /settings', async ({ page, prefix, graphql }) => {
   const before = await graphql.siteSettings();
   try {
     await page.goto('/admin/settings');
-    // Served by web: its admin pages use the admin stylesheet its asset server builds
     await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
     await expect(page.getByRole('heading', { name: 'General Settings' })).toBeVisible();
     await expect(field(page, 'Site Title')).toHaveValue(before.siteTitle ?? '');
