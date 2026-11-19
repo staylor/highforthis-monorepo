@@ -126,22 +126,6 @@ export type AppQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 export type AppQuery = { __typename?: 'Query', apiKeys?: { __typename?: 'APIKeys', googleMaps?: string | null } | null, podcastSettings: { __typename?: 'PodcastSettings', description?: string | null, feedLink?: string | null, id: string, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: string } | null }, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', id: string, name: string, slug: string } } }> } | null, siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };
 
-export type VenueListingsAdminQueryVariables = Types.Exact<{
-  venueId: Types.Scalars['String']['input'];
-  withListings: Types.Scalars['Boolean']['input'];
-}>;
-
-
-export type VenueListingsAdminQuery = { __typename?: 'Query', venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, listingsUrl?: string | null, name: string } }> } | null, venueListings?: { __typename?: 'VenueListings', error?: string | null, source?: string | null, listings: Array<{ __typename?: 'Listing', cancelled: boolean, dateChanged: boolean, headliners: Array<string>, localDate?: string | null, localTime?: string | null, newArtists: Array<string>, sourceId: string, status?: string | null, support: Array<string>, url?: string | null, show?: { __typename?: 'Show', id: string } | null }> } };
-
-export type ImportListingsMutationVariables = Types.Exact<{
-  venueId: Types.Scalars['String']['input'];
-  input: Array<Types.ImportListingInput> | Types.ImportListingInput;
-}>;
-
-
-export type ImportListingsMutation = { __typename?: 'Mutation', importListings: { __typename?: 'ImportListingsResult', artistsCreated: number, showsCreated: number } };
-
 export type UploadsAdminQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
   first?: Types.InputMaybe<Types.Scalars['Int']['input']>;

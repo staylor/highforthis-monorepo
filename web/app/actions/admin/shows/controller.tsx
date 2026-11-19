@@ -11,7 +11,7 @@ import { AdminForm, type Field } from '../../../ui/admin/form.tsx';
 import { documentLoad } from '../../../ui/admin/links.ts';
 import { ListTable, RowActions, RowTitle, Search } from '../../../ui/admin/list-table.tsx';
 import { Message } from '../../../ui/admin/message.tsx';
-import { HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
+import { Alert, HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
 import { DateTimeInput } from '../../../ui/admin/public/date-time-input.tsx';
 import { EntitiesPicker } from '../../../ui/admin/public/entities-picker.tsx';
 import { InlineToggle } from '../../../ui/admin/public/inline-toggle.tsx';
@@ -340,17 +340,14 @@ function bulkPage(t: TFunction, result?: BulkImportErrors) {
         </pre>
       </div>
       {errors.length > 0 && (
-        <div
-          role="alert"
-          class="mb-5 max-w-2xl border-l-4 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-900 dark:bg-red-950/30 dark:text-red-200"
-        >
+        <Alert>
           <p class="font-semibold">{t('shows.bulk.errors')}</p>
           <ul class="mt-1 list-disc pl-5">
             {errors.map((error) => (
               <li>{t('shows.bulk.lineError', error)}</li>
             ))}
           </ul>
-        </div>
+        </Alert>
       )}
       <form method="post">
         <label for="bulk-shows" class="mb-1 block text-sm tracking-wide text-gray-700">

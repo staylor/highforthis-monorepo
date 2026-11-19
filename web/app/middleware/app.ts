@@ -54,10 +54,13 @@ const matches = (pathname: string, path: string) =>
  * Forwards admin and API paths to their servers, except the admin paths web renders itself
  * (`@highforthis/shared/adminPaths`). Their React Router `.data` requests still go to the admin.
  */
-export function proxies({ servedHere }: { servedHere?: readonly string[] } = {}): Middleware {
+export function proxies({
+  servedHere,
+  notYetMoved,
+}: { servedHere?: readonly string[]; notYetMoved?: readonly string[] } = {}): Middleware {
   return (context, next) => {
     const { pathname } = context.url;
-    if (isServedByWeb(pathname, servedHere)) {
+    if (isServedByWeb(pathname, servedHere, notYetMoved)) {
       return next();
     }
     const forward = forwards.find(({ paths }) => paths.some((path) => matches(pathname, path)));

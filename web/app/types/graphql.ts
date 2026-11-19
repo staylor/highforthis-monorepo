@@ -240,6 +240,22 @@ export type BulkCreateShowsMutationVariables = Types.Exact<{
 
 export type BulkCreateShowsMutation = { __typename?: 'Mutation', bulkCreateShows: { __typename?: 'BulkCreateShowsResult', artistsCreated: number, showsCreated: number, venuesCreated: number } };
 
+export type VenueListingsAdminQueryVariables = Types.Exact<{
+  venueId: Types.Scalars['String']['input'];
+  withListings: Types.Scalars['Boolean']['input'];
+}>;
+
+
+export type VenueListingsAdminQuery = { __typename?: 'Query', venues?: { __typename?: 'VenueConnection', edges: Array<{ __typename?: 'VenueEdge', node: { __typename?: 'Venue', id: string, listingsUrl?: string | null, name: string } }> } | null, venueListings?: { __typename?: 'VenueListings', error?: string | null, source?: string | null, listings: Array<{ __typename?: 'Listing', cancelled: boolean, dateChanged: boolean, headliners: Array<string>, localDate?: string | null, localTime?: string | null, newArtists: Array<string>, sourceId: string, status?: string | null, support: Array<string>, url?: string | null, show?: { __typename?: 'Show', id: string } | null }> } };
+
+export type ImportListingsMutationVariables = Types.Exact<{
+  venueId: Types.Scalars['String']['input'];
+  input: Array<Types.ImportListingInput> | Types.ImportListingInput;
+}>;
+
+
+export type ImportListingsMutation = { __typename?: 'Mutation', importListings: { __typename?: 'ImportListingsResult', artistsCreated: number, showsCreated: number } };
+
 export type UserForm_UserFragment = { __typename?: 'User', bio?: string | null, email: string, id: string, name?: string | null, roles?: Array<string | null> | null };
 
 export type UsersAdminQueryVariables = Types.Exact<{

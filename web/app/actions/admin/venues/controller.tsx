@@ -10,7 +10,6 @@ import { routes } from '../../../routes.ts';
 import type { VenueEditQuery, VenuesAdminQuery } from '../../../types/graphql.ts';
 import { EntityShows, PageLink } from '../../../ui/admin/entity.tsx';
 import { AdminForm, type Field } from '../../../ui/admin/form.tsx';
-import { documentLoad } from '../../../ui/admin/links.ts';
 import { ListTable, RowActions, RowTitle, Search } from '../../../ui/admin/list-table.tsx';
 import { Message } from '../../../ui/admin/message.tsx';
 import { HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
@@ -242,8 +241,6 @@ export const venuesEdit = createController(venues.edit, {
         date: node.date,
         name: node.title || node.artists.map((artist) => artist.name).join(' / '),
       }));
-      // The listings page is still the admin app's
-      const listingsHref = `/admin/show/listings/${venue.id}`;
       return renderAdminPage(
         context,
         <>
@@ -252,8 +249,7 @@ export const venuesEdit = createController(venues.edit, {
           <PageLink href={routes.venue.href({ slug: venue.slug })}>{t('venues.view')}</PageLink>
           {venue.listingsUrl && (
             <a
-              href={listingsHref}
-              data-rmx-document={documentLoad(listingsHref)}
+              href={routes.admin.shows.listings.index.href({ venueId: venue.id })}
               class="inline-block text-sm text-pink underline"
             >
               {t('shows.listings.view')}

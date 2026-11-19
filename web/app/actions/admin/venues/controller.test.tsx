@@ -230,8 +230,8 @@ describe('admin venues', () => {
     stubGraphQL(t, { VenueEdit: { venue, shows: { __typename: 'ShowConnection', edges: shows } } });
     const html = await (await get('/admin/venue/v1')).text();
     assert.match(html, /<a href="\/venue\/ryman-auditorium" target="_blank"/);
-    // The listings page is still the admin app's, so it loads in full
-    assert.match(html, /<a href="\/admin\/show\/listings\/v1" data-rmx-document/);
+    // Web serves the listings page too, so the link doesn't need a full load
+    assert.match(html, /<a href="\/admin\/show\/listings\/v1" class=/);
     assert.match(
       html,
       /<input type="url" name="listingsUrl" value="https:\/\/www.ticketmaster.com\/ryman"/

@@ -18,7 +18,7 @@ const adminPathsServedByWeb: readonly string[] = [
  * Pages under the paths above that the admin app still renders, while the rest of their section
  * has moved. Each goes when it moves too.
  */
-const adminPathsNotYetMoved: readonly string[] = ['/admin/show/listings'];
+const adminPathsNotYetMoved: readonly string[] = [];
 
 const isUnder = (pathname: string, path: string) =>
   pathname === path || pathname.startsWith(`${path}/`);

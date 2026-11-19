@@ -135,6 +135,14 @@ These are in web, and nothing is served there yet:
      - The bulk add page's CSV parser moved to web with its tests (`bulk-csv.ts`). A turned-back import renders the page again with the CSV and a message per line, with status 422.
      - The admin app's shows list, add, edit and bulk routes, the show form, its selectors, `server/shows.ts` and their tests are removed in the same change.
      - `e2e/tests/shows.spec.ts` runs against web, and adds a bulk import test.
+   - **The venue listings page has moved**, which finishes step 3. Web serves `/admin/show/listings(/:venueId)` (`web/app/actions/admin/shows/listings.tsx`), and the list of pages that haven't moved yet is empty again.
+     - Choosing a venue goes to its page through a client entry (`navigate-select.tsx`), since the venue is a path segment a GET form can't submit.
+     - The table is a client entry (`listings-form.tsx`): picking rows, "hide added", each row's artists field with its new and existing pills, and the button that adds a row's missing support acts. The server formats and translates everything first, since the browser has no translations. The add button gets a label for each count, and "+ {{names}}" comes as a template.
+     - The artists field re-renders on every keystroke, so its controlled `value` keeps what's typed.
+     - The picked rows post as a plain form. A failed import renders the page again with an alert, with status 502.
+     - `splitArtists` moved to `web/app/ui/admin/public/split-artists.ts`, since the server and the browser both use it.
+     - The admin app's listings route, `server/listings.ts` and `utils/splitArtists.ts` are removed in the same change, which leaves the admin app with no shows routes.
+     - `e2e/tests/listings.spec.ts` chooses a venue whose listings page Ticketmaster can't use, which fails without a request, and checks the page says why. Real listings come from Bowery Presents and Ticketmaster, which the tests can't reach, so the controller tests cover adding them.
 4. **Media:** upload, album covers, and the pickers.
 5. **Posts:** the editor client entry, the featured media field, and both pickers.
 6. **Login and passkeys:** move sign-in, write the session cookie from web, stop forwarding, then retire the admin service, its Railway variables and web's `ADMIN_HOST`.
