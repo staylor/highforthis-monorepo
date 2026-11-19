@@ -4,8 +4,7 @@ import { cn } from '../../public/cn.ts';
 
 import { inputBase } from './styles.ts';
 
-// The media upload page, from the admin app's routes/admin/media/upload: drop files, or choose
-// them, and each uploads to /upload with its progress, then links to its edit page. Web adds the
+// Each file uploads to /upload with its progress, then links to its edit page. Web adds the
 // admin's token on the way to GraphQL, since the browser can't read the session cookie.
 
 interface MediaUploaderProps {
@@ -16,7 +15,6 @@ interface Upload {
   name: string;
   /** How much has been sent, out of 100. */
   progress: number;
-  /** The new upload's ID, once it's done. */
   id?: string;
   failed?: boolean;
 }

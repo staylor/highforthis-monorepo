@@ -1,11 +1,8 @@
 import { expect, test } from '../support/test.ts';
 import { field } from '../support/ui.ts';
 
-// The media library has moved from the admin app to web (see admin/REMIX3-MIGRATION.md).
-
 test('filters the media list by type', async ({ page }) => {
   await page.goto('/admin/media');
-  // Served by web: its admin pages use the admin stylesheet its asset server builds
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
   // Choosing a type submits the filter once the select's client entry has loaded
   await page.waitForLoadState('networkidle');

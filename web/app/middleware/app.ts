@@ -44,8 +44,7 @@ const graphqlProxy = createFetchProxy(graphqlHost, { fetch: fetchNow });
 
 /**
  * The media upload page posts files from the browser, which can't read the httpOnly session
- * cookie, so the admin's token goes with them for GraphQL to check that the uploader is an admin,
- * as the admin app did before the page moved here.
+ * cookie, so the admin's token goes with them for GraphQL to check that the uploader is an admin.
  */
 function forwardUpload(request: Request) {
   const token = adminToken(request.headers.get('cookie'));

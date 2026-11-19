@@ -4,9 +4,6 @@ import { cn } from '../../public/cn.ts';
 
 import { buttonClass } from './styles.ts';
 
-// The album covers page's results, from the admin app's routes/admin/media/album-covers: a grid
-// of Apple Music albums to pick, and a button that adds the picked covers to the media library.
-
 interface Album {
   id: string;
   name: string;
