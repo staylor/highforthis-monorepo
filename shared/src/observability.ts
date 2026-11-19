@@ -7,7 +7,6 @@ import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
-import { RouterInstrumentation } from '@opentelemetry/instrumentation-router';
 import { RuntimeNodeInstrumentation } from '@opentelemetry/instrumentation-runtime-node';
 import { UndiciInstrumentation } from '@opentelemetry/instrumentation-undici';
 import {
@@ -122,8 +121,6 @@ export function startObservability({
     instrumentations: [
       new HttpInstrumentation(),
       new UndiciInstrumentation(),
-      // Express 5 is imported from ESM, which require-hooks can't patch; its router is required.
-      new RouterInstrumentation(),
       new GraphQLInstrumentation({ ignoreTrivialResolveSpans: true, mergeItems: true }),
       new PgInstrumentation(),
       new RuntimeNodeInstrumentation(),

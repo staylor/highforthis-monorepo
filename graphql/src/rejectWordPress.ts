@@ -1,13 +1,14 @@
-import type { RequestHandler } from 'express';
+import type { Middleware } from 'remix/router';
 
 const wpPattern = /^\/(?:wp-|xmlrpc\.php|\.env)/i;
 
-const rejectWordPress: RequestHandler = (req, res, next) => {
-  if (wpPattern.test(req.path)) {
-    res.status(403).end();
-    return;
-  }
-  next();
-};
+export const isWordPressProbe = (pathname: string) => wpPattern.test(pathname);
 
-export default rejectWordPress;
+export default function rejectWordPress(): Middleware {
+  return (context, next) => {
+    if (isWordPressProbe(context.url.pathname)) {
+      return new Response(null, { status: 403 });
+    }
+    return next();
+  };
+}

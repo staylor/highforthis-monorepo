@@ -1,11 +1,11 @@
 # @highforthis/graphql
 
-GraphQL API server for High For This, built with Apollo Server, Express, and Prisma with PostgreSQL.
+GraphQL API server for High For This, built with Apollo Server, Remix's Fetch API server packages, and Prisma with PostgreSQL.
 
 ## Stack
 
 - **[Apollo Server](https://www.apollographql.com/docs/apollo-server/)** — GraphQL server
-- **[Express](https://expressjs.com/)** — HTTP server
+- **[Remix](https://remix.run/)** — HTTP server: `remix/node-fetch-server` and `remix/router`, with Remix's CORS, compression and static middleware, and `remix/form-data-parser` for uploads
 - **[Prisma](https://www.prisma.io/)** — ORM with PostgreSQL adapter (`@prisma/adapter-pg`)
 - **JWT** — Authentication via `jsonwebtoken` and `bcryptjs`
 
@@ -107,7 +107,9 @@ pnpm start
 
 ```
 src/
-├── index.ts          # Express + Apollo Server entry point
+├── index.ts          # Entry point: starts observability, then server.ts
+├── server.ts         # Node HTTP server, Apollo Server and request logging
+├── app.ts            # Routes and middleware (Remix router)
 ├── authentication.ts # JWT authentication middleware
 ├── database/         # Prisma client
 ├── models/           # Data access layer

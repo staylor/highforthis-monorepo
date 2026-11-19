@@ -5,7 +5,7 @@ import ffprobeStatic from 'ffprobe-static';
 
 import type { Callback } from '../Storage';
 
-import Upload, { type FileData } from './Upload';
+import Upload, { type FileData, type IncomingFile } from './Upload';
 
 interface VideoMetadata {
   description: string;
@@ -22,7 +22,7 @@ interface FFProbeStream {
 }
 
 export default class Video extends Upload {
-  async save(file: Express.Multer.File, cb: Callback) {
+  async save(file: IncomingFile, cb: Callback) {
     const callback: Callback = async (err, data) => {
       const finalPath = path.join(this.destination, this.fileName);
       const meta: VideoMetadata = {
@@ -54,7 +54,7 @@ export default class Video extends Upload {
       cb(err, {
         ...(data as FileData),
         ...meta,
-      } as Partial<Express.Multer.File>);
+      });
     };
     super.save(file, callback);
   }

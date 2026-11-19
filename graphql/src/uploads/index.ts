@@ -1,21 +1,15 @@
 import path from 'node:path';
-import { Readable } from 'node:stream';
 
-import type { Request, Response, NextFunction } from 'express';
-import multer from 'multer';
-
-import mediaStorage, { storeFile } from './Storage';
+import { storeFile } from './Storage';
 import mediaAdapter from './adapter';
-import mediaMiddleware, { createMediaUpload } from './handler';
+import handleUploads, { createMediaUpload } from './handler';
 
 // Uploads are written here, then copied to the bucket
 export const uploadDir = path.join(process.cwd(), 'public/uploads');
 
-const multerMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const storage = mediaStorage({ uploadDir, adapter: mediaAdapter(uploadDir) });
-  const upload = multer({ storage });
-  return upload.array('uploads')(req, res, next);
-};
+/** `POST /upload`: stores the files in the `uploads` field and answers with their media IDs. */
+export const uploadHandler = ({ request }: { request: Request }) =>
+  handleUploads(request, uploadDir);
 
 const IMAGE_EXTENSIONS: Record<string, string> = {
   'image/jpeg': '.jpg',
@@ -36,21 +30,7 @@ export async function uploadFromUrl(
     throw new Error(`Could not download ${url}: HTTP ${response.status}, ${mimetype || 'no type'}`);
   }
 
-  const buffer = Buffer.from(await response.arrayBuffer());
-  const file: Express.Multer.File = {
-    fieldname: 'uploads',
-    originalname: `${name}${ext}`,
-    encoding: '7bit',
-    mimetype,
-    size: buffer.length,
-    stream: Readable.from(buffer),
-    destination: '',
-    filename: '',
-    path: '',
-    buffer,
-  };
+  const file = new File([await response.arrayBuffer()], `${name}${ext}`, { type: mimetype });
   const stored = await storeFile(file, uploadDir, mediaAdapter(uploadDir));
   return createMediaUpload({ ...stored, ...details });
 }
-
-export { multerMiddleware, mediaMiddleware };

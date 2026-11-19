@@ -4,7 +4,7 @@ import { pipeline } from 'node:stream/promises';
 
 import type { Callback } from '../Storage';
 
-import Upload, { type FileData } from './Upload';
+import Upload, { type FileData, type IncomingFile } from './Upload';
 
 export type CropInfo = {
   fileName: string;
@@ -52,7 +52,7 @@ export default class Image extends Upload {
     });
   }
 
-  async save(file: Express.Multer.File, cb: Callback) {
+  async save(file: IncomingFile, cb: Callback) {
     let fileData: FileData;
     try {
       await this.setFileProps(file);
@@ -73,7 +73,7 @@ export default class Image extends Upload {
       });
 
       // Rejects if any stream fails, such as sharp on a file that isn't a readable image
-      await pipeline(file.stream, imageMeta, fs.createWriteStream(finalPath));
+      await pipeline(file.stream(), imageMeta, fs.createWriteStream(finalPath));
 
       const sizes = this.settings.crops.map(({ width, height }: CropSetting) => {
         const w = width ?? 0;
@@ -90,8 +90,8 @@ export default class Image extends Upload {
 
       fileData = {
         ...original,
-        mimeType: file.mimetype,
-        originalName: file.originalname,
+        mimeType: file.type,
+        originalName: file.name,
         destination: this.destination.replace(`${this.uploadDir}/`, ''),
         title: '',
         caption: '',
@@ -103,7 +103,7 @@ export default class Image extends Upload {
       cb(error as Error);
       return;
     }
-    cb(null, fileData as Partial<Express.Multer.File>);
+    cb(null, fileData);
   }
 
   toArray() {

@@ -6,7 +6,7 @@ import mm from 'musicmetadata';
 import type { Callback } from '../Storage';
 
 import type { CropInfo } from './Image';
-import Upload, { type FileData } from './Upload';
+import Upload, { type FileData, type IncomingFile } from './Upload';
 
 interface AudioMetadata {
   title: string;
@@ -50,7 +50,7 @@ export default class Audio extends Upload {
     );
   }
 
-  async save(file: Express.Multer.File, cb: Callback) {
+  async save(file: IncomingFile, cb: Callback) {
     const callback: Callback = async (error, data) => {
       const readMetadata = (): Promise<MM.Metadata> =>
         new Promise((resolve, reject) => {
@@ -116,7 +116,7 @@ export default class Audio extends Upload {
       cb(error, {
         ...(data as FileData),
         ...meta,
-      } as Partial<Express.Multer.File>);
+      });
     };
     super.save(file, callback);
   }

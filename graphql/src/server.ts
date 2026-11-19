@@ -1,74 +1,36 @@
 import http from 'node:http';
 
-import { ApolloServer, HeaderMap } from '@apollo/server';
+import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import compression from 'compression';
-import cors from 'cors';
-import express from 'express';
+import { createRequestListener } from 'remix/node-fetch-server';
 
 import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
 
-import { authMiddleware, jwtMiddleware, sessionHandler } from './authentication';
-import { adminMiddleware } from './authorization';
+import { createApp, routes } from './app';
 import env from './env';
 import cronJobs from './jobs';
 import type { AppContext } from './models';
-import {
-  authenticationOptionsHandler,
-  authenticationVerificationHandler,
-  deletePasskeyHandler,
-  listPasskeysHandler,
-  registrationOptionsHandler,
-  registrationVerificationHandler,
-} from './passkeys';
-import rejectWordPress from './rejectWordPress';
+import { isWordPressProbe } from './rejectWordPress';
 import resolvers from './resolvers';
 import typeDefs from './schema';
-import { mediaMiddleware, multerMiddleware, uploadDir } from './uploads';
 
 const GRAPHQL_PORT = env.GRAPHQL_PORT;
 const logger = createLogger({ serviceName: 'graphql' });
 
+// WordPress probes and the favicon are answered without being logged
+function logged({ method, url = '/' }: http.IncomingMessage): boolean {
+  let pathname: string;
+  try {
+    ({ pathname } = new URL(url, 'http://localhost'));
+  } catch {
+    return true;
+  }
+  const favicon = pathname === routes.favicon.href() && (method === 'GET' || method === 'HEAD');
+  return !favicon && !isWordPressProbe(pathname);
+}
+
 async function startServer(): Promise<void> {
-  const app = express();
-  const httpServer = http.createServer(app);
-
-  app.use(rejectWordPress);
-
-  app.get('/favicon.ico', (_req, res) => {
-    res.sendStatus(204);
-  });
-
-  app.use(compression());
-  app.use(createHttpLogger(logger));
-  // This server handles uploads, and can serve previews of static assets
-  app.use(express.static(uploadDir));
-
-  app.use(express.urlencoded({ extended: true }));
-
-  app.use((req, _res, next) => {
-    req.context = {};
-
-    next();
-  });
-
-  app.get('/health', (_req, res) => {
-    res.json({ status: 'ok' });
-  });
-
-  app.use('/graphql', jwtMiddleware);
-
-  app.use('/auth/passkeys', jwtMiddleware, express.json());
-  app.post('/auth/passkeys/authenticate/options', authenticationOptionsHandler);
-  app.post('/auth/passkeys/authenticate/verify', authenticationVerificationHandler);
-  app.post('/auth/passkeys/register/options', registrationOptionsHandler);
-  app.post('/auth/passkeys/register/verify', registrationVerificationHandler);
-  app.get('/auth/passkeys', listPasskeysHandler);
-  app.delete('/auth/passkeys/:credentialId', deletePasskeyHandler);
-  app.get('/auth/session', jwtMiddleware, sessionHandler);
-  app.post('/auth', express.json(), authMiddleware);
-
-  app.post('/upload', jwtMiddleware, adminMiddleware, multerMiddleware, mediaMiddleware);
+  const httpServer = http.createServer();
 
   const server = new ApolloServer<AppContext>({
     typeDefs,
@@ -77,40 +39,21 @@ async function startServer(): Promise<void> {
   });
   await server.start();
 
-  app.use('/graphql', cors(), express.json(), async (req, res) => {
-    const headers = new HeaderMap();
-    for (const [key, value] of Object.entries(req.headers)) {
-      if (value !== undefined) {
-        headers.set(key, Array.isArray(value) ? value.join(', ') : value);
-      }
-    }
+  const httpLogger = createHttpLogger(logger);
+  const listener = createRequestListener(createApp(server).fetch, {
+    onError(error) {
+      logger.error({ err: error }, 'Request failed');
+      return new Response('Internal Server Error', { status: 500 });
+    },
+  });
 
-    const httpGraphQLResponse = await server.executeHTTPGraphQLRequest({
-      httpGraphQLRequest: {
-        method: req.method.toUpperCase(),
-        headers,
-        search: new URL(req.url, `http://${req.headers.host}`).search ?? '',
-        body: req.body,
-      },
-      context: async (): Promise<AppContext> => ({
-        authUser: req.context?.authUser as AppContext['authUser'],
-      }),
-    });
-
-    for (const [key, value] of httpGraphQLResponse.headers) {
-      res.setHeader(key, value);
+  // pino-http works on Node's req/res, so it wraps the fetch listener instead of becoming
+  // Remix middleware.
+  httpServer.on('request', (req, res) => {
+    if (logged(req)) {
+      httpLogger(req, res);
     }
-    res.status(httpGraphQLResponse.status || 200);
-
-    if (httpGraphQLResponse.body.kind === 'complete') {
-      res.send(httpGraphQLResponse.body.string);
-      return;
-    }
-
-    for await (const chunk of httpGraphQLResponse.body.asyncIterator) {
-      res.write(chunk);
-    }
-    res.end();
+    listener(req, res);
   });
 
   await new Promise<void>((resolve) =>
