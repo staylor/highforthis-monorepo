@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { field } from '../support/ui.ts';
+import { field, hydrated } from '../support/ui.ts';
 
 // Settings are shared by the whole site, so each test puts back what it changes.
 
@@ -43,9 +43,10 @@ test('adds a crop size and removes it again', async ({ page, prefix, graphql }) 
     await expect(page.getByText('Settings Updated.')).toBeVisible();
     expect(await graphql.mediaCrops()).toContainEqual({ name, width: 640, height: 360 });
 
-    // The saved row is the last one; removing it and saving takes it out
+    // After a reload the saved row is the last one; removing it and saving takes it out
+    await page.reload();
+    await hydrated(page);
     await expect(page.getByRole('textbox', { name: `Name ${row}` })).toHaveValue(name);
-    await page.waitForLoadState('networkidle');
     await page
       .getByRole('row')
       .filter({ has: page.getByRole('textbox', { name: `Name ${row}` }) })
