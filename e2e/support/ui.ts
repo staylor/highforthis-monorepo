@@ -50,3 +50,8 @@ export async function addedId(page: Page, section: string): Promise<string> {
   await expect(page).toHaveURL(editPage);
   return editPage.exec(page.url())![1];
 }
+
+/** Waits for the page's client entries to hydrate; until then, their controls do nothing. */
+export async function hydrated(page: Page) {
+  await expect(page.locator('html[data-hydrated]')).toHaveCount(1);
+}

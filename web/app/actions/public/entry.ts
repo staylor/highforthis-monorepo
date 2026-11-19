@@ -22,6 +22,13 @@ const app = run({
   },
 });
 
+// Marks the page once its client entries have hydrated, which the end-to-end tests wait for:
+// until then, their controls do nothing.
+app
+  .ready()
+  .then(() => document.documentElement.setAttribute('data-hydrated', ''))
+  .catch((error) => console.error('Client entries failed to hydrate', error));
+
 const rumConfig = window.__OPENOBSERVE_RUM__;
 if (rumConfig) {
   import('./rum.ts')
