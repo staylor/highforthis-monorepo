@@ -30,6 +30,12 @@ interface Show {
   venue: { name: string };
 }
 
+interface User {
+  id: string;
+  name: string;
+  bio?: string | null;
+}
+
 interface Entity {
   id: string;
   name: string;
@@ -125,9 +131,17 @@ export class GraphQL {
     return show;
   }
 
+  async user(id: string) {
+    const { user } = await this.query<{ user: User | null }>(
+      `query ($id: String!) { user(id: $id) { id name bio } }`,
+      { id }
+    );
+    return user;
+  }
+
   /**
-   * Removes the posts, shows, venues and artists whose title or name starts with `prefix`. Shows
-   * go first, since a venue can't be removed while a show is at it.
+   * Removes the posts, shows, venues, artists and users whose title or name starts with `prefix`.
+   * Shows go first, since a venue can't be removed while a show is at it.
    */
   async removeMatching(prefix: string) {
     const found = await this.query<{
@@ -135,12 +149,14 @@ export class GraphQL {
       shows: Connection<Show>;
       venues: Connection<Entity>;
       artists: Connection<Entity>;
+      users: Connection<User>;
     }>(
       `query ($search: String) {
         posts(search: $search, first: 500) { count edges { node { id title } } }
         shows(search: $search, first: 500) { count edges { node { id title venue { name } } } }
         venues(search: $search, first: 500) { count edges { node { id name } } }
         artists(search: $search, first: 500) { count edges { node { id name } } }
+        users(search: $search, first: 500) { count edges { node { id name } } }
       }`,
       { search: prefix }
     );
@@ -164,6 +180,7 @@ export class GraphQL {
       ['removeVenue', ids(found.venues, (venue) => venue.name.startsWith(prefix))],
       ['removeArtist', ids(found.artists, (artist) => artist.name.startsWith(prefix))],
       ['removePost', ids(found.posts, (post) => post.title.startsWith(prefix))],
+      ['removeUser', ids(found.users, (user) => user.name.startsWith(prefix))],
     ];
     for (const [mutation, removing] of removals) {
       if (removing.length === 0) {

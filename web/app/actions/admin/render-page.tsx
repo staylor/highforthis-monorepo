@@ -11,8 +11,13 @@ interface AdminPageOptions {
   status?: number;
 }
 
+// What rendering needs from a request's context. Admin controllers' contexts also carry
+// `context.admin`, which keeps them from being an `AppContext`.
+type AdminPageContext = Pick<AppContext, 'gql' | 'request' | 'render' | 'url'>;
+
+/** Renders an admin page in the admin's document and layout. */
 export async function renderAdminPage(
-  context: AppContext,
+  context: AdminPageContext,
   page: RemixNode,
   options: AdminPageOptions = {}
 ) {

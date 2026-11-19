@@ -1,6 +1,6 @@
 import { gql } from 'graphql-tag';
 import type { RemixNode } from 'remix/component';
-import { createContextKey, type Middleware } from 'remix/router';
+import type { Middleware } from 'remix/router';
 
 import { adminToken } from '../lib/adminSession.ts';
 import { graphqlHost } from '../lib/graphql.ts';
@@ -65,14 +65,19 @@ const appQuery = gql`
   }
 `;
 
-const RootData = createContextKey<Promise<AppQuery>>();
+// One App query per request, shared by the prefetch middleware and the page. Keyed by the
+// request rather than stored on the context, so any controller's context can use it, whatever
+// its middleware has added.
+const rootData = new WeakMap<Request, Promise<AppQuery>>();
 
 /** Page actions share one memoized App query per request. */
-export function loadRootData(context: AppContext): Promise<AppQuery> {
-  if (!context.has(RootData)) {
-    context.set(RootData, context.gql.query<AppQuery>(appQuery));
+export function loadRootData(context: Pick<AppContext, 'gql' | 'request'>): Promise<AppQuery> {
+  let data = rootData.get(context.request);
+  if (!data) {
+    data = context.gql.query<AppQuery>(appQuery);
+    rootData.set(context.request, data);
   }
-  return context.get(RootData)!;
+  return data;
 }
 
 /** Controller middleware that starts the App query before the action runs its own. */

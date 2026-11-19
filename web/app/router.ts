@@ -3,6 +3,7 @@ import { render } from 'remix/middleware/render';
 import { staticFiles } from 'remix/middleware/static';
 import { createRouter, type RouterContext } from 'remix/router';
 
+import { usersAdd, usersEdit, usersList } from './actions/admin/users/controller.tsx';
 import controller from './actions/controller.tsx';
 import podcastController from './actions/podcast/controller.tsx';
 import showsController from './actions/shows/controller.tsx';
@@ -43,3 +44,6 @@ declare module 'remix' {
 router.map(routes, controller);
 router.map(routes.podcast, podcastController);
 router.map(routes.shows, showsController);
+router.map(routes.admin.users.list, usersList);
+router.map(routes.admin.users.add, usersAdd);
+router.map(routes.admin.users.edit, usersEdit);
