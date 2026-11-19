@@ -1,10 +1,12 @@
 import { startRegistration } from '@simplewebauthn/browser';
-import { clientEntry, navigate, on, type Handle } from 'remix/component';
+import { clientEntry, navigate, on, ref, type Handle } from 'remix/component';
 
 import { buttonClass, inputBase } from './styles.ts';
 
 // Adding a passkey, from the admin app's passkeys page: asks for the registration options, runs
-// the browser's WebAuthn prompt, sends its answer to be checked, then reloads the list.
+// the browser's WebAuthn prompt, sends its answer to be checked, then reloads the list. The name
+// field is read when the button is pressed, so a name typed before the page's scripts load is
+// kept.
 
 interface PasskeyRegisterProps {
   /** Where to ask for the options and send the answer. */
@@ -37,7 +39,7 @@ async function postJSON(href: string, failed: string, body?: unknown) {
 export const PasskeyRegister = clientEntry(
   import.meta.url,
   function PasskeyRegister(handle: Handle<PasskeyRegisterProps>) {
-    let name = '';
+    let nameInput: HTMLInputElement | undefined;
     let error = '';
     let registering = false;
 
@@ -51,10 +53,12 @@ export const PasskeyRegister = clientEntry(
         const response = await startRegistration({ optionsJSON: options });
         await postJSON(verifyHref, labels.failed, {
           challengeId,
-          name: name.trim() || undefined,
+          name: nameInput?.value.trim() || undefined,
           response,
         });
-        name = '';
+        if (nameInput) {
+          nameInput.value = '';
+        }
         await navigate(window.location.href, { history: 'replace', resetScroll: false });
       } catch (caught) {
         error = caught instanceof Error ? caught.message : labels.failed;
@@ -74,11 +78,9 @@ export const PasskeyRegister = clientEntry(
               type="text"
               maxLength={100}
               placeholder={labels.namePlaceholder}
-              value={name}
               class={`${inputBase} w-full`}
-              mix={on('input', (event) => {
-                name = event.currentTarget.value;
-                handle.update();
+              mix={ref((node) => {
+                nameInput = node;
               })}
             />
           </label>
