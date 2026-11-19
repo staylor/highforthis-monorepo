@@ -26,7 +26,7 @@ The Dockerfile keeps three days of data (`ZO_COMPACT_DATA_RETENTION_DAYS`; OpenO
 
 The root credentials initialize the first user on a fresh `/data` volume. Keep them configured so a replacement volume can initialize successfully.
 
-## Configure `graphql`, `web` and `admin`
+## Configure `graphql` and `web`
 
 Set the following variables on each Railway service. The endpoint must include the OpenObserve organization (`default` below), but must not include a signal-specific suffix such as `/v1/traces`.
 
@@ -79,6 +79,18 @@ OPENOBSERVE_RUM_TRACE_SAMPLE_RATE=100
 ```
 
 Each rate must be between `0` and `100`; set the replay rate to `0` to disable session replay. RUM remains disabled when none of its required variables are present, and startup reports an incomplete configuration when only some are set.
+
+## Admin dashboard
+
+The admin's dashboard (`/admin`, on `web`) shows the last 30 days of page views by querying OpenObserve's search API from the server. Set these on the Railway `web` service; the private address keeps the queries on Railway's network:
+
+```text
+OPENOBSERVE_URL=http://${{observability.RAILWAY_PRIVATE_DOMAIN}}:5080
+OPENOBSERVE_USER=${{observability.ZO_ROOT_USER_EMAIL}}
+OPENOBSERVE_PASSWORD=${{observability.ZO_ROOT_USER_PASSWORD}}
+```
+
+`OPENOBSERVE_ORG` picks another organization than `default`. Without the URL and credentials, the dashboard says which variables to set.
 
 ## Run locally
 
