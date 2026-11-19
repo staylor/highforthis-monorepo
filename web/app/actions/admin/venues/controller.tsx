@@ -31,8 +31,8 @@ import {
   type VenueFlag,
 } from './data.ts';
 
-// The admin's venues section, moved from the admin app's routes/admin/venue. Each form route
-// has its own controller, since controller middleware doesn't apply to nested route maps.
+// Each form route has its own controller, since controller middleware doesn't apply to nested
+// route maps.
 
 const venues = routes.admin.venues;
 
@@ -44,7 +44,6 @@ const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redire
 const flags = new Set<unknown>(['excludeFromSearch', 'permanentlyClosed'] satisfies VenueFlag[]);
 const isFlag = (intent: unknown): intent is VenueFlag => flags.has(intent);
 
-/** The venue's featured image at its smallest crop, as the admin app's list Thumbnail. */
 function thumbnail(venue: VenueRow) {
   const [media] = venue.featuredMedia ?? [];
   const crops = media && 'crops' in media ? [...(media.crops ?? [])] : [];

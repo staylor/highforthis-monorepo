@@ -19,7 +19,6 @@ export interface Field {
   /** The form field's name, and the property of `data` that fills it. */
   prop: string;
   type?: 'text' | 'textarea' | 'select' | 'hidden' | 'checkbox' | 'custom';
-  /** The <input> type for a text field. */
   inputType?: 'text' | 'email' | 'password' | 'url';
   autoComplete?: boolean;
   placeholder?: string;
