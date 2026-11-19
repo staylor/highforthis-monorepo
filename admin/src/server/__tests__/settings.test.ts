@@ -2,7 +2,13 @@
 import { describe, expect, it } from 'vitest';
 
 import { loadApp } from '../app';
-import { deletePodcasts, loadPodcast, loadPodcasts, updatePodcast } from '../podcasts';
+import {
+  createPodcast,
+  deletePodcasts,
+  loadPodcast,
+  loadPodcasts,
+  updatePodcast,
+} from '../podcasts';
 import {
   loadMediaSettings,
   loadPodcastSettings,
@@ -29,7 +35,7 @@ describe('settings', () => {
   });
 
   it('saves each settings page under its ID', async () => {
-    const gql = stubGraphQL();
+    const gql = stubGraphQL({ mutate: { updateSiteSettings: { id: 'site' } } });
     const url = new URL('http://localhost/admin/settings/site');
     const result = await updateSiteSettings({ gql, url, formData: form({ siteTitle: 'HFT' }) });
     await updateMediaSettings({
@@ -77,6 +83,19 @@ describe('podcasts', () => {
       { operation: 'UpdatePodcast', variables: { id: 'e1', input: { title: 'Pilot' } } },
       { operation: 'DeletePodcast', variables: { ids: ['e1'] } },
     ]);
+  });
+
+  it('creates an episode and goes to its edit page', async () => {
+    const gql = stubGraphQL({ mutate: { createPodcast: { id: 'e2' } } });
+    const result = await createPodcast({
+      gql,
+      url: new URL('http://localhost/admin/podcast/add'),
+      formData: form({ title: 'Pilot' }),
+    });
+    expect(calls(gql.mutate)).toEqual([
+      { operation: 'CreatePodcast', variables: { input: { title: 'Pilot' } } },
+    ]);
+    expect(result).toEqual({ redirectTo: 'http://localhost/admin/podcast/e2?message=updated' });
   });
 });
 

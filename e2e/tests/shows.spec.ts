@@ -57,3 +57,20 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
   await expect(row).toHaveCount(0);
   expect(await graphql.show(id)).toBeNull();
 });
+
+test("lists an artist once, and says so when a show can't be saved", async ({ page, prefix }) => {
+  await page.goto('/admin/show/add');
+  await field(page, 'Title').fill(`${prefix} Show`);
+  await removeArtists(page);
+  const artists = field(page, 'Artists');
+  await artists.selectOption({ index: 1 });
+  await artists.selectOption({ index: 2 });
+  await artists.selectOption({ index: 1 });
+  await expect(page.getByRole('main').getByRole('button', { name: /^Remove / })).toHaveCount(2);
+
+  // A show needs an artist
+  await removeArtists(page);
+  await page.getByRole('button', { name: 'Add Show' }).click();
+  await expect(page.getByText("Couldn't save. Check the form and try again.")).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Add Show' })).toBeVisible();
+});

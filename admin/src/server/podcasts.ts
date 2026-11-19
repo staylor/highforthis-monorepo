@@ -97,7 +97,7 @@ export function createPodcast(args: FormArgs) {
   return submitForm({
     ...args,
     mutation: createPodcastMutation,
-    createMutation: 'createShow',
+    createMutation: 'createPodcast',
   });
 }
 

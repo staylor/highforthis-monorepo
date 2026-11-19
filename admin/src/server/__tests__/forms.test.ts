@@ -105,6 +105,40 @@ describe('submitForm', () => {
     expect(result).toEqual({ redirectTo: 'http://localhost/admin/thing/abc123?message=updated' });
   });
 
+  it('says the save failed when GraphQL refuses it', async () => {
+    // The client logs a GraphQL error, such as a missing required field, and returns no data
+    const result = await submitForm({
+      gql: stubGraphQL({ mutate: {} }),
+      formData: form({ title: 'New title' }),
+      url: new URL('http://localhost/admin/thing/1?tab=meta&message=updated'),
+      mutation: saveMutation,
+      variables: { id: '1' },
+    });
+    expect(result).toEqual({ redirectTo: 'http://localhost/admin/thing/1?tab=meta&saveFailed=1' });
+  });
+
+  it('stays on the add page when adding fails', async () => {
+    const result = await submitForm({
+      gql: stubGraphQL({ mutate: { createThing: null } }),
+      formData: form({ title: 'First' }),
+      url: new URL('http://localhost/admin/thing/add'),
+      mutation: createMutation,
+      createMutation: 'createThing',
+    });
+    expect(result).toEqual({ redirectTo: 'http://localhost/admin/thing/add?saveFailed=1' });
+  });
+
+  it("drops the last save's failure once a save works", async () => {
+    const result = await submitForm({
+      gql: stubGraphQL({ mutate: { saveThing: { id: '1' } } }),
+      formData: form({ title: 'New title' }),
+      url: new URL('http://localhost/admin/thing/1?saveFailed=1'),
+      mutation: saveMutation,
+      variables: { id: '1' },
+    });
+    expect(result).toEqual({ redirectTo: 'http://localhost/admin/thing/1?message=updated' });
+  });
+
   it("sends the editor's state as JSON, with element formats as numbers", async () => {
     const gql = stubGraphQL();
     const editorState = {

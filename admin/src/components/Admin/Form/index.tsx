@@ -4,6 +4,7 @@ import invariant from 'tiny-invariant';
 
 import { FormWrap } from '#/components/Admin/styles';
 import Button from '#/components/Button';
+import Message from '#/components/Form/Message';
 import type { Fields, FieldUnion } from '#/types';
 import { cn } from '#/utils/cn';
 
@@ -90,6 +91,7 @@ export default function AdminForm({ data = {}, fields, boxLabel, buttonLabel }: 
 
   return (
     <FormWrap>
+      <Message param="saveFailed" text={t('admin.saveFailed')} />
       <form method="post">
         <fieldset
           className={cn('flex w-full flex-col gap-6', {

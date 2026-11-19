@@ -47,7 +47,7 @@ describe('media', () => {
   });
 
   it('updates an upload', async () => {
-    const gql = stubGraphQL();
+    const gql = stubGraphQL({ mutate: { updateMediaUpload: { id: 'm1' } } });
     const result = await updateMedia({
       gql,
       id: 'm1',

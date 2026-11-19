@@ -67,7 +67,8 @@ interface SubmitFormArgs extends FormArgs, ParseFormOptions {
   createMutation?: string;
 }
 
-// Saves an add or edit form, then comes back to the form's page with ?message=updated
+// Saves an add or edit form, then comes back to the form's page with ?message=updated, or with
+// ?saveFailed=1 when the mutation didn't succeed
 export async function submitForm({
   gql,
   formData,
@@ -92,10 +93,19 @@ export async function submitForm({
   } else {
     mergedVariables.input = input;
   }
-  const result = await gql.mutate<Record<string, any>>(mutation, mergedVariables);
+  const result = await gql.mutate<Record<string, { id: string } | null>>(mutation, mergedVariables);
+  // The client turns a GraphQL error, such as input the server rejects, into empty data
+  const saved = createMutation ? result[createMutation] : Object.values(result)[0];
+  // The form posts to its own URL, which can still say how the last save went
   const redirectUrl = new URL(url);
+  redirectUrl.searchParams.delete('message');
+  redirectUrl.searchParams.delete('saveFailed');
+  if (!saved) {
+    redirectUrl.searchParams.set('saveFailed', '1');
+    return { redirectTo: redirectUrl.toString() };
+  }
   if (createMutation) {
-    redirectUrl.pathname = redirectUrl.pathname.replace('/add', `/${result[createMutation].id}`);
+    redirectUrl.pathname = redirectUrl.pathname.replace('/add', `/${saved.id}`);
   }
   redirectUrl.searchParams.set('message', 'updated');
 
