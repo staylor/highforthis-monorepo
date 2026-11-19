@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 
 import { expect, test } from '../support/test.ts';
-import { field } from '../support/ui.ts';
+import { addedId, field } from '../support/ui.ts';
 
 /** Opens the picker with this button, picks its first upload and says which one it was. */
 async function pick(page: Page, button: string, input: string) {
@@ -37,7 +37,7 @@ test('adds a podcast with an image and audio, edits it and deletes it', async ({
   await page.getByRole('button', { name: 'Add Podcast' }).click();
   await expect(page.getByRole('heading', { name: 'Edit Podcast' })).toBeVisible();
   await expect(page.getByText('Podcast updated.')).toBeVisible();
-  const id = new URL(page.url()).pathname.split('/').pop() as string;
+  const id = await addedId(page, 'podcast');
   expect(await graphql.podcast(id)).toMatchObject({
     title,
     image: { id: image },
