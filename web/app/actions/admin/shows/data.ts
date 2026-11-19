@@ -20,9 +20,6 @@ import type {
 
 import { parseBulkShowsCsv } from './bulk-csv.ts';
 
-// The shows section's data, moved from the admin app's src/server/shows.ts with the same GraphQL
-// operations. The venue listings page is still the admin app's.
-
 const showFormFragment = gql`
   fragment ShowForm_show on Show {
     artists {
@@ -156,7 +153,6 @@ const bulkCreateShowsMutation = gql`
   }
 `;
 
-/** The shows list, newest first, filtered by ?search=. */
 export function loadShows({
   gql: client,
   searchParams,

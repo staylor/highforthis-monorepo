@@ -40,9 +40,8 @@ export function RowTitle(handle: Handle<{ href: string; title?: string | null }>
 }
 
 /**
- * A row's edit link, a link to its public page when it has one, and, given the row's ID, its
- * delete button. Delete posts the ID with intent=delete. A column about something else, such as a
- * show's venue, leaves the ID out.
+ * Given the row's ID, a delete button that posts it with intent=delete. A column about
+ * something else, such as a show's venue, leaves the ID out.
  */
 export function RowActions(handle: Handle<{ editHref: string; viewHref?: string; id?: string }>) {
   return () => {

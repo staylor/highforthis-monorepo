@@ -3,9 +3,6 @@ import { describe, it } from 'remix/test';
 
 import { parseBulkShowsCsv } from './bulk-csv.ts';
 
-// Moved with the parser from the admin app's src/server/__tests__/bulkShowsCsv.test.ts
-
-/** The fields of the first show that a test checks, without its date. */
 const firstShow = (result: ReturnType<typeof parseBulkShowsCsv>) => {
   const { artists, attended, venue } = result.shows[0];
   return { artists, attended, venue };

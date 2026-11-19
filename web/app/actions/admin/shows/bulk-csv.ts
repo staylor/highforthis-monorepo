@@ -1,6 +1,3 @@
-// Parses the shows pasted into the bulk add page as CSV, moved from the admin app's
-// src/server/bulkShowsCsv.ts.
-
 interface BulkShowInput {
   artists: string[];
   attended: boolean;
