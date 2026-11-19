@@ -17,7 +17,6 @@ import {
   updatePodcastSettings,
   updateSiteSettings,
 } from '../settings';
-import { createUser, deleteUsers, loadUser, loadUsers, updateUser } from '../users';
 
 import { calls, form, stubGraphQL } from './helpers';
 
@@ -96,39 +95,5 @@ describe('podcasts', () => {
       { operation: 'CreatePodcast', variables: { input: { title: 'Pilot' } } },
     ]);
     expect(result).toEqual({ redirectTo: 'http://localhost/admin/podcast/e2?message=updated' });
-  });
-});
-
-describe('users', () => {
-  it('lists, loads, updates and deletes users', async () => {
-    const gql = stubGraphQL();
-    const url = new URL('http://localhost/admin/user/u1');
-    await loadUsers({ gql, searchParams: new URLSearchParams('page=2') });
-    await loadUser({ gql, id: 'u1' });
-    await updateUser({ gql, id: 'u1', url, formData: form({ name: 'Scott', 'roles[]': 'admin' }) });
-    await deleteUsers({ gql, url, formData: form({ ids: 'u1' }) });
-
-    expect([...calls(gql.query), ...calls(gql.mutate)]).toEqual([
-      { operation: 'UsersAdmin', variables: { first: 20, after: 'YXJyYXljb25uZWN0aW9uOjE5' } },
-      { operation: 'UserEdit', variables: { id: 'u1' } },
-      {
-        operation: 'UpdateUser',
-        variables: { id: 'u1', input: { name: 'Scott', roles: ['admin'] } },
-      },
-      { operation: 'DeleteUser', variables: { ids: ['u1'] } },
-    ]);
-  });
-
-  it('creates a user and goes to their edit page', async () => {
-    const gql = stubGraphQL({ mutate: { createUser: { id: 'u2' } } });
-    const result = await createUser({
-      gql,
-      url: new URL('http://localhost/admin/user/add'),
-      formData: form({ name: 'Pat', email: 'pat@example.com' }),
-    });
-    expect(calls(gql.mutate)).toEqual([
-      { operation: 'CreateUser', variables: { input: { name: 'Pat', email: 'pat@example.com' } } },
-    ]);
-    expect(result).toEqual({ redirectTo: 'http://localhost/admin/user/u2?message=updated' });
   });
 });

@@ -93,7 +93,7 @@ These are in web, and nothing is served there yet:
    - **Users has moved.** Web serves `/admin/user` (`web/app/actions/admin/users/`).
      - The generic data helpers (`submitForm`, `deleteSelected`, `parseForm`, `GraphQLClient`, and the list paging and search variables) now live in `shared/src/admin/`. The admin's `server/forms.ts` and `utils/listVariables.ts` re-export them, so both apps use one copy.
      - The list table (row and bulk delete, search, paging) and the field-driven form are in `web/app/ui/admin/`. They're plain HTML: rows join the bulk form through the `form` attribute, search is a GET form, and there's no select-all checkbox yet. The form covers text, email, password, textarea, select and hidden fields so far.
-     - The admin's own users routes stay until this has been deployed, then go in a follow-up.
+     - The admin app's users routes and `server/users.ts` are removed in the same change.
      - `e2e/tests/users.spec.ts` covers the section in a browser.
 2. **Podcast, videos, settings:** more forms, video list filters, and the crops editor.
 3. **Shows:** the bulk CSV page and the listings page are the largest route files.
