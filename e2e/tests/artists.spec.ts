@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { field } from '../support/ui.ts';
+import { addedId, field } from '../support/ui.ts';
 
 test('adds an artist with featured media, edits them, toggles search and deletes them', async ({
   page,
@@ -36,7 +36,7 @@ test('adds an artist with featured media, edits them, toggles search and deletes
   await page.getByRole('button', { name: 'Add Artist' }).click();
   await expect(page.getByRole('heading', { name: 'Edit Artist' })).toBeVisible();
   await expect(page.getByText('Artist updated.')).toBeVisible();
-  const id = new URL(page.url()).pathname.split('/').pop() as string;
+  const id = await addedId(page, 'artist');
   const added = await graphql.artist(id);
   expect(added?.name).toBe(name);
   expect(added?.featuredMedia?.map((media) => media.id)).toEqual([picked]);
