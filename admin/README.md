@@ -18,6 +18,8 @@ Vite's `base` is `/admin/`, so this app's scripts, styles and public files (tran
 
 The public site is a Remix 3 app, so it shares no React code with this one. `shared` holds only what both use: the GraphQL schema types, the Apollo cache configuration and the Tailwind theme. Codegen writes this app's operation types to `src/types/graphql.ts`, which also re-exports the schema types from `shared`, so admin code imports every GraphQL type from `#/types/graphql`.
 
+[REMIX3-MIGRATION.md](REMIX3-MIGRATION.md) describes what's left to move this app to Remix 3 and a plan for doing it section by section through the public site's proxy.
+
 ## Development
 
 `pnpm dev` from the monorepo root starts GraphQL, web and admin. Open the admin through the public site at http://localhost:3000/admin.
