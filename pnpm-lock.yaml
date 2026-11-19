@@ -53,9 +53,6 @@ importers:
       '@types/ffprobe-static':
         specifier: 2.0.3
         version: 2.0.3
-      '@types/html-escape':
-        specifier: 2.0.2
-        version: 2.0.2
       '@types/multer':
         specifier: 2.0.0
         version: 2.0.0
@@ -65,9 +62,6 @@ importers:
       '@types/node':
         specifier: 25.3.2
         version: 25.3.2
-      '@types/qs':
-        specifier: ^6.14.0
-        version: 6.14.0
       '@typescript/native-preview':
         specifier: 7.0.0-dev.20260707.2
         version: 7.0.0-dev.20260707.2
@@ -321,18 +315,12 @@ importers:
       graphql-tag:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.13.0)
-      html-escape:
-        specifier: 2.0.0
-        version: 2.0.0
       i18next:
         specifier: 25.8.13
         version: 25.8.13(typescript@5.9.3)
       lexical:
         specifier: 0.53.0
         version: 0.53.0(typescript@5.9.3)
-      qs:
-        specifier: 6.15.0
-        version: 6.15.0
       remix:
         specifier: 3.3.0
         version: 3.3.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(mysql2@3.15.3)(pg@8.19.0)(playwright@1.65.1)
@@ -3312,9 +3300,6 @@ packages:
   '@types/ffprobe@1.1.8':
     resolution: {integrity: sha512-qPxx8Dy0HyH12hQCESN39NQOmU2Yl2b7tCyUhWy0l11HQv/8Yv7U+vcaveFXmXK8hcAP0oj29DPFuSM7vcC3Tg==}
 
-  '@types/html-escape@2.0.2':
-    resolution: {integrity: sha512-fM55cRnV3Uv6sOyUVjHfl3QPRUNf7Fe1am3qUV29zXWHhxQHQtKgi0vF3VQiXqa5kuick9UjZuOc5c7GHKP1zg==}
-
   '@types/http-errors@2.0.5':
     resolution: {integrity: sha512-r8Tayk8HJnX0FztbZN7oVqGccWgw98T/0neJphO91KkmOzug1KkofZURD4UaD5uH8AqcFLfdPErnBod0u71/qg==}
 
@@ -4505,9 +4490,6 @@ packages:
 
   html-entities@2.6.0:
     resolution: {integrity: sha512-kig+rMn/QOVRvr7c86gQ8lWXq+Hkv6CbAH1hLu+RG338StTpE8Z0b44SDVaqVu7HGKf27frdmUYEs9hTUX/cLQ==}
-
-  html-escape@2.0.0:
-    resolution: {integrity: sha512-BYh0wceM2Vm4/Q8TNfnKaHXs4DCv2DuYVS87DR40elSvFc+8a6B9mE9ej+8nCOkdqPx7puEx9+hm+GoJ3f9PzA==}
 
   html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
@@ -9168,8 +9150,6 @@ snapshots:
 
   '@types/ffprobe@1.1.8': {}
 
-  '@types/html-escape@2.0.2': {}
-
   '@types/http-errors@2.0.5': {}
 
   '@types/istanbul-lib-coverage@2.0.6': {}
@@ -10519,8 +10499,6 @@ snapshots:
       - '@noble/hashes'
 
   html-entities@2.6.0: {}
-
-  html-escape@2.0.0: {}
 
   html-escaper@2.0.2: {}
 

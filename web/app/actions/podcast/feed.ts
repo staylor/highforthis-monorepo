@@ -1,10 +1,9 @@
 import { gql } from 'graphql-tag';
-import escape from 'html-escape';
+import { html } from 'remix/html-template';
 
 import type { AudioUpload, PodcastConnection, PodcastSettings } from '../../types/graphql.ts';
 import { uploadUrl } from '../../ui/public/media.ts';
 
-// Ported unchanged from routes/podcast/xml: a resource route was already just a Response.
 export const feedQuery = gql`
   query PodcastFeed {
     podcasts {
@@ -56,14 +55,18 @@ export const feedTemplate = ({ podcastSettings: settings, podcasts }: PodcastDat
   const imageUrl = settings.image
     ? uploadUrl(settings.image.destination, settings.image.fileName)
     : null;
+  // The copyright is stored with HTML entities, such as &#xA9; for ©, so it goes in as it is
+  const copyright = html.raw`${settings.copyrightText}`;
 
-  return `<?xml version="1.0" encoding="utf-8"?>
+  // html escapes every value in the template, which XML needs as much as HTML does
+  return String(
+    html`<?xml version="1.0" encoding="utf-8"?>
   <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>${settings.title}</title>
     <description>${settings.description}</description>
     <managingEditor>${settings.managingEditor}</managingEditor>
-    <copyright>${settings.copyrightText}</copyright>
+    <copyright>${copyright}</copyright>
     <generator>${settings.generator}</generator>
     <atom:link href="${settings.feedLink}" rel="self" type="application/rss+xml"/>
     <link>${settings.websiteLink}</link>
@@ -72,7 +75,7 @@ export const feedTemplate = ({ podcastSettings: settings, podcasts }: PodcastDat
        <itunes:email>${settings.itunesEmail}</itunes:email>
     </itunes:owner>
     <itunes:author>${settings.itunesName}</itunes:author>
-    <itunes:summary>${escape(settings.description || '')}</itunes:summary>
+    <itunes:summary>${settings.description}</itunes:summary>
     <language>${settings.language}</language>
     <itunes:explicit>${settings.explicit}</itunes:explicit>
     <itunes:category text="${settings.category}" />
@@ -82,37 +85,37 @@ export const feedTemplate = ({ podcastSettings: settings, podcasts }: PodcastDat
       <link>${settings.websiteLink}</link>
       <title>${settings.title}</title>
     </image>
-    ${podcasts.edges
-      .map(({ node: podcast }) => {
-        const { duration, destination, fileName, fileSize } = podcast.audio as AudioUpload;
-        const d = duration as number;
-        const date = new Date(podcast.date as number) as any;
-        const guid = `https://highforthis.com/podcast/${podcast.id}`;
-        const audioUrl = uploadUrl(destination, fileName);
-        let podcastImageUrl = imageUrl;
-        if (podcast.image) {
-          podcastImageUrl = uploadUrl(podcast.image.destination, podcast.image.fileName);
-        }
+    ${podcasts.edges.map(({ node: podcast }) => {
+      const { duration, destination, fileName, fileSize } = podcast.audio as AudioUpload;
+      const seconds = duration as number;
+      const length = [
+        Math.floor(seconds / 3600),
+        Math.floor((seconds % 3600) / 60),
+        Math.floor(seconds % 60),
+      ].join(':');
+      const date = new Date(podcast.date as number) as any;
+      const guid = `https://highforthis.com/podcast/${podcast.id}`;
+      const audioUrl = uploadUrl(destination, fileName);
+      let podcastImageUrl = imageUrl;
+      if (podcast.image) {
+        podcastImageUrl = uploadUrl(podcast.image.destination, podcast.image.fileName);
+      }
 
-        return `<item>
-      <title>${escape(podcast.title)}</title>
-      <description>${escape(podcast.description)}</description>
-      <itunes:summary>${escape(podcast.description)}</itunes:summary>
-      <content:encoded>
-         <![CDATA[<p>${escape(podcast.description)}</p>]]>
-      </content:encoded>
-      <guid>${guid}</guid>
-      <pubDate>${date.toGMTString()}</pubDate>
-      <itunes:explicit>no</itunes:explicit>
-      <itunes:image href="${podcastImageUrl}" />
-      <itunes:duration>${Math.floor(d / 3600)}:${Math.floor((d % 3600) / 60)}:${Math.floor(
-        (d % 3600) % 60
-      )}</itunes:duration>
-      <enclosure url="${audioUrl}" type="audio/mpeg" length="${fileSize}" />
-    </item>`;
-      })
-      .join('\n')}
+      return html`<item>
+        <title>${podcast.title}</title>
+        <description>${podcast.description}</description>
+        <itunes:summary>${podcast.description}</itunes:summary>
+        <content:encoded> <![CDATA[<p>${podcast.description}</p>]]> </content:encoded>
+        <guid>${guid}</guid>
+        <pubDate>${date.toGMTString()}</pubDate>
+        <itunes:explicit>no</itunes:explicit>
+        <itunes:image href="${podcastImageUrl}" />
+        <itunes:duration>${length}</itunes:duration>
+        <enclosure url="${audioUrl}" type="audio/mpeg" length="${fileSize}" />
+      </item> `;
+    })}
   </channel>
   </rss>
-      `;
+      `
+  );
 };
