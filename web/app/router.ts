@@ -1,3 +1,4 @@
+import { readdirSync } from 'node:fs';
 import { constants } from 'node:zlib';
 
 import { compression } from 'remix/middleware/compression';
@@ -46,6 +47,11 @@ import {
 import { serverTiming, timed } from './middleware/timing.ts';
 import { routes } from './routes.ts';
 
+// staticFiles() looks each request's path up on disk, so only paths under public/'s own files and
+// folders reach it.
+const publicEntries = new Set(readdirSync('./public'));
+const inPublic = (path: string) => publicEntries.has(path.split('/', 1)[0]);
+
 // Time each request, reject WordPress probes, compress, serve public/ and the OpenObserve SDK
 // bundles, forward API paths to GraphQL, then render. HTTP logging stays on the Node server in
 // server.ts, because pino-http needs Node's req/res.
@@ -61,7 +67,11 @@ export const router = createRouter({
     ),
     timed(
       'static',
-      staticFiles('./public', { index: false, cacheControl: 'public, max-age=3600' })
+      staticFiles('./public', {
+        index: false,
+        cacheControl: 'public, max-age=3600',
+        filter: inPublic,
+      })
     ),
     timed('openObserveBundles', openObserveBundles()),
     timed('proxies', proxies()),
