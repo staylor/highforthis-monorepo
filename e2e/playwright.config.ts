@@ -4,8 +4,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 import { authFile, databaseUrl, graphqlUrl, ports, root, webUrl } from './support/env.ts';
 
-// The admin is part of the public site's server (web), which forwards /upload, /auth/passkeys
-// and the API to GraphQL, as in production. Web runs in production mode.
+// Web forwards /upload, /auth/passkeys and the API to GraphQL, as in production. It runs in
+// production mode.
 
 const reuseExistingServer = !process.env.CI;
 const database = databaseUrl();
@@ -51,7 +51,6 @@ export default defineConfig({
     },
     {
       name: 'web',
-      // build:service builds the CSS
       command: 'pnpm build:service && node --import remix/node-tsx server.ts',
       cwd: path.join(root, 'web'),
       url: `${webUrl}/health`,

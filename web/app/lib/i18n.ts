@@ -25,10 +25,7 @@ export function getT(locale = 'en'): TFunction {
   return i18n.getFixedT(locale);
 }
 
-/**
- * The translation function for admin pages. Their strings load on first use, so public pages
- * never read them.
- */
+/** Admin strings load on first use, so public pages never read them. */
 export function getAdminT(locale = 'en'): TFunction {
   if (!i18n.hasResourceBundle('en', 'admin')) {
     const strings = JSON.parse(

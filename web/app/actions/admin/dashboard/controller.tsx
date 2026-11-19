@@ -10,8 +10,7 @@ import { renderAdminPage } from '../render-page.tsx';
 
 import { loadPageViews, type PageViews as PageViewsData } from './page-views.ts';
 
-// The admin's dashboard: the public site's page views over the last 30 days, from OpenObserve.
-// Moved from the admin app's routes/admin/index.tsx and its Dashboard/PageViews.
+// The public site's page views over the last 30 days, from OpenObserve.
 
 const formatDate = (date: string) =>
   // Dates are YYYY-MM-DD in the site's time zone; noon UTC keeps them on the same day

@@ -1,10 +1,8 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
-// Signing in keeps the admin's GraphQL token in a signed cookie. Public pages read it to know
-// someone is signed in, which turns on live refresh, and admin pages read the token to call
-// GraphQL. The format is the one the admin's React Router app used, so sessions it started keep
-// working: `base64(JSON)`, signed with HMAC-SHA256, with the signature in unpadded base64 after a
-// dot.
+// The admin's GraphQL token lives in a signed cookie in React Router's format: `base64(JSON)`,
+// signed with HMAC-SHA256, with the signature in unpadded base64 after a dot. Public pages read
+// it to know someone is signed in, which turns on live refresh.
 
 const cookieName = () => process.env.TOKEN_KEY || '__session';
 const secrets = () => [process.env.TOKEN_SECRET || 's3cr3t'];
@@ -50,14 +48,13 @@ const attributes = (seconds: number) => {
   return `Path=/; Max-Age=${seconds}; HttpOnly; SameSite=Lax${secure}`;
 };
 
-/** A `Set-Cookie` value that signs the admin in with their GraphQL token. */
 export function adminSessionCookie(token: string): string {
   const value = Buffer.from(JSON.stringify({ token })).toString('base64');
   const signed = `${value}.${sign(value, secrets()[0])}`;
   return `${cookieName()}=${encodeURIComponent(signed)}; ${attributes(maxAge)}`;
 }
 
-/** A `Set-Cookie` value that signs the admin out. */
+/** Signs the admin out; the attributes must match the ones the cookie was set with. */
 export function expiredAdminCookie(): string {
   return `${cookieName()}=; ${attributes(0)}`;
 }

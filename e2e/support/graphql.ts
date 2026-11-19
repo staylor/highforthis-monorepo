@@ -371,7 +371,6 @@ export class GraphQL {
     }
   }
 
-  /** The test admin's passkeys, from GraphQL's /auth/passkeys. */
   async passkeys(): Promise<Passkey[]> {
     const response = await this.request.get('/auth/passkeys', {
       headers: { Authorization: `Bearer ${this.token}` },

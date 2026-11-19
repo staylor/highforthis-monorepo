@@ -11,14 +11,11 @@ import { renderAdminPage } from '../render-page.tsx';
 
 import { passwordLoginEnabled, signIn } from './sign-in.ts';
 
-// Signing in and out, moved from the admin app's routes/login and routes/admin/logout.
-
 const inputClass =
   'mt-0.5 mr-1.5 mb-5 box-border w-full rounded-sm border border-gray-300 bg-gray-50 p-2 text-2xl shadow-xs outline-hidden transition focus:border-gray-400 focus:shadow-lg';
 const buttonClass =
   'box-border h-7 cursor-pointer appearance-none rounded-sm border border-detail bg-white px-3 pb-0.5 align-baseline text-sm';
 
-/** The message for the page's error segment, such as /login/unauthorized. */
 function errorMessage(t: TFunction, error?: string) {
   switch (error) {
     case 'unauthorized':
@@ -36,8 +33,8 @@ export const login = createController(routes.login, {
   middleware: [sameOrigin()],
   actions: {
     async index(context) {
-      // Someone signed in goes on to the admin, as before. requireAdmin() checks the token with
-      // GraphQL, and sends them back here with the session removed if it's no longer good.
+      // Someone signed in goes on to the admin. requireAdmin() checks the token with GraphQL, and
+      // sends them back here with the session removed if it's no longer good.
       if (adminToken(context.request.headers.get('cookie'))) {
         return createRedirectResponse(routes.admin.dashboard.href());
       }
@@ -126,7 +123,6 @@ export const login = createController(routes.login, {
   },
 });
 
-/** Signs out: removes the session and goes back to the sign-in page. */
 export const logout = createAction(routes.admin.logout, {
   handler() {
     return createRedirectResponse(routes.login.index.href({}), {

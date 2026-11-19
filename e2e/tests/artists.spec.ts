@@ -1,8 +1,6 @@
 import { expect, test } from '../support/test.ts';
 import { addedId, field, hydrated } from '../support/ui.ts';
 
-// The featured media picker and the list's "exclude from search" box are client entries.
-
 test('adds an artist with featured media, edits them, toggles search and deletes them', async ({
   page,
   prefix,

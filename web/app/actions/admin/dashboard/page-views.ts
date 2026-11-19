@@ -1,7 +1,7 @@
 import { openObserveConfig, search } from './openobserve.ts';
 
-// The dashboard's page views, moved from the admin app's utils/pageViews.server.ts. They come
-// from the public site's browser RUM, which records a "view" event per page. The SDK sends several updates for one view, so views are counted by distinct view_id.
+// Page views come from the public site's browser RUM, which records a "view" event per page.
+// The SDK sends several updates for one view, so views are counted by distinct view_id.
 
 const DAYS = 30;
 const TIME_ZONE = 'America/New_York';
