@@ -6,6 +6,11 @@ import { createRouter, type RouterContext } from 'remix/router';
 import { artistsAdd, artistsEdit, artistsList } from './actions/admin/artists/controller.tsx';
 import { mediaPicker } from './actions/admin/media/controller.ts';
 import { podcastsAdd, podcastsEdit, podcastsList } from './actions/admin/podcasts/controller.tsx';
+import {
+  settingsMedia,
+  settingsPodcast,
+  settingsSite,
+} from './actions/admin/settings/controller.tsx';
 import { usersAdd, usersEdit, usersList } from './actions/admin/users/controller.tsx';
 import { venuesAdd, venuesEdit, venuesList } from './actions/admin/venues/controller.tsx';
 import { videosEdit, videosList } from './actions/admin/videos/controller.tsx';
@@ -63,4 +68,7 @@ router.map(routes.admin.podcasts.add, podcastsAdd);
 router.map(routes.admin.podcasts.edit, podcastsEdit);
 router.map(routes.admin.videos.list, videosList);
 router.map(routes.admin.videos.edit, videosEdit);
+router.map(routes.admin.settings.site, settingsSite);
+router.map(routes.admin.settings.media, settingsMedia);
+router.map(routes.admin.settings.podcast, settingsPodcast);
 router.map(routes.admin.mediaPicker, mediaPicker);

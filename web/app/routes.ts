@@ -46,6 +46,12 @@ export const routes = route({
       add: form('/add'),
       edit: form('/:id'),
     }),
+    // Each settings page edits one settings document. General settings are also at /settings.
+    settings: route('/settings', {
+      site: form('(/site)'),
+      media: form('/media'),
+      podcast: form('/podcast'),
+    }),
     // Videos come from YouTube, so there's no add page
     videos: route('/video', {
       list: form('/'),

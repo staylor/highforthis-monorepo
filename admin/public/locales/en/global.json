@@ -200,8 +200,10 @@
       "crops": {
         "add": "Add Crop",
         "dimensions": "Dimensions",
+        "height": "Height",
         "name": "Name",
-        "remove": "Remove"
+        "remove": "Remove",
+        "width": "Width"
       },
       "cropSizes": "Crop Sizes",
       "heading": "Media Settings",

@@ -64,6 +64,17 @@ interface Video {
   year: number;
 }
 
+interface SiteSettings {
+  siteTitle: string | null;
+  tagline: string | null;
+}
+
+interface MediaCrop {
+  name: string;
+  width: number | null;
+  height: number | null;
+}
+
 interface Artist extends Entity {
   description: string | null;
   excludeFromSearch: boolean | null;
@@ -197,6 +208,36 @@ export class GraphQL {
       { id }
     );
     return video;
+  }
+
+  async siteSettings() {
+    const { siteSettings } = await this.query<{ siteSettings: SiteSettings }>(
+      `{ siteSettings { siteTitle tagline } }`
+    );
+    return siteSettings;
+  }
+
+  /** Puts general settings back, as a test that changes them must. */
+  async updateSiteSettings(input: Partial<SiteSettings>) {
+    await this.query(
+      `mutation ($input: SiteSettingsInput!) { updateSiteSettings(id: "site", input: $input) { id } }`,
+      { input }
+    );
+  }
+
+  async mediaCrops() {
+    const { mediaSettings } = await this.query<{ mediaSettings: { crops: MediaCrop[] | null } }>(
+      `{ mediaSettings { crops { name width height } } }`
+    );
+    return mediaSettings.crops ?? [];
+  }
+
+  /** Puts the crop sizes back, as a test that changes them must. */
+  async updateMediaCrops(crops: MediaCrop[]) {
+    await this.query(
+      `mutation ($input: MediaSettingsInput!) { updateMediaSettings(id: "media", input: $input) { id } }`,
+      { input: { crops } }
+    );
   }
 
   async createShow(input: { title: string; artists: string[]; venue: string }) {
