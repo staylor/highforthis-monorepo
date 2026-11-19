@@ -38,9 +38,8 @@ import {
   updateMedia,
 } from './library-data.ts';
 
-// The admin's media library, moved from the admin app's routes/admin/media: the list, the upload
-// page, the album covers page and the edit page. Each route has its own controller, since
-// controller middleware doesn't apply to nested route maps.
+// Each route has its own controller, since controller middleware doesn't apply to nested route
+// maps.
 
 const media = routes.admin.media;
 
@@ -56,7 +55,6 @@ interface Crop {
 
 const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
 
-/** A file's size as the admin app's filesize package showed it: 500 B, 1.2 MB. */
 function formatFileSize(bytes: number) {
   const units = ['B', 'kB', 'MB', 'GB', 'TB'];
   let size = bytes;
@@ -76,7 +74,6 @@ function cropsOf(upload: { crops?: (Crop | null)[] | null; images?: (Crop | null
   return crops.sort((a, b) => a.width - b.width);
 }
 
-/** The list's thumbnail: an image's or an audio file's smallest crop, as the admin app showed it. */
 function thumbnail(upload: UploadRow) {
   const [smallest] = cropsOf(upload as Parameters<typeof cropsOf>[0]);
   return smallest ? (
@@ -267,7 +264,6 @@ export const mediaAlbumCovers = createController(media.albumCovers, {
   },
 });
 
-/** The upload itself on its edit page: an image by its 300px crop, or a player. */
 function preview(upload: Media) {
   const url = uploadUrl(upload.destination, upload.fileName);
   if (upload.type === 'image' && 'crops' in upload) {
@@ -294,7 +290,6 @@ function preview(upload: Media) {
   return null;
 }
 
-/** The details box: the file's type and size, and its crops, from the admin app's Info panels. */
 function details(t: TFunction, upload: Media) {
   const link = (crop: { fileName: string; width?: number | null; height?: number | null }) => (
     <a href={uploadUrl(upload.destination, crop.fileName)}>

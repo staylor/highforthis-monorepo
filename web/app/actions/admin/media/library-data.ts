@@ -16,8 +16,7 @@ import type {
   UploadsAdminQuery,
 } from '../../../types/graphql.ts';
 
-// The media library's data, moved from the admin app's src/server/media.ts with the same GraphQL
-// operations. The featured media field's picker has its own, in data.ts.
+// The featured media field's picker has its own data, in data.ts.
 
 const mediaFormFragment = gql`
   fragment MediaForm_media on MediaUpload {
@@ -156,7 +155,6 @@ const addAlbumCoversMutation = gql`
   }
 `;
 
-/** The media list, filtered by ?type=, ?mimeType= and ?search=. */
 export function loadMediaList({
   gql: client,
   searchParams,
