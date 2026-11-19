@@ -96,6 +96,14 @@ interface PageOptions {
   status?: number;
 }
 
+/**
+ * Links prefetch their page on hover or press, but Remix discards the HTML and the click fetches
+ * it again, so every click rendered the page twice. Caching it briefly lets the click reuse the
+ * prefetch. A signed-in admin's pages aren't cached, so live refresh gets new content, and with
+ * Vary: Cookie, pages cached before signing in or out aren't reused after.
+ */
+const reusable = { 'Cache-Control': 'private, max-age=30', Vary: 'Cookie' };
+
 export async function renderPage(context: AppContext, page: RemixNode, options: PageOptions = {}) {
   const root = await loadRootData(context);
   const app = {
@@ -105,6 +113,7 @@ export async function renderPage(context: AppContext, page: RemixNode, options: 
     isAuthenticated: (await adminToken(context.request.headers.get('cookie'))) !== null,
     graphqlHost,
   };
+  const status = options.status ?? 200;
   return context.render(
     <Document
       app={app}
@@ -115,6 +124,6 @@ export async function renderPage(context: AppContext, page: RemixNode, options: 
     >
       {page}
     </Document>,
-    { status: options.status }
+    { status, headers: status === 200 && !app.isAuthenticated ? reusable : undefined }
   );
 }
