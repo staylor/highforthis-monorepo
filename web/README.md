@@ -51,6 +51,7 @@ The admin is moving here from its React Router app one section at a time; [`admi
 - Admin controllers list `sameOrigin()` and `requireAdmin()` (`app/middleware/admin.ts`). They reject cross-site form posts and require an admin session GraphQL accepts, which then sits on `context.admin` with a GraphQL client that sends the token.
 - `renderAdminPage()` (`app/actions/admin/render-page.tsx`) renders a page in the admin's document and layout, from `app/ui/admin/`.
 - Admin pages use `admin.css`, which the Tailwind CLI builds from `app/styles/admin.css`, and the admin app's strings, which `pnpm admin-strings` copies in. They're loaded the first time an admin page asks for them.
+- Their client entries, such as the featured media picker and the list's inline toggle, live in `app/ui/admin/public/`. Links to admin pages that haven't moved set `data-rmx-document={documentLoad(href)}` (`app/ui/admin/links.ts`), so they load in full instead of through client navigation.
 
 RUM tracks views manually: Remix navigates with the browser's Navigation API, which the RUM SDK doesn't watch, so `app/actions/public/rum.ts` starts a view on load and after each navigation.
 

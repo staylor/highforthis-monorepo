@@ -92,11 +92,51 @@ export type MediaPickerQueryVariables = Types.Exact<{
 
 
 export type MediaPickerQuery = { __typename?: 'Query', uploads?: { __typename?: 'MediaUploadConnection', edges: Array<{ __typename?: 'MediaUploadEdge', node:
-        | { __typename?: 'AudioUpload', destination: string, id: string, title?: string | null, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null }
-        | { __typename?: 'FileUpload', destination: string, id: string, title?: string | null }
-        | { __typename?: 'ImageUpload', destination: string, id: string, title?: string | null, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-        | { __typename?: 'VideoUpload', destination: string, id: string, title?: string | null }
+        | { __typename?: 'AudioUpload', destination: string, fileName: string, id: string, title?: string | null, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null }
+        | { __typename?: 'FileUpload', destination: string, fileName: string, id: string, title?: string | null }
+        | { __typename?: 'ImageUpload', destination: string, fileName: string, id: string, title?: string | null, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
+        | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, title?: string | null }
        }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null } } | null };
+
+export type PodcastForm_PodcastFragment = { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null };
+
+export type PodcastsAdminQueryVariables = Types.Exact<{
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type PodcastsAdminQuery = { __typename?: 'Query', podcasts?: { __typename?: 'PodcastConnection', count: number, edges: Array<{ __typename?: 'PodcastEdge', node: { __typename?: 'Podcast', id: string, title: string } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type DeletePodcastMutationVariables = Types.Exact<{
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type DeletePodcastMutation = { __typename?: 'Mutation', removePodcast?: boolean | null };
+
+export type PodcastEditQueryVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+}>;
+
+
+export type PodcastEditQuery = { __typename?: 'Query', podcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
+
+export type CreatePodcastMutationVariables = Types.Exact<{
+  input: Types.CreatePodcastInput;
+}>;
+
+
+export type CreatePodcastMutation = { __typename?: 'Mutation', createPodcast?: { __typename?: 'Podcast', id: string } | null };
+
+export type UpdatePodcastMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdatePodcastInput;
+}>;
+
+
+export type UpdatePodcastMutation = { __typename?: 'Mutation', updatePodcast?: { __typename?: 'Podcast', description: string, id: string, title: string, audio?: { __typename?: 'AudioUpload', id: string, destination: string, fileName: string, type: string } | null, image?: { __typename?: 'ImageUpload', id: string, destination: string, fileName: string, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> } | null } | null };
 
 export type UserForm_UserFragment = { __typename?: 'User', bio?: string | null, email: string, id: string, name?: string | null, roles?: Array<string | null> | null };
 

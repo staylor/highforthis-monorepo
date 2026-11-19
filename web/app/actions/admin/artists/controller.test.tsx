@@ -269,6 +269,7 @@ describe('admin media picker', () => {
           id: 'm1',
           title: 'Wilco live',
           destination: '2024/05',
+          fileName: 'w.jpg',
           crops: [
             { fileName: 'w-150.jpg', width: 150 },
             { fileName: 'w-300.jpg', width: 300 },
@@ -281,6 +282,7 @@ describe('admin media picker', () => {
           id: 'm2',
           title: null,
           destination: '2024/06',
+          fileName: 'x.jpg',
           crops: [],
         },
       },
@@ -299,13 +301,52 @@ describe('admin media picker', () => {
           title: 'Wilco live',
           thumb: `${storage}/2024/05/w-150.jpg`,
           preview: `${storage}/2024/05/w-300.jpg`,
+          audio: null,
         },
-        { id: 'm2', title: '', thumb: null, preview: null },
+        { id: 'm2', title: '', thumb: null, preview: null, audio: null },
       ],
       endCursor: 'next',
       hasNextPage: true,
     });
     assert.deepEqual(operations[0].variables, { first: 50, type: 'image', cursor: 'abc' });
+  });
+
+  it('answers audio with its cover art and the file to play', async (t) => {
+    const operations = stubGraphQL(t, {
+      MediaPicker: {
+        uploads: {
+          __typename: 'MediaUploadConnection',
+          edges: [
+            {
+              node: {
+                __typename: 'AudioUpload',
+                id: 'a1',
+                title: 'Episode 1',
+                destination: '2024/07',
+                fileName: 'episode-1.mp3',
+                images: [{ fileName: 'episode-1-150.jpg', width: 150 }],
+              },
+            },
+          ],
+          pageInfo: { endCursor: 'end', hasNextPage: false },
+        },
+      },
+    });
+    const response = await get('/admin/media-picker/audio');
+    assert.deepEqual(await response.json(), {
+      items: [
+        {
+          id: 'a1',
+          title: 'Episode 1',
+          thumb: `${storage}/2024/07/episode-1-150.jpg`,
+          preview: null,
+          audio: `${storage}/2024/07/episode-1.mp3`,
+        },
+      ],
+      endCursor: 'end',
+      hasNextPage: false,
+    });
+    assert.deepEqual(operations[0].variables, { first: 50, type: 'audio' });
   });
 
   it('answers 404 for a type it has no picker for', async (t) => {

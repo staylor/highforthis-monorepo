@@ -49,6 +49,14 @@ interface Venue extends Entity {
   featuredMedia: { id: string }[] | null;
 }
 
+interface Podcast {
+  id: string;
+  title: string;
+  description: string | null;
+  image: { id: string } | null;
+  audio: { id: string } | null;
+}
+
 interface Artist extends Entity {
   description: string | null;
   excludeFromSearch: boolean | null;
@@ -149,6 +157,14 @@ export class GraphQL {
     return artist;
   }
 
+  async podcast(id: string) {
+    const { podcast } = await this.query<{ podcast: Podcast | null }>(
+      `query ($id: String!) { podcast(id: $id) { id title description image { id } audio { id } } }`,
+      { id }
+    );
+    return podcast;
+  }
+
   async createShow(input: { title: string; artists: string[]; venue: string }) {
     const { createShow } = await this.query<{ createShow: Show }>(
       `mutation ($input: CreateShowInput!) { createShow(input: $input) { id title } }`,
@@ -174,7 +190,8 @@ export class GraphQL {
   }
 
   /**
-   * Removes the posts, shows, venues, artists and users whose title or name starts with `prefix`.
+   * Removes the posts, shows, venues, artists, users and podcasts whose title or name starts with
+   * `prefix`.
    * Shows go first, since a venue can't be removed while a show is at it.
    */
   async removeMatching(prefix: string) {
@@ -184,6 +201,7 @@ export class GraphQL {
       venues: Connection<Entity>;
       artists: Connection<Entity>;
       users: Connection<User>;
+      podcasts: Connection<Podcast>;
     }>(
       `query ($search: String) {
         posts(search: $search, first: 500) { count edges { node { id title } } }
@@ -191,6 +209,7 @@ export class GraphQL {
         venues(search: $search, first: 500) { count edges { node { id name } } }
         artists(search: $search, first: 500) { count edges { node { id name } } }
         users(search: $search, first: 500) { count edges { node { id name } } }
+        podcasts(search: $search, first: 500) { count edges { node { id title } } }
       }`,
       { search: prefix }
     );
@@ -215,6 +234,7 @@ export class GraphQL {
       ['removeArtist', ids(found.artists, (artist) => artist.name.startsWith(prefix))],
       ['removePost', ids(found.posts, (post) => post.title.startsWith(prefix))],
       ['removeUser', ids(found.users, (user) => user.name.startsWith(prefix))],
+      ['removePodcast', ids(found.podcasts, (podcast) => podcast.title.startsWith(prefix))],
     ];
     for (const [mutation, removing] of removals) {
       if (removing.length === 0) {

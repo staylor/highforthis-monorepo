@@ -5,6 +5,7 @@ import { PER_PAGE } from '@highforthis/shared/admin/listVariables';
 import { cn } from '../public/cn.ts';
 
 import { getAdmin } from './context.tsx';
+import { documentLoad } from './links.ts';
 import { Message } from './message.tsx';
 import { buttonClass, inputBase } from './public/styles.ts';
 
@@ -37,16 +38,28 @@ export function RowTitle(handle: Handle<{ href: string; title?: string | null }>
   };
 }
 
-/** Delete posts the row's ID with intent=delete. */
-export function RowActions(handle: Handle<{ editHref: string; id: string }>) {
+/**
+ * A row's edit link, a link to its public page when it has one, and its delete button. Delete
+ * posts the row's ID with intent=delete.
+ */
+export function RowActions(handle: Handle<{ editHref: string; viewHref?: string; id: string }>) {
   return () => {
     const { t } = getAdmin(handle);
+    const { viewHref } = handle.props;
     return (
       <nav class="text-sm">
         <a class="hover:underline" href={handle.props.editHref}>
           {t('table.edit')}
         </a>
         {' | '}
+        {viewHref && (
+          <>
+            <a class="hover:underline" href={viewHref} data-rmx-document={documentLoad(viewHref)}>
+              {t('table.view')}
+            </a>
+            {' | '}
+          </>
+        )}
         <form method="post" class="inline">
           <input type="hidden" name="intent" value="delete" />
           <input type="hidden" name="ids" value={handle.props.id} />

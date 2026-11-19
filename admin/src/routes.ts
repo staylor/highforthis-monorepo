@@ -17,7 +17,6 @@ export default [
       route('album-covers', 'routes/admin/media/album-covers.tsx'),
       route(':id', 'routes/admin/media/edit.tsx'),
     ]),
-    ...adminRoutes('podcast'),
     ...prefix('passkeys', [
       index('routes/admin/passkeys/index.tsx'),
       route('options', 'routes/admin/passkeys/options.ts'),

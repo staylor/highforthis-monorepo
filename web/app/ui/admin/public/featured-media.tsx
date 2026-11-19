@@ -8,9 +8,11 @@ import { buttonClass } from './styles.ts';
 // brings focus handling and Escape, and it pages through /admin/media-picker/:type as it
 // scrolls.
 
+/** An upload the field holds, shown by its 300px crop when it has one, or played if it's audio. */
 export interface SelectedMedia {
   id: string;
   preview: string | null;
+  audio?: string | null;
 }
 
 export interface MediaPickerItem extends SelectedMedia {
@@ -81,7 +83,7 @@ export const FeaturedMedia = clientEntry(
     };
 
     const pick = (item: MediaPickerItem) => {
-      selected = [{ id: item.id, preview: item.preview }];
+      selected = [{ id: item.id, preview: item.preview, audio: item.audio }];
       dialog?.close();
       handle.update();
     };
@@ -95,13 +97,20 @@ export const FeaturedMedia = clientEntry(
           {media.map((upload) => (
             <input type="hidden" name={name} value={upload.id} />
           ))}
-          {media.map((upload) =>
-            upload.preview ? (
+          {media.map((upload) => {
+            if (upload.audio) {
+              return (
+                <figure class="my-4">
+                  <audio controls src={upload.audio} />
+                </figure>
+              );
+            }
+            return upload.preview ? (
               <img class="mr-2.5 mb-2.5" alt="" src={upload.preview} />
             ) : (
               <p>{upload.id}</p>
-            )
-          )}
+            );
+          })}
           <button type="button" class={buttonClass()} mix={on('click', open)}>
             {buttonText}
           </button>
