@@ -104,6 +104,7 @@
     "all": "All Media",
     "altText": "Alternative Text",
     "caption": "Caption",
+    "chooseFiles": "Choose Files",
     "deleted_one": "Deleted {{count}} upload",
     "deleted_other": "Deleted {{count}} uploads",
     "description": "Description",
@@ -120,7 +121,8 @@
     "type": "Type",
     "update": "Update Media",
     "updated": "Media updated.",
-    "upload": "Upload Media"
+    "upload": "Upload Media",
+    "uploadFailed": "Couldn’t upload this file."
   },
   "nav": {
     "addNew": "Add New",

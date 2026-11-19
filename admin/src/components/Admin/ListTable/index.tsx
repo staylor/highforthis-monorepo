@@ -15,7 +15,6 @@ import { formatDate } from './utils';
 
 export { default as RowTitle } from './RowTitle';
 export { default as RowActions } from './RowActions';
-export { default as Thumbnail } from './Thumbnail';
 
 const cellHeading = cn('text-sm py-2 px-2.5 text-left');
 

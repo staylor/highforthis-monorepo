@@ -5,6 +5,12 @@ import { createRouter, type RouterContext } from 'remix/router';
 
 import { artistsAdd, artistsEdit, artistsList } from './actions/admin/artists/controller.tsx';
 import { mediaPicker } from './actions/admin/media/controller.ts';
+import {
+  mediaAlbumCovers,
+  mediaEdit,
+  mediaList,
+  mediaUpload,
+} from './actions/admin/media/library.tsx';
 import { podcastsAdd, podcastsEdit, podcastsList } from './actions/admin/podcasts/controller.tsx';
 import {
   settingsMedia,
@@ -78,4 +84,8 @@ router.map(routes.admin.shows.add, showsAdd);
 router.map(routes.admin.shows.bulk, showsBulk);
 router.map(routes.admin.shows.listings, showListings);
 router.map(routes.admin.shows.edit, showsEdit);
+router.map(routes.admin.media.list, mediaList);
+router.map(routes.admin.media.upload, mediaUpload);
+router.map(routes.admin.media.albumCovers, mediaAlbumCovers);
+router.map(routes.admin.media.edit, mediaEdit);
 router.map(routes.admin.mediaPicker, mediaPicker);

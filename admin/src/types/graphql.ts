@@ -16,21 +16,6 @@ export type FeaturedMedia_MediaFragment =
   | FeaturedMedia_Media_VideoUpload_Fragment
 ;
 
-type MediaForm_Media_AudioUpload_Fragment = { __typename?: 'AudioUpload', description?: string | null, duration?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, fileSize: number, height: number, width: number } | null> | null };
-
-type MediaForm_Media_FileUpload_Fragment = { __typename?: 'FileUpload', description?: string | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string };
-
-type MediaForm_Media_ImageUpload_Fragment = { __typename?: 'ImageUpload', altText?: string | null, caption?: string | null, height?: number | null, width?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, fileSize: number, height: number, width: number }> };
-
-type MediaForm_Media_VideoUpload_Fragment = { __typename?: 'VideoUpload', description?: string | null, duration?: number | null, height?: number | null, width?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string };
-
-export type MediaForm_MediaFragment =
-  | MediaForm_Media_AudioUpload_Fragment
-  | MediaForm_Media_FileUpload_Fragment
-  | MediaForm_Media_ImageUpload_Fragment
-  | MediaForm_Media_VideoUpload_Fragment
-;
-
 export type TextNodes_LinebreakNodeFragment = { __typename?: 'LinebreakNode', type?: string | null, version?: number | null };
 
 export type TextNodes_TextNodeFragment = { __typename?: 'TextNode', detail?: number | null, format?: number | null, mode?: Types.TextModeType | null, style?: string | null, text?: string | null, textFormat?: number | null, textStyle?: string | null, type?: string | null, version?: number | null };
@@ -125,73 +110,6 @@ export type AppQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type AppQuery = { __typename?: 'Query', apiKeys?: { __typename?: 'APIKeys', googleMaps?: string | null } | null, podcastSettings: { __typename?: 'PodcastSettings', description?: string | null, feedLink?: string | null, id: string, title?: string | null, websiteLink?: string | null, image?: { __typename?: 'ImageUpload', destination: string, fileName: string, id: string } | null }, shows?: { __typename?: 'ShowConnection', edges: Array<{ __typename?: 'ShowEdge', node: { __typename?: 'Show', date: number, id: string, title?: string | null, url?: string | null, artists: Array<{ __typename?: 'Artist', id: string, name: string, slug: string }>, venue: { __typename?: 'Venue', id: string, name: string, slug: string } } }> } | null, siteSettings: { __typename?: 'SiteSettings', copyrightText?: string | null, id: string, language?: string | null, siteTitle?: string | null, siteUrl?: string | null, tagline?: string | null } };
-
-export type UploadsAdminQueryVariables = Types.Exact<{
-  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  mimeType?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  type?: Types.InputMaybe<Types.Scalars['String']['input']>;
-}>;
-
-
-export type UploadsAdminQuery = { __typename?: 'Query', uploads?: { __typename?: 'MediaUploadConnection', count: number, mimeTypes?: Array<string> | null, types?: Array<string> | null, edges: Array<{ __typename?: 'MediaUploadEdge', node:
-        | { __typename?: 'AudioUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number } | null> | null }
-        | { __typename?: 'FileUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
-        | { __typename?: 'ImageUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, width: number }> }
-        | { __typename?: 'VideoUpload', destination: string, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
-       }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
-
-export type DeleteMediaMutationVariables = Types.Exact<{
-  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
-}>;
-
-
-export type DeleteMediaMutation = { __typename?: 'Mutation', removeMediaUpload?: boolean | null };
-
-export type MediaAdminQueryVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-}>;
-
-
-export type MediaAdminQuery = { __typename?: 'Query', media?:
-    | { __typename?: 'AudioUpload', description?: string | null, duration?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, fileSize: number, height: number, width: number } | null> | null }
-    | { __typename?: 'FileUpload', description?: string | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
-    | { __typename?: 'ImageUpload', altText?: string | null, caption?: string | null, height?: number | null, width?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, fileSize: number, height: number, width: number }> }
-    | { __typename?: 'VideoUpload', description?: string | null, duration?: number | null, height?: number | null, width?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
-   | null };
-
-export type UpdateMediaMutationVariables = Types.Exact<{
-  id: Types.Scalars['String']['input'];
-  input: Types.UpdateMediaUploadInput;
-}>;
-
-
-export type UpdateMediaMutation = { __typename?: 'Mutation', updateMediaUpload?:
-    | { __typename?: 'AudioUpload', description?: string | null, duration?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string, images?: Array<{ __typename?: 'ImageUploadCrop', fileName: string, fileSize: number, height: number, width: number } | null> | null }
-    | { __typename?: 'FileUpload', description?: string | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
-    | { __typename?: 'ImageUpload', altText?: string | null, caption?: string | null, height?: number | null, width?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string, crops: Array<{ __typename?: 'ImageUploadCrop', fileName: string, fileSize: number, height: number, width: number }> }
-    | { __typename?: 'VideoUpload', description?: string | null, duration?: number | null, height?: number | null, width?: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title?: string | null, type: string }
-   | null };
-
-export type AlbumCoversAdminQueryVariables = Types.Exact<{
-  term: Types.Scalars['String']['input'];
-}>;
-
-
-export type AlbumCoversAdminQuery = { __typename?: 'Query', appleMusicAlbums: { __typename?: 'AppleMusicAlbumResults', error?: string | null, albums: Array<{ __typename?: 'AppleMusicAlbum', id: string, name: string, artistName: string, releaseDate?: string | null, cover: string, artwork: { __typename?: 'AppleMusicArtwork', width?: number | null, height?: number | null } }> } };
-
-export type AddAlbumCoversMutationVariables = Types.Exact<{
-  ids: Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input'];
-}>;
-
-
-export type AddAlbumCoversMutation = { __typename?: 'Mutation', addAlbumCovers: Array<
-    | { __typename?: 'AudioUpload', id: string }
-    | { __typename?: 'FileUpload', id: string }
-    | { __typename?: 'ImageUpload', id: string }
-    | { __typename?: 'VideoUpload', id: string }
-  > };
 
 export type MediaModalQueryVariables = Types.Exact<{
   cursor?: Types.InputMaybe<Types.Scalars['String']['input']>;

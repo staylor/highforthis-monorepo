@@ -67,10 +67,11 @@ export default createConfig(testingLibrary, {
       },
     },
     {
-      // The podcast's audio has no caption tracks
+      // The podcast's audio and uploaded media have no caption tracks
       files: [
         'admin/src/components/Admin/**/*.tsx',
         'web/app/actions/podcast/**/*.tsx',
+        'web/app/actions/admin/media/library.tsx',
         'web/app/ui/admin/public/featured-media.tsx',
       ],
       rules: {

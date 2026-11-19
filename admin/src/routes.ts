@@ -11,12 +11,6 @@ export default [
   route('admin', 'routes/admin/layout.tsx', [
     index('routes/admin/index.tsx'),
     route('logout', 'routes/admin/logout.ts'),
-    ...prefix('media', [
-      index('routes/admin/media/index.tsx'),
-      route('upload', 'routes/admin/media/upload.tsx'),
-      route('album-covers', 'routes/admin/media/album-covers.tsx'),
-      route(':id', 'routes/admin/media/edit.tsx'),
-    ]),
     ...prefix('passkeys', [
       index('routes/admin/passkeys/index.tsx'),
       route('options', 'routes/admin/passkeys/options.ts'),

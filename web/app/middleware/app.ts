@@ -5,6 +5,7 @@ import { createContextKey, type Middleware } from 'remix/router';
 
 import { isServedByWeb } from '@highforthis/shared/adminPaths';
 
+import { adminToken } from '../lib/adminSession.ts';
 import { createGraphQLClient, graphqlHost, type GraphQLClient } from '../lib/graphql.ts';
 import { getT, type TFunction } from '../lib/i18n.ts';
 import { openObserveBundleFiles } from '../lib/openobserve-bundles.ts';
@@ -39,12 +40,31 @@ export function openObserveBundles(): Middleware {
 const adminHost = (process.env.ADMIN_HOST || 'http://localhost:3001').replace(/\/$/, '');
 // Looked up per request rather than captured at startup, so tests can stub fetch.
 const fetchNow: typeof fetch = (input, init) => globalThis.fetch(input, init);
+const graphqlProxy = createFetchProxy(graphqlHost, { fetch: fetchNow });
+
+/**
+ * The media upload page posts files from the browser, which can't read the httpOnly session
+ * cookie, so the admin's token goes with them for GraphQL to check that the uploader is an admin,
+ * as the admin app did before the page moved here.
+ */
+function forwardUpload(request: Request) {
+  const token = adminToken(request.headers.get('cookie'));
+  if (!token) {
+    return graphqlProxy(request);
+  }
+  const headers = new Headers(request.headers);
+  headers.set('Authorization', `Bearer ${token}`);
+  // A streamed body needs duplex: 'half' to be passed on
+  return graphqlProxy(new Request(request, { headers, duplex: 'half' } as RequestInit));
+}
+
 const forwards = [
   {
-    paths: ['/admin', '/auth/passkeys', '/login', '/modals', '/upload'],
+    paths: ['/admin', '/auth/passkeys', '/login', '/modals'],
     proxy: createFetchProxy(adminHost, { fetch: fetchNow, xForwardedHeaders: true }),
   },
-  { paths: ['/graphql', '/uploads'], proxy: createFetchProxy(graphqlHost, { fetch: fetchNow }) },
+  { paths: ['/upload'], proxy: forwardUpload },
+  { paths: ['/graphql', '/uploads'], proxy: graphqlProxy },
 ];
 
 const matches = (pathname: string, path: string) =>

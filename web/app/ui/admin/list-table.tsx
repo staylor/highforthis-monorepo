@@ -28,12 +28,25 @@ interface Connection {
 const BULK_FORM = 'bulk-actions';
 const cellHeading = 'text-sm py-2 px-2.5 text-left';
 
-export function RowTitle(handle: Handle<{ href: string; title?: string | null }>) {
+/**
+ * A link to the row's edit page, in bold, as the first line of a row's main column, with a
+ * smaller line under it when given one, such as an upload's file name.
+ */
+export function RowTitle(
+  handle: Handle<{ href: string; title?: string | null; subtitle?: string | null }>
+) {
   return () => {
     const { t } = getAdmin(handle);
+    const { href, title, subtitle } = handle.props;
     return (
       <strong class="mb-1 block text-sm font-bold wrap-break-word">
-        <a href={handle.props.href}>{handle.props.title || t('table.noTitle')}</a>
+        <a href={href}>{title || t('table.noTitle')}</a>
+        {subtitle && (
+          <>
+            <br />
+            <span class="text-xs font-normal">{subtitle}</span>
+          </>
+        )}
       </strong>
     );
   };

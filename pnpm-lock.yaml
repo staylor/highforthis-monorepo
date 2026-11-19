@@ -170,9 +170,6 @@ importers:
       express:
         specifier: 5.2.1
         version: 5.2.1
-      filesize:
-        specifier: 11.0.13
-        version: 11.0.13
       graphql:
         specifier: 16.13.0
         version: 16.13.0
@@ -4838,10 +4835,6 @@ packages:
 
   filereader-stream@0.2.0:
     resolution: {integrity: sha512-4VIFXppZFLjx3Dz9GSVPh4MdC2iPQDgr6rksO2EcSou7lUOIQZ0FsoaTCeWp/k5VTs8bZKBUAjOny/oavvzumQ==}
-
-  filesize@11.0.13:
-    resolution: {integrity: sha512-mYJ/qXKvREuO0uH8LTQJ6v7GsUvVOguqxg2VTwQUkyTPXXRRWPdjuUPVqdBrJQhvci48OHlNGRnux+Slr2Rnvw==}
-    engines: {node: '>= 10.8.0'}
 
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
@@ -11466,8 +11459,6 @@ snapshots:
   filereader-stream@0.2.0:
     dependencies:
       inherits: 1.0.0
-
-  filesize@11.0.13: {}
 
   fill-range@7.1.1:
     dependencies:

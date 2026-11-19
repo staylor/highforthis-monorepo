@@ -9,8 +9,9 @@ The admin is its own app, but it shares the public site's domain. The `web` serv
 - `/admin`: the admin itself
 - `/login`: password and passkey sign-in
 - `/modals`: the media and video pickers
-- `/upload`: media uploads (the token from the session cookie is added here)
 - `/auth/passkeys`: passkey sign-in
+
+Media uploads (`/upload`) go from web to GraphQL, with the token from the session cookie added there, since the upload page moved to web.
 
 So URLs, the session cookie, passkeys, and the public site's live refresh while you're signed in all work across both apps.
 

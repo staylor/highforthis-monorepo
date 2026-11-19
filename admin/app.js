@@ -10,7 +10,6 @@ import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
 import factory from './src/apollo/client.js';
 import { apolloClientContext, graphqlHostContext, i18nContext } from './src/context.js';
 import createI18n from './src/i18n.js';
-import { sessionStorage } from './src/session.js';
 
 // The admin app: /admin, /login and /modals. The public site forwards those paths here,
 // so both share one domain, session cookie and passkey origin.
@@ -38,7 +37,8 @@ function getLoadContext(_, res) {
 const proxy = createProxyMiddleware({
   target: gqlHost,
   changeOrigin: true,
-  pathFilter: ['/auth/passkeys', '/graphql', '/upload', '/uploads'],
+  // The media upload page moved to web, which forwards /upload to GraphQL itself
+  pathFilter: ['/auth/passkeys', '/graphql', '/uploads'],
 });
 
 const viteDevServer =
@@ -87,17 +87,6 @@ app.use(cookieParser());
 
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable('x-powered-by');
-
-// The upload page posts from the browser, which can't read the httpOnly session cookie.
-// Attach its token so the GraphQL server can check that the uploader is an admin.
-app.use('/upload', async (req, _res, next) => {
-  const session = await sessionStorage.getSession(req.headers.cookie);
-  const token = session.get('token');
-  if (token) {
-    req.headers.authorization = `Bearer ${token}`;
-  }
-  next();
-});
 
 // Proxy API requests before Vite's development middleware can serve an HTML fallback.
 app.use(proxy);

@@ -129,6 +129,43 @@ describe('proxies', () => {
     assert.deepEqual(forwarded, ['/admin/user.data', '/admin/userland', '/admin/post']);
   });
 
+  it("forwards uploads to GraphQL with the admin's token, which the browser can't read", async (t) => {
+    process.env.TOKEN_SECRET = 'test-secret';
+    // Made by the admin app's React Router createCookieSessionStorage with the secret
+    // 'test-secret', holding the token 'test-token'.
+    const session =
+      '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ%3D%3D.0jvC0SjKdfmXr5Rw%2F6679ia0w0xRgH4hIpEzB3aJ9Fc';
+    const forwarded: { url: string; authorization: string | null; body: string }[] = [];
+    t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
+      const request = new Request(input, init);
+      forwarded.push({
+        url: request.url,
+        authorization: request.headers.get('authorization'),
+        body: await request.text(),
+      });
+      return Response.json(['upload-1']);
+    });
+    const upload = (cookie?: string) =>
+      router.fetch(
+        new Request(new URL('/upload', origin), {
+          method: 'POST',
+          body: 'file bytes',
+          headers: cookie ? { cookie } : {},
+        })
+      );
+    try {
+      assert.deepEqual(await (await upload(session)).json(), ['upload-1']);
+      await upload();
+    } finally {
+      delete process.env.TOKEN_SECRET;
+    }
+    assert.equal(new URL(forwarded[0].url).pathname, '/upload');
+    assert.notEqual(new URL(forwarded[0].url).origin, origin);
+    assert.equal(forwarded[0].authorization, 'Bearer test-token');
+    assert.equal(forwarded[0].body, 'file bytes');
+    assert.equal(forwarded[1].authorization, null);
+  });
+
   it("forwards a moved section's pages that haven't moved yet", async (t) => {
     const showsRouter = createRouter({
       middleware: [proxies({ servedHere: ['/admin/show'], notYetMoved: ['/admin/show/listings'] })],

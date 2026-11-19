@@ -70,6 +70,12 @@ export const routes = route({
       add: form('/add'),
       edit: form('/:id'),
     }),
+    media: route('/media', {
+      list: form('/'),
+      upload: get('/upload'),
+      albumCovers: form('/album-covers'),
+      edit: form('/:id'),
+    }),
     // The pages of uploads the featured media field's picker scrolls through, as JSON
     mediaPicker: get('/media-picker/:type'),
   }),
