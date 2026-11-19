@@ -132,10 +132,10 @@ export class GraphQL {
     return post;
   }
 
-  async createVenue(name: string) {
+  async createVenue(name: string, fields: { listingsUrl?: string } = {}) {
     const { createVenue } = await this.query<{ createVenue: Entity }>(
       `mutation ($input: CreateVenueInput!) { createVenue(input: $input) { id name } }`,
-      { input: { name } }
+      { input: { name, ...fields } }
     );
     return createVenue;
   }

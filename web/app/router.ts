@@ -12,6 +12,7 @@ import {
   settingsSite,
 } from './actions/admin/settings/controller.tsx';
 import { showsAdd, showsBulk, showsEdit, showsList } from './actions/admin/shows/controller.tsx';
+import { showListings } from './actions/admin/shows/listings.tsx';
 import { usersAdd, usersEdit, usersList } from './actions/admin/users/controller.tsx';
 import { venuesAdd, venuesEdit, venuesList } from './actions/admin/venues/controller.tsx';
 import { videosEdit, videosList } from './actions/admin/videos/controller.tsx';
@@ -75,5 +76,6 @@ router.map(routes.admin.settings.podcast, settingsPodcast);
 router.map(routes.admin.shows.list, showsList);
 router.map(routes.admin.shows.add, showsAdd);
 router.map(routes.admin.shows.bulk, showsBulk);
+router.map(routes.admin.shows.listings, showListings);
 router.map(routes.admin.shows.edit, showsEdit);
 router.map(routes.admin.mediaPicker, mediaPicker);

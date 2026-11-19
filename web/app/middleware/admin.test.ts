@@ -129,8 +129,10 @@ describe('proxies', () => {
     assert.deepEqual(forwarded, ['/admin/user.data', '/admin/userland', '/admin/post']);
   });
 
-  it("forwards a moved section's pages that haven't moved yet, such as the venue listings", async (t) => {
-    const showsRouter = createRouter({ middleware: [proxies({ servedHere: ['/admin/show'] })] });
+  it("forwards a moved section's pages that haven't moved yet", async (t) => {
+    const showsRouter = createRouter({
+      middleware: [proxies({ servedHere: ['/admin/show'], notYetMoved: ['/admin/show/listings'] })],
+    });
     showsRouter.get('/admin/show', () => new Response('from web'));
     const forwarded: string[] = [];
     t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL) => {

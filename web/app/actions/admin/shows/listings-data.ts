@@ -1,12 +1,12 @@
 import { gql } from 'graphql-tag';
 
-import type { ImportListingsMutation, VenueListingsAdminQuery } from '#/types/graphql';
-import { splitArtists } from '#/utils/splitArtists';
+import type { GraphQLClient, RedirectResult } from '@highforthis/shared/admin/forms';
 
-import type { RedirectResult } from './forms';
-import type { GraphQLClient } from './graphql';
+import type { ImportListingsMutation, VenueListingsAdminQuery } from '../../../types/graphql.ts';
+import { splitArtists } from '../../../ui/admin/public/split-artists.ts';
 
-// A venue's upcoming shows from its listings page, to add to the shows
+// A venue's upcoming shows from its listings page, to add to the shows. Moved from the admin
+// app's src/server/listings.ts with the same GraphQL operations.
 
 const listingsQuery = gql`
   query VenueListingsAdmin($venueId: String!, $withListings: Boolean!) {
@@ -50,22 +50,28 @@ const importMutation = gql`
   }
 `;
 
-// The venues to choose from, and the chosen venue's listings
-export function loadVenueListings({ gql, venueId }: { gql: GraphQLClient; venueId?: string }) {
-  return gql.query<VenueListingsAdminQuery>(listingsQuery, {
+/** The venues to choose from, and the chosen venue's listings. */
+export function loadVenueListings({
+  gql: client,
+  venueId,
+}: {
+  gql: GraphQLClient;
+  venueId?: string;
+}) {
+  return client.query<VenueListingsAdminQuery>(listingsQuery, {
     venueId: venueId ?? '',
     withListings: Boolean(venueId),
   });
 }
 
-// Adds the checked listings as shows, each with the artists entered for it
+/** Adds the checked listings as shows, each with the artists entered for it. */
 export async function importListings({
-  gql,
+  gql: client,
   venueId,
   formData,
 }: {
   gql: GraphQLClient;
-  venueId?: string;
+  venueId: string;
   formData: FormData;
 }): Promise<{ failed: true } | RedirectResult> {
   const input = formData.getAll('selected').map((value) => {
@@ -76,7 +82,7 @@ export async function importListings({
     };
   });
 
-  const result = await gql.mutate<Partial<ImportListingsMutation>>(importMutation, {
+  const result = await client.mutate<Partial<ImportListingsMutation>>(importMutation, {
     venueId,
     input,
   });
