@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 
 import { expect, test } from '../support/test.ts';
-import { cell, field } from '../support/ui.ts';
+import { addedId, cell, field } from '../support/ui.ts';
 
 // The artists picker, the date and the list's "attended" box are client entries, which work once
 // the page's scripts have loaded.
@@ -37,7 +37,7 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
 
   await expect(page.getByRole('heading', { name: 'Edit Show' })).toBeVisible();
   await expect(page.getByText('Show updated.')).toBeVisible();
-  const id = new URL(page.url()).pathname.split('/').pop() as string;
+  const id = await addedId(page, 'show');
   expect((await graphql.show(id))?.title).toBe(title);
 
   await field(page, 'Title').fill(editedTitle);
