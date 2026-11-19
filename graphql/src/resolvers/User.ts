@@ -8,6 +8,7 @@ import type {
   QueryUsersArgs,
 } from 'types/graphql';
 
+import { endSessions } from '#/authentication';
 import prisma from '#/database';
 
 import { parseConnection } from './utils/collection';
@@ -85,8 +86,6 @@ const resolvers = {
       const data: Record<string, unknown> = { ...fields };
       if (password) {
         data.hash = await bcrypt.hash(password, SALT_ROUNDS);
-        // A new password ends the user's tokens, wherever they're signed in
-        data.tokenVersion = { increment: 1 };
       }
 
       if (typeof roles !== 'undefined') {
@@ -98,7 +97,12 @@ const resolvers = {
         }
       }
 
-      return prisma.user.update({ where: { id }, data, include: userIncludes });
+      const updated = await prisma.user.update({ where: { id }, data, include: userIncludes });
+      if (password) {
+        // A new password signs the user out wherever they're signed in
+        await endSessions(id);
+      }
+      return updated;
     },
 
     async removeUser(_: unknown, { ids }: MutationRemoveUserArgs) {

@@ -1,5 +1,9 @@
+import { credentials } from '../support/env.ts';
 import { expect, test } from '../support/test.ts';
 import { hydrated } from '../support/ui.ts';
+
+// Signing out ends the session, and the other tests share one, so this signs in on its own
+test.use({ storageState: { cookies: [], origins: [] } });
 
 // Chromium's virtual authenticator stands in for Touch ID or a security key: it answers the
 // browser's WebAuthn prompts as soon as they open.
@@ -16,6 +20,13 @@ test('adds a passkey, signs in with it and removes it', async ({ page, prefix, g
       automaticPresenceSimulation: true,
     },
   });
+
+  const { email, password } = credentials();
+  await page.goto('/login');
+  await page.getByLabel('Email').fill(email);
+  await page.getByLabel('Password').fill(password);
+  await page.getByRole('button', { name: 'Log In' }).click();
+  await expect(page).toHaveURL('/admin');
 
   const name = `${prefix} Passkey`;
   await page.goto('/admin/passkeys');

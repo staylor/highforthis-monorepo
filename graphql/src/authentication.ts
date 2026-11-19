@@ -13,15 +13,39 @@ import type { UserWithRoles } from '#/models';
 
 type JWTPayload = {
   userId: string;
-  // The user's token version when the token was issued; tokens from before this existed have none
-  ver?: number;
+  // The session the token belongs to. Tokens from before sessions were kept have none.
+  sid?: string;
 };
 
-/** A token for the user that lasts 12 hours, or until they sign out or change their password. */
-export function issueToken(user: { id: string; tokenVersion: number }): string {
-  return jsonwebtoken.sign({ userId: user.id, ver: user.tokenVersion }, env.TOKEN_SECRET, {
-    expiresIn: '12h',
+const SESSION_HOURS = 12;
+
+/** Signs a token for a session that's already saved. */
+export function signToken(userId: string, sessionId: string): string {
+  return jsonwebtoken.sign({ userId, sid: sessionId }, env.TOKEN_SECRET, {
+    expiresIn: `${SESSION_HOURS}h`,
   });
+}
+
+/**
+ * Starts a session for the user and answers its token, which lasts 12 hours, or until they sign
+ * out or their password changes.
+ */
+export async function issueToken(userId: string): Promise<string> {
+  const now = new Date();
+  await prisma.session.deleteMany({ where: { expiresAt: { lt: now } } });
+  const session = await prisma.session.create({
+    data: { userId, expiresAt: new Date(now.getTime() + SESSION_HOURS * 60 * 60 * 1000) },
+  });
+  return signToken(userId, session.id);
+}
+
+function verifiedPayload(token: string): JWTPayload | null {
+  try {
+    return jsonwebtoken.verify(token, env.TOKEN_SECRET) as JWTPayload;
+  } catch {
+    // Invalid or expired
+    return null;
+  }
 }
 
 const authBodySchema = z.object({
@@ -45,24 +69,19 @@ function extractBearerToken(headers: Headers): string | null {
 
 async function tokenUser(headers: Headers): Promise<UserWithRoles | null> {
   const token = extractBearerToken(headers);
-  if (!token) {
+  const payload = token ? verifiedPayload(token) : null;
+  // A token is good only while its session is: signing out or a new password deletes it
+  if (!payload?.userId || !payload.sid) {
     return null;
   }
-
-  try {
-    const payload = jsonwebtoken.verify(token, env.TOKEN_SECRET) as JWTPayload;
-    if (payload.userId) {
-      const user = await prisma.user.findUnique({
-        where: { id: payload.userId },
-        include: { roles: true },
-      });
-      // Signing out or changing the password moves the version on, which ends older tokens
-      return user && (payload.ver ?? 0) === user.tokenVersion ? user : null;
-    }
-  } catch {
-    // Invalid or expired token — continue as unauthenticated
+  const session = await prisma.session.findUnique({
+    where: { id: payload.sid },
+    include: { user: { include: { roles: true } } },
+  });
+  if (!session || session.userId !== payload.userId || session.expiresAt <= new Date()) {
+    return null;
   }
-  return null;
+  return session.user;
 }
 
 /** Puts the user the request's bearer token belongs to, if any, on `context.authUser`. */
@@ -85,20 +104,26 @@ export function sessionHandler({ authUser }: { authUser: UserWithRoles | null })
   return Response.json({ user: { id: authUser.id, email: authUser.email, name: authUser.name } });
 }
 
-/** `POST /auth/signout`: ends every token the signed-in user has. */
+/** `POST /auth/signout`: ends the session the request's token belongs to, and only that one. */
 export async function signOutHandler({
   authUser,
+  headers,
 }: {
   authUser: UserWithRoles | null;
+  headers: Headers;
 }): Promise<Response> {
-  if (!authUser) {
+  const token = extractBearerToken(headers);
+  const sessionId = token ? verifiedPayload(token)?.sid : undefined;
+  if (!authUser || !sessionId) {
     return Response.json({ error: 'Authentication required' }, { status: 401 });
   }
-  await prisma.user.update({
-    where: { id: authUser.id },
-    data: { tokenVersion: { increment: 1 } },
-  });
+  await prisma.session.deleteMany({ where: { id: sessionId, userId: authUser.id } });
   return new Response(null, { status: 204 });
+}
+
+/** Ends all of the user's sessions, as a new password should. */
+export async function endSessions(userId: string): Promise<void> {
+  await prisma.session.deleteMany({ where: { userId } });
 }
 
 /**
@@ -132,5 +157,5 @@ export async function authHandler({ body }: { body: unknown }): Promise<Response
   }
 
   failedSignIns.reset(key);
-  return Response.json({ token: issueToken(user) });
+  return Response.json({ token: await issueToken(user.id) });
 }

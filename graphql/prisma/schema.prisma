@@ -225,13 +225,25 @@ model User {
   email              String              @unique
   bio                String?
   hash               String
-  // Goes up when the user signs out or their password changes, which ends their tokens
-  tokenVersion       Int                 @default(0)
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   roles              UserRole[]
   passkeys           Passkey[]
   webAuthnChallenges WebAuthnChallenge[]
+  sessions           Session[]
+}
+
+// A signed-in session, named in its token. Signing out deletes it, and a new password deletes
+// all of the user's, which ends those tokens before they expire.
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Passkey {

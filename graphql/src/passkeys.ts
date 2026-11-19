@@ -181,7 +181,7 @@ export async function authenticationVerificationHandler(
       },
     });
 
-    return Response.json({ token: issueToken(passkey.user) });
+    return Response.json({ token: await issueToken(passkey.userId) });
   } catch (error) {
     return errorResponse(error, 401);
   }

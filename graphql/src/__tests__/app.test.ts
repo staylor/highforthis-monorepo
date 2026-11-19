@@ -3,12 +3,13 @@ import bcrypt from 'bcryptjs';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createApp } from '#/app';
-import { issueToken } from '#/authentication';
+import { signToken } from '#/authentication';
 import type { AppContext, UserWithRoles } from '#/models';
 
 const db = vi.hoisted(() => ({
   user: { findUnique: vi.fn() },
   passkey: { findMany: vi.fn(), delete: vi.fn() },
+  session: { findUnique: vi.fn(), create: vi.fn(), deleteMany: vi.fn() },
 }));
 
 vi.mock('#/database', () => ({ default: db }));
@@ -18,7 +19,6 @@ const admin = {
   email: 'admin@example.test',
   name: 'Admin',
   hash: bcrypt.hashSync('secret', 4),
-  tokenVersion: 0,
   roles: [{ id: 'role-admin', name: 'admin', userId: 'admin-1' }],
 } as UserWithRoles;
 const editor = { ...admin, id: 'editor-1', roles: [] } as UserWithRoles;
@@ -28,7 +28,10 @@ let app: ReturnType<typeof createApp>;
 
 const request = (path: string, init?: RequestInit) =>
   app.fetch(new Request(`http://localhost${path}`, init));
-const signedIn = (user: UserWithRoles) => ({ Authorization: `Bearer ${issueToken(user)}` });
+// Each user's session is `session-<id>`, which the database stub answers with the user
+const signedIn = (user: UserWithRoles) => ({
+  Authorization: `Bearer ${signToken(user.id, `session-${user.id}`)}`,
+});
 const json = (body: unknown, headers: Record<string, string> = {}) => ({
   method: 'POST',
   body: JSON.stringify(body),
@@ -53,6 +56,13 @@ describe('createApp', () => {
       async ({ where }: { where: { id?: string; email?: string } }) =>
         [admin, editor].find((user) => user.id === where.id || user.email === where.email) ?? null
     );
+    db.session.findUnique.mockImplementation(async ({ where }: { where: { id: string } }) => {
+      const user = [admin, editor].find(({ id }) => where.id === `session-${id}`);
+      return user
+        ? { id: where.id, userId: user.id, expiresAt: new Date(Date.now() + 60_000), user }
+        : null;
+    });
+    db.session.create.mockResolvedValue({ id: 'session-new' });
   });
 
   afterAll(() => server.stop());

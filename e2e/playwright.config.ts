@@ -59,6 +59,10 @@ export default defineConfig({
         PORT: String(ports.web),
         GQL_HOST: graphqlUrl,
         PASSWORD_LOGIN_ENABLED: 'true',
+        // Production won't start without one; this one signs only the tests' sessions
+        TOKEN_SECRET: 'e2e-session-secret',
+        // Every test signs in from this machine, and runs reuse the server
+        SIGN_IN_RATE_LIMITS: 'off',
       },
       reuseExistingServer,
     },
