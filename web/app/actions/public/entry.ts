@@ -23,11 +23,18 @@ const app = run({
 });
 
 // Marks the page once its client entries have hydrated, which the end-to-end tests wait for:
-// until then, their controls do nothing.
+// until then, their controls do nothing. A navigation in place renders the next page into this
+// document and settles once its client entries have hydrated, so the mark comes off when one
+// starts and goes back on when it settles.
+const root = document.documentElement;
+const markHydrated = () => root.setAttribute('data-hydrated', '');
 app
   .ready()
-  .then(() => document.documentElement.setAttribute('data-hydrated', ''))
+  .then(markHydrated)
   .catch((error) => console.error('Client entries failed to hydrate', error));
+window.navigation?.addEventListener('navigate', () => root.removeAttribute('data-hydrated'));
+window.navigation?.addEventListener('navigatesuccess', markHydrated);
+window.navigation?.addEventListener('navigateerror', markHydrated);
 
 const rumConfig = window.__OPENOBSERVE_RUM__;
 if (rumConfig) {
