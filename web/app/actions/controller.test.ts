@@ -30,11 +30,28 @@ function stubGraphQL(t: TestContext, handlers: Record<string, (body: any) => unk
   });
 }
 
+/** Waits out a query the request may have started without awaiting it. */
+const settle = () => new Promise((resolve) => setTimeout(resolve, 10));
+
 describe('root controller', () => {
-  it('GET /health responds without touching GraphQL', async () => {
+  it('GET /health responds without touching GraphQL', async (t) => {
+    const fetch = t.mock.method(globalThis, 'fetch', async () => Response.json({ data: {} }));
     const response = await router.fetch(new URL(routes.health.href(), origin));
     assert.equal(response.status, 200);
     assert.deepEqual(await response.json(), { status: 'ok' });
+    await settle();
+    assert.equal(fetch.mock.calls.length, 0);
+  });
+
+  it('serves browser modules without touching GraphQL', async (t) => {
+    const fetch = t.mock.method(globalThis, 'fetch', async () => Response.json({ data: {} }));
+    const response = await router.fetch(
+      new URL(routes.assets.href({ path: 'app/routes.ts' }), origin)
+    );
+    assert.equal(response.status, 200);
+    await response.text();
+    await settle();
+    assert.equal(fetch.mock.calls.length, 0);
   });
 
   it('reports where the time went in Server-Timing', async () => {
