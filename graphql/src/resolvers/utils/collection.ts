@@ -58,12 +58,15 @@ export async function parseConnection(
   }
 
   const countArgs = findManyArgs.where ? { where: findManyArgs.where } : undefined;
-  const count = await delegate.count(countArgs);
-  const items = await delegate.findMany({
-    ...findManyArgs,
-    skip: offset,
-    take: limit,
-  });
+  // Neither needs the other, so they share a round trip to the database
+  const [count, items] = await Promise.all([
+    delegate.count(countArgs),
+    delegate.findMany({
+      ...findManyArgs,
+      skip: offset,
+      take: limit,
+    }),
+  ]);
 
   const arrayLength = count;
   const sliceEnd = offset + items.length;
