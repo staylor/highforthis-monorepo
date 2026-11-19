@@ -7,7 +7,7 @@ const origin = 'http://localhost';
 
 // A session cookie signed with the secret 'test-secret', holding the token 'test-token'
 const session =
-  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ%3D%3D.0jvC0SjKdfmXr5Rw%2F6679ia0w0xRgH4hIpEzB3aJ9Fc';
+  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ==.0jvC0SjKdfmXr5Rw/6679ia0w0xRgH4hIpEzB3aJ9Fc';
 
 type Sent = { path: string; body: any };
 
@@ -89,7 +89,7 @@ describe('signing in', () => {
     assert.equal(response.headers.get('location'), '/admin');
     assert.equal(
       response.headers.get('set-cookie'),
-      `${session}; Path=/; Max-Age=43200; HttpOnly; SameSite=Lax`
+      `${session}; HttpOnly; Max-Age=43200; Path=/; SameSite=Lax`
     );
     assert.deepEqual(sent, [
       { path: '/auth', body: { email: 'admin@example.com', password: 'test-pass' } },
@@ -149,7 +149,7 @@ describe('signing in', () => {
     assert.equal(response.headers.get('location'), '/login');
     assert.equal(
       response.headers.get('set-cookie'),
-      '__session=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax'
+      '__session=; HttpOnly; Max-Age=0; Path=/; SameSite=Lax'
     );
   });
 });

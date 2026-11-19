@@ -1,73 +1,36 @@
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createCookie } from 'remix/cookie';
 
-// The admin's GraphQL token lives in a signed cookie in React Router's format: `base64(JSON)`,
-// signed with HMAC-SHA256, with the signature in unpadded base64 after a dot. Public pages read
-// it to know someone is signed in, which turns on live refresh.
-
-const cookieName = () => process.env.TOKEN_KEY || '__session';
-const secrets = () => [process.env.TOKEN_SECRET || 's3cr3t'];
-
-function cookieValue(cookieHeader: string | null, name: string): string | null {
-  for (const part of cookieHeader?.split(';') ?? []) {
-    const index = part.indexOf('=');
-    if (index > 0 && part.slice(0, index).trim() === name) {
-      try {
-        return decodeURIComponent(part.slice(index + 1).trim());
-      } catch {
-        return null;
-      }
-    }
-  }
-  return null;
-}
-
-const sign = (value: string, secret: string) =>
-  createHmac('sha256', secret).update(value).digest('base64').replace(/=+$/, '');
-
-function verify(signed: string): string | null {
-  const dot = signed.lastIndexOf('.');
-  if (dot < 0) {
-    return null;
-  }
-  const value = signed.slice(0, dot);
-  const signature = Buffer.from(signed.slice(dot + 1));
-  for (const secret of secrets()) {
-    const expected = Buffer.from(sign(value, secret));
-    if (expected.length === signature.length && timingSafeEqual(expected, signature)) {
-      return value;
-    }
-  }
-  return null;
-}
+// The admin's GraphQL token lives in a signed cookie as `{ token }` JSON, signed with
+// HMAC-SHA256 as React Router's session cookies were. Public pages read it to know someone is
+// signed in, which turns on live refresh.
 
 // Signing in lasts 12 hours
 const maxAge = 12 * 60 * 60;
 
-const attributes = (seconds: number) => {
-  const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-  return `Path=/; Max-Age=${seconds}; HttpOnly; SameSite=Lax${secure}`;
-};
+// Made when used, since the name, secret and NODE_ENV come from the environment
+function sessionCookie() {
+  return createCookie(process.env.TOKEN_KEY || '__session', {
+    secrets: [process.env.TOKEN_SECRET || 's3cr3t'],
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge,
+  });
+}
 
-export function adminSessionCookie(token: string): string {
-  const value = Buffer.from(JSON.stringify({ token })).toString('base64');
-  const signed = `${value}.${sign(value, secrets()[0])}`;
-  return `${cookieName()}=${encodeURIComponent(signed)}; ${attributes(maxAge)}`;
+export function adminSessionCookie(token: string): Promise<string> {
+  return sessionCookie().serialize(JSON.stringify({ token }));
 }
 
 /** Signs the admin out; the attributes must match the ones the cookie was set with. */
-export function expiredAdminCookie(): string {
-  return `${cookieName()}=; ${attributes(0)}`;
+export function expiredAdminCookie(): Promise<string> {
+  return sessionCookie().serialize('', { maxAge: 0 });
 }
 
 /** The signed-in admin's token from the request's cookies, or null. */
-export function adminToken(cookieHeader: string | null): string | null {
-  const signed = cookieValue(cookieHeader, cookieName());
-  const value = signed && verify(signed);
-  if (!value) {
-    return null;
-  }
+export async function adminToken(cookieHeader: string | null): Promise<string | null> {
+  const value = await sessionCookie().parse(cookieHeader);
   try {
-    const data = JSON.parse(Buffer.from(value, 'base64').toString('utf8'));
+    const data = value ? JSON.parse(value) : null;
     return typeof data?.token === 'string' ? data.token : null;
   } catch {
     return null;

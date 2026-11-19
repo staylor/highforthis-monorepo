@@ -9,7 +9,7 @@ const origin = 'http://localhost';
 
 // A session cookie signed with the secret 'test-secret', holding the token 'test-token'
 const signedIn =
-  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ%3D%3D.0jvC0SjKdfmXr5Rw%2F6679ia0w0xRgH4hIpEzB3aJ9Fc';
+  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ==.0jvC0SjKdfmXr5Rw/6679ia0w0xRgH4hIpEzB3aJ9Fc';
 
 /**
  * Answers GraphQL's /auth/session with each status in turn (the last one repeats), recording the
@@ -116,7 +116,7 @@ describe('proxies', () => {
     process.env.TOKEN_SECRET = 'test-secret';
     // A session cookie signed with the secret 'test-secret', holding the token 'test-token'
     const session =
-      '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ%3D%3D.0jvC0SjKdfmXr5Rw%2F6679ia0w0xRgH4hIpEzB3aJ9Fc';
+      '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ==.0jvC0SjKdfmXr5Rw/6679ia0w0xRgH4hIpEzB3aJ9Fc';
     const forwarded: { url: string; authorization: string | null; body: string }[] = [];
     t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
       const request = new Request(input, init);

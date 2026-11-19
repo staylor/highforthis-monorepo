@@ -102,7 +102,7 @@ export async function renderPage(context: AppContext, page: RemixNode, options: 
     t: context.t,
     root,
     pathname: context.url.pathname,
-    isAuthenticated: adminToken(context.request.headers.get('cookie')) !== null,
+    isAuthenticated: (await adminToken(context.request.headers.get('cookie'))) !== null,
     graphqlHost,
   };
   return context.render(

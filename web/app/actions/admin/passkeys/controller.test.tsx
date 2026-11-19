@@ -7,7 +7,7 @@ const origin = 'http://localhost';
 
 // A session cookie signed with the secret 'test-secret', holding the token 'test-token'
 const session =
-  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ%3D%3D.0jvC0SjKdfmXr5Rw%2F6679ia0w0xRgH4hIpEzB3aJ9Fc';
+  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ==.0jvC0SjKdfmXr5Rw/6679ia0w0xRgH4hIpEzB3aJ9Fc';
 
 type Sent = { method: string; path: string; authorization: string | null; body?: string };
 
