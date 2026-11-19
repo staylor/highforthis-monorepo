@@ -1,4 +1,5 @@
 import { ApolloServer } from '@apollo/server';
+import { ApolloServerPluginCacheControlDisabled } from '@apollo/server/plugin/disabled';
 import bcrypt from 'bcryptjs';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -41,6 +42,8 @@ describe('createApp', () => {
       resolvers: {
         Query: { viewer: (_: unknown, __: unknown, { authUser }: AppContext) => authUser?.id },
       },
+      // as in server.ts
+      plugins: [ApolloServerPluginCacheControlDisabled()],
     });
     await server.start();
     app = createApp(server);
@@ -91,6 +94,16 @@ describe('createApp', () => {
       });
 
       await expect(response.json()).resolves.toEqual({ data: { viewer: 'admin-1' } });
+    });
+
+    it('tells caches not to store answers, without the cache-control plugin', async () => {
+      const get = await request('/graphql?query=%7Bviewer%7D', {
+        headers: { 'apollo-require-preflight': 'true' },
+      });
+      const post = await request('/graphql', json({ query: '{ viewer }' }));
+
+      expect(get.headers.get('cache-control')).toBe('no-store');
+      expect(post.headers.get('cache-control')).toBe('no-store');
     });
 
     it('answers CORS preflights for any origin with the requested headers', async () => {
