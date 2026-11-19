@@ -40,3 +40,13 @@ export async function cell(page: Page, row: Locator, header: string): Promise<Lo
   expect(index, `a "${header}" column`).toBeGreaterThanOrEqual(0);
   return row.locator('th, td').nth(index);
 }
+
+/**
+ * The ID of the item a form just added, from its edit page's URL. Remix shows the page the add
+ * redirected to before it replaces the URL, so this waits for the URL to leave the add page.
+ */
+export async function addedId(page: Page, section: string): Promise<string> {
+  const editPage = new RegExp(`/admin/${section}/(?!add(?:[/?]|$))([^/?]+)`);
+  await expect(page).toHaveURL(editPage);
+  return editPage.exec(page.url())![1];
+}
