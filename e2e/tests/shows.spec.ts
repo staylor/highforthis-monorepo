@@ -7,7 +7,7 @@ import { addedId, cell, field, hydrated } from '../support/ui.ts';
 // the page's scripts have loaded.
 async function openAddForm(page: Page) {
   await page.goto('/admin/show/add');
-  await page.waitForLoadState('networkidle');
+  await hydrated(page);
 }
 
 // The add form starts out like the last show added, artists included
