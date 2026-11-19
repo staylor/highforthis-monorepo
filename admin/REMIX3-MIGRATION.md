@@ -115,6 +115,12 @@ These are in web, and nothing is served there yet:
      - Saving keeps a title like "2024" a string.
      - The admin app's podcast routes, podcast form and `server/podcasts.ts` are removed in the same change.
      - `e2e/tests/podcasts.spec.ts` covers the section and both pickers in a browser.
+   - **Videos has moved.** Web serves `/admin/video` (`web/app/actions/admin/videos/`): the list and the edit page, since videos come from YouTube's import.
+     - The list's year filter is a `ListFilter`: a GET form whose select (`auto-submit-select.tsx`) submits as soon as it changes, with an Apply button without JavaScript. The search box and the filters keep each other's values, and the filters stay when they match nothing.
+     - The edit page leaves the thumbnail out when a video has none, where the admin app's page failed.
+     - GraphQL's `updateVideo` set an invalid date whenever the input left `publishedAt` out, which the edit form always does, so saving a video failed in the admin app too. It now keeps the saved date.
+     - The admin app's video routes, video form and `server/videos.ts` are removed in the same change.
+     - `e2e/tests/videos.spec.ts` covers the filter, the search, an edit and a delete in a browser.
 3. **Shows:** the bulk CSV page and the listings page are the largest route files.
 4. **Media:** upload, album covers, and the pickers.
 5. **Posts:** the editor client entry, the featured media field, and both pickers.

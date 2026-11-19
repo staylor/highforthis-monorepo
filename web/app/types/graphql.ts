@@ -251,6 +251,40 @@ export type UpdateVenueMutation = { __typename?: 'Mutation', updateVenue?: { __t
       | { __typename?: 'VideoUpload', destination: string, fileName: string, id: string, type: string }
     > | null } | null };
 
+export type VideoForm_VideoFragment = { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> };
+
+export type VideosAdminQueryVariables = Types.Exact<{
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  year?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+}>;
+
+
+export type VideosAdminQuery = { __typename?: 'Query', videos?: { __typename?: 'VideoConnection', count: number, years?: Array<number> | null, edges: Array<{ __typename?: 'VideoEdge', node: { __typename?: 'Video', id: string, publishedAt: number, slug: string, title: string, year: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null } } | null };
+
+export type DeleteVideoMutationVariables = Types.Exact<{
+  ids: Array<Types.InputMaybe<Types.Scalars['String']['input']>> | Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type DeleteVideoMutation = { __typename?: 'Mutation', removeVideo?: boolean | null };
+
+export type VideoEditQueryVariables = Types.Exact<{
+  id?: Types.InputMaybe<Types.Scalars['String']['input']>;
+}>;
+
+
+export type VideoEditQuery = { __typename?: 'Query', video?: { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
+
+export type UpdateVideoMutationVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+  input: Types.UpdateVideoInput;
+}>;
+
+
+export type UpdateVideoMutation = { __typename?: 'Mutation', updateVideo?: { __typename?: 'Video', dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ __typename?: 'VideoThumbnail', height: number, url: string, width: number }> } | null };
+
 export type ArtistQueryVariables = Types.Exact<{
   first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   slug: Types.Scalars['String']['input'];

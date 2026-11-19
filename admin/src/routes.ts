@@ -35,10 +35,6 @@ export default [
       route('listings/:venueId?', 'routes/admin/show/listings.tsx'),
       route(':id', 'routes/admin/show/edit.tsx'),
     ]),
-    ...prefix('video', [
-      index('routes/admin/video/index.tsx'),
-      route(':id', 'routes/admin/video/edit.tsx'),
-    ]),
   ]),
   route('login', 'routes/login/layout.tsx', [route(':error?', 'routes/login/index.tsx')]),
   ...prefix('modals', [

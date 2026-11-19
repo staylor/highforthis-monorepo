@@ -57,6 +57,13 @@ interface Podcast {
   audio: { id: string } | null;
 }
 
+interface Video {
+  id: string;
+  title: string;
+  slug: string;
+  year: number;
+}
+
 interface Artist extends Entity {
   description: string | null;
   excludeFromSearch: boolean | null;
@@ -165,6 +172,33 @@ export class GraphQL {
     return podcast;
   }
 
+  /** A video as if YouTube's import had added it, without thumbnails. */
+  async createVideo(input: { title: string; slug: string; year: number }) {
+    const { createVideo } = await this.query<{ createVideo: Video }>(
+      `mutation ($input: CreateVideoInput!) { createVideo(input: $input) { id title slug year } }`,
+      {
+        input: {
+          dataId: input.slug,
+          dataPlaylistId: `e2e-${input.year}`,
+          dataType: 'youtube#video',
+          publishedAt: Date.UTC(input.year, 0, 1),
+          // Optional in the schema, but the server requires it
+          publishedISO: new Date(Date.UTC(input.year, 0, 1)).toISOString(),
+          ...input,
+        },
+      }
+    );
+    return createVideo;
+  }
+
+  async video(id: string) {
+    const { video } = await this.query<{ video: Video | null }>(
+      `query ($id: String!) { video(id: $id) { id title slug year } }`,
+      { id }
+    );
+    return video;
+  }
+
   async createShow(input: { title: string; artists: string[]; venue: string }) {
     const { createShow } = await this.query<{ createShow: Show }>(
       `mutation ($input: CreateShowInput!) { createShow(input: $input) { id title } }`,
@@ -190,8 +224,8 @@ export class GraphQL {
   }
 
   /**
-   * Removes the posts, shows, venues, artists, users and podcasts whose title or name starts with
-   * `prefix`.
+   * Removes the posts, shows, venues, artists, users, podcasts and videos whose title or name
+   * starts with `prefix`.
    * Shows go first, since a venue can't be removed while a show is at it.
    */
   async removeMatching(prefix: string) {
@@ -202,6 +236,7 @@ export class GraphQL {
       artists: Connection<Entity>;
       users: Connection<User>;
       podcasts: Connection<Podcast>;
+      videos: Connection<Video>;
     }>(
       `query ($search: String) {
         posts(search: $search, first: 500) { count edges { node { id title } } }
@@ -210,6 +245,7 @@ export class GraphQL {
         artists(search: $search, first: 500) { count edges { node { id name } } }
         users(search: $search, first: 500) { count edges { node { id name } } }
         podcasts(search: $search, first: 500) { count edges { node { id title } } }
+        videos(search: $search, first: 500) { count edges { node { id title } } }
       }`,
       { search: prefix }
     );
@@ -235,6 +271,7 @@ export class GraphQL {
       ['removePost', ids(found.posts, (post) => post.title.startsWith(prefix))],
       ['removeUser', ids(found.users, (user) => user.name.startsWith(prefix))],
       ['removePodcast', ids(found.podcasts, (podcast) => podcast.title.startsWith(prefix))],
+      ['removeVideo', ids(found.videos, (video) => video.title.startsWith(prefix))],
     ];
     for (const [mutation, removing] of removals) {
       if (removing.length === 0) {

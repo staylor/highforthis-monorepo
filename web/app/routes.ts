@@ -46,6 +46,11 @@ export const routes = route({
       add: form('/add'),
       edit: form('/:id'),
     }),
+    // Videos come from YouTube, so there's no add page
+    videos: route('/video', {
+      list: form('/'),
+      edit: form('/:id'),
+    }),
     venues: route('/venue', {
       list: form('/'),
       add: form('/add'),

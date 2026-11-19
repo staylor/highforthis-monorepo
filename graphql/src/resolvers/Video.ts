@@ -82,7 +82,8 @@ const resolvers = {
         where: { id },
         data: {
           ...rest,
-          ...(publishedAt !== null && { publishedAt: new Date(publishedAt || '') }),
+          // A form that leaves the date out sends no publishedAt, which keeps the saved one
+          ...(publishedAt !== undefined && { publishedAt: new Date(publishedAt) }),
         },
         include: videoIncludes,
       });
