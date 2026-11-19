@@ -12,6 +12,8 @@ const resolvers = {
   },
   PodcastSettings: {
     async image(settings: PodcastSettings) {
+      // Query.podcastSettings includes it
+      if ('image' in settings) return settings.image;
       if (!settings.imageId) return null;
       return prisma.mediaUpload.findUnique({ where: { id: settings.imageId } });
     },
