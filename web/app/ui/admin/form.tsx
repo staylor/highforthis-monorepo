@@ -1,12 +1,15 @@
-import type { Handle } from 'remix/component';
+import type { Handle, RemixNode } from 'remix/component';
 
 import { cn } from '../public/cn.ts';
 
 import { getAdmin } from './context.tsx';
 import { Message } from './message.tsx';
-import { buttonClass, inputBase } from './styles.ts';
+import { buttonClass, inputBase } from './public/styles.ts';
 
-// A plain POST form whose fields are described by data.
+// The admin's add and edit forms, following the admin app's AdminForm and EditableField: a
+// plain POST form whose fields are described by data. A custom field renders what it's given,
+// such as the featured media field. The date, editor and tags fields move here with the
+// sections that use them.
 
 interface Choice {
   label: string;
@@ -17,12 +20,15 @@ export interface Field {
   label: string;
   /** The form field's name, and the property of `data` that fills it. */
   prop: string;
-  type?: 'text' | 'textarea' | 'select' | 'hidden';
+  type?: 'text' | 'textarea' | 'select' | 'hidden' | 'checkbox' | 'custom';
+  /** The <input> type for a text field. */
   inputType?: 'text' | 'email' | 'password';
   autoComplete?: boolean;
   placeholder?: string;
   choices?: Choice[];
   multiple?: boolean;
+  /** A custom field's content, under its label. */
+  render?: () => RemixNode;
 }
 
 const label = 'mb-1 block text-sm tracking-wide text-gray-700 dark:text-neutral-300';
@@ -41,6 +47,20 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
           value={String(value ?? '')}
           placeholder={field.placeholder}
           class={cn(inputBase, 'w-full')}
+          id={id}
+        />
+      );
+    }
+    if (field.type === 'checkbox') {
+      // Submits true when checked. An unchecked box submits nothing, so a form's save sends
+      // false for it by default.
+      return (
+        <input
+          type="checkbox"
+          name={field.prop}
+          value="true"
+          checked={Boolean(value)}
+          class="rounded-sm border-gray-300 text-pink shadow-sm focus:border-pink focus:ring-3 focus:ring-pink focus:ring-offset-0"
           id={id}
         />
       );
@@ -101,33 +121,64 @@ interface AdminFormProps {
   fields: Field[];
   data?: Record<string, unknown> | null;
   buttonLabel?: string;
+  /** A box beside the fields on wide screens, such as an artist's shows. */
+  meta?: RemixNode;
+}
+
+function FormField(handle: Handle<{ field: Field; data?: Record<string, unknown> | null }>) {
+  return () => {
+    const { field, data } = handle.props;
+    const id = `field-${field.prop}`;
+    if (field.type === 'custom') {
+      return (
+        <div class="my-6 block">
+          {field.label && <span class={label}>{field.label}</span>}
+          {field.render?.()}
+        </div>
+      );
+    }
+    return (
+      <div class="mt-2.5 mb-5 block">
+        {field.type !== 'hidden' && (
+          <label for={id} class={label}>
+            {field.label}
+          </label>
+        )}
+        <FieldInput field={field} value={data?.[field.prop]} id={id} />
+      </div>
+    );
+  };
 }
 
 export function AdminForm(handle: Handle<AdminFormProps>) {
   return () => {
     const { t } = getAdmin(handle);
-    const { fields, data, buttonLabel } = handle.props;
+    const { fields, data, buttonLabel, meta } = handle.props;
     return (
       <div class="block after:clear-both after:table">
         <Message param="saveFailed" text={t('admin.saveFailed')} />
         <form method="post">
-          <fieldset class="w-full max-w-2xl min-w-0">
-            {fields.map((field) => {
-              const id = `field-${field.prop}`;
-              return (
-                <div class="mt-2.5 mb-5 block">
-                  {field.type !== 'hidden' && (
-                    <label for={id} class={label}>
-                      {field.label}
-                    </label>
-                  )}
-                  <FieldInput field={field} value={data?.[field.prop]} id={id} />
-                </div>
-              );
-            })}
-            <button type="submit" class={buttonClass(true, 'h-7.5 px-3 pb-0.5 leading-7')}>
-              {buttonLabel || t('admin.submit')}
-            </button>
+          <fieldset
+            class={cn(
+              'flex w-full flex-col gap-6',
+              Boolean(meta) && 'lg:flex-row lg:items-start lg:gap-8'
+            )}
+          >
+            <div class="w-full max-w-2xl min-w-0">
+              {fields.map((field) => (
+                <FormField field={field} data={data} />
+              ))}
+              <button type="submit" class={buttonClass(true, 'h-7.5 px-3 pb-0.5 leading-7')}>
+                {buttonLabel || t('admin.submit')}
+              </button>
+            </div>
+            {meta && (
+              <section class="w-full shrink-0 lg:sticky lg:top-4 lg:w-70">
+                <aside class="mb-5 box-border block border border-detail shadow-sm">
+                  <div class="px-5 pt-1.5 pb-5 text-sm">{meta}</div>
+                </aside>
+              </section>
+            )}
           </fieldset>
         </form>
       </div>

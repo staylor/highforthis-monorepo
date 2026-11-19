@@ -1,4 +1,4 @@
-import { cn } from '../public/cn.ts';
+import { cn } from '../../public/cn.ts';
 
 export const inputBase =
   'my-1 mr-1 last:mr-0 rounded-md border-gray-300 shadow-xs focus:border-pink focus:ring-3 focus:ring-pink-200 transition-colors';

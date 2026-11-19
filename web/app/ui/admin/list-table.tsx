@@ -6,13 +6,13 @@ import { cn } from '../public/cn.ts';
 
 import { getAdmin } from './context.tsx';
 import { Message } from './message.tsx';
-import { buttonClass, inputBase } from './styles.ts';
+import { buttonClass, inputBase } from './public/styles.ts';
 
 // Works as plain HTML: each row's checkbox belongs to the bulk actions form through the `form`
 // attribute, search is a GET form, and paging is links.
 
 interface Column {
-  label: string;
+  label?: string;
   class?: string;
   render: (node: any) => RemixNode;
 }

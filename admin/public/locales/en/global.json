@@ -1,6 +1,8 @@
 {
   "admin": {
+    "close": "Close",
     "details": "Details",
+    "loading": "Loading…",
     "saveFailed": "Couldn't save. Check the form and try again.",
     "submit": "Submit",
     "viewSite": "View Site"
@@ -59,6 +61,8 @@
     "featuredMedia": "Featured Media",
     "name": "Name",
     "noShows": "No associated shows.",
+    "setFeaturedMedia": "Set Featured Media",
+    "showMore": "Show More",
     "shows": "Shows",
     "slug": "Slug",
     "website": "Website"

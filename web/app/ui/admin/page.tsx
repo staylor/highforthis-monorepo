@@ -2,7 +2,7 @@ import type { Handle, RemixNode } from 'remix/component';
 
 import { cn } from '../public/cn.ts';
 
-import { buttonClass, heading1 } from './styles.ts';
+import { buttonClass, heading1 } from './public/styles.ts';
 
 export function Heading(handle: Handle<{ children?: RemixNode }>) {
   return () => (

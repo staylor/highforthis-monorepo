@@ -1,21 +1,14 @@
 import type { Handle, RemixNode } from 'remix/component';
 
-import { isServedByWeb } from '@highforthis/shared/adminPaths';
-
 import { cn } from '../public/cn.ts';
 
 import { getAdmin } from './context.tsx';
 import { Icon } from './icon.tsx';
+import { documentLoad } from './links.ts';
 import { adminHref, adminNav, isSectionActive, type NavSection } from './nav.ts';
 
 // A sidebar on wide screens and a menu under the header on narrow ones. The menu is a
 // <details> element, so it opens without JavaScript.
-
-/**
- * Links to admin pages that haven't moved here load in full: Remix's client navigation would
- * fetch the admin app's page and merge it into this document, which can't run its scripts.
- */
-const documentLoad = (href: string) => !isServedByWeb(href) || undefined;
 
 const linkBase = cn(
   'flex items-center gap-3 rounded-lg py-2 pr-2 pl-2.5 text-sm font-medium no-underline',
