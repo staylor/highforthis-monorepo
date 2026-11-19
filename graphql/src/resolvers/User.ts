@@ -85,6 +85,8 @@ const resolvers = {
       const data: Record<string, unknown> = { ...fields };
       if (password) {
         data.hash = await bcrypt.hash(password, SALT_ROUNDS);
+        // A new password ends the user's tokens, wherever they're signed in
+        data.tokenVersion = { increment: 1 };
       }
 
       if (typeof roles !== 'undefined') {

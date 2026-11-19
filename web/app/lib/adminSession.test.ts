@@ -2,7 +2,12 @@ import * as assert from 'remix/assert';
 import { afterEach, beforeEach, describe, it } from 'remix/test';
 
 import { testSecret, testSession, testToken } from './adminSession.fixtures.ts';
-import { adminSessionCookie, adminToken, expiredAdminCookie } from './adminSession.ts';
+import {
+  adminSessionCookie,
+  adminToken,
+  assertSessionSecret,
+  expiredAdminCookie,
+} from './adminSession.ts';
 
 // A session without a token, which React Router signed with `testSecret` as it did testSession.
 // remix/cookie neither percent-encodes the value it writes nor decodes the one it reads, so both
@@ -62,5 +67,26 @@ describe('adminSessionCookie', () => {
       await expiredAdminCookie(),
       '__session=; HttpOnly; Max-Age=0; Path=/; SameSite=Lax; Secure'
     );
+  });
+
+  it('is secure on Railway, whatever NODE_ENV says', async (t) => {
+    t.mock.property(process, 'env', { ...process.env, RAILWAY_ENVIRONMENT_NAME: 'production' });
+    assert.match(await adminSessionCookie(testToken), /; Secure$/);
+  });
+});
+
+describe('assertSessionSecret', () => {
+  it('stops a deployed server without TOKEN_SECRET from starting', () => {
+    assert.throws(() => assertSessionSecret({ NODE_ENV: 'production' }), /TOKEN_SECRET/);
+    assert.throws(
+      () => assertSessionSecret({ RAILWAY_ENVIRONMENT_NAME: 'staging' }),
+      /TOKEN_SECRET/
+    );
+  });
+
+  it('lets development and tests sign with the development secret', () => {
+    assertSessionSecret({ NODE_ENV: 'development' });
+    assertSessionSecret({ NODE_ENV: 'test' });
+    assertSessionSecret({ NODE_ENV: 'production', TOKEN_SECRET: 'set' });
   });
 });

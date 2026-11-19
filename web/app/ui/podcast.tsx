@@ -1,8 +1,9 @@
-import { css, unsafeHTML, type Handle, type RemixNode } from 'remix/component';
+import { css, type Handle, type RemixNode } from 'remix/component';
 
 import type { MetaTag } from '../actions/document.tsx';
 
 import { Heading1 } from './heading.tsx';
+import { lines } from './lines.tsx';
 import { uploadUrl } from './public/media.ts';
 import { lg } from './public/styles.ts';
 
@@ -57,8 +58,9 @@ export function Podcast(
           lineHeight: 1.625,
           color: 'var(--muted)',
         })}
-        innerHTML={unsafeHTML(handle.props.description.replace(/\n/g, '<br />'))}
-      />
+      >
+        {lines(handle.props.description)}
+      </p>
       <div mix={css({ marginBottom: '2rem', display: 'flex', gap: '0.75rem' })}>
         <a href="https://podcasts.apple.com/us/podcast/high-for-this/id1461883255" mix={storeLink}>
           <AppleLogo />

@@ -1,5 +1,7 @@
 import { css, unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 
+import { sanitizeInlineHTML } from '../lib/sanitize.ts';
+
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';
 import { DarkMode } from './public/dark-mode.tsx';
@@ -198,10 +200,10 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
                 textAlign: 'center',
                 ...text.xs,
                 color: 'var(--muted)',
-                // The copyright text is HTML from the site settings
+                // The copyright text is HTML from the site settings, cut down to links and text
                 '& a': { color: 'var(--pink)', textDecoration: 'underline' },
               })}
-              innerHTML={unsafeHTML(siteSettings?.copyrightText ?? '')}
+              innerHTML={unsafeHTML(sanitizeInlineHTML(siteSettings?.copyrightText ?? ''))}
             />
           </div>
         </footer>

@@ -3,6 +3,7 @@ import { createRouter } from 'remix/router';
 import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
 
 import { testSecret, testSession, testToken } from '../lib/adminSession.fixtures.ts';
+import { rememberClientAddress } from '../lib/client.ts';
 
 import { Admin, requireAdmin, sameOrigin } from './admin.ts';
 import { proxies } from './app.ts';
@@ -104,6 +105,20 @@ describe('sameOrigin', () => {
     );
     assert.equal(await page.text(), 'page');
   });
+
+  it('goes by what the browser says in Sec-Fetch-Site, which pages cannot set', async () => {
+    for (const site of ['cross-site', 'same-site']) {
+      const response = await post({ 'sec-fetch-site': site });
+      assert.equal(response.status, 400, `${site}, without an Origin`);
+    }
+    const sibling = await post({
+      'sec-fetch-site': 'same-site',
+      origin: 'http://graphql.localhost',
+    });
+    assert.equal(sibling.status, 400, 'another subdomain of this site');
+    assert.equal(await (await post({ 'sec-fetch-site': 'same-origin', origin })).text(), 'saved');
+    assert.equal(await (await post({ 'sec-fetch-site': 'none' })).text(), 'saved');
+  });
 });
 
 describe('proxies', () => {
@@ -127,7 +142,7 @@ describe('proxies', () => {
         new Request(new URL('/upload', origin), {
           method: 'POST',
           body: 'file bytes',
-          headers: cookie ? { cookie } : {},
+          headers: cookie ? { cookie, origin } : { origin },
         })
       );
     try {
@@ -143,22 +158,67 @@ describe('proxies', () => {
     assert.equal(forwarded[1].authorization, null);
   });
 
-  it('forwards passkey sign-in and the API to GraphQL, and leaves the admin to this app', async (t) => {
+  it("won't turn the admin's cookie into a token for another site's upload", async (t) => {
+    process.env.TOKEN_SECRET = testSecret;
+    const fetch = t.mock.method(globalThis, 'fetch', async () => Response.json(['upload-1']));
+    const upload = (method: string, headers: Record<string, string>) =>
+      router.fetch(
+        new Request(new URL('/upload', origin), {
+          method,
+          body: method === 'POST' ? 'file bytes' : undefined,
+          headers: { cookie: testSession, ...headers },
+        })
+      );
+    try {
+      assert.equal((await upload('POST', { origin: 'https://evil.example' })).status, 400);
+      assert.equal((await upload('POST', { 'sec-fetch-site': 'same-site' })).status, 400);
+      const get = await upload('GET', {});
+      assert.equal(get.status, 405);
+      assert.equal(get.headers.get('allow'), 'POST');
+    } finally {
+      delete process.env.TOKEN_SECRET;
+    }
+    assert.equal(fetch.mock.calls.length, 0);
+  });
+
+  it('gives each address a few passkey sign-ins before turning it away', async (t) => {
+    t.mock.method(globalThis, 'fetch', async () => Response.json({ challengeId: 'c1' }));
+    const start = (address: string) => {
+      const request = new Request(new URL('/auth/passkeys/authenticate/options', origin), {
+        method: 'POST',
+      });
+      rememberClientAddress(request, address);
+      return router.fetch(request);
+    };
+    for (let i = 0; i < 30; i++) {
+      assert.equal((await start('203.0.113.7')).status, 200);
+    }
+    const refused = await start('203.0.113.7');
+    assert.equal(refused.status, 429);
+    assert.ok(Number(refused.headers.get('retry-after')) > 0);
+    assert.equal((await start('203.0.113.8')).status, 200, 'another address');
+  });
+
+  it('forwards passkey sign-in and the API to GraphQL, and leaves the rest to this app', async (t) => {
     const forwarded: string[] = [];
     t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL) => {
       forwarded.push(new URL(input instanceof Request ? input.url : input).pathname);
       return new Response('from graphql');
     });
-    const text = async (path: string) => (await router.fetch(new URL(path, origin))).text();
+    const text = async (path: string, method = 'GET') =>
+      (await router.fetch(new Request(new URL(path, origin), { method }))).text();
 
     assert.equal(await text('/admin/user'), 'from web');
-    assert.equal(await text('/auth/passkeys/authenticate/options'), 'from graphql');
+    assert.equal(await text('/auth/passkeys/authenticate/options', 'POST'), 'from graphql');
     assert.equal(await text('/graphql'), 'from graphql');
-    assert.equal(await text('/uploads/image.jpg'), 'from graphql');
-    assert.deepEqual(forwarded, [
-      '/auth/passkeys/authenticate/options',
-      '/graphql',
+    // Uploads are served from the bucket, and passkeys are managed through the admin
+    for (const path of [
       '/uploads/image.jpg',
-    ]);
+      '/auth/passkeys',
+      '/auth/passkeys/register/options',
+    ]) {
+      assert.equal((await router.fetch(new Request(new URL(path, origin)))).status, 404, path);
+    }
+    assert.deepEqual(forwarded, ['/auth/passkeys/authenticate/options', '/graphql']);
   });
 });

@@ -8,6 +8,7 @@ import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
 
 import { createApp, routes } from './app';
 import env from './env';
+import { errorOptions, queryLimits } from './hardening';
 import cronJobs from './jobs';
 import type { AppContext } from './models';
 import { isWordPressProbe } from './rejectWordPress';
@@ -33,10 +34,12 @@ async function startServer(): Promise<void> {
   const httpServer = http.createServer();
 
   const server = new ApolloServer<AppContext>({
+    ...errorOptions(logger),
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
+  server.addPlugin(queryLimits());
   await server.start();
 
   const httpLogger = createHttpLogger(logger);

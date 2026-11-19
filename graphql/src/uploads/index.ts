@@ -5,7 +5,7 @@ import mediaAdapter from './adapter';
 import handleUploads, { createMediaUpload } from './handler';
 
 // Uploads are written here, then copied to the bucket
-export const uploadDir = path.join(process.cwd(), 'public/uploads');
+const uploadDir = path.join(process.cwd(), 'public/uploads');
 
 /** `POST /upload`: stores the files in the `uploads` field and answers with their media IDs. */
 export const uploadHandler = ({ request }: { request: Request }) =>

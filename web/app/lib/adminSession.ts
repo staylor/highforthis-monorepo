@@ -7,12 +7,31 @@ import { createCookie } from 'remix/cookie';
 // Signing in lasts 12 hours
 const maxAge = 12 * 60 * 60;
 
+// Development and tests sign with this when TOKEN_SECRET isn't set. A deployed server won't
+// start without one (see assertSessionSecret).
+const developmentSecret = 's3cr3t';
+
+/** Production, or anywhere on Railway, whatever NODE_ENV says. */
+function deployed(env: NodeJS.ProcessEnv) {
+  return env.NODE_ENV === 'production' || Boolean(env.RAILWAY_ENVIRONMENT_NAME);
+}
+
+/**
+ * Throws when a deployed server has no TOKEN_SECRET, so the session cookie is never signed with
+ * the development secret, which anyone can read here.
+ */
+export function assertSessionSecret(env: NodeJS.ProcessEnv = process.env): void {
+  if (deployed(env) && !env.TOKEN_SECRET) {
+    throw new Error('Set TOKEN_SECRET: it signs the admin session cookie');
+  }
+}
+
 // Made when used, since the name, secret and NODE_ENV come from the environment
 function sessionCookie() {
   return createCookie(process.env.TOKEN_KEY || '__session', {
-    secrets: [process.env.TOKEN_SECRET || 's3cr3t'],
+    secrets: [process.env.TOKEN_SECRET || developmentSecret],
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: deployed(process.env),
     maxAge,
   });
 }

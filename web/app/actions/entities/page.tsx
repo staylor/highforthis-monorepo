@@ -1,10 +1,11 @@
 import { gql } from 'graphql-tag';
-import { css, unsafeHTML, type Handle } from 'remix/component';
+import { css, type Handle } from 'remix/component';
 
 import type { ArtistQuery, VenueQuery } from '../../types/graphql.ts';
 import { getApp } from '../../ui/app-context.tsx';
 import { Metadata } from '../../ui/artist.tsx';
 import { Heading1 } from '../../ui/heading.tsx';
+import { lines } from '../../ui/lines.tsx';
 import { uploadUrl } from '../../ui/public/media.ts';
 import { md, text } from '../../ui/public/styles.ts';
 import { Attended, attendedFragment, Shows, showsGridFragment } from '../../ui/shows/shows.tsx';
@@ -182,8 +183,9 @@ export function VenuePage(handle: Handle<{ data: VenueQuery }>) {
                   ...text.sm,
                   color: 'var(--muted)',
                 })}
-                innerHTML={unsafeHTML(venue.address.replace(/\n/g, '<br />'))}
-              />
+              >
+                {lines(venue.address)}
+              </p>
             )}
             {venue.capacity && (
               <p mix={css({ marginBottom: '1rem', ...text.sm })}>

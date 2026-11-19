@@ -29,7 +29,7 @@ test('adds a passkey, signs in with it and removes it', async ({ page, prefix, g
   expect((await graphql.passkeys()).some((passkey) => passkey.name === name)).toBe(true);
 
   // Signing out keeps the authenticator, so the passkey can sign back in
-  await page.getByRole('link', { name: 'Log Out' }).click();
+  await page.getByRole('button', { name: 'Log Out' }).click();
   await expect(page).toHaveURL('/login');
   await hydrated(page);
   await page.getByRole('button', { name: 'Sign in with a passkey' }).click();

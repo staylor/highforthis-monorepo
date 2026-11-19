@@ -1,6 +1,8 @@
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server';
 import { z } from 'zod';
 
+import { createLogger } from '@highforthis/shared/logger';
+
 import { issueToken } from '#/authentication';
 import { isAdmin } from '#/authorization';
 import prisma from '#/database';
@@ -10,10 +12,21 @@ import type { UserWithRoles } from '#/models';
 const CHALLENGE_TTL_MS = 5 * 60 * 1000;
 const AUTHENTICATION_CHALLENGE = 'authentication';
 const REGISTRATION_CHALLENGE = 'registration';
+// Anyone can start signing in, and each start saves a challenge for five minutes. Past this many
+// at once, starts are turned away until some expire, so the table can't be flooded.
+const MAX_PENDING_AUTHENTICATIONS = 5000;
+
+const logger = createLogger({ serviceName: 'graphql' });
+
+/** A failure whose message is meant for the browser. Any other error is logged, not shown. */
+class PasskeyError extends Error {}
+
+// The browser's WebAuthn answer: SimpleWebAuthn checks all of it, but its ID is looked up first
+const webAuthnResponse = z.looseObject({ id: z.string().min(1) });
 
 const authenticationVerificationSchema = z.object({
   challengeId: z.string().min(1),
-  response: z.unknown(),
+  response: webAuthnResponse,
 });
 
 const registrationVerificationSchema = authenticationVerificationSchema.extend({
@@ -73,7 +86,7 @@ async function consumeChallenge({
     if (challenge) {
       await prisma.webAuthnChallenge.delete({ where: { id: challenge.id } });
     }
-    throw new Error('The passkey request expired or is invalid');
+    throw new PasskeyError('The passkey request expired or is invalid');
   }
 
   await prisma.webAuthnChallenge.delete({ where: { id: challenge.id } });
@@ -81,12 +94,27 @@ async function consumeChallenge({
 }
 
 function errorResponse(error: unknown, status = 400): Response {
-  const message = error instanceof Error ? error.message : 'Passkey request failed';
-  return Response.json({ error: message }, { status });
+  if (error instanceof PasskeyError) {
+    return Response.json({ error: error.message }, { status });
+  }
+  if (error instanceof z.ZodError) {
+    return Response.json({ error: 'The passkey request is incomplete' }, { status });
+  }
+  logger.warn({ err: error }, 'Passkey request failed');
+  return Response.json({ error: 'Passkey request failed' }, { status });
 }
 
 export async function authenticationOptionsHandler(): Promise<Response> {
   try {
+    const pending = await prisma.webAuthnChallenge.count({
+      where: { type: AUTHENTICATION_CHALLENGE, expiresAt: { gt: new Date() } },
+    });
+    if (pending >= MAX_PENDING_AUTHENTICATIONS) {
+      return Response.json(
+        { error: 'Too many sign-ins in progress. Try again in a few minutes.' },
+        { status: 429, headers: { 'Retry-After': String(CHALLENGE_TTL_MS / 1000) } }
+      );
+    }
     // Imported on first use: the library adds about 5 MB of heap to every idle process.
     const { generateAuthenticationOptions } = await import('@simplewebauthn/server');
     const options = await generateAuthenticationOptions({
@@ -110,7 +138,7 @@ export async function authenticationVerificationHandler(
 ): Promise<Response> {
   try {
     const body = authenticationVerificationSchema.parse(context.body);
-    const response = body.response as AuthenticationResponseJSON;
+    const response = body.response as unknown as AuthenticationResponseJSON;
     const expectedChallenge = await consumeChallenge({
       id: body.challengeId,
       type: AUTHENTICATION_CHALLENGE,
@@ -121,7 +149,7 @@ export async function authenticationVerificationHandler(
     });
 
     if (!passkey || !isAdmin(passkey.user)) {
-      throw new Error('Passkey authentication failed');
+      throw new PasskeyError('Passkey authentication failed');
     }
 
     const { verifyAuthenticationResponse } = await import('@simplewebauthn/server');
@@ -140,7 +168,7 @@ export async function authenticationVerificationHandler(
     });
 
     if (!verification.verified) {
-      throw new Error('Passkey authentication failed');
+      throw new PasskeyError('Passkey authentication failed');
     }
 
     await prisma.passkey.update({
@@ -153,7 +181,7 @@ export async function authenticationVerificationHandler(
       },
     });
 
-    return Response.json({ token: issueToken(passkey.userId) });
+    return Response.json({ token: issueToken(passkey.user) });
   } catch (error) {
     return errorResponse(error, 401);
   }
@@ -163,7 +191,7 @@ export async function registrationOptionsHandler(context: PasskeyContext): Promi
   try {
     const user = getAdminUser(context);
     if (!user) {
-      return errorResponse(new Error('Authentication required'), 401);
+      return errorResponse(new PasskeyError('Authentication required'), 401);
     }
 
     const passkeys = await prisma.passkey.findMany({ where: { userId: user.id } });
@@ -201,11 +229,11 @@ export async function registrationVerificationHandler(context: PasskeyContext): 
   try {
     const user = getAdminUser(context);
     if (!user) {
-      return errorResponse(new Error('Authentication required'), 401);
+      return errorResponse(new PasskeyError('Authentication required'), 401);
     }
 
     const body = registrationVerificationSchema.parse(context.body);
-    const response = body.response as RegistrationResponseJSON;
+    const response = body.response as unknown as RegistrationResponseJSON;
     const expectedChallenge = await consumeChallenge({
       id: body.challengeId,
       type: REGISTRATION_CHALLENGE,
@@ -221,7 +249,7 @@ export async function registrationVerificationHandler(context: PasskeyContext): 
     });
 
     if (!verification.verified || !verification.registrationInfo) {
-      throw new Error('Passkey registration failed');
+      throw new PasskeyError('Passkey registration failed');
     }
 
     const { credential, credentialBackedUp, credentialDeviceType } = verification.registrationInfo;
@@ -256,7 +284,7 @@ export async function registrationVerificationHandler(context: PasskeyContext): 
 export async function listPasskeysHandler(context: PasskeyContext): Promise<Response> {
   const user = getAdminUser(context);
   if (!user) {
-    return errorResponse(new Error('Authentication required'), 401);
+    return errorResponse(new PasskeyError('Authentication required'), 401);
   }
 
   const passkeys = await prisma.passkey.findMany({
@@ -280,7 +308,7 @@ export async function deletePasskeyHandler(
   try {
     const user = getAdminUser(context);
     if (!user) {
-      return errorResponse(new Error('Authentication required'), 401);
+      return errorResponse(new PasskeyError('Authentication required'), 401);
     }
 
     const credentialId = z.string().min(1).parse(context.params.credentialId);
@@ -290,10 +318,10 @@ export async function deletePasskeyHandler(
     });
 
     if (!passkeys.some((passkey) => passkey.id === credentialId)) {
-      return errorResponse(new Error('Passkey not found'), 404);
+      return errorResponse(new PasskeyError('Passkey not found'), 404);
     }
     if (!env.PASSWORD_LOGIN_ENABLED && passkeys.length === 1) {
-      return errorResponse(new Error('The last passkey cannot be removed'), 409);
+      return errorResponse(new PasskeyError('The last passkey cannot be removed'), 409);
     }
 
     await prisma.passkey.delete({ where: { id: credentialId } });

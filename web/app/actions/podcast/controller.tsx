@@ -1,9 +1,10 @@
 import { gql } from 'graphql-tag';
-import { css, unsafeHTML } from 'remix/component';
+import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
 import { routes } from '../../routes.ts';
 import type { PodcastQuery, PodcastsQuery } from '../../types/graphql.ts';
+import { lines } from '../../ui/lines.tsx';
 import { Link } from '../../ui/link.tsx';
 import { Podcast, podcastMetaTags } from '../../ui/podcast.tsx';
 import { uploadUrl } from '../../ui/public/media.ts';
@@ -86,8 +87,9 @@ export default createController(routes.podcast, {
                     lineHeight: 1.625,
                     color: 'var(--muted)',
                   })}
-                  innerHTML={unsafeHTML(node.description.replace(/\n/g, '<br />'))}
-                />
+                >
+                  {lines(node.description)}
+                </p>
               )}
             </Link>
           ))}

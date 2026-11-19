@@ -52,10 +52,14 @@ describe('renderAdminPage', () => {
     assert.ok(!html.includes(translate('posts.all')), "other sections' pages stay hidden");
   });
 
-  it('signs out with a full page load, and opens the site in a new tab', async (t) => {
+  it('signs out with a posted form and a full page load, and opens the site in a new tab', async (t) => {
     stubAppQuery(t);
     const html = await page('/admin/user');
-    assert.match(link(html, '/admin/logout') ?? '', /data-rmx-document/);
+    assert.equal(link(html, '/admin/logout'), undefined, 'a link elsewhere could sign you out');
+    assert.match(
+      html,
+      /<form method="post" action="\/admin\/logout" data-rmx-document[^>]*>\s*<button type="submit"/
+    );
     assert.doesNotMatch(link(html, '/admin/passkeys') ?? '', /data-rmx-document/);
     assert.doesNotMatch(link(html, '/admin') ?? '', /data-rmx-document/);
     assert.match(link(html, '/') ?? '', /target="_blank"/);

@@ -1,11 +1,10 @@
 import { HeaderMap, type ApolloServer } from '@apollo/server';
 import { compression } from 'remix/middleware/compression';
 import { cors } from 'remix/middleware/cors';
-import { staticFiles } from 'remix/middleware/static';
 import { createRouter } from 'remix/router';
 import { del, get, post, route } from 'remix/routes';
 
-import { authHandler, jwt, sessionHandler } from './authentication';
+import { authHandler, jwt, sessionHandler, signOutHandler } from './authentication';
 import { adminOnly } from './authorization';
 import { parseBody } from './http';
 import type { AppContext, UserWithRoles } from './models';
@@ -18,7 +17,7 @@ import {
   registrationVerificationHandler,
 } from './passkeys';
 import rejectWordPress from './rejectWordPress';
-import { uploadDir, uploadHandler } from './uploads';
+import { uploadHandler } from './uploads';
 
 export const routes = route({
   favicon: get('/favicon.ico'),
@@ -26,6 +25,7 @@ export const routes = route({
   graphql: '/graphql',
   auth: post('/auth'),
   session: get('/auth/session'),
+  signOut: post('/auth/signout'),
   passkeys: route('/auth/passkeys', {
     list: get('/'),
     authenticationOptions: post('/authenticate/options'),
@@ -36,9 +36,6 @@ export const routes = route({
   }),
   upload: post('/upload'),
 });
-
-// Like express.static, which served the uploads before, don't serve dotfiles
-const notDotfile = (path: string) => !path.split('/').some((segment) => segment.startsWith('.'));
 
 /** Runs a GraphQL request through Apollo Server. */
 function graphqlHandler(server: ApolloServer<AppContext>) {
@@ -97,14 +94,8 @@ function graphqlHandler(server: ApolloServer<AppContext>) {
 
 /** The routes GraphQL serves over HTTP, with Apollo Server answering `/graphql`. */
 export function createApp(server: ApolloServer<AppContext>) {
-  const router = createRouter({
-    middleware: [
-      rejectWordPress(),
-      compression(),
-      // This server handles uploads, and can serve previews of them
-      staticFiles(uploadDir, { cacheControl: 'public, max-age=0', filter: notDotfile }),
-    ],
-  });
+  // Uploads are served from the bucket, never from here: this host shares a site with the admin
+  const router = createRouter({ middleware: [rejectWordPress(), compression()] });
 
   router.map(routes.favicon, () => new Response(null, { status: 204 }));
   router.map(routes.health, () => Response.json({ status: 'ok' }));
@@ -126,6 +117,7 @@ export function createApp(server: ApolloServer<AppContext>) {
     },
   });
   router.map(routes.session, { middleware: [jwt()], handler: sessionHandler });
+  router.map(routes.signOut, { middleware: [jwt()], handler: signOutHandler });
   router.map(routes.auth, { middleware: [parseBody()], handler: authHandler });
 
   router.map(routes.upload, { middleware: [jwt(), adminOnly()], handler: uploadHandler });

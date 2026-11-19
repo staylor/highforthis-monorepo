@@ -13,3 +13,18 @@ onlyBuiltDependencies:
   - prisma
   - sharp
   - unrs-resolver
+
+# Patched releases of packages that development tools (Vitest, GraphQL Code Generator, the
+# GraphQL ESLint plugin, Remix's asset server) depend on, each within the major they ask for
+overrides:
+  '@babel/core@7': 7.29.13
+  '@fastify/busboy@3': 3.2.6
+  '@graphql-tools/executor-legacy-ws@1': 1.1.39
+  baseline-browser-mapping@2: 2.11.39
+  brace-expansion@2: 2.1.8
+  browserslist@4: 4.29.6
+  happy-dom: 21.0.4
+  js-yaml@4: 4.3.2
+  picomatch@2: 2.3.2
+  source-map-js@1: 1.2.4
+  ws@8: 8.23.0

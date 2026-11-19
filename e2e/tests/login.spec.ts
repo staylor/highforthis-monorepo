@@ -17,7 +17,7 @@ test('signs in, lands on the dashboard and signs out', async ({ page }) => {
   await expect(page).toHaveURL('/admin');
   await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
 
-  await page.getByRole('link', { name: 'Log Out' }).click();
+  await page.getByRole('button', { name: 'Log Out' }).click();
   await expect(page).toHaveURL('/login');
   await expect(page.getByRole('button', { name: 'Log In' })).toBeVisible();
 

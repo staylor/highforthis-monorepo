@@ -13,7 +13,7 @@ GraphQL API server for High For This, built with Apollo Server, Remix's Fetch AP
 
 From the monorepo root, `pnpm bootstrap` sets everything up, and `pnpm dev` starts GraphQL with the web app. See the [root README](../README.md#setup).
 
-Bootstrap installs PostgreSQL 18 from the `Brewfile`, creates `graphql/.env` from [`.env.example`](.env.example), and runs `pnpm db:setup`. That creates the database if it's missing, applies the Prisma schema, and loads `dump/highforthis-seed.dump` into an empty database. It's safe to run again; existing data is kept.
+Bootstrap installs PostgreSQL 18 from the `Brewfile`, creates `graphql/.env` from [`.env.example`](.env.example), and runs `pnpm db:setup`. That creates the database if it's missing, applies the Prisma schema, and loads `dump/highforthis-seed.dump` into an empty database. It's safe to run again; existing data is kept. The seed has no users: `pnpm e2e:admin` creates an admin to sign in with locally.
 
 `DATABASE_URL` connects as your macOS user, which Homebrew's Postgres sets up as a superuser with no password. Loading the seed needs a superuser, because the restore disables foreign key triggers.
 
@@ -34,7 +34,8 @@ In development (`pnpm dev`), only `DATABASE_URL` is needed. Everything else is o
 | `APPLE_MUSIC_KEY_ID`              |                        | MusicKit key ID, for album covers                 |
 | `APPLE_MUSIC_TEAM_ID`             |                        | Apple Developer team ID                           |
 | `APPLE_MUSIC_PRIVATE_KEY`         |                        | MusicKit private key (the .p8 file's contents)    |
-| `GOOGLE_MAPS_GEOLOCATION_API_KEY` |                        | Google Maps key for venue maps and geocoding      |
+| `GOOGLE_MAPS_GEOLOCATION_API_KEY` |                        | Google key for geocoding addresses (server only)  |
+| `GOOGLE_MAPS_BROWSER_API_KEY`     |                        | Public key for venue maps: Maps Static API only   |
 | `TICKETMASTER_API_KEY`            |                        | Ticketmaster Discovery API key for venue listings |
 
 ### Refresh from production

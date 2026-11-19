@@ -12,7 +12,6 @@ export const routes = route({
   post: get('/post/:slug'),
   artist: get('/artist/:slug'),
   venue: get('/venue/:slug'),
-  oembed: get('/oembed'),
   sphere: get('/sphere'),
   podcastFeed: get('/podcast.xml'),
   podcast: route('/podcast', {
@@ -28,12 +27,12 @@ export const routes = route({
   }),
   videos: get('/videos(/:year)'),
   video: get('/video/:slug'),
-  // Signing in to the admin, with an optional error to show: unauthorized or failed
+  // Signing in to the admin, with an optional error to show: unauthorized, failed or throttled
   login: form('/login(/:error)'),
   // Each form route is a GET page and its POST.
   admin: route('/admin', {
     dashboard: get('/'),
-    logout: get('/logout'),
+    logout: post('/logout'),
     passkeys: route('/passkeys', {
       list: form('/'),
       // JSON for the browser's WebAuthn calls, forwarded to GraphQL with the admin's token

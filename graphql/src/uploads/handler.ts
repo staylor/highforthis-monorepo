@@ -1,10 +1,20 @@
-import { parseFormData, type FileUpload } from 'remix/form-data-parser/future';
+import {
+  FormDataParseError,
+  MaxFileSizeExceededError,
+  MaxFilesExceededError,
+  MaxPartsExceededError,
+  MaxTotalSizeExceededError,
+  MultipartParseError,
+  parseFormData,
+  type FileUpload,
+} from 'remix/form-data-parser/future';
 import { z } from 'zod';
 
 import prisma from '#/database';
 
 import { storeFile } from './Storage';
 import mediaAdapter from './adapter';
+import { mediaExtension, UploadError } from './mediaTypes';
 import type { FileData } from './types/Upload';
 
 const imageCropSchema = z.object({
@@ -99,8 +109,28 @@ export async function createMediaUpload(file: unknown) {
   return record.id;
 }
 
-// Like multer, which took uploads before: no limit on the number or size of files
-const limits = { maxFiles: Infinity, maxFileSize: Infinity, maxParts: Infinity };
+// The media uploader sends one file a request. A gigabyte covers any podcast episode or video clip.
+const GB = 1024 * 1024 * 1024;
+const limits = { maxFiles: 10, maxFileSize: GB, maxParts: 20, maxTotalSize: 2 * GB };
+
+/** The answer for an upload turned down before it was stored, or null for any other failure. */
+function refusal(error: unknown): Response | null {
+  if (error instanceof UploadError) {
+    return Response.json({ error: error.message }, { status: error.status });
+  }
+  if (
+    error instanceof MaxFileSizeExceededError ||
+    error instanceof MaxTotalSizeExceededError ||
+    error instanceof MaxFilesExceededError ||
+    error instanceof MaxPartsExceededError
+  ) {
+    return Response.json({ error: error.message }, { status: 413 });
+  }
+  if (error instanceof FormDataParseError || error instanceof MultipartParseError) {
+    return Response.json({ error: 'The upload could not be read' }, { status: 400 });
+  }
+  return null;
+}
 
 /**
  * Stores the files posted in the `uploads` field, records them in the media library, and answers
@@ -118,7 +148,13 @@ export default async function handleUploads(request: Request, uploadDir: string)
 
   function store(upload: FileUpload) {
     if (upload.fieldName !== 'uploads') {
-      throw new Error(`Unexpected field: ${upload.fieldName}`);
+      throw new UploadError(400, `Unexpected field: ${upload.fieldName}`);
+    }
+    if (!mediaExtension(upload.type)) {
+      throw new UploadError(
+        415,
+        `Uploads must be images, audio or video, not ${upload.type || 'untyped files'}`
+      );
     }
     // The parser moves on to the next part once this file has streamed in
     const { promise: received, resolve } = Promise.withResolvers<void>();
@@ -140,14 +176,14 @@ export default async function handleUploads(request: Request, uploadDir: string)
   }
   // Even when one fails, wait for the others, so none is still writing when this answers
   const results = await Promise.allSettled(stored);
-  if (parseError) {
-    throw parseError;
-  }
-  const files = results.map((result) => {
-    if (result.status === 'rejected') {
-      throw result.reason;
+  const failure = parseError ?? results.find((result) => result.status === 'rejected')?.reason;
+  if (failure) {
+    const response = refusal(failure);
+    if (response) {
+      return response;
     }
-    return result.value;
-  });
+    throw failure;
+  }
+  const files = results.map((result) => (result as PromiseFulfilledResult<FileData>).value);
   return Response.json(await Promise.all(files.map(createMediaUpload)));
 }
