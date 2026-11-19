@@ -1,3 +1,5 @@
+import { constants } from 'node:zlib';
+
 import { compression } from 'remix/middleware/compression';
 import { render } from 'remix/middleware/render';
 import { staticFiles } from 'remix/middleware/static';
@@ -51,7 +53,12 @@ export const router = createRouter({
   middleware: [
     serverTiming(),
     timed('rejectWordPress', rejectWordPress()),
-    timed('compression', compression()),
+    // Brotli's default quality, 11, takes 30-70ms a page. 5 takes under half a millisecond, and
+    // its output is about 10% larger.
+    timed(
+      'compression',
+      compression({ brotli: { params: { [constants.BROTLI_PARAM_QUALITY]: 5 } } })
+    ),
     timed(
       'static',
       staticFiles('./public', { index: false, cacheControl: 'public, max-age=3600' })
