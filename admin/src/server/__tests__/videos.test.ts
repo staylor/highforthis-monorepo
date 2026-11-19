@@ -26,7 +26,7 @@ describe('videos', () => {
   });
 
   it('loads and updates a video', async () => {
-    const gql = stubGraphQL();
+    const gql = stubGraphQL({ mutate: { updateVideo: { id: 'y1' } } });
     await loadVideo({ gql, id: 'y1' });
     const result = await updateVideo({
       gql,

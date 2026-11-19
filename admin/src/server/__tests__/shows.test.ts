@@ -83,7 +83,7 @@ describe('shows', () => {
   });
 
   it('clears the fields and boxes the form leaves out', async () => {
-    const gql = stubGraphQL();
+    const gql = stubGraphQL({ mutate: { updateShow: { id: 's1' } } });
     const result = await updateShow({
       gql,
       id: 's1',

@@ -1,6 +1,7 @@
 {
   "admin": {
     "details": "Details",
+    "saveFailed": "Couldn't save. Check the form and try again.",
     "submit": "Submit",
     "viewSite": "View Site"
   },

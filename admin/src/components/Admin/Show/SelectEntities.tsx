@@ -30,7 +30,8 @@ export default function SelectEntities({ name, nodes, filtered }: SelectEntityPr
           value: node.id,
         }))}
         onChange={(value: string) => {
-          if (value) {
+          // a show lists an artist once, and the add form starts with the last show's artists
+          if (value && !ids.includes(value)) {
             setIds([...ids, value]);
           }
         }}
