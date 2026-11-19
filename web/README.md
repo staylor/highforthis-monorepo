@@ -44,6 +44,14 @@ pnpm web:dev   # just this app
 
 Public pages only read the admin's session cookie to know someone is signed in, which turns on live refresh. The admin app signs it with React Router's cookie format, which `app/lib/adminSession.ts` verifies.
 
+### Admin pages
+
+The admin is moving here from its React Router app one section at a time; [`admin/REMIX3-MIGRATION.md`](../admin/REMIX3-MIGRATION.md) has the plan. A section that has moved is listed in `shared/src/adminPaths.ts`. This server then renders it instead of forwarding it, and the admin app's links to it load the page in full.
+
+- Admin controllers list `sameOrigin()` and `requireAdmin()` (`app/middleware/admin.ts`). They reject cross-site form posts and require an admin session GraphQL accepts, which then sits on `context.admin` with a GraphQL client that sends the token.
+- `renderAdminPage()` (`app/actions/admin/render-page.tsx`) renders a page in the admin's document and layout, from `app/ui/admin/`.
+- Admin pages use `admin.css`, which the Tailwind CLI builds from `app/styles/admin.css`, and the admin app's strings, which `pnpm admin-strings` copies in. They're loaded the first time an admin page asks for them.
+
 RUM tracks views manually: Remix navigates with the browser's Navigation API, which the RUM SDK doesn't watch, so `app/actions/public/rum.ts` starts a view on load and after each navigation.
 
 The browser loads the OpenObserve SDKs as their prebuilt bundles, served from `/vendor/openobserve-rum@<version>/` and `/vendor/openobserve-logs@<version>/` by `app/lib/openobserve-bundles.ts`. Served through the asset server, they would be about 275 separate modules, each with an import map entry on every page.
@@ -68,6 +76,7 @@ On Railway (detected by `RAILWAY_ENVIRONMENT_NAME`), the server trusts the `X-Fo
 | `pnpm build`     | Build shared and the CSS                      |
 | `pnpm start`     | Start the production server                   |
 | `pnpm css`       | Build the CSS once                            |
+| `pnpm admin-strings` | Copy the admin app's strings for admin pages |
 | `pnpm test`      | Run tests with Remix's test runner            |
 | `pnpm typecheck` | Type-check                                    |
 
@@ -80,7 +89,7 @@ app/
 ├── actions/           # Controllers and pages, by route
 │   └── public/        # Browser entry, RUM and other client modules
 ├── ui/                # Components (ui/public/ holds client entries)
-├── lib/               # GraphQL client, i18n, RUM config, admin session
+├── lib/               # GraphQL clients, i18n, RUM config, admin session
 ├── middleware/        # Proxies, GraphQL client, translations
 ├── styles/            # Tailwind input (public/ is the built CSS)
 └── types/             # Generated GraphQL operation types

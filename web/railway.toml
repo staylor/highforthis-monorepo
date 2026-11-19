@@ -1,5 +1,5 @@
 [build]
-watchPatterns = ["shared/**", "web/**"]
+watchPatterns = ["shared/**", "web/**", "admin/public/locales/**"]
 installCommand = "corepack enable && pnpm install"
 buildCommand = "pnpm --filter @highforthis/web build"
 

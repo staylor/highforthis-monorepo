@@ -24,3 +24,18 @@ export type { TFunction };
 export function getT(locale = 'en'): TFunction {
   return i18n.getFixedT(locale);
 }
+
+/**
+ * The translation function for admin pages served here. Until the admin has moved, its strings
+ * stay in the admin app; `pnpm admin-strings` copies them in when this app builds. They load on
+ * first use, so public pages never read them.
+ */
+export function getAdminT(locale = 'en'): TFunction {
+  if (!i18n.hasResourceBundle('en', 'admin')) {
+    const strings = JSON.parse(
+      readFileSync(new URL('./admin/strings.en.json', import.meta.url), 'utf8')
+    );
+    i18n.addResourceBundle('en', 'admin', strings);
+  }
+  return i18n.getFixedT(locale, 'admin');
+}

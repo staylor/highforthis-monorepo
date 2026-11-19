@@ -1,0 +1,36 @@
+/*
+ * Styles for the admin pages that have moved here from the admin app (see
+ * admin/REMIX3-MIGRATION.md). The Tailwind CLI builds it into public/admin.css next to main.css.
+ * It scans only the admin's UI and main.css skips it, so neither stylesheet carries the other's
+ * classes. The base rules come from admin/src/styles/admin.css; the editor's styles move with the
+ * posts section.
+ */
+@import 'tailwindcss' source(none);
+@import '@highforthis/shared/styles/theme.css';
+
+@source '../ui/admin';
+@source '../actions/admin';
+
+@layer base {
+  a {
+    color: #262626;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  sup {
+    font-size: 10px;
+    vertical-align: super;
+  }
+
+  sub {
+    font-size: 10px;
+    vertical-align: sub;
+  }
+}

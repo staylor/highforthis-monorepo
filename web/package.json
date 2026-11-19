@@ -27,14 +27,15 @@
   },
   "scripts": {
     "dev": "pnpm --filter @highforthis/shared build && pnpm dev:service",
-    "dev:service": "pnpm css && (pnpm css:watch & NODE_ENV=development node --env-file-if-exists=.env --watch --import remix/node-tsx server.ts)",
-    "hmr": "pnpm css && (pnpm css:watch & NODE_ENV=development node --env-file-if-exists=.env hmr.ts)",
+    "dev:service": "pnpm css && pnpm admin-strings && (pnpm css:watch & NODE_ENV=development node --env-file-if-exists=.env --watch --import remix/node-tsx server.ts)",
+    "hmr": "pnpm css && pnpm admin-strings && (pnpm css:watch & NODE_ENV=development node --env-file-if-exists=.env hmr.ts)",
     "build": "pnpm --filter @highforthis/shared build && pnpm build:service",
-    "build:service": "pnpm css",
+    "build:service": "pnpm css && pnpm admin-strings",
     "start": "NODE_ENV=production node --import remix/node-tsx server.ts",
-    "css": "tailwindcss -i app/styles/main.css -o app/styles/public/main.css",
-    "css:watch": "tailwindcss -i app/styles/main.css -o app/styles/public/main.css --watch=always",
-    "test": "pnpm css && NODE_ENV=test remix test",
+    "css": "tailwindcss -i app/styles/main.css -o app/styles/public/main.css && tailwindcss -i app/styles/admin.css -o app/styles/public/admin.css",
+    "css:watch": "tailwindcss -i app/styles/admin.css -o app/styles/public/admin.css --watch=always & tailwindcss -i app/styles/main.css -o app/styles/public/main.css --watch=always",
+    "admin-strings": "cp ../admin/public/locales/en/global.json app/lib/admin/strings.en.json",
+    "test": "pnpm css && pnpm admin-strings && NODE_ENV=test remix test",
     "typecheck": "tsgo"
   }
 }

@@ -61,7 +61,7 @@ The public site in `web/` has run on Remix 3 since #45. The admin is still a Rea
 
 ### How the split works
 
-`web/app/router.ts` runs `proxies()` before rendering, and `web/app/middleware/app.ts` forwards `/admin`, `/auth/passkeys`, `/login`, `/modals` and `/upload` to the admin service. Moving a section means adding its routes to web's `routes.ts` and changing the forwarding rule so that section's paths aren't forwarded, for example by checking a list of migrated prefixes before `/admin`. Links between migrated and unmigrated pages are ordinary same-origin links, and web's Navigation API client navigation handles them either way.
+`web/app/router.ts` runs `proxies()` before rendering, and `web/app/middleware/app.ts` forwards `/admin`, `/auth/passkeys`, `/login`, `/modals` and `/upload` to the admin service. Moving a section means adding its routes to web's `routes.ts` and listing its path in `shared/src/adminPaths.ts`, which `proxies()` checks before forwarding `/admin`. Links between migrated and unmigrated pages must load in full, in both directions. Remix's client navigation would merge the admin app's HTML into a Remix page without running its scripts, and React Router's would ask the admin app for `.data` it no longer has. The foundations handle both (see below).
 
 ### Sessions: nobody needs to be signed out
 
@@ -76,13 +76,16 @@ The admin's session cookie (`TOKEN_KEY`, signed with `TOKEN_SECRET`) holds only 
 - **Admin check:** React Router's admin layout redirected signed-out users. In web, add a `requireAdmin()` controller middleware that checks the token against GraphQL's `/auth/session`, like `admin/src/utils/adminSession.server.ts`. List it on **every** admin controller, because controller middleware doesn't flow into nested route maps (from the trial). GraphQL still enforces admin access on every mutation either way.
 - **CSRF:** React Router compared each action's `Origin` with the request host. Web needs the same for admin POSTs, either with `remix/middleware/csrf`, which expects Remix's session middleware, or a small origin-check middleware until sessions move.
 
-### Foundations before the first section
+### Foundations (done)
 
-1. An admin document shell in web: layout, nav and messages. The trial's `app/actions/admin/shell.tsx` is a start.
-2. Admin styles built by the Tailwind CLI, as web's are (the trial built `admin.css` the same way), plus the admin's translations loaded into web's `i18next`.
-3. A GraphQL client that sends the admin token. The admin's server functions take one, so they can move into web (or a shared workspace) as-is, with their tests and GraphQL documents. Web's codegen then needs to cover those documents.
-4. `requireAdmin()` and the origin check.
-5. The forwarding rule with an exclusion list.
+These are in web, and nothing is served there yet:
+
+1. **Paths that have moved:** `shared/src/adminPaths.ts` lists them, empty for now. Web's `proxies()` renders a listed path (and the pages under it) instead of forwarding it. React Router `.data` requests still go to the admin. The admin's `CustomLink` loads listed paths in full (`reloadDocument`, no prefetch), since its client router can't render them.
+2. **Middleware:** `requireAdmin()` and `sameOrigin()` in `web/app/middleware/admin.ts`. `requireAdmin()` checks the session cookie with GraphQL's `/auth/session`, removes a rejected one, and puts `{ token, gql }` on `context.admin`. `gql` is an admin GraphQL client (`web/app/lib/admin/graphql.ts`) with the admin's error handling: failed operations come back as empty data, so the server functions in `src/server` can move over as they are.
+3. **Document and layout:** `renderAdminPage()` (`web/app/actions/admin/render-page.tsx`) and `web/app/ui/admin/`, which hold the shell, the nav as data (`nav.ts`, mirroring `useRouteConfig`), the icon set and `Message`. The shell renders on the server. The narrow-screen menu is a `<details>` element, and the sidebar doesn't collapse to icons yet. Links to admin pages that haven't moved carry `data-rmx-document`, so Remix loads them in full rather than merging the admin app's HTML into the page.
+4. **Styles and strings:** `web/app/styles/admin.css`, built to `public/admin.css` by `pnpm css`, scans only the admin folders, and `main.css` skips them. The admin's strings stay in this app; `pnpm admin-strings` copies them into web when it builds or runs, and `getAdminT()` loads them the first time an admin page asks.
+
+**Moving a section** then means: move its server functions and GraphQL documents into web (with their tests, and web's codegen covering them), add its routes to `routes.ts` and a controller in `app/actions/admin/` listing `sameOrigin()` and `requireAdmin()`, render with `renderAdminPage()`, and add its path to `adminPaths.ts`.
 
 ### Order
 

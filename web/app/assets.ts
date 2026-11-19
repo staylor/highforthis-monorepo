@@ -38,3 +38,4 @@ export const scriptEntry = await assets.getScriptEntry('app/actions/public/entry
 
 // Built by the Tailwind CLI (`pnpm css`), then served and fingerprinted by the asset server.
 export const stylesheetHref = await assets.getHref('app/styles/public/main.css');
+export const adminStylesheetHref = await assets.getHref('app/styles/public/admin.css');

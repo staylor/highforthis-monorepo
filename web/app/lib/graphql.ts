@@ -16,17 +16,22 @@ export interface GraphQLClient {
 }
 
 /**
- * One Apollo client per request. Apollo Client's core has no React
- * dependency, so the existing cache config and type policies carry over unchanged.
+ * An Apollo client for one request. Apollo Client's core has no React dependency, so the cache
+ * config and type policies are the same as the admin app's.
  */
-export function createGraphQLClient(token?: string): GraphQLClient {
-  const client = new ApolloClient({
+export function createApolloClient() {
+  return new ApolloClient({
     link: new HttpLink({ uri: `${graphqlHost}/graphql` }),
     cache: new InMemoryCache({
       possibleTypes: fragmentMatcher.possibleTypes,
       typePolicies,
     }),
   });
+}
+
+/** The public pages' client: queries log errors and return empty data; mutations throw. */
+export function createGraphQLClient(token?: string): GraphQLClient {
+  const client = createApolloClient();
   const context = token ? { headers: { Authorization: `Bearer ${token}` } } : undefined;
 
   return {
@@ -46,7 +51,7 @@ export function createGraphQLClient(token?: string): GraphQLClient {
   };
 }
 
-function logError(e: unknown) {
+export function logError(e: unknown) {
   const error = e as Error;
   if (ServerError.is(error)) {
     console.error(error.bodyText);
