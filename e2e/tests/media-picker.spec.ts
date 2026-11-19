@@ -1,4 +1,5 @@
 import { expect, test } from '../support/test.ts';
+import { hydrated } from '../support/ui.ts';
 
 test('picks featured media for a post, scrolling the picker to load more', async ({
   page,
@@ -8,12 +9,11 @@ test('picks featured media for a post, scrolling the picker to load more', async
   const post = await graphql.createPost({ title: `${prefix} Post` });
   await page.goto(`/admin/post/${post.id}`);
 
-  // A click before the page hydrates does nothing, as when the full suite keeps the server busy
+  // The picker opens once its client entry has hydrated
   const picker = page.getByRole('dialog', { name: 'Media' });
-  await expect(async () => {
-    await page.getByRole('button', { name: 'Set Featured Media' }).click();
-    await expect(picker).toBeVisible({ timeout: 1_000 });
-  }).toPass();
+  await hydrated(page);
+  await page.getByRole('button', { name: 'Set Featured Media' }).click();
+  await expect(picker).toBeVisible();
   // The uploads, and the close button
   const buttons = picker.getByRole('button');
   await expect.poll(() => buttons.count()).toBeGreaterThan(1);
