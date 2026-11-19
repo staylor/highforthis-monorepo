@@ -17,6 +17,22 @@ export function field(page: Page, label: string): Locator {
   return main.getByLabel(label, { exact: true }).or(control).first();
 }
 
+/**
+ * Types into a list's search box, which filters the list as you type, and waits for the search to
+ * reach the URL. Typing before the page hydrates is lost, as on a slow CI runner, so it types
+ * again until the search takes.
+ */
+export async function search(page: Page, placeholder: string, text: string) {
+  const box = page.getByPlaceholder(placeholder);
+  await expect(async () => {
+    await box.clear();
+    await box.fill(text);
+    await expect
+      .poll(() => new URL(page.url()).searchParams.get('search'), { timeout: 2_000 })
+      .toBe(text);
+  }).toPass({ timeout: 15_000 });
+}
+
 /** The cell in a table row under the column with this header. */
 export async function cell(page: Page, row: Locator, header: string): Promise<Locator> {
   const headers = await page.getByRole('table').locator('thead th').allInnerTexts();
