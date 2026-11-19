@@ -1,13 +1,10 @@
 import * as assert from 'remix/assert';
 import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
 
+import { testSecret, testSession, testToken } from '../../../lib/adminSession.fixtures.ts';
 import { router } from '../../../router.ts';
 
 const origin = 'http://localhost';
-
-// A session cookie signed with the secret 'test-secret', holding the token 'test-token'
-const session =
-  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ==.0jvC0SjKdfmXr5Rw/6679ia0w0xRgH4hIpEzB3aJ9Fc';
 
 type Sent = { method: string; path: string; authorization: string | null; body?: string };
 
@@ -42,7 +39,7 @@ const request = (path: string, init: RequestInit = {}) =>
   router.fetch(
     new Request(new URL(path, origin), {
       ...init,
-      headers: { cookie: session, origin, ...init.headers },
+      headers: { cookie: testSession, origin, ...init.headers },
     })
   );
 
@@ -67,7 +64,7 @@ const passkeys = [
 
 describe('admin passkeys', () => {
   beforeEach(() => {
-    process.env.TOKEN_SECRET = 'test-secret';
+    process.env.TOKEN_SECRET = testSecret;
   });
   afterEach(() => {
     delete process.env.TOKEN_SECRET;
@@ -88,7 +85,7 @@ describe('admin passkeys', () => {
     assert.match(html, /<input type="hidden" name="credentialId" value="cred-2" \/>/);
     assert.match(html, /"exportName":"PasskeyRegister"/);
     assert.deepEqual(sent, [
-      { method: 'GET', path: '/auth/passkeys', authorization: 'Bearer test-token' },
+      { method: 'GET', path: '/auth/passkeys', authorization: `Bearer ${testToken}` },
     ]);
   });
 
@@ -109,7 +106,7 @@ describe('admin passkeys', () => {
     assert.equal(response.status, 303);
     assert.equal(response.headers.get('location'), '/admin/passkeys');
     assert.deepEqual(sent, [
-      { method: 'DELETE', path: '/auth/passkeys/cred-1', authorization: 'Bearer test-token' },
+      { method: 'DELETE', path: '/auth/passkeys/cred-1', authorization: `Bearer ${testToken}` },
     ]);
   });
 
@@ -136,12 +133,12 @@ describe('admin passkeys', () => {
       {
         method: 'POST',
         path: '/auth/passkeys/register/options',
-        authorization: 'Bearer test-token',
+        authorization: `Bearer ${testToken}`,
       },
       {
         method: 'POST',
         path: '/auth/passkeys/register/verify',
-        authorization: 'Bearer test-token',
+        authorization: `Bearer ${testToken}`,
         body,
       },
     ]);

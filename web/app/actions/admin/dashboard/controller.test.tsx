@@ -1,13 +1,10 @@
 import * as assert from 'remix/assert';
 import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
 
+import { testSecret, testSession } from '../../../lib/adminSession.fixtures.ts';
 import { router } from '../../../router.ts';
 
 const origin = 'http://localhost';
-
-// A session cookie signed with the secret 'test-secret', holding the token 'test-token'
-const session =
-  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ==.0jvC0SjKdfmXr5Rw/6679ia0w0xRgH4hIpEzB3aJ9Fc';
 
 const openObserve = {
   OPENOBSERVE_URL: 'http://o2:5080',
@@ -31,12 +28,12 @@ function stubServers(t: TestContext, search: (sql: string) => Response) {
 
 const dashboard = async () =>
   (
-    await router.fetch(new Request(new URL('/admin', origin), { headers: { cookie: session } }))
+    await router.fetch(new Request(new URL('/admin', origin), { headers: { cookie: testSession } }))
   ).text();
 
 describe('admin dashboard', () => {
   beforeEach(() => {
-    process.env.TOKEN_SECRET = 'test-secret';
+    process.env.TOKEN_SECRET = testSecret;
   });
   afterEach(() => {
     delete process.env.TOKEN_SECRET;

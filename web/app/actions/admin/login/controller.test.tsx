@@ -1,13 +1,10 @@
 import * as assert from 'remix/assert';
 import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
 
+import { testSecret, testSession, testToken } from '../../../lib/adminSession.fixtures.ts';
 import { router } from '../../../router.ts';
 
 const origin = 'http://localhost';
-
-// A session cookie signed with the secret 'test-secret', holding the token 'test-token'
-const session =
-  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ==.0jvC0SjKdfmXr5Rw/6679ia0w0xRgH4hIpEzB3aJ9Fc';
 
 type Sent = { path: string; body: any };
 
@@ -36,7 +33,7 @@ const signIn = (fields: Record<string, string>) =>
 
 describe('signing in', () => {
   beforeEach(() => {
-    process.env.TOKEN_SECRET = 'test-secret';
+    process.env.TOKEN_SECRET = testSecret;
   });
   afterEach(() => {
     delete process.env.TOKEN_SECRET;
@@ -73,13 +70,13 @@ describe('signing in', () => {
 
   it('sends someone already signed in on to the admin', async () => {
     const response = await router.fetch(
-      new Request(new URL('/login', origin), { headers: { cookie: session } })
+      new Request(new URL('/login', origin), { headers: { cookie: testSession } })
     );
     assert.equal(response.headers.get('location'), '/admin');
   });
 
   it('signs in with an email and password, keeping the token in the session', async (t) => {
-    const sent = stubGraphQL(t, { token: 'test-token' });
+    const sent = stubGraphQL(t, { token: testToken });
     const response = await signIn({
       intent: 'password',
       email: 'admin@example.com',
@@ -89,7 +86,7 @@ describe('signing in', () => {
     assert.equal(response.headers.get('location'), '/admin');
     assert.equal(
       response.headers.get('set-cookie'),
-      `${session}; HttpOnly; Max-Age=43200; Path=/; SameSite=Lax`
+      `${testSession}; HttpOnly; Max-Age=43200; Path=/; SameSite=Lax`
     );
     assert.deepEqual(sent, [
       { path: '/auth', body: { email: 'admin@example.com', password: 'test-pass' } },
@@ -97,14 +94,14 @@ describe('signing in', () => {
   });
 
   it("signs in with a passkey's answer", async (t) => {
-    const sent = stubGraphQL(t, { token: 'test-token' });
+    const sent = stubGraphQL(t, { token: testToken });
     const response = await signIn({
       intent: 'passkey',
       challengeId: 'c1',
       response: JSON.stringify({ id: 'credential' }),
     });
     assert.equal(response.headers.get('location'), '/admin');
-    assert.ok(response.headers.get('set-cookie')?.startsWith(session));
+    assert.ok(response.headers.get('set-cookie')?.startsWith(testSession));
     assert.deepEqual(sent, [
       {
         path: '/auth/passkeys/authenticate/verify',
@@ -130,7 +127,7 @@ describe('signing in', () => {
   });
 
   it('turns down a sign-in posted from another site', async (t) => {
-    const sent = stubGraphQL(t, { token: 'test-token' });
+    const sent = stubGraphQL(t, { token: testToken });
     const response = await router.fetch(
       new Request(new URL('/login', origin), {
         method: 'POST',
@@ -144,7 +141,7 @@ describe('signing in', () => {
 
   it('signs out by removing the session', async () => {
     const response = await router.fetch(
-      new Request(new URL('/admin/logout', origin), { headers: { cookie: session } })
+      new Request(new URL('/admin/logout', origin), { headers: { cookie: testSession } })
     );
     assert.equal(response.headers.get('location'), '/login');
     assert.equal(
