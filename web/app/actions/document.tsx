@@ -1,7 +1,7 @@
 import { unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 import { ImportMap } from 'remix/component/server';
 
-import { scriptEntry, stylesheetHref } from '../assets.ts';
+import { scriptEntry, stylesheetHrefs } from '../assets.ts';
 import { rumConfig } from '../lib/rum.ts';
 import { AppProvider, type AppValue } from '../ui/app-context.tsx';
 import { Layout, Wrapper } from '../ui/layout.tsx';
@@ -32,7 +32,7 @@ export function Document(handle: Handle<DocumentProps>) {
     const { href, importMap, preloads } = scriptEntry;
 
     return (
-      <html lang={siteSettings?.language || 'en'} class="h-full" data-rmx-preserve-attrs="class">
+      <html lang={siteSettings?.language || 'en'} data-rmx-preserve-attrs="class">
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -60,7 +60,9 @@ export function Document(handle: Handle<DocumentProps>) {
             href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
           />
           <link rel="shortcut icon" href="/favicon.png" type="image/png" />
-          <link rel="stylesheet" href={stylesheetHref} />
+          {stylesheetHrefs.site.map((stylesheetHref) => (
+            <link key={stylesheetHref} rel="stylesheet" href={stylesheetHref} />
+          ))}
           {layout === 'app' && podcastSettings?.feedLink && podcastSettings.title && (
             <link
               rel="alternate"
@@ -76,7 +78,7 @@ export function Document(handle: Handle<DocumentProps>) {
           ))}
           <script type="module" src={href}></script>
         </head>
-        <body class="h-full font-body">
+        <body>
           <AppProvider value={app}>
             {layout === 'app' ? <Layout>{children}</Layout> : <Wrapper>{children}</Wrapper>}
           </AppProvider>

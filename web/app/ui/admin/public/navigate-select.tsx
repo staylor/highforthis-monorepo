@@ -1,8 +1,6 @@
-import { clientEntry, navigate, on, type Handle } from 'remix/component';
+import { clientEntry, css, navigate, on, type Handle } from 'remix/component';
 
-import { cn } from '../../public/cn.ts';
-
-import { inputBase } from './styles.ts';
+import { toolbarSelect } from './styles.ts';
 
 // A select whose choices are pages, for a choice that's a path segment a GET form can't submit,
 // such as the venue on /admin/show/listings/:venueId. Choosing one goes to its page.
@@ -21,13 +19,15 @@ export const NavigateSelect = clientEntry(
       return (
         <select
           aria-label={placeholder}
-          class={cn(inputBase, 'h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm')}
-          mix={on('change', (event) => {
-            const href = event.currentTarget.value;
-            if (href) {
-              navigate(href);
-            }
-          })}
+          mix={[
+            css(toolbarSelect),
+            on('change', (event) => {
+              const href = event.currentTarget.value;
+              if (href) {
+                navigate(href);
+              }
+            }),
+          ]}
         >
           <option value="">{placeholder}</option>
           {choices.map((choice) => (

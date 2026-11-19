@@ -4,7 +4,6 @@ import { describe, it } from 'remix/test';
 
 import { getT } from '../../lib/i18n.ts';
 import { AppProvider, type AppValue } from '../app-context.tsx';
-import { cn } from '../public/cn.ts';
 import { trans } from '../trans.tsx';
 
 import { Attended, ShowsGrid } from './shows.tsx';
@@ -24,7 +23,13 @@ const show = (id: string, date: string, artist: string, venue = 'Bowery Ballroom
     title: null,
     url: null,
     artists: [{ id: `a-${id}`, name: artist, slug: artist.toLowerCase() }],
-    venue: { id: 'v1', name: venue, slug: 'bowery-ballroom', city: 'New York', state: 'NY' },
+    venue: {
+      id: 'v1',
+      name: venue,
+      slug: 'bowery-ballroom',
+      city: 'New York',
+      state: 'NY',
+    },
   },
 });
 
@@ -58,15 +63,17 @@ describe('Attended', () => {
       <AppProvider value={app}>
         <Attended
           relation="venue"
-          shows={{ edges: [show('1', '2024-01-01', 'Sting'), show('2', '2024-02-01', 'Sting')] }}
+          shows={{
+            edges: [show('1', '2024-01-01', 'Sting'), show('2', '2024-02-01', 'Sting')],
+          }}
         />
       </AppProvider>
     );
-    assert.match(html, /<span class="underline">2 Shows<\/span> we have attended at this venue/);
+    assert.match(html, /<span class="[^"]+">2 Shows<\/span> we have attended at this venue/);
   });
 });
 
-describe('trans and cn', () => {
+describe('trans', () => {
   it('turns translated markup into elements', async () => {
     const html = await renderToString(
       <p>{trans(getT(), 'sphere.stats.songs', { songCount: 3, setlistCount: 2 })}</p>
@@ -75,9 +82,5 @@ describe('trans and cn', () => {
       html,
       '<p><strong>3</strong> songs played total during the residency (<strong>2</strong> shows)</p>'
     );
-  });
-
-  it('joins truthy classes', () => {
-    assert.equal(cn('a', false, undefined, { b: true, c: false }), 'a b');
   });
 });

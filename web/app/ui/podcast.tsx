@@ -1,9 +1,10 @@
-import { unsafeHTML, type Handle, type RemixNode } from 'remix/component';
+import { css, unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 
 import type { MetaTag } from '../actions/document.tsx';
 
 import { Heading1 } from './heading.tsx';
 import { uploadUrl } from './public/media.ts';
+import { lg } from './public/styles.ts';
 
 export function podcastMetaTags({
   title,
@@ -30,38 +31,50 @@ export function podcastMetaTags({
   ];
 }
 
+const storeLink = css({
+  transition: 'opacity 150ms var(--ease)',
+  '&:hover': { opacity: 0.8 },
+});
+
+const logo = css({ height: '2.5rem', width: 'auto' });
+
 export function Podcast(
   handle: Handle<{ title: string; description: string; children?: RemixNode }>
 ) {
   return () => (
-    <article class="mx-auto my-0 w-auto lg:mx-0 lg:w-3/4">
-      <Heading1 class="uppercase">{handle.props.title}</Heading1>
+    <article
+      mix={css({
+        marginInline: 'auto',
+        width: 'auto',
+        [lg]: { marginInline: 0, width: '75%' },
+      })}
+    >
+      <Heading1>{handle.props.title}</Heading1>
       <p
-        class="mb-8 text-base leading-relaxed text-muted dark:text-muted-dark"
+        mix={css({
+          marginBottom: '2rem',
+          fontSize: '1rem',
+          lineHeight: 1.625,
+          color: 'var(--muted)',
+        })}
         innerHTML={unsafeHTML(handle.props.description.replace(/\n/g, '<br />'))}
       />
-      <div class="mb-8 flex gap-3">
-        <a
-          href="https://podcasts.apple.com/us/podcast/high-for-this/id1461883255"
-          class="transition-opacity hover:opacity-80"
-        >
-          <AppleLogo class="h-10 w-auto" />
+      <div mix={css({ marginBottom: '2rem', display: 'flex', gap: '0.75rem' })}>
+        <a href="https://podcasts.apple.com/us/podcast/high-for-this/id1461883255" mix={storeLink}>
+          <AppleLogo />
         </a>
-        <a
-          href="https://open.spotify.com/show/7FDueRQTovjtNdcqEzfGgV"
-          class="transition-opacity hover:opacity-80"
-        >
-          <SpotifyLogo class="h-10 w-auto" />
+        <a href="https://open.spotify.com/show/7FDueRQTovjtNdcqEzfGgV" mix={storeLink}>
+          <SpotifyLogo />
         </a>
       </div>
-      <div class="space-y-0">{handle.props.children}</div>
+      <div>{handle.props.children}</div>
     </article>
   );
 }
 
-function AppleLogo(handle: Handle<{ class: string }>) {
+function AppleLogo() {
   return () => (
-    <svg viewBox="0 0 164.857 40" class={handle.props.class}>
+    <svg viewBox="0 0 164.857 40" mix={logo}>
       <path
         fill="#A6A6A6"
         d="M155.327 0H9.535c-.367 0-.73 0-1.095.002-.306.002-.61.008-.919.013A13.22 13.22 0 0 0 5.517.19a6.665 6.665 0 0 0-1.9.627A6.435 6.435 0 0 0 .193 5.521c-.12.663-.162 1.332-.179 2.002-.01.307-.01.615-.015.921V31.56c.005.31.006.61.015.922.017.67.059 1.34.18 2.001.116.67.313 1.298.624 1.905.304.595.7 1.144 1.179 1.614.473.477 1.02.875 1.618 1.179a6.7 6.7 0 0 0 1.901.63c.665.12 1.338.159 2.004.177.31.007.613.011.919.011.366.002.728.002 1.095.002h145.792c.36 0 .725 0 1.084-.002.305 0 .618-.004.922-.01.67-.02 1.342-.058 2-.178a6.804 6.804 0 0 0 1.909-.63A6.277 6.277 0 0 0 162.858 38a6.395 6.395 0 0 0 1.181-1.614 6.604 6.604 0 0 0 .62-1.905c.123-.662.162-1.332.185-2.002.004-.31.004-.61.004-.921.008-.364.008-.725.008-1.094V9.536c0-.366 0-.73-.008-1.092 0-.306 0-.614-.004-.92-.024-.67-.063-1.34-.186-2.003a6.618 6.618 0 0 0-.619-1.903 6.448 6.448 0 0 0-2.798-2.8 6.767 6.767 0 0 0-1.909-.627c-.658-.119-1.33-.16-2-.177-.304-.004-.617-.01-.922-.012-.36-.002-.724-.002-1.084-.002z"
@@ -103,9 +116,9 @@ function AppleLogo(handle: Handle<{ class: string }>) {
   );
 }
 
-function SpotifyLogo(handle: Handle<{ class: string }>) {
+function SpotifyLogo() {
   return () => (
-    <svg viewBox="0 0 330 80" class={handle.props.class}>
+    <svg viewBox="0 0 330 80" mix={logo}>
       <g fill="none" fill-rule="evenodd">
         <path
           d="M310.925.5H19.086a660.437 660.437 0 0 0-2.188.004 86.19 86.19 0 0 0-1.436.019l-.394.006c-1.553.039-2.775.138-3.938.346-1.317.23-2.511.622-3.664 1.207A12.385 12.385 0 0 0 4.35 4.35a12.017 12.017 0 0 0-2.265 3.114c-.582 1.139-.971 2.334-1.204 3.669C.67 12.288.57 13.5.53 15.062c-.008.269-.013.544-.018.912l-.004.327-.008.588v46.22a140.395 140.395 0 0 1 .012.919c.005.367.01.644.018.92.04 1.559.14 2.771.352 3.93.232 1.337.622 2.536 1.204 3.668a11.926 11.926 0 0 0 2.268 3.104 12.06 12.06 0 0 0 3.113 2.264c1.137.583 2.326.973 3.665 1.215 1.147.205 2.339.301 3.934.346a82.84 82.84 0 0 0 1.831.021 256.138 256.138 0 0 0 2.189.004h291.839a724.427 724.427 0 0 0 2.17-.004c.589 0 1.208-.007 1.831-.021 1.604-.044 2.792-.14 3.929-.346 1.339-.242 2.531-.631 3.682-1.215a12.076 12.076 0 0 0 3.113-2.268 12.28 12.28 0 0 0 2.27-3.098c.58-1.147.97-2.352 1.193-3.675.21-1.124.305-2.259.364-3.918a296.025 296.025 0 0 0 .008-1.848l.007-.437c.007-.48.008-.864.008-1.74V19.072c0-1.092-.003-1.573-.016-2.183a266.582 266.582 0 0 0-.007-1.825c-.059-1.67-.154-2.805-.365-3.938-.222-1.31-.61-2.51-1.19-3.66a12.398 12.398 0 0 0-2.275-3.119 12.386 12.386 0 0 0-3.108-2.264 13.058 13.058 0 0 0-3.684-1.208c-1.15-.208-2.368-.308-3.923-.346l-.352-.006a346.437 346.437 0 0 0-1.488-.02A285.69 285.69 0 0 0 310.925.5z"

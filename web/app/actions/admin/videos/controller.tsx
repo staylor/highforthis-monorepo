@@ -1,3 +1,4 @@
+import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
@@ -47,7 +48,7 @@ function videoFields(t: TFunction, video: Video): Field[] {
       type: 'custom',
       render: () => (
         <a
-          class="underline"
+          mix={css({ textDecoration: 'underline' })}
           href={`https://www.youtube.com/playlist?list=${encodeURIComponent(video.dataPlaylistId)}`}
         >
           {t('videos.viewPlaylist', { year: video.year })}
@@ -152,8 +153,12 @@ export const videosEdit = createController(videos.edit, {
           <Heading>{label}</Heading>
           <Message text={t('videos.updated')} />
           {thumbnail && (
-            <figure class="mb-6 max-w-full overflow-hidden">
-              <img class="relative z-10" src={thumbnail.url} alt={video.title} />
+            <figure mix={css({ marginBottom: '1.5rem', maxWidth: '100%', overflow: 'hidden' })}>
+              <img
+                mix={css({ position: 'relative', zIndex: 10 })}
+                src={thumbnail.url}
+                alt={video.title}
+              />
             </figure>
           )}
           <AdminForm fields={videoFields(t, video)} data={video} buttonLabel={t('videos.update')} />

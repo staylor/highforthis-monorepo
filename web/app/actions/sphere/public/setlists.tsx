@@ -1,6 +1,6 @@
-import { clientEntry, on, type Handle, type RemixNode } from 'remix/component';
+import { clientEntry, css, on, type Handle, type RemixNode } from 'remix/component';
 
-import { cn } from '../../../ui/public/cn.ts';
+import { colorTransition, text } from '../../../ui/public/styles.ts';
 
 export type Stats = Record<string, number>;
 export type Setlist = { date: string; sets: string[][] };
@@ -32,6 +32,47 @@ function markup(template: string, values: Record<string, string | number>): Remi
   });
 }
 
+const grid = (columns: number) =>
+  css({
+    display: 'grid',
+    gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+    gap: '0.5rem',
+  });
+
+// A song, pink when it's the one picked and gray when it was played once
+const songItem = css({
+  marginBottom: '0.25rem',
+  marginLeft: '-0.25rem',
+  padding: '0.25rem',
+  '&[data-once]': { backgroundColor: 'var(--detail)' },
+  '&[data-current]': { backgroundColor: 'var(--pink)', color: '#fff' },
+});
+
+const songButton = css({ width: '100%', cursor: 'pointer', textAlign: 'left' });
+
+const statsButton = css({
+  marginBottom: '1rem',
+  display: 'inline-block',
+  height: '1.75rem',
+  cursor: 'pointer',
+  borderRadius: '0.25rem',
+  border: '1px solid var(--gray-400)',
+  backgroundColor: 'var(--slate-50)',
+  padding: '0 0.625rem 1px',
+  verticalAlign: 'top',
+  ...text.sm,
+  lineHeight: '1.5rem',
+  whiteSpace: 'nowrap',
+  boxShadow: 'var(--shadow-xs)',
+  ...colorTransition,
+  '&:hover': {
+    borderColor: 'var(--gray-600)',
+    backgroundColor: 'var(--slate-100)',
+    boxShadow: 'var(--shadow-md)',
+  },
+  '&:active': { translate: '0 1px' },
+});
+
 /** The sphere page's setlists, with song highlighting and stats. */
 export const Setlists = clientEntry(
   import.meta.url,
@@ -59,24 +100,19 @@ export const Setlists = clientEntry(
             : `${songPercentage}% of ${totalShows} shows across ${weekends} weekends`;
       }
 
-      const setlistSet = (label: string, songs: string[], className = '') => (
-        <ul class={className}>
+      const setlistSet = (label: string, songs: string[], spaced = false) => (
+        <ul mix={spaced ? css({ marginBottom: '2rem' }) : undefined}>
           <li>
             <strong>{label}</strong>
           </li>
           {songs.map((song) => (
             <li
               key={song}
-              class={cn('mb-1 -ml-1 p-1', {
-                'bg-pink text-white': currentSong === song,
-                'bg-detail': currentSong !== song && stats[song] === 1,
-              })}
+              data-current={currentSong === song || undefined}
+              data-once={stats[song] === 1 || undefined}
+              mix={songItem}
             >
-              <button
-                type="button"
-                class="w-full cursor-pointer text-left"
-                mix={on('click', () => select(song))}
-              >
+              <button type="button" mix={[songButton, on('click', () => select(song))]}>
                 {song}
               </button>
             </li>
@@ -88,11 +124,13 @@ export const Setlists = clientEntry(
         <div>
           <button
             type="button"
-            class="mb-4 inline-block h-7 cursor-pointer rounded border border-gray-400 bg-slate-50 px-2.5 pb-px align-top text-sm leading-6 whitespace-nowrap shadow-xs transition-colors hover:border-gray-600 hover:bg-slate-100 hover:shadow-md active:translate-y-px"
-            mix={on('click', () => {
-              showStats = !showStats;
-              handle.update();
-            })}
+            mix={[
+              statsButton,
+              on('click', () => {
+                showStats = !showStats;
+                handle.update();
+              }),
+            ]}
           >
             {showStats ? messages.hide : messages.show}
           </button>
@@ -104,7 +142,7 @@ export const Setlists = clientEntry(
           {showStats ? (
             <div>
               <p>{markup(messages.songsSummary, {})}</p>
-              <ul class="my-4">
+              <ul mix={css({ marginBlock: '1rem' })}>
                 {entries.map(([song, count]) => (
                   <li key={song}>
                     {song}: {count}
@@ -113,29 +151,50 @@ export const Setlists = clientEntry(
               </ul>
             </div>
           ) : currentSong ? (
-            <div class="sticky top-0 mb-4 flex justify-between bg-pink p-2 text-white">
+            <div
+              mix={css({
+                position: 'sticky',
+                top: 0,
+                marginBottom: '1rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                backgroundColor: 'var(--pink)',
+                padding: '0.5rem',
+                color: '#fff',
+              })}
+            >
               <p>
                 {markup(stats[currentSong] === 1 ? messages.songOne : messages.songOther, {
                   song: currentSong,
                   count: stats[currentSong],
                 })}{' '}
-                ({stats[currentSong] === weekends ? messages.weekend : songPercentage}).
+                ({stats[currentSong] === weekends ? messages.weekend : songPercentage}
+                ).
               </p>
-              <button type="button" class="mx-3" mix={on('click', () => select(currentSong))}>
+              <button
+                type="button"
+                mix={[css({ marginInline: '0.75rem' }), on('click', () => select(currentSong))]}
+              >
                 <strong>{'x'}</strong>
               </button>
             </div>
           ) : null}
-          <div class="grid grid-cols-3 gap-2">
+          <div mix={grid(3)}>
             {setlists.map(({ date, sets: [set1, set2, encore] }) => (
-              <div key={date} class="border border-detail p-2">
-                <p class="mb-4 text-lg">
+              <div
+                key={date}
+                mix={css({
+                  border: '1px solid var(--detail)',
+                  padding: '0.5rem',
+                })}
+              >
+                <p mix={css({ marginBottom: '1rem', ...text.lg })}>
                   <strong>{date}</strong>
                 </p>
-                <div class="grid grid-cols-2 gap-2">
+                <div mix={grid(2)}>
                   {setlistSet(messages.set1, set1)}
                   <div>
-                    {setlistSet(messages.set2, set2, 'mb-8')}
+                    {setlistSet(messages.set2, set2, true)}
                     {setlistSet(messages.encore, encore)}
                   </div>
                 </div>

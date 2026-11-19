@@ -1,3 +1,7 @@
+import { css } from 'remix/component';
+
+import { colorTransition } from './public/styles.ts';
+
 const YOUTUBE_USERNAME = 'highforthisnyc';
 const INSTAGRAM_USERNAME = 'highforthisdotcom';
 export const TWITTER_USERNAME = 'highforthisss';
@@ -26,17 +30,19 @@ const icons = [
   },
 ];
 
+const iconLink = css({
+  color: 'currentColor',
+  ...colorTransition,
+  '&:hover': { color: 'var(--pink)' },
+});
+
+const icon = css({ width: '1.25rem', height: '1.25rem' });
+
 export function SocialIcons() {
   return () =>
     icons.map(({ label, url, path }) => (
-      <a
-        class="text-current transition-colors hover:text-pink"
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={label}
-      >
-        <svg class="size-5" fill="currentColor" viewBox="0 0 24 24">
+      <a mix={iconLink} href={url} target="_blank" rel="noopener noreferrer" aria-label={label}>
+        <svg mix={icon} fill="currentColor" viewBox="0 0 24 24">
           <path d={path} />
         </svg>
       </a>

@@ -51,7 +51,7 @@ export default defineConfig({
     },
     {
       name: 'web',
-      command: 'pnpm build:service && node --import remix/node-tsx server.ts',
+      command: 'node --import remix/node-tsx server.ts',
       cwd: path.join(root, 'web'),
       url: `${webUrl}/health`,
       env: {

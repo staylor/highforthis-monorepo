@@ -1,7 +1,7 @@
 import { startRegistration } from '@simplewebauthn/browser';
-import { clientEntry, navigate, on, type Handle } from 'remix/component';
+import { clientEntry, css, navigate, on, type Handle } from 'remix/component';
 
-import { buttonClass, inputBase } from './styles.ts';
+import { button, wideInput } from './styles.ts';
 
 // Asks for the registration options, runs the browser's WebAuthn prompt, sends its answer to be
 // checked, then reloads the list.
@@ -66,30 +66,33 @@ export const PasskeyRegister = clientEntry(
       const { labels } = handle.props;
       return (
         <>
-          <label class="mb-4 block" for="passkey-name">
-            <span class="mb-1 block font-semibold">{labels.name}</span>
+          <label mix={css({ marginBottom: '1rem', display: 'block' })} for="passkey-name">
+            <span mix={css({ marginBottom: '0.25rem', display: 'block', fontWeight: 600 })}>
+              {labels.name}
+            </span>
             <input
               id="passkey-name"
               type="text"
               maxLength={100}
               placeholder={labels.namePlaceholder}
               value={name}
-              class={`${inputBase} w-full`}
-              mix={on('input', (event) => {
-                name = event.currentTarget.value;
-                handle.update();
-              })}
+              mix={[
+                wideInput,
+                on('input', (event) => {
+                  name = event.currentTarget.value;
+                  handle.update();
+                }),
+              ]}
             />
           </label>
           <button
             type="button"
             disabled={registering}
-            class={buttonClass(true)}
-            mix={on('click', () => register())}
+            mix={[css(button(true)), on('click', () => register())]}
           >
             {registering ? labels.waiting : labels.button}
           </button>
-          {error && <p class="mt-3 text-red-700">{error}</p>}
+          {error && <p mix={css({ marginTop: '0.75rem', color: 'var(--red-700)' })}>{error}</p>}
         </>
       );
     };

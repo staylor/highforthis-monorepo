@@ -1,3 +1,4 @@
+import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
 import { assets } from '../assets.ts';
@@ -45,7 +46,9 @@ export default createController(routes, {
     },
 
     async posts(context) {
-      const { posts } = await context.gql.query<PostsQuery>(postsQuery, { first: 50 });
+      const { posts } = await context.gql.query<PostsQuery>(postsQuery, {
+        first: 50,
+      });
       if (!posts) {
         return renderPage(context, null, { title: 'Posts' });
       }
@@ -55,7 +58,9 @@ export default createController(routes, {
     },
 
     async post(context) {
-      const { post } = await context.gql.query<PostQuery>(postQuery, { slug: context.params.slug });
+      const { post } = await context.gql.query<PostQuery>(postQuery, {
+        slug: context.params.slug,
+      });
       if (!post) {
         return notFound(context);
       }
@@ -89,7 +94,9 @@ export default createController(routes, {
       if (!data.artist) {
         return notFound(context);
       }
-      return renderPage(context, <ArtistPage data={data} />, { title: data.artist.name });
+      return renderPage(context, <ArtistPage data={data} />, {
+        title: data.artist.name,
+      });
     },
 
     async venue(context) {
@@ -100,7 +107,9 @@ export default createController(routes, {
       if (!data.venue) {
         return notFound(context);
       }
-      return renderPage(context, <VenuePage data={data} />, { title: data.venue.name });
+      return renderPage(context, <VenuePage data={data} />, {
+        title: data.venue.name,
+      });
     },
 
     async videos(context) {
@@ -139,7 +148,9 @@ export default createController(routes, {
       if (!video) {
         return notFound(context);
       }
-      return renderPage(context, <Video single video={video} />, { title: video.title });
+      return renderPage(context, <Video single video={video} />, {
+        title: video.title,
+      });
     },
 
     async podcastFeed(context) {
@@ -171,7 +182,7 @@ export default createController(routes, {
       const sortedStats = Object.fromEntries(Object.entries(stats).sort(([, a], [, b]) => b - a));
       return renderPage(
         context,
-        <article class="mt-8">
+        <article mix={css({ marginTop: '2rem' })}>
           <Heading1>{t('sphere.heading')}</Heading1>
           <Setlists
             setlists={setlists as Setlist[]}

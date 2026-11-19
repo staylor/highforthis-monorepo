@@ -1,3 +1,4 @@
+import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
@@ -13,6 +14,7 @@ import { Message } from '../../../ui/admin/message.tsx';
 import { HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
 import { FeaturedMedia } from '../../../ui/admin/public/featured-media.tsx';
 import { InlineToggle } from '../../../ui/admin/public/inline-toggle.tsx';
+import { pinkLink } from '../../../ui/admin/public/styles.ts';
 import { selectedMedia } from '../media/data.ts';
 import { renderAdminPage } from '../render-page.tsx';
 
@@ -24,6 +26,8 @@ import {
   setArtistExcludeFromSearch,
   updateArtist,
 } from './data.ts';
+
+const block = css({ display: 'block' });
 
 // Each form route has its own controller, since controller middleware doesn't apply to nested
 // route maps.
@@ -48,7 +52,11 @@ function artistFields(t: TFunction, artist?: Artist): Field[] {
             prop: 'artwork',
             type: 'custom' as const,
             render: () => (
-              <img src={artworkUrl(artwork, 300)} alt={artist?.name} class="my-4 rounded" />
+              <img
+                src={artworkUrl(artwork, 300)}
+                alt={artist?.name}
+                mix={css({ marginBlock: '1rem', borderRadius: '0.25rem' })}
+              />
             ),
           },
         ]
@@ -90,7 +98,7 @@ export const artistsList = createController(artists.list, {
       const deleted = Number(context.url.searchParams.get('deleted') || 0);
       const columns = [
         {
-          class: 'w-16',
+          styles: { width: '4rem' },
           render: (artist: ArtistRow) => {
             const artwork = artist.appleMusic?.artwork?.url;
             if (!artwork) {
@@ -103,11 +111,11 @@ export const artistsList = createController(artists.list, {
                 width={44}
                 height={44}
                 loading="lazy"
-                class="block"
+                mix={block}
               />
             );
             return artist.appleMusic?.url ? (
-              <a href={artist.appleMusic.url} target="_blank" rel="noreferrer" class="block">
+              <a href={artist.appleMusic.url} target="_blank" rel="noreferrer" mix={block}>
                 {image}
               </a>
             ) : (
@@ -130,7 +138,7 @@ export const artistsList = createController(artists.list, {
         { label: t('entity.slug'), render: (artist: ArtistRow) => artist.slug },
         {
           label: t('entity.excludeFromSearch'),
-          class: 'text-center',
+          styles: { textAlign: 'center' },
           render: (artist: ArtistRow) => (
             <InlineToggle
               intent="excludeFromSearch"
@@ -145,7 +153,7 @@ export const artistsList = createController(artists.list, {
           label: t('entity.website'),
           render: (artist: ArtistRow) =>
             artist.website && (
-              <a class="text-pink underline" href={artist.website} target="_blank" rel="noreferrer">
+              <a mix={pinkLink} href={artist.website} target="_blank" rel="noreferrer">
                 {artist.website}
               </a>
             ),

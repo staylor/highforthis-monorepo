@@ -1,9 +1,11 @@
-import type { Handle, RemixNode } from 'remix/component';
+import { css, type Handle, type RemixNode } from 'remix/component';
 
+import { text } from '../public/styles.ts';
 import { formatDate } from '../shows/utils.ts';
 
 import { getAdmin } from './context.tsx';
 import { documentLoad } from './links.ts';
+import { label, pinkLink } from './public/styles.ts';
 
 export function PageLink(handle: Handle<{ href: string; children?: RemixNode }>) {
   return () => (
@@ -11,7 +13,13 @@ export function PageLink(handle: Handle<{ href: string; children?: RemixNode }>)
       href={handle.props.href}
       target="_blank"
       rel="noreferrer"
-      class="mx-4 inline-block text-sm text-pink underline"
+      mix={css({
+        marginInline: '1rem',
+        display: 'inline-block',
+        ...text.sm,
+        color: 'var(--pink)',
+        textDecoration: 'underline',
+      })}
     >
       {handle.props.children}
     </a>
@@ -40,8 +48,8 @@ export function EntityShows(handle: Handle<{ shows: EntityShow[] }>) {
       const date = formatDate(show.date ?? undefined);
       const href = `/admin/show/${show.id}`;
       return (
-        <li class="my-3">
-          <a href={href} data-rmx-document={documentLoad(href)} class="text-pink underline">
+        <li mix={css({ marginBlock: '0.75rem' })}>
+          <a href={href} data-rmx-document={documentLoad(href)} mix={pinkLink}>
             {date.formatted}/{date.year} {show.name}
           </a>
         </li>
@@ -49,21 +57,21 @@ export function EntityShows(handle: Handle<{ shows: EntityShow[] }>) {
     };
     const addHref = '/admin/show/add';
     return (
-      <div class="my-6 block">
-        <span class="mb-1 block text-sm tracking-wide text-gray-700 dark:text-neutral-300">
-          {t('entity.shows')}
-        </span>
+      <div mix={css({ marginBlock: '1.5rem', display: 'block' })}>
+        <span mix={label}>{t('entity.shows')}</span>
         <ul>{shows.slice(0, SHOWN).map(item)}</ul>
         {shows.length > SHOWN && (
           <details>
-            <summary class="cursor-pointer text-sm underline">{t('entity.showMore')}</summary>
+            <summary mix={css({ cursor: 'pointer', ...text.sm, textDecoration: 'underline' })}>
+              {t('entity.showMore')}
+            </summary>
             <ul>{shows.slice(SHOWN).map(item)}</ul>
           </details>
         )}
         <a
           href={addHref}
           data-rmx-document={documentLoad(addHref)}
-          class="mt-8 inline-block underline"
+          mix={css({ marginTop: '2rem', display: 'inline-block', textDecoration: 'underline' })}
         >
           {t('shows.add')}
         </a>

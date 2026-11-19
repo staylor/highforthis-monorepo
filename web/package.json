@@ -35,21 +35,15 @@
     "remix": "3.3.0"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "4.3.4",
-    "@tailwindcss/forms": "0.5.11",
-    "tailwindcss": "4.3.4",
     "typescript": "5.9.3"
   },
   "scripts": {
     "dev": "pnpm --filter @highforthis/shared build && pnpm dev:service",
-    "dev:service": "pnpm css && (pnpm css:watch & NODE_ENV=development node --env-file-if-exists=.env --watch --import remix/node-tsx server.ts)",
-    "hmr": "pnpm css && (pnpm css:watch & NODE_ENV=development node --env-file-if-exists=.env hmr.ts)",
-    "build": "pnpm --filter @highforthis/shared build && pnpm build:service",
-    "build:service": "pnpm css",
+    "dev:service": "NODE_ENV=development node --env-file-if-exists=.env --watch --import remix/node-tsx server.ts",
+    "hmr": "NODE_ENV=development node --env-file-if-exists=.env hmr.ts",
+    "build": "pnpm --filter @highforthis/shared build",
     "start": "NODE_ENV=production node --import remix/node-tsx server.ts",
-    "css": "tailwindcss -i app/styles/main.css -o app/styles/public/main.css && tailwindcss -i app/styles/admin.css -o app/styles/public/admin.css",
-    "css:watch": "tailwindcss -i app/styles/admin.css -o app/styles/public/admin.css --watch=always & tailwindcss -i app/styles/main.css -o app/styles/public/main.css --watch=always",
-    "test": "pnpm css && NODE_ENV=test remix test --type server",
+    "test": "NODE_ENV=test remix test --type server",
     "typecheck": "tsgo"
   }
 }

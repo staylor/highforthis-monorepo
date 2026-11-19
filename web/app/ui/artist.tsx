@@ -1,9 +1,9 @@
-import type { Handle, RemixNode } from 'remix/component';
+import { css, type Handle, type RemixNode } from 'remix/component';
 
 import type { AppleMusicData } from '../types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
-import { cn } from './public/cn.ts';
+import { md, merge, pinkButton, text, type Styles } from './public/styles.ts';
 
 const DEFAULT_IMAGE_SIZE = 300;
 
@@ -11,19 +11,24 @@ type AppleMusic = Partial<Pick<AppleMusicData, 'url'>> & {
   artwork?: { url?: string | null } | null;
 };
 
-/** An artist's Apple Music artwork. */
+/** An artist's Apple Music artwork. `styles` go on the link around it, or the image if none. */
 export function Artwork(
-  handle: Handle<{ name: string; imageSize?: number; data: AppleMusic; class?: string }>
+  handle: Handle<{
+    name: string;
+    imageSize?: number;
+    data: AppleMusic;
+    styles?: Styles;
+  }>
 ) {
   return () => {
-    const { name, imageSize = DEFAULT_IMAGE_SIZE, data, class: className } = handle.props;
+    const { name, imageSize = DEFAULT_IMAGE_SIZE, data, styles } = handle.props;
     const { url, artwork } = data;
     if (!artwork?.url) {
       return null;
     }
     const image = (
       <img
-        class={cn('block', !url && className)}
+        mix={css(merge({ display: 'block' }, !url ? styles : undefined))}
         src={artwork.url.replace(/\{[wh]\}/g, String(imageSize))}
         alt={name}
         width={imageSize}
@@ -37,7 +42,16 @@ export function Artwork(
     return (
       <a
         href={url}
-        class={cn('mb-4 block md:mr-8 md:mb-0', className)}
+        mix={css(
+          merge(
+            {
+              display: 'block',
+              marginBottom: '1rem',
+              [md]: { marginRight: '2rem', marginBottom: 0 },
+            },
+            styles
+          )
+        )}
         style={{ width: imageSize, height: imageSize }}
         target="_blank"
         rel="noreferrer"
@@ -52,12 +66,16 @@ function ArtistLink(url: string, children: RemixNode) {
   return (
     <a
       href={url}
-      class={cn(
-        'mr-3 inline-block rounded-lg px-4 py-2 text-sm font-medium transition-all',
-        'border-pink/20 bg-pink/5 text-pink border',
-        'hover:bg-pink/10',
-        'dark:border-pink/30 dark:bg-pink/10 dark:hover:bg-pink/20'
-      )}
+      mix={css({
+        marginRight: '0.75rem',
+        display: 'inline-block',
+        borderRadius: '0.5rem',
+        padding: '0.5rem 1rem',
+        ...text.sm,
+        fontWeight: 500,
+        transition: 'all 150ms var(--ease)',
+        ...pinkButton,
+      })}
       target="_blank"
       rel="noreferrer"
     >
@@ -75,9 +93,23 @@ export function Metadata(
   return () => {
     const { name, website, data } = handle.props;
     return (
-      <div class="mt-4 mb-8 items-center md:mt-6 md:mb-10 md:flex">
-        <Artwork name={name} data={data} class="rounded-lg" />
-        <div class="mt-3 flex flex-wrap gap-2 md:mt-0">
+      <div
+        mix={css({
+          marginBlock: '1rem 2rem',
+          alignItems: 'center',
+          [md]: { display: 'flex', marginBlock: '1.5rem 2.5rem' },
+        })}
+      >
+        <Artwork name={name} data={data} styles={{ borderRadius: '0.5rem' }} />
+        <div
+          mix={css({
+            marginTop: '0.75rem',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+            [md]: { marginTop: 0 },
+          })}
+        >
           {website && ArtistLink(website, t('artists.website'))}
           {data.url && ArtistLink(data.url, t('artists.listen'))}
         </div>

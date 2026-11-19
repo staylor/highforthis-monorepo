@@ -8,7 +8,6 @@
       "ignoreDependencies": [
         "@lexical/eslint-plugin",
         "eslint-plugin-i18next",
-        "eslint-plugin-tailwindcss",
         "esbuild",
         "tsconfig-paths",
         "tsx"
@@ -49,8 +48,7 @@
         "@lexical/dragon",
         "@lexical/extension",
         "@lexical/html",
-        "@preact/signals-core",
-        "@tailwindcss/forms"
+        "@preact/signals-core"
       ]
     },
     "e2e": {

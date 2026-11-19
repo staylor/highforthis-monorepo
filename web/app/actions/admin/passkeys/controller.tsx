@@ -1,3 +1,4 @@
+import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
@@ -7,7 +8,7 @@ import { routes } from '../../../routes.ts';
 import { Heading } from '../../../ui/admin/page.tsx';
 import { ConfirmButton } from '../../../ui/admin/public/confirm-button.tsx';
 import { PasskeyRegister } from '../../../ui/admin/public/passkey-register.tsx';
-import { cn } from '../../../ui/public/cn.ts';
+import { dark, lg, text, type Styles } from '../../../ui/public/styles.ts';
 import { renderAdminPage } from '../render-page.tsx';
 
 import { deletePasskey, listPasskeys, passkeyApi } from './data.ts';
@@ -16,9 +17,39 @@ import { deletePasskey, listPasskeys, passkeyApi } from './data.ts';
 
 const passkeys = routes.admin.passkeys;
 
-const heading2 = 'mb-2 block text-2xl font-bold lg:mb-3 dark:text-white';
-const muted = 'block text-sm text-neutral-600 dark:text-neutral-400';
-const box = 'rounded-sm border border-neutral-200 dark:border-white/10';
+const heading2 = css({
+  marginBottom: '0.5rem',
+  display: 'block',
+  ...text['2xl'],
+  fontWeight: 700,
+  [lg]: { marginBottom: '0.75rem' },
+  [dark]: { color: '#fff' },
+});
+const muted = css({
+  display: 'block',
+  ...text.sm,
+  color: 'var(--neutral-600)',
+  [dark]: { color: 'var(--neutral-400)' },
+});
+const box = {
+  borderRadius: '0.25rem',
+  border: '1px solid var(--neutral-200)',
+  [dark]: { borderColor: 'rgb(255 255 255 / 0.1)' },
+} satisfies Styles;
+const lightText = css({ [dark]: { color: 'var(--neutral-300)' } });
+
+// A passkey, with a line between it and the next
+const passkeyRow = css({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '1.25rem',
+  padding: '1rem',
+  '& + &': {
+    borderTop: '1px solid var(--neutral-200)',
+    [dark]: { borderColor: 'rgb(255 255 255 / 0.1)' },
+  },
+});
 
 export const passkeysList = createController(passkeys.list, {
   middleware: [sameOrigin(), requireAdmin()],
@@ -28,12 +59,12 @@ export const passkeysList = createController(passkeys.list, {
       const { passkeys: registered } = await listPasskeys(context.admin.token);
       return renderAdminPage(
         context,
-        <div class="max-w-3xl">
+        <div mix={css({ maxWidth: '48rem' })}>
           <Heading>{t('passkeys.heading')}</Heading>
-          <p class="mb-6 dark:text-neutral-300">{t('passkeys.description')}</p>
+          <p mix={[lightText, css({ marginBottom: '1.5rem' })]}>{t('passkeys.description')}</p>
 
-          <section class={cn(box, 'mb-10 p-5')}>
-            <h2 class={heading2}>{t('passkeys.addHeading')}</h2>
+          <section mix={css({ ...box, marginBottom: '2.5rem', padding: '1.25rem' })}>
+            <h2 mix={heading2}>{t('passkeys.addHeading')}</h2>
             <PasskeyRegister
               optionsHref={passkeys.options.href()}
               verifyHref={passkeys.verify.href()}
@@ -48,33 +79,32 @@ export const passkeysList = createController(passkeys.list, {
           </section>
 
           <section>
-            <h2 class={heading2}>{t('passkeys.registeredHeading')}</h2>
+            <h2 mix={heading2}>{t('passkeys.registeredHeading')}</h2>
             {registered.length === 0 ? (
-              <p class="dark:text-neutral-300">{t('passkeys.none')}</p>
+              <p mix={lightText}>{t('passkeys.none')}</p>
             ) : (
-              <ul class={cn(box, 'divide-y divide-neutral-200 dark:divide-white/10')}>
+              <ul mix={css(box)}>
                 {registered.map((passkey) => (
-                  <li key={passkey.id} class="flex items-center justify-between gap-5 p-4">
+                  <li key={passkey.id} mix={passkeyRow}>
                     <div>
-                      <strong class="block dark:text-white">
+                      <strong mix={css({ display: 'block', [dark]: { color: '#fff' } })}>
                         {passkey.name || t('passkeys.unnamed')}
                       </strong>
-                      <span class={muted}>
+                      <span mix={muted}>
                         {t('passkeys.created', { date: passkey.createdAt.slice(0, 10) })}
                       </span>
-                      <span class={muted}>
+                      <span mix={muted}>
                         {passkey.lastUsedAt
                           ? t('passkeys.lastUsed', { date: passkey.lastUsedAt.slice(0, 10) })
                           : t('passkeys.neverUsed')}
                       </span>
-                      {passkey.backedUp && <span class={muted}>{t('passkeys.synced')}</span>}
+                      {passkey.backedUp && <span mix={muted}>{t('passkeys.synced')}</span>}
                     </div>
                     <form method="post">
                       <input type="hidden" name="credentialId" value={passkey.id} />
                       <ConfirmButton
                         label={t('passkeys.remove')}
                         confirm={t('passkeys.removeConfirm')}
-                        class="cursor-pointer rounded-sm border border-red-700 bg-white px-3 py-2 text-red-700"
                       />
                     </form>
                   </li>

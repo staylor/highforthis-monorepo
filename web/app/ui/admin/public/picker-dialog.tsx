@@ -1,6 +1,6 @@
-import { on, ref, type Handle } from 'remix/component';
+import { css, on, ref, type Handle } from 'remix/component';
 
-import { cn } from '../../public/cn.ts';
+import { colorTransition, sm, text } from '../../public/styles.ts';
 
 import { Icon } from './icon.tsx';
 
@@ -52,6 +52,64 @@ interface PickerDialogProps {
   closeLabel: string;
   loadingText: string;
 }
+
+// Nearly the whole window, with the page dimmed behind it
+const dialogStyle = css({
+  position: 'fixed',
+  inset: '0.5rem',
+  margin: 0,
+  maxHeight: 'none',
+  maxWidth: 'none',
+  width: 'auto',
+  height: 'auto',
+  border: '2px solid var(--dark)',
+  backgroundColor: '#fff',
+  padding: '1rem',
+  '&::backdrop': { backgroundColor: 'rgb(0 0 0 / 0.5)' },
+  [sm]: { inset: '10%', padding: '1.75rem' },
+});
+
+const closeButton = css({
+  position: 'absolute',
+  top: '0.625rem',
+  right: '0.625rem',
+  display: 'flex',
+  width: '1.5rem',
+  height: '1.5rem',
+  cursor: 'pointer',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '9999px',
+  color: 'var(--dark)',
+  ...colorTransition,
+  '&:hover': { backgroundColor: 'var(--neutral-100)' },
+});
+
+// The scrolling list of uploads, which float in rows
+const frameStyle = css({
+  position: 'absolute',
+  insetInline: '1rem',
+  top: '3rem',
+  bottom: '1rem',
+  overflow: 'auto',
+  '&::after': { content: '""', clear: 'both', display: 'table' },
+  [sm]: { top: '1.875rem', right: '2.5rem', bottom: '2.5rem', left: '1.875rem' },
+});
+
+// A column from the top: a button centers what it holds
+const itemStyle = css({
+  float: 'left',
+  margin: '0.375rem',
+  display: 'flex',
+  height: '7rem',
+  width: '7.5rem',
+  cursor: 'pointer',
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
+  overflow: 'hidden',
+  backgroundColor: 'var(--zinc-50)',
+  textAlign: 'left',
+});
 
 export function PickerDialog(handle: Handle<PickerDialogProps>) {
   let items: MediaPickerItem[] = [];
@@ -110,11 +168,8 @@ export function PickerDialog(handle: Handle<PickerDialogProps>) {
     return (
       <dialog
         aria-label={heading}
-        class={cn(
-          'fixed inset-2 m-0 max-h-none max-w-none size-auto',
-          'border-2 border-dark bg-white p-4 backdrop:bg-black/50 sm:inset-[10%] sm:p-7'
-        )}
         mix={[
+          dialogStyle,
           ref((node) => {
             dialog = node as HTMLDialogElement;
             sync();
@@ -126,38 +181,40 @@ export function PickerDialog(handle: Handle<PickerDialogProps>) {
         <button
           type="button"
           aria-label={closeLabel}
-          class={cn(
-            'absolute top-2.5 right-2.5 flex size-6 cursor-pointer items-center justify-center',
-            'rounded-full text-dark transition-colors hover:bg-neutral-100'
-          )}
-          mix={on('click', () => onClose())}
+          mix={[closeButton, on('click', () => onClose())]}
         >
-          <Icon name="close" class="size-4" />
+          <Icon name="close" size="1rem" />
         </button>
         <div
-          class={cn(
-            'absolute inset-x-4 top-12 bottom-4 overflow-auto after:clear-both after:table',
-            'sm:top-7.5 sm:right-10 sm:bottom-10 sm:left-7.5'
-          )}
-          mix={on('scroll', (event) => {
-            const frame = event.currentTarget;
-            if (frame.scrollTop + frame.offsetHeight >= frame.scrollHeight - 200) {
-              void loadMore();
-            }
-          })}
+          mix={[
+            frameStyle,
+            on('scroll', (event) => {
+              const frame = event.currentTarget;
+              if (frame.scrollTop + frame.offsetHeight >= frame.scrollHeight - 200) {
+                void loadMore();
+              }
+            }),
+          ]}
         >
           {items.map((item) => (
-            <button
-              type="button"
-              // A column from the top: a button centers what it holds
-              class="float-left m-1.5 flex h-28 w-30 cursor-pointer flex-col justify-start overflow-hidden bg-zinc-50 text-left"
-              mix={on('click', () => onPick(item))}
-            >
+            <button type="button" mix={[itemStyle, on('click', () => onPick(item))]}>
               {item.thumb ? <img alt="" src={item.thumb} /> : null}
-              <span class="block truncate text-sm">{item.title}</span>
+              <span
+                mix={css({
+                  display: 'block',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  ...text.sm,
+                })}
+              >
+                {item.title}
+              </span>
             </button>
           ))}
-          {loading && <p class="clear-both py-4 text-sm">{loadingText}</p>}
+          {loading && (
+            <p mix={css({ clear: 'both', paddingBlock: '1rem', ...text.sm })}>{loadingText}</p>
+          )}
         </div>
       </dialog>
     );

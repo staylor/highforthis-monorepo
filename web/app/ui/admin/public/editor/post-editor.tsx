@@ -1,8 +1,8 @@
 import type { SerializedEditorState } from 'lexical';
-import { clientEntry, on, ref, type Handle, type RemixNode } from 'remix/component';
+import { clientEntry, css, on, ref, type Handle, type RemixNode } from 'remix/component';
 
 import type { ImageUpload, Video } from '../../../../types/graphql.ts';
-import { cn } from '../../../public/cn.ts';
+import { lg, text } from '../../../public/styles.ts';
 import { Icon, type IconName } from '../icon.tsx';
 import { PickerDialog } from '../picker-dialog.tsx';
 
@@ -30,17 +30,17 @@ interface PostEditorProps {
   };
 }
 
-const iconClass = 'size-4';
+const iconSize = '1rem';
 
 const blockLabels: Record<BlockStyle, RemixNode> = {
   h2: 'H2',
   h3: 'H3',
-  'atomic-image': <Icon name="media" class={iconClass} />,
-  video: <Icon name="video" class={iconClass} />,
-  blockquote: <Icon name="quote" class={iconClass} />,
-  bullet: <Icon name="listBullet" class={iconClass} />,
-  number: <Icon name="listOrdered" class={iconClass} />,
-  code: <Icon name="code" class={iconClass} />,
+  'atomic-image': <Icon name="media" size={iconSize} />,
+  video: <Icon name="video" size={iconSize} />,
+  blockquote: <Icon name="quote" size={iconSize} />,
+  bullet: <Icon name="listBullet" size={iconSize} />,
+  number: <Icon name="listOrdered" size={iconSize} />,
+  code: <Icon name="code" size={iconSize} />,
 };
 
 const inlineIcons: Partial<Record<InlineFormat, IconName>> = {
@@ -54,7 +54,7 @@ const inlineIcons: Partial<Record<InlineFormat, IconName>> = {
 function inlineLabel(format: InlineFormat): RemixNode {
   const icon = inlineIcons[format];
   if (icon) {
-    return <Icon name={icon} class={iconClass} />;
+    return <Icon name={icon} size={iconSize} />;
   }
   return format === 'superscript' ? (
     <>
@@ -67,11 +67,33 @@ function inlineLabel(format: InlineFormat): RemixNode {
   );
 }
 
-const toolbarClass = cn(
-  'toolbar-hidden absolute z-50 rounded border border-gray-200 bg-white p-1 shadow-lg transition-[scale]',
-  'after:border-transparent after:border-t-white',
-  'after:pointer-events-none after:absolute after:right-1/2 after:-bottom-3 after:size-0'
-);
+// Toolbars grow from nothing when they show: their style attribute sets the scale
+const toolbar = {
+  position: 'absolute',
+  zIndex: 50,
+  borderRadius: '0.25rem',
+  border: '1px solid var(--gray-200)',
+  backgroundColor: '#fff',
+  padding: '0.25rem',
+  boxShadow: 'var(--shadow-lg)',
+  scale: 0,
+  transition: 'scale 150ms var(--ease)',
+} as const;
+
+// Dark while its style is on
+const styleButton = css({
+  display: 'flex',
+  width: '1.75rem',
+  height: '1.75rem',
+  cursor: 'pointer',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'var(--detail)',
+  '&:first-child': { borderStartStartRadius: '0.25rem', borderEndStartRadius: '0.25rem' },
+  '&:last-child': { borderStartEndRadius: '0.25rem', borderEndEndRadius: '0.25rem' },
+  '&:hover': { color: 'var(--dark)' },
+  '&[data-active]': { color: 'var(--dark)', '&:hover': { color: 'var(--pink)' } },
+});
 
 /** A toolbar button. It acts on mousedown and keeps the focus in the editor. */
 function StyleButton(handle: Handle<{ active: boolean; label: RemixNode; onToggle: () => void }>) {
@@ -79,22 +101,29 @@ function StyleButton(handle: Handle<{ active: boolean; label: RemixNode; onToggl
     <span
       role="button"
       tabIndex={-1}
-      class={cn(
-        'flex size-7 cursor-pointer items-center justify-center first:rounded-l last:rounded-r',
-        handle.props.active ? 'text-dark hover:text-pink' : 'text-detail hover:text-dark'
-      )}
-      mix={on('mousedown', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        handle.props.onToggle();
-      })}
+      data-active={handle.props.active || undefined}
+      mix={[
+        styleButton,
+        on('mousedown', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          handle.props.onToggle();
+        }),
+      ]}
     >
       {handle.props.label}
     </span>
   );
 }
 
-const controlsClass = 'relative inline-flex items-center gap-1 text-sm select-none';
+const controls = css({
+  position: 'relative',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.25rem',
+  ...text.sm,
+  userSelect: 'none',
+});
 
 export const PostEditor = clientEntry(
   import.meta.url,
@@ -144,35 +173,76 @@ export const PostEditor = clientEntry(
             })}
           />
           {/* The negative offset makes room for the block button, which only fits on wide screens */}
-          <div class="editor-container relative left-0 lg:-left-6">
-            <div class="editor-inner">
-              {/* Lexical renders the post into this element */}
+          <div
+            mix={css({
+              position: 'relative',
+              left: 0,
+              margin: '20px auto',
+              maxWidth: '600px',
+              color: '#000',
+              lineHeight: '20px',
+              fontWeight: 400,
+              textAlign: 'left',
+              borderRadius: '10px 10px 2px 2px',
+              [lg]: { left: '-1.5rem' },
+            })}
+          >
+            <div mix={css({ position: 'relative', backgroundColor: '#fff' })}>
+              {/* Lexical renders the post into this element, with admin.css's editor- classes */}
               <div
-                class="editor-input"
+                mix={[
+                  css({
+                    position: 'relative',
+                    minHeight: '150px',
+                    resize: 'none',
+                    fontSize: '15px',
+                    tabSize: 1,
+                    outline: 0,
+                    padding: '15px 10px',
+                    caretColor: '#444',
+                  }),
+                  ref(mount),
+                ]}
                 contentEditable
                 role="textbox"
                 spellcheck
                 aria-label={labels.placeholder}
-                mix={ref(mount)}
               />
               {postEditor.placeholder.get() && (
-                <div class="editor-placeholder">{labels.placeholder}</div>
+                <div
+                  mix={css({
+                    position: 'absolute',
+                    top: '15px',
+                    left: '10px',
+                    display: 'inline-block',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    fontSize: '15px',
+                    color: '#999',
+                    userSelect: 'none',
+                    pointerEvents: 'none',
+                  })}
+                >
+                  {labels.placeholder}
+                </div>
               )}
             </div>
             {/* The inline toolbar, over selected text */}
             <div
-              class={cn(toolbarClass, inlineState.flush && 'after:border-t-transparent')}
+              mix={[
+                css(toolbar),
+                ref((node, signal) => {
+                  const unregister = inline.register(node as HTMLElement);
+                  signal.addEventListener('abort', unregister);
+                }),
+              ]}
               style={{
                 left: `${inlineState.left}px`,
                 top: `${inlineState.top}px`,
                 scale: inlineState.visible ? '1' : undefined,
               }}
-              mix={ref((node, signal) => {
-                const unregister = inline.register(node as HTMLElement);
-                signal.addEventListener('abort', unregister);
-              })}
             >
-              <div class={controlsClass}>
+              <div mix={controls}>
                 {INLINE_FORMATS.map((format) => (
                   <StyleButton
                     active={inlineState.formats[format]}
@@ -188,24 +258,35 @@ export const PostEditor = clientEntry(
               tabIndex={0}
               aria-label={labels.blockTypes}
               aria-expanded={blockState.open ? 'true' : 'false'}
-              class="toolbar-hidden absolute -left-7.5 block cursor-pointer text-detail transition-[scale] hover:text-detail-dark"
               style={{ top: `${blockState.top}px`, scale: blockState.visible ? '1' : undefined }}
-              mix={on('mousedown', (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                block.toggleOpen();
-              })}
+              mix={[
+                css({
+                  position: 'absolute',
+                  left: '-1.875rem',
+                  display: 'block',
+                  cursor: 'pointer',
+                  color: 'var(--detail)',
+                  scale: 0,
+                  transition: 'scale 150ms var(--ease)',
+                  '&:hover': { color: 'var(--detail-dark)' },
+                }),
+                on('mousedown', (event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  block.toggleOpen();
+                }),
+              ]}
             >
-              <Icon name={blockState.open ? 'closeCircle' : 'plusCircle'} class="size-6" />
+              <Icon name={blockState.open ? 'closeCircle' : 'plusCircle'} size="1.5rem" />
             </div>
             <div
-              class={cn(toolbarClass, '-left-7 after:right-auto after:left-1')}
+              mix={css({ ...toolbar, left: '-1.75rem' })}
               style={{
                 top: `${blockState.toolbarTop}px`,
                 scale: blockState.visible && blockState.open ? '1' : undefined,
               }}
             >
-              <div class={controlsClass}>
+              <div mix={controls}>
                 {BLOCK_TYPES.map((type) => (
                   <StyleButton
                     active={blockState.style === type.style}

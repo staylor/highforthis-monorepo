@@ -1,4 +1,4 @@
-import { unsafeHTML } from 'remix/component';
+import { css, unsafeHTML } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
@@ -19,9 +19,9 @@ import { Message } from '../../../ui/admin/message.tsx';
 import { Alert, HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
 import { CoverPicker } from '../../../ui/admin/public/cover-picker.tsx';
 import { MediaUploader } from '../../../ui/admin/public/media-uploader.tsx';
-import { inputBase } from '../../../ui/admin/public/styles.ts';
-import { cn } from '../../../ui/public/cn.ts';
+import { input } from '../../../ui/admin/public/styles.ts';
 import { uploadUrl } from '../../../ui/public/media.ts';
+import { merge, text } from '../../../ui/public/styles.ts';
 import { renderAdminPage, type AdminPageContext } from '../render-page.tsx';
 
 import {
@@ -32,6 +32,9 @@ import {
   searchAlbumCovers,
   updateMedia,
 } from './library-data.ts';
+
+const previewImage = css({ marginBlock: '0.625rem' });
+const player = css({ marginBlock: '0.625rem 1.25rem' });
 
 // Each route has its own controller, since controller middleware doesn't apply to nested route
 // maps.
@@ -72,7 +75,11 @@ function cropsOf(upload: { crops?: (Crop | null)[] | null; images?: (Crop | null
 function thumbnail(upload: UploadRow) {
   const [smallest] = cropsOf(upload as Parameters<typeof cropsOf>[0]);
   return smallest ? (
-    <img class="w-16" src={uploadUrl(upload.destination, smallest.fileName)} alt="" />
+    <img
+      mix={css({ width: '4rem' })}
+      src={uploadUrl(upload.destination, smallest.fileName)}
+      alt=""
+    />
   ) : null;
 }
 
@@ -88,10 +95,10 @@ export const mediaList = createController(media.list, {
       const filterHref = (key: string, value: string) =>
         `${media.list.index.href()}?${new URLSearchParams({ [key]: value })}`;
       const columns = [
-        { class: 'w-16', render: thumbnail },
+        { styles: { width: '4rem' }, render: thumbnail },
         {
           label: t('media.title'),
-          class: 'w-[60%]',
+          styles: { width: '60%' },
           render: (upload: UploadRow) => {
             const href = media.edit.index.href({ id: upload.id });
             return (
@@ -198,9 +205,9 @@ async function renderAlbumCoversPage(
   if (results?.error) {
     body = <Alert>{results.error}</Alert>;
   } else if (!results) {
-    body = <p class="my-4 text-sm">{t('media.albumCovers.hint')}</p>;
+    body = <p mix={css({ marginBlock: '1rem', ...text.sm })}>{t('media.albumCovers.hint')}</p>;
   } else if (results.albums.length === 0) {
-    body = <p class="my-10">{t('media.albumCovers.empty')}</p>;
+    body = <p mix={css({ marginBlock: '2.5rem' })}>{t('media.albumCovers.empty')}</p>;
   } else {
     const albums = results.albums.map(({ id, name, artistName, releaseDate, cover, artwork }) => ({
       id,
@@ -231,7 +238,7 @@ async function renderAlbumCoversPage(
     <>
       <Heading>{label}</Heading>
       <Search placeholder={t('media.albumCovers.search')} />
-      <div class="clear-both">
+      <div mix={css({ clear: 'both' })}>
         {options.failed && <Alert>{t('media.albumCovers.failed')}</Alert>}
         {body}
       </div>
@@ -264,16 +271,20 @@ function preview(upload: Media) {
   if (upload.type === 'image' && 'crops' in upload) {
     const crop = upload.crops.find((c) => c.width === 300);
     return (
-      <img class="my-2.5" src={crop ? uploadUrl(upload.destination, crop.fileName) : url} alt="" />
+      <img
+        mix={previewImage}
+        src={crop ? uploadUrl(upload.destination, crop.fileName) : url}
+        alt=""
+      />
     );
   }
   if (upload.type === 'audio') {
-    return <audio class="mt-2.5 mb-5" controls src={url} />;
+    return <audio mix={player} controls src={url} />;
   }
   if (upload.type === 'video' && 'duration' in upload && 'width' in upload) {
     return (
       <video
-        class="mt-2.5 mb-5 max-w-160 appearance-none"
+        mix={[player, css({ maxWidth: '40rem', appearance: 'none' })]}
         preload="metadata"
         width={upload.width ?? undefined}
         height={upload.height ?? undefined}
@@ -322,7 +333,7 @@ function details(t: TFunction, upload: Media) {
         <strong>{t('audio.fileType')}:</strong> {upload.mimeType}
         {first && (
           <>
-            <img class="my-2.5" src={uploadUrl(upload.destination, first.fileName)} alt="" />
+            <img mix={previewImage} src={uploadUrl(upload.destination, first.fileName)} alt="" />
             <strong>{t('audio.showing')}:</strong>
             <br />
             {first.width}
@@ -381,7 +392,14 @@ function mediaFields(t: TFunction, upload: Media): Field[] {
           value={upload.title ?? ''}
           placeholder={placeholder}
           aria-label={placeholder}
-          class={cn(inputBase, 'h-9 w-full px-2 py-1 text-xl')}
+          mix={css(
+            merge(input, {
+              height: '2.25rem',
+              width: '100%',
+              padding: '0.25rem 0.5rem',
+              ...text.xl,
+            })
+          )}
         />
       ),
     },
@@ -427,8 +445,10 @@ export const mediaEdit = createController(media.edit, {
             data={upload}
             buttonLabel={t('media.update')}
             meta={
-              <div class="my-6 block">
-                <h3 class="mb-2 text-sm font-bold">{t('admin.details')}</h3>
+              <div mix={css({ marginBlock: '1.5rem', display: 'block' })}>
+                <h3 mix={css({ marginBottom: '0.5rem', ...text.sm, fontWeight: 700 })}>
+                  {t('admin.details')}
+                </h3>
                 {details(t, upload)}
               </div>
             }

@@ -1,5 +1,5 @@
 import { gql } from 'graphql-tag';
-import type { Handle } from 'remix/component';
+import { css, type Handle } from 'remix/component';
 
 import type { VideosQuery } from '../../types/graphql.ts';
 import { getApp } from '../../ui/app-context.tsx';
@@ -47,7 +47,14 @@ export function VideosPage(
     const { videos, year, search } = handle.props;
     return (
       <>
-        <div class="mb-6 flex items-center justify-between">
+        <div
+          mix={css({
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          })}
+        >
           <Heading1>{year ? `${year} Videos` : 'Videos'}</Heading1>
           <YearSelect value={year || ''} placeholder={t('nav.videosByYear')} years={yearChoices} />
         </div>

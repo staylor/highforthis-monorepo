@@ -1,6 +1,6 @@
-import { clientEntry, on, ref, type Handle } from 'remix/component';
+import { clientEntry, css, on, ref, type Handle } from 'remix/component';
 
-import { cn } from '../../public/cn.ts';
+import { lg } from '../../public/styles.ts';
 
 // One line of large text that wraps and grows instead of scrolling sideways, so a long title is
 // all visible. Enter doesn't start a new line. Without JavaScript it's a textarea a line tall.
@@ -9,8 +9,27 @@ interface HeadingFieldProps {
   name: string;
   value: string;
   placeholder: string;
-  class?: string;
 }
+
+// Big and bold, without the box of other fields
+const field = css({
+  margin: '0 0 0.625rem',
+  display: 'block',
+  width: '100%',
+  resize: 'none',
+  overflow: 'hidden',
+  border: 0,
+  backgroundColor: 'transparent',
+  padding: 0,
+  fontSize: '2.25rem',
+  lineHeight: 1.25,
+  fontWeight: 900,
+  letterSpacing: '0.025em',
+  overflowWrap: 'break-word',
+  boxShadow: 'none',
+  '&:focus': { boxShadow: 'none' },
+  [lg]: { marginBottom: '1.5rem', fontSize: '3rem' },
+});
 
 const grow = (textarea: HTMLTextAreaElement) => {
   textarea.style.height = 'auto';
@@ -29,8 +48,8 @@ export const HeadingField = clientEntry(
           defaultValue={value}
           placeholder={placeholder}
           aria-label={placeholder}
-          class={cn('w-full resize-none overflow-hidden bg-transparent', handle.props.class)}
           mix={[
+            field,
             ref((node) => grow(node as HTMLTextAreaElement)),
             on('input', (event) => grow(event.currentTarget)),
             on('keydown', (event) => {

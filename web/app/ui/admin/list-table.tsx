@@ -1,20 +1,21 @@
-import type { Handle, RemixNode } from 'remix/component';
+import { css, type Handle, type RemixNode } from 'remix/component';
 
 import { PER_PAGE } from '../../lib/admin/list-variables.ts';
-import { cn } from '../public/cn.ts';
+import { merge, sm, text, type Styles } from '../public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { documentLoad } from './links.ts';
 import { Message } from './message.tsx';
 import { AutoSubmitSelect } from './public/auto-submit-select.tsx';
-import { buttonClass, inputBase } from './public/styles.ts';
+import { button, table, tableScroller, toolbarSelect, wideInput } from './public/styles.ts';
 
 // Works as plain HTML: each row's checkbox belongs to the bulk actions form through the `form`
 // attribute, search is a GET form, and paging is links.
 
 interface Column {
   label?: string;
-  class?: string;
+  /** Styles for the column's cells, such as its width. */
+  styles?: Styles;
   render: (node: any) => RemixNode;
 }
 
@@ -25,7 +26,17 @@ interface Connection {
 }
 
 const BULK_FORM = 'bulk-actions';
-const cellHeading = 'text-sm py-2 px-2.5 text-left';
+const cell = { padding: '0.5rem 0.625rem', ...text.sm, textAlign: 'left' } satisfies Styles;
+const plainButton = css(button());
+const underlineOnHover = css({ '&:hover': { textDecoration: 'underline' } });
+const toolbar = {
+  clear: 'both',
+  marginBlock: '0.375rem',
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '0.5rem',
+} satisfies Styles;
+const row = css({ display: 'flex', alignItems: 'center', gap: '0.5rem' });
 
 export function RowTitle(
   handle: Handle<{ href: string; title?: string | null; subtitle?: string | null }>
@@ -34,12 +45,20 @@ export function RowTitle(
     const { t } = getAdmin(handle);
     const { href, title, subtitle } = handle.props;
     return (
-      <strong class="mb-1 block text-sm font-bold wrap-break-word">
+      <strong
+        mix={css({
+          marginBottom: '0.25rem',
+          display: 'block',
+          ...text.sm,
+          fontWeight: 700,
+          overflowWrap: 'break-word',
+        })}
+      >
         <a href={href}>{title || t('table.noTitle')}</a>
         {subtitle && (
           <>
             <br />
-            <span class="text-xs font-normal">{subtitle}</span>
+            <span mix={css({ ...text.xs, fontWeight: 400 })}>{subtitle}</span>
           </>
         )}
       </strong>
@@ -56,30 +75,37 @@ export function RowActions(handle: Handle<{ editHref: string; viewHref?: string;
     const { t } = getAdmin(handle);
     const { editHref, viewHref, id } = handle.props;
     const actions: RemixNode[] = [
-      <a class="hover:underline" href={editHref} data-rmx-document={documentLoad(editHref)}>
+      <a mix={underlineOnHover} href={editHref} data-rmx-document={documentLoad(editHref)}>
         {t('table.edit')}
       </a>,
     ];
     if (viewHref) {
       actions.push(
-        <a class="hover:underline" href={viewHref} data-rmx-document={documentLoad(viewHref)}>
+        <a mix={underlineOnHover} href={viewHref} data-rmx-document={documentLoad(viewHref)}>
           {t('table.view')}
         </a>
       );
     }
     if (id) {
       actions.push(
-        <form method="post" class="inline">
+        <form method="post" mix={css({ display: 'inline' })}>
           <input type="hidden" name="intent" value="delete" />
           <input type="hidden" name="ids" value={id} />
-          <button type="submit" class="cursor-pointer text-pink hover:underline">
+          <button
+            type="submit"
+            mix={css({
+              cursor: 'pointer',
+              color: 'var(--pink)',
+              '&:hover': { textDecoration: 'underline' },
+            })}
+          >
             {t('table.delete')}
           </button>
         </form>
       );
     }
     return (
-      <nav class="text-sm">
+      <nav mix={css(text.sm)}>
         {actions.flatMap((action, i) => (i === 0 ? [action] : [' | ', action]))}
       </nav>
     );
@@ -109,7 +135,14 @@ export function Search(handle: Handle<{ placeholder: string }>) {
   return () => {
     const { url } = getAdmin(handle);
     return (
-      <form method="get" class="mb-2 w-full sm:float-right sm:w-64">
+      <form
+        method="get"
+        mix={css({
+          marginBottom: '0.5rem',
+          width: '100%',
+          [sm]: { float: 'right', width: '16rem' },
+        })}
+      >
         <KeptParams name="search" />
         <input
           type="search"
@@ -117,7 +150,7 @@ export function Search(handle: Handle<{ placeholder: string }>) {
           value={url.searchParams.get('search') ?? ''}
           placeholder={handle.props.placeholder}
           aria-label={handle.props.placeholder}
-          class={cn(inputBase, 'w-full')}
+          mix={wideInput}
         />
       </form>
     );
@@ -142,7 +175,7 @@ export function ListFilter(handle: Handle<ListFilterProps>) {
     const { t, url } = getAdmin(handle);
     const { name, placeholder, choices } = handle.props;
     return (
-      <form method="get" class="flex items-center gap-2">
+      <form method="get" mix={row}>
         <KeptParams name={name} />
         <AutoSubmitSelect
           name={name}
@@ -151,7 +184,7 @@ export function ListFilter(handle: Handle<ListFilterProps>) {
           choices={choices}
         />
         <noscript>
-          <button type="submit" class={buttonClass()}>
+          <button type="submit" mix={plainButton}>
             {t('table.apply')}
           </button>
         </noscript>
@@ -160,12 +193,39 @@ export function ListFilter(handle: Handle<ListFilterProps>) {
   };
 }
 
-const pageText = cn(
-  'border border-detail',
-  'inline-block text-base leading-none font-normal mx-0.5 pt-0.5 px-1.5 pb-1 rounded-sm text-center select-none'
-);
+const pageStep = {
+  marginInline: '0.125rem',
+  display: 'inline-block',
+  borderRadius: '0.25rem',
+  border: '1px solid var(--detail)',
+  padding: '0.125rem 0.375rem 0.25rem',
+  fontSize: '1rem',
+  lineHeight: 1,
+  fontWeight: 400,
+  textAlign: 'center',
+  userSelect: 'none',
+} satisfies Styles;
 
-function Pagination(handle: Handle<{ connection: Connection; perPage: number; class?: string }>) {
+const disabledStep = css({ ...pageStep, backgroundColor: 'var(--neutral-50)' });
+
+const linkStep = css({
+  ...pageStep,
+  backgroundColor: '#fff',
+  color: 'var(--dark)',
+  textDecoration: 'none',
+  '&:hover': { backgroundColor: 'var(--detail)', color: '#000' },
+});
+
+const pageCount = css({
+  marginInline: '0.25rem',
+  display: 'inline-block',
+  paddingInline: '0.5rem',
+  textAlign: 'center',
+  fontWeight: 400,
+  userSelect: 'none',
+});
+
+function Pagination(handle: Handle<{ connection: Connection; perPage: number; top?: boolean }>) {
   return () => {
     const { t, url } = getAdmin(handle);
     const { connection, perPage } = handle.props;
@@ -191,21 +251,22 @@ function Pagination(handle: Handle<{ connection: Connection; perPage: number; cl
     };
     const step = (to: number | null, label: string) =>
       to === null ? (
-        <span class={cn(pageText, 'bg-neutral-50')}>{label}</span>
+        <span mix={disabledStep}>{label}</span>
       ) : (
-        <a
-          href={href(to)}
-          class={cn(pageText, 'text-dark hover:bg-detail bg-white no-underline hover:text-black')}
-        >
+        <a href={href(to)} mix={linkStep}>
           {label}
         </a>
       );
-    const count = (text: string) => (
-      <strong class="mx-1 inline-block px-2 text-center font-normal select-none">{text}</strong>
-    );
+    const count = (text: string) => <strong mix={pageCount}>{text}</strong>;
 
     return (
-      <nav class={cn('text-sm select-none', handle.props.class)}>
+      <nav
+        mix={css({
+          ...text.sm,
+          userSelect: 'none',
+          textAlign: handle.props.top ? 'right' : undefined,
+        })}
+      >
         {count(t('pagination.items', { count: total }))}
         {step(paginated ? 1 : null, '«')}
         {step(previousPage, '‹')}
@@ -225,6 +286,13 @@ interface ListTableProps {
   perPage?: number;
 }
 
+const rowCheckbox = css({
+  borderRadius: '0.25rem',
+  borderColor: 'var(--gray-300)',
+  color: 'var(--pink)',
+  '&:focus': { boxShadow: '0 0 0 2px #fff, 0 0 0 4px var(--pink-200)' },
+});
+
 export function ListTable(handle: Handle<ListTableProps>) {
   return () => {
     const { t, url } = getAdmin(handle);
@@ -240,17 +308,19 @@ export function ListTable(handle: Handle<ListTableProps>) {
       return (
         <>
           {failedMessage}
-          {filters && <section class="clear-both my-1.5 flex flex-wrap gap-2">{filters}</section>}
-          <p class="my-10">{t('table.noItems')}</p>
+          {filters && <section mix={css(toolbar)}>{filters}</section>}
+          <p mix={css({ marginBlock: '2.5rem' })}>{t('table.noItems')}</p>
         </>
       );
     }
 
-    const headerRow = (border: string) => (
+    // The column labels, above the rows and again below them. They take a column's width but stay
+    // left-aligned.
+    const headerRow = (border: Styles) => (
       <tr>
-        <th class={cn(cellHeading, 'w-9', border)}></th>
+        <th mix={css({ ...cell, width: '2.25rem', ...border })}></th>
         {columns.map((column) => (
-          <th class={cn(cellHeading, border, column.class)}>{column.label}</th>
+          <th mix={css(merge(column.styles, cell, border))}>{column.label}</th>
         ))}
       </tr>
     );
@@ -258,39 +328,40 @@ export function ListTable(handle: Handle<ListTableProps>) {
     return (
       <>
         {failedMessage}
-        <section class="clear-both my-1.5 flex flex-wrap items-center gap-2">
-          <div class="flex grow flex-wrap items-center gap-2">
+        <section mix={css({ ...toolbar, alignItems: 'center' })}>
+          <div
+            mix={css({
+              display: 'flex',
+              flexGrow: 1,
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              gap: '0.5rem',
+            })}
+          >
             {deletable && (
               // The chosen action is the form's intent, so Apply with none chosen does nothing
-              <form id={BULK_FORM} method="post" class="flex items-center gap-2">
-                <select
-                  name="intent"
-                  aria-label={t('table.bulkActions')}
-                  class={cn(
-                    inputBase,
-                    'h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm'
-                  )}
-                >
+              <form id={BULK_FORM} method="post" mix={row}>
+                <select name="intent" aria-label={t('table.bulkActions')} mix={css(toolbarSelect)}>
                   <option value="">{t('table.bulkActions')}</option>
                   <option value="delete">{t('table.delete')}</option>
                 </select>
-                <button type="submit" class={buttonClass()}>
+                <button type="submit" mix={plainButton}>
                   {t('table.apply')}
                 </button>
               </form>
             )}
             {filters}
           </div>
-          <Pagination connection={connection} perPage={perPage} class="text-right" />
+          <Pagination connection={connection} perPage={perPage} top />
         </section>
         {/* horizontal scroll instead of unreadable columns on narrow screens */}
-        <div class="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-          <table class="w-full min-w-160 table-fixed border-spacing-0 border border-detail shadow-sm">
-            <thead>{headerRow('border-b border-detail')}</thead>
+        <div mix={tableScroller}>
+          <table mix={table}>
+            <thead>{headerRow({ borderBottom: '1px solid var(--detail)' })}</thead>
             <tbody>
               {connection.edges.map(({ node }) => (
-                <tr class="even:bg-neutral-50">
-                  <th class={cn(cellHeading, 'px-2.5 py-1.5 align-top')}>
+                <tr mix={css({ '&:nth-child(even)': { backgroundColor: 'var(--neutral-50)' } })}>
+                  <th mix={css({ ...cell, verticalAlign: 'top' })}>
                     {deletable && (
                       <input
                         type="checkbox"
@@ -298,22 +369,34 @@ export function ListTable(handle: Handle<ListTableProps>) {
                         value={node.id}
                         form={BULK_FORM}
                         aria-label={t('table.select')}
-                        class="rounded border-gray-300 text-pink focus:ring-pink-200"
+                        mix={rowCheckbox}
                       />
                     )}
                   </th>
                   {columns.map((column) => (
-                    <td class={cn('px-2.5 py-2 align-top text-sm wrap-break-word', column.class)}>
+                    <td
+                      mix={css(
+                        merge(
+                          {
+                            padding: '0.5rem 0.625rem',
+                            verticalAlign: 'top',
+                            ...text.sm,
+                            overflowWrap: 'break-word',
+                          },
+                          column.styles
+                        )
+                      )}
+                    >
                       {column.render(node)}
                     </td>
                   ))}
                 </tr>
               ))}
             </tbody>
-            <tfoot>{headerRow('border-t border-detail')}</tfoot>
+            <tfoot>{headerRow({ borderTop: '1px solid var(--detail)' })}</tfoot>
           </table>
         </div>
-        <section class="my-4 flex justify-end">
+        <section mix={css({ marginBlock: '1rem', display: 'flex', justifyContent: 'flex-end' })}>
           <Pagination connection={connection} perPage={perPage} />
         </section>
       </>

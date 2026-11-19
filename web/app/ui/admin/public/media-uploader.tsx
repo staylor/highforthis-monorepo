@@ -1,8 +1,8 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { cn } from '../../public/cn.ts';
+import { merge, text } from '../../public/styles.ts';
 
-import { inputBase } from './styles.ts';
+import { input } from './styles.ts';
 
 // Each file uploads to /upload with its progress, then links to its edit page. Web adds the
 // admin's token on the way to GraphQL, since the browser can't read the session cookie.
@@ -66,8 +66,15 @@ export const MediaUploader = clientEntry(
       return (
         <>
           <div
-            class="my-5 block h-50 w-full max-w-150 border-4 border-dashed border-dark"
             mix={[
+              css({
+                marginBlock: '1.25rem',
+                display: 'block',
+                height: '12.5rem',
+                width: '100%',
+                maxWidth: '37.5rem',
+                border: '4px dashed var(--dark)',
+              }),
               on('dragover', (event) => event.preventDefault()),
               on('drop', (event) => {
                 event.preventDefault();
@@ -77,31 +84,78 @@ export const MediaUploader = clientEntry(
               }),
             ]}
           >
-            <p class="mx-auto mt-16 px-5 py-1 text-center text-xl">{labels.dropFiles}</p>
+            <p
+              mix={css({
+                marginInline: 'auto',
+                marginTop: '4rem',
+                padding: '0.25rem 1.25rem',
+                textAlign: 'center',
+                ...text.xl,
+              })}
+            >
+              {labels.dropFiles}
+            </p>
           </div>
-          <label class="mb-5 block max-w-150 text-sm">
-            <span class="mb-1 block tracking-wide text-gray-700">{labels.chooseFiles}</span>
+          <label
+            mix={css({
+              marginBottom: '1.25rem',
+              display: 'block',
+              maxWidth: '37.5rem',
+              ...text.sm,
+            })}
+          >
+            <span
+              mix={css({
+                marginBottom: '0.25rem',
+                display: 'block',
+                letterSpacing: '0.025em',
+                color: 'var(--gray-700)',
+              })}
+            >
+              {labels.chooseFiles}
+            </span>
             <input
               type="file"
               multiple
-              class={cn(inputBase, 'w-full p-1')}
-              mix={on('change', (event) => {
-                const input = event.currentTarget;
-                for (const file of input.files ?? []) {
-                  upload(file);
-                }
-                input.value = '';
-              })}
+              mix={[
+                css(merge(input, { width: '100%', padding: '0.25rem' })),
+                on('change', (event) => {
+                  const field = event.currentTarget;
+                  for (const file of field.files ?? []) {
+                    upload(file);
+                  }
+                  field.value = '';
+                }),
+              ]}
             />
           </label>
           {[...uploads.entries()].map(([key, item]) => (
-            <div class="relative my-2.5 box-border h-7.5 w-full max-w-150 text-sm" key={key}>
-              <div class="relative z-20">
+            <div
+              mix={css({
+                position: 'relative',
+                marginBlock: '0.625rem',
+                boxSizing: 'border-box',
+                height: '1.875rem',
+                width: '100%',
+                maxWidth: '37.5rem',
+                ...text.sm,
+              })}
+              key={key}
+            >
+              <div mix={css({ position: 'relative', zIndex: 20 })}>
                 {item.name} {item.id && <a href={`/admin/media/${item.id}`}>{labels.edit}</a>}
-                {item.failed && <span class="text-red-700">{labels.failed}</span>}
+                {item.failed && <span mix={css({ color: 'var(--red-700)' })}>{labels.failed}</span>}
               </div>
+              {/* The upload's progress */}
               <div
-                class="absolute top-0 left-0 z-10 h-7.5 bg-pink"
+                mix={css({
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  zIndex: 10,
+                  height: '1.875rem',
+                  backgroundColor: 'var(--pink)',
+                })}
                 style={{ width: item.id || item.failed ? '3px' : `${item.progress}%` }}
               />
             </div>

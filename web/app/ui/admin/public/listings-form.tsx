@@ -1,9 +1,9 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { cn } from '../../public/cn.ts';
+import { dark, merge, text } from '../../public/styles.ts';
 
 import { splitArtists } from './split-artists.ts';
-import { buttonClass, inputBase } from './styles.ts';
+import { button, disabledFades, table, tableScroller, wideInput } from './styles.ts';
 
 // A row per upcoming show, with a box to pick it and the artists to add it with. The page
 // translates and formats everything on the server, since the browser has no translations; the
@@ -57,8 +57,28 @@ interface ListingsFormProps {
   };
 }
 
-const cell = 'px-2.5 py-2 align-top text-sm';
-const pill = 'rounded-full border px-2 py-px text-xs';
+const cell = { padding: '0.5rem 0.625rem', verticalAlign: 'top', ...text.sm };
+const cellStyle = css(cell);
+
+// Whether an artist is new to the data or already in it
+const pill = css({
+  borderRadius: '9999px',
+  border: '1px solid var(--green-700)',
+  padding: '1px 0.5rem',
+  ...text.xs,
+  color: 'var(--green-700)',
+  '&[data-new]': { borderColor: 'var(--amber-600)', color: 'var(--amber-700)' },
+});
+
+const checkbox = {
+  borderRadius: '0.25rem',
+  borderColor: 'var(--gray-300)',
+  color: 'var(--pink)',
+  boxShadow: 'var(--shadow-sm)',
+  '&:focus': { boxShadow: '0 0 0 2px #fff, 0 0 0 4px var(--pink), var(--shadow-sm)' },
+};
+
+const pinkLink = css({ color: 'var(--pink)', textDecoration: 'underline' });
 
 export const ListingsForm = clientEntry(
   import.meta.url,
@@ -76,9 +96,13 @@ export const ListingsForm = clientEntry(
       return (
         <tr
           key={listing.sourceId}
-          class={cn('border-b border-detail', !listing.canAdd && 'text-neutral-500')}
+          data-disabled={!listing.canAdd || undefined}
+          mix={css({
+            borderBottom: '1px solid var(--detail)',
+            '&[data-disabled]': { color: 'var(--neutral-500)' },
+          })}
         >
-          <td class={cell}>
+          <td mix={cellStyle}>
             <input
               type="checkbox"
               name="selected"
@@ -86,22 +110,26 @@ export const ListingsForm = clientEntry(
               checked={checked}
               disabled={!listing.canAdd}
               aria-label={listing.selectLabel}
-              class="rounded-sm border-gray-300 text-pink shadow-sm focus:ring-pink disabled:opacity-40"
-              mix={on('change', (event) => {
-                if (event.currentTarget.checked) {
-                  selected.add(listing.sourceId);
-                } else {
-                  selected.delete(listing.sourceId);
-                }
-                handle.update();
-              })}
+              mix={[
+                css({ ...checkbox, '&:disabled': { opacity: 0.4 } }),
+                on('change', (event) => {
+                  if (event.currentTarget.checked) {
+                    selected.add(listing.sourceId);
+                  } else {
+                    selected.delete(listing.sourceId);
+                  }
+                  handle.update();
+                }),
+              ]}
             />
           </td>
-          <td class={cn(cell, 'whitespace-nowrap')}>
+          <td mix={css({ ...cell, whiteSpace: 'nowrap' })}>
             {listing.day}
-            {listing.time && <span class="block text-xs">{listing.time}</span>}
+            {listing.time && (
+              <span mix={css({ display: 'block', ...text.xs })}>{listing.time}</span>
+            )}
           </td>
-          <td class={cell}>
+          <td mix={cellStyle}>
             {listing.canAdd ? (
               <>
                 <input
@@ -110,37 +138,46 @@ export const ListingsForm = clientEntry(
                   value={value}
                   required={checked}
                   aria-label={listing.artistsLabel}
-                  class={cn(inputBase, 'w-full')}
-                  mix={on('input', (event) => {
-                    // Re-rendering keeps the value, which a client entry's input otherwise loses
-                    artists.set(listing.sourceId, event.currentTarget.value);
-                    handle.update();
-                  })}
+                  mix={[
+                    wideInput,
+                    on('input', (event) => {
+                      // Re-rendering keeps the value, which a client entry's input otherwise loses
+                      artists.set(listing.sourceId, event.currentTarget.value);
+                      handle.update();
+                    }),
+                  ]}
                 />
-                <div class="mt-1 flex flex-wrap items-center gap-1">
+                <div
+                  mix={css({
+                    marginTop: '0.25rem',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                  })}
+                >
                   {listing.pills
                     .filter(({ name }) => names.includes(name))
                     .map(({ isNew, text, title }) => (
-                      <span
-                        title={title}
-                        class={cn(
-                          pill,
-                          isNew
-                            ? 'border-amber-600 text-amber-700'
-                            : 'border-green-700 text-green-700'
-                        )}
-                      >
+                      <span title={title} data-new={isNew || undefined} mix={pill}>
                         {text}
                       </span>
                     ))}
                   {missingSupport.length > 0 && (
                     <button
                       type="button"
-                      class="cursor-pointer text-xs text-pink underline"
-                      mix={on('click', () => {
-                        artists.set(listing.sourceId, [...names, ...missingSupport].join('; '));
-                        handle.update();
-                      })}
+                      mix={[
+                        css({
+                          cursor: 'pointer',
+                          ...text.xs,
+                          color: 'var(--pink)',
+                          textDecoration: 'underline',
+                        }),
+                        on('click', () => {
+                          artists.set(listing.sourceId, [...names, ...missingSupport].join('; '));
+                          handle.update();
+                        }),
+                      ]}
                     >
                       {labels.addSupport.replace('{{names}}', missingSupport.join(', '))}
                     </button>
@@ -151,28 +188,28 @@ export const ListingsForm = clientEntry(
               listing.listed
             )}
           </td>
-          <td class={cell}>
+          <td mix={cellStyle}>
             {listing.tickets.href ? (
-              <a
-                href={listing.tickets.href}
-                target="_blank"
-                rel="noreferrer"
-                class="text-pink underline"
-              >
+              <a href={listing.tickets.href} target="_blank" rel="noreferrer" mix={pinkLink}>
                 {listing.tickets.text}
               </a>
             ) : (
               listing.tickets.text
             )}
           </td>
-          <td class={cell}>
+          <td mix={cellStyle}>
             {listing.showHref && (
               <>
-                <a href={listing.showHref} class="text-green-700 underline">
+                <a
+                  href={listing.showHref}
+                  mix={css({ color: 'var(--green-700)', textDecoration: 'underline' })}
+                >
                   {labels.added}
                 </a>
                 {listing.dateChanged && (
-                  <span class="block text-xs text-amber-700">{labels.dateChanged}</span>
+                  <span mix={css({ display: 'block', ...text.xs, color: 'var(--amber-700)' })}>
+                    {labels.dateChanged}
+                  </span>
                 )}
               </>
             )}
@@ -187,40 +224,64 @@ export const ListingsForm = clientEntry(
       const count = selected.size;
       return (
         <form method="post">
-          <div class="mb-3 flex flex-wrap items-center gap-4">
-            <p class="text-sm text-neutral-600 dark:text-neutral-300">{summary}</p>
-            <label class="flex items-center gap-2 text-sm">
+          <div
+            mix={css({
+              marginBottom: '0.75rem',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              gap: '1rem',
+            })}
+          >
+            <p
+              mix={css({
+                ...text.sm,
+                color: 'var(--neutral-600)',
+                [dark]: { color: 'var(--neutral-300)' },
+              })}
+            >
+              {summary}
+            </p>
+            <label mix={css({ display: 'flex', alignItems: 'center', gap: '0.5rem', ...text.sm })}>
               <input
                 type="checkbox"
                 checked={hideAdded}
-                class="rounded-sm border-gray-300 text-pink shadow-sm focus:ring-pink"
-                mix={on('change', (event) => {
-                  hideAdded = event.currentTarget.checked;
-                  handle.update();
-                })}
+                mix={[
+                  css(checkbox),
+                  on('change', (event) => {
+                    hideAdded = event.currentTarget.checked;
+                    handle.update();
+                  }),
+                ]}
               />
               {labels.hideAdded}
             </label>
             <button
               type="submit"
               disabled={count === 0}
-              class={buttonClass(true, 'disabled:cursor-not-allowed disabled:opacity-50')}
+              mix={css(merge(button(true), disabledFades))}
             >
               {labels.add[Math.min(count, labels.add.length - 1)]}
             </button>
           </div>
           {listings.length === 0 ? (
-            <p class="my-10">{labels.empty}</p>
+            <p mix={css({ marginBlock: '2.5rem' })}>{labels.empty}</p>
           ) : (
-            <div class="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-              <table class="w-full min-w-160 table-fixed border-spacing-0 border border-detail shadow-sm">
+            <div mix={tableScroller}>
+              <table mix={table}>
                 <thead>
-                  <tr class="border-b border-detail text-left text-sm">
-                    <th class={cn(cell, 'w-10')} aria-hidden="true"></th>
-                    <th class={cn(cell, 'w-32')}>{labels.date}</th>
-                    <th class={cell}>{labels.artists}</th>
-                    <th class={cn(cell, 'w-32')}>{labels.tickets}</th>
-                    <th class={cn(cell, 'w-44')}>{labels.inYourData}</th>
+                  <tr
+                    mix={css({
+                      borderBottom: '1px solid var(--detail)',
+                      textAlign: 'left',
+                      ...text.sm,
+                    })}
+                  >
+                    <th mix={css({ ...cell, width: '2.5rem' })} aria-hidden="true"></th>
+                    <th mix={css({ ...cell, width: '8rem' })}>{labels.date}</th>
+                    <th mix={cellStyle}>{labels.artists}</th>
+                    <th mix={css({ ...cell, width: '8rem' })}>{labels.tickets}</th>
+                    <th mix={css({ ...cell, width: '11rem' })}>{labels.inYourData}</th>
                   </tr>
                 </thead>
                 <tbody>{visible.map(row)}</tbody>

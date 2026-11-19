@@ -1,24 +1,33 @@
-import { unsafeHTML, type Handle, type RemixNode } from 'remix/component';
+import { css, unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';
-import { cn } from './public/cn.ts';
 import { DarkMode } from './public/dark-mode.tsx';
 import { MobileMenu } from './public/mobile-menu.tsx';
 import { NavLink } from './public/nav-link.tsx';
 import { Revalidate } from './public/revalidate.tsx';
+import { lg, md, text } from './public/styles.ts';
 import { AccentLine } from './section-header.tsx';
 import { Sidebar } from './sidebar.tsx';
 import { SocialIcons } from './social-icons.tsx';
+
+const centered = {
+  marginInline: 'auto',
+  maxWidth: '80rem',
+  paddingInline: '1.5rem',
+};
 
 /** The bare page frame, used for error pages. */
 export function Wrapper(handle: Handle<{ children?: RemixNode }>) {
   return () => (
     <div
-      class={cn(
-        'mx-auto max-w-7xl bg-white p-6 dark:bg-black',
-        'transition-colors duration-300 ease-linear'
-      )}
+      mix={css({
+        marginInline: 'auto',
+        maxWidth: '80rem',
+        padding: '1.5rem',
+        backgroundColor: 'light-dark(#fff, #000)',
+        transition: 'color 300ms linear, background-color 300ms linear',
+      })}
     >
       {handle.props.children}
     </div>
@@ -35,24 +44,55 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
     const siteTitle = siteSettings?.siteTitle || t('title');
 
     return (
-      <div class="flex min-h-full flex-col">
+      <div
+        mix={css({
+          display: 'flex',
+          minHeight: '100%',
+          flexDirection: 'column',
+        })}
+      >
         {isAuthenticated && <Revalidate graphqlHost={graphqlHost} />}
         <header
-          class={cn(
-            'sticky top-0 z-40',
-            'border-b border-neutral-200/60 bg-white/80 backdrop-blur-xl',
-            'dark:bg-surface-dark/80 dark:border-white/5'
-          )}
+          mix={css({
+            position: 'sticky',
+            top: 0,
+            zIndex: 40,
+            borderBottom:
+              '1px solid light-dark(oklch(92.2% 0 none / 0.6), rgb(255 255 255 / 0.05))',
+            backgroundColor: 'light-dark(rgb(255 255 255 / 0.8), rgb(10 10 10 / 0.8))',
+            backdropFilter: 'blur(24px)',
+          })}
         >
-          <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+          <div
+            mix={css({
+              ...centered,
+              display: 'flex',
+              height: '4rem',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            })}
+          >
             <Link
               href="/"
-              class="font-title text-4xl font-black tracking-tight uppercase hover:text-pink"
+              mix={css({
+                fontFamily: 'var(--font-title)',
+                ...text['4xl'],
+                fontWeight: 900,
+                letterSpacing: '-0.025em',
+                textTransform: 'uppercase',
+              })}
             >
               {siteTitle}
             </Link>
 
-            <nav class="hidden items-center gap-8 lg:flex">
+            <nav
+              mix={css({
+                display: 'none',
+                alignItems: 'center',
+                gap: '2rem',
+                [lg]: { display: 'flex' },
+              })}
+            >
               <NavLink href="/" pathname={pathname}>
                 {t('nav.home')}
               </NavLink>
@@ -67,11 +107,19 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
               </NavLink>
             </nav>
 
-            <div class="flex items-center gap-4">
-              <div class="hidden lg:block">
+            <div mix={css({ display: 'flex', alignItems: 'center', gap: '1rem' })}>
+              <div mix={css({ display: 'none', [lg]: { display: 'block' } })}>
                 <DarkMode id="dark-mode" label={t('nav.darkMode')} />
               </div>
-              <div class="hidden items-center gap-3 text-muted lg:flex dark:text-muted-dark">
+              <div
+                mix={css({
+                  display: 'none',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  color: 'var(--muted)',
+                  [lg]: { display: 'flex' },
+                })}
+              >
                 <SocialIcons />
               </div>
               <MobileMenu
@@ -89,7 +137,14 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
           </div>
         </header>
 
-        <main class="mx-auto w-full max-w-7xl grow px-6 py-12">
+        <main
+          mix={css({
+            ...centered,
+            width: '100%',
+            flexGrow: 1,
+            paddingBlock: '3rem',
+          })}
+        >
           {isHome && shows && (
             <>
               <Sidebar shows={shows} />
@@ -100,20 +155,52 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
         </main>
 
         <footer
-          class={cn(
-            'border-t border-neutral-200 bg-white',
-            'dark:bg-surface-dark dark:border-white/5'
-          )}
+          mix={css({
+            borderTop: '1px solid light-dark(var(--neutral-200), rgb(255 255 255 / 0.05))',
+            backgroundColor: 'light-dark(#fff, var(--surface-dark))',
+          })}
         >
-          <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 py-10 md:flex-row">
-            <div class="font-title text-2xl font-bold tracking-tight text-neutral-300 dark:text-white/30">
+          <div
+            mix={css({
+              ...centered,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1.5rem',
+              paddingBlock: '2.5rem',
+              [md]: { flexDirection: 'row' },
+            })}
+          >
+            <div
+              mix={css({
+                fontFamily: 'var(--font-title)',
+                ...text['2xl'],
+                fontWeight: 700,
+                letterSpacing: '-0.025em',
+                color: 'light-dark(var(--neutral-300), rgb(255 255 255 / 0.3))',
+              })}
+            >
               {siteTitle}
             </div>
-            <div class="flex items-center gap-6 text-muted dark:text-muted-dark">
+            <div
+              mix={css({
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1.5rem',
+                color: 'var(--muted)',
+              })}
+            >
               <SocialIcons />
             </div>
             <div
-              class="text-center text-xs text-muted dark:text-muted-dark"
+              mix={css({
+                textAlign: 'center',
+                ...text.xs,
+                color: 'var(--muted)',
+                // The copyright text is HTML from the site settings
+                '& a': { color: 'var(--pink)', textDecoration: 'underline' },
+              })}
               innerHTML={unsafeHTML(siteSettings?.copyrightText ?? '')}
             />
           </div>

@@ -1,4 +1,10 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
+
+import { merge } from '../../public/styles.ts';
+
+import { checkbox } from './styles.ts';
+
+const toggle = css(merge(checkbox, { '&:focus': { borderColor: 'var(--pink)' } }));
 
 // Saves as soon as it changes, posting the intent, the row's ID and `name` as true or false to
 // the list's action. The action answers 204 when it saved, and the box goes back if it didn't.
@@ -54,8 +60,7 @@ export const InlineToggle = clientEntry(
           checked={checked ?? handle.props.checked}
           disabled={saving}
           aria-label={label}
-          class="rounded-sm border-gray-300 text-pink shadow-sm focus:border-pink focus:ring-3 focus:ring-pink focus:ring-offset-0"
-          mix={on('change', (event) => void save(event.currentTarget))}
+          mix={[toggle, on('change', (event) => void save(event.currentTarget))]}
         />
       );
     };

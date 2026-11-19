@@ -31,7 +31,7 @@ function renderImage(image: ImageUpload | null, size: string) {
   }
 
   const img = document.createElement('img');
-  img.className = 'my-2.5';
+  img.className = 'editor-image';
   img.alt = '';
   img.src = uploadUrl(image.destination, crop.fileName);
   return img;

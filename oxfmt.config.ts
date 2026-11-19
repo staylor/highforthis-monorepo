@@ -6,9 +6,6 @@ const sortImports = base.sortImports as {
 };
 
 export default createConfig({
-  sortTailwindcss: {
-    stylesheet: './web/app/styles/main.css',
-  },
   sortImports: {
     // This repo's own packages (@highforthis/*) get a group after other packages,
     // instead of sorting in among them

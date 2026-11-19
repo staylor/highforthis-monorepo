@@ -1,0 +1,47 @@
+/*
+ * The public site's global styles, after base.css. Dark mode (the `dark` class on <html>) switches
+ * the color scheme, so the colors below and in components pick a side with light-dark().
+ */
+@layer base {
+  :root {
+    color-scheme: light;
+    --muted: light-dark(#737373, #888888);
+    --page: light-dark(var(--surface), var(--surface-dark));
+    --card: light-dark(#fff, var(--surface-dark-card));
+    --card-border: light-dark(var(--neutral-100), rgb(255 255 255 / 0.05));
+    --lift: light-dark(rgb(229 0 130 / 0.05), rgb(229 0 130 / 0.1));
+  }
+
+  :root.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    color: light-dark(#000, #fff);
+    background-color: var(--page);
+    text-rendering: optimizeLegibility;
+    transition:
+      background-color 300ms linear,
+      color 300ms linear;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  iframe {
+    max-width: 100%;
+  }
+
+  a {
+    color: light-dark(#262626, #fff);
+    transition: color 200ms ease;
+  }
+
+  a:active,
+  a:hover {
+    color: var(--pink);
+  }
+
+  blockquote {
+    margin-inline: 1.5rem;
+  }
+}

@@ -1,12 +1,12 @@
 import { gql } from 'graphql-tag';
-import type { Handle } from 'remix/component';
+import { css, type Handle } from 'remix/component';
 
 import type { Video_VideoFragment, Videos_VideosFragment } from '../types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
 import { TextTitle } from './heading.tsx';
 import { Link } from './link.tsx';
-import { cn } from './public/cn.ts';
+import { lg, merge, pinkButton, sm, text } from './public/styles.ts';
 import { VideoThumbnail } from './public/video-thumbnail.tsx';
 
 export const videoFragment = gql`
@@ -54,7 +54,11 @@ const findThumb = (thumbs: Video_VideoFragment['thumbnails']) => {
 };
 
 export function Video(
-  handle: Handle<{ video: Video_VideoFragment; single?: boolean; embed?: boolean }>
+  handle: Handle<{
+    video: Video_VideoFragment;
+    single?: boolean;
+    embed?: boolean;
+  }>
 ) {
   return () => {
     const { video, single = false, embed = false } = handle.props;
@@ -68,7 +72,7 @@ export function Video(
         dataId={video.dataId}
         title={video.title}
         thumbUrl={findThumb(video.thumbnails)?.url}
-        class={embed ? 'm-0' : 'mb-3'}
+        embedded={embed}
       />
     );
 
@@ -76,7 +80,7 @@ export function Video(
       return (
         <>
           {thumbnail}
-          <h3 class="mb-6 text-base">
+          <h3 mix={css({ marginBottom: '1.5rem', ...text.base })}>
             {single ? video.title : <Link href={href}>{video.title}</Link>}
           </h3>
         </>
@@ -84,12 +88,12 @@ export function Video(
     }
 
     return (
-      <article class="group">
+      <article>
         {thumbnail}
         {single ? (
           <TextTitle>{video.title}</TextTitle>
         ) : (
-          <h1 class="text-base leading-snug font-semibold transition-colors group-hover:text-pink">
+          <h1 mix={css({ fontSize: '1rem', lineHeight: 1.375, fontWeight: 600 })}>
             <Link href={href}>{video.title}</Link>
           </h1>
         )}
@@ -97,6 +101,15 @@ export function Video(
     );
   };
 }
+
+const pageButton = {
+  borderRadius: '0.5rem',
+  padding: '0.625rem 1.25rem',
+  ...text.sm,
+  fontWeight: 500,
+  transition: 'all 150ms var(--ease)',
+  cursor: 'pointer',
+};
 
 /**
  * A grid of videos. Previous/next are plain links, which work without JavaScript and are
@@ -115,28 +128,45 @@ export function Videos(
     const { videos, paginate = true, search } = handle.props;
     const hasPrevious = videos.pageInfo.hasPreviousPage || search?.get('after');
     const hasNext = videos.pageInfo.hasNextPage || search?.get('before');
-    const buttonBase =
-      'rounded-lg border px-5 py-2.5 text-sm font-medium transition-all cursor-pointer';
 
     return (
       <>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          mix={css({
+            display: 'grid',
+            gap: '1.5rem',
+            [sm]: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' },
+            [lg]: { gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' },
+          })}
+        >
           {videos.edges.length === 0 && <p>{t('videos.noFound')}</p>}
           {videos.edges.map((edge) => (
             <Video key={edge.node.id} video={edge.node} />
           ))}
         </div>
         {paginate && (hasPrevious || hasNext) && (
-          <div class="mt-10 flex justify-center gap-3">
+          <div
+            mix={css({
+              marginTop: '2.5rem',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '0.75rem',
+            })}
+          >
             {hasPrevious && (
               <Link
                 href={`?before=${videos.edges[0].cursor}`}
-                class={cn(
-                  buttonBase,
-                  'text-muted border-neutral-200 bg-white shadow-sm',
-                  'hover:border-pink/30 hover:text-neutral-900',
-                  'dark:bg-surface-dark-card dark:text-muted-dark dark:border-white/10',
-                  'dark:hover:border-pink/30 dark:hover:text-white'
+                mix={css(
+                  merge(pageButton, {
+                    border: '1px solid light-dark(var(--neutral-200), rgb(255 255 255 / 0.1))',
+                    backgroundColor: 'var(--card)',
+                    color: 'var(--muted)',
+                    boxShadow: 'var(--shadow-sm)',
+                    '&:hover': {
+                      borderColor: 'rgb(229 0 130 / 0.3)',
+                      color: 'light-dark(var(--neutral-900), #fff)',
+                    },
+                  })
                 )}
               >
                 ← {t('videos.previous')}
@@ -145,13 +175,7 @@ export function Videos(
             {hasNext && (
               <Link
                 href={`?after=${videos.edges[videos.edges.length - 1].cursor}`}
-                class={cn(
-                  buttonBase,
-                  'border-pink/20 bg-pink/5 text-pink',
-                  'hover:bg-pink/10',
-                  'dark:border-pink/30 dark:bg-pink/10',
-                  'dark:hover:bg-pink/20'
-                )}
+                mix={css(merge(pageButton, pinkButton))}
               >
                 {t('videos.next')} →
               </Link>

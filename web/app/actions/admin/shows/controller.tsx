@@ -1,3 +1,4 @@
+import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
@@ -14,8 +15,8 @@ import { Alert, HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
 import { DateTimeInput } from '../../../ui/admin/public/date-time-input.tsx';
 import { EntitiesPicker } from '../../../ui/admin/public/entities-picker.tsx';
 import { InlineToggle } from '../../../ui/admin/public/inline-toggle.tsx';
-import { buttonClass, inputBase } from '../../../ui/admin/public/styles.ts';
-import { cn } from '../../../ui/public/cn.ts';
+import { input, saveButton, select } from '../../../ui/admin/public/styles.ts';
+import { dark, merge, text } from '../../../ui/public/styles.ts';
 import { renderAdminPage } from '../render-page.tsx';
 
 import {
@@ -81,8 +82,12 @@ function tonight() {
 function showFields(t: TFunction, data: ShowFormData): Field[] {
   const show = data.show;
   const venueId = show?.venue?.id ?? '';
-  const venueLink = (href: string, label: string, extra: string) => (
-    <a href={href} data-rmx-document={documentLoad(href)} class={cn('text-pink underline', extra)}>
+  const venueLink = (href: string, label: string, marginLeft: string) => (
+    <a
+      href={href}
+      data-rmx-document={documentLoad(href)}
+      mix={css({ marginLeft, color: 'var(--pink)', textDecoration: 'underline' })}
+    >
       {label}
     </a>
   );
@@ -115,12 +120,7 @@ function showFields(t: TFunction, data: ShowFormData): Field[] {
       type: 'custom',
       render: () => (
         <>
-          <select
-            name="venue"
-            id="field-venue"
-            aria-label={t('shows.venue')}
-            class={cn(inputBase, 'rounded-lg border-neutral-300 bg-white text-sm')}
-          >
+          <select name="venue" id="field-venue" aria-label={t('shows.venue')} mix={select}>
             <option value="">---</option>
             {choices(show?.venue ? [show.venue] : [], data.venues).map((venue) => (
               <option value={venue.id} selected={venue.id === venueId}>
@@ -128,13 +128,13 @@ function showFields(t: TFunction, data: ShowFormData): Field[] {
               </option>
             ))}
           </select>
-          <p class="mt-2 mb-8">
-            {venueLink(routes.admin.venues.add.index.href(), t('entity.add.venue'), 'ml-2')}
+          <p mix={css({ marginBlock: '0.5rem 2rem' })}>
+            {venueLink(routes.admin.venues.add.index.href(), t('entity.add.venue'), '0.5rem')}
             {venueId &&
               venueLink(
                 routes.admin.venues.edit.index.href({ id: venueId }),
                 t('entity.edit.venue'),
-                'ml-4'
+                '1rem'
               )}
           </p>
         </>
@@ -196,7 +196,7 @@ export const showsList = createController(shows.list, {
         },
         {
           label: t('shows.attended.label'),
-          class: 'text-center',
+          styles: { textAlign: 'center' },
           render: (show: ShowRow) => (
             <InlineToggle
               intent="attended"
@@ -327,21 +327,41 @@ function bulkPage(t: TFunction, result?: BulkImportErrors) {
     <>
       <Heading>{t('shows.bulk.heading')}</Heading>
       <HeaderAdd href={shows.list.index.href()} label={t('shows.all')} />
-      <div class="mb-5 max-w-2xl text-sm text-neutral-700 dark:text-neutral-300">
+      <div
+        mix={css({
+          marginBottom: '1.25rem',
+          maxWidth: '42rem',
+          ...text.sm,
+          color: 'var(--neutral-700)',
+          [dark]: { color: 'var(--neutral-300)' },
+          '& p + p': { marginTop: '0.5rem' },
+        })}
+      >
         <p>{t('shows.bulk.description')}</p>
-        <p class="mt-2">
+        <p>
           {t('shows.bulk.formatLabel')} <code>{t('shows.bulk.format')}</code>
         </p>
-        <p class="mt-2">{t('shows.bulk.artistsHelp')}</p>
-        <p class="mt-2">{t('shows.bulk.dateHelp')}</p>
-        <pre class="mt-3 overflow-x-auto rounded-md bg-neutral-100 p-3 text-xs leading-5 dark:bg-white/10">
+        <p>{t('shows.bulk.artistsHelp')}</p>
+        <p>{t('shows.bulk.dateHelp')}</p>
+        <pre
+          mix={css({
+            marginTop: '0.75rem',
+            overflowX: 'auto',
+            borderRadius: '0.375rem',
+            backgroundColor: 'var(--neutral-100)',
+            padding: '0.75rem',
+            ...text.xs,
+            lineHeight: '1.25rem',
+            [dark]: { backgroundColor: 'rgb(255 255 255 / 0.1)' },
+          })}
+        >
           {exampleCsv}
         </pre>
       </div>
       {errors.length > 0 && (
         <Alert>
-          <p class="font-semibold">{t('shows.bulk.errors')}</p>
-          <ul class="mt-1 list-disc pl-5">
+          <p mix={css({ fontWeight: 600 })}>{t('shows.bulk.errors')}</p>
+          <ul mix={css({ marginTop: '0.25rem', listStyleType: 'disc', paddingLeft: '1.25rem' })}>
             {errors.map((error) => (
               <li>{t('shows.bulk.lineError', error)}</li>
             ))}
@@ -349,7 +369,16 @@ function bulkPage(t: TFunction, result?: BulkImportErrors) {
         </Alert>
       )}
       <form method="post">
-        <label for="bulk-shows" class="mb-1 block text-sm tracking-wide text-gray-700">
+        <label
+          for="bulk-shows"
+          mix={css({
+            marginBottom: '0.25rem',
+            display: 'block',
+            ...text.sm,
+            letterSpacing: '0.025em',
+            color: 'var(--gray-700)',
+          })}
+        >
           {t('shows.bulk.csv')}
         </label>
         <textarea
@@ -359,10 +388,17 @@ function bulkPage(t: TFunction, result?: BulkImportErrors) {
           required
           spellcheck={false}
           value={result?.csv ?? ''}
-          class={cn(inputBase, 'w-full max-w-2xl font-mono text-sm')}
+          mix={css(
+            merge(input, {
+              width: '100%',
+              maxWidth: '42rem',
+              fontFamily: 'var(--font-mono)',
+              ...text.sm,
+            })
+          )}
         />
-        <div class="mt-3">
-          <button type="submit" class={buttonClass(true, 'h-7.5 px-3 pb-0.5 leading-7')}>
+        <div mix={css({ marginTop: '0.75rem' })}>
+          <button type="submit" mix={saveButton}>
             {t('shows.bulk.submit')}
           </button>
         </div>

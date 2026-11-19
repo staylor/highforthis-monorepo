@@ -1,17 +1,15 @@
 import type { EditorThemeClasses } from 'lexical';
 
-// The classes Lexical gives a post's blocks and text. The blocks look as they do on the public
-// site.
-
-const headingBase = 'block mb-2 lg:mb-3 dark:text-white';
+// The classes Lexical gives a post's blocks and text, which admin.css styles. The blocks look as
+// they do on the public site.
 
 export const theme: EditorThemeClasses = {
-  code: 'font-code p-2 text-base bg-[rgba(0,0,0,0.05)]',
+  code: 'editor-code',
   heading: {
     h1: 'editor-heading-h1',
-    h2: `${headingBase} font-bold text-2xl`,
-    h3: `${headingBase} font-bold border-pink inline-block border-b-2 border-dashed mt-6 py-1 pl-0.5 pr-6 text-2xl`,
-    h4: `${headingBase} font-bold text-lg`,
+    h2: 'editor-heading-h2',
+    h3: 'editor-heading-h3',
+    h4: 'editor-heading-h4',
     h5: 'editor-heading-h5',
   },
   image: 'editor-image',
@@ -21,13 +19,13 @@ export const theme: EditorThemeClasses = {
     nested: {
       listitem: 'editor-nested-listitem',
     },
-    ol: 'list-decimal my-5 ml-8',
-    ul: 'list-disc my-5 ml-8',
+    ol: 'editor-list-ol',
+    ul: 'editor-list-ul',
   },
   ltr: 'ltr',
-  paragraph: 'mb-6',
+  paragraph: 'editor-paragraph',
   placeholder: 'editor-placeholder',
-  quote: 'font-georgia text-[#666] border-l-4 border-detail italic my-4 py-2.5 px-5',
+  quote: 'editor-quote',
   rtl: 'rtl',
   text: {
     bold: 'editor-text-bold',
