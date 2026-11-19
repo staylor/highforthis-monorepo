@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { addedId, field } from '../support/ui.ts';
+import { addedId, field, hydrated } from '../support/ui.ts';
 
 test('adds an artist with featured media, edits them, toggles search and deletes them', async ({
   page,
@@ -53,8 +53,8 @@ test('adds an artist with featured media, edits them, toggles search and deletes
   const row = page.getByRole('row').filter({ hasText: name });
   const toggle = row.getByRole('checkbox', { name: `Exclude from search: ${name}` });
   await expect(toggle).toBeChecked();
-  // A click before the box's client entry has loaded doesn't save, so it waits for the scripts
-  await page.waitForLoadState('networkidle');
+  // A click before the box's client entry hydrates doesn't save
+  await hydrated(page);
   await toggle.uncheck();
   await expect.poll(async () => (await graphql.artist(id))?.excludeFromSearch).toBe(false);
   await page.reload();
