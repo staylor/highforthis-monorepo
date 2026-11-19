@@ -1,11 +1,12 @@
 import bcrypt from 'bcryptjs';
-import type { Request, Response, NextFunction } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
+import type { Middleware } from 'remix/router';
 import { z } from 'zod';
 
 import { isAdmin } from '#/authorization';
 import prisma from '#/database';
 import env from '#/env';
+import { AuthUser } from '#/http';
 import type { UserWithRoles } from '#/models';
 
 type JWTPayload = {
@@ -21,19 +22,18 @@ const authBodySchema = z.object({
   password: z.string().min(1),
 });
 
-function extractBearerToken(req: Request): string | null {
-  const header = req.headers.authorization;
+function extractBearerToken(headers: Headers): string | null {
+  const header = headers.get('authorization');
   if (!header) return null;
   const [scheme, token] = header.split(' ');
   if (scheme !== 'Bearer' || !token) return null;
   return token;
 }
 
-export async function jwtMiddleware(req: Request, _res: Response, next: NextFunction) {
-  const token = extractBearerToken(req);
+async function tokenUser(headers: Headers): Promise<UserWithRoles | null> {
+  const token = extractBearerToken(headers);
   if (!token) {
-    next();
-    return;
+    return null;
   }
 
   try {
@@ -43,43 +43,49 @@ export async function jwtMiddleware(req: Request, _res: Response, next: NextFunc
         where: { id: payload.userId },
         include: { roles: true },
       });
-      if (user) {
-        req.context.authUser = user;
-      }
+      return user;
     }
   } catch {
     // Invalid or expired token — continue as unauthenticated
   }
-
-  next();
+  return null;
 }
 
-export function sessionHandler(req: Request, res: Response): void {
-  const user = req.context?.authUser as UserWithRoles | undefined;
-  if (!isAdmin(user)) {
-    res.status(401).json({ error: 'Authentication required' });
-    return;
+/** Puts the user the request's bearer token belongs to, if any, on `context.authUser`. */
+export function jwt(): Middleware<{
+  key: typeof AuthUser;
+  value: UserWithRoles | null;
+  property: 'authUser';
+}> {
+  return async (context, next) => {
+    context.set(AuthUser, await tokenUser(context.headers), { property: 'authUser' });
+    return next();
+  };
+}
+
+export function sessionHandler({ authUser }: { authUser: UserWithRoles | null }): Response {
+  if (!isAdmin(authUser)) {
+    return Response.json({ error: 'Authentication required' }, { status: 401 });
   }
 
-  res.json({ user: { id: user.id, email: user.email, name: user.name } });
+  return Response.json({ user: { id: authUser.id, email: authUser.email, name: authUser.name } });
 }
 
-export async function authMiddleware(req: Request, res: Response) {
+export async function authHandler({ body }: { body: unknown }): Promise<Response> {
   try {
     if (!env.PASSWORD_LOGIN_ENABLED) {
-      res.status(403).json({ error: 'Password login is disabled' });
-      return;
+      return Response.json({ error: 'Password login is disabled' }, { status: 403 });
     }
 
-    const { email, password } = authBodySchema.parse(req.body);
+    const { email, password } = authBodySchema.parse(body);
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.hash))) {
       throw new Error('User not found matching email/password combination');
     }
 
-    res.json({ token: issueToken(user.id) });
+    return Response.json({ token: issueToken(user.id) });
   } catch (e) {
-    res.json({ error: (e as Error).message });
+    return Response.json({ error: (e as Error).message });
   }
 }

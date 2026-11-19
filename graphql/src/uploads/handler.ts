@@ -1,16 +1,11 @@
-import type { Request, Response } from 'express';
+import { parseFormData, type FileUpload } from 'remix/form-data-parser/future';
 import { z } from 'zod';
 
 import prisma from '#/database';
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    interface Request {
-      context: Record<string, unknown>;
-    }
-  }
-}
+import { storeFile } from './Storage';
+import mediaAdapter from './adapter';
+import type { FileData } from './types/Upload';
 
 const imageCropSchema = z.object({
   fileName: z.string(),
@@ -104,10 +99,55 @@ export async function createMediaUpload(file: unknown) {
   return record.id;
 }
 
-export default async (_req: Request, res: Response) => {
-  const multerFiles = (_req.files ?? []) as Express.Multer.File[];
-  const rawFiles = multerFiles.map(
-    ({ fieldname: _, originalname: _o, encoding: _e, mimetype: _m, ...rest }) => rest
-  );
-  res.json(await Promise.all(rawFiles.map(createMediaUpload)));
-};
+// Like multer, which took uploads before: no limit on the number or size of files
+const limits = { maxFiles: Infinity, maxFileSize: Infinity, maxParts: Infinity };
+
+/**
+ * Stores the files posted in the `uploads` field, records them in the media library, and answers
+ * with their IDs. Each file is written to disk as it streams in; its crops and its copy to the
+ * bucket carry on while the next file arrives.
+ */
+export default async function handleUploads(request: Request, uploadDir: string) {
+  // multer only read multipart bodies, and found no files in anything else
+  if (!/^multipart\//i.test(request.headers.get('content-type') ?? '')) {
+    return Response.json([]);
+  }
+
+  const adapter = mediaAdapter(uploadDir);
+  const stored: Promise<FileData>[] = [];
+
+  function store(upload: FileUpload) {
+    if (upload.fieldName !== 'uploads') {
+      throw new Error(`Unexpected field: ${upload.fieldName}`);
+    }
+    // The parser moves on to the next part once this file has streamed in
+    const { promise: received, resolve } = Promise.withResolvers<void>();
+    const stream = upload.stream().pipeThrough(new TransformStream({ flush: () => resolve() }));
+    const saved = storeFile(
+      { name: upload.name, type: upload.type, stream: () => stream },
+      uploadDir,
+      adapter
+    );
+    stored.push(saved);
+    return Promise.race([received, saved]).then(() => undefined);
+  }
+
+  let parseError: unknown;
+  try {
+    await parseFormData(request, limits, store);
+  } catch (error) {
+    parseError = error;
+  }
+  // Even when one fails, wait for the others, so none is still writing when this answers
+  const results = await Promise.allSettled(stored);
+  if (parseError) {
+    throw parseError;
+  }
+  const files = results.map((result) => {
+    if (result.status === 'rejected') {
+      throw result.reason;
+    }
+    return result.value;
+  });
+  return Response.json(await Promise.all(files.map(createMediaUpload)));
+}

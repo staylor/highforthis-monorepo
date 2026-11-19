@@ -1,13 +1,15 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-
-import { mkdirp } from 'mkdirp';
+import { pipeline } from 'node:stream/promises';
 
 import type { Callback, UploadOpts } from '../Storage';
 import type { StorageAdapter } from '../adapter';
 
 import { type CropSetting } from './Image';
+
+// A file to store: a `File`, or a file upload as it streams in from the request
+export type IncomingFile = Pick<File, 'name' | 'type' | 'stream'>;
 
 export interface FileData {
   fileName: string;
@@ -54,17 +56,17 @@ export default class Upload {
     this.settings = opts.settings;
   }
 
-  setDestination() {
+  async setDestination() {
     const d = new Date();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const uploadsFolder = path.join(this.uploadDir, `${d.getFullYear()}`, month);
-    mkdirp.sync(uploadsFolder);
+    await fs.promises.mkdir(uploadsFolder, { recursive: true });
     this.destination = uploadsFolder;
   }
 
-  setFileProps(file: Express.Multer.File): Promise<void> {
-    this.setDestination();
-    this.ext = path.extname(file.originalname);
+  async setFileProps(file: IncomingFile): Promise<void> {
+    await this.setDestination();
+    this.ext = path.extname(file.name);
     return new Promise((resolve, reject) => {
       crypto.randomBytes(8, (err, raw) => {
         if (err) {
@@ -78,24 +80,25 @@ export default class Upload {
     });
   }
 
-  async save(file: Express.Multer.File, cb: Callback) {
+  async save(file: IncomingFile, cb: Callback) {
     await this.setFileProps(file);
 
     const finalPath = path.join(this.destination, this.fileName);
     const outStream = fs.createWriteStream(finalPath);
-    outStream.on('error', cb);
-    outStream.on('finish', () => {
-      const fileData: FileData = {
-        fileName: this.fileName,
-        destination: this.destination.replace(`${this.uploadDir}/`, ''),
-        mimeType: file.mimetype,
-        originalName: file.originalname,
-        fileSize: outStream.bytesWritten,
-      };
-      cb(null, fileData as Partial<Express.Multer.File>);
+    try {
+      // Rejects if either stream fails, such as when the upload is cut off
+      await pipeline(file.stream(), outStream);
+    } catch (error) {
+      cb(error as Error);
+      return;
+    }
+    cb(null, {
+      fileName: this.fileName,
+      destination: this.destination.replace(`${this.uploadDir}/`, ''),
+      mimeType: file.type,
+      originalName: file.name,
+      fileSize: outStream.bytesWritten,
     });
-
-    file.stream.pipe(outStream);
   }
 
   toArray() {

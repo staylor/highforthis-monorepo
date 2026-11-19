@@ -1,6 +1,7 @@
-import type { NextFunction, Request, Response } from 'express';
 import { GraphQLError } from 'graphql';
+import type { Middleware } from 'remix/router';
 
+import { AuthUser } from '#/http';
 import type { AppContext, UserWithRoles } from '#/models';
 
 export function isAdmin(user?: UserWithRoles | null): user is UserWithRoles {
@@ -25,10 +26,12 @@ export function requireAdmin(resolver: Resolver): Resolver {
   };
 }
 
-export function adminMiddleware(req: Request, res: Response, next: NextFunction) {
-  if (!isAdmin(req.context?.authUser as UserWithRoles | undefined)) {
-    res.status(401).json({ error: 'Authentication required' });
-    return;
-  }
-  next();
+/** Answers 401 unless `jwt()` found an admin. */
+export function adminOnly(): Middleware {
+  return (context, next) => {
+    if (!isAdmin(context.get(AuthUser))) {
+      return Response.json({ error: 'Authentication required' }, { status: 401 });
+    }
+    return next();
+  };
 }

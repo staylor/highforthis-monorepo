@@ -1,14 +1,12 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { Readable } from 'node:stream';
 
 import sharp from 'sharp';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { storeFile } from '../Storage';
 import Image from '../types/Image';
-import type { FileData } from '../types/Upload';
 
 const { findUnique, findMany } = vi.hoisted(() => ({ findUnique: vi.fn(), findMany: vi.fn() }));
 
@@ -16,20 +14,8 @@ vi.mock('#/database', () => ({
   default: { mediaSettings: { findUnique }, mediaCropSetting: { findMany } },
 }));
 
-function imageFile(buffer: Buffer): Express.Multer.File {
-  return {
-    fieldname: 'uploads',
-    originalname: 'cover.jpg',
-    encoding: '7bit',
-    mimetype: 'image/jpeg',
-    size: buffer.length,
-    stream: Readable.from(buffer),
-    destination: '',
-    filename: '',
-    path: '',
-    buffer,
-  };
-}
+const imageFile = (buffer: Buffer) =>
+  new File([new Uint8Array(buffer)], 'cover.jpg', { type: 'image/jpeg' });
 
 const jpeg = () =>
   sharp({ create: { width: 4, height: 4, channels: 3, background: '#000' } })
@@ -51,7 +37,7 @@ describe('storeFile', () => {
   });
 
   it('stores a readable image with its crops', async () => {
-    const stored = (await storeFile(imageFile(await jpeg()), uploadDir)) as unknown as FileData;
+    const stored = await storeFile(imageFile(await jpeg()), uploadDir);
 
     expect(stored).toMatchObject({
       width: 4,

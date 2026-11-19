@@ -92,7 +92,7 @@ pnpm codegen
 
 ## Observability
 
-The shared [`@highforthis/shared`](./shared) workspace initializes OpenTelemetry before either application loads, allowing automatic HTTP, Express, GraphQL, and runtime instrumentation plus structured Pino logging. Requests receive an `x-request-id`; logs produced inside a trace also contain OpenTelemetry trace and span IDs.
+The shared [`@highforthis/shared`](./shared) workspace initializes OpenTelemetry before either application loads, allowing automatic HTTP, GraphQL, PostgreSQL, and runtime instrumentation plus structured Pino logging. Requests receive an `x-request-id`; logs produced inside a trace also contain OpenTelemetry trace and span IDs.
 
 OpenObserve runs as a separate Railway service using the pinned image and configuration in [`observability`](./observability). A persistent Railway volume mounted at `/data` is required.
 
