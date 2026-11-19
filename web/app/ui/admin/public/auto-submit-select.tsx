@@ -4,8 +4,8 @@ import { cn } from '../../public/cn.ts';
 
 import { inputBase } from './styles.ts';
 
-// A list filter's <select>, which submits its GET form as soon as it changes, as the admin app's
-// filters did. Without JavaScript, the form's Apply button submits it instead.
+// Submits its GET form as soon as it changes. Without JavaScript, the form's Apply button
+// submits it instead.
 
 interface Choice {
   label: string;

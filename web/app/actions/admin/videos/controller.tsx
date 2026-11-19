@@ -21,9 +21,9 @@ import { renderAdminPage } from '../render-page.tsx';
 
 import { deleteVideos, loadVideo, loadVideos, updateVideo } from './data.ts';
 
-// The admin's videos section, moved from the admin app's routes/admin/video. The videos come
-// from YouTube, so there's a list and an edit page but no add page. Each form route has its own
-// controller, since controller middleware doesn't apply to nested route maps.
+// The videos come from YouTube, so there's a list and an edit page but no add page. Each form
+// route has its own controller, since controller middleware doesn't apply to nested route
+// maps.
 
 const videos = routes.admin.videos;
 
@@ -32,7 +32,6 @@ type Video = NonNullable<VideoEditQuery['video']>;
 
 const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
 
-/** The day a video was published, as the admin app showed it: 5/10/2024. */
 function publishedDate(publishedAt: number) {
   const date = new Date(publishedAt);
   return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
