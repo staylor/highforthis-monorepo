@@ -9,6 +9,7 @@ import { adminUrl, authFile, databaseUrl, graphqlUrl, ports, root, webUrl } from
 // from a fresh build.
 
 const reuseExistingServer = !process.env.CI;
+const database = databaseUrl();
 
 export default defineConfig({
   testDir: 'tests',
@@ -40,7 +41,7 @@ export default defineConfig({
         // Development needs no API keys or TOKEN_SECRET; graphql/.env isn't loaded
         NODE_ENV: 'development',
         NODE_OPTIONS: '--disable-warning=DEP0040',
-        DATABASE_URL: databaseUrl(),
+        ...(database ? { DATABASE_URL: database } : {}),
         GRAPHQL_PORT: String(ports.graphql),
         PASSWORD_LOGIN_ENABLED: 'true',
       },
