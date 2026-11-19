@@ -18,8 +18,12 @@ import { removeEntities, resolveJoin } from './utils/helpers';
 import resolveTags from './utils/resolveTags';
 import { createPostSchema, updatePostSchema } from './validations';
 
+// The artwork on post lists picks a size from each image's crops, which took a query per image
+// when ImageUpload.crops loaded them
+const featuredMediaIncludes = { media: { include: { crops: true } } };
+
 const postIncludes = {
-  featuredMedia: { include: { media: true } },
+  featuredMedia: { include: featuredMediaIncludes },
   artists: { include: { artist: true } },
 };
 
@@ -32,7 +36,7 @@ const resolvers = {
       return resolveJoin(post, 'featuredMedia', 'media', () =>
         prisma.postFeaturedMedia.findMany({
           where: { postId: post.id },
-          include: { media: true },
+          include: featuredMediaIncludes,
         })
       );
     },
