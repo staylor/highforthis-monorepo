@@ -29,8 +29,9 @@ pnpm web:dev   # just this app
 | `SERVER_PORT` | Web server port (default: `3000`; Railway's `PORT` wins) |
 | `GQL_HOST` | GraphQL server URL (default: `http://localhost:8081`) |
 | `TOKEN_KEY` | Admin session cookie name (default: `__session`) |
-| `TOKEN_SECRET` | Admin session cookie secret (development has a default) |
+| `TOKEN_SECRET` | Admin session cookie secret; required in production and on Railway (development and tests have a default) |
 | `PASSWORD_LOGIN_ENABLED` | Set to `false` to sign in with passkeys only; must match `graphql` |
+| `SIGN_IN_RATE_LIMITS` | Set to `off` to stop limiting sign-ins per address, as the end-to-end tests do |
 | `OPENOBSERVE_URL`, `OPENOBSERVE_USER`, `OPENOBSERVE_PASSWORD` | OpenObserve's address and credentials, for the admin dashboard's page views |
 | `OPENOBSERVE_ORG` | OpenObserve organization the dashboard searches (default: `default`) |
 | `OPENOBSERVE_RUM_APPLICATION_ID` | OpenObserve RUM application ID; setting any required RUM variable enables browser monitoring |
