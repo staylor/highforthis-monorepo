@@ -1,6 +1,7 @@
 import * as assert from 'remix/assert';
 import { describe, it, type TestContext } from 'remix/test';
 
+import { testSecret, testSession } from '../lib/adminSession.fixtures.ts';
 import { openObserveBundleFiles, openObserveScripts } from '../lib/openobserve-bundles.ts';
 import { router } from '../router.ts';
 import { routes } from '../routes.ts';
@@ -104,14 +105,11 @@ describe('admin', () => {
 
   it('turns on live refresh only for a signed-in admin', async (t) => {
     stubGraphQL(t, { 'graphql:App': () => ({ data: {} }), 'graphql:Home': () => ({ data: {} }) });
-    process.env.TOKEN_SECRET = 'test-secret';
-    // Made by the admin app's React Router createCookieSessionStorage with that secret
-    const signedIn =
-      '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ==.0jvC0SjKdfmXr5Rw/6679ia0w0xRgH4hIpEzB3aJ9Fc';
+    process.env.TOKEN_SECRET = testSecret;
     const home = (cookie?: string) =>
       router.fetch(new Request(new URL('/', origin), { headers: cookie ? { cookie } : {} }));
     try {
-      assert.match(await (await home(signedIn)).text(), /"exportName":"Revalidate"/);
+      assert.match(await (await home(testSession)).text(), /"exportName":"Revalidate"/);
       assert.doesNotMatch(await (await home()).text(), /"exportName":"Revalidate"/);
     } finally {
       delete process.env.TOKEN_SECRET;

@@ -1,13 +1,10 @@
 import * as assert from 'remix/assert';
 import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
 
+import { testSecret, testSession } from '../../../lib/adminSession.fixtures.ts';
 import { router } from '../../../router.ts';
 
 const origin = 'http://localhost';
-
-// A session cookie signed with the secret 'test-secret', holding the token 'test-token'
-const session =
-  '__session=eyJ0b2tlbiI6InRlc3QtdG9rZW4ifQ==.0jvC0SjKdfmXr5Rw/6679ia0w0xRgH4hIpEzB3aJ9Fc';
 
 type Operation = { operationName: string; variables: Record<string, any> };
 
@@ -30,14 +27,14 @@ function stubGraphQL(t: TestContext, answers: Record<string, unknown> = {}) {
 }
 
 const get = (path: string) =>
-  router.fetch(new Request(new URL(path, origin), { headers: { cookie: session } }));
+  router.fetch(new Request(new URL(path, origin), { headers: { cookie: testSession } }));
 
 const post = (path: string, body: string) =>
   router.fetch(
     new Request(new URL(path, origin), {
       method: 'POST',
       body: new URLSearchParams(body),
-      headers: { cookie: session, origin },
+      headers: { cookie: testSession, origin },
     })
   );
 
@@ -129,7 +126,7 @@ function entryProps(html: string, exportName: string) {
 
 describe('admin posts', () => {
   beforeEach(() => {
-    process.env.TOKEN_SECRET = 'test-secret';
+    process.env.TOKEN_SECRET = testSecret;
   });
   afterEach(() => {
     delete process.env.TOKEN_SECRET;
