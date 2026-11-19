@@ -1,4 +1,5 @@
 import { expect, test } from '../support/test.ts';
+import { hydrated } from '../support/ui.ts';
 
 // Real listings come from Bowery Presents or Ticketmaster, which the tests can't reach, so this
 // uses a venue whose listings page is a Ticketmaster page but not a venue's: GraphQL turns it
@@ -16,9 +17,9 @@ test('chooses a venue and says why its listings could not be loaded', async ({
   await expect(page.locator('link[href*="/assets/app/styles/public/admin"]')).toHaveCount(1);
   await expect(page.getByRole('heading', { name: 'Venue Listings' })).toBeVisible();
 
-  // Choosing a venue goes to its page once the select's client entry has loaded
+  // Choosing a venue goes to its page once the select's client entry has hydrated
   const chooser = page.getByRole('combobox', { name: 'Choose a venue' });
-  await page.waitForLoadState('networkidle');
+  await hydrated(page);
   await chooser.selectOption({ label: venue.name });
   await expect(page).toHaveURL(`/admin/show/listings/${venue.id}`);
   await expect(page.getByRole('alert')).toHaveText(
