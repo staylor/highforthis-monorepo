@@ -22,6 +22,12 @@ export function createApolloClient() {
       possibleTypes: fragmentMatcher.possibleTypes,
       typePolicies,
     }),
+    // Each request gets its own client, so nothing reads what the cache stores. Writing results
+    // into it and reading them back took longer than the GraphQL request itself.
+    defaultOptions: {
+      query: { fetchPolicy: 'no-cache' },
+      mutate: { fetchPolicy: 'no-cache' },
+    },
   });
 }
 
