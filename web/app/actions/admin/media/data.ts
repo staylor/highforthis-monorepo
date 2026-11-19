@@ -1,7 +1,6 @@
 import { gql } from 'graphql-tag';
 
-import type { GraphQLClient } from '@highforthis/shared/admin/forms';
-
+import type { GraphQLClient } from '../../../lib/admin/forms.ts';
 import type {
   FeaturedMedia_MediaFragment,
   MediaPickerQuery,

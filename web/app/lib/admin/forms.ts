@@ -2,8 +2,6 @@ import type { OperationVariables } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
 import qs from 'qs';
 
-// Tests are in web/app/lib/admin/forms.test.ts.
-
 /**
  * What the admin's data functions take instead of a request, so they don't depend on a
  * framework. A failed operation is logged and comes back as empty data, which is how

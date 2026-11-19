@@ -26,7 +26,7 @@ export default createConfig({
     'graphql/generated/**',
     'graphql/public/**',
     'graphql/schema.graphql',
-    '{shared,admin}/src/types/graphql.ts',
     'web/app/types/graphql.ts',
+    'web/app/types/schema.ts',
   ],
 });

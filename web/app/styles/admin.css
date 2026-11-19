@@ -3,7 +3,7 @@
  * skips it, so neither stylesheet carries the other's classes.
  */
 @import 'tailwindcss' source(none);
-@import '@highforthis/shared/styles/theme.css';
+@import './theme.css';
 
 @source '../ui/admin';
 @source '../actions/admin';

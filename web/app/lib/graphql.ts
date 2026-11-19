@@ -3,8 +3,8 @@ import type { OperationVariables } from '@apollo/client/core';
 import { ServerError } from '@apollo/client/errors';
 import type { DocumentNode } from 'graphql';
 
-import fragmentMatcher from '@highforthis/shared/apollo/fragmentMatcher';
-import typePolicies from '@highforthis/shared/apollo/typePolicies';
+import fragmentMatcher from './apollo/fragment-matcher.js';
+import typePolicies from './apollo/type-policies.js';
 
 // Accept either a base URL or a legacy /graphql URL.
 const configuredGqlHost = process.env.GQL_HOST || 'http://localhost:8081';

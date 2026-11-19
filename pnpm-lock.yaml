@@ -207,9 +207,6 @@ importers:
 
   shared:
     dependencies:
-      '@apollo/client':
-        specifier: 4.1.6
-        version: 4.1.6(graphql-ws@6.0.7(graphql@16.13.0)(ws@8.19.0))(graphql@16.13.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rxjs@7.8.2)
       '@opentelemetry/api':
         specifier: 1.9.1
         version: 1.9.1
@@ -261,21 +258,12 @@ importers:
       '@opentelemetry/semantic-conventions':
         specifier: 1.43.0
         version: 1.43.0
-      '@tailwindcss/forms':
-        specifier: 0.5.11
-        version: 0.5.11(tailwindcss@4.3.4)
-      graphql:
-        specifier: 16.13.0
-        version: 16.13.0
       pino:
         specifier: 10.3.1
         version: 10.3.1
       pino-http:
         specifier: 11.0.0
         version: 11.0.0
-      qs:
-        specifier: 6.15.0
-        version: 6.15.0
 
   web:
     dependencies:
@@ -355,6 +343,9 @@ importers:
       '@tailwindcss/cli':
         specifier: 4.3.4
         version: 4.3.4
+      '@tailwindcss/forms':
+        specifier: 0.5.11
+        version: 0.5.11(tailwindcss@4.3.4)
       tailwindcss:
         specifier: 4.3.4
         version: 4.3.4
