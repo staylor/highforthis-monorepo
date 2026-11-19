@@ -141,4 +141,25 @@ describe('admin', () => {
       delete process.env.TOKEN_SECRET;
     }
   });
+
+  it("lets a click reuse a prefetched page, unless an admin's live refresh needs it new", async (t) => {
+    stubGraphQL(t, { 'graphql:App': () => ({ data: {} }) });
+    process.env.TOKEN_SECRET = testSecret;
+    const page = (path: string, cookie?: string) =>
+      router.fetch(new Request(new URL(path, origin), { headers: cookie ? { cookie } : {} }));
+    try {
+      const visitor = await page(routes.sphere.href());
+      assert.equal(visitor.headers.get('cache-control'), 'private, max-age=30');
+      assert.match(visitor.headers.get('vary') ?? '', /\bCookie\b/);
+
+      const admin = await page(routes.sphere.href(), testSession);
+      assert.equal(admin.headers.get('cache-control'), null);
+
+      const missing = await page('/no/such/page');
+      assert.equal(missing.status, 404);
+      assert.equal(missing.headers.get('cache-control'), null);
+    } finally {
+      delete process.env.TOKEN_SECRET;
+    }
+  });
 });
