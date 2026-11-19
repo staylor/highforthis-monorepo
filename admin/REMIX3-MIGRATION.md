@@ -20,6 +20,7 @@ The public site in `web/` has run on Remix 3 since #45. The admin is still a Rea
 | #52 | Failed deletes show an error. On Railway, web trusts the edge's forwarded headers, so admin redirects stay on https. |
 | #53 | The list table's row and bulk delete forms are plain forms. Bulk actions apply with a button, not on change. |
 | #54 | A Playwright suite (6 specs, 8 tests) drives the admin through web's URL and runs on PRs. Failed saves come back with `?saveFailed=1`. |
+| Lexical 0.53 | The editor imports `CodeNode` from `@lexical/code-core`, so Prism, which the asset server can't serve, is gone. Image and video nodes are block-level, which Lexical 0.53 needs to load saved posts unchanged. |
 
 ## The admin today
 
@@ -105,8 +106,9 @@ Run the e2e suite after each step. It drives everything through web's URL, so it
 - **Uploads:** the admin's Express middleware adds the session token to `/upload` requests before proxying them to GraphQL. Web's `remix/fetch-proxy` can do the same; the trial kept that injection.
 - **Passkeys and login:** ported in the trial (`app/actions/login/`, `app/actions/admin/passkeys/`), with `@simplewebauthn/browser` served unbundled.
 - **Translations:** `react-i18next` doesn't apply. Server components read `t` from context, as web's do, and client entries get their strings as props.
-- **Browser packages:** web's `assets.ts` serves only packages in `allowPackages`, and under pnpm each must be a direct dependency of web. The editor needs `lexical`, `@lexical/rich-text`, `list`, `history`, `selection`, `utils` and `code`, and their dependencies `@lexical/clipboard`, `dragon`, `extension` and `html`, plus `@preact/signals-core`. Each Lexical package is one ES module, so that's about a dozen import-map entries, not hundreds like the OpenObserve SDK was before #46. Check the import map size after adding them.
-- **Prism, the main unknown:** `@lexical/code` (the editor's code blocks, used in `core/editor.ts` and `core/blockToolbar.ts`) imports `prismjs` and 15 Prism language files for their side effects. Prism `1.30.0` isn't an ES module (no `type`, `module` or `exports` field), and the asset server can't serve CommonJS to browsers, so the editor may not load as-is. The trial's editor spike didn't use code blocks, so this is untested. Try it first in the editor step. If the asset server can't serve it, the options are serving `@lexical/code` and Prism as one prebuilt bundle (as #46 did for OpenObserve), or dropping code blocks if posts don't use them. None of the 14 posts in the local seed data contain one; check production before deciding.
+- **Browser packages:** web's `assets.ts` serves only packages in `allowPackages`, and under pnpm each must be a direct dependency of web. On Lexical 0.53 the editor needs `lexical`, `@lexical/rich-text`, `list`, `history`, `selection`, `utils` and `code-core`, and their dependencies `@lexical/clipboard`, `dragon`, `extension`, `html` and `a11y`, plus `@preact/signals-core` at the version `@lexical/extension` asks for (`^1.14.4`), so the browser doesn't get an older copy from web. `@lexical/internal` is build-time only and isn't needed.
+- **Code blocks and Prism (spiked, resolved):** `@lexical/code` 0.41 imported `prismjs` and 15 Prism language files for their side effects. The asset server rejects Prism (`CommonJS module detected: …/prismjs/prism.js`), and any page with the editor then fails to load. Since 0.42, Lexical ships `CodeNode` in `@lexical/code-core`, which has no Prism; highlighting lives in the separate `@lexical/code-prism`, which the admin doesn't use. The admin now runs Lexical 0.53 and imports from `@lexical/code-core`. A spike page in web confirmed that a code block loads, edits and saves (as `"type": "code"`, keeping its language) through the asset server, in development and production, with Prism never loaded. If highlighting is ever wanted, it would need Prism served as a prebuilt bundle, as #46 did for OpenObserve.
+- **Lexical's dev and prod builds:** each Lexical package's entry imports both its `.dev` and `.prod` builds and picks one at runtime. With no bundler, a production editor page downloaded both: 78 Lexical files, and a 43 KB import map with 128 entries. The compiler folds `process.env.NODE_ENV` but keeps `import "./Lexical.dev.js"` as a side effect. A `scripts.loaders` entry in `assets.ts` that removes those imports in production brings it to 52 files (124 KB compressed) and a 35 KB import map. Adding a `production` resolution condition doesn't help, because the asset server resolves packages with fixed conditions. Only pages with the editor pay this; the public site's import map is unaffected.
 - **Express server:** goes away with the admin service. Compression, static files and proxying are already in web, and the `trust proxy` / forwarded-host middleware (#47, #48) has no proxy hop left to correct.
 
 ## Remix 3 gaps that still apply
@@ -115,10 +117,10 @@ Run the e2e suite after each step. It drives everything through web's URL, so it
 - **Form data typing:** action-level `formData()` middleware doesn't add `context.formData` to the handler's type. Web works around it with router-level middleware.
 - **Unfinished docs:** the "Auth, Sessions, and Security" and "Errors and Cancellation" guides are still outlines in 3.2.0. The middleware READMEs have working examples.
 - **Tests:** `remix/test` has no snapshot matcher, and interactive component tests need Playwright (`*.test.browser.tsx`).
+- **Packages that pick their build at runtime:** the asset server serves both builds of a package whose entry imports its dev and prod builds and chooses one, as Lexical's do. It needs a loader to drop the dev import (see "Lexical's dev and prod builds").
 
 ## Open questions
 
-- Whether the editor's code blocks work in the browser under Remix, given Prism (see "Area by area"). Worth a short spike before the posts step, or even before starting.
 - Whether the admin's server functions move into web or into a shared workspace. Web is the only consumer once the admin service is gone.
 - Whether the server function tests stay on vitest or move to `remix test`.
 - When to switch the session to `remix/session`: after the move, with one sign-out, or never.

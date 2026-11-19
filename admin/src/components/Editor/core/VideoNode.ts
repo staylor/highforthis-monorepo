@@ -86,6 +86,12 @@ function renderVideo(video: Video) {
  * host the editor; `decorate()` has nothing to render.
  */
 export default class VideoNode extends DecoratorNode<null> {
+  // A block of its own. Lexical wraps inline nodes at the root in a paragraph, which would change
+  // how saved posts load.
+  isInline(): false {
+    return false;
+  }
+
   __video: Video;
 
   static getType(): string {

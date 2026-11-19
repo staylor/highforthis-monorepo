@@ -1,4 +1,4 @@
-import { CodeNode } from '@lexical/code';
+import { CodeNode } from '@lexical/code-core';
 import { createEmptyHistoryState, registerHistory } from '@lexical/history';
 import { ListItemNode, ListNode, registerList } from '@lexical/list';
 import { HeadingNode, QuoteNode, registerRichText } from '@lexical/rich-text';
