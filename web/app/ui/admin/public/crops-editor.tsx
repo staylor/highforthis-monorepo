@@ -1,8 +1,8 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { cn } from '../../public/cn.ts';
+import { merge, text } from '../../public/styles.ts';
 
-import { buttonClass, inputBase } from './styles.ts';
+import { button, input, wideInput } from './styles.ts';
 
 // A row per crop size, named crops[0][name], crops[0][width] and crops[0][height], with
 // buttons to add and remove rows. Without JavaScript the rows the server rendered can still be
@@ -26,7 +26,22 @@ interface CropsEditorProps {
   };
 }
 
-const sizeInput = cn(inputBase, 'inline-block h-8 w-16 px-1 py-0.5');
+const sizeInput = css(
+  merge(input, {
+    display: 'inline-block',
+    height: '2rem',
+    width: '4rem',
+    padding: '0.125rem 0.25rem',
+  })
+);
+
+const cell = css({ paddingBlock: '0.25rem', paddingRight: '0.625rem' });
+const headingCell = css({
+  paddingBlock: '0.25rem',
+  paddingRight: '0.625rem',
+  textAlign: 'left',
+  ...text.sm,
+});
 
 /** A row of the table: its crop as the page loaded it, and a key that stays with the row. */
 interface Row {
@@ -57,7 +72,7 @@ export const CropsEditor = clientEntry(
         name={`crops[${i}][${prop}]`}
         defaultValue={crop[prop] === null ? '' : String(crop[prop])}
         aria-label={`${handle.props.labels[prop]} ${i + 1}`}
-        class={sizeInput}
+        mix={sizeInput}
       />
     );
 
@@ -67,19 +82,21 @@ export const CropsEditor = clientEntry(
         <>
           <button
             type="button"
-            class={buttonClass(false, 'h-6 px-2 pb-0.5 text-xs')}
-            mix={on('click', () => {
-              currentRows().push(row({ name: '', width: null, height: null }));
-              handle.update();
-            })}
+            mix={[
+              css(merge(button(), { fontSize: '0.75rem' })),
+              on('click', () => {
+                currentRows().push(row({ name: '', width: null, height: null }));
+                handle.update();
+              }),
+            ]}
           >
             {labels.add}
           </button>
-          <table class="my-5">
+          <table mix={css({ marginBlock: '1.25rem' })}>
             <thead>
               <tr>
-                <th class="py-1 pr-2.5 text-left text-sm">{labels.name}</th>
-                <th class="py-1 pr-2.5 text-left text-sm" colSpan={2}>
+                <th mix={headingCell}>{labels.name}</th>
+                <th mix={headingCell} colSpan={2}>
                   {labels.dimensions}
                 </th>
               </tr>
@@ -87,29 +104,35 @@ export const CropsEditor = clientEntry(
             <tbody>
               {currentRows().map(({ key, crop }, i) => (
                 <tr key={key}>
-                  <td class="py-1 pr-2.5">
+                  <td mix={cell}>
                     <input
                       type="text"
                       name={`crops[${i}][name]`}
                       defaultValue={crop.name}
                       size={20}
                       aria-label={`${labels.name} ${i + 1}`}
-                      class={cn(inputBase, 'w-full')}
+                      mix={wideInput}
                     />
                   </td>
-                  <td class="py-1 pr-2.5 whitespace-nowrap">
+                  <td mix={[cell, css({ whiteSpace: 'nowrap' })]}>
                     {size(crop, 'width', i)}
                     {' x '}
                     {size(crop, 'height', i)}
                   </td>
-                  <td class="py-1 pr-2.5">
+                  <td mix={cell}>
                     <button
                       type="button"
-                      class="cursor-pointer text-sm hover:underline"
-                      mix={on('click', () => {
-                        rows = currentRows().filter((r) => r.key !== key);
-                        handle.update();
-                      })}
+                      mix={[
+                        css({
+                          cursor: 'pointer',
+                          ...text.sm,
+                          '&:hover': { textDecoration: 'underline' },
+                        }),
+                        on('click', () => {
+                          rows = currentRows().filter((r) => r.key !== key);
+                          handle.update();
+                        }),
+                      ]}
                     >
                       {labels.remove}
                     </button>

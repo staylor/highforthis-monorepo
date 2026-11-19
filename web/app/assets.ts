@@ -76,6 +76,10 @@ export const assets = createAssetServer({
 
 export const scriptEntry = await assets.getScriptEntry('app/actions/public/entry.ts');
 
-// Built by the Tailwind CLI (`pnpm css`), then served and fingerprinted by the asset server.
-export const stylesheetHref = await assets.getHref('app/styles/public/main.css');
-export const adminStylesheetHref = await assets.getHref('app/styles/public/admin.css');
+// Each page's global stylesheets: base.css, then the site's or the admin's. Components style
+// themselves with css(), which Remix renders into the page.
+const baseStylesheet = await assets.getHref('app/styles/public/base.css');
+export const stylesheetHrefs = {
+  site: [baseStylesheet, await assets.getHref('app/styles/public/site.css')],
+  admin: [baseStylesheet, await assets.getHref('app/styles/public/admin.css')],
+};

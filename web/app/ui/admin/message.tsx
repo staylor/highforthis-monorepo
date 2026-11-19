@@ -1,6 +1,6 @@
-import type { Handle } from 'remix/component';
+import { css, type Handle } from 'remix/component';
 
-import { cn } from '../public/cn.ts';
+import { colorTransition, text } from '../public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { Icon } from './public/icon.tsx';
@@ -27,18 +27,41 @@ export function Message(handle: Handle<MessageProps>) {
 
     return (
       <div
-        class={cn(
-          'border-pink border-l-4 bg-neutral-50 shadow-xs',
-          'relative mt-1 mb-4 block py-px pr-9 pl-3'
-        )}
+        mix={css({
+          position: 'relative',
+          marginBlock: '0.25rem 1rem',
+          display: 'block',
+          borderLeft: '4px solid var(--pink)',
+          backgroundColor: 'var(--neutral-50)',
+          padding: '1px 2.25rem 1px 0.75rem',
+          boxShadow: 'var(--shadow-xs)',
+        })}
       >
-        <p class="my-2 p-0.5 text-sm text-dark">{handle.props.text}</p>
+        <p
+          mix={css({
+            marginBlock: '0.5rem',
+            padding: '0.125rem',
+            ...text.sm,
+            color: 'var(--dark)',
+          })}
+        >
+          {handle.props.text}
+        </p>
         <a
           href={`${dismissed.pathname}${dismissed.search}`}
           aria-label="Dismiss"
-          class="absolute top-0 right-1 m-0 p-2 text-neutral-400 transition-colors hover:text-neutral-900"
+          mix={css({
+            position: 'absolute',
+            top: 0,
+            right: '0.25rem',
+            margin: 0,
+            padding: '0.5rem',
+            color: 'var(--neutral-400)',
+            ...colorTransition,
+            '&:hover': { color: 'var(--neutral-900)' },
+          })}
         >
-          <Icon name="close" class="size-4" />
+          <Icon name="close" size="1rem" />
         </a>
       </div>
     );

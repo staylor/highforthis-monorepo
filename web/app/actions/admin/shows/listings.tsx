@@ -1,3 +1,4 @@
+import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
@@ -125,9 +126,13 @@ async function renderListingsPage(
     <>
       <Heading>{label}</Heading>
       {choices.length === 0 ? (
-        <p class="my-4 text-sm">{t('shows.listings.noVenues')}</p>
+        <p
+          mix={css({ marginBlock: '1rem', fontSize: '0.875rem', lineHeight: 'calc(1.25 / 0.875)' })}
+        >
+          {t('shows.listings.noVenues')}
+        </p>
       ) : (
-        <div class="mb-4">
+        <div mix={css({ marginBottom: '1rem' })}>
           <NavigateSelect
             value={venueId ? listingsRoute.index.href({ venueId }) : ''}
             placeholder={t('shows.listings.chooseVenue')}

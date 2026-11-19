@@ -1,6 +1,6 @@
-import type { Handle, RemixNode } from 'remix/component';
+import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { cn } from './cn.ts';
+import { colorTransition, text } from './styles.ts';
 
 const showsPattern = /^\/(shows|venue|artist)/;
 
@@ -21,6 +21,17 @@ function isActive(path: string, pathname: string) {
   return path.indexOf(initial) === 0;
 }
 
+const navLinkStyle = css({
+  ...text.sm,
+  fontWeight: 500,
+  letterSpacing: '0.025em',
+  textTransform: 'uppercase',
+  ...colorTransition,
+  color: 'var(--muted)',
+  '&:hover': { color: 'light-dark(var(--neutral-900), #fff)' },
+  '&[aria-current="page"]': { color: 'var(--pink)' },
+});
+
 /** A nav link, active when its href matches the pathname prop. */
 export function NavLink(handle: Handle<{ href: string; pathname: string; children?: RemixNode }>) {
   return () => {
@@ -31,10 +42,7 @@ export function NavLink(handle: Handle<{ href: string; pathname: string; childre
         href={href}
         data-rmx-prefetch="intent"
         aria-current={active ? 'page' : undefined}
-        class={cn('text-sm font-medium tracking-wide uppercase transition-colors', {
-          'text-pink dark:text-pink': active,
-          'text-muted hover:text-neutral-900 dark:text-muted-dark dark:hover:text-white': !active,
-        })}
+        mix={navLinkStyle}
       >
         {children}
       </a>

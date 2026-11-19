@@ -1,4 +1,5 @@
 import { gql } from 'graphql-tag';
+import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
 import { routes } from '../../routes.ts';
@@ -11,7 +12,7 @@ import type {
 import { Artwork } from '../../ui/artist.tsx';
 import { Heading1, Heading2 } from '../../ui/heading.tsx';
 import { Link } from '../../ui/link.tsx';
-import { cn } from '../../ui/public/cn.ts';
+import { md, text, type Styles } from '../../ui/public/styles.ts';
 import { Shows, ShowsList, showsGridFragment } from '../../ui/shows/shows.tsx';
 import { formatDate } from '../../ui/shows/utils.ts';
 import { prefetchRootData, renderPage } from '../render-page.tsx';
@@ -81,36 +82,47 @@ const showQuery = gql`
   }
 `;
 
-const sizes = ['text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl'];
+// Font sizes for names in the stats, larger the more shows they had. The second keeps the
+// page's size.
+const sizes: Styles[] = [text.sm, {}, text.lg, text.xl, text['2xl'], text['3xl']];
 
-function parseClasses(total: number, size: number) {
+function sizeFor(total: number, size: number) {
   const edge = sizes.length - 1;
-  const className: Record<string, boolean> = {};
-  for (let i = edge; i >= 0; i -= 1) {
-    if (i === edge) {
-      className[sizes[i]] = total >= i * size;
-    } else if (i === 0) {
-      className[sizes[i]] = total < size;
-    } else {
-      className[sizes[i]] = total >= i * size && total < (i + 1) * size;
-    }
+  if (total >= edge * size) {
+    return sizes[edge];
   }
-  return className;
+  return total < size ? sizes[0] : sizes[Math.floor(total / size)];
 }
+
+const statsLink = css({
+  ...text.lg,
+  color: 'var(--pink)',
+  textDecoration: 'underline',
+});
 
 export default createController(routes.shows, {
   middleware: [prefetchRootData()],
   actions: {
     async index(context) {
       const { t } = context;
-      const { shows } = await context.gql.query<ShowsQuery>(showsQuery, { first: 200 });
+      const { shows } = await context.gql.query<ShowsQuery>(showsQuery, {
+        first: 200,
+      });
       return renderPage(
         context,
         <article>
           <Heading1>{t('shows.recommended')}</Heading1>
-          <p class="mb-8 text-base text-muted dark:text-muted-dark">
+          <p
+            mix={css({
+              marginBottom: '2rem',
+              ...text.base,
+              color: 'var(--muted)',
+            })}
+          >
             {t('shows.todaysDate')}:{' '}
-            <strong class="text-neutral-900 dark:text-white">{formatDate().formatted}</strong>
+            <strong mix={css({ color: 'light-dark(var(--neutral-900), #fff)' })}>
+              {formatDate().formatted}
+            </strong>
           </p>
           {shows && <Shows shows={shows} />}
         </article>,
@@ -119,8 +131,12 @@ export default createController(routes.shows, {
     },
 
     async list(context) {
-      const { shows } = await context.gql.query<ShowsQuery>(showsQuery, { first: 200 });
-      return renderPage(context, shows ? <ShowsList shows={shows} /> : null, { title: 'Shows' });
+      const { shows } = await context.gql.query<ShowsQuery>(showsQuery, {
+        first: 200,
+      });
+      return renderPage(context, shows ? <ShowsList shows={shows} /> : null, {
+        title: 'Shows',
+      });
     },
 
     async history(context) {
@@ -137,11 +153,17 @@ export default createController(routes.shows, {
           {year ? (
             <>
               <Heading2>
-                <span class="text-pink">{count}</span> {t('shows.attendedIn', { count, year })}
+                <span mix={css({ color: 'var(--pink)' })}>{count}</span>{' '}
+                {t('shows.attendedIn', { count, year })}
               </Heading2>
-              <p class="my-5">
+              <p mix={css({ marginBlock: '1.25rem' })}>
                 <Link
-                  class="text-xl text-pink uppercase underline"
+                  mix={css({
+                    ...text.xl,
+                    color: 'var(--pink)',
+                    textTransform: 'uppercase',
+                    textDecoration: 'underline',
+                  })}
                   href={routes.shows.history.href()}
                 >
                   {t('shows.viewFullHistory')}
@@ -176,25 +198,31 @@ export default createController(routes.shows, {
 
       return renderPage(
         context,
-        <article class="w-160 max-w-full">
+        <article mix={css({ width: '40rem', maxWidth: '100%' })}>
           <Heading1>{t(`entity.stats.${entity}`)}</Heading1>
-          <p class="mb-8">
+          <p mix={css({ marginBottom: '2rem' })}>
             <Link
               href={routes.shows.stats.href({ entity: other })}
-              class="mr-2 text-lg text-pink underline"
+              mix={[statsLink, css({ marginRight: '0.5rem' })]}
             >
               {t(`entity.stats.see.${other}`)}
             </Link>
             {' • '}
-            <Link href={routes.shows.history.href()} class="ml-2 text-lg text-pink underline">
+            <Link
+              href={routes.shows.history.href()}
+              mix={[statsLink, css({ marginLeft: '0.5rem' })]}
+            >
               {t('entity.stats.see.all')}
             </Link>
           </p>
           {Object.entries(buckets).map(([key, stats]) => (
-            <ul key={key} class="mb-4">
+            <ul key={key} mix={css({ marginBottom: '1rem' })}>
               {stats.map((stat) => (
-                <li key={stat.entity.id} class={cn(parseClasses(stat.count, size))}>
-                  <Link href={`/${entity}/${stat.entity.slug}`} class="hover:underline">
+                <li key={stat.entity.id} mix={css(sizeFor(stat.count, size))}>
+                  <Link
+                    href={`/${entity}/${stat.entity.slug}`}
+                    mix={css({ '&:hover': { textDecoration: 'underline' } })}
+                  >
                     {stat.entity.name}
                   </Link>
                   {' - '}
@@ -210,7 +238,9 @@ export default createController(routes.shows, {
 
     async show(context) {
       const { t } = context;
-      const { show } = await context.gql.query<ShowQuery>(showQuery, { id: context.params.id });
+      const { show } = await context.gql.query<ShowQuery>(showQuery, {
+        id: context.params.id,
+      });
       if (!show) {
         return new Response('Not Found', { status: 404 });
       }
@@ -221,31 +251,52 @@ export default createController(routes.shows, {
 
       return renderPage(
         context,
-        <article class="mx-auto text-center md:flex md:text-left">
-          <div class="mt-3 mb-8 md:mr-8">
+        <article
+          mix={css({
+            marginInline: 'auto',
+            textAlign: 'center',
+            [md]: { display: 'flex', textAlign: 'left' },
+          })}
+        >
+          <div
+            mix={css({
+              marginBlock: '0.75rem 2rem',
+              [md]: { marginRight: '2rem' },
+            })}
+          >
             <Artwork
               name={artist.name}
               data={artist.appleMusic || {}}
-              class="mx-auto rounded-lg md:mx-0"
+              styles={{
+                marginInline: 'auto',
+                borderRadius: '0.5rem',
+                [md]: { marginLeft: 0 },
+              }}
             />
           </div>
-          <div class="md:mt-4">
-            <p class="mb-3 text-lg">
+          <div mix={css({ [md]: { marginTop: '1rem' } })}>
+            <p mix={css({ marginBottom: '0.75rem', ...text.lg })}>
               {d.monthName} {d.day}, {d.year} - {d.time}
             </p>
             {show.title && <Heading1>{show.title}</Heading1>}
-            <ArtistHeading class="font-sans">
+            <ArtistHeading styles={{ fontFamily: 'var(--font-sans)' }}>
               {show.artists.map((artist, i) => (
                 <Link
                   href={routes.artist.href({ slug: artist.slug })}
-                  class={cn('block', { 'mb-1': i < lastIndex })}
+                  mix={css({
+                    display: 'block',
+                    marginBottom: i < lastIndex ? '0.25rem' : undefined,
+                  })}
                 >
                   {artist.name} →
                 </Link>
               ))}
             </ArtistHeading>
-            <Heading2 class="mt-4">
-              <Link href={routes.venue.href({ slug: show.venue.slug })} class="text-gray-400">
+            <Heading2 styles={{ marginTop: '1rem' }}>
+              <Link
+                href={routes.venue.href({ slug: show.venue.slug })}
+                mix={css({ color: 'var(--gray-400)' })}
+              >
                 {show.venue.name}
               </Link>
             </Heading2>
@@ -253,7 +304,16 @@ export default createController(routes.shows, {
               <a
                 href={show.url}
                 target="_blank"
-                class="my-2 inline-block rounded-md border border-pink px-3 py-2 font-sans text-xl text-pink"
+                mix={css({
+                  marginBlock: '0.5rem',
+                  display: 'inline-block',
+                  borderRadius: '0.375rem',
+                  border: '1px solid var(--pink)',
+                  padding: '0.5rem 0.75rem',
+                  fontFamily: 'var(--font-sans)',
+                  ...text.xl,
+                  color: 'var(--pink)',
+                })}
                 rel="noreferrer"
               >
                 {t('shows.website')}
@@ -261,7 +321,9 @@ export default createController(routes.shows, {
             )}
           </div>
         </article>,
-        { title: show.title || show.artists.map(({ name }) => name).join(' / ') }
+        {
+          title: show.title || show.artists.map(({ name }) => name).join(' / '),
+        }
       );
     },
   },

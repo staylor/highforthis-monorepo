@@ -1,12 +1,21 @@
-import type { Handle, RemixNode } from 'remix/component';
+import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { cn } from '../public/cn.ts';
+import { dark, merge, text } from '../public/styles.ts';
 
-import { buttonClass, heading1 } from './public/styles.ts';
+import { button, heading1 } from './public/styles.ts';
 
 export function Heading(handle: Handle<{ children?: RemixNode }>) {
   return () => (
-    <h1 class={cn('mr-4 mb-4 inline-block align-middle dark:text-white', heading1)}>
+    <h1
+      mix={css({
+        marginRight: '1rem',
+        marginBottom: '1rem',
+        display: 'inline-block',
+        verticalAlign: 'middle',
+        ...heading1,
+        [dark]: { color: '#fff' },
+      })}
+    >
       {handle.props.children}
     </h1>
   );
@@ -14,7 +23,7 @@ export function Heading(handle: Handle<{ children?: RemixNode }>) {
 
 export function HeaderAdd(handle: Handle<{ href: string; label: string }>) {
   return () => (
-    <a href={handle.props.href} class={buttonClass(false, 'mb-4 align-middle')}>
+    <a href={handle.props.href} mix={css(merge(button(), { marginBottom: '1rem' }))}>
       {handle.props.label}
     </a>
   );
@@ -24,7 +33,16 @@ export function Alert(handle: Handle<{ children?: RemixNode }>) {
   return () => (
     <div
       role="alert"
-      class="mb-5 max-w-2xl border-l-4 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-900 dark:bg-red-950/30 dark:text-red-200"
+      mix={css({
+        marginBottom: '1.25rem',
+        maxWidth: '42rem',
+        borderLeft: '4px solid var(--red-600)',
+        backgroundColor: 'var(--red-50)',
+        padding: '0.75rem 1rem',
+        ...text.sm,
+        color: 'var(--red-900)',
+        [dark]: { backgroundColor: 'oklch(25.8% 0.092 26.042 / 0.3)', color: 'var(--red-200)' },
+      })}
     >
       {handle.props.children}
     </div>

@@ -1,6 +1,4 @@
-import type { Handle } from 'remix/component';
-
-import { cn } from '../../public/cn.ts';
+import { css, type Handle, type MixInput } from 'remix/component';
 
 const paths = {
   artist: [
@@ -70,7 +68,8 @@ const paths = {
 
 export type IconName = keyof typeof paths;
 
-export function Icon(handle: Handle<{ name: IconName; class?: string }>) {
+/** An outlined icon, `size` wide and tall. */
+export function Icon(handle: Handle<{ name: IconName; size: string; mix?: MixInput }>) {
   return () => (
     <svg
       aria-hidden="true"
@@ -80,7 +79,10 @@ export function Icon(handle: Handle<{ name: IconName; class?: string }>) {
       stroke-width="1.5"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class={cn('shrink-0', handle.props.class)}
+      mix={[
+        css({ flexShrink: 0, width: handle.props.size, height: handle.props.size }),
+        handle.props.mix,
+      ]}
     >
       {paths[handle.props.name].map((d) => (
         <path d={d} />

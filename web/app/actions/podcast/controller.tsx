@@ -1,13 +1,13 @@
 import { gql } from 'graphql-tag';
-import { unsafeHTML } from 'remix/component';
+import { css, unsafeHTML } from 'remix/component';
 import { createController } from 'remix/router';
 
 import { routes } from '../../routes.ts';
 import type { PodcastQuery, PodcastsQuery } from '../../types/graphql.ts';
 import { Link } from '../../ui/link.tsx';
 import { Podcast, podcastMetaTags } from '../../ui/podcast.tsx';
-import { cn } from '../../ui/public/cn.ts';
 import { uploadUrl } from '../../ui/public/media.ts';
+import { colorTransition, lineClamp, linkHover, text } from '../../ui/public/styles.ts';
 import { loadRootData, prefetchRootData, renderPage } from '../render-page.tsx';
 
 const podcastsQuery = gql`
@@ -40,6 +40,19 @@ const podcastQuery = gql`
   }
 `;
 
+const episodeLink = css({
+  marginInline: '-1rem',
+  display: 'block',
+  borderRadius: '0.5rem',
+  padding: '1.25rem 1rem',
+  borderBottom: '1px solid var(--card-border)',
+  ...colorTransition,
+  '&:hover': {
+    backgroundColor: 'light-dark(var(--neutral-50), rgb(20 20 20 / 0.5))',
+  },
+  '&:last-child': { borderBottom: 0 },
+});
+
 export default createController(routes.podcast, {
   middleware: [prefetchRootData()],
   actions: {
@@ -53,21 +66,26 @@ export default createController(routes.podcast, {
         context,
         <Podcast title={title} description={podcastSettings.description ?? ''}>
           {podcasts?.edges.map(({ node }) => (
-            <Link
-              href={routes.podcast.show.href({ id: node.id })}
-              class={cn(
-                'group -mx-4 block rounded-lg px-4 py-5',
-                'border-b border-neutral-100 dark:border-white/5',
-                'dark:hover:bg-surface-dark-elevated/50 transition-colors hover:bg-neutral-50',
-                'last:border-b-0'
-              )}
-            >
-              <h3 class="mb-2 text-lg font-semibold transition-colors group-hover:text-pink">
+            <Link href={routes.podcast.show.href({ id: node.id })} mix={episodeLink}>
+              <h3
+                mix={css({
+                  marginBottom: '0.5rem',
+                  ...text.lg,
+                  fontWeight: 600,
+                  ...colorTransition,
+                  [linkHover]: { color: 'var(--pink)' },
+                })}
+              >
                 {node.title}
               </h3>
               {node.description && (
                 <p
-                  class="line-clamp-3 text-sm leading-relaxed text-muted dark:text-muted-dark"
+                  mix={css({
+                    ...lineClamp(3),
+                    fontSize: '0.875rem',
+                    lineHeight: 1.625,
+                    color: 'var(--muted)',
+                  })}
                   innerHTML={unsafeHTML(node.description.replace(/\n/g, '<br />'))}
                 />
               )}
@@ -88,7 +106,9 @@ export default createController(routes.podcast, {
 
     async show(context) {
       const [{ podcast }, { siteSettings, podcastSettings }] = await Promise.all([
-        context.gql.query<PodcastQuery>(podcastQuery, { id: context.params.id }),
+        context.gql.query<PodcastQuery>(podcastQuery, {
+          id: context.params.id,
+        }),
         loadRootData(context),
       ]);
       if (!podcast) {
@@ -99,7 +119,7 @@ export default createController(routes.podcast, {
         context,
         <Podcast title={podcast.title} description={podcast.description}>
           {audio && (
-            <figure class="mb-6">
+            <figure mix={css({ marginBottom: '1.5rem' })}>
               <audio src={uploadUrl(audio.destination, audio.fileName)} controls />
             </figure>
           )}

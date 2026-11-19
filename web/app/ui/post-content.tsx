@@ -1,5 +1,5 @@
 import { gql } from 'graphql-tag';
-import type { Handle, RemixNode } from 'remix/component';
+import { css, type Handle, type RemixNode } from 'remix/component';
 
 import { ListType } from '../types/graphql.ts';
 import type {
@@ -92,7 +92,33 @@ function isEmptyText(nodes: TextNode[]) {
   return nodes.length === 0 || nodes.filter(({ text }) => text?.trim()).length === 0;
 }
 
-const headings = { h1: PostTitle, h2: Heading2, h3: Heading3, h4: Heading4 } as const;
+const contentImage = css({ marginBlock: '0.625rem' });
+const orderedList = css({
+  marginBlock: '1.25rem',
+  marginLeft: '2rem',
+  listStyleType: 'decimal',
+});
+const unorderedList = css({
+  marginBlock: '1.25rem',
+  marginLeft: '2rem',
+  listStyleType: 'disc',
+});
+const paragraph = css({ marginBottom: '1.5rem' });
+const quote = css({
+  marginBlock: '1rem',
+  borderLeft: '4px solid var(--detail)',
+  padding: '0.625rem 1.25rem',
+  fontFamily: 'var(--font-georgia)',
+  color: '#666',
+  fontStyle: 'italic',
+});
+
+const headings = {
+  h1: PostTitle,
+  h2: Heading2,
+  h3: Heading3,
+  h4: Heading4,
+} as const;
 
 /** Renders a post's Lexical JSON from GraphQL, without Lexical. */
 export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }>) {
@@ -121,7 +147,7 @@ export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }
           return (
             <img
               key={image.id}
-              class="my-2.5"
+              mix={contentImage}
               alt=""
               src={uploadUrl(image.destination, crop.fileName)}
             />
@@ -136,11 +162,11 @@ export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }
             return null;
           }
           return list.listType === ListType.Number ? (
-            <ol key={`list-${idx}`} class="my-5 ml-8 list-decimal" start={list.start ?? undefined}>
+            <ol key={`list-${idx}`} mix={orderedList} start={list.start ?? undefined}>
               {items}
             </ol>
           ) : (
-            <ul key={`list-${idx}`} class="my-5 ml-8 list-disc">
+            <ul key={`list-${idx}`} mix={unorderedList}>
               {items}
             </ul>
           );
@@ -148,7 +174,7 @@ export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }
         case 'paragraph': {
           const children = (elem as ElementNode).children as TextNode[];
           return isEmptyText(children) ? null : (
-            <p key={`paragraph-${idx}`} class="mb-6">
+            <p key={`paragraph-${idx}`} mix={paragraph}>
               {textNodes(children)}
             </p>
           );
@@ -156,10 +182,7 @@ export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }
         case 'quote': {
           const children = (elem as QuoteNode).children as TextNode[];
           return isEmptyText(children) ? null : (
-            <blockquote
-              key={`quote-${idx}`}
-              class="my-4 border-l-4 border-detail px-5 py-2.5 font-georgia text-[#666] italic"
-            >
+            <blockquote key={`quote-${idx}`} mix={quote}>
               {textNodes(children)}
             </blockquote>
           );

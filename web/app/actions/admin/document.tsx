@@ -1,7 +1,7 @@
 import { unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 import { ImportMap } from 'remix/component/server';
 
-import { adminStylesheetHref, scriptEntry } from '../../assets.ts';
+import { scriptEntry, stylesheetHrefs } from '../../assets.ts';
 import { AdminProvider, type AdminValue } from '../../ui/admin/context.tsx';
 import { AdminShell } from '../../ui/admin/shell.tsx';
 
@@ -23,7 +23,7 @@ export function AdminDocument(handle: Handle<AdminDocumentProps>) {
     const { href, importMap, preloads } = scriptEntry;
 
     return (
-      <html lang="en" class="h-full" data-rmx-preserve-attrs="class">
+      <html lang="en" data-rmx-preserve-attrs="class">
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -37,14 +37,16 @@ export function AdminDocument(handle: Handle<AdminDocumentProps>) {
             href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
           />
           <link rel="shortcut icon" href="/favicon.png" type="image/png" />
-          <link rel="stylesheet" href={adminStylesheetHref} />
+          {stylesheetHrefs.admin.map((stylesheetHref) => (
+            <link key={stylesheetHref} rel="stylesheet" href={stylesheetHref} />
+          ))}
           <ImportMap value={importMap} />
           {preloads.map((preloadHref) => (
             <link key={preloadHref} rel="modulepreload" href={preloadHref} />
           ))}
           <script type="module" src={href}></script>
         </head>
-        <body class="h-full font-body">
+        <body>
           <AdminProvider value={admin}>
             {bare ? children : <AdminShell>{children}</AdminShell>}
           </AdminProvider>

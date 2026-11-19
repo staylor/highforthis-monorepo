@@ -1,8 +1,8 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { cn } from '../../public/cn.ts';
+import { dark, lg, merge, sm, text } from '../../public/styles.ts';
 
-import { buttonClass } from './styles.ts';
+import { button, disabledFades } from './styles.ts';
 
 interface Album {
   id: string;
@@ -21,6 +21,22 @@ interface CoverPickerProps {
     adding: string;
   };
 }
+
+// An album to pick, outlined in pink once it's picked
+const albumStyle = css({
+  display: 'grid',
+  height: '100%',
+  cursor: 'pointer',
+  gridTemplateColumns: 'auto 1fr',
+  alignContent: 'start',
+  columnGap: '0.5rem',
+  borderRadius: '0.25rem',
+  border: '2px solid transparent',
+  padding: '0.375rem',
+  ...text.sm,
+  '&:hover': { borderColor: 'var(--detail)' },
+  '&[data-checked]': { borderColor: 'var(--pink)' },
+});
 
 export const CoverPicker = clientEntry(
   import.meta.url,
@@ -42,46 +58,74 @@ export const CoverPicker = clientEntry(
           <button
             type="submit"
             disabled={count === 0 || submitting}
-            class={buttonClass(true, 'mb-4 disabled:cursor-not-allowed disabled:opacity-50')}
+            mix={css(merge(button(true), { marginBottom: '1rem' }, disabledFades))}
           >
             {submitting ? labels.adding : labels.add[Math.min(count, labels.add.length - 1)]}
           </button>
-          <ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <ul
+            mix={css({
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: '1rem',
+              [sm]: { gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' },
+              [lg]: { gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' },
+              '@media (width >= 80rem)': { gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' },
+            })}
+          >
             {albums.map((album) => {
               const checked = selected.has(album.id);
               return (
                 <li key={album.id}>
-                  <label
-                    class={cn(
-                      'grid h-full cursor-pointer grid-cols-[auto_1fr] content-start gap-x-2 rounded-sm border-2 p-1.5 text-sm',
-                      checked ? 'border-pink' : 'border-transparent hover:border-detail'
-                    )}
-                  >
+                  <label data-checked={checked || undefined} mix={albumStyle}>
                     <img
                       src={album.cover}
                       alt=""
                       loading="lazy"
-                      class="col-span-2 mb-2 aspect-square w-full bg-neutral-100 object-cover dark:bg-neutral-800"
+                      mix={css({
+                        gridColumn: 'span 2 / span 2',
+                        marginBottom: '0.5rem',
+                        aspectRatio: '1 / 1',
+                        width: '100%',
+                        backgroundColor: 'var(--neutral-100)',
+                        objectFit: 'cover',
+                        [dark]: { backgroundColor: 'var(--neutral-800)' },
+                      })}
                     />
                     <input
                       type="checkbox"
                       name="selected"
                       value={album.id}
                       checked={checked}
-                      class="mt-0.5 rounded-sm border-gray-300 text-pink shadow-sm focus:ring-pink"
-                      mix={on('change', (event) => {
-                        if (event.currentTarget.checked) {
-                          selected.add(album.id);
-                        } else {
-                          selected.delete(album.id);
-                        }
-                        handle.update();
-                      })}
+                      mix={[
+                        css({
+                          marginTop: '0.125rem',
+                          borderRadius: '0.25rem',
+                          borderColor: 'var(--gray-300)',
+                          color: 'var(--pink)',
+                          boxShadow: 'var(--shadow-sm)',
+                          '&:focus': { boxShadow: '0 0 0 2px #fff, 0 0 0 4px var(--pink)' },
+                        }),
+                        on('change', (event) => {
+                          if (event.currentTarget.checked) {
+                            selected.add(album.id);
+                          } else {
+                            selected.delete(album.id);
+                          }
+                          handle.update();
+                        }),
+                      ]}
                     />
-                    <span class="min-w-0">
-                      <strong class="block">{album.name}</strong>
+                    <span mix={css({ minWidth: 0 })}>
+                      <strong mix={css({ display: 'block' })}>{album.name}</strong>
                       {album.artistName}
-                      <small class="block text-xs text-neutral-500 dark:text-neutral-400">
+                      <small
+                        mix={css({
+                          display: 'block',
+                          ...text.xs,
+                          color: 'var(--neutral-500)',
+                          [dark]: { color: 'var(--neutral-400)' },
+                        })}
+                      >
                         {album.details}
                       </small>
                     </span>

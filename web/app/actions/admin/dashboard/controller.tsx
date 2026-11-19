@@ -1,4 +1,4 @@
-import type { Handle } from 'remix/component';
+import { css, type Handle } from 'remix/component';
 import { createAction } from 'remix/router';
 
 import { getAdminT } from '../../../lib/i18n.ts';
@@ -6,6 +6,7 @@ import { requireAdmin } from '../../../middleware/admin.ts';
 import { routes } from '../../../routes.ts';
 import { getAdmin } from '../../../ui/admin/context.tsx';
 import { Alert, Heading } from '../../../ui/admin/page.tsx';
+import { dark, text } from '../../../ui/public/styles.ts';
 import { renderAdminPage } from '../render-page.tsx';
 
 import { loadPageViews, type PageViews as PageViewsData } from './page-views.ts';
@@ -20,16 +21,37 @@ const formatDate = (date: string) =>
     day: 'numeric',
   });
 
+// Gray text, lighter in dark mode
+const secondary = { color: 'var(--neutral-600)', [dark]: { color: 'var(--neutral-400)' } };
+const white = { [dark]: { color: '#fff' } };
+
 function Stat(handle: Handle<{ label: string; value: number }>) {
   return () => (
-    <div class="rounded-lg border border-neutral-200 px-5 py-4 dark:border-white/10">
-      <div class="text-sm text-neutral-600 dark:text-neutral-400">{handle.props.label}</div>
-      <div class="mt-1 text-3xl font-semibold tabular-nums dark:text-white">
+    <div
+      mix={css({
+        borderRadius: '0.5rem',
+        border: '1px solid var(--neutral-200)',
+        padding: '1rem 1.25rem',
+        [dark]: { borderColor: 'rgb(255 255 255 / 0.1)' },
+      })}
+    >
+      <div mix={css({ ...text.sm, ...secondary })}>{handle.props.label}</div>
+      <div
+        mix={css({
+          marginTop: '0.25rem',
+          ...text['3xl'],
+          fontWeight: 600,
+          fontVariantNumeric: 'tabular-nums',
+          ...white,
+        })}
+      >
         {handle.props.value.toLocaleString('en-US')}
       </div>
     </div>
   );
 }
+
+const bar = css({ fill: 'var(--pink)' });
 
 function DailyChart(handle: Handle<{ days: PageViewsData['days'] }>) {
   return () => {
@@ -41,11 +63,11 @@ function DailyChart(handle: Handle<{ days: PageViewsData['days'] }>) {
     const gap = 4;
     const width = days.length * (barWidth + gap) - gap;
     return (
-      <figure class="mb-8">
+      <figure mix={css({ marginBottom: '2rem' })}>
         <svg
           viewBox={`0 0 ${width} ${height}`}
           preserveAspectRatio="none"
-          class="block h-32 w-full"
+          mix={css({ display: 'block', height: '8rem', width: '100%' })}
           role="img"
           aria-label={t('dashboard.chartLabel', { count: days.length })}
         >
@@ -54,7 +76,10 @@ function DailyChart(handle: Handle<{ days: PageViewsData['days'] }>) {
             x2={width}
             y1={height}
             y2={height}
-            class="stroke-neutral-300 dark:stroke-white/20"
+            mix={css({
+              stroke: 'var(--neutral-300)',
+              [dark]: { stroke: 'rgb(255 255 255 / 0.2)' },
+            })}
             stroke-width={1}
             vector-effect="non-scaling-stroke"
           />
@@ -67,7 +92,7 @@ function DailyChart(handle: Handle<{ days: PageViewsData['days'] }>) {
                 y={height - barHeight}
                 width={barWidth}
                 height={Math.max(barHeight, day.views > 0 ? 1 : 0)}
-                class="fill-pink"
+                mix={bar}
               >
                 <title>
                   {t('dashboard.viewsOn', { count: day.views, date: formatDate(day.date) })}
@@ -76,7 +101,16 @@ function DailyChart(handle: Handle<{ days: PageViewsData['days'] }>) {
             );
           })}
         </svg>
-        <figcaption class="mt-2 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
+        <figcaption
+          mix={css({
+            marginTop: '0.5rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            ...text.xs,
+            color: 'var(--neutral-500)',
+            [dark]: { color: 'var(--neutral-400)' },
+          })}
+        >
           <span>{formatDate(days[0].date)}</span>
           <span>{t('dashboard.peak', { count: max })}</span>
           <span>{formatDate(days[days.length - 1].date)}</span>
@@ -91,22 +125,53 @@ function TopPages(handle: Handle<{ pages: PageViewsData['topPages'] }>) {
     const { t, siteUrl } = getAdmin(handle);
     const site = siteUrl.replace(/\/$/, '');
     return (
-      <table class="w-full max-w-2xl text-left text-sm">
-        <caption class="mb-2 text-left text-lg font-semibold dark:text-white">
+      <table mix={css({ width: '100%', maxWidth: '42rem', textAlign: 'left', ...text.sm })}>
+        <caption
+          mix={css({
+            marginBottom: '0.5rem',
+            textAlign: 'left',
+            ...text.lg,
+            fontWeight: 600,
+            ...white,
+          })}
+        >
           {t('dashboard.topPages')}
         </caption>
-        <thead class="border-b border-neutral-200 text-neutral-600 dark:border-white/10 dark:text-neutral-400">
+        <thead
+          mix={css({
+            borderBottom: '1px solid var(--neutral-200)',
+            ...secondary,
+            [dark]: { borderColor: 'rgb(255 255 255 / 0.1)', color: 'var(--neutral-400)' },
+          })}
+        >
           <tr>
-            <th class="py-2 font-medium">{t('dashboard.page')}</th>
-            <th class="py-2 text-right font-medium">{t('dashboard.views')}</th>
+            <th mix={css({ paddingBlock: '0.5rem', fontWeight: 500 })}>{t('dashboard.page')}</th>
+            <th mix={css({ paddingBlock: '0.5rem', textAlign: 'right', fontWeight: 500 })}>
+              {t('dashboard.views')}
+            </th>
           </tr>
         </thead>
         <tbody>
           {handle.props.pages.map(({ path, views }) => (
-            <tr key={path} class="border-b border-neutral-100 dark:border-white/5">
-              <td class="max-w-0 truncate py-2 pr-4">
+            <tr
+              key={path}
+              mix={css({
+                borderBottom: '1px solid var(--neutral-100)',
+                [dark]: { borderColor: 'rgb(255 255 255 / 0.05)' },
+              })}
+            >
+              <td
+                mix={css({
+                  maxWidth: 0,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  paddingBlock: '0.5rem',
+                  paddingRight: '1rem',
+                })}
+              >
                 <a
-                  class="text-pink hover:underline"
+                  mix={css({ color: 'var(--pink)', '&:hover': { textDecoration: 'underline' } })}
                   href={`${site}${path}`}
                   target="_blank"
                   rel="noreferrer"
@@ -114,7 +179,14 @@ function TopPages(handle: Handle<{ pages: PageViewsData['topPages'] }>) {
                   {path}
                 </a>
               </td>
-              <td class="py-2 text-right tabular-nums dark:text-white">
+              <td
+                mix={css({
+                  paddingBlock: '0.5rem',
+                  textAlign: 'right',
+                  fontVariantNumeric: 'tabular-nums',
+                  ...white,
+                })}
+              >
                 {views.toLocaleString('en-US')}
               </td>
             </tr>
@@ -130,16 +202,24 @@ function PageViews(handle: Handle<{ pageViews: PageViewsData }>) {
     const { t } = getAdmin(handle);
     const { days, views, sessions, topPages } = handle.props.pageViews;
     return (
-      <section class="max-w-4xl">
-        <p class="mb-4 text-sm text-neutral-600 dark:text-neutral-400">
+      <section mix={css({ maxWidth: '56rem' })}>
+        <p mix={css({ marginBottom: '1rem', ...text.sm, ...secondary })}>
           {t('dashboard.range', { count: days.length })}
         </p>
-        <div class="mb-6 grid max-w-md grid-cols-2 gap-4">
+        <div
+          mix={css({
+            marginBottom: '1.5rem',
+            display: 'grid',
+            maxWidth: '28rem',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: '1rem',
+          })}
+        >
           <Stat label={t('dashboard.pageViews')} value={views} />
           <Stat label={t('dashboard.sessions')} value={sessions} />
         </div>
         {views === 0 ? (
-          <p class="text-neutral-600 dark:text-neutral-400">{t('dashboard.empty')}</p>
+          <p mix={css(secondary)}>{t('dashboard.empty')}</p>
         ) : (
           <>
             <DailyChart days={days} />

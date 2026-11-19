@@ -1,4 +1,6 @@
-import { clientEntry, navigate, on, type Handle } from 'remix/component';
+import { clientEntry, css, navigate, on, type Handle } from 'remix/component';
+
+import { colorTransition, dark, text } from '../../../ui/public/styles.ts';
 
 /**
  * The year picker needs JavaScript because the year is a path segment (/videos/:year),
@@ -9,11 +11,30 @@ export const YearSelect = clientEntry(
   function YearSelect(handle: Handle<{ value: string; placeholder: string; years: number[] }>) {
     return () => (
       <select
-        class="my-1 mr-1 h-9 rounded-lg border-neutral-300 bg-white py-0 pr-9 text-sm shadow-xs transition-colors last:mr-0 hover:border-neutral-400 focus:border-pink focus:ring-3 focus:ring-pink-200 dark:border-white/10 dark:bg-surface-dark-elevated dark:text-dark"
-        mix={on('change', (event) => {
-          const year = event.currentTarget.value;
-          navigate(year ? `/videos/${year}` : '/videos');
-        })}
+        mix={[
+          css({
+            marginBlock: '0.25rem',
+            height: '2.25rem',
+            borderRadius: '0.5rem',
+            borderColor: 'light-dark(var(--neutral-300), rgb(255 255 255 / 0.1))',
+            backgroundColor: 'light-dark(#fff, var(--surface-dark-elevated))',
+            paddingBlock: 0,
+            paddingRight: '2.25rem',
+            ...text.sm,
+            boxShadow: 'var(--shadow-xs)',
+            ...colorTransition,
+            [dark]: { color: 'var(--dark)' },
+            '&:hover': { borderColor: 'var(--neutral-400)' },
+            '&:focus': {
+              borderColor: 'var(--pink)',
+              boxShadow: '0 0 0 3px var(--pink-200), var(--shadow-xs)',
+            },
+          }),
+          on('change', (event) => {
+            const year = event.currentTarget.value;
+            navigate(year ? `/videos/${year}` : '/videos');
+          }),
+        ]}
       >
         <option value="">{handle.props.placeholder}</option>
         {handle.props.years.map((year) => (

@@ -1,8 +1,8 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { cn } from './cn.ts';
 import { DarkMode } from './dark-mode.tsx';
 import { NavLink } from './nav-link.tsx';
+import { dark, lg } from './styles.ts';
 
 interface MobileMenuProps {
   pathname: string;
@@ -30,16 +30,27 @@ export const MobileMenu = clientEntry(
         <>
           <button
             type="button"
-            class="flex items-center lg:hidden"
             aria-label={labels.menu}
             aria-expanded={isOpen}
-            mix={on('click', () => {
-              isOpen = !isOpen;
-              handle.update();
-            })}
+            mix={[
+              css({
+                display: 'flex',
+                alignItems: 'center',
+                [lg]: { display: 'none' },
+              }),
+              on('click', () => {
+                isOpen = !isOpen;
+                handle.update();
+              }),
+            ]}
           >
             <svg
-              class="size-6 text-neutral-700 dark:text-white"
+              mix={css({
+                width: '1.5rem',
+                height: '1.5rem',
+                color: 'var(--neutral-700)',
+                [dark]: { color: '#fff' },
+              })}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -54,13 +65,27 @@ export const MobileMenu = clientEntry(
           </button>
           {isOpen && (
             <nav
-              class={cn(
-                'absolute top-full right-4 z-50 w-56 rounded-xl lg:hidden',
-                'dark:bg-surface-dark border border-neutral-200 bg-white shadow-lg dark:border-white/10',
-                'p-5'
-              )}
+              mix={css({
+                position: 'absolute',
+                top: '100%',
+                right: '1rem',
+                zIndex: 50,
+                width: '14rem',
+                borderRadius: '0.75rem',
+                border: '1px solid light-dark(var(--neutral-200), rgb(255 255 255 / 0.1))',
+                backgroundColor: 'light-dark(#fff, var(--surface-dark))',
+                boxShadow: 'var(--shadow-lg)',
+                padding: '1.25rem',
+                [lg]: { display: 'none' },
+              })}
             >
-              <div class="flex flex-col gap-4">
+              <div
+                mix={css({
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                })}
+              >
                 <NavLink href="/" pathname={pathname}>
                   {labels.home}
                 </NavLink>
@@ -73,7 +98,7 @@ export const MobileMenu = clientEntry(
                 <NavLink href="/videos" pathname={pathname}>
                   {labels.videos}
                 </NavLink>
-                <div class="mt-2">
+                <div mix={css({ marginTop: '0.5rem' })}>
                   <DarkMode id="dark-mode-mobile" label={labels.darkMode} />
                 </div>
               </div>

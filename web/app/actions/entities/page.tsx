@@ -1,12 +1,13 @@
 import { gql } from 'graphql-tag';
 import qs from 'qs';
-import { unsafeHTML, type Handle } from 'remix/component';
+import { css, unsafeHTML, type Handle } from 'remix/component';
 
 import type { ArtistQuery, VenueQuery } from '../../types/graphql.ts';
 import { getApp } from '../../ui/app-context.tsx';
 import { Metadata } from '../../ui/artist.tsx';
 import { Heading1 } from '../../ui/heading.tsx';
 import { uploadUrl } from '../../ui/public/media.ts';
+import { md, text } from '../../ui/public/styles.ts';
 import { Attended, attendedFragment, Shows, showsGridFragment } from '../../ui/shows/shows.tsx';
 
 export const artistQuery = gql`
@@ -92,7 +93,10 @@ type Venue = NonNullable<VenueQuery['venue']>;
 
 /** A static Google map linking to Apple Maps. */
 function VenueMap(
-  handle: Handle<{ name: string; coordinates: NonNullable<Venue['coordinates']> }>
+  handle: Handle<{
+    name: string;
+    coordinates: NonNullable<Venue['coordinates']>;
+  }>
 ) {
   const { root } = getApp(handle);
   const size = 300;
@@ -115,11 +119,22 @@ function VenueMap(
     const src = `https://maps.googleapis.com/maps/api/staticmap?${qs.stringify(params)}&${qs.stringify({ style: 'feature:poi|visibility:off' })}`;
     return (
       <a
-        class="mb-12 block md:mb-0"
+        mix={css({
+          marginBottom: '3rem',
+          display: 'block',
+          [md]: { marginBottom: 0 },
+        })}
         style={{ width: size, height: size }}
         href={`http://maps.apple.com/?${qs.stringify({ q: name, ll: center, z: 18 })}`}
       >
-        <img width={size} height={size} class="block rounded-md" src={src} loading="lazy" alt="" />
+        <img
+          width={size}
+          height={size}
+          mix={css({ display: 'block', borderRadius: '0.375rem' })}
+          src={src}
+          loading="lazy"
+          alt=""
+        />
       </a>
     );
   };
@@ -139,7 +154,7 @@ export function VenuePage(handle: Handle<{ data: VenueQuery }>) {
           const crop = 'crops' in media ? media.crops.find((c) => c.width === 640) : undefined;
           return crop ? (
             <img
-              class="mb-4"
+              mix={css({ marginBottom: '1rem' })}
               alt=""
               loading="lazy"
               src={uploadUrl(media.destination, crop.fileName)}
@@ -147,18 +162,33 @@ export function VenuePage(handle: Handle<{ data: VenueQuery }>) {
           ) : null;
         })}
         <Heading1>{venue.name}</Heading1>
-        <div class="mb-6 justify-between md:my-8 md:flex">
-          <div class="my-4 md:my-0 md:mr-4">
+        <div
+          mix={css({
+            marginBottom: '1.5rem',
+            justifyContent: 'space-between',
+            [md]: { marginBlock: '2rem', display: 'flex' },
+          })}
+        >
+          <div
+            mix={css({
+              marginBlock: '1rem',
+              [md]: { marginBlock: 0, marginRight: '1rem' },
+            })}
+          >
             {venue.address && (
               <p
-                class="mb-3 text-sm text-muted dark:text-muted-dark"
+                mix={css({
+                  marginBottom: '0.75rem',
+                  ...text.sm,
+                  color: 'var(--muted)',
+                })}
                 innerHTML={unsafeHTML(venue.address.replace(/\n/g, '<br />'))}
               />
             )}
             {venue.capacity && (
-              <p class="mb-4 text-sm">
+              <p mix={css({ marginBottom: '1rem', ...text.sm })}>
                 <strong>{t('venues.capacity')}:</strong>{' '}
-                <span class="text-muted dark:text-muted-dark">{venue.capacity}</span>
+                <span mix={css({ color: 'var(--muted)' })}>{venue.capacity}</span>
               </p>
             )}
             {venue.website && (
@@ -166,13 +196,27 @@ export function VenuePage(handle: Handle<{ data: VenueQuery }>) {
                 href={venue.website}
                 target="_blank"
                 rel="noreferrer"
-                class="text-sm text-pink underline"
+                mix={css({
+                  ...text.sm,
+                  color: 'var(--pink)',
+                  textDecoration: 'underline',
+                })}
               >
                 {t('venues.website')} →
               </a>
             )}
             {venue.permanentlyClosed && (
-              <p class="mt-4 rounded-lg bg-pink p-2 text-sm font-bold text-white">
+              <p
+                mix={css({
+                  marginTop: '1rem',
+                  borderRadius: '0.5rem',
+                  backgroundColor: 'var(--pink)',
+                  padding: '0.5rem',
+                  ...text.sm,
+                  fontWeight: 700,
+                  color: '#fff',
+                })}
+              >
                 {t('venues.permanentlyClosed')}.
               </p>
             )}

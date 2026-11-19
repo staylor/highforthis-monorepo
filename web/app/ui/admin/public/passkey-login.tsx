@@ -1,5 +1,7 @@
 import { browserSupportsWebAuthn, startAuthentication } from '@simplewebauthn/browser';
-import { clientEntry, on, ref, type Handle } from 'remix/component';
+import { clientEntry, css, on, ref, type Handle } from 'remix/component';
+
+import { text } from '../../public/styles.ts';
 
 // The button asks GraphQL for the options (web forwards /auth/passkeys to it), runs the
 // browser's WebAuthn prompt, then posts the answer with a hidden form, which the sign-in action
@@ -58,12 +60,25 @@ export const PasskeyLogin = clientEntry(
           <button
             type="button"
             disabled={authenticating}
-            class="box-border w-full cursor-pointer appearance-none rounded-sm border border-detail bg-white px-3 py-2 align-baseline text-sm"
-            mix={on('click', (_event, signal) => authenticate(signal))}
+            mix={[
+              css({
+                boxSizing: 'border-box',
+                width: '100%',
+                cursor: 'pointer',
+                appearance: 'none',
+                borderRadius: '0.25rem',
+                border: '1px solid var(--detail)',
+                backgroundColor: '#fff',
+                padding: '0.5rem 0.75rem',
+                verticalAlign: 'baseline',
+                ...text.sm,
+              }),
+              on('click', (_event, signal) => authenticate(signal)),
+            ]}
           >
             {authenticating ? labels.waiting : labels.button}
           </button>
-          {error && <p class="mt-3 text-red-700">{error}</p>}
+          {error && <p mix={css({ marginTop: '0.75rem', color: 'var(--red-700)' })}>{error}</p>}
           <form
             method="post"
             action={action}

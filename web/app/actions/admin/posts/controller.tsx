@@ -1,3 +1,4 @@
+import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
@@ -14,8 +15,9 @@ import { DateTimeInput } from '../../../ui/admin/public/date-time-input.tsx';
 import { PostEditor } from '../../../ui/admin/public/editor/post-editor.tsx';
 import { FeaturedMedia } from '../../../ui/admin/public/featured-media.tsx';
 import { HeadingField } from '../../../ui/admin/public/heading-field.tsx';
-import { buttonClass } from '../../../ui/admin/public/styles.ts';
+import { button } from '../../../ui/admin/public/styles.ts';
 import { TagsInput } from '../../../ui/admin/public/tags-input.tsx';
+import { merge } from '../../../ui/public/styles.ts';
 import { selectedMedia } from '../media/data.ts';
 import { renderAdminPage } from '../render-page.tsx';
 
@@ -43,9 +45,6 @@ function postDate(timestamp?: number | null) {
   return `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${d.getFullYear()} at ${time}`;
 }
 
-const titleClass =
-  'm-0 mb-2.5 block border-0 p-0 text-4xl leading-tight font-black tracking-wide wrap-break-word shadow-none lg:mb-6 lg:text-5xl focus:ring-0';
-
 function bodyFields(t: TFunction, post?: Post): Field[] {
   return [
     {
@@ -53,12 +52,7 @@ function bodyFields(t: TFunction, post?: Post): Field[] {
       prop: 'title',
       type: 'custom',
       render: () => (
-        <HeadingField
-          name="title"
-          value={post?.title ?? ''}
-          placeholder={t('posts.addTitle')}
-          class={titleClass}
-        />
+        <HeadingField name="title" value={post?.title ?? ''} placeholder={t('posts.addTitle')} />
       ),
     },
     {
@@ -107,7 +101,7 @@ function info(t: TFunction, post?: Post) {
           href={routes.post.href({ slug: post.slug })}
           target="_blank"
           rel="noreferrer"
-          class={buttonClass(false, 'my-4')}
+          mix={css(merge(button(), { marginBlock: '1rem' }))}
         >
           {t('posts.view')}
         </a>

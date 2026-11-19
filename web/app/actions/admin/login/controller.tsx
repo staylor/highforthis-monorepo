@@ -1,3 +1,4 @@
+import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
@@ -6,15 +7,44 @@ import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
 import { sameOrigin } from '../../../middleware/admin.ts';
 import { routes } from '../../../routes.ts';
 import { PasskeyLogin } from '../../../ui/admin/public/passkey-login.tsx';
+import { text } from '../../../ui/public/styles.ts';
 import { loadRootData } from '../../render-page.tsx';
 import { renderAdminPage } from '../render-page.tsx';
 
 import { passwordLoginEnabled, signIn } from './sign-in.ts';
 
-const inputClass =
-  'mt-0.5 mr-1.5 mb-5 box-border w-full rounded-sm border border-gray-300 bg-gray-50 p-2 text-2xl shadow-xs outline-hidden transition focus:border-gray-400 focus:shadow-lg';
-const buttonClass =
-  'box-border h-7 cursor-pointer appearance-none rounded-sm border border-detail bg-white px-3 pb-0.5 align-baseline text-sm';
+// Big fields that lift when focused
+const input = css({
+  margin: '0.125rem 0.375rem 1.25rem 0',
+  boxSizing: 'border-box',
+  width: '100%',
+  borderRadius: '0.25rem',
+  border: '1px solid var(--gray-300)',
+  backgroundColor: 'var(--gray-50)',
+  padding: '0.5rem',
+  ...text['2xl'],
+  boxShadow: 'var(--shadow-xs)',
+  outline: '2px solid transparent',
+  outlineOffset: '2px',
+  transition: 'all 150ms var(--ease)',
+  '&:focus': { borderColor: 'var(--gray-400)', boxShadow: 'var(--shadow-lg)' },
+});
+
+const button = css({
+  boxSizing: 'border-box',
+  height: '1.75rem',
+  cursor: 'pointer',
+  appearance: 'none',
+  borderRadius: '0.25rem',
+  border: '1px solid var(--detail)',
+  backgroundColor: '#fff',
+  padding: '0 0.75rem 0.125rem',
+  verticalAlign: 'baseline',
+  ...text.sm,
+});
+
+const rule = css({ height: 1, flex: '1 1 0%', backgroundColor: 'var(--gray-300)' });
+const fieldLabel = css({ letterSpacing: '0.025em' });
 
 function errorMessage(t: TFunction, error?: string) {
   switch (error) {
@@ -45,18 +75,43 @@ export const login = createController(routes.login, {
 
       return renderAdminPage(
         context,
-        <div class="block min-h-screen">
-          <div class="m-auto w-80 pt-[8%]">
-            <h1 class="mb-5 block text-5xl font-black">{siteSettings?.siteTitle || t('title')}</h1>
+        <div mix={css({ display: 'block', minHeight: '100vh' })}>
+          <div mix={css({ margin: 'auto', width: '20rem', paddingTop: '8%' })}>
+            <h1
+              mix={css({
+                marginBottom: '1.25rem',
+                display: 'block',
+                fontSize: '3rem',
+                lineHeight: 1,
+                fontWeight: 900,
+              })}
+            >
+              {siteSettings?.siteTitle || t('title')}
+            </h1>
             {error && (
               <p
                 role="alert"
-                class="mb-4 border-l-4 border-pink bg-pink/10 px-3 py-2 text-sm text-neutral-900"
+                mix={css({
+                  marginBottom: '1rem',
+                  borderLeft: '4px solid var(--pink)',
+                  backgroundColor: 'rgb(229 0 130 / 0.1)',
+                  padding: '0.5rem 0.75rem',
+                  ...text.sm,
+                  color: 'var(--neutral-900)',
+                })}
               >
                 {error}
               </p>
             )}
-            <div class="mt-5 block p-6 text-sm shadow-2xl">
+            <div
+              mix={css({
+                marginTop: '1.25rem',
+                display: 'block',
+                padding: '1.5rem',
+                ...text.sm,
+                boxShadow: 'var(--shadow-2xl)',
+              })}
+            >
               <PasskeyLogin
                 action={action}
                 labels={{
@@ -68,17 +123,25 @@ export const login = createController(routes.login, {
               />
               {passwordLoginEnabled() && (
                 <>
-                  <div class="my-5 flex items-center gap-3 text-gray-500">
-                    <span class="h-px flex-1 bg-gray-300" />
+                  <div
+                    mix={css({
+                      marginBlock: '1.25rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      color: 'var(--gray-500)',
+                    })}
+                  >
+                    <span mix={rule} />
                     <span>{t('login.orPassword')}</span>
-                    <span class="h-px flex-1 bg-gray-300" />
+                    <span mix={rule} />
                   </div>
                   <form method="post" action={action}>
                     <input type="hidden" name="intent" value="password" />
-                    <label class="tracking-wide" for="email">
+                    <label mix={fieldLabel} for="email">
                       {t('login.email')}
                       <input
-                        class={inputClass}
+                        mix={input}
                         autoComplete="username"
                         id="email"
                         type="email"
@@ -86,10 +149,10 @@ export const login = createController(routes.login, {
                         required
                       />
                     </label>
-                    <label class="tracking-wide" for="password">
+                    <label mix={fieldLabel} for="password">
                       {t('login.password')}
                       <input
-                        class={inputClass}
+                        mix={input}
                         autoComplete="current-password"
                         id="password"
                         type="password"
@@ -97,7 +160,7 @@ export const login = createController(routes.login, {
                         required
                       />
                     </label>
-                    <button class={buttonClass} type="submit">
+                    <button mix={button} type="submit">
                       {t('login.button')}
                     </button>
                   </form>

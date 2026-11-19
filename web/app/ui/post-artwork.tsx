@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
-import type { Handle } from 'remix/component';
+import { css, type Handle } from 'remix/component';
 
 import type { PostArtwork_PostFragment } from '../types/graphql.ts';
 
-import { cn } from './public/cn.ts';
 import { uploadUrl } from './public/media.ts';
+import { linkHover, merge, type Styles } from './public/styles.ts';
 
 export const postArtworkFragment = gql`
   fragment PostArtwork_post on Post {
@@ -47,19 +47,77 @@ interface DisplayImage extends ArtworkImage {
   src: string;
 }
 
-const collageItemClasses = {
-  1: [''],
-  2: ['', ''],
-  3: ['row-span-2', '', ''],
-  4: ['', '', '', ''],
-  5: ['col-span-2 row-span-2', 'col-span-2', 'col-span-2', 'col-span-2', 'col-span-2'],
-} as const;
+const span2 = 'span 2 / span 2';
 
-const stackItemClasses = [
-  'z-30 -rotate-2 group-hover:-translate-x-1 group-hover:-rotate-6',
-  'z-20 translate-x-1 rotate-6 group-hover:translate-x-2 group-hover:rotate-10',
-  'z-10 translate-x-2 rotate-12 group-hover:translate-x-4 group-hover:rotate-16',
+// The grid for each number of images: three put the first image down the left, five put it
+// in a large square beside four small ones
+const collageGrids: Record<number, Styles> = {
+  2: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' },
+  3: {
+    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    gridTemplateRows: 'repeat(2, minmax(0, 1fr))',
+    '& > :first-child': { gridRow: span2 },
+  },
+  4: {
+    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    gridTemplateRows: 'repeat(2, minmax(0, 1fr))',
+  },
+  5: {
+    gridTemplateColumns: 'repeat(6, minmax(0, 1fr))',
+    gridTemplateRows: 'repeat(2, minmax(0, 1fr))',
+    '& > *': { gridColumn: span2 },
+    '& > :first-child': { gridRow: span2 },
+  },
+};
+
+const collageItem = css({ overflow: 'hidden' });
+
+const collageImage = css({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  transition: 'scale 700ms var(--ease)',
+  [linkHover]: { scale: 1.05 },
+});
+
+// The stacked images fan out when the card is hovered
+const stackImages: Styles[] = [
+  {
+    zIndex: 30,
+    rotate: '-2deg',
+    [linkHover]: { translate: '-0.25rem 0', rotate: '-6deg' },
+  },
+  {
+    zIndex: 20,
+    translate: '0.25rem 0',
+    rotate: '6deg',
+    [linkHover]: { translate: '0.5rem 0', rotate: '10deg' },
+  },
+  {
+    zIndex: 10,
+    translate: '0.5rem 0',
+    rotate: '12deg',
+    [linkHover]: { translate: '1rem 0', rotate: '16deg' },
+  },
 ];
+
+const stackImage = {
+  position: 'absolute',
+  inset: '0.5rem',
+  width: '6rem',
+  height: '6rem',
+  borderRadius: '0.5rem',
+  border: '2px solid light-dark(#fff, var(--surface-dark-card))',
+  objectFit: 'cover',
+  boxShadow: 'var(--shadow-md)',
+  transition: 'translate 500ms var(--ease-out), rotate 500ms var(--ease-out)',
+} satisfies Styles;
+
+const stackSize = {
+  flexShrink: 0,
+  width: '7rem',
+  height: '7rem',
+} satisfies Styles;
 
 function cropUrl(image: ArtworkImage, targetWidth: number) {
   const crops = [...image.crops].sort((a, b) => a.width - b.width);
@@ -108,44 +166,48 @@ function postImages(post: PostArtwork_PostFragment, targetWidth: number, seed: s
   return randomizeImages(preferredImages, seed);
 }
 
-function Collage(images: DisplayImage[], className?: string) {
+function Collage(images: DisplayImage[]) {
   const visibleImages = images.slice(0, 5);
-  const count = visibleImages.length as keyof typeof collageItemClasses;
 
   return (
     <div
-      class={cn(
-        'grid gap-1 bg-neutral-950 size-full',
-        count === 2 && 'grid-cols-2',
-        count === 3 && 'grid-cols-2 grid-rows-2',
-        count === 4 && 'grid-cols-2 grid-rows-2',
-        count === 5 && 'grid-cols-6 grid-rows-2',
-        className
+      mix={css(
+        merge(
+          {
+            display: 'grid',
+            gap: '0.25rem',
+            backgroundColor: 'var(--neutral-950)',
+            width: '100%',
+            height: '100%',
+          },
+          collageGrids[visibleImages.length]
+        )
       )}
     >
       {visibleImages.map(({ id, src }, index) => (
-        <div key={id} class={cn('overflow-hidden', collageItemClasses[count][index])}>
-          <img
-            alt=""
-            class="size-full object-cover transition-transform duration-700 group-hover:scale-105"
-            loading={index === 0 ? 'eager' : 'lazy'}
-            src={src}
-          />
+        <div key={id} mix={collageItem}>
+          <img alt="" mix={collageImage} loading={index === 0 ? 'eager' : 'lazy'} src={src} />
         </div>
       ))}
     </div>
   );
 }
 
-function Stack(images: DisplayImage[], className?: string) {
+function Stack(images: DisplayImage[]) {
   const visibleImages = images.slice(0, 3);
 
   if (visibleImages.length === 1) {
     return (
-      <div class={cn('shrink-0 overflow-hidden rounded-lg size-28', className)}>
+      <div mix={css({ ...stackSize, overflow: 'hidden', borderRadius: '0.5rem' })}>
         <img
           alt=""
-          class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          mix={css({
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transition: 'scale 500ms var(--ease)',
+            [linkHover]: { scale: 1.05 },
+          })}
           loading="lazy"
           src={visibleImages[0].src}
         />
@@ -154,22 +216,32 @@ function Stack(images: DisplayImage[], className?: string) {
   }
 
   return (
-    <div class={cn('relative shrink-0 size-28', className)}>
+    <div mix={css({ ...stackSize, position: 'relative' })}>
       {visibleImages.map(({ id, src }, index) => (
         <img
           key={id}
           alt=""
-          class={cn(
-            'dark:border-surface-dark-card absolute inset-2 rounded-lg border-2 border-white object-cover shadow-md size-24',
-            'transition-transform duration-500 ease-out',
-            stackItemClasses[index]
-          )}
+          mix={css(merge(stackImage, stackImages[index]))}
           loading="lazy"
           src={src}
         />
       ))}
       {images.length > visibleImages.length && (
-        <span class="absolute right-0 bottom-0 z-40 rounded-full bg-pink px-1.5 py-0.5 text-[10px] font-bold text-white shadow">
+        <span
+          mix={css({
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            zIndex: 40,
+            borderRadius: '9999px',
+            backgroundColor: 'var(--pink)',
+            padding: '0.125rem 0.375rem',
+            fontSize: '10px',
+            fontWeight: 700,
+            color: '#fff',
+            boxShadow: 'var(--shadow-sm)',
+          })}
+        >
           +{images.length - visibleImages.length}
         </span>
       )}
@@ -179,7 +251,6 @@ function Stack(images: DisplayImage[], className?: string) {
 
 export function PostArtwork(
   handle: Handle<{
-    class?: string;
     post: PostArtwork_PostFragment;
     seed: string;
     variant: 'collage' | 'stack';
@@ -191,8 +262,6 @@ export function PostArtwork(
     if (images.length === 0) {
       return null;
     }
-    return variant === 'collage'
-      ? Collage(images, handle.props.class)
-      : Stack(images, handle.props.class);
+    return variant === 'collage' ? Collage(images) : Stack(images);
   };
 }

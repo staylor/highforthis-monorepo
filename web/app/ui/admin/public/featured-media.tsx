@@ -1,7 +1,7 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
 import { PickerDialog } from './picker-dialog.tsx';
-import { buttonClass } from './styles.ts';
+import { button } from './styles.ts';
 
 // The form submits the picked upload's ID in a hidden input, and the field shows it: an image
 // by its 300px crop, or a player for audio.
@@ -45,18 +45,22 @@ export const FeaturedMedia = clientEntry(
           {media.map((upload) => {
             if (upload.audio) {
               return (
-                <figure class="my-4">
+                <figure mix={css({ marginBlock: '1rem' })}>
                   <audio controls src={upload.audio} />
                 </figure>
               );
             }
             return upload.preview ? (
-              <img class="mr-2.5 mb-2.5" alt="" src={upload.preview} />
+              <img
+                mix={css({ marginRight: '0.625rem', marginBottom: '0.625rem' })}
+                alt=""
+                src={upload.preview}
+              />
             ) : (
               <p>{upload.id}</p>
             );
           })}
-          <button type="button" class={buttonClass()} mix={on('click', () => setPicking(true))}>
+          <button type="button" mix={[css(button()), on('click', () => setPicking(true))]}>
             {buttonText}
           </button>
           <PickerDialog

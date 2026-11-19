@@ -1,6 +1,6 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { cn } from './cn.ts';
+import { colorTransition, srOnly } from './styles.ts';
 
 const STORAGE_KEY = 'darkMode';
 
@@ -27,41 +27,66 @@ export const DarkMode = clientEntry(
     });
 
     return () => (
-      <div class="flex items-center">
+      <div mix={css({ display: 'flex', alignItems: 'center' })}>
         <label
-          class="relative inline-block h-6 w-12"
+          mix={css({
+            position: 'relative',
+            display: 'inline-block',
+            height: '1.5rem',
+            width: '3rem',
+          })}
           for={handle.props.id}
           aria-label={handle.props.label}
         >
           <input
             type="checkbox"
             id={handle.props.id}
-            class="peer hidden"
+            mix={[
+              css({ display: 'none' }),
+              on('change', (event) => {
+                checked = event.currentTarget.checked;
+                if (checked) {
+                  storage((store) => store.setItem(STORAGE_KEY, '1'));
+                } else {
+                  storage((store) => store.removeItem(STORAGE_KEY));
+                }
+                document.documentElement.classList.toggle('dark', checked);
+                handle.update();
+              }),
+            ]}
             checked={checked}
-            mix={on('change', (event) => {
-              checked = event.currentTarget.checked;
-              if (checked) {
-                storage((store) => store.setItem(STORAGE_KEY, '1'));
-              } else {
-                storage((store) => store.removeItem(STORAGE_KEY));
-              }
-              document.documentElement.classList.toggle('dark', checked);
-              handle.update();
+          />
+          {/* The track, with the knob as its ::before */}
+          <div
+            mix={css({
+              position: 'absolute',
+              inset: 0,
+              cursor: 'pointer',
+              borderRadius: '9999px',
+              border: '1px solid light-dark(var(--neutral-200), rgb(255 255 255 / 0.1))',
+              backgroundColor: 'light-dark(var(--neutral-200), var(--surface-dark-card))',
+              ...colorTransition,
+              transitionDuration: '300ms',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                bottom: '0.125rem',
+                left: '0.125rem',
+                width: '1.25rem',
+                height: '1.25rem',
+                borderRadius: '9999px',
+                backgroundColor: '#fff',
+                boxShadow: 'var(--shadow-sm)',
+                transition: 'translate 300ms var(--ease)',
+              },
+              ':checked + &::before': {
+                translate: '1.5rem 0',
+                backgroundColor: 'var(--pink)',
+              },
             })}
           />
-          <div
-            class={cn(
-              'absolute inset-0 cursor-pointer rounded-full border transition-colors duration-300',
-              'border-neutral-200 bg-neutral-200',
-              'dark:bg-surface-dark-card dark:border-white/10',
-              'before:absolute before:bottom-0.5 before:left-0.5 before:size-5',
-              'before:rounded-full before:bg-white before:shadow-sm before:transition-transform before:duration-300',
-              'peer-checked:before:translate-x-6',
-              'peer-checked:before:bg-pink'
-            )}
-          />
         </label>
-        <span class="sr-only">{handle.props.label}</span>
+        <span mix={srOnly}>{handle.props.label}</span>
       </div>
     );
   }

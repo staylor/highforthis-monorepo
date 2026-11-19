@@ -172,7 +172,7 @@ describe('admin media library', () => {
     });
     const html = await (await get('/admin/media/album-covers?search=wilco')).text();
     assert.match(html, /<input type="checkbox" name="selected" value="al1"/);
-    assert.match(html, /<strong class="block">Yankee Hotel Foxtrot<\/strong>Wilco/);
+    assert.match(html, /<strong[^>]*>Yankee Hotel Foxtrot<\/strong>Wilco/);
     assert.match(html, /2002 · 3000 × 3000/);
     assert.match(html, /<button type="submit" disabled[^>]*>Add Covers<\/button>/);
     assert.deepEqual(operations.find((op) => op.operationName === 'AlbumCoversAdmin')?.variables, {

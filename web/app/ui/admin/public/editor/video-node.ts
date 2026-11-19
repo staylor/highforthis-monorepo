@@ -15,7 +15,9 @@ function element<K extends keyof HTMLElementTagNameMap>(
   ...children: (Node | string)[]
 ) {
   const el = document.createElement(tag);
-  el.className = className;
+  if (className) {
+    el.className = className;
+  }
   el.append(...children);
   return el;
 }
@@ -23,7 +25,6 @@ function element<K extends keyof HTMLElementTagNameMap>(
 function playIcon() {
   const ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg');
-  svg.setAttribute('class', 'ml-0.5 size-7 text-white');
   svg.setAttribute('fill', 'currentColor');
   svg.setAttribute('viewBox', '0 0 24 24');
   const path = document.createElementNS(ns, 'path');
@@ -42,35 +43,23 @@ const findThumb = (thumbs: VideoThumbnail[]) =>
 function renderVideo(video: Video) {
   const href = `/video/${video.slug}`;
 
-  const figure = element('figure', 'group/thumb relative overflow-hidden rounded-xl');
+  const figure = element('figure', '');
   const thumb = findThumb(video.thumbnails);
   if (thumb) {
-    const img = element(
-      'img',
-      'aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105'
-    );
+    const img = element('img', '');
     img.src = thumb.url;
     img.alt = video.title;
     figure.append(img);
   }
-  figure.append(
-    element(
-      'div',
-      'absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100',
-      element(
-        'div',
-        'flex size-14 items-center justify-center rounded-full bg-pink/90 backdrop-blur-sm',
-        playIcon()
-      )
-    ),
-    element('figcaption', 'hidden', video.title)
-  );
+  const caption = element('figcaption', '', video.title);
+  caption.hidden = true;
+  figure.append(element('div', 'play', element('div', '', playIcon())), caption);
 
-  const link = element('a', 'm-0 block', figure);
+  const link = element('a', '', figure);
   link.href = href;
   link.addEventListener('click', (event) => {
     event.preventDefault();
-    const iframe = element('iframe', 'w-full aspect-video');
+    const iframe = element('iframe', '');
     iframe.src = `https://www.youtube.com/embed/${video.dataId}?autoplay=1`;
     link.replaceChildren(iframe);
   });
@@ -78,7 +67,7 @@ function renderVideo(video: Video) {
   const titleLink = element('a', '', video.title);
   titleLink.href = href;
 
-  return [link, element('h3', 'mb-6 text-base', titleLink)];
+  return [link, element('h3', '', titleLink)];
 }
 
 /**
@@ -122,6 +111,7 @@ export default class VideoNode extends DecoratorNode<null> {
 
   createDOM(): HTMLElement {
     const div = document.createElement('div');
+    div.className = 'editor-video';
     if (this.__video) {
       div.append(...renderVideo(this.__video));
     }

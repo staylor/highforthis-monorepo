@@ -7,7 +7,7 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 | Workspace                          | Description                                            |
 | ---------------------------------- | ------------------------------------------------------ |
 | [`graphql`](./graphql)             | GraphQL API server (Apollo Server, Prisma, PostgreSQL) |
-| [`web`](./web)                     | Public site and admin (Remix 3, Tailwind CSS)          |
+| [`web`](./web)                     | Public site and admin (Remix 3)                        |
 | [`shared`](./shared)               | Logging and OpenTelemetry for GraphQL and web          |
 | [`e2e`](./e2e)                     | Playwright end-to-end tests of the admin               |
 | [`observability`](./observability) | OpenObserve backend and GUI deployment                 |

@@ -1,11 +1,19 @@
 import { gql } from 'graphql-tag';
-import type { Handle } from 'remix/component';
+import { css, type Handle } from 'remix/component';
 
 import type { HomeQuery } from '../../types/graphql.ts';
 import { getApp } from '../../ui/app-context.tsx';
 import { Link } from '../../ui/link.tsx';
 import { PostArtwork, postArtworkFragment } from '../../ui/post-artwork.tsx';
-import { cn } from '../../ui/public/cn.ts';
+import {
+  card,
+  colorTransition,
+  lg,
+  lineClamp,
+  linkHover,
+  merge,
+  text,
+} from '../../ui/public/styles.ts';
 import { AccentLine, SectionHeader } from '../../ui/section-header.tsx';
 import { Videos, videosFragment } from '../../ui/videos.tsx';
 
@@ -59,58 +67,144 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
               viewAllLink="/posts"
               viewAllText={t('posts.viewAll')}
             />
-            <div class="grid gap-8 lg:grid-cols-2">
+            <div
+              mix={css({
+                display: 'grid',
+                gap: '2rem',
+                [lg]: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' },
+              })}
+            >
               <Link
                 href={`/post/${featured.node.slug}`}
-                class={cn(
-                  'group relative block overflow-hidden rounded-2xl',
-                  'dark:bg-surface-dark-card bg-white shadow-sm',
-                  'transition-all duration-300 hover:-translate-y-0.5',
-                  'hover:shadow-pink/5 dark:hover:shadow-pink/10 hover:shadow-lg'
+                mix={css(
+                  merge(card, {
+                    border: 'none',
+                    position: 'relative',
+                    display: 'block',
+                    overflow: 'hidden',
+                    borderRadius: '1rem',
+                  })
                 )}
               >
-                <div class="aspect-4/3 overflow-hidden bg-neutral-950">
+                <div
+                  mix={css({
+                    aspectRatio: '4 / 3',
+                    overflow: 'hidden',
+                    backgroundColor: 'var(--neutral-950)',
+                  })}
+                >
                   <PostArtwork
                     post={featured.node}
                     seed={`${artworkSeed}:${featured.node.id}`}
                     variant="collage"
                   />
-                  <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
+                  <div
+                    mix={css({
+                      position: 'absolute',
+                      inset: 0,
+                      background:
+                        'linear-gradient(to top in oklab, rgb(0 0 0 / 0.8), rgb(0 0 0 / 0.2), transparent)',
+                    })}
+                  />
                 </div>
-                <div class="absolute inset-x-0 bottom-0 p-8">
-                  <span class="mb-4 inline-block rounded bg-pink/90 px-3 py-1 text-xs font-bold tracking-wider text-white uppercase">
+                <div
+                  mix={css({
+                    position: 'absolute',
+                    insetInline: 0,
+                    bottom: 0,
+                    padding: '2rem',
+                  })}
+                >
+                  <span
+                    mix={css({
+                      marginBottom: '1rem',
+                      display: 'inline-block',
+                      borderRadius: '0.25rem',
+                      backgroundColor: 'rgb(229 0 130 / 0.9)',
+                      padding: '0.25rem 0.75rem',
+                      ...text.xs,
+                      fontWeight: 700,
+                      letterSpacing: '0.05em',
+                      color: '#fff',
+                      textTransform: 'uppercase',
+                    })}
+                  >
                     {t('posts.featured')}
                   </span>
-                  <h2 class="mb-3 text-3xl leading-tight font-bold text-white lg:text-4xl">
+                  <h2
+                    mix={css({
+                      marginBottom: '0.75rem',
+                      fontSize: '1.875rem',
+                      lineHeight: 1.25,
+                      fontWeight: 700,
+                      color: '#fff',
+                      [lg]: { fontSize: '2.25rem' },
+                    })}
+                  >
                     {featured.node.title}
                   </h2>
                   {featured.node.summary && (
-                    <p class="line-clamp-2 max-w-lg text-sm leading-relaxed text-white/70">
+                    <p
+                      mix={css({
+                        ...lineClamp(2),
+                        maxWidth: '32rem',
+                        fontSize: '0.875rem',
+                        lineHeight: 1.625,
+                        color: 'rgb(255 255 255 / 0.7)',
+                      })}
+                    >
                       {featured.node.summary}
                     </p>
                   )}
                 </div>
               </Link>
 
-              <div class="flex flex-col gap-4">
+              <div
+                mix={css({
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                })}
+              >
                 {rest.map(({ node }) => (
                   <Link
                     href={`/post/${node.slug}`}
-                    class={cn(
-                      'group flex gap-5 rounded-xl p-4',
-                      'border border-neutral-100 bg-white shadow-sm',
-                      'dark:bg-surface-dark-card dark:border-white/5',
-                      'transition-all duration-300 hover:-translate-y-0.5',
-                      'hover:shadow-pink/5 dark:hover:shadow-pink/10 hover:shadow-lg'
+                    mix={css(
+                      merge(card, {
+                        display: 'flex',
+                        gap: '1.25rem',
+                        borderRadius: '0.75rem',
+                        padding: '1rem',
+                      })
                     )}
                   >
                     <PostArtwork post={node} seed={`${artworkSeed}:${node.id}`} variant="stack" />
-                    <div class="flex flex-col justify-center">
-                      <h3 class="mb-1.5 text-lg font-semibold transition-colors group-hover:text-pink">
+                    <div
+                      mix={css({
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                      })}
+                    >
+                      <h3
+                        mix={css({
+                          marginBottom: '0.375rem',
+                          ...text.lg,
+                          fontWeight: 600,
+                          ...colorTransition,
+                          [linkHover]: { color: 'var(--pink)' },
+                        })}
+                      >
                         {node.title}
                       </h3>
                       {node.summary && (
-                        <p class="line-clamp-2 text-sm text-muted dark:text-muted-dark">
+                        <p
+                          mix={css({
+                            ...lineClamp(2),
+                            ...text.sm,
+                            color: 'var(--muted)',
+                          })}
+                        >
                           {node.summary}
                         </p>
                       )}

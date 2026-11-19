@@ -1,14 +1,19 @@
-import { clientEntry, on, type Handle } from 'remix/component';
-
-import { cn } from './cn.ts';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
 interface VideoThumbnailProps {
   href: string;
   dataId: string;
   title: string;
   thumbUrl?: string;
-  class?: string;
+  /** In a post: no space below. */
+  embedded?: boolean;
 }
+
+const frame = css({
+  display: 'block',
+  marginBottom: '0.75rem',
+  '&[data-embedded]': { marginBottom: 0 },
+});
 
 /**
  * Click-to-play thumbnail: clicking swaps it for the YouTube player. Without JavaScript the
@@ -20,12 +25,12 @@ export const VideoThumbnail = clientEntry(
     let playing = false;
 
     return () => {
-      const { href, dataId, title, thumbUrl } = handle.props;
+      const { href, dataId, title, thumbUrl, embedded } = handle.props;
       if (playing) {
         return (
-          <div class={cn('block', handle.props.class)}>
+          <div mix={frame} data-embedded={embedded || undefined}>
             <iframe
-              class="aspect-video w-full"
+              mix={css({ aspectRatio: '16 / 9', width: '100%' })}
               src={`https://www.youtube.com/embed/${dataId}?autoplay=1`}
               title={title}
               allow="autoplay; encrypted-media; picture-in-picture"
@@ -37,29 +42,70 @@ export const VideoThumbnail = clientEntry(
       return (
         <a
           href={href}
-          class={cn('block', handle.props.class)}
-          mix={on('click', (event) => {
-            event.preventDefault();
-            playing = true;
-            handle.update();
-          })}
+          data-embedded={embedded || undefined}
+          mix={[
+            frame,
+            on('click', (event) => {
+              event.preventDefault();
+              playing = true;
+              handle.update();
+            }),
+          ]}
         >
-          <figure class="group/thumb relative overflow-hidden rounded-xl">
-            {thumbUrl && (
-              <img
-                src={thumbUrl}
-                alt={title}
-                class="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            )}
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
-              <div class="flex size-14 items-center justify-center rounded-full bg-pink/90 backdrop-blur-sm">
-                <svg class="ml-0.5 size-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+          {/* Hovering zooms the thumbnail and shows the play button */}
+          <figure
+            mix={css({
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: '0.75rem',
+              '& img': {
+                aspectRatio: '16 / 9',
+                width: '100%',
+                objectFit: 'cover',
+                transition: 'scale 500ms var(--ease)',
+              },
+              '&:hover img': { scale: 1.05 },
+              '& .play': {
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: 0,
+                transition: 'opacity 150ms var(--ease)',
+              },
+              '&:hover .play': { opacity: 1 },
+            })}
+          >
+            {thumbUrl && <img src={thumbUrl} alt={title} />}
+            <div class="play">
+              <div
+                mix={css({
+                  display: 'flex',
+                  width: '3.5rem',
+                  height: '3.5rem',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '9999px',
+                  backgroundColor: 'rgb(229 0 130 / 0.9)',
+                  backdropFilter: 'blur(8px)',
+                })}
+              >
+                <svg
+                  mix={css({
+                    marginLeft: '0.125rem',
+                    width: '1.75rem',
+                    height: '1.75rem',
+                    color: '#fff',
+                  })}
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
             </div>
-            <figcaption class="hidden">{title}</figcaption>
+            <figcaption hidden>{title}</figcaption>
           </figure>
         </a>
       );

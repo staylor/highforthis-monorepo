@@ -1,8 +1,10 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { cn } from '../../public/cn.ts';
+import { merge, sm } from '../../public/styles.ts';
 
-import { inputBase } from './styles.ts';
+import { input } from './styles.ts';
+
+const dateInput = css(merge(input, { width: '100%', [sm]: { width: 'auto' } }));
 
 // A datetime-local input in the browser's time zone, and a hidden input with the timestamp,
 // which is what the form submits. The page renders the time in the server's time zone until
@@ -38,14 +40,16 @@ export const DateTimeInput = clientEntry(
             type="datetime-local"
             id={id}
             value={current === null ? '' : localValue(current)}
-            class={cn(inputBase, 'w-full sm:w-auto')}
-            mix={on('change', (event) => {
-              const parsed = Date.parse(event.currentTarget.value);
-              if (!Number.isNaN(parsed)) {
-                timestamp = parsed;
-                handle.update();
-              }
-            })}
+            mix={[
+              dateInput,
+              on('change', (event) => {
+                const parsed = Date.parse(event.currentTarget.value);
+                if (!Number.isNaN(parsed)) {
+                  timestamp = parsed;
+                  handle.update();
+                }
+              }),
+            ]}
           />
         </>
       );

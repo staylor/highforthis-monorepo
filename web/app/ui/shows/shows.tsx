@@ -1,20 +1,13 @@
 import { gql } from 'graphql-tag';
-import type { Handle, RemixNode } from 'remix/component';
+import { css, type Handle, type MixInput, type RemixNode } from 'remix/component';
 
 import type { Attended_ShowsFragment, ShowsGrid_ShowsFragment } from '../../types/graphql.ts';
 import { getApp } from '../app-context.tsx';
 import { Link } from '../link.tsx';
-import { cn } from '../public/cn.ts';
+import { colorTransition, md, sm, text, xs } from '../public/styles.ts';
 import { trans } from '../trans.tsx';
 
-import {
-  cellBase,
-  formatArtists,
-  formatDate,
-  formatShowLink,
-  rowBorder,
-  rowHover,
-} from './utils.ts';
+import { cell, formatArtists, formatDate, formatShowLink, row } from './utils.ts';
 
 export const showsGridFragment = gql`
   fragment ShowsGrid_shows on ShowConnection {
@@ -70,13 +63,54 @@ export const attendedFragment = gql`
 
 type GridProps = {
   shows: ShowsGrid_ShowsFragment;
-  class?: string;
+  mix?: MixInput;
   showMonths?: boolean;
   showYears?: boolean;
 };
 
+const table = css({ width: '100%', borderCollapse: 'collapse' });
+const rowStyle = css(row);
+const cellStyle = css(cell);
+const dateCell = css({
+  ...cell,
+  color: 'var(--muted)',
+  width: '4rem',
+  fontVariantNumeric: 'tabular-nums',
+  [md]: { width: '6rem' },
+});
+// The venue gets its own column from the sm breakpoint, and goes under the show below it
+const venueCell = css({
+  ...cell,
+  color: 'var(--muted)',
+  display: 'none',
+  textTransform: 'uppercase',
+  [sm]: { display: 'table-cell' },
+});
+const venueBelow = css({
+  display: 'block',
+  ...text.xs,
+  color: 'var(--muted)',
+  [sm]: { display: 'none' },
+});
+const spacer = css({ height: '0.5rem' });
+const pinkLink = css({
+  color: 'var(--pink)',
+  '&:hover': { textDecoration: 'underline' },
+});
+const plainLink = css({
+  ...colorTransition,
+  '&:hover': { color: 'var(--pink)' },
+});
+const monthName = {
+  ...text.xs,
+  fontWeight: 600,
+  letterSpacing: '0.05em',
+  color: 'var(--muted)',
+  textTransform: 'uppercase',
+};
+
 /** Shows as a table on wider screens and a list on the narrowest. */
-export function Shows(handle: Handle<Omit<GridProps, 'class'>>) {
+export function Shows(handle: Handle<Omit<GridProps, 'mix'>>) {
   return () => {
     const { shows, showMonths = true, showYears = true } = handle.props;
     if (!shows?.edges?.length) {
@@ -88,35 +122,42 @@ export function Shows(handle: Handle<Omit<GridProps, 'class'>>) {
           shows={shows}
           showMonths={showMonths}
           showYears={showYears}
-          class="hidden xs:block"
+          mix={css({ display: 'none', [xs]: { display: 'block' } })}
         />
-        <ShowsList shows={shows} class="block xs:hidden" />
+        <ShowsList shows={shows} mix={css({ display: 'block', [xs]: { display: 'none' } })} />
       </>
     );
   };
 }
 
-function monthHeader(cellClass: string, monthName: string) {
+const monthCell = css({ ...cell, ...monthName, paddingBlock: '0.5rem' });
+
+function monthHeader(name: string) {
   return [
     <tr>
-      <td colSpan={3} class="h-2" />
+      <td colSpan={3} mix={spacer} />
     </tr>,
-    <tr class="bg-neutral-100 dark:bg-surface-dark-card">
-      <td
-        colSpan={3}
-        class={cn(
-          cellClass,
-          'text-muted dark:text-muted-dark py-2 text-xs font-semibold tracking-wider uppercase'
-        )}
-      >
-        {monthName}
+    <tr
+      mix={css({
+        backgroundColor: 'light-dark(var(--neutral-100), var(--surface-dark-card))',
+      })}
+    >
+      <td colSpan={3} mix={monthCell}>
+        {name}
       </td>
     </tr>,
     <tr>
-      <td colSpan={3} class="h-2" />
+      <td colSpan={3} mix={spacer} />
     </tr>,
   ];
 }
+
+const yearCell = css({
+  ...cell,
+  paddingTop: 0,
+  fontWeight: 700,
+  color: 'light-dark(var(--neutral-900), #fff)',
+});
 
 export function ShowsGrid(handle: Handle<GridProps>) {
   return () => {
@@ -134,7 +175,6 @@ export function ShowsGrid(handle: Handle<GridProps>) {
       }
       return a.date < b.date ? -1 : 1;
     });
-    const headerCell = cn(cellBase, 'font-bold text-neutral-900 dark:text-white');
 
     const rows: RemixNode[] = [];
     for (const { node } of sorted) {
@@ -147,42 +187,36 @@ export function ShowsGrid(handle: Handle<GridProps>) {
           rows.push(
             <tr>
               <td colSpan={3}>
-                <div class="mt-4 h-2" />
+                <div mix={css({ marginTop: '1rem', height: '0.5rem' })} />
               </td>
             </tr>
           );
         }
         rows.push(
           <tr>
-            <td colSpan={3} class={cn(headerCell, 'pt-6 text-lg first:pt-0')}>
+            <td colSpan={3} mix={yearCell}>
               {d.year}
             </td>
           </tr>
         );
         if (showMonths) {
-          rows.push(...monthHeader(cellBase, d.monthName));
+          rows.push(...monthHeader(d.monthName));
         }
       } else if (showMonths && !months[`${d.year}${d.month}`]) {
         months[`${d.year}${d.month}`] = 1;
-        rows.push(...monthHeader(cellBase, d.monthName));
+        rows.push(...monthHeader(d.monthName));
       }
       rows.push(
-        <tr key={node.id} class={rowHover}>
-          <td class={cn(cellBase, 'text-muted dark:text-muted-dark w-16 tabular-nums md:w-24')}>
-            {d.formatted}
-          </td>
-          <td class={cellBase}>
-            <Link class="text-pink hover:underline" href={formatShowLink(node)}>
+        <tr key={node.id} mix={rowStyle}>
+          <td mix={dateCell}>{d.formatted}</td>
+          <td mix={cellStyle}>
+            <Link mix={pinkLink} href={formatShowLink(node)}>
               {formatArtists(node)}
             </Link>
-            <span class="block text-xs text-muted sm:hidden dark:text-muted-dark">
-              {node.venue.name}
-            </span>
+            <span mix={venueBelow}>{node.venue.name}</span>
           </td>
-          <td
-            class={cn(cellBase, 'text-muted dark:text-muted-dark hidden uppercase sm:table-cell')}
-          >
-            <Link class="transition-colors hover:text-pink" href={`/venue/${node.venue.slug}`}>
+          <td mix={venueCell}>
+            <Link mix={plainLink} href={`/venue/${node.venue.slug}`}>
               {node.venue.name}
             </Link>
           </td>
@@ -191,8 +225,8 @@ export function ShowsGrid(handle: Handle<GridProps>) {
     }
 
     return (
-      <div class={handle.props.class}>
-        <table class="w-full border-collapse">
+      <div mix={handle.props.mix}>
+        <table mix={table}>
           <tbody>{rows}</tbody>
         </table>
       </div>
@@ -200,23 +234,23 @@ export function ShowsGrid(handle: Handle<GridProps>) {
   };
 }
 
-export function ShowsList(handle: Handle<{ shows: ShowsGrid_ShowsFragment; class?: string }>) {
+export function ShowsList(handle: Handle<{ shows: ShowsGrid_ShowsFragment; mix?: MixInput }>) {
   return () => {
     const years: Record<number, number> = {};
     const months: Record<string, number> = {};
     return (
-      <article class={handle.props.class}>
+      <article mix={handle.props.mix}>
         {handle.props.shows.edges.map(({ node }) => {
           const d = formatDate(node.date);
           const showRow = (
-            <p class="mb-2 text-sm">
-              <strong class="tabular-nums">{d.formatted}</strong>
+            <p mix={css({ marginBottom: '0.5rem', ...text.sm })}>
+              <strong mix={css({ fontVariantNumeric: 'tabular-nums' })}>{d.formatted}</strong>
               <br />
-              <Link class="text-pink" href={formatShowLink(node)}>
+              <Link mix={css({ color: 'var(--pink)' })} href={formatShowLink(node)}>
                 {formatArtists(node)}
               </Link>
               <br />
-              <span class="text-muted dark:text-muted-dark">{node.venue.name}</span>
+              <span mix={css({ color: 'var(--muted)' })}>{node.venue.name}</span>
             </p>
           );
 
@@ -225,12 +259,10 @@ export function ShowsList(handle: Handle<{ shows: ShowsGrid_ShowsFragment; class
             months[`${d.year}${d.month}`] = 1;
             return (
               <div key={node.id}>
-                <p class="mt-4 mb-1 first:mt-0">
-                  <strong class="text-lg">{d.year}</strong>
+                <p mix={css({ marginBottom: '0.25rem' })}>
+                  <strong mix={css(text.lg)}>{d.year}</strong>
                 </p>
-                <p class="mb-1 text-xs font-semibold tracking-wider text-muted uppercase dark:text-muted-dark">
-                  {d.monthName}
-                </p>
+                <p mix={css({ marginBottom: '0.25rem', ...monthName })}>{d.monthName}</p>
                 {showRow}
               </div>
             );
@@ -239,9 +271,7 @@ export function ShowsList(handle: Handle<{ shows: ShowsGrid_ShowsFragment; class
             months[`${d.year}${d.month}`] = 1;
             return (
               <div key={node.id}>
-                <p class="mt-3 mb-1 text-xs font-semibold tracking-wider text-muted uppercase dark:text-muted-dark">
-                  {d.monthName}
-                </p>
+                <p mix={css({ marginBlock: '0.75rem 0.25rem', ...monthName })}>{d.monthName}</p>
                 {showRow}
               </div>
             );
@@ -253,8 +283,22 @@ export function ShowsList(handle: Handle<{ shows: ShowsGrid_ShowsFragment; class
   };
 }
 
+const underline = css({ textDecoration: 'underline' });
+const borderedRow = css({
+  ...row,
+  borderBottom: '1px solid var(--card-border)',
+  '&:last-child': { borderBottom: 0 },
+});
+const underlinedLink = css({
+  ...colorTransition,
+  '&:hover': { color: 'var(--pink)', textDecoration: 'underline' },
+});
+
 export function Attended(
-  handle: Handle<{ shows: Attended_ShowsFragment; relation: 'artist' | 'venue'; class?: string }>
+  handle: Handle<{
+    shows: Attended_ShowsFragment;
+    relation: 'artist' | 'venue';
+  }>
 ) {
   const { t } = getApp(handle);
 
@@ -264,58 +308,40 @@ export function Attended(
       return null;
     }
     return (
-      <article class={handle.props.class || 'mt-12'}>
-        <p class="mb-3 text-sm">
-          <Link href={`/shows/stats/${relation}`} class="text-pink hover:underline">
+      <article mix={css({ marginTop: '3rem' })}>
+        <p mix={css({ marginBottom: '0.75rem', ...text.sm })}>
+          <Link href={`/shows/stats/${relation}`} mix={pinkLink}>
             {trans(
               t,
               `shows.attended.${relation}`,
               { count: shows.edges.length },
-              { Bold: (children) => <span class="underline">{children}</span> }
+              { Bold: (children) => <span mix={underline}>{children}</span> }
             )}
           </Link>
           :
         </p>
-        <table class="w-full border-collapse">
+        <table mix={table}>
           <tbody>
             {shows.edges.map(({ node }) => {
               const d = formatDate(node.date);
               const place = [node.venue.city, node.venue.state].filter(Boolean).join(', ');
               return (
-                <tr key={node.id} class={cn(rowHover, rowBorder)}>
-                  <td
-                    class={cn(
-                      cellBase,
-                      'text-muted dark:text-muted-dark w-16 tabular-nums md:w-24'
-                    )}
-                  >
+                <tr key={node.id} mix={borderedRow}>
+                  <td mix={dateCell}>
                     {d.formatted}/{d.year}
                   </td>
-                  <td class={cellBase}>
+                  <td mix={cellStyle}>
                     <Link
-                      class="transition-colors hover:text-pink hover:underline"
+                      mix={underlinedLink}
                       href={
                         relation === 'artist' ? `/venue/${node.venue.slug}` : formatShowLink(node)
                       }
                     >
                       {relation === 'artist' ? node.venue.name : formatArtists(node)}
                     </Link>
-                    {relation === 'artist' && (
-                      <span class="block text-xs text-muted sm:hidden dark:text-muted-dark">
-                        {place}
-                      </span>
-                    )}
+                    {relation === 'artist' && <span mix={venueBelow}>{place}</span>}
                   </td>
-                  {relation === 'artist' && (
-                    <td
-                      class={cn(
-                        cellBase,
-                        'text-muted dark:text-muted-dark hidden uppercase sm:table-cell'
-                      )}
-                    >
-                      {place}
-                    </td>
-                  )}
+                  {relation === 'artist' && <td mix={venueCell}>{place}</td>}
                 </tr>
               );
             })}

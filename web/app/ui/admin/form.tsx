@@ -1,10 +1,10 @@
-import type { Handle, RemixNode } from 'remix/component';
+import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { cn } from '../public/cn.ts';
+import { lg, merge, sm, text } from '../public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { Message } from './message.tsx';
-import { buttonClass, inputBase } from './public/styles.ts';
+import { checkbox, label, saveButton, select, wideInput } from './public/styles.ts';
 
 // A plain POST form whose fields are described by data. A custom field renders what it's
 // given, such as the featured media field.
@@ -27,7 +27,7 @@ export interface Field {
   render?: () => RemixNode;
 }
 
-const label = 'mb-1 block text-sm tracking-wide text-gray-700 dark:text-neutral-300';
+const checkboxStyle = css(merge(checkbox, { '&:focus': { borderColor: 'var(--pink)' } }));
 
 function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>) {
   return () => {
@@ -42,7 +42,7 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
           rows={5}
           value={String(value ?? '')}
           placeholder={field.placeholder}
-          class={cn(inputBase, 'w-full')}
+          mix={wideInput}
           id={id}
         />
       );
@@ -56,7 +56,7 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
           name={field.prop}
           value="true"
           checked={Boolean(value)}
-          class="rounded-sm border-gray-300 text-pink shadow-sm focus:border-pink focus:ring-3 focus:ring-pink focus:ring-offset-0"
+          mix={checkboxStyle}
           id={id}
         />
       );
@@ -68,12 +68,7 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
         )
       );
       return (
-        <select
-          name={field.prop}
-          multiple={field.multiple}
-          class={cn(inputBase, 'rounded-lg border-neutral-300 bg-white text-sm')}
-          id={id}
-        >
+        <select name={field.prop} multiple={field.multiple} mix={select} id={id}>
           {!field.multiple && <option value="">{field.placeholder ?? ''}</option>}
           {field.choices?.map((choice) => (
             <option value={choice.value} selected={selected.has(choice.value)}>
@@ -91,7 +86,7 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
           type="password"
           name={field.prop}
           autocomplete={autocomplete}
-          class={cn(inputBase, 'w-full')}
+          mix={wideInput}
           id={id}
         />
       );
@@ -101,7 +96,7 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
       value: String(value ?? ''),
       placeholder: field.placeholder,
       autocomplete,
-      class: cn(inputBase, 'w-full'),
+      mix: wideInput,
       id,
     };
     // Remix types each input type's attributes separately
@@ -135,16 +130,16 @@ export function FormField(handle: Handle<{ field: Field; data?: Record<string, u
     const id = `field-${field.prop}`;
     if (field.type === 'custom') {
       return (
-        <div class="my-6 block">
-          {field.label && <span class={label}>{field.label}</span>}
+        <div mix={css({ marginBlock: '1.5rem', display: 'block' })}>
+          {field.label && <span mix={label}>{field.label}</span>}
           {field.render?.()}
         </div>
       );
     }
     return (
-      <div class="mt-2.5 mb-5 block">
+      <div mix={css({ marginBlock: '0.625rem 1.25rem', display: 'block' })}>
         {field.type !== 'hidden' && (
-          <label for={id} class={label}>
+          <label for={id} mix={label}>
             {field.label}
           </label>
         )}
@@ -154,50 +149,86 @@ export function FormField(handle: Handle<{ field: Field; data?: Record<string, u
   };
 }
 
-const boxBorder = 'border border-detail';
+const box = css({
+  marginBottom: '1.25rem',
+  boxSizing: 'border-box',
+  display: 'block',
+  border: '1px solid var(--detail)',
+  boxShadow: 'var(--shadow-sm)',
+});
+
+const boxBody = css({ padding: '0.375rem 1.25rem 1.25rem', ...text.sm });
 
 export function AdminForm(handle: Handle<AdminFormProps>) {
   return () => {
     const { t } = getAdmin(handle);
     const { fields, data, buttonLabel, meta, info } = handle.props;
     const button = (
-      <button type="submit" class={buttonClass(true, 'h-7.5 px-3 pb-0.5 leading-7')}>
+      <button type="submit" mix={saveButton}>
         {buttonLabel || t('admin.submit')}
       </button>
     );
     const sidebar = Boolean(meta || info);
     return (
-      <div class="block after:clear-both after:table">
+      <div
+        mix={css({
+          display: 'block',
+          '&::after': { content: '""', clear: 'both', display: 'table' },
+        })}
+      >
         <Message param="saveFailed" text={t('admin.saveFailed')} />
         <form method="post">
           <fieldset
-            class={cn(
-              'flex w-full flex-col gap-6',
-              sidebar && 'lg:flex-row lg:items-start lg:gap-8'
-            )}
+            data-sidebar={sidebar || undefined}
+            mix={css({
+              display: 'flex',
+              width: '100%',
+              flexDirection: 'column',
+              gap: '1.5rem',
+              '&[data-sidebar]': {
+                [lg]: { flexDirection: 'row', alignItems: 'flex-start', gap: '2rem' },
+              },
+            })}
           >
-            <div class="w-full max-w-2xl min-w-0">
+            <div mix={css({ width: '100%', maxWidth: '42rem', minWidth: 0 })}>
               {fields.map((field) => (
                 <FormField field={field} data={data} />
               ))}
               {!info && button}
             </div>
             {sidebar && (
-              <section class="w-full shrink-0 lg:sticky lg:top-4 lg:w-70">
+              <section
+                mix={css({
+                  width: '100%',
+                  flexShrink: 0,
+                  [lg]: { position: 'sticky', top: '1rem', width: '17.5rem' },
+                })}
+              >
                 {info && (
-                  <aside class={cn(boxBorder, 'mb-5 box-border block shadow-sm')}>
-                    <h3 class={cn(boxBorder, 'px-3 py-2 text-sm font-bold text-dark select-none')}>
+                  <aside mix={box}>
+                    <h3
+                      mix={css({
+                        border: '1px solid var(--detail)',
+                        padding: '0.5rem 0.75rem',
+                        ...text.sm,
+                        fontWeight: 700,
+                        color: 'var(--dark)',
+                        userSelect: 'none',
+                      })}
+                    >
                       {t('admin.details')}
                     </h3>
-                    <div class="px-5 pt-1.5 pb-5 text-sm">
+                    <div mix={boxBody}>
                       {info}
-                      <span class="hidden lg:inline-block">{button}</span>
+                      <span mix={css({ display: 'none', [lg]: { display: 'inline-block' } })}>
+                        {button}
+                      </span>
                     </div>
                   </aside>
                 )}
                 {meta && (
-                  <aside class={cn(boxBorder, 'mb-5 box-border block shadow-sm')}>
-                    <div class="px-5 pt-1.5 pb-5 text-sm">{meta}</div>
+                  <aside mix={box}>
+                    <div mix={boxBody}>{meta}</div>
                   </aside>
                 )}
               </section>
@@ -205,11 +236,21 @@ export function AdminForm(handle: Handle<AdminFormProps>) {
           </fieldset>
           {info && (
             <div
-              class={cn(
-                'sticky bottom-0 z-30 mt-6 flex justify-end lg:hidden',
-                '-mx-4 px-4 py-3 sm:-mx-6 sm:px-6',
-                'border-t border-neutral-200/80 bg-white/90 backdrop-blur-xl'
-              )}
+              mix={css({
+                position: 'sticky',
+                bottom: 0,
+                zIndex: 30,
+                marginTop: '1.5rem',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginInline: '-1rem',
+                padding: '0.75rem 1rem',
+                borderTop: '1px solid oklch(92.2% 0 none / 0.8)',
+                backgroundColor: 'rgb(255 255 255 / 0.9)',
+                backdropFilter: 'blur(24px)',
+                [sm]: { marginInline: '-1.5rem', paddingInline: '1.5rem' },
+                [lg]: { display: 'none' },
+              })}
             >
               {button}
             </div>

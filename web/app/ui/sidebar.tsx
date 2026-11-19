@@ -1,10 +1,10 @@
-import type { Handle } from 'remix/component';
+import { css, type Handle } from 'remix/component';
 
 import type { AppQuery } from '../types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';
-import { cn } from './public/cn.ts';
+import { card, colorTransition, lg, linkHover, merge, sm, text } from './public/styles.ts';
 import { SectionHeader } from './section-header.tsx';
 import { formatArtists, formatShowLink } from './shows/utils.ts';
 
@@ -18,7 +18,10 @@ function groupShowsByMonth(edges: Edges) {
   for (const edge of edges) {
     const date = new Date(edge.node.date);
     const key = `${date.getFullYear()}-${date.getMonth()}`;
-    const label = date.toLocaleString('en-us', { month: 'long', year: 'numeric' });
+    const label = date.toLocaleString('en-us', {
+      month: 'long',
+      year: 'numeric',
+    });
 
     if (seen.has(key)) {
       groups[seen.get(key)!].shows.push(edge);
@@ -30,6 +33,40 @@ function groupShowsByMonth(edges: Edges) {
 
   return groups;
 }
+
+const monthHeading = css({
+  marginBottom: '0.75rem',
+  ...text.xs,
+  fontWeight: 600,
+  letterSpacing: '0.05em',
+  color: 'var(--muted)',
+  textTransform: 'uppercase',
+});
+
+// Each month's shows fill columns top to bottom, with the row counts set per month
+const monthGrid = css({
+  display: 'grid',
+  gap: '0.75rem',
+  [sm]: {
+    gridAutoFlow: 'column',
+    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    gridTemplateRows: 'var(--rows-sm)',
+  },
+  [lg]: {
+    gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+    gridTemplateRows: 'var(--rows-lg)',
+  },
+});
+
+const showCard = css(
+  merge(card, {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '1rem',
+    borderRadius: '0.75rem',
+    padding: '1rem',
+  })
+);
 
 export function Sidebar(handle: Handle<{ shows: Shows }>) {
   const { t } = getApp(handle);
@@ -46,20 +83,14 @@ export function Sidebar(handle: Handle<{ shows: Shows }>) {
           viewAllText="Full Calendar →"
         />
         {shows.edges.length === 0 && (
-          <p class="text-sm text-muted dark:text-muted-dark">{t('shows.noRecommended')}</p>
+          <p mix={css({ ...text.sm, color: 'var(--muted)' })}>{t('shows.noRecommended')}</p>
         )}
-        <div class="flex flex-col gap-8">
+        <div mix={css({ display: 'flex', flexDirection: 'column', gap: '2rem' })}>
           {groups.map((group) => (
             <div key={group.key}>
-              <h3 class="mb-3 text-xs font-semibold tracking-wider text-muted uppercase dark:text-muted-dark">
-                {group.label}
-              </h3>
+              <h3 mix={monthHeading}>{group.label}</h3>
               <div
-                class={cn(
-                  'grid gap-3',
-                  'sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-(--rows-sm)',
-                  'lg:grid-cols-3 lg:grid-rows-(--rows-lg)'
-                )}
+                mix={monthGrid}
                 style={{
                   '--rows-sm': `repeat(${Math.ceil(group.shows.length / 2)}, auto)`,
                   '--rows-lg': `repeat(${Math.ceil(group.shows.length / 3)}, auto)`,
@@ -68,29 +99,50 @@ export function Sidebar(handle: Handle<{ shows: Shows }>) {
                 {group.shows.map(({ node }) => {
                   const date = new Date(node.date);
                   return (
-                    <Link
-                      href={formatShowLink(node)}
-                      class={cn(
-                        'group flex items-start gap-4 rounded-xl p-4',
-                        'border border-neutral-100 bg-white shadow-sm',
-                        'dark:bg-surface-dark-card dark:border-white/5',
-                        'transition-all duration-300 hover:-translate-y-0.5',
-                        'hover:shadow-pink/5 dark:hover:shadow-pink/10 hover:shadow-lg'
-                      )}
-                    >
-                      <div class="shrink-0 text-center">
-                        <div class="text-2xl leading-none font-bold text-pink">
+                    <Link href={formatShowLink(node)} mix={showCard}>
+                      <div mix={css({ flexShrink: 0, textAlign: 'center' })}>
+                        <div
+                          mix={css({
+                            fontSize: '1.5rem',
+                            lineHeight: 1,
+                            fontWeight: 700,
+                            color: 'var(--pink)',
+                          })}
+                        >
                           {String(date.getDate()).padStart(2, '0')}
                         </div>
-                        <div class="text-xs font-medium tracking-wider text-muted uppercase tabular-nums dark:text-muted-dark">
+                        <div
+                          mix={css({
+                            ...text.xs,
+                            fontWeight: 500,
+                            letterSpacing: '0.05em',
+                            color: 'var(--muted)',
+                            textTransform: 'uppercase',
+                            fontVariantNumeric: 'tabular-nums',
+                          })}
+                        >
                           {date.toLocaleString('en-us', { weekday: 'short' })}
                         </div>
                       </div>
-                      <div class="min-w-0 flex-1">
-                        <div class="text-base leading-snug font-semibold transition-colors group-hover:text-pink">
+                      <div mix={css({ minWidth: 0, flex: '1 1 0%' })}>
+                        <div
+                          mix={css({
+                            fontSize: '1rem',
+                            lineHeight: 1.375,
+                            fontWeight: 600,
+                            ...colorTransition,
+                            [linkHover]: { color: 'var(--pink)' },
+                          })}
+                        >
                           {formatArtists(node)}
                         </div>
-                        <div class="mt-1 text-sm text-muted dark:text-muted-dark">
+                        <div
+                          mix={css({
+                            marginTop: '0.25rem',
+                            ...text.sm,
+                            color: 'var(--muted)',
+                          })}
+                        >
                           {node.venue.name}
                         </div>
                       </div>

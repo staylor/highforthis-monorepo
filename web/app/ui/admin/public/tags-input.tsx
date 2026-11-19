@@ -1,9 +1,9 @@
-import { clientEntry, on, type Handle } from 'remix/component';
+import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { cn } from '../../public/cn.ts';
+import { colorTransition, text } from '../../public/styles.ts';
 
 import { Icon } from './icon.tsx';
-import { inputBase } from './styles.ts';
+import { wideInput } from './styles.ts';
 
 // Enter adds what's typed as a tag, each tag has a button to remove it, and the form submits
 // them as hidden inputs sharing a name.
@@ -15,6 +15,31 @@ interface TagsInputProps {
   /** Translated "Remove {{tag}}", each remove button's label. */
   removeLabel: string;
 }
+
+const tagStyle = css({
+  float: 'left',
+  marginRight: '0.375rem',
+  maxWidth: '100%',
+  cursor: 'default',
+  overflow: 'hidden',
+  ...text.sm,
+  textOverflow: 'ellipsis',
+});
+
+const removeButton = css({
+  float: 'left',
+  marginRight: '0.125rem',
+  display: 'flex',
+  width: '1.25rem',
+  height: '1.25rem',
+  cursor: 'pointer',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '9999px',
+  color: 'var(--dark)',
+  ...colorTransition,
+  '&:hover': { backgroundColor: 'var(--neutral-200)' },
+});
 
 export const TagsInput = clientEntry(
   import.meta.url,
@@ -30,39 +55,40 @@ export const TagsInput = clientEntry(
             type="text"
             placeholder={placeholder}
             aria-label={placeholder}
-            class={cn(inputBase, 'w-full')}
-            mix={on('keydown', (event) => {
-              if (event.key !== 'Enter') {
-                return;
-              }
-              // Enter adds a tag instead of submitting the form
-              event.preventDefault();
-              const input = event.currentTarget;
-              const tag = input.value.trim();
-              if (tag && !current().includes(tag)) {
-                tags = [...current(), tag];
-                handle.update();
-              }
-              input.value = '';
-            })}
+            mix={[
+              wideInput,
+              on('keydown', (event) => {
+                if (event.key !== 'Enter') {
+                  return;
+                }
+                // Enter adds a tag instead of submitting the form
+                event.preventDefault();
+                const input = event.currentTarget;
+                const tag = input.value.trim();
+                if (tag && !current().includes(tag)) {
+                  tags = [...current(), tag];
+                  handle.update();
+                }
+                input.value = '';
+              }),
+            ]}
           />
-          <div class="my-1.5 overflow-auto text-xs">
+          <div mix={css({ marginBlock: '0.375rem', overflow: 'auto', ...text.xs })}>
             {current().map((tag) => (
-              <div
-                key={tag}
-                class="float-left mr-1.5 max-w-full cursor-default overflow-hidden text-sm text-ellipsis"
-              >
+              <div key={tag} mix={tagStyle}>
                 <input type="hidden" name={name} value={tag} />
                 <button
                   type="button"
                   aria-label={removeLabel.replace('{{tag}}', tag)}
-                  class="float-left mr-0.5 flex size-5 cursor-pointer items-center justify-center rounded-full text-dark transition-colors hover:bg-neutral-200"
-                  mix={on('click', () => {
-                    tags = current().filter((other) => other !== tag);
-                    handle.update();
-                  })}
+                  mix={[
+                    removeButton,
+                    on('click', () => {
+                      tags = current().filter((other) => other !== tag);
+                      handle.update();
+                    }),
+                  ]}
                 >
-                  <Icon name="close" class="size-3.5" />
+                  <Icon name="close" size="0.875rem" />
                 </button>{' '}
                 {tag}
               </div>

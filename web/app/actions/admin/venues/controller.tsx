@@ -1,3 +1,4 @@
+import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
@@ -13,9 +14,9 @@ import { Message } from '../../../ui/admin/message.tsx';
 import { HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
 import { FeaturedMedia } from '../../../ui/admin/public/featured-media.tsx';
 import { InlineToggle } from '../../../ui/admin/public/inline-toggle.tsx';
-import { inputBase } from '../../../ui/admin/public/styles.ts';
-import { cn } from '../../../ui/public/cn.ts';
+import { pinkLink, wideInput } from '../../../ui/admin/public/styles.ts';
 import { uploadUrl } from '../../../ui/public/media.ts';
+import { text } from '../../../ui/public/styles.ts';
 import { selectedMedia } from '../media/data.ts';
 import { renderAdminPage } from '../render-page.tsx';
 
@@ -49,7 +50,13 @@ function thumbnail(venue: VenueRow) {
   if (!media || !('destination' in media) || !smallest) {
     return null;
   }
-  return <img class="w-16" src={uploadUrl(media.destination, smallest.fileName)} alt="" />;
+  return (
+    <img
+      mix={css({ width: '4rem' })}
+      src={uploadUrl(media.destination, smallest.fileName)}
+      alt=""
+    />
+  );
 }
 
 function venueFields(t: TFunction, venue?: Venue): Field[] {
@@ -62,7 +69,7 @@ function venueFields(t: TFunction, venue?: Venue): Field[] {
         value={String(venue?.coordinates?.[axis] ?? '')}
         placeholder={label}
         aria-label={label}
-        class={cn(inputBase, 'w-full')}
+        mix={wideInput}
       />
     );
   };
@@ -127,7 +134,7 @@ export const venuesList = createController(venues.list, {
       const deleted = Number(context.url.searchParams.get('deleted') || 0);
       const toggle = (flag: VenueFlag, label: string) => ({
         label,
-        class: 'text-center',
+        styles: { textAlign: 'center' },
         render: (venue: VenueRow) => (
           <InlineToggle
             intent={flag}
@@ -139,7 +146,7 @@ export const venuesList = createController(venues.list, {
         ),
       });
       const columns = [
-        { class: 'w-16', render: thumbnail },
+        { styles: { width: '4rem' }, render: thumbnail },
         {
           label: t('entity.name'),
           render: (venue: VenueRow) => {
@@ -157,7 +164,7 @@ export const venuesList = createController(venues.list, {
           label: t('entity.website'),
           render: (venue: VenueRow) =>
             venue.website && (
-              <a class="text-pink underline" href={venue.website} target="_blank" rel="noreferrer">
+              <a mix={pinkLink} href={venue.website} target="_blank" rel="noreferrer">
                 {venue.website}
               </a>
             ),
@@ -249,7 +256,7 @@ export const venuesEdit = createController(venues.edit, {
           {venue.listingsUrl && (
             <a
               href={routes.admin.shows.listings.index.href({ venueId: venue.id })}
-              class="inline-block text-sm text-pink underline"
+              mix={[pinkLink, css({ display: 'inline-block', ...text.sm })]}
             >
               {t('shows.listings.view')}
             </a>
