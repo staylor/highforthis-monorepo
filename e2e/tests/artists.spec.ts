@@ -13,12 +13,11 @@ test('adds an artist with featured media, edits them, toggles search and deletes
   await field(page, 'Name').fill(name);
   await field(page, 'Description').fill('Added by the end-to-end tests');
 
-  // The picker opens once its client entry has loaded
+  // The picker opens once its client entry has hydrated
   const picker = page.getByRole('dialog', { name: 'Media' });
-  await expect(async () => {
-    await page.getByRole('button', { name: 'Set Featured Media' }).click();
-    await expect(picker).toBeVisible({ timeout: 1_000 });
-  }).toPass();
+  await hydrated(page);
+  await page.getByRole('button', { name: 'Set Featured Media' }).click();
+  await expect(picker).toBeVisible();
   // The uploads, and the close button
   const uploads = picker.getByRole('button');
   await expect.poll(() => uploads.count()).toBeGreaterThan(1);
