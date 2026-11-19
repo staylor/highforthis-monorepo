@@ -4,9 +4,9 @@ import { cn } from '../../public/cn.ts';
 
 import { Icon } from './icon.tsx';
 
-// The picker for media and videos, from the admin app's media and video modals: a <dialog>, which
-// brings focus handling and Escape, that pages through /admin/media-picker/:type as it scrolls.
-// The featured media field and the post editor's image and video blocks use it.
+// A <dialog>, which brings focus handling and Escape, that pages through
+// /admin/media-picker/:type as it scrolls. The featured media field and the post editor's image
+// and video blocks use it.
 
 /** An image as the post editor's image block keeps it. */
 export interface PickerImage {
@@ -24,7 +24,6 @@ export interface PickerVideo {
   thumbnails: { url: string; width: number; height: number }[];
 }
 
-/** An upload or video in the picker, with its thumbnail. */
 export interface MediaPickerItem {
   id: string;
   title: string;
@@ -49,7 +48,6 @@ interface PickerDialogProps {
   open: boolean;
   onPick: (item: MediaPickerItem) => void;
   onClose: () => void;
-  /** Translated text: the picker's name, its close button and its loading line. */
   heading: string;
   closeLabel: string;
   loadingText: string;

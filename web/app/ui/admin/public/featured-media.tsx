@@ -3,9 +3,8 @@ import { clientEntry, on, type Handle } from 'remix/component';
 import { PickerDialog } from './picker-dialog.tsx';
 import { buttonClass } from './styles.ts';
 
-// The featured media field, from the admin app's FeaturedMedia field. The form submits the picked
-// upload's ID in a hidden input, and the field shows it: an image by its 300px crop, or a player
-// for audio.
+// The form submits the picked upload's ID in a hidden input, and the field shows it: an image
+// by its 300px crop, or a player for audio.
 
 export interface SelectedMedia {
   id: string;

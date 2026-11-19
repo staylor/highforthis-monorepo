@@ -22,9 +22,8 @@ import { renderAdminPage } from '../render-page.tsx';
 
 import { createPost, deletePosts, loadPost, loadPosts, updatePost } from './data.ts';
 
-// The admin's posts section, moved from the admin app's routes/admin/post, with its editor. Each
-// form route has its own controller, since controller middleware doesn't apply to nested route
-// maps.
+// Each form route has its own controller, since controller middleware doesn't apply to nested
+// route maps.
 
 const posts = routes.admin.posts;
 
@@ -35,7 +34,6 @@ const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redire
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
-/** A post's date as the admin app's list showed it: 05/10/2024 at 8:00pm. */
 function postDate(timestamp?: number | null) {
   if (!timestamp) {
     return null;
@@ -49,7 +47,6 @@ function postDate(timestamp?: number | null) {
 const titleClass =
   'm-0 mb-2.5 block border-0 p-0 text-4xl leading-tight font-black tracking-wide wrap-break-word shadow-none lg:mb-6 lg:text-5xl focus:ring-0';
 
-/** The post's title and body, the column the form is mostly about. */
 function bodyFields(t: TFunction, post?: Post): Field[] {
   return [
     {
@@ -86,7 +83,6 @@ function bodyFields(t: TFunction, post?: Post): Field[] {
   ];
 }
 
-/** The details box: a link to the post, its publish date and its status, above the button. */
 function info(t: TFunction, post?: Post) {
   const fields: Field[] = [
     {
@@ -124,7 +120,6 @@ function info(t: TFunction, post?: Post) {
   );
 }
 
-/** The box under it: the featured media, the summary and the artists. */
 function meta(t: TFunction, post?: Post) {
   const fields: Field[] = [
     {

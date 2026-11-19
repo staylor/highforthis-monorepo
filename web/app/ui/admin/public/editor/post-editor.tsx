@@ -12,15 +12,14 @@ import { createInlineToolbar, INLINE_FORMATS, type InlineFormat } from './inline
 import type { Store } from './store.ts';
 import { theme } from './theme.ts';
 
-// The post editor, from the admin app's components/Editor: the framework-free core (editor.ts and
-// the toolbars) hosted in a client entry. It renders the contenteditable element, the form field
-// the post save reads, the placeholder, and the toolbars, and redraws when the core's stores
-// change. The block toolbar's image and video buttons open the picker.
+// The framework-free core (editor.ts and the toolbars) hosted in a client entry. It renders the
+// contenteditable element, the form field the post save reads, the placeholder, and the
+// toolbars, and redraws when the core's stores change. The block toolbar's image and video
+// buttons open the picker.
 
 interface PostEditorProps {
   /** The post's saved body as JSON, as GraphQL sends it, or empty for a new post. */
   editorState: string;
-  /** Translated text: the placeholder, the block button and the pickers. */
   labels: {
     placeholder: string;
     blockTypes: string;

@@ -1,5 +1,5 @@
-// The post editor without a UI framework: what the client entry hosting it gets. Moved from the
-// admin app, where it ran on happy-dom; it runs in a browser now (`pnpm test:browser`).
+// The post editor without a UI framework, as the client entry hosting it gets it. It runs in a
+// browser (`pnpm test:browser`).
 import './browser-env.ts';
 import { $isListNode } from '@lexical/list';
 import { $isHeadingNode } from '@lexical/rich-text';
@@ -23,7 +23,7 @@ import { image, savedImage, savedPost, savedVideo, video } from './fixtures.ts';
 import { createInlineToolbar, positionInlineToolbar } from './inline-toolbar.ts';
 import { $createVideoNode } from './video-node.ts';
 
-/** The fields of `value` that `expected` names, to compare the way toMatchObject did. */
+/** The fields of `value` that `expected` names. */
 function pick<T extends object>(value: T, expected: Partial<T>): Partial<T> {
   return Object.fromEntries(
     Object.keys(expected).map((key) => [key, value[key as keyof T]])

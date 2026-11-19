@@ -122,9 +122,8 @@ interface AdminFormProps {
   /** A box beside the fields on wide screens, such as an artist's shows. */
   meta?: RemixNode;
   /**
-   * A box above `meta` with the save button, such as a post's date and status, from the admin
-   * app's InfoColumn. A long form, such as a post's, keeps its button there on wide screens and in
-   * a bar stuck to the bottom of narrow ones.
+   * A box above `meta` with the save button, such as a post's date and status. A long form keeps
+   * its button there on wide screens and in a bar stuck to the bottom of narrow ones.
    */
   info?: RemixNode;
 }

@@ -13,9 +13,7 @@ import { textNodeFragments } from '../../../ui/post-content.tsx';
 import { videoFragment } from '../../../ui/videos.tsx';
 import { featuredMediaFragment } from '../media/data.ts';
 
-// The posts section's data, moved from the admin app's src/server/posts.ts with the same GraphQL
-// operations. The post's body uses the public site's text and video fragments, which ask for the
-// same fields the admin app's did.
+// The post's body uses the public site's text and video fragments.
 
 const postFormFragment = gql`
   fragment PostForm_post on Post {
@@ -170,7 +168,7 @@ const updatePostMutation = gql`
   ${postFormFragment}
 `;
 
-// Keeps a title like "2024" a string, as with the other sections, and lets a summary be cleared
+// Keeps a title like "2024" a string, and lets a summary be cleared
 const skipKeys = ['title', 'summary'];
 
 export function loadPosts({

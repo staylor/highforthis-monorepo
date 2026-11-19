@@ -2,9 +2,8 @@ import { clientEntry, on, ref, type Handle } from 'remix/component';
 
 import { cn } from '../../public/cn.ts';
 
-// The post form's title, from the admin app's "heading" field: one line of large text that wraps
-// and grows instead of scrolling sideways, so a long title is all visible. Enter doesn't start a
-// new line. Without JavaScript it's a textarea a line tall.
+// One line of large text that wraps and grows instead of scrolling sideways, so a long title is
+// all visible. Enter doesn't start a new line. Without JavaScript it's a textarea a line tall.
 
 interface HeadingFieldProps {
   name: string;
