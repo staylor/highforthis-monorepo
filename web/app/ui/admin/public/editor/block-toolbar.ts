@@ -23,7 +23,7 @@ import {
 } from 'lexical';
 import type { ElementNode, LexicalCommand, LexicalEditor, LexicalNode } from 'lexical';
 
-import type { ImageUpload, Video } from '../../../../types/graphql.ts';
+import type { ImageUpload, Video } from '#/types/graphql.ts';
 
 import { $createImageNode } from './image-node.ts';
 import { createStore, shallowEqual } from './store.ts';

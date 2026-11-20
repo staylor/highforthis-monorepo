@@ -3,12 +3,12 @@ import { openLazyFile } from 'remix/fs';
 import { createFileResponse } from 'remix/response/file';
 import { createContextKey, type Middleware, type RequestContext } from 'remix/router';
 
-import { adminToken } from '../lib/adminSession.ts';
-import { clientAddress } from '../lib/client.ts';
-import { createGraphQLClient, graphqlHost, type GraphQLClient } from '../lib/graphql.ts';
-import { getT, type TFunction } from '../lib/i18n.ts';
-import { openObserveBundleFiles } from '../lib/openobserve-bundles.ts';
-import { passkeyStarts } from '../lib/rate-limits.ts';
+import { adminToken } from '#/lib/adminSession.ts';
+import { clientAddress } from '#/lib/client.ts';
+import { createGraphQLClient, graphqlHost, type GraphQLClient } from '#/lib/graphql.ts';
+import { getT, type TFunction } from '#/lib/i18n.ts';
+import { openObserveBundleFiles } from '#/lib/openobserve-bundles.ts';
+import { passkeyStarts } from '#/lib/rate-limits.ts';
 
 import { sameOrigin } from './admin.ts';
 

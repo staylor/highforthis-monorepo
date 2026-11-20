@@ -1,6 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { dark, merge, text } from '../public/styles.ts';
+import { dark, merge, text } from '#/ui/public/styles.ts';
 
 import { button, heading1 } from './public/styles.ts';
 

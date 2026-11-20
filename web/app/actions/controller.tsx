@@ -1,8 +1,8 @@
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
-import { assets } from '../assets.ts';
-import { routes } from '../routes.ts';
+import { assets } from '#/assets.ts';
+import { routes } from '#/routes.ts';
 import type {
   ArtistQuery,
   HomeQuery,
@@ -12,10 +12,10 @@ import type {
   VenueQuery,
   VideoQuery,
   VideosQuery,
-} from '../types/graphql.ts';
-import { Heading1 } from '../ui/heading.tsx';
-import { uploadUrl } from '../ui/public/media.ts';
-import { Video } from '../ui/videos.tsx';
+} from '#/types/graphql.ts';
+import { Heading1 } from '#/ui/heading.tsx';
+import { uploadUrl } from '#/ui/public/media.ts';
+import { Video } from '#/ui/videos.tsx';
 
 import { ArtistPage, artistQuery, VenuePage, venueQuery } from './entities/page.tsx';
 import { HomePage, homeQuery } from './home/page.tsx';

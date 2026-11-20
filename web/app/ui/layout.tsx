@@ -1,6 +1,6 @@
 import { css, unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 
-import { sanitizeInlineHTML } from '../lib/sanitize.ts';
+import { sanitizeInlineHTML } from '#/lib/sanitize.ts';
 
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';

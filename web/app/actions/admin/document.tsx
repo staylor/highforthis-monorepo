@@ -1,9 +1,9 @@
 import { unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 import { ImportMap } from 'remix/component/server';
 
-import { scriptEntry, stylesheetHrefs } from '../../assets.ts';
-import { AdminProvider, type AdminValue } from '../../ui/admin/context.tsx';
-import { AdminShell } from '../../ui/admin/shell.tsx';
+import { scriptEntry, stylesheetHrefs } from '#/assets.ts';
+import { AdminProvider, type AdminValue } from '#/ui/admin/context.tsx';
+import { AdminShell } from '#/ui/admin/shell.tsx';
 
 interface AdminDocumentProps {
   admin: AdminValue;

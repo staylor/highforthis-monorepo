@@ -1,6 +1,6 @@
 import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { colorTransition, text } from '../../public/styles.ts';
+import { colorTransition, text } from '#/ui/public/styles.ts';
 
 import { Icon } from './icon.tsx';
 import { wideInput } from './styles.ts';

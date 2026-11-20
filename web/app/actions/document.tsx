@@ -1,11 +1,11 @@
 import { unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 import { ImportMap } from 'remix/component/server';
 
-import { scriptEntry, stylesheetHrefs } from '../assets.ts';
-import { rumConfig } from '../lib/rum.ts';
-import { AppProvider, type AppValue } from '../ui/app-context.tsx';
-import { Layout, Wrapper } from '../ui/layout.tsx';
-import { TWITTER_USERNAME } from '../ui/social-icons.tsx';
+import { scriptEntry, stylesheetHrefs } from '#/assets.ts';
+import { rumConfig } from '#/lib/rum.ts';
+import { AppProvider, type AppValue } from '#/ui/app-context.tsx';
+import { Layout, Wrapper } from '#/ui/layout.tsx';
+import { TWITTER_USERNAME } from '#/ui/social-icons.tsx';
 
 export interface MetaTag {
   property: string;

@@ -1,5 +1,5 @@
-import type { Show } from '../../types/graphql.ts';
-import { colorTransition, text } from '../public/styles.ts';
+import type { Show } from '#/types/graphql.ts';
+import { colorTransition, text } from '#/ui/public/styles.ts';
 
 export const cell = { padding: '0.375rem 0.75rem', ...text.sm };
 

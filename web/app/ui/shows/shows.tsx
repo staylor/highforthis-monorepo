@@ -1,11 +1,11 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle, type MixInput, type RemixNode } from 'remix/component';
 
-import type { Attended_ShowsFragment, ShowsGrid_ShowsFragment } from '../../types/graphql.ts';
-import { getApp } from '../app-context.tsx';
-import { Link } from '../link.tsx';
-import { colorTransition, md, sm, text, xs } from '../public/styles.ts';
-import { trans } from '../trans.tsx';
+import type { Attended_ShowsFragment, ShowsGrid_ShowsFragment } from '#/types/graphql.ts';
+import { getApp } from '#/ui/app-context.tsx';
+import { Link } from '#/ui/link.tsx';
+import { colorTransition, md, sm, text, xs } from '#/ui/public/styles.ts';
+import { trans } from '#/ui/trans.tsx';
 
 import { cell, formatArtists, formatDate, formatShowLink, row } from './utils.ts';
 

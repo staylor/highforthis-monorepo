@@ -8,6 +8,7 @@ Use the Remix skill in [`.agents/skills/remix/SKILL.md`](.agents/skills/remix/SK
 
 ## Layout
 
+- Import modules from another folder of `app/` through `#/`, which `package.json`'s `imports` maps to `app/` (`#/lib/i18n.ts`), not `../` paths. Imports from the same folder or below stay `./`. Node, TypeScript, the asset server and the test harness all resolve it.
 - `app/routes.ts` defines every route's URL pattern, shared by server and browser modules for type-safe hrefs.
 - `app/router.ts` installs the middleware and maps routes to controllers.
 - `app/actions/controller.tsx` handles top-level routes; `app/actions/<route-key>/controller.tsx` handles nested route maps.

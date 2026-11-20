@@ -1,6 +1,6 @@
 import type { RemixNode } from 'remix/component';
 
-import type { TFunction } from '../lib/i18n.ts';
+import type { TFunction } from '#/lib/i18n.ts';
 
 type Components = Record<string, (children: string) => RemixNode>;
 

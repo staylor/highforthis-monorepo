@@ -1,7 +1,7 @@
 import { createAction } from 'remix/router';
 
-import { requireAdmin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
+import { requireAdmin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
 
 import { loadMediaPickerPage } from './data.ts';
 

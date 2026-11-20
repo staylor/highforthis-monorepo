@@ -1,6 +1,6 @@
 import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { dark, merge, text } from '../../public/styles.ts';
+import { dark, merge, text } from '#/ui/public/styles.ts';
 
 import { splitArtists } from './split-artists.ts';
 import { button, disabledFades, table, tableScroller, wideInput } from './styles.ts';

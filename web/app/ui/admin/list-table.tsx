@@ -1,7 +1,7 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { PER_PAGE } from '../../lib/admin/list-variables.ts';
-import { merge, sm, text, type Styles } from '../public/styles.ts';
+import { PER_PAGE } from '#/lib/admin/list-variables.ts';
+import { merge, sm, text, type Styles } from '#/ui/public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { documentLoad } from './links.ts';

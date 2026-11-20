@@ -7,15 +7,15 @@ import {
   type FormArgs,
   type GraphQLClient,
   type RedirectResult,
-} from '../../../lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '../../../lib/admin/list-variables.ts';
+} from '#/lib/admin/forms.ts';
+import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
 import type {
   BulkCreateShowsMutation,
   ShowEditQuery,
   ShowEntitiesQuery,
   ShowsAdminQuery,
   UpdateShowAttendedMutation,
-} from '../../../types/graphql.ts';
+} from '#/types/graphql.ts';
 
 import { parseBulkShowsCsv } from './bulk-csv.ts';
 

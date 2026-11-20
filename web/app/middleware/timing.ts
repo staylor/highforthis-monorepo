@@ -1,6 +1,6 @@
 import { createContextKey, type Middleware } from 'remix/router';
 
-import { adminToken } from '../lib/adminSession.ts';
+import { adminToken } from '#/lib/adminSession.ts';
 
 // Any middleware, whatever it adds to the context
 type AnyMiddleware = Middleware<any>;

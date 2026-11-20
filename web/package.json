@@ -5,8 +5,11 @@
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
+  "imports": {
+    "#/*": "./app/*"
+  },
   "engines": {
-    "node": ">=24.3.0"
+    "node": ">=24.14.0"
   },
   "dependencies": {
     "@apollo/client": "4.3.8",

@@ -1,7 +1,7 @@
 import type { Handle, RemixNode } from 'remix/component';
 
-import type { TFunction } from '../lib/i18n.ts';
-import type { AppQuery } from '../types/graphql.ts';
+import type { TFunction } from '#/lib/i18n.ts';
+import type { AppQuery } from '#/types/graphql.ts';
 
 export interface AppValue {
   t: TFunction;

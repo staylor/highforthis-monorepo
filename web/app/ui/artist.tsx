@@ -1,6 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import type { AppleMusicData } from '../types/graphql.ts';
+import type { AppleMusicData } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
 import { md, merge, pinkButton, text, type Styles } from './public/styles.ts';

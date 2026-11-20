@@ -1,12 +1,12 @@
 import { gql } from 'graphql-tag';
 
-import { submitForm, type FormArgs, type GraphQLClient } from '../../../lib/admin/forms.ts';
+import { featuredMediaFragment } from '#/actions/admin/media/data.ts';
+import { submitForm, type FormArgs, type GraphQLClient } from '#/lib/admin/forms.ts';
 import type {
   MediaSettingsQuery,
   PodcastSettingsQuery,
   SiteSettingsQuery,
-} from '../../../types/graphql.ts';
-import { featuredMediaFragment } from '../media/data.ts';
+} from '#/types/graphql.ts';
 
 // Each page edits one settings document, saved under a fixed ID.
 

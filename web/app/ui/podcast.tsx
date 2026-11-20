@@ -1,6 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import type { MetaTag } from '../actions/document.tsx';
+import type { MetaTag } from '#/actions/document.tsx';
 
 import { Heading1 } from './heading.tsx';
 import { lines } from './lines.tsx';

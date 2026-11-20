@@ -1,18 +1,18 @@
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import type { RedirectResult } from '../../../lib/admin/forms.ts';
-import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import type { PodcastEditQuery, PodcastsAdminQuery } from '../../../types/graphql.ts';
-import { AdminForm, type Field } from '../../../ui/admin/form.tsx';
-import { ListTable, RowActions, RowTitle, Search } from '../../../ui/admin/list-table.tsx';
-import { Message } from '../../../ui/admin/message.tsx';
-import { HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
-import { FeaturedMedia } from '../../../ui/admin/public/featured-media.tsx';
-import { selectedMedia } from '../media/data.ts';
-import { renderAdminPage } from '../render-page.tsx';
+import { selectedMedia } from '#/actions/admin/media/data.ts';
+import { renderAdminPage } from '#/actions/admin/render-page.tsx';
+import type { RedirectResult } from '#/lib/admin/forms.ts';
+import { getAdminT, type TFunction } from '#/lib/i18n.ts';
+import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import type { PodcastEditQuery, PodcastsAdminQuery } from '#/types/graphql.ts';
+import { AdminForm, type Field } from '#/ui/admin/form.tsx';
+import { ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { Message } from '#/ui/admin/message.tsx';
+import { HeaderAdd, Heading } from '#/ui/admin/page.tsx';
+import { FeaturedMedia } from '#/ui/admin/public/featured-media.tsx';
 
 import { createPodcast, deletePodcasts, loadPodcast, loadPodcasts, updatePodcast } from './data.ts';
 

@@ -2,22 +2,16 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import type { RedirectResult } from '../../../lib/admin/forms.ts';
-import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import type { VideoEditQuery, VideosAdminQuery } from '../../../types/graphql.ts';
-import { AdminForm, type Field } from '../../../ui/admin/form.tsx';
-import {
-  ListFilter,
-  ListTable,
-  RowActions,
-  RowTitle,
-  Search,
-} from '../../../ui/admin/list-table.tsx';
-import { Message } from '../../../ui/admin/message.tsx';
-import { Heading } from '../../../ui/admin/page.tsx';
-import { renderAdminPage } from '../render-page.tsx';
+import { renderAdminPage } from '#/actions/admin/render-page.tsx';
+import type { RedirectResult } from '#/lib/admin/forms.ts';
+import { getAdminT, type TFunction } from '#/lib/i18n.ts';
+import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import type { VideoEditQuery, VideosAdminQuery } from '#/types/graphql.ts';
+import { AdminForm, type Field } from '#/ui/admin/form.tsx';
+import { ListFilter, ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { Message } from '#/ui/admin/message.tsx';
+import { Heading } from '#/ui/admin/page.tsx';
 
 import { deleteVideos, loadVideo, loadVideos, updateVideo } from './data.ts';
 

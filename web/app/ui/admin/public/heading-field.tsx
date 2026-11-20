@@ -1,6 +1,6 @@
 import { clientEntry, css, on, ref, type Handle } from 'remix/component';
 
-import { lg } from '../../public/styles.ts';
+import { lg } from '#/ui/public/styles.ts';
 
 // One line of large text that wraps and grows instead of scrolling sideways, so a long title is
 // all visible. Enter doesn't start a new line. Without JavaScript it's a textarea a line tall.

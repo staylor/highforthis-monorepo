@@ -1,16 +1,16 @@
 import { gql } from 'graphql-tag';
 
+import { featuredMediaFragment } from '#/actions/admin/media/data.ts';
 import {
   deleteSelected,
   submitForm,
   type FormArgs,
   type GraphQLClient,
-} from '../../../lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '../../../lib/admin/list-variables.ts';
-import type { PostEditQuery, PostsAdminQuery } from '../../../types/graphql.ts';
-import { textNodeFragments } from '../../../ui/post-content.tsx';
-import { videoFragment } from '../../../ui/videos.tsx';
-import { featuredMediaFragment } from '../media/data.ts';
+} from '#/lib/admin/forms.ts';
+import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import type { PostEditQuery, PostsAdminQuery } from '#/types/graphql.ts';
+import { textNodeFragments } from '#/ui/post-content.tsx';
+import { videoFragment } from '#/ui/videos.tsx';
 
 // The post's body uses the public site's text and video fragments.
 

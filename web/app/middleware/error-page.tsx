@@ -2,8 +2,8 @@ import type { Middleware } from 'remix/router';
 
 import { createLogger } from '@highforthis/shared/logger';
 
-import { renderPage } from '../actions/render-page.tsx';
-import type { AppContext } from '../router.ts';
+import { renderPage } from '#/actions/render-page.tsx';
+import type { AppContext } from '#/router.ts';
 
 const logger = createLogger({ serviceName: 'web' });
 

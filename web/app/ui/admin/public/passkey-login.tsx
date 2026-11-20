@@ -1,7 +1,7 @@
 import { browserSupportsWebAuthn, startAuthentication } from '@simplewebauthn/browser';
 import { clientEntry, css, on, ref, type Handle } from 'remix/component';
 
-import { text } from '../../public/styles.ts';
+import { text } from '#/ui/public/styles.ts';
 
 // The button asks GraphQL for the options (web forwards /auth/passkeys to it), runs the
 // browser's WebAuthn prompt, then posts the answer with a hidden form, which the sign-in action

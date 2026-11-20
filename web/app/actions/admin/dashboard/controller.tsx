@@ -1,13 +1,13 @@
 import { css, type Handle } from 'remix/component';
 import { createAction } from 'remix/router';
 
-import { getAdminT } from '../../../lib/i18n.ts';
-import { requireAdmin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import { getAdmin } from '../../../ui/admin/context.tsx';
-import { Alert, Heading } from '../../../ui/admin/page.tsx';
-import { dark, text } from '../../../ui/public/styles.ts';
-import { renderAdminPage } from '../render-page.tsx';
+import { renderAdminPage } from '#/actions/admin/render-page.tsx';
+import { getAdminT } from '#/lib/i18n.ts';
+import { requireAdmin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import { getAdmin } from '#/ui/admin/context.tsx';
+import { Alert, Heading } from '#/ui/admin/page.tsx';
+import { dark, text } from '#/ui/public/styles.ts';
 
 import { loadPageViews, type PageViews as PageViewsData } from './page-views.ts';
 

@@ -2,7 +2,7 @@ import * as assert from 'remix/assert';
 import { renderToString } from 'remix/component/server';
 import { describe, it } from 'remix/test';
 
-import type { PostArtwork_PostFragment } from '../types/graphql.ts';
+import type { PostArtwork_PostFragment } from '#/types/graphql.ts';
 
 import { PostArtwork } from './post-artwork.tsx';
 

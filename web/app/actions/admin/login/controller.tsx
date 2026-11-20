@@ -2,16 +2,16 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
-import { adminSessionCookie, adminToken, expiredAdminCookie } from '../../../lib/adminSession.ts';
-import { clientAddress } from '../../../lib/client.ts';
-import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { signInAttempts } from '../../../lib/rate-limits.ts';
-import { sameOrigin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import { PasskeyLogin } from '../../../ui/admin/public/passkey-login.tsx';
-import { text } from '../../../ui/public/styles.ts';
-import { loadRootData } from '../../render-page.tsx';
-import { renderAdminPage } from '../render-page.tsx';
+import { renderAdminPage } from '#/actions/admin/render-page.tsx';
+import { loadRootData } from '#/actions/render-page.tsx';
+import { adminSessionCookie, adminToken, expiredAdminCookie } from '#/lib/adminSession.ts';
+import { clientAddress } from '#/lib/client.ts';
+import { getAdminT, type TFunction } from '#/lib/i18n.ts';
+import { signInAttempts } from '#/lib/rate-limits.ts';
+import { sameOrigin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import { PasskeyLogin } from '#/ui/admin/public/passkey-login.tsx';
+import { text } from '#/ui/public/styles.ts';
 
 import { passwordLoginEnabled, signIn, signOut } from './sign-in.ts';
 

@@ -1,19 +1,15 @@
 import { gql } from 'graphql-tag';
 
+import { featuredMediaFragment } from '#/actions/admin/media/data.ts';
 import {
   deleteSelected,
   parseForm,
   submitForm,
   type FormArgs,
   type GraphQLClient,
-} from '../../../lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '../../../lib/admin/list-variables.ts';
-import type {
-  UpdateVenueFlagMutation,
-  VenueEditQuery,
-  VenuesAdminQuery,
-} from '../../../types/graphql.ts';
-import { featuredMediaFragment } from '../media/data.ts';
+} from '#/lib/admin/forms.ts';
+import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import type { UpdateVenueFlagMutation, VenueEditQuery, VenuesAdminQuery } from '#/types/graphql.ts';
 
 const venueFormFragment = gql`
   fragment VenueForm_venue on Venue {

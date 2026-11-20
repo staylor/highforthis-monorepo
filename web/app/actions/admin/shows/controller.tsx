@@ -2,22 +2,22 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import { isRedirect, type RedirectResult } from '../../../lib/admin/forms.ts';
-import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import type { ShowEditQuery, ShowEntitiesQuery, ShowsAdminQuery } from '../../../types/graphql.ts';
-import { AdminForm, type Field } from '../../../ui/admin/form.tsx';
-import { documentLoad } from '../../../ui/admin/links.ts';
-import { ListTable, RowActions, RowTitle, Search } from '../../../ui/admin/list-table.tsx';
-import { Message } from '../../../ui/admin/message.tsx';
-import { Alert, HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
-import { DateTimeInput } from '../../../ui/admin/public/date-time-input.tsx';
-import { EntitiesPicker } from '../../../ui/admin/public/entities-picker.tsx';
-import { InlineToggle } from '../../../ui/admin/public/inline-toggle.tsx';
-import { input, saveButton, select } from '../../../ui/admin/public/styles.ts';
-import { dark, merge, text } from '../../../ui/public/styles.ts';
-import { renderAdminPage } from '../render-page.tsx';
+import { renderAdminPage } from '#/actions/admin/render-page.tsx';
+import { isRedirect, type RedirectResult } from '#/lib/admin/forms.ts';
+import { getAdminT, type TFunction } from '#/lib/i18n.ts';
+import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import type { ShowEditQuery, ShowEntitiesQuery, ShowsAdminQuery } from '#/types/graphql.ts';
+import { AdminForm, type Field } from '#/ui/admin/form.tsx';
+import { documentLoad } from '#/ui/admin/links.ts';
+import { ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { Message } from '#/ui/admin/message.tsx';
+import { Alert, HeaderAdd, Heading } from '#/ui/admin/page.tsx';
+import { DateTimeInput } from '#/ui/admin/public/date-time-input.tsx';
+import { EntitiesPicker } from '#/ui/admin/public/entities-picker.tsx';
+import { InlineToggle } from '#/ui/admin/public/inline-toggle.tsx';
+import { input, saveButton, select } from '#/ui/admin/public/styles.ts';
+import { dark, merge, text } from '#/ui/public/styles.ts';
 
 import {
   createShow,

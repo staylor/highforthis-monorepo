@@ -1,8 +1,8 @@
 import type { RemixNode } from 'remix/component';
 
-import { getAdminT } from '../../lib/i18n.ts';
-import type { AppContext } from '../../router.ts';
-import { loadRootData, titleTemplate } from '../render-page.tsx';
+import { loadRootData, titleTemplate } from '#/actions/render-page.tsx';
+import { getAdminT } from '#/lib/i18n.ts';
+import type { AppContext } from '#/router.ts';
 
 import { AdminDocument } from './document.tsx';
 

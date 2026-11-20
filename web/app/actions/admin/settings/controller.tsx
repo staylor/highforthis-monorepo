@@ -1,18 +1,18 @@
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import type { RedirectResult } from '../../../lib/admin/forms.ts';
-import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import { AdminForm, type Field } from '../../../ui/admin/form.tsx';
-import { Message } from '../../../ui/admin/message.tsx';
-import { Heading } from '../../../ui/admin/page.tsx';
-import { CropsEditor } from '../../../ui/admin/public/crops-editor.tsx';
-import { FeaturedMedia } from '../../../ui/admin/public/featured-media.tsx';
-import { selectedMedia } from '../media/data.ts';
-import { renderAdminPage } from '../render-page.tsx';
-import type { AdminPageContext } from '../render-page.tsx';
+import { selectedMedia } from '#/actions/admin/media/data.ts';
+import { renderAdminPage } from '#/actions/admin/render-page.tsx';
+import type { AdminPageContext } from '#/actions/admin/render-page.tsx';
+import type { RedirectResult } from '#/lib/admin/forms.ts';
+import { getAdminT, type TFunction } from '#/lib/i18n.ts';
+import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import { AdminForm, type Field } from '#/ui/admin/form.tsx';
+import { Message } from '#/ui/admin/message.tsx';
+import { Heading } from '#/ui/admin/page.tsx';
+import { CropsEditor } from '#/ui/admin/public/crops-editor.tsx';
+import { FeaturedMedia } from '#/ui/admin/public/featured-media.tsx';
 
 import {
   loadMediaSettings,

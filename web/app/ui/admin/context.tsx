@@ -1,6 +1,6 @@
 import type { Handle, RemixNode } from 'remix/component';
 
-import type { TFunction } from '../../lib/i18n.ts';
+import type { TFunction } from '#/lib/i18n.ts';
 
 export interface AdminValue {
   t: TFunction;

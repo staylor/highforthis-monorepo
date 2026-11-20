@@ -1,8 +1,8 @@
 import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import type { NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 
-import type { ImageUpload } from '../../../../types/graphql.ts';
-import { uploadUrl } from '../../../public/media.ts';
+import type { ImageUpload } from '#/types/graphql.ts';
+import { uploadUrl } from '#/ui/public/media.ts';
 
 // this data gets saved
 type SerializedImageNode = Spread<{ imageId: string; size: string }, SerializedLexicalNode>;

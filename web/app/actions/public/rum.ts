@@ -1,7 +1,7 @@
 import type { openobserveLogs } from '@openobserve/browser-logs';
 import type { openobserveRum } from '@openobserve/browser-rum';
 
-import type { OpenObserveRumConfig } from '../../lib/rum.ts';
+import type { OpenObserveRumConfig } from '#/lib/rum.ts';
 
 // The SDKs are loaded as their prebuilt bundles (see lib/openobserve-bundles.ts), which set
 // these globals. Only their types are imported, so the asset server never serves the SDKs'

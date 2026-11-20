@@ -1,6 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { lg, merge, sm, text } from '../public/styles.ts';
+import { lg, merge, sm, text } from '#/ui/public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { Message } from './message.tsx';

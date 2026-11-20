@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
-import type { PostArtwork_PostFragment } from '../types/graphql.ts';
+import type { PostArtwork_PostFragment } from '#/types/graphql.ts';
 
 import { uploadUrl } from './public/media.ts';
 import { linkHover, merge, type Styles } from './public/styles.ts';

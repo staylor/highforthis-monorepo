@@ -3,11 +3,11 @@ import { render } from 'remix/middleware/render';
 import { createRouter } from 'remix/router';
 import { describe, it, type TestContext } from 'remix/test';
 
-import { assets } from '../../assets.ts';
-import { getAdminT } from '../../lib/i18n.ts';
-import { graphql } from '../../middleware/app.ts';
-import type { AppContext } from '../../router.ts';
-import { Message } from '../../ui/admin/message.tsx';
+import { assets } from '#/assets.ts';
+import { getAdminT } from '#/lib/i18n.ts';
+import { graphql } from '#/middleware/app.ts';
+import type { AppContext } from '#/router.ts';
+import { Message } from '#/ui/admin/message.tsx';
 
 import { renderAdminPage } from './render-page.tsx';
 

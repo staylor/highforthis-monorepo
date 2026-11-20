@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
-import type { Video_VideoFragment, Videos_VideosFragment } from '../types/graphql.ts';
+import type { Video_VideoFragment, Videos_VideosFragment } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
 import { TextTitle } from './heading.tsx';

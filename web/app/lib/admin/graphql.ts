@@ -1,7 +1,7 @@
 import type { OperationVariables } from '@apollo/client/core';
 import type { DocumentNode } from 'graphql';
 
-import { createApolloClient, logError, type GraphQLClient } from '../graphql.ts';
+import { createApolloClient, logError, type GraphQLClient } from '#/lib/graphql.ts';
 
 /**
  * Every operation sends the admin's token, and a failed query or mutation is logged and comes

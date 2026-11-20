@@ -1,10 +1,10 @@
 import * as assert from 'remix/assert';
 import { describe, it, type TestContext } from 'remix/test';
 
-import { testSecret, testSession } from '../lib/adminSession.fixtures.ts';
-import { openObserveBundleFiles, openObserveScripts } from '../lib/openobserve-bundles.ts';
-import { router } from '../router.ts';
-import { routes } from '../routes.ts';
+import { testSecret, testSession } from '#/lib/adminSession.fixtures.ts';
+import { openObserveBundleFiles, openObserveScripts } from '#/lib/openobserve-bundles.ts';
+import { router } from '#/router.ts';
+import { routes } from '#/routes.ts';
 
 const origin = 'http://localhost';
 

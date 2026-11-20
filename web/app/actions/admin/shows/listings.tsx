@@ -2,17 +2,17 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import { isRedirect, type GraphQLClient } from '../../../lib/admin/forms.ts';
-import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import type { VenueListingsAdminQuery } from '../../../types/graphql.ts';
-import { Message } from '../../../ui/admin/message.tsx';
-import { Alert, Heading } from '../../../ui/admin/page.tsx';
-import { ListingsForm, type ListingRow } from '../../../ui/admin/public/listings-form.tsx';
-import { NavigateSelect } from '../../../ui/admin/public/navigate-select.tsx';
-import { renderAdminPage } from '../render-page.tsx';
-import type { AdminPageContext } from '../render-page.tsx';
+import { renderAdminPage } from '#/actions/admin/render-page.tsx';
+import type { AdminPageContext } from '#/actions/admin/render-page.tsx';
+import { isRedirect, type GraphQLClient } from '#/lib/admin/forms.ts';
+import { getAdminT, type TFunction } from '#/lib/i18n.ts';
+import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import type { VenueListingsAdminQuery } from '#/types/graphql.ts';
+import { Message } from '#/ui/admin/message.tsx';
+import { Alert, Heading } from '#/ui/admin/page.tsx';
+import { ListingsForm, type ListingRow } from '#/ui/admin/public/listings-form.tsx';
+import { NavigateSelect } from '#/ui/admin/public/navigate-select.tsx';
 
 import { importListings, loadVenueListings } from './listings-data.ts';
 

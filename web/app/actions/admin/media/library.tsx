@@ -2,27 +2,21 @@ import { css, unsafeHTML } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
-import { isRedirect, type GraphQLClient, type RedirectResult } from '../../../lib/admin/forms.ts';
-import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import type { MediaAdminQuery, UploadsAdminQuery } from '../../../types/graphql.ts';
-import { AdminForm, type Field } from '../../../ui/admin/form.tsx';
-import {
-  ListFilter,
-  ListTable,
-  RowActions,
-  RowTitle,
-  Search,
-} from '../../../ui/admin/list-table.tsx';
-import { Message } from '../../../ui/admin/message.tsx';
-import { Alert, HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
-import { CoverPicker } from '../../../ui/admin/public/cover-picker.tsx';
-import { MediaUploader } from '../../../ui/admin/public/media-uploader.tsx';
-import { input } from '../../../ui/admin/public/styles.ts';
-import { uploadUrl } from '../../../ui/public/media.ts';
-import { merge, text } from '../../../ui/public/styles.ts';
-import { renderAdminPage, type AdminPageContext } from '../render-page.tsx';
+import { renderAdminPage, type AdminPageContext } from '#/actions/admin/render-page.tsx';
+import { isRedirect, type GraphQLClient, type RedirectResult } from '#/lib/admin/forms.ts';
+import { getAdminT, type TFunction } from '#/lib/i18n.ts';
+import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import type { MediaAdminQuery, UploadsAdminQuery } from '#/types/graphql.ts';
+import { AdminForm, type Field } from '#/ui/admin/form.tsx';
+import { ListFilter, ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { Message } from '#/ui/admin/message.tsx';
+import { Alert, HeaderAdd, Heading } from '#/ui/admin/page.tsx';
+import { CoverPicker } from '#/ui/admin/public/cover-picker.tsx';
+import { MediaUploader } from '#/ui/admin/public/media-uploader.tsx';
+import { input } from '#/ui/admin/public/styles.ts';
+import { uploadUrl } from '#/ui/public/media.ts';
+import { merge, text } from '#/ui/public/styles.ts';
 
 import {
   addAlbumCovers,

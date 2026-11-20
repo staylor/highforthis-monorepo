@@ -2,23 +2,23 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import type { RedirectResult } from '../../../lib/admin/forms.ts';
-import { getAdminT, type TFunction } from '../../../lib/i18n.ts';
-import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import type { VenueEditQuery, VenuesAdminQuery } from '../../../types/graphql.ts';
-import { EntityShows, PageLink } from '../../../ui/admin/entity.tsx';
-import { AdminForm, type Field } from '../../../ui/admin/form.tsx';
-import { ListTable, RowActions, RowTitle, Search } from '../../../ui/admin/list-table.tsx';
-import { Message } from '../../../ui/admin/message.tsx';
-import { HeaderAdd, Heading } from '../../../ui/admin/page.tsx';
-import { FeaturedMedia } from '../../../ui/admin/public/featured-media.tsx';
-import { InlineToggle } from '../../../ui/admin/public/inline-toggle.tsx';
-import { pinkLink, wideInput } from '../../../ui/admin/public/styles.ts';
-import { uploadUrl } from '../../../ui/public/media.ts';
-import { text } from '../../../ui/public/styles.ts';
-import { selectedMedia } from '../media/data.ts';
-import { renderAdminPage } from '../render-page.tsx';
+import { selectedMedia } from '#/actions/admin/media/data.ts';
+import { renderAdminPage } from '#/actions/admin/render-page.tsx';
+import type { RedirectResult } from '#/lib/admin/forms.ts';
+import { getAdminT, type TFunction } from '#/lib/i18n.ts';
+import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import type { VenueEditQuery, VenuesAdminQuery } from '#/types/graphql.ts';
+import { EntityShows, PageLink } from '#/ui/admin/entity.tsx';
+import { AdminForm, type Field } from '#/ui/admin/form.tsx';
+import { ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { Message } from '#/ui/admin/message.tsx';
+import { HeaderAdd, Heading } from '#/ui/admin/page.tsx';
+import { FeaturedMedia } from '#/ui/admin/public/featured-media.tsx';
+import { InlineToggle } from '#/ui/admin/public/inline-toggle.tsx';
+import { pinkLink, wideInput } from '#/ui/admin/public/styles.ts';
+import { uploadUrl } from '#/ui/public/media.ts';
+import { text } from '#/ui/public/styles.ts';
 
 import {
   createVenue,

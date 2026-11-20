@@ -2,20 +2,15 @@ import { gql } from 'graphql-tag';
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
-import { routes } from '../../routes.ts';
-import type {
-  ShowQuery,
-  ShowsHistoryQuery,
-  ShowsQuery,
-  ShowStatsQuery,
-} from '../../types/graphql.ts';
-import { Artwork } from '../../ui/artist.tsx';
-import { Heading1, Heading2 } from '../../ui/heading.tsx';
-import { Link } from '../../ui/link.tsx';
-import { md, text, type Styles } from '../../ui/public/styles.ts';
-import { Shows, ShowsList, showsGridFragment } from '../../ui/shows/shows.tsx';
-import { formatDate } from '../../ui/shows/utils.ts';
-import { prefetchRootData, renderPage } from '../render-page.tsx';
+import { prefetchRootData, renderPage } from '#/actions/render-page.tsx';
+import { routes } from '#/routes.ts';
+import type { ShowQuery, ShowsHistoryQuery, ShowsQuery, ShowStatsQuery } from '#/types/graphql.ts';
+import { Artwork } from '#/ui/artist.tsx';
+import { Heading1, Heading2 } from '#/ui/heading.tsx';
+import { Link } from '#/ui/link.tsx';
+import { md, text, type Styles } from '#/ui/public/styles.ts';
+import { Shows, ShowsList, showsGridFragment } from '#/ui/shows/shows.tsx';
+import { formatDate } from '#/ui/shows/utils.ts';
 
 const showsQuery = gql`
   query Shows($after: String, $first: Int) {

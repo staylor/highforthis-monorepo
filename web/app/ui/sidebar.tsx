@@ -1,6 +1,6 @@
 import { css, type Handle } from 'remix/component';
 
-import type { AppQuery } from '../types/graphql.ts';
+import type { AppQuery } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';

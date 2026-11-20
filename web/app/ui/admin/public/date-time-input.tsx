@@ -1,6 +1,6 @@
 import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { merge, sm } from '../../public/styles.ts';
+import { merge, sm } from '#/ui/public/styles.ts';
 
 import { input } from './styles.ts';
 

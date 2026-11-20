@@ -1,4 +1,4 @@
-import { graphqlHost } from '../../../lib/graphql.ts';
+import { graphqlHost } from '#/lib/graphql.ts';
 
 // Looked up per request rather than captured at startup, so tests can stub fetch.
 const fetchNow: typeof fetch = (input, init) => globalThis.fetch(input, init);

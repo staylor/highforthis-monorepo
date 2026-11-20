@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
-import type { HomeQuery } from '../../types/graphql.ts';
-import { getApp } from '../../ui/app-context.tsx';
-import { Link } from '../../ui/link.tsx';
-import { PostArtwork, postArtworkFragment } from '../../ui/post-artwork.tsx';
+import type { HomeQuery } from '#/types/graphql.ts';
+import { getApp } from '#/ui/app-context.tsx';
+import { Link } from '#/ui/link.tsx';
+import { PostArtwork, postArtworkFragment } from '#/ui/post-artwork.tsx';
 import {
   card,
   colorTransition,
@@ -13,9 +13,9 @@ import {
   linkHover,
   merge,
   text,
-} from '../../ui/public/styles.ts';
-import { AccentLine, SectionHeader } from '../../ui/section-header.tsx';
-import { Videos, videosFragment } from '../../ui/videos.tsx';
+} from '#/ui/public/styles.ts';
+import { AccentLine, SectionHeader } from '#/ui/section-header.tsx';
+import { Videos, videosFragment } from '#/ui/videos.tsx';
 
 export const homeQuery = gql`
   query Home(

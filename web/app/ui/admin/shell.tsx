@@ -1,6 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { colorTransition, dark, lg, sm, text } from '../public/styles.ts';
+import { colorTransition, dark, lg, sm, text } from '#/ui/public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { adminHref, adminNav, isSectionActive, type NavSection } from './nav.ts';

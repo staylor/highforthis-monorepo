@@ -1,7 +1,7 @@
 import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import type { NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 
-import type { Video, VideoThumbnail } from '../../../../types/graphql.ts';
+import type { Video, VideoThumbnail } from '#/types/graphql.ts';
 
 // this data gets saved
 type SerializedVideoNode = Spread<{ videoId: string }, SerializedLexicalNode>;

@@ -1,12 +1,12 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
-import type { PostQuery, PostsQuery } from '../../types/graphql.ts';
-import { getApp } from '../../ui/app-context.tsx';
-import { Heading1, PostTitle } from '../../ui/heading.tsx';
-import { Link } from '../../ui/link.tsx';
-import { PostArtwork, postArtworkFragment } from '../../ui/post-artwork.tsx';
-import { PostContent, textNodeFragments } from '../../ui/post-content.tsx';
+import type { PostQuery, PostsQuery } from '#/types/graphql.ts';
+import { getApp } from '#/ui/app-context.tsx';
+import { Heading1, PostTitle } from '#/ui/heading.tsx';
+import { Link } from '#/ui/link.tsx';
+import { PostArtwork, postArtworkFragment } from '#/ui/post-artwork.tsx';
+import { PostContent, textNodeFragments } from '#/ui/post-content.tsx';
 import {
   card,
   colorTransition,
@@ -16,8 +16,8 @@ import {
   merge,
   sm,
   text,
-} from '../../ui/public/styles.ts';
-import { videoFragment } from '../../ui/videos.tsx';
+} from '#/ui/public/styles.ts';
+import { videoFragment } from '#/ui/videos.tsx';
 
 export const postsQuery = gql`
   query Posts($first: Int) {

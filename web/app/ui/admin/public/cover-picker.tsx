@@ -1,6 +1,6 @@
 import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { dark, lg, merge, sm, text } from '../../public/styles.ts';
+import { dark, lg, merge, sm, text } from '#/ui/public/styles.ts';
 
 import { button, disabledFades } from './styles.ts';
 

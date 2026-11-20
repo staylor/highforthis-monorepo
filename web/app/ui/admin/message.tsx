@@ -1,6 +1,6 @@
 import { css, type Handle } from 'remix/component';
 
-import { colorTransition, text } from '../public/styles.ts';
+import { colorTransition, text } from '#/ui/public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { Icon } from './public/icon.tsx';

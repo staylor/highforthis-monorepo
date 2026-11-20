@@ -1,14 +1,14 @@
 import { gql } from 'graphql-tag';
 
+import { featuredMediaFragment } from '#/actions/admin/media/data.ts';
 import {
   deleteSelected,
   submitForm,
   type FormArgs,
   type GraphQLClient,
-} from '../../../lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '../../../lib/admin/list-variables.ts';
-import type { PodcastEditQuery, PodcastsAdminQuery } from '../../../types/graphql.ts';
-import { featuredMediaFragment } from '../media/data.ts';
+} from '#/lib/admin/forms.ts';
+import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import type { PodcastEditQuery, PodcastsAdminQuery } from '#/types/graphql.ts';
 
 const podcastFormFragment = gql`
   fragment PodcastForm_podcast on Podcast {

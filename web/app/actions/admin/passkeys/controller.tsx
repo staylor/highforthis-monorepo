@@ -2,14 +2,14 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
-import { getAdminT } from '../../../lib/i18n.ts';
-import { requireAdmin, sameOrigin } from '../../../middleware/admin.ts';
-import { routes } from '../../../routes.ts';
-import { Heading } from '../../../ui/admin/page.tsx';
-import { ConfirmButton } from '../../../ui/admin/public/confirm-button.tsx';
-import { PasskeyRegister } from '../../../ui/admin/public/passkey-register.tsx';
-import { dark, lg, text, type Styles } from '../../../ui/public/styles.ts';
-import { renderAdminPage } from '../render-page.tsx';
+import { renderAdminPage } from '#/actions/admin/render-page.tsx';
+import { getAdminT } from '#/lib/i18n.ts';
+import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
+import { routes } from '#/routes.ts';
+import { Heading } from '#/ui/admin/page.tsx';
+import { ConfirmButton } from '#/ui/admin/public/confirm-button.tsx';
+import { PasskeyRegister } from '#/ui/admin/public/passkey-register.tsx';
+import { dark, lg, text, type Styles } from '#/ui/public/styles.ts';
 
 import { deletePasskey, listPasskeys, passkeyApi } from './data.ts';
 

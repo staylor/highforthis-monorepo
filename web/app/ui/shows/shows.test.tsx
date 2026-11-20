@@ -2,9 +2,9 @@ import * as assert from 'remix/assert';
 import { renderToString } from 'remix/component/server';
 import { describe, it } from 'remix/test';
 
-import { getT } from '../../lib/i18n.ts';
-import { AppProvider, type AppValue } from '../app-context.tsx';
-import { trans } from '../trans.tsx';
+import { getT } from '#/lib/i18n.ts';
+import { AppProvider, type AppValue } from '#/ui/app-context.tsx';
+import { trans } from '#/ui/trans.tsx';
 
 import { Attended, ShowsGrid } from './shows.tsx';
 

@@ -1,6 +1,6 @@
 import { css } from 'remix/component';
 
-import { colorTransition, dark, lg, merge, sm, text, type Styles } from '../../public/styles.ts';
+import { colorTransition, dark, lg, merge, sm, text, type Styles } from '#/ui/public/styles.ts';
 
 /** The admin's text fields and selects, on top of base.css's defaults for them. */
 export const input = {

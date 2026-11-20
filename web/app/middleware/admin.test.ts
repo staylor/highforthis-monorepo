@@ -2,8 +2,8 @@ import * as assert from 'remix/assert';
 import { createRouter } from 'remix/router';
 import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
 
-import { testSecret, testSession, testToken } from '../lib/adminSession.fixtures.ts';
-import { rememberClientAddress } from '../lib/client.ts';
+import { testSecret, testSession, testToken } from '#/lib/adminSession.fixtures.ts';
+import { rememberClientAddress } from '#/lib/client.ts';
 
 import { Admin, requireAdmin, sameOrigin } from './admin.ts';
 import { proxies } from './app.ts';

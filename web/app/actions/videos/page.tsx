@@ -1,10 +1,10 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
-import type { VideosQuery } from '../../types/graphql.ts';
-import { getApp } from '../../ui/app-context.tsx';
-import { Heading1 } from '../../ui/heading.tsx';
-import { Videos, videoFragment, videosFragment } from '../../ui/videos.tsx';
+import type { VideosQuery } from '#/types/graphql.ts';
+import { getApp } from '#/ui/app-context.tsx';
+import { Heading1 } from '#/ui/heading.tsx';
+import { Videos, videoFragment, videosFragment } from '#/ui/videos.tsx';
 
 import { YearSelect } from './public/year-select.tsx';
 

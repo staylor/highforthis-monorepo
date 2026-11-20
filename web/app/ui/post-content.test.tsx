@@ -2,7 +2,7 @@ import * as assert from 'remix/assert';
 import { renderToString } from 'remix/component/server';
 import { describe, it } from 'remix/test';
 
-import { ListType, type EditorState } from '../types/graphql.ts';
+import { ListType, type EditorState } from '#/types/graphql.ts';
 
 import { PostContent } from './post-content.tsx';
 

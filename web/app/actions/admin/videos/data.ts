@@ -5,9 +5,9 @@ import {
   submitForm,
   type FormArgs,
   type GraphQLClient,
-} from '../../../lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '../../../lib/admin/list-variables.ts';
-import type { VideoEditQuery, VideosAdminQuery } from '../../../types/graphql.ts';
+} from '#/lib/admin/forms.ts';
+import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import type { VideoEditQuery, VideosAdminQuery } from '#/types/graphql.ts';
 
 const videoFormFragment = gql`
   fragment VideoForm_video on Video {

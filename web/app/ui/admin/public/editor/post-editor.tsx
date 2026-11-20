@@ -1,10 +1,10 @@
 import type { SerializedEditorState } from 'lexical';
 import { clientEntry, css, on, ref, type Handle, type RemixNode } from 'remix/component';
 
-import type { ImageUpload, Video } from '../../../../types/graphql.ts';
-import { lg, text } from '../../../public/styles.ts';
-import { Icon, type IconName } from '../icon.tsx';
-import { PickerDialog } from '../picker-dialog.tsx';
+import type { ImageUpload, Video } from '#/types/graphql.ts';
+import { Icon, type IconName } from '#/ui/admin/public/icon.tsx';
+import { PickerDialog } from '#/ui/admin/public/picker-dialog.tsx';
+import { lg, text } from '#/ui/public/styles.ts';
 
 import { BLOCK_TYPES, createBlockToolbar, type BlockStyle } from './block-toolbar.ts';
 import { createPostEditor } from './editor.ts';

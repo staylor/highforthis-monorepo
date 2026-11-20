@@ -1,4 +1,4 @@
-import { graphqlHost } from '../../../lib/graphql.ts';
+import { graphqlHost } from '#/lib/graphql.ts';
 
 import type { PasskeyListResponse } from './types.ts';
 

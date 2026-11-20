@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 
-import type { GraphQLClient, RedirectResult } from '../../../lib/admin/forms.ts';
-import type { ImportListingsMutation, VenueListingsAdminQuery } from '../../../types/graphql.ts';
-import { splitArtists } from '../../../ui/admin/public/split-artists.ts';
+import type { GraphQLClient, RedirectResult } from '#/lib/admin/forms.ts';
+import type { ImportListingsMutation, VenueListingsAdminQuery } from '#/types/graphql.ts';
+import { splitArtists } from '#/ui/admin/public/split-artists.ts';
 
 const listingsQuery = gql`
   query VenueListingsAdmin($venueId: String!, $withListings: Boolean!) {

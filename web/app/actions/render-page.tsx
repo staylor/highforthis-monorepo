@@ -2,10 +2,10 @@ import { gql } from 'graphql-tag';
 import type { RemixNode } from 'remix/component';
 import type { Middleware } from 'remix/router';
 
-import { adminToken } from '../lib/adminSession.ts';
-import { graphqlHost } from '../lib/graphql.ts';
-import type { AppContext } from '../router.ts';
-import type { AppQuery, SiteSettings } from '../types/graphql.ts';
+import { adminToken } from '#/lib/adminSession.ts';
+import { graphqlHost } from '#/lib/graphql.ts';
+import type { AppContext } from '#/router.ts';
+import type { AppQuery, SiteSettings } from '#/types/graphql.ts';
 
 import { Document, type MetaTag } from './document.tsx';
 

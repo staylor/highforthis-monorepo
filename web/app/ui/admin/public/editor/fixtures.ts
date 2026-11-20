@@ -1,7 +1,7 @@
 // An image, a video and a saved post, for the editor's tests.
 import type { SerializedEditorState } from 'lexical';
 
-import type { ImageUpload, Video } from '../../../../types/graphql.ts';
+import type { ImageUpload, Video } from '#/types/graphql.ts';
 
 // an image and a video with the fields the editor and its pickers read
 export const image = {

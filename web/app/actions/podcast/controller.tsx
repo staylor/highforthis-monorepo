@@ -2,14 +2,14 @@ import { gql } from 'graphql-tag';
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
-import { routes } from '../../routes.ts';
-import type { PodcastQuery, PodcastsQuery } from '../../types/graphql.ts';
-import { lines } from '../../ui/lines.tsx';
-import { Link } from '../../ui/link.tsx';
-import { Podcast, podcastMetaTags } from '../../ui/podcast.tsx';
-import { uploadUrl } from '../../ui/public/media.ts';
-import { colorTransition, lineClamp, linkHover, text } from '../../ui/public/styles.ts';
-import { loadRootData, prefetchRootData, renderPage } from '../render-page.tsx';
+import { loadRootData, prefetchRootData, renderPage } from '#/actions/render-page.tsx';
+import { routes } from '#/routes.ts';
+import type { PodcastQuery, PodcastsQuery } from '#/types/graphql.ts';
+import { lines } from '#/ui/lines.tsx';
+import { Link } from '#/ui/link.tsx';
+import { Podcast, podcastMetaTags } from '#/ui/podcast.tsx';
+import { uploadUrl } from '#/ui/public/media.ts';
+import { colorTransition, lineClamp, linkHover, text } from '#/ui/public/styles.ts';
 
 const podcastsQuery = gql`
   query Podcasts($first: Int) {

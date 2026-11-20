@@ -1,6 +1,6 @@
 import { clientEntry, css, navigate, on, type Handle } from 'remix/component';
 
-import { colorTransition, dark, text } from '../../../ui/public/styles.ts';
+import { colorTransition, dark, text } from '#/ui/public/styles.ts';
 
 /**
  * The year picker needs JavaScript because the year is a path segment (/videos/:year),

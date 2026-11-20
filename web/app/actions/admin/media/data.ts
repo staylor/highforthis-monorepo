@@ -1,14 +1,14 @@
 import { gql } from 'graphql-tag';
 
-import type { GraphQLClient } from '../../../lib/admin/forms.ts';
+import type { GraphQLClient } from '#/lib/admin/forms.ts';
 import type {
   FeaturedMedia_MediaFragment,
   MediaPickerQuery,
   VideoPickerQuery,
-} from '../../../types/graphql.ts';
-import type { SelectedMedia } from '../../../ui/admin/public/featured-media.tsx';
-import type { MediaPickerItem } from '../../../ui/admin/public/picker-dialog.tsx';
-import { uploadUrl } from '../../../ui/public/media.ts';
+} from '#/types/graphql.ts';
+import type { SelectedMedia } from '#/ui/admin/public/featured-media.tsx';
+import type { MediaPickerItem } from '#/ui/admin/public/picker-dialog.tsx';
+import { uploadUrl } from '#/ui/public/media.ts';
 
 // The browser gets URLs it can show, not the uploads themselves.
 

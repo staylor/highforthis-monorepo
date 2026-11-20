@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag';
 import { html } from 'remix/html-template';
 
-import type { AudioUpload, PodcastConnection, PodcastSettings } from '../../types/graphql.ts';
-import { uploadUrl } from '../../ui/public/media.ts';
+import type { AudioUpload, PodcastConnection, PodcastSettings } from '#/types/graphql.ts';
+import { uploadUrl } from '#/ui/public/media.ts';
 
 export const feedQuery = gql`
   query PodcastFeed {

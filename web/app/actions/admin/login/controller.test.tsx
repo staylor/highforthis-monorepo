@@ -1,9 +1,9 @@
 import * as assert from 'remix/assert';
 import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
 
-import { testSecret, testSession, testToken } from '../../../lib/adminSession.fixtures.ts';
-import { rememberClientAddress } from '../../../lib/client.ts';
-import { router } from '../../../router.ts';
+import { testSecret, testSession, testToken } from '#/lib/adminSession.fixtures.ts';
+import { rememberClientAddress } from '#/lib/client.ts';
+import { router } from '#/router.ts';
 
 const origin = 'http://localhost';
 

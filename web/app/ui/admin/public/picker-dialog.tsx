@@ -1,6 +1,6 @@
 import { css, on, ref, type Handle } from 'remix/component';
 
-import { colorTransition, sm, text } from '../../public/styles.ts';
+import { colorTransition, sm, text } from '#/ui/public/styles.ts';
 
 import { Icon } from './icon.tsx';
 

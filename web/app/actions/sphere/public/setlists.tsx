@@ -1,6 +1,6 @@
 import { clientEntry, css, on, type Handle, type RemixNode } from 'remix/component';
 
-import { colorTransition, text } from '../../../ui/public/styles.ts';
+import { colorTransition, text } from '#/ui/public/styles.ts';
 
 export type Stats = Record<string, number>;
 export type Setlist = { date: string; sets: string[][] };

@@ -6,14 +6,14 @@ import {
   type FormArgs,
   type GraphQLClient,
   type RedirectResult,
-} from '../../../lib/admin/forms.ts';
-import { addPageOffset } from '../../../lib/admin/list-variables.ts';
+} from '#/lib/admin/forms.ts';
+import { addPageOffset } from '#/lib/admin/list-variables.ts';
 import type {
   AddAlbumCoversMutation,
   AlbumCoversAdminQuery,
   MediaAdminQuery,
   UploadsAdminQuery,
-} from '../../../types/graphql.ts';
+} from '#/types/graphql.ts';
 
 // The featured media field's picker has its own data, in data.ts.
 

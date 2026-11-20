@@ -1,7 +1,7 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { text } from '../public/styles.ts';
-import { formatDate } from '../shows/utils.ts';
+import { text } from '#/ui/public/styles.ts';
+import { formatDate } from '#/ui/shows/utils.ts';
 
 import { getAdmin } from './context.tsx';
 import { documentLoad } from './links.ts';
