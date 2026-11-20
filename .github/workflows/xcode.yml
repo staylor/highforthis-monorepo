@@ -152,7 +152,6 @@ jobs:
         with:
           name: ${{ matrix.name }}
           platform: ${{ matrix.platform }}
-          build: ${{ matrix.build }}
           device: ${{ matrix.device }}
           only-testing: ${{ matrix.only-testing }}
 
@@ -161,7 +160,8 @@ jobs:
   # The xcode-27 image 20261119.0378, with macOS 27.2 and the Xcode 27.3 beta's CoreSimulator, breaks simulators of a
   # downloaded runtime: downloads fail, boots and tests hang, and the test runner can't launch. Until a fixed image
   # ships, these still run on pull requests but aren't one of CI's needs, so a failure shows on the run without
-  # blocking a merge or TestFlight. Once one ships, move these back into test's matrix.
+  # blocking a merge or TestFlight. Once one ships, move these back into test's matrix, and pass build to the action
+  # there again.
   test-older-runtimes:
     name: Test (${{ matrix.name }})
     needs: changes
