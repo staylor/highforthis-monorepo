@@ -9,6 +9,7 @@ fragment ShowList_show on Show {
   }
   venue {
     id
+    address
     name
     slug
   }

@@ -6,8 +6,10 @@ import Observation
 import os
 import UIKit
 
-/// CarPlay lists the recommended shows and the podcast episodes, and plays episodes with the app's shared player.
+/// CarPlay lists the recommended shows, which open driving directions to their venues in Maps, and the podcast
+/// episodes, which play with the app's shared player.
 final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
+    private weak var scene: CPTemplateApplicationScene?
     private var interfaceController: CPInterfaceController?
     /// Changes on every connect and disconnect, so observation started for an earlier connection stops.
     private var connection = 0
@@ -24,6 +26,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         _ templateApplicationScene: CPTemplateApplicationScene,
         didConnect interfaceController: CPInterfaceController
     ) {
+        scene = templateApplicationScene
         self.interfaceController = interfaceController
         connection += 1
         shows.tabTitle = String(localized: .shows)
@@ -51,6 +54,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         _ templateApplicationScene: CPTemplateApplicationScene,
         didDisconnectInterfaceController interfaceController: CPInterfaceController
     ) {
+        scene = nil
         self.interfaceController = nil
         connection += 1
         playback?.cancel()
@@ -97,7 +101,25 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     private func makeItem(for show: ShowList_show, dated: Bool) -> CPListItem {
         let venue = show.venue.name
         let detail = dated ? String(localized: .dateAndVenue(show.startDate.formatted(.showDay), venue)) : venue
-        return CPListItem(text: show.headline, detailText: detail)
+        let item = CPListItem(text: show.headline, detailText: detail)
+        if let directions = show.venue.address.flatMap(URL.directions) {
+            item.handler = { [weak self] _, completion in
+                guard let self else { return completion() }
+                open(directions, completion: completion)
+            }
+        }
+        return item
+    }
+
+    /// Opens Maps on the car's screen, as CarPlay shows apps that the scene opens there.
+    private func open(_ directions: URL, completion: @escaping () -> Void) {
+        guard let scene else { return completion() }
+        Task {
+            defer { completion() }
+            if await !scene.open(directions, options: nil) {
+                showAlert(String(localized: .directionsUnavailable))
+            }
+        }
     }
 
     // MARK: - Episodes

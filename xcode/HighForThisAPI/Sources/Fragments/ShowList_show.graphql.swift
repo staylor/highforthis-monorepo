@@ -6,7 +6,7 @@
 
 nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
   public static var fragmentDefinition: StaticString {
-    #"fragment ShowList_show on Show { __typename id date title artists { __typename id name slug } venue { __typename id name slug } }"#
+    #"fragment ShowList_show on Show { __typename id date title artists { __typename id name slug } venue { __typename id address name slug } }"#
   }
 
   @_spi(Unsafe) public let __data: DataDict
@@ -65,6 +65,7 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
     @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
       .field("__typename", String.self),
       .field("id", String.self),
+      .field("address", String?.self),
       .field("name", String.self),
       .field("slug", String.self),
     ] }
@@ -73,6 +74,7 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
     ] }
 
     public var id: String { __data["id"] }
+    public var address: String? { __data["address"] }
     public var name: String { __data["name"] }
     public var slug: String { __data["slug"] }
   }

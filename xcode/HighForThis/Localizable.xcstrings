@@ -64,6 +64,18 @@
         }
       }
     },
+    "directionsUnavailable" : {
+      "comment" : "An alert in CarPlay when Maps can't open directions to a show's venue.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maps couldn't open directions to this venue."
+          }
+        }
+      }
+    },
     "playbackUnavailable" : {
       "extractionState": "manual",
       "localizations": {
