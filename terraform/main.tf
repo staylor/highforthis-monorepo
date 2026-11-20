@@ -7,12 +7,12 @@ terraform {
     }
   }
 
-  # State is local for now (gitignored). To share it, create a versioned
-  # bucket and switch to:
-  # backend "gcs" {
-  #   bucket = "wonderboymusic-tfstate"
-  #   prefix = "highforthis"
-  # }
+  # State lives in the bucket defined in state.tf. The backend locks it while
+  # a plan or apply runs, so two runs can't write it at once.
+  backend "gcs" {
+    bucket = "wonderboymusic-tfstate"
+    prefix = "highforthis"
+  }
 }
 
 variable "project" {

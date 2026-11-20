@@ -8,6 +8,7 @@ Terraform for what the site uses in Google Cloud:
 | `iam.tf` | The `highforthis-storage` service account and every binding on the bucket |
 | `apikeys.tf` | The YouTube, geocoding and Maps Static API keys |
 | `services.tf` | The APIs those need |
+| `state.tf` | The `wonderboymusic-tfstate` bucket that holds this config's state |
 
 Everything here was created by hand first and adopted with `import` blocks.
 To adopt something else, write its resource block, add an `import` block
@@ -20,13 +21,31 @@ The provider reads your gcloud login, so you don't need a key file:
 
 ```bash
 export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
+terraform init   # once per checkout: connects to the state bucket
 terraform plan
 ```
 
 Or run `gcloud auth application-default login` once and skip the export.
 
-State is local (`terraform.tfstate`, gitignored). It holds the API key
-values, so if you move it to a GCS backend, make that bucket private.
+## State
+
+State lives in `gs://wonderboymusic-tfstate/highforthis/default.tfstate`,
+not on disk. It holds the API key values, so the bucket blocks public access
+and only the project's owners can read it. Terraform locks the state while a
+plan or apply runs.
+
+The bucket keeps the last 10 versions of the state. To roll back after a bad
+apply, list them and copy an older one over the current one:
+
+```bash
+gcloud storage ls -a gs://wonderboymusic-tfstate/highforthis/
+gcloud storage cp gs://wonderboymusic-tfstate/highforthis/default.tfstate#GENERATION \
+  gs://wonderboymusic-tfstate/highforthis/default.tfstate
+```
+
+The bucket is managed by the state it holds (`state.tf`). That's normal, but
+it means the bucket has to exist before `terraform init` can work, so it has
+`prevent_destroy` set.
 
 ## Railway variables (highforthis-graphql)
 
