@@ -6,4 +6,4 @@ web/apollo/fragmentMatcher.js linguist-generated=true
 web/src/types/graphql.ts linguist-generated=true
 
 # Apollo iOS (pnpm codegen:ios)
-xcode/HighForThisAPI/**/*.graphql.swift linguist-generated=true
+apple/HighForThisAPI/**/*.graphql.swift linguist-generated=true

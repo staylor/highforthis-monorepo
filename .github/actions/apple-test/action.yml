@@ -1,4 +1,4 @@
-name: Xcode tests
+name: Apple tests
 description: Runs the app's tests on a simulator, or the unit tests on the Mac when there's no device.
 
 inputs:
@@ -91,7 +91,7 @@ runs:
     # once more. The Mac run retries neither, so a flaky race in the unit tests still fails CI.
     - name: Test
       shell: bash
-      working-directory: xcode
+      working-directory: apple
       env:
         DESTINATION: ${{ steps.simulator.outputs.destination || 'platform=macOS' }}
         UDID: ${{ steps.simulator.outputs.udid }}
@@ -130,4 +130,4 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: Tests (${{ inputs.name }}).xcresult
-        path: xcode/Tests*.xcresult
+        path: apple/Tests*.xcresult
