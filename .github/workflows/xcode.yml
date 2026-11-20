@@ -121,7 +121,9 @@ jobs:
     needs: changes
     if: needs.changes.outputs.xcode == 'true'
     runs-on: xcode-27
-    timeout-minutes: 45
+    # The longest runs take about 30 minutes, which leaves room to run the tests again after a failure that isn't the
+    # app's.
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -147,11 +149,6 @@ jobs:
             platform: iOS
             build: 23F77
             device: iPad Pro 11-inch (M5)
-          - name: iPhone, iOS 26.0 player
-            platform: iOS
-            build: 23A343
-            device: iPhone 17 Pro
-            only-testing: HighForThisUITests/NavigationTests/testPlayerStaysAvailableAcrossTabsAndCanBeStopped
           - name: Apple TV
             platform: tvOS
             device: Apple TV 4K (3rd generation)
@@ -163,101 +160,34 @@ jobs:
           - name: Mac
             platform: macOS
             only-testing: HighForThisTests
-    defaults:
-      run:
-        working-directory: xcode
     steps:
       - uses: actions/checkout@v5
-      - name: Install the simulator runtime
-        if: matrix.build
-        env:
-          PLATFORM: ${{ matrix.platform }}
-          BUILD: ${{ matrix.build }}
-        run: |
-          set -o pipefail
-          xcodebuild -downloadPlatform "$PLATFORM" -buildVersion "$BUILD" -architectureVariant arm64
-          # Deferred cleanup of stale runtime registrations can unmount the active simulator mid-test.
-          # Keep the assets shared with their usable replacements, then remount those replacements.
-          xcrun simctl runtime scan-and-mount
-          xcrun simctl runtime list --json | jq -r '.[] | select(.state == "Unusable") | .identifier' |
-            while IFS= read -r runtime; do
-              xcrun simctl runtime delete "$runtime" --keep-asset
-            done
-          xcrun simctl runtime scan-and-mount
-          # A simulator that boots before its runtime's dyld shared cache is built stays several times slower.
-          xcrun simctl runtime dyld_shared_cache update --all
-      - name: Pick a simulator
-        id: simulator
-        if: matrix.device
-        env:
-          PLATFORM: ${{ matrix.platform }}
-          BUILD: ${{ matrix.build }}
-          DEVICE: ${{ matrix.device }}
-        # Xcode can leave an older runtime's simulators out of its destinations, as Xcode 27.1 does with tvOS 27.0
-        # once tvOS 27.2 is installed, so this uses the newest runtime for the device, adding the device to it when
-        # it's missing. Runtimes made for one new model, such as iPhone Duo's, support only that model.
-        run: |
-          runtime=$(xcrun simctl list runtimes available --json |
-            jq -r --arg platform "$PLATFORM" --arg build "$BUILD" --arg device "$DEVICE" '
-              [.runtimes[] | select(.platform == $platform and ($build == "" or .buildversion == $build))
-                | select(any(.supportedDeviceTypes[]?; .name == $device))]
-              | sort_by(.version | split(".") | map(tonumber)) | last | .identifier // empty')
-          if [ -z "$runtime" ]; then
-            echo "::error::No $PLATFORM ${BUILD:-runtime} supports $DEVICE."
-            exit 1
-          fi
-          udid=$(xcrun simctl list devices available --json | jq -r --arg runtime "$runtime" --arg device "$DEVICE" '
-            [.devices[$runtime][]? | select(.name == $device)] | last | .udid // empty')
-          if [ -z "$udid" ]; then
-            udid=$(xcrun simctl create "$DEVICE" "$DEVICE" "$runtime")
-          fi
-          echo "destination=id=$udid" >> "$GITHUB_OUTPUT"
-          xcrun simctl list devices available | grep "$udid"
-          # The test runner can stall while a cold simulator boots, and then never starts. The boot itself can also hang
-          # at "Waiting on BackBoard": CI boots take under 5 minutes, so give up after 10 and boot the erased device again.
-          boot() {
-            xcrun simctl bootstatus "$udid" -b &
-            local pid=$!
-            SECONDS=0
-            while kill -0 "$pid" 2>/dev/null; do
-              if [ "$SECONDS" -ge 600 ]; then
-                kill "$pid"
-                return 1
-              fi
-              sleep 5
-            done
-            wait "$pid"
-          }
-          if ! boot; then
-            echo "::warning::The simulator didn't finish booting in 10 minutes, so it's being erased and booted again."
-            xcrun simctl shutdown "$udid" || true
-            xcrun simctl erase "$udid"
-            boot
-          fi
-      # CI simulators sometimes time out reading the UI or fail to quit the app. The Mac run doesn't retry,
-      # so a flaky race in the unit tests still fails CI.
-      - name: Test
-        env:
-          DESTINATION: ${{ steps.simulator.outputs.destination || 'platform=macOS' }}
-          DEVICE: ${{ matrix.device }}
-          ONLY_TESTING: ${{ matrix.only-testing }}
-        run: |
-          set -o pipefail
-          xcodebuild test \
-            -project HighForThis.xcodeproj \
-            -scheme HighForThis \
-            -destination "$DESTINATION" \
-            ${ONLY_TESTING:+-only-testing:"$ONLY_TESTING"} \
-            -resultBundlePath Tests.xcresult \
-            ${DEVICE:+-retry-tests-on-failure -test-iterations 3} \
-            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
-            | xcbeautify --renderer github-actions
-      - name: Upload test results
-        if: failure()
-        uses: actions/upload-artifact@v4
+      - uses: ./.github/actions/xcode-test
         with:
-          name: Tests (${{ matrix.name }}).xcresult
-          path: xcode/Tests.xcresult
+          name: ${{ matrix.name }}
+          platform: ${{ matrix.platform }}
+          build: ${{ matrix.build }}
+          device: ${{ matrix.device }}
+          only-testing: ${{ matrix.only-testing }}
+
+  # iOS 26.0 lacks the tab accessory API, so this checks the player's fallback. Its simulator often hangs while booting,
+  # so it runs after a merge and on manual runs, not on pull requests. It isn't one of CI's needs: a failure marks the
+  # run on main without holding up TestFlight.
+  test-ios-26-0:
+    name: Test (iPhone, iOS 26.0 player)
+    needs: changes
+    if: github.event_name != 'pull_request' && needs.changes.outputs.xcode == 'true'
+    runs-on: xcode-27
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/xcode-test
+        with:
+          name: iPhone, iOS 26.0 player
+          platform: iOS
+          build: 23A343
+          device: iPhone 17 Pro
+          only-testing: HighForThisUITests/NavigationTests/testPlayerStaysAvailableAcrossTabsAndCanBeStopped
 
   generated-code:
     name: Generated code

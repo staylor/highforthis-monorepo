@@ -1,0 +1,117 @@
+name: Xcode tests
+description: Runs the app's tests on a simulator, or the unit tests on the Mac when there's no device.
+
+inputs:
+  name:
+    description: The job's name, for the result bundle's artifact.
+    required: true
+  platform:
+    description: iOS, tvOS or macOS.
+    required: true
+  build:
+    description: A simulator runtime build to install, such as 23F77. Without one, the image's newest runtime is used.
+    default: ''
+  device:
+    description: The simulator's device type, such as iPhone 18 Pro. Without one, the tests run on the Mac.
+    default: ''
+  only-testing:
+    description: An -only-testing identifier, to run some of the tests.
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Install the simulator runtime
+      if: inputs.build != ''
+      shell: bash
+      env:
+        PLATFORM: ${{ inputs.platform }}
+        BUILD: ${{ inputs.build }}
+      run: |
+        xcodebuild -downloadPlatform "$PLATFORM" -buildVersion "$BUILD" -architectureVariant arm64
+        # Deferred cleanup of stale runtime registrations can unmount the active simulator mid-test.
+        # Keep the assets shared with their usable replacements, then remount those replacements.
+        xcrun simctl runtime scan-and-mount
+        xcrun simctl runtime list --json | jq -r '.[] | select(.state == "Unusable") | .identifier' |
+          while IFS= read -r runtime; do
+            xcrun simctl runtime delete "$runtime" --keep-asset
+          done
+        xcrun simctl runtime scan-and-mount
+        # A simulator that boots before its runtime's dyld shared cache is built stays several times slower.
+        xcrun simctl runtime dyld_shared_cache update --all
+    - name: Pick a simulator
+      id: simulator
+      if: inputs.device != ''
+      shell: bash
+      env:
+        PLATFORM: ${{ inputs.platform }}
+        BUILD: ${{ inputs.build }}
+        DEVICE: ${{ inputs.device }}
+        BOOT: ${{ github.action_path }}/boot-simulator.sh
+      # Xcode can leave an older runtime's simulators out of its destinations, as Xcode 27.1 does with tvOS 27.0
+      # once tvOS 27.2 is installed, so this uses the newest runtime for the device, adding the device to it when
+      # it's missing. Runtimes made for one new model, such as iPhone Duo's, support only that model.
+      run: |
+        runtime=$(xcrun simctl list runtimes available --json |
+          jq -r --arg platform "$PLATFORM" --arg build "$BUILD" --arg device "$DEVICE" '
+            [.runtimes[] | select(.platform == $platform and ($build == "" or .buildversion == $build))
+              | select(any(.supportedDeviceTypes[]?; .name == $device))]
+            | sort_by(.version | split(".") | map(tonumber)) | last | .identifier // empty')
+        if [ -z "$runtime" ]; then
+          echo "::error::No $PLATFORM ${BUILD:-runtime} supports $DEVICE."
+          exit 1
+        fi
+        udid=$(xcrun simctl list devices available --json | jq -r --arg runtime "$runtime" --arg device "$DEVICE" '
+          [.devices[$runtime][]? | select(.name == $device)] | last | .udid // empty')
+        if [ -z "$udid" ]; then
+          udid=$(xcrun simctl create "$DEVICE" "$DEVICE" "$runtime")
+        fi
+        echo "udid=$udid" >> "$GITHUB_OUTPUT"
+        echo "destination=id=$udid" >> "$GITHUB_OUTPUT"
+        xcrun simctl list devices available | grep "$udid"
+        bash "$BOOT" "$udid"
+    # CI simulators sometimes time out reading the UI or fail to quit the app, so failed tests run up to 3 times.
+    # xcodebuild exits with 65 when the build or a test fails. Any other failure, such as xcodebuild crashing or losing
+    # the simulator, isn't the app's, so the simulator is erased and the tests run once more. The Mac run retries
+    # neither, so a flaky race in the unit tests still fails CI.
+    - name: Test
+      shell: bash
+      working-directory: xcode
+      env:
+        DESTINATION: ${{ steps.simulator.outputs.destination || 'platform=macOS' }}
+        UDID: ${{ steps.simulator.outputs.udid }}
+        ONLY_TESTING: ${{ inputs.only-testing }}
+        BOOT: ${{ github.action_path }}/boot-simulator.sh
+      run: |
+        run_tests() {
+          xcodebuild test \
+            -project HighForThis.xcodeproj \
+            -scheme HighForThis \
+            -destination "$DESTINATION" \
+            ${ONLY_TESTING:+-only-testing:"$ONLY_TESTING"} \
+            -resultBundlePath Tests.xcresult \
+            ${UDID:+-retry-tests-on-failure -test-iterations 3} \
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+            | xcbeautify --renderer github-actions
+          return "${PIPESTATUS[0]}"
+        }
+        status=0
+        run_tests || status=$?
+        if [ -n "$UDID" ] && [ "$status" -ne 0 ] && [ "$status" -ne 65 ]; then
+          echo "::warning::xcodebuild exited with $status, which isn't a test failure, so the simulator is being erased and the tests run again."
+          if [ -e Tests.xcresult ]; then
+            mv Tests.xcresult Tests-first-run.xcresult
+          fi
+          xcrun simctl shutdown "$UDID" || true
+          xcrun simctl erase "$UDID"
+          bash "$BOOT" "$UDID"
+          status=0
+          run_tests || status=$?
+        fi
+        exit "$status"
+    - name: Upload test results
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: Tests (${{ inputs.name }}).xcresult
+        path: xcode/Tests*.xcresult
