@@ -28,7 +28,20 @@ runs:
         PLATFORM: ${{ inputs.platform }}
         BUILD: ${{ inputs.build }}
       run: |
-        xcodebuild -downloadPlatform "$PLATFORM" -buildVersion "$BUILD" -architectureVariant arm64
+        # Apple's download server sometimes fails with a networking error that asks to try again later, so the
+        # download is tried up to 3 times.
+        for attempt in 1 2 3; do
+          status=0
+          xcodebuild -downloadPlatform "$PLATFORM" -buildVersion "$BUILD" -architectureVariant arm64 || status=$?
+          if [ "$status" -eq 0 ]; then
+            break
+          fi
+          if [ "$attempt" -eq 3 ]; then
+            exit "$status"
+          fi
+          echo "::warning::Downloading the $PLATFORM $BUILD runtime failed with $status, so it's being tried again in 30 seconds."
+          sleep 30
+        done
         # Deferred cleanup of stale runtime registrations can unmount the active simulator mid-test.
         # Keep the assets shared with their usable replacements, then remount those replacements.
         xcrun simctl runtime scan-and-mount
