@@ -44,6 +44,7 @@ import {
   rejectWordPress,
   translations,
 } from './middleware/app.ts';
+import { errorPage } from './middleware/error-page.tsx';
 import { securityHeaders } from './middleware/headers.ts';
 import { serverTiming, timed } from './middleware/timing.ts';
 import { routes } from './routes.ts';
@@ -80,6 +81,7 @@ export const router = createRouter({
     timed('graphql', graphql()),
     timed('translations', translations()),
     timed('render', render({ assets })),
+    errorPage(),
   ],
 });
 

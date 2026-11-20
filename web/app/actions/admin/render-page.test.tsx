@@ -49,7 +49,23 @@ describe('renderAdminPage', () => {
     assert.ok(html.includes(translate('users.heading')));
     assert.ok(html.includes(translate('users.all')));
     assert.ok(html.includes(translate('users.add')));
-    assert.ok(!html.includes(translate('posts.all')), "other sections' pages stay hidden");
+    // Every section's pages are in the page, for the collapsed rail's flyouts, but only the
+    // current section's are marked to show under it
+    const lists = [...html.matchAll(/<ul\b[^>]*>[\s\S]*?<\/ul>/g)].map(([list]) => list);
+    const openingTag = (list?: string) => list?.slice(0, list.indexOf('>')) ?? '';
+    const users = lists.find((list) => list.includes(translate('users.add')));
+    const posts = lists.find((list) => list.includes(translate('posts.all')));
+    assert.match(openingTag(users), /data-current/);
+    assert.ok(posts, "other sections' pages are there for the flyouts");
+    assert.doesNotMatch(openingTag(posts), /data-current/, "and don't show under their section");
+  });
+
+  it('collapses the sidebar from a stored choice before first paint, and keeps it', async (t) => {
+    stubAppQuery(t);
+    const html = await page('/admin/user');
+    assert.match(html, /<html[^>]*data-rmx-preserve-attrs="class data-nav"/);
+    assert.match(html, /localStorage\.getItem\('adminNavCollapsed'\)\)d\.dataset\.nav='collapsed'/);
+    assert.match(html, /aria-expanded="true" aria-label="Collapse menu"/);
   });
 
   it('signs out with a posted form and a full page load, and opens the site in a new tab', async (t) => {
