@@ -2,8 +2,8 @@ import { readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join, relative, sep } from 'node:path';
 
-// The OpenObserve browser SDKs ship prebuilt bundles that set window.OO_RUM and
-// window.OO_LOGS. The browser loads those instead of the SDKs' ES modules, which the asset
+// The OpenObserve browser SDKs ship prebuilt bundles that set window.O2_RUM and
+// window.O2_LOGS. The browser loads those instead of the SDKs' ES modules, which the asset
 // server would send as about 275 separate files, each with an import map entry on every
 // page. The SDK version is in the URL, so the files can be cached for good.
 

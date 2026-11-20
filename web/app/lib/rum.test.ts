@@ -1,8 +1,26 @@
+import { readFileSync } from 'node:fs';
+
 import * as assert from 'remix/assert';
 import { describe, it } from 'remix/test';
 
-import { openObserveScripts } from './openobserve-bundles.ts';
+import { sdkGlobals } from '#/actions/public/rum.ts';
+
+import { openObserveBundleFiles, openObserveScripts } from './openobserve-bundles.ts';
 import { getOpenObserveRumConfig } from './rum.ts';
+
+describe('OpenObserve SDK bundles', () => {
+  // startRum reads these globals once the bundles load, and gives up without them
+  it('set the globals startRum reads', () => {
+    for (const name of ['rum', 'logs'] as const) {
+      const file = openObserveBundleFiles.get(openObserveScripts[name]);
+      assert.ok(file, `Nothing is served at ${openObserveScripts[name]}`);
+      assert.ok(
+        readFileSync(file, 'utf8').includes(`"${sdkGlobals[name]}"`),
+        `${openObserveScripts[name]} doesn't set window.${sdkGlobals[name]}`
+      );
+    }
+  });
+});
 
 describe('OpenObserve RUM configuration', () => {
   it('is disabled when no RUM variables are set', () => {

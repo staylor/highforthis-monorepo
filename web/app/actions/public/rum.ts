@@ -8,10 +8,13 @@ import type { OpenObserveRumConfig } from '#/lib/rum.ts';
 // own modules.
 declare global {
   interface Window {
-    OO_RUM?: typeof openobserveRum;
-    OO_LOGS?: typeof openobserveLogs;
+    O2_RUM?: typeof openobserveRum;
+    O2_LOGS?: typeof openobserveLogs;
   }
 }
+
+/** The globals the SDK bundles set, which startRum reads once they load. */
+export const sdkGlobals = { rum: 'O2_RUM', logs: 'O2_LOGS' } as const;
 
 function loadScript(src: string) {
   return new Promise<void>((resolve, reject) => {
@@ -29,8 +32,8 @@ function loadScript(src: string) {
 // navigation, which is what the admin dashboard counts as page views.
 export async function startRum(config: OpenObserveRumConfig) {
   await Promise.all([loadScript(config.scripts.rum), loadScript(config.scripts.logs)]);
-  const rum = window.OO_RUM;
-  const logs = window.OO_LOGS;
+  const rum = window[sdkGlobals.rum];
+  const logs = window[sdkGlobals.logs];
   if (!rum || !logs) {
     throw new Error('The OpenObserve SDK bundles loaded without setting their globals');
   }
