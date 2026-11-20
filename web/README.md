@@ -45,7 +45,7 @@ pnpm web:dev   # just this app
 | `OPENOBSERVE_RUM_ENVIRONMENT` | Deployment environment (defaults to the Railway environment or `NODE_ENV`) |
 | `OPENOBSERVE_RUM_VERSION` | Deployed version (defaults to the Railway Git SHA) |
 
-Signing in keeps the admin's GraphQL token in a signed cookie (`app/lib/adminSession.ts`), in the React Router format the admin app used before it moved here, so its sessions carried over. Public pages only read it to know someone is signed in, which turns on live refresh.
+Signing in keeps the admin's GraphQL token in a cookie signed with `remix/cookie` (`app/lib/adminSession.ts`), for 12 hours. Public pages only read it to know someone is signed in, which turns on live refresh.
 
 ### Admin pages
 

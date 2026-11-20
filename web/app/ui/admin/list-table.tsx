@@ -7,6 +7,7 @@ import { getAdmin } from './context.tsx';
 import { documentLoad } from './links.ts';
 import { Message } from './message.tsx';
 import { AutoSubmitSelect } from './public/auto-submit-select.tsx';
+import { SelectAll } from './public/select-all.tsx';
 import { button, table, tableScroller, toolbarSelect, wideInput } from './public/styles.ts';
 
 // Works as plain HTML: each row's checkbox belongs to the bulk actions form through the `form`
@@ -314,11 +315,13 @@ export function ListTable(handle: Handle<ListTableProps>) {
       );
     }
 
-    // The column labels, above the rows and again below them. They take a column's width but stay
-    // left-aligned.
+    // The column labels, above the rows and again below them, each with a box that selects every
+    // row. They take a column's width but stay left-aligned.
     const headerRow = (border: Styles) => (
       <tr>
-        <th mix={css({ ...cell, width: '2.25rem', ...border })}></th>
+        <th mix={css({ ...cell, width: '2.25rem', ...border })}>
+          {deletable ? <SelectAll label={t('table.selectAll')} /> : null}
+        </th>
         {columns.map((column) => (
           <th mix={css(merge(column.styles, cell, border))}>{column.label}</th>
         ))}

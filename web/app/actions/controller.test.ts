@@ -104,6 +104,22 @@ describe('root controller', () => {
     assert.equal(response.status, 404);
   });
 
+  it("renders the error page when an action fails, without the error's message", async (t) => {
+    // The feed can't be built without its settings, so the action throws
+    stubGraphQL(t, {
+      'graphql:App': () => ({ data: {} }),
+      'graphql:PodcastFeed': () => ({ data: {} }),
+    });
+    t.mock.method(console, 'error', () => {});
+    const response = await router.fetch(new URL(routes.podcastFeed.href(), origin));
+    assert.equal(response.status, 500);
+    assert.match(response.headers.get('content-type') ?? '', /text\/html/);
+    const html = await response.text();
+    assert.match(html, /Something went wrong\. Try again in a moment\./);
+    assert.match(html, /<title>Error »/);
+    assert.doesNotMatch(html, /TypeError|Cannot read/);
+  });
+
   it('rejects WordPress probes before routing', async () => {
     const response = await router.fetch(new URL('/wp-login.php', origin));
     assert.equal(response.status, 403);

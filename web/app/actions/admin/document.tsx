@@ -13,8 +13,8 @@ interface AdminDocumentProps {
   children?: RemixNode;
 }
 
-// Runs before first paint so dark mode doesn't flash
-const darkModeScript = `try{if(localStorage.getItem('darkMode'))document.documentElement.classList.add('dark')}catch(e){}`;
+// Runs before first paint so dark mode and a collapsed sidebar (NavCollapse) don't flash
+const beforePaintScript = `try{var d=document.documentElement;if(localStorage.getItem('darkMode'))d.classList.add('dark');if(localStorage.getItem('adminNavCollapsed'))d.dataset.nav='collapsed'}catch(e){}`;
 
 /** No RUM: page views count public pages only. */
 export function AdminDocument(handle: Handle<AdminDocumentProps>) {
@@ -23,13 +23,13 @@ export function AdminDocument(handle: Handle<AdminDocumentProps>) {
     const { href, importMap, preloads } = scriptEntry;
 
     return (
-      <html lang="en" data-rmx-preserve-attrs="class">
+      <html lang="en" data-rmx-preserve-attrs="class data-nav">
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width,initial-scale=1" />
           <meta name="robots" content="noindex" />
           <title>{title}</title>
-          <script innerHTML={unsafeHTML(darkModeScript)} />
+          <script innerHTML={unsafeHTML(beforePaintScript)} />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link
