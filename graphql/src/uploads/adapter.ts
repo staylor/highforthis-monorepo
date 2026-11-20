@@ -24,14 +24,19 @@ class StorageAdapter {
         new Error('Set GCS_BUCKET, GCS_CLIENT_EMAIL and GCS_PRIVATE_KEY to upload media.')
       );
     }
-    this.bucket ??= import('@google-cloud/storage').then(({ Storage }) =>
-      new Storage({
-        credentials: {
-          client_email: GCS_CLIENT_EMAIL,
-          private_key: GCS_PRIVATE_KEY.replace(/\\n/g, '\n'),
-        },
-      }).bucket(GCS_BUCKET)
-    );
+    this.bucket ??= Promise.all([
+      import('@google-cloud/storage'),
+      import('google-auth-library'),
+    ]).then(([{ Storage }, { JWT }]) => {
+      // A JWT client signs in as the service account. Passing the key as `credentials` instead
+      // still works, but google-auth-library warns that it's deprecated.
+      const authClient = new JWT({
+        email: GCS_CLIENT_EMAIL,
+        key: GCS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        scopes: ['https://www.googleapis.com/auth/devstorage.read_write'],
+      });
+      return new Storage({ authClient }).bucket(GCS_BUCKET);
+    });
     return this.bucket;
   }
 
