@@ -83,10 +83,12 @@ runs:
         echo "destination=id=$udid" >> "$GITHUB_OUTPUT"
         xcrun simctl list devices available | grep "$udid"
         bash "$BOOT" "$udid"
-    # CI simulators sometimes time out reading the UI or fail to quit the app, so failed tests run up to 3 times.
-    # xcodebuild exits with 65 when the build or a test fails. Any other failure, such as xcodebuild crashing or losing
-    # the simulator, isn't the app's, so the simulator is erased and the tests run once more. The Mac run retries
-    # neither, so a flaky race in the unit tests still fails CI.
+    # CI simulators sometimes time out reading the UI or fail to quit the app, so failed tests run up to 3 times. A UI
+    # test can also hang in a wait that never returns, so each test is killed after 5 minutes, about twice the slowest
+    # passing one. That kills the test runner too, so each retry starts a new one: a retry in the same runner never
+    # runs the test that timed out. xcodebuild exits with 65 when the build or a test fails. Any other failure, such
+    # as xcodebuild crashing or losing the simulator, isn't the app's, so the simulator is erased and the tests run
+    # once more. The Mac run retries neither, so a flaky race in the unit tests still fails CI.
     - name: Test
       shell: bash
       working-directory: xcode
@@ -103,7 +105,8 @@ runs:
             -destination "$DESTINATION" \
             ${ONLY_TESTING:+-only-testing:"$ONLY_TESTING"} \
             -resultBundlePath Tests.xcresult \
-            ${UDID:+-retry-tests-on-failure -test-iterations 3} \
+            ${UDID:+-retry-tests-on-failure -test-iterations 3 -test-repetition-relaunch-enabled YES} \
+            ${UDID:+-test-timeouts-enabled YES -default-test-execution-time-allowance 300} \
             CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
             | xcbeautify --renderer github-actions
           return "${PIPESTATUS[0]}"
