@@ -136,25 +136,11 @@ jobs:
           - name: iPhone Duo
             platform: iOS
             device: iPhone Duo
-          # The deployment target is 26.0, and the image only has 27 simulators. These are the 26.5 releases' builds:
-          # asking for version 26.5 sometimes installs its release candidate.
-          - name: iPhone, iOS 26.5
-            platform: iOS
-            build: 23F77
-            device: iPhone 17 Pro
           - name: iPad
             platform: iOS
             device: iPad Pro 11-inch (M5)
-          - name: iPad, iOS 26.5
-            platform: iOS
-            build: 23F77
-            device: iPad Pro 11-inch (M5)
           - name: Apple TV
             platform: tvOS
-            device: Apple TV 4K (3rd generation)
-          - name: Apple TV, tvOS 26.5
-            platform: tvOS
-            build: 23L470
             device: Apple TV 4K (3rd generation)
           # The Mac runs the unit tests alone.
           - name: Mac
@@ -169,6 +155,43 @@ jobs:
           build: ${{ matrix.build }}
           device: ${{ matrix.device }}
           only-testing: ${{ matrix.only-testing }}
+
+  # The deployment target is 26.0, and the image only has 27 simulators, so these download the 26.5 releases' builds:
+  # asking for version 26.5 sometimes installs its release candidate.
+  # The xcode-27 image 20261119.0378, with macOS 27.2 and the Xcode 27.3 beta's CoreSimulator, breaks simulators of a
+  # downloaded runtime: downloads fail, boots and tests hang, and the test runner can't launch. Until a fixed image
+  # ships, these still run on pull requests but aren't one of CI's needs, so a failure shows on the run without
+  # blocking a merge or TestFlight. Once one ships, move these back into test's matrix.
+  test-older-runtimes:
+    name: Test (${{ matrix.name }})
+    needs: changes
+    if: needs.changes.outputs.xcode == 'true'
+    runs-on: xcode-27
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: iPhone, iOS 26.5
+            platform: iOS
+            build: 23F77
+            device: iPhone 17 Pro
+          - name: iPad, iOS 26.5
+            platform: iOS
+            build: 23F77
+            device: iPad Pro 11-inch (M5)
+          - name: Apple TV, tvOS 26.5
+            platform: tvOS
+            build: 23L470
+            device: Apple TV 4K (3rd generation)
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/xcode-test
+        with:
+          name: ${{ matrix.name }}
+          platform: ${{ matrix.platform }}
+          build: ${{ matrix.build }}
+          device: ${{ matrix.device }}
 
   # iOS 26.0 lacks the tab accessory API, so this checks the player's fallback. Its simulator often hangs while booting,
   # so it runs after a merge and on manual runs, not on pull requests. It isn't one of CI's needs: a failure marks the
