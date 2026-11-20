@@ -9,6 +9,10 @@ const dateInput = css(merge(input, { width: '100%', [sm]: { width: 'auto' } }));
 // A datetime-local input in the browser's time zone, and a hidden input with the timestamp,
 // which is what the form submits. The page renders the time in the server's time zone until
 // the browser runs this.
+//
+// The date input is uncontrolled. Remix puts a controlled input's value back after every `input`
+// event that doesn't render a new one, which undid each pick and keystroke before `change`, and a
+// half-typed date has no value to render.
 
 interface DateTimeInputProps {
   name: string;
@@ -28,21 +32,22 @@ function localValue(timestamp: number) {
 export const DateTimeInput = clientEntry(
   import.meta.url,
   function DateTimeInput(handle: Handle<DateTimeInputProps>) {
+    // The last whole date and time picked or typed
     let timestamp: number | null = null;
 
     return () => {
-      const { name, id } = handle.props;
-      const current = timestamp ?? handle.props.value;
+      const { name, id, value } = handle.props;
+      const current = timestamp ?? value;
       return (
         <>
           <input type="hidden" name={name} value={current === null ? '' : String(current)} />
           <input
             type="datetime-local"
             id={id}
-            value={current === null ? '' : localValue(current)}
+            defaultValue={value === null ? '' : localValue(value)}
             mix={[
               dateInput,
-              on('change', (event) => {
+              on('input', (event) => {
                 const parsed = Date.parse(event.currentTarget.value);
                 if (!Number.isNaN(parsed)) {
                   timestamp = parsed;
