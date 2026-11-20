@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Guidance for coding agents working in `xcode/`. Read [`README.md`](README.md) for building and code generation, and [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the code fits together.
+Guidance for coding agents working in `apple/`. Read [`README.md`](README.md) for building and code generation, and [`ARCHITECTURE.md`](ARCHITECTURE.md) for how the code fits together.
 
 ## Commands
 

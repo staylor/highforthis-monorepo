@@ -35,7 +35,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['xcode/graphql/*.graphql'],
+    files: ['apple/graphql/*.graphql'],
     languageOptions: {
       parser: graphql.parser,
     },

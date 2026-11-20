@@ -10,7 +10,7 @@
 
 ## iOS app
 
-- **Work in `xcode/` follows [`xcode/AGENTS.md`](./xcode/AGENTS.md)**, which has its own build, test and formatting commands.
+- **Work in `apple/` follows [`apple/AGENTS.md`](./apple/AGENTS.md)**, which has its own build, test and formatting commands.
 
 ## Git
 

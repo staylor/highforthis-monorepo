@@ -2,7 +2,7 @@
   "schemaNamespace" : "HighForThisAPI",
   "input" : {
     "operationSearchPaths" : [
-      "./xcode/graphql/*.graphql"
+      "./apple/graphql/*.graphql"
     ],
     "schemaSearchPaths" : [
       "./graphql/schema.graphql"
@@ -15,7 +15,7 @@
       }
     },
     "schemaTypes" : {
-      "path" : "./xcode/HighForThisAPI",
+      "path" : "./apple/HighForThisAPI",
       "moduleType" : {
         "swiftPackage" : {
         }

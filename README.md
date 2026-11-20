@@ -11,7 +11,7 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 | [`shared`](./shared)               | Logging and OpenTelemetry for GraphQL and web          |
 | [`e2e`](./e2e)                     | Playwright end-to-end tests of the admin               |
 | [`observability`](./observability) | OpenObserve backend and GUI deployment                 |
-| [`xcode`](./xcode)                 | iOS, iPadOS, macOS and tvOS app (SwiftUI, Apollo iOS)  |
+| [`apple`](./apple)                 | iOS, iPadOS, macOS and tvOS app (SwiftUI, Apollo iOS)  |
 
 ## Requirements
 
@@ -79,7 +79,7 @@ The root `codegen.ts` generates:
 - `graphql/types/graphql.ts` — TypeScript types for the server
 - `web/app/types/schema.ts` and `web/app/types/graphql.ts` — TypeScript schema types, and the site's and admin's operations
 - `web/app/lib/apollo/fragment-matcher.js` — Fragment matcher for Apollo Client
-- `xcode/HighForThisAPI/` — Swift types for the app (via Apollo iOS, from `graphql/schema.graphql`)
+- `apple/HighForThisAPI/` — Swift types for the app (via Apollo iOS, from `graphql/schema.graphql`)
 
 Requires the GraphQL server to be running locally:
 
@@ -88,7 +88,7 @@ pnpm graphql:dev
 pnpm codegen
 ```
 
-`pnpm codegen:ios` regenerates only `xcode/HighForThisAPI/`, from the committed schema, so it doesn't need the server. See [`xcode/README.md`](./xcode/README.md).
+`pnpm codegen:ios` regenerates only `apple/HighForThisAPI/`, from the committed schema, so it doesn't need the server. See [`apple/README.md`](./apple/README.md).
 
 ## Observability
 

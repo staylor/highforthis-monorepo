@@ -1,4 +1,4 @@
-name: Xcode
+name: Apple
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ jobs:
     name: Changes
     runs-on: ubuntu-26.04
     outputs:
-      xcode: ${{ steps.diff.outputs.xcode }}
+      apple: ${{ steps.diff.outputs.apple }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -38,15 +38,15 @@ jobs:
             # A push can add several commits, and the checkout has only the last two.
             git fetch --quiet --depth=1 origin "$base" || true
           fi
-          # Documentation and this workflow don't change the app, so changing only them skips the Xcode jobs.
+          # Documentation and this workflow don't change the app, so changing only them skips the Apple jobs.
           # To test a workflow change, run the workflow manually on its branch.
           if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
-            echo "xcode=true" >> "$GITHUB_OUTPUT"
+            echo "apple=true" >> "$GITHUB_OUTPUT"
           elif git diff --name-only "$base" HEAD |
-            grep -E '^(xcode/|apollo-codegen-config\.json$|graphql/schema\.graphql$)' | grep -qv '\.md$'; then
-            echo "xcode=true" >> "$GITHUB_OUTPUT"
+            grep -E '^(apple/|apollo-codegen-config\.json$|graphql/schema\.graphql$)' | grep -qv '\.md$'; then
+            echo "apple=true" >> "$GITHUB_OUTPUT"
           else
-            echo "xcode=false" >> "$GITHUB_OUTPUT"
+            echo "apple=false" >> "$GITHUB_OUTPUT"
           fi
 
   # The check for branch rules to require. Jobs skipped because nothing the app uses changed count as passing, so
@@ -65,7 +65,7 @@ jobs:
   build:
     name: Build ${{ matrix.name }}
     needs: changes
-    if: needs.changes.outputs.xcode == 'true'
+    if: needs.changes.outputs.apple == 'true'
     runs-on: ${{ matrix.runner || 'xcode-27' }}
     timeout-minutes: 30
     env:
@@ -91,7 +91,7 @@ jobs:
             developer-dir: /Applications/Xcode.app/Contents/Developer
     defaults:
       run:
-        working-directory: xcode
+        working-directory: apple
     steps:
       - uses: actions/checkout@v5
       # The tests build Debug for the simulators, so this archives Release for devices, as an App Store build would.
@@ -119,7 +119,7 @@ jobs:
   test:
     name: Test (${{ matrix.name }})
     needs: changes
-    if: needs.changes.outputs.xcode == 'true'
+    if: needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     # The longest runs take about 30 minutes, which leaves room to run the tests again after a failure that isn't the
     # app's.
@@ -148,7 +148,7 @@ jobs:
             only-testing: HighForThisTests
     steps:
       - uses: actions/checkout@v5
-      - uses: ./.github/actions/xcode-test
+      - uses: ./.github/actions/apple-test
         with:
           name: ${{ matrix.name }}
           platform: ${{ matrix.platform }}
@@ -165,7 +165,7 @@ jobs:
   test-older-runtimes:
     name: Test (${{ matrix.name }})
     needs: changes
-    if: needs.changes.outputs.xcode == 'true'
+    if: needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     timeout-minutes: 60
     strategy:
@@ -186,7 +186,7 @@ jobs:
             device: Apple TV 4K (3rd generation)
     steps:
       - uses: actions/checkout@v5
-      - uses: ./.github/actions/xcode-test
+      - uses: ./.github/actions/apple-test
         with:
           name: ${{ matrix.name }}
           platform: ${{ matrix.platform }}
@@ -199,12 +199,12 @@ jobs:
   test-ios-26-0:
     name: Test (iPhone, iOS 26.0 player)
     needs: changes
-    if: github.event_name != 'pull_request' && needs.changes.outputs.xcode == 'true'
+    if: github.event_name != 'pull_request' && needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
-      - uses: ./.github/actions/xcode-test
+      - uses: ./.github/actions/apple-test
         with:
           name: iPhone, iOS 26.0 player
           platform: iOS
@@ -215,7 +215,7 @@ jobs:
   generated-code:
     name: Generated code
     needs: changes
-    if: needs.changes.outputs.xcode == 'true'
+    if: needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     timeout-minutes: 10
     steps:
@@ -223,9 +223,9 @@ jobs:
       # Fails when an operation or the schema changed without regenerating HighForThisAPI, or it was edited by hand.
       - name: Generate HighForThisAPI
         run: |
-          sh xcode/scripts/generate-api.sh
-          git add --intent-to-add xcode/HighForThisAPI
-          if ! git diff --exit-code --stat xcode/HighForThisAPI; then
+          sh apple/scripts/generate-api.sh
+          git add --intent-to-add apple/HighForThisAPI
+          if ! git diff --exit-code --stat apple/HighForThisAPI; then
             echo "::error::HighForThisAPI is out of date. Run pnpm codegen:ios and commit the result."
             exit 1
           fi
@@ -233,12 +233,12 @@ jobs:
   format:
     name: Format
     needs: changes
-    if: needs.changes.outputs.xcode == 'true'
+    if: needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     timeout-minutes: 10
     defaults:
       run:
-        working-directory: xcode
+        working-directory: apple
     steps:
       - uses: actions/checkout@v5
       - name: Lint
@@ -248,7 +248,7 @@ jobs:
     name: TestFlight ${{ matrix.name }}
     needs: [changes, ci]
     if: >-
-      !cancelled() && needs.ci.result == 'success' && needs.changes.outputs.xcode == 'true'
+      !cancelled() && needs.ci.result == 'success' && needs.changes.outputs.apple == 'true'
       && github.ref == 'refs/heads/main'
       && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: xcode-27
@@ -268,7 +268,7 @@ jobs:
             destination: generic/platform=tvOS
     defaults:
       run:
-        working-directory: xcode
+        working-directory: apple
     env:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
