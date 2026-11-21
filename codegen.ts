@@ -1,5 +1,7 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
+import typeDefs from './graphql/src/schema/index.ts';
+
 // The schema types, which web's operation types build on and re-export, so web's code imports
 // every GraphQL type from app/types/graphql.ts
 const SCHEMA_TYPES = './schema.ts';
@@ -21,20 +23,14 @@ const appTypes = (path: string, documents: string[]) => ({
 });
 
 const config: CodegenConfig = {
-  schema: 'http://localhost:8081/graphql',
+  // The type definitions the server builds its schema from, so codegen doesn't need it running
+  schema: typeDefs,
   generates: {
     './graphql/schema.graphql': {
       plugins: ['schema-ast'],
       config: {
-        commentDescriptions: true,
         includeDirectives: true,
         sort: false,
-      },
-    },
-    './graphql/schema.json': {
-      plugins: ['introspection'],
-      config: {
-        minify: true,
       },
     },
     './graphql/types/graphql.ts': {
@@ -46,15 +42,17 @@ const config: CodegenConfig = {
     './web/app/types/schema.ts': {
       plugins: ['typescript'],
       config: {
-        dedupeOperationSuffix: true,
-        // Constant objects instead of enums: web loads this file through Node's type
-        // stripping, which can't handle enums. HeadingTag.H1 and the like still work.
+        // Constant objects instead of enums, so HeadingTag.H1 and the like are plain values
         enumsAsConst: true,
         useTypeImports: true,
       },
     },
     // Tests define stand-in operations against fields the schema doesn't have
     ...appTypes('./web/app/types/graphql.ts', ['web/app/**/*.{ts,tsx}', '!web/app/**/*.test.*']),
+  },
+  hooks: {
+    // oxfmt skips the files its config ignores
+    afterAllFileWrite: ['oxfmt'],
   },
 };
 
