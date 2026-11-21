@@ -11,15 +11,15 @@ import { VideoThumbnail } from './public/video-thumbnail.tsx';
 
 export const videoFragment = gql`
   fragment Video_video on Video {
-    dataId
     id
+    dataId
     slug
+    title
     thumbnails {
       height
       url
       width
     }
-    title
   }
 `;
 

@@ -16,8 +16,8 @@ const podcastsQuery = gql`
     podcasts(first: $first) {
       edges {
         node {
-          description
           id
+          description
           title
         }
       }
@@ -28,15 +28,15 @@ const podcastsQuery = gql`
 const podcastQuery = gql`
   query Podcast($id: String!) {
     podcast(id: $id) {
+      id
+      description
+      title
       audio {
+        id
         destination
         duration
         fileName
-        id
       }
-      description
-      id
-      title
     }
   }
 `;

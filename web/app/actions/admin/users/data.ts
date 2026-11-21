@@ -11,9 +11,9 @@ import type { UserEditQuery, UsersAdminQuery } from '#/types/graphql.ts';
 
 const userFormFragment = gql`
   fragment UserForm_user on User {
+    id
     bio
     email
-    id
     name
     roles
   }

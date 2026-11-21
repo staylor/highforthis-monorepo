@@ -9,20 +9,30 @@ import {
 } from '#/lib/admin/forms.ts';
 import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
 import type { PostEditQuery, PostsAdminQuery } from '#/types/graphql.ts';
-import { textNodeFragments } from '#/ui/post-content.tsx';
+import { linebreakNodeFragment, textNodeFragment } from '#/ui/post-content.tsx';
 import { videoFragment } from '#/ui/videos.tsx';
 
 // The post's body uses the public site's text and video fragments.
 
 const postFormFragment = gql`
   fragment PostForm_post on Post {
+    id
+    date
+    slug
+    status
+    summary
+    title
     artists {
       id
       name
     }
-    date
     editorState {
       root {
+        direction
+        format
+        indent
+        type
+        version
         children {
           ... on ElementNodeType {
             direction
@@ -32,22 +42,22 @@ const postFormFragment = gql`
             version
           }
           ... on HeadingNode {
+            tag
             children {
               ...TextNodes_linebreakNode
               ...TextNodes_textNode
             }
-            tag
           }
           ... on ImageNode {
+            size
             image {
+              id
+              destination
               crops {
                 fileName
                 width
               }
-              destination
-              id
             }
-            size
           }
           ... on VideoNode {
             video {
@@ -67,49 +77,40 @@ const postFormFragment = gql`
             }
           }
           ... on CodeNode {
+            language
             children {
               ...TextNodes_linebreakNode
               ...TextNodes_textNode
             }
-            language
           }
           ... on ListNode {
+            listType
+            start
             children {
               ... on ListItemNode {
                 checked
-                children {
-                  ...TextNodes_linebreakNode
-                  ...TextNodes_textNode
-                }
                 direction
                 format
                 indent
                 type
                 value
                 version
+                children {
+                  ...TextNodes_linebreakNode
+                  ...TextNodes_textNode
+                }
               }
             }
-            listType
-            start
           }
         }
-        direction
-        format
-        indent
-        type
-        version
       }
     }
     featuredMedia {
       ...FeaturedMedia_media
     }
-    id
-    slug
-    status
-    summary
-    title
   }
-  ${textNodeFragments}
+  ${linebreakNodeFragment}
+  ${textNodeFragment}
   ${featuredMediaFragment}
   ${videoFragment}
 `;
@@ -120,8 +121,8 @@ const postsQuery = gql`
       count
       edges {
         node {
-          date
           id
+          date
           slug
           status
           title

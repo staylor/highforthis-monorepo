@@ -6,6 +6,25 @@ import { splitArtists } from '#/ui/admin/public/split-artists.ts';
 
 const listingsQuery = gql`
   query VenueListingsAdmin($venueId: String!, $withListings: Boolean!) {
+    venueListings(venueId: $venueId) @include(if: $withListings) {
+      error
+      source
+      listings {
+        cancelled
+        dateChanged
+        headliners
+        localDate
+        localTime
+        newArtists
+        sourceId
+        status
+        support
+        url
+        show {
+          id
+        }
+      }
+    }
     venues(first: 500) {
       edges {
         node {
@@ -15,31 +34,12 @@ const listingsQuery = gql`
         }
       }
     }
-    venueListings(venueId: $venueId) @include(if: $withListings) {
-      error
-      listings {
-        cancelled
-        dateChanged
-        headliners
-        localDate
-        localTime
-        newArtists
-        show {
-          id
-        }
-        sourceId
-        status
-        support
-        url
-      }
-      source
-    }
   }
 `;
 
 const importMutation = gql`
-  mutation ImportListings($venueId: String!, $input: [ImportListingInput!]!) {
-    importListings(venueId: $venueId, input: $input) {
+  mutation ImportListings($input: [ImportListingInput!]!, $venueId: String!) {
+    importListings(input: $input, venueId: $venueId) {
       artistsCreated
       showsCreated
     }

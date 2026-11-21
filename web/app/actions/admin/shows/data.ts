@@ -21,16 +21,16 @@ import { parseBulkShowsCsv } from './bulk-csv.ts';
 
 const showFormFragment = gql`
   fragment ShowForm_show on Show {
+    id
+    attended
+    date
+    notes
+    title
+    url
     artists {
       id
       name
     }
-    attended
-    date
-    id
-    notes
-    title
-    url
     venue {
       id
       name
@@ -65,16 +65,16 @@ const showsQuery = gql`
       count
       edges {
         node {
+          id
+          attended
+          date
+          title
+          url
           artists {
             id
             name
             slug
           }
-          attended
-          date
-          id
-          title
-          url
           venue {
             id
             name
@@ -105,10 +105,10 @@ const deleteShowMutation = gql`
 
 const newShowQuery = gql`
   query ShowEntities {
+    ...ShowForm_entities
     show(lastAdded: true) {
       ...ShowForm_show
     }
-    ...ShowForm_entities
   }
   ${showFormFragment}
   ${showFormEntitiesFragment}
@@ -124,10 +124,10 @@ const createShowMutation = gql`
 
 const showQuery = gql`
   query ShowEdit($id: String!) {
+    ...ShowForm_entities
     show(id: $id) {
       ...ShowForm_show
     }
-    ...ShowForm_entities
   }
   ${showFormFragment}
   ${showFormEntitiesFragment}

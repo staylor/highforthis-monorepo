@@ -11,17 +11,17 @@ import type { VideoEditQuery, VideosAdminQuery } from '#/types/graphql.ts';
 
 const videoFormFragment = gql`
   fragment VideoForm_video on Video {
+    id
     dataPlaylistId
     dataType
-    id
     slug
+    title
+    year
     thumbnails {
       height
       url
       width
     }
-    title
-    year
   }
 `;
 
@@ -29,6 +29,7 @@ const videosQuery = gql`
   query VideosAdmin($after: String, $first: Int, $search: String, $year: Int) {
     videos(after: $after, first: $first, search: $search, year: $year) @cache(key: "admin") {
       count
+      years
       edges {
         node {
           id
@@ -41,7 +42,6 @@ const videosQuery = gql`
       pageInfo {
         hasNextPage
       }
-      years
     }
   }
 `;

@@ -53,21 +53,21 @@ const showStatsQuery = gql`
 const showQuery = gql`
   query Show($id: String) {
     show(id: $id) {
+      id
+      date
+      title
+      url
       artists {
-        appleMusic {
-          artwork {
-            url
-          }
-          id
-        }
         id
         name
         slug
+        appleMusic {
+          id
+          artwork {
+            url
+          }
+        }
       }
-      date
-      id
-      title
-      url
       venue {
         id
         name

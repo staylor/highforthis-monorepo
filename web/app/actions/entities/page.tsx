@@ -13,16 +13,16 @@ import { Attended, attendedFragment, Shows, showsGridFragment } from '#/ui/shows
 export const artistQuery = gql`
   query Artist($first: Int, $slug: String!) {
     artist(slug: $slug) {
-      appleMusic {
-        artwork {
-          url
-        }
-        id
-        url
-      }
       id
       name
       website
+      appleMusic {
+        id
+        url
+        artwork {
+          url
+        }
+      }
     }
     attended: shows(artist: { slug: $slug }, attended: true, first: $first) {
       ...Attended_shows
@@ -61,16 +61,20 @@ export const venueQuery = gql`
       ...ShowsGrid_shows
     }
     venue(slug: $slug) {
+      id
       address
       capacity
+      name
+      permanentlyClosed
+      website
       coordinates {
         latitude
         longitude
       }
       featuredMedia {
+        id
         destination
         fileName
-        id
         type
         ... on ImageUpload {
           crops {
@@ -79,10 +83,6 @@ export const venueQuery = gql`
           }
         }
       }
-      id
-      name
-      permanentlyClosed
-      website
     }
   }
   ${attendedFragment}

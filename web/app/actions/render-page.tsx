@@ -23,29 +23,29 @@ const appQuery = gql`
       googleMaps
     }
     podcastSettings {
+      id
       description
       feedLink
-      id
-      image {
-        destination
-        fileName
-        id
-      }
       title
       websiteLink
+      image {
+        id
+        destination
+        fileName
+      }
     }
     shows(first: 30, latest: true) @cache(key: "sidebar") {
       edges {
         node {
+          id
+          date
+          title
+          url
           artists {
             id
             name
             slug
           }
-          date
-          id
-          title
-          url
           venue {
             id
             name
@@ -55,8 +55,8 @@ const appQuery = gql`
       }
     }
     siteSettings {
-      copyrightText
       id
+      copyrightText
       language
       siteTitle
       siteUrl

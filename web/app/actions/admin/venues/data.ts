@@ -13,18 +13,11 @@ import type { UpdateVenueFlagMutation, VenueEditQuery, VenuesAdminQuery } from '
 
 const venueFormFragment = gql`
   fragment VenueForm_venue on Venue {
+    id
     capacity
     city
-    coordinates {
-      latitude
-      longitude
-    }
     description
     excludeFromSearch
-    featuredMedia {
-      ...FeaturedMedia_media
-    }
-    id
     listingsUrl
     name
     permanentlyClosed
@@ -33,6 +26,13 @@ const venueFormFragment = gql`
     state
     streetAddress
     website
+    coordinates {
+      latitude
+      longitude
+    }
+    featuredMedia {
+      ...FeaturedMedia_media
+    }
   }
   ${featuredMediaFragment}
 `;
@@ -43,25 +43,25 @@ const venuesQuery = gql`
       count
       edges {
         node {
+          id
           address
           capacity
           excludeFromSearch
-          featuredMedia {
-            ... on ImageUpload {
-              crops {
-                fileName
-                width
-              }
-              destination
-              id
-              type
-            }
-          }
-          id
           name
           permanentlyClosed
           slug
           website
+          featuredMedia {
+            ... on ImageUpload {
+              id
+              destination
+              type
+              crops {
+                fileName
+                width
+              }
+            }
+          }
         }
       }
       pageInfo {
@@ -90,13 +90,13 @@ const venueQuery = gql`
     shows(first: 200, venue: { id: $id }) {
       edges {
         node {
+          id
+          date
+          title
           artists {
             id
             name
           }
-          date
-          id
-          title
         }
       }
     }

@@ -8,25 +8,26 @@ import { linkHover, merge, type Styles } from './public/styles.ts';
 
 export const postArtworkFragment = gql`
   fragment PostArtwork_post on Post {
+    id
     editorState {
       root {
         children {
           ... on ImageNode {
             image {
+              id
+              destination
               crops {
                 fileName
                 width
               }
-              destination
-              id
             }
           }
         }
       }
     }
     featuredMedia {
-      destination
       id
+      destination
       ... on ImageUpload {
         crops {
           fileName

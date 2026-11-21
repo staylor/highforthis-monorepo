@@ -21,11 +21,14 @@ import { Heading2, Heading3, Heading4, PostTitle } from './heading.tsx';
 import { uploadUrl } from './public/media.ts';
 import { Video } from './videos.tsx';
 
-export const textNodeFragments = gql`
+export const linebreakNodeFragment = gql`
   fragment TextNodes_linebreakNode on LinebreakNode {
     type
     version
   }
+`;
+
+export const textNodeFragment = gql`
   fragment TextNodes_textNode on TextNode {
     detail
     format

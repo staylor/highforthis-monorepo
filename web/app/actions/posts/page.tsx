@@ -6,7 +6,7 @@ import { getApp } from '#/ui/app-context.tsx';
 import { Heading1, PostTitle } from '#/ui/heading.tsx';
 import { Link } from '#/ui/link.tsx';
 import { PostArtwork, postArtworkFragment } from '#/ui/post-artwork.tsx';
-import { PostContent, textNodeFragments } from '#/ui/post-content.tsx';
+import { PostContent, linebreakNodeFragment, textNodeFragment } from '#/ui/post-content.tsx';
 import {
   card,
   colorTransition,
@@ -108,8 +108,17 @@ export function PostsPage(
 export const postQuery = gql`
   query Post($slug: String) {
     post(slug: $slug) {
+      id
+      slug
+      summary
+      title
       editorState {
         root {
+          direction
+          format
+          indent
+          type
+          version
           children {
             ... on ElementNodeType {
               direction
@@ -119,20 +128,20 @@ export const postQuery = gql`
               version
             }
             ... on HeadingNode {
+              tag
               children {
                 ...TextNodes_linebreakNode
                 ...TextNodes_textNode
               }
-              tag
             }
             ... on ImageNode {
               image {
+                id
+                destination
                 crops {
                   fileName
                   width
                 }
-                destination
-                id
               }
             }
             ... on VideoNode {
@@ -159,6 +168,8 @@ export const postQuery = gql`
               }
             }
             ... on ListNode {
+              listType
+              start
               children {
                 ... on ListItemNode {
                   children {
@@ -167,20 +178,13 @@ export const postQuery = gql`
                   }
                 }
               }
-              listType
-              start
             }
           }
-          direction
-          format
-          indent
-          type
-          version
         }
       }
       featuredMedia {
-        destination
         id
+        destination
         ... on ImageUpload {
           crops {
             fileName
@@ -188,13 +192,10 @@ export const postQuery = gql`
           }
         }
       }
-      id
-      slug
-      summary
-      title
     }
   }
-  ${textNodeFragments}
+  ${linebreakNodeFragment}
+  ${textNodeFragment}
   ${videoFragment}
 `;
 
