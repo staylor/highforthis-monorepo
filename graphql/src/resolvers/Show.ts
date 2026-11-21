@@ -1,37 +1,33 @@
 import type { Prisma, Artist, Venue, Show } from '@prisma/client';
-import type {
-  MutationBulkCreateShowsArgs,
-  MutationCreateShowArgs,
-  MutationRemoveShowArgs,
-  MutationUpdateShowArgs,
-  QueryShowArgs,
-  QueryShowStatsArgs,
-  QueryShowsArgs,
-} from 'types/graphql';
+import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
+import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
-import { parseConnection, emptyConnection } from './utils/collection';
+import { type Connection, parseConnection, emptyConnection } from './utils/collection';
 import { removeEntities, resolveJoin, timestampResolver } from './utils/helpers';
 import { bulkCreateShowsSchema, createShowSchema, updateShowSchema } from './validations';
-
-/** What `shows` answers with: a page of shows, and the filter `years` lists the years of. */
-interface ShowConnectionSource extends Awaited<ReturnType<typeof parseConnection>> {
-  // What the shows were filtered by, apart from their dates, or null when none can match
-  filter?: Prisma.ShowWhereInput | null;
-}
-
-interface EntityWithType {
-  type: string;
-  name?: string;
-  [key: string]: unknown;
-}
 
 const showIncludes = {
   artists: { include: { artist: true } },
   venue: true,
-};
+} satisfies Prisma.ShowInclude;
+
+/** A show, with its artists and venue when its query included them */
+export type ShowSource = WithIncludes<
+  Show,
+  Prisma.ShowGetPayload<{ include: typeof showIncludes }>
+>;
+
+/** What `shows` answers with: a page of shows, and the filter `years` lists the years of. */
+export interface ShowConnectionSource extends Connection<ShowSource> {
+  // What the shows were filtered by, apart from their dates, or null when none can match
+  filter?: Prisma.ShowWhereInput | null;
+}
+
+/** An artist or a venue in the show stats, and which of the two it is */
+export type ShowEntitySource = (Artist & { type: 'artist' }) | (Venue & { type: 'venue' });
 
 /**
  * Adds each show's venue and artists, as `include: showIncludes` would. That include finds the
@@ -62,50 +58,54 @@ async function includeVenuesAndArtists(shows: Show[]) {
   }
 }
 
-async function getEntityStats(
+async function getEntityStats<
+  TEntity extends Artist | Venue,
+  TType extends ShowEntitySource['type'],
+>(
   counts: { id: string; count: number }[],
-  lookup: (ids: string[]) => Promise<(Artist | Venue)[]>,
-  type: string
+  lookup: (ids: string[]) => Promise<TEntity[]>,
+  type: TType
 ) {
   const ids = counts.map((c) => c.id);
   const entities = await lookup(ids);
   const entityMap = new Map(entities.map((e) => [e.id, e]));
   return counts
-    .map(({ id, count }) => ({
-      count,
-      entity: { ...entityMap.get(id), type } as EntityWithType,
-    }))
-    .sort((a, b) => b.count - a.count || (a.entity.name ?? '').localeCompare(b.entity.name ?? ''));
+    .flatMap(({ id, count }) => {
+      const entity = entityMap.get(id);
+      // An artist or venue deleted since the count has nothing to show
+      return entity ? [{ count, entity: { ...entity, type } }] : [];
+    })
+    .sort((a, b) => b.count - a.count || a.entity.name.localeCompare(b.entity.name));
 }
 
 const resolvers = {
   Show: {
     date: timestampResolver('date'),
-    artists(show: Show) {
-      return resolveJoin(show, 'artists', 'artist', () =>
+    artists(show) {
+      return resolveJoin(show.artists, 'artist', () =>
         prisma.showArtist.findMany({
           where: { showId: show.id },
           include: { artist: true },
         })
       );
     },
-    venue(show: Show) {
-      if ('venue' in show && show.venue && typeof show.venue === 'object') {
+    venue(show) {
+      if (show.venue) {
         return show.venue;
       }
-      return prisma.venue.findUnique({ where: { id: show.venueId } });
+      // Every show has a venue
+      return prisma.venue.findUniqueOrThrow({ where: { id: show.venueId } });
     },
   },
   ShowEntity: {
-    __resolveType(entity: EntityWithType) {
-      if (entity.type === 'artist') return 'Artist';
-      if (entity.type === 'venue') return 'Venue';
+    __resolveType(entity) {
+      return entity.type === 'artist' ? 'Artist' : 'Venue';
     },
   },
   ShowConnection: {
     // A field's resolver only gets its own arguments, so the years come from the filter `shows`
     // put on the connection
-    async years({ filter = {} }: Pick<ShowConnectionSource, 'filter'>) {
+    async years({ filter = {} }) {
       if (filter === null) return [];
       const results = await prisma.show.findMany({
         where: filter,
@@ -116,7 +116,7 @@ const resolvers = {
     },
   },
   Query: {
-    async shows(_: unknown, args: QueryShowsArgs): Promise<ShowConnectionSource> {
+    async shows(_, args) {
       const { artist, venue, latest, attended, year, search, order, ...connectionArgs } = args;
       // Everything but the dates, which `years` leaves out
       const filter: Prisma.ShowWhereInput = {};
@@ -168,11 +168,11 @@ const resolvers = {
         where: date ? { ...filter, date } : filter,
         orderBy: { date: order === 'ASC' || (!order && latest) ? 'asc' : 'desc' },
       });
-      await includeVenuesAndArtists(connection.edges.map(({ node }) => node as Show));
+      await includeVenuesAndArtists(connection.edges.map(({ node }) => node));
       return { ...connection, filter };
     },
 
-    async show(_: unknown, { id, lastAdded }: QueryShowArgs) {
+    async show(_, { id, lastAdded }) {
       if (lastAdded) {
         return prisma.show.findFirst({ orderBy: { createdAt: 'desc' }, include: showIncludes });
       }
@@ -182,7 +182,7 @@ const resolvers = {
       return null;
     },
 
-    async showStats(_: unknown, { entity }: QueryShowStatsArgs) {
+    async showStats(_, { entity }) {
       if (entity.toLowerCase() === 'artist') {
         const results = await prisma.showArtist.groupBy({
           by: ['artistId'],
@@ -209,7 +209,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    async bulkCreateShows(_: unknown, { input }: MutationBulkCreateShowsArgs) {
+    async bulkCreateShows(_, { input }) {
       const shows = bulkCreateShowsSchema.parse(input);
 
       return prisma.$transaction(
@@ -291,7 +291,7 @@ const resolvers = {
       );
     },
 
-    async createShow(_: unknown, { input }: MutationCreateShowArgs) {
+    async createShow(_, { input }) {
       const { artists, venue, date, ...data } = createShowSchema.parse(input);
       return prisma.show.create({
         data: {
@@ -306,7 +306,7 @@ const resolvers = {
       });
     },
 
-    async updateShow(_: unknown, { id, input }: MutationUpdateShowArgs) {
+    async updateShow(_, { id, input }) {
       const validated = updateShowSchema.parse(input);
       const { artists, venue, date, ...data } = validated;
       const values: Record<string, unknown> = { ...data };
@@ -326,10 +326,10 @@ const resolvers = {
       return prisma.show.update({ where: { id }, data: values, include: showIncludes });
     },
 
-    async removeShow(_: unknown, { ids }: MutationRemoveShowArgs) {
+    async removeShow(_, { ids }) {
       return removeEntities(prisma.show, ids);
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

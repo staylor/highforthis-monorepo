@@ -1,19 +1,27 @@
-import type { MediaSettings, PodcastSettings } from '@prisma/client';
+import type { PodcastSettings, Prisma } from '@prisma/client';
+import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
 
 import { siteSettingsSchema, mediaSettingsSchema, podcastSettingsSchema } from './validations';
 
+/**
+ * The podcast's settings, with their image when the query included it, or only the ID of
+ * settings that were never saved
+ */
+export type PodcastSettingsSource = Pick<PodcastSettings, 'id'> &
+  Partial<Prisma.PodcastSettingsGetPayload<{ include: { image: true } }>>;
+
 const resolvers = {
   MediaSettings: {
-    async crops(settings: MediaSettings) {
+    async crops(settings) {
       return prisma.mediaCropSetting.findMany({ where: { mediaSettingsId: settings.id } });
     },
   },
   PodcastSettings: {
-    async image(settings: PodcastSettings) {
+    async image(settings) {
       // Query.podcastSettings includes it
-      if ('image' in settings) return settings.image;
+      if (settings.image !== undefined) return settings.image;
       if (!settings.imageId) return null;
       return prisma.mediaUpload.findUnique({ where: { id: settings.imageId } });
     },
@@ -36,7 +44,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    async updateSiteSettings(_: unknown, { id, input }: { id: string; input: unknown }) {
+    async updateSiteSettings(_, { id, input }) {
       const data = siteSettingsSchema.parse(input);
       return prisma.siteSettings.upsert({
         where: { id },
@@ -44,7 +52,7 @@ const resolvers = {
         update: data,
       });
     },
-    async updateMediaSettings(_: unknown, { id, input }: { id: string; input: unknown }) {
+    async updateMediaSettings(_, { id, input }) {
       const { crops, ...rest } = mediaSettingsSchema.parse(input);
       const settings = await prisma.mediaSettings.upsert({
         where: { id },
@@ -61,7 +69,7 @@ const resolvers = {
       }
       return settings;
     },
-    async updatePodcastSettings(_: unknown, { id, input }: { id: string; input: unknown }) {
+    async updatePodcastSettings(_, { id, input }) {
       const { image, ...data } = podcastSettingsSchema.parse(input);
       return prisma.podcastSettings.upsert({
         where: { id },
@@ -70,6 +78,6 @@ const resolvers = {
       });
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

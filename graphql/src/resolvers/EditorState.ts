@@ -1,8 +1,12 @@
+import type { Resolvers } from 'types/graphql';
+
 import prisma from '#/database';
 
 import { resolveType } from './utils/helpers';
 
-interface EditorNodeData {
+/** A node of a post's editor state, as Lexical saved it: the fields resolvers read */
+export interface EditorNodeData {
+  type?: string;
   imageId?: string;
   videoId?: string;
 }
@@ -29,7 +33,7 @@ const resolvers = {
   ImageNode: {
     // Prisma batches the findUnique calls of one tick into one query, and the crops come with
     // it, instead of a query per image from ImageUpload.crops
-    image(data: EditorNodeData) {
+    image(data) {
       return prisma.mediaUpload.findUnique({
         where: { id: data.imageId },
         include: { crops: true },
@@ -37,10 +41,10 @@ const resolvers = {
     },
   },
   VideoNode: {
-    video(data: EditorNodeData) {
+    video(data) {
       return prisma.video.findUnique({ where: { id: data.videoId } });
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

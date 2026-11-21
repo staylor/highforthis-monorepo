@@ -1,15 +1,10 @@
 import type { Prisma, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import type {
-  MutationCreateUserArgs,
-  MutationRemoveUserArgs,
-  MutationUpdateUserArgs,
-  QueryUserArgs,
-  QueryUsersArgs,
-} from 'types/graphql';
+import type { Resolvers } from 'types/graphql';
 
 import { endSessions } from '#/authentication';
 import prisma from '#/database';
+import type { WithIncludes } from '#/models';
 
 import { parseConnection } from './utils/collection';
 import { removeEntities, resolveJoin } from './utils/helpers';
@@ -17,18 +12,24 @@ import { createUserSchema, updateUserSchema } from './validations';
 
 const SALT_ROUNDS = 10;
 
-const userIncludes = { roles: true };
+const userIncludes = { roles: true } satisfies Prisma.UserInclude;
+
+/** A user, with their roles when their query included them */
+export type UserSource = WithIncludes<
+  User,
+  Prisma.UserGetPayload<{ include: typeof userIncludes }>
+>;
 
 const resolvers = {
   User: {
-    roles(user: User) {
-      return resolveJoin(user, 'roles', 'name', () =>
+    roles(user) {
+      return resolveJoin(user.roles, 'name', () =>
         prisma.userRole.findMany({ where: { userId: user.id } })
       );
     },
   },
   Query: {
-    async users(_: unknown, args: QueryUsersArgs) {
+    async users(_, args) {
       const { search, ...connectionArgs } = args;
       const where: Prisma.UserWhereInput = {};
       if (search) {
@@ -45,12 +46,12 @@ const resolvers = {
       });
     },
 
-    user(_: unknown, { id }: QueryUserArgs) {
+    user(_, { id }) {
       return prisma.user.findUnique({ where: { id }, include: userIncludes });
     },
   },
   Mutation: {
-    async createUser(_: unknown, { input }: MutationCreateUserArgs) {
+    async createUser(_, { input }) {
       const { password, roles, ...fields } = createUserSchema.parse(input);
       if (!fields.email || !password) {
         throw new Error('Email and Password are required.');
@@ -71,7 +72,7 @@ const resolvers = {
       });
     },
 
-    async updateUser(_: unknown, { id, input }: MutationUpdateUserArgs) {
+    async updateUser(_, { id, input }) {
       const { password, roles, ...fields } = updateUserSchema.parse(input);
       const user = await prisma.user.findUnique({ where: { id } });
       if (!user) throw new Error('User not found');
@@ -105,10 +106,10 @@ const resolvers = {
       return updated;
     },
 
-    async removeUser(_: unknown, { ids }: MutationRemoveUserArgs) {
+    async removeUser(_, { ids }) {
       return removeEntities(prisma.user, ids);
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

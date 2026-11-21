@@ -1,10 +1,6 @@
-import type {
-  AppleMusicAlbumCoverArgs,
-  MutationAddAlbumCoversArgs,
-  QueryAppleMusicAlbumsArgs,
-} from 'types/graphql';
+import type { Resolvers } from 'types/graphql';
 
-import { type Album, artworkUrl, getAlbums, searchAlbums } from '#/appleMusic';
+import { artworkUrl, getAlbums, searchAlbums } from '#/appleMusic';
 import prisma from '#/database';
 import { uploadFromUrl } from '#/uploads';
 
@@ -12,12 +8,12 @@ import { addAlbumCoversSchema } from './validations';
 
 const resolvers = {
   AppleMusicAlbum: {
-    cover({ artwork }: Album, { size }: AppleMusicAlbumCoverArgs) {
+    cover({ artwork }, { size }) {
       return artworkUrl(artwork, size, size);
     },
   },
   Query: {
-    async appleMusicAlbums(_: unknown, { term }: QueryAppleMusicAlbumsArgs) {
+    async appleMusicAlbums(_, { term }) {
       try {
         return { albums: await searchAlbums(term), error: null };
       } catch (error) {
@@ -27,7 +23,7 @@ const resolvers = {
   },
   Mutation: {
     // The albums are looked up again, so the server only downloads Apple's own artwork
-    async addAlbumCovers(_: unknown, { ids }: MutationAddAlbumCoversArgs) {
+    async addAlbumCovers(_, { ids }) {
       const albums = await getAlbums(addAlbumCoversSchema.parse(ids));
       const mediaIds: string[] = [];
       // One at a time: a full-size cover can be several megabytes
@@ -46,6 +42,6 @@ const resolvers = {
       });
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

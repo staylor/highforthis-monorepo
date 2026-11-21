@@ -1,12 +1,8 @@
 import type { Prisma, MediaUpload } from '@prisma/client';
-import type {
-  MutationRemoveMediaUploadArgs,
-  MutationUpdateMediaUploadArgs,
-  QueryMediaArgs,
-  QueryUploadsArgs,
-} from 'types/graphql';
+import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
+import type { WithIncludes } from '#/models';
 
 import { parseConnection } from './utils/collection';
 import { removeEntities, resolveJoin, resolveType } from './utils/helpers';
@@ -18,7 +14,13 @@ const mediaIncludes = {
   audioAlbumArtists: true,
   audioGenres: true,
   audioImages: true,
-};
+} satisfies Prisma.MediaUploadInclude;
+
+/** An upload, with the relations in `mediaIncludes` when its query included them */
+export type MediaUploadSource = WithIncludes<
+  MediaUpload,
+  Prisma.MediaUploadGetPayload<{ include: typeof mediaIncludes }>
+>;
 
 const resolvers = {
   MediaUpload: {
@@ -32,29 +34,29 @@ const resolvers = {
     ),
   },
   ImageUpload: {
-    crops(media: MediaUpload) {
-      if ('crops' in media) return media.crops;
+    crops(media) {
+      if (media.crops) return media.crops;
       return prisma.imageUploadCrop.findMany({ where: { mediaId: media.id } });
     },
   },
   AudioUpload: {
-    artist(media: MediaUpload) {
-      return resolveJoin(media, 'audioArtists', 'name', () =>
+    artist(media) {
+      return resolveJoin(media.audioArtists, 'name', () =>
         prisma.audioArtist.findMany({ where: { mediaId: media.id } })
       );
     },
-    albumArtist(media: MediaUpload) {
-      return resolveJoin(media, 'audioAlbumArtists', 'name', () =>
+    albumArtist(media) {
+      return resolveJoin(media.audioAlbumArtists, 'name', () =>
         prisma.audioAlbumArtist.findMany({ where: { mediaId: media.id } })
       );
     },
-    genre(media: MediaUpload) {
-      return resolveJoin(media, 'audioGenres', 'name', () =>
+    genre(media) {
+      return resolveJoin(media.audioGenres, 'name', () =>
         prisma.audioGenre.findMany({ where: { mediaId: media.id } })
       );
     },
-    images(media: MediaUpload) {
-      if ('audioImages' in media) return media.audioImages;
+    images(media) {
+      if (media.audioImages) return media.audioImages;
       return prisma.audioImage.findMany({ where: { mediaId: media.id } });
     },
   },
@@ -77,7 +79,7 @@ const resolvers = {
     },
   },
   Query: {
-    async uploads(_: unknown, args: QueryUploadsArgs) {
+    async uploads(_, args) {
       const { type, mimeType, search, ...connectionArgs } = args;
       const where: Prisma.MediaUploadWhereInput = {};
       if (type) where.type = type;
@@ -94,21 +96,21 @@ const resolvers = {
         include: mediaIncludes,
       });
     },
-    media(_: unknown, { id }: QueryMediaArgs) {
+    media(_, { id }) {
       if (!id) return null;
       return prisma.mediaUpload.findUnique({ where: { id }, include: mediaIncludes });
     },
   },
   Mutation: {
-    async updateMediaUpload(_: unknown, { id, input }: MutationUpdateMediaUploadArgs) {
+    async updateMediaUpload(_, { id, input }) {
       const data = updateMediaUploadSchema.parse(input);
       return prisma.mediaUpload.update({ where: { id }, data, include: mediaIncludes });
     },
 
-    async removeMediaUpload(_: unknown, { ids }: MutationRemoveMediaUploadArgs) {
+    async removeMediaUpload(_, { ids }) {
       return removeEntities(prisma.mediaUpload, ids);
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

@@ -1,8 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { requireAdmin, type Resolver } from '#/authorization';
+import { requireAdmin } from '#/authorization';
 import type { AppContext, UserWithRoles } from '#/models';
 import resolvers from '#/resolvers';
+
+// Any resolver: requireAdmin turns the request away before the resolver reads its arguments
+type Resolver = (parent: unknown, args: unknown, context: AppContext, info: unknown) => unknown;
 
 function user(...roles: string[]) {
   return {

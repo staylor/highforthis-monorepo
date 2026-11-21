@@ -39,6 +39,9 @@ importers:
       '@graphql-codegen/typescript-operations':
         specifier: 7.0.1
         version: 7.0.1(graphql@16.15.0)
+      '@graphql-codegen/typescript-resolvers':
+        specifier: 7.0.1
+        version: 7.0.1(graphql@16.15.0)
       '@graphql-eslint/eslint-plugin':
         specifier: 4.4.2
         version: 4.4.2(@types/node@25.9.9)(eslint@10.15.0(jiti@2.7.0))(graphql@16.15.0)(typescript@6.0.3)
@@ -1070,6 +1073,16 @@ packages:
 
   '@graphql-codegen/typescript-operations@7.0.1':
     resolution: {integrity: sha512-qdn7Ya7TbdOkanNeZULW4rF6+q7F5dTgOX2oxE48bm+zULqSQ7UlTe3jCOVxEVKtooi6TpVNnnmhttFVB0R1EA==}
+    engines: {node: '>=22.18.0'}
+    peerDependencies:
+      graphql: ^16.0.0 || ^17.0.0
+      graphql-sock: ^1.0.0
+    peerDependenciesMeta:
+      graphql-sock:
+        optional: true
+
+  '@graphql-codegen/typescript-resolvers@7.0.1':
+    resolution: {integrity: sha512-DrFFCWvC7kFGoroY3RtJegKXzSe6xVs17XT84dyFWyriyRO3MGW0GhDIq+jxO3N8sMA0bHID4fcCyaeHqY6dXg==}
     engines: {node: '>=22.18.0'}
     peerDependencies:
       graphql: ^16.0.0 || ^17.0.0
@@ -7049,6 +7062,15 @@ snapshots:
     dependencies:
       '@graphql-codegen/plugin-helpers': 8.0.0(graphql@16.15.0)
       '@graphql-codegen/schema-ast': 7.0.0(graphql@16.15.0)
+      '@graphql-codegen/visitor-plugin-common': 8.0.2(graphql@16.15.0)
+      auto-bind: 5.0.1
+      graphql: 16.15.0
+      tslib: 2.9.1
+
+  '@graphql-codegen/typescript-resolvers@7.0.1(graphql@16.15.0)':
+    dependencies:
+      '@graphql-codegen/plugin-helpers': 8.0.0(graphql@16.15.0)
+      '@graphql-codegen/typescript': 7.0.1(graphql@16.15.0)
       '@graphql-codegen/visitor-plugin-common': 8.0.2(graphql@16.15.0)
       auto-bind: 5.0.1
       graphql: 16.15.0

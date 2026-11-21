@@ -1,13 +1,8 @@
 import type { Prisma, Podcast } from '@prisma/client';
-import type {
-  MutationCreatePodcastArgs,
-  MutationRemovePodcastArgs,
-  MutationUpdatePodcastArgs,
-  QueryPodcastArgs,
-  QueryPodcastsArgs,
-} from 'types/graphql';
+import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
+import type { WithIncludes } from '#/models';
 
 import { parseConnection } from './utils/collection';
 import { removeEntities, timestampResolver } from './utils/helpers';
@@ -16,24 +11,30 @@ import { createPodcastSchema, updatePodcastSchema } from './validations';
 const podcastIncludes = {
   audio: true,
   image: true,
-};
+} satisfies Prisma.PodcastInclude;
+
+/** A podcast, with its audio and image when its query included them */
+export type PodcastSource = WithIncludes<
+  Podcast,
+  Prisma.PodcastGetPayload<{ include: typeof podcastIncludes }>
+>;
 
 const resolvers = {
   Podcast: {
-    audio(podcast: Podcast) {
-      if ('audio' in podcast) return podcast.audio;
+    audio(podcast) {
+      if (podcast.audio !== undefined) return podcast.audio;
       if (!podcast.audioId) return null;
       return prisma.mediaUpload.findUnique({ where: { id: podcast.audioId } });
     },
-    image(podcast: Podcast) {
-      if ('image' in podcast) return podcast.image;
+    image(podcast) {
+      if (podcast.image !== undefined) return podcast.image;
       if (!podcast.imageId) return null;
       return prisma.mediaUpload.findUnique({ where: { id: podcast.imageId } });
     },
     date: timestampResolver('updatedAt'),
   },
   Query: {
-    async podcasts(_: unknown, args: QueryPodcastsArgs) {
+    async podcasts(_, args) {
       const { search, order, ...connectionArgs } = args;
       const where: Prisma.PodcastWhereInput = {};
       if (search) {
@@ -49,13 +50,13 @@ const resolvers = {
       });
     },
 
-    async podcast(_: unknown, { id }: QueryPodcastArgs) {
+    async podcast(_, { id }) {
       if (!id) return null;
       return prisma.podcast.findUnique({ where: { id }, include: podcastIncludes });
     },
   },
   Mutation: {
-    async createPodcast(_: unknown, { input }: MutationCreatePodcastArgs) {
+    async createPodcast(_, { input }) {
       const { audio, image, date: _date, ...data } = createPodcastSchema.parse(input);
       // Prisma's Without<> union can't resolve FK fields from a spread;
       // use UncheckedCreateInput via assertion on validated data.
@@ -70,7 +71,7 @@ const resolvers = {
       });
     },
 
-    async updatePodcast(_: unknown, { id, input }: MutationUpdatePodcastArgs) {
+    async updatePodcast(_, { id, input }) {
       const { audio, image, date: _date, ...data } = updatePodcastSchema.parse(input);
       const podcastData: Prisma.PodcastUncheckedUpdateInput = {
         ...data,
@@ -84,10 +85,10 @@ const resolvers = {
       });
     },
 
-    async removePodcast(_: unknown, { ids }: MutationRemovePodcastArgs) {
+    async removePodcast(_, { ids }) {
       return removeEntities(prisma.podcast, ids);
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;
