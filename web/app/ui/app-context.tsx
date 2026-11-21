@@ -7,8 +7,6 @@ export interface AppValue {
   t: TFunction;
   root: AppQuery;
   pathname: string;
-  isAuthenticated: boolean;
-  graphqlHost: string;
 }
 
 /**

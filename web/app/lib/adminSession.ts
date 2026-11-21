@@ -2,7 +2,7 @@ import { createCookie } from 'remix/cookie';
 
 // The admin's GraphQL token lives in a signed cookie as `{ token }` JSON, signed with
 // HMAC-SHA256 as React Router's session cookies were. Public pages read it to know someone is
-// signed in, which turns on live refresh.
+// signed in, and then aren't cached, so an admin sees their edits right away.
 
 // Signing in lasts 12 hours
 const maxAge = 12 * 60 * 60;

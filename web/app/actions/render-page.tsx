@@ -3,7 +3,6 @@ import type { RemixNode } from 'remix/component';
 import type { Middleware } from 'remix/router';
 
 import { adminToken } from '#/lib/adminSession.ts';
-import { graphqlHost } from '#/lib/graphql.ts';
 import type { AppContext } from '#/router.ts';
 import type { AppQuery, SiteSettings } from '#/types/graphql.ts';
 
@@ -99,20 +98,15 @@ interface PageOptions {
 /**
  * Links prefetch their page on hover or press, but Remix discards the HTML and the click fetches
  * it again, so every click rendered the page twice. Caching it briefly lets the click reuse the
- * prefetch. A signed-in admin's pages aren't cached, so live refresh gets new content, and with
+ * prefetch. A signed-in admin's pages aren't cached, so they show edits right away, and with
  * Vary: Cookie, pages cached before signing in or out aren't reused after.
  */
 const reusable = { 'Cache-Control': 'private, max-age=30', Vary: 'Cookie' };
 
 export async function renderPage(context: AppContext, page: RemixNode, options: PageOptions = {}) {
   const root = await loadRootData(context);
-  const app = {
-    t: context.t,
-    root,
-    pathname: context.url.pathname,
-    isAuthenticated: (await adminToken(context.request.headers.get('cookie'))) !== null,
-    graphqlHost,
-  };
+  const app = { t: context.t, root, pathname: context.url.pathname };
+  const signedIn = (await adminToken(context.request.headers.get('cookie'))) !== null;
   const status = options.status ?? 200;
   return context.render(
     <Document
@@ -124,6 +118,6 @@ export async function renderPage(context: AppContext, page: RemixNode, options: 
     >
       {page}
     </Document>,
-    { status, headers: status === 200 && !app.isAuthenticated ? reusable : undefined }
+    { status, headers: status === 200 && !signedIn ? reusable : undefined }
   );
 }

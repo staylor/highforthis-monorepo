@@ -12,8 +12,6 @@ const app: AppValue = {
   t: getT(),
   root: {} as AppValue['root'],
   pathname: '/',
-  isAuthenticated: false,
-  graphqlHost: 'http://graphql.test',
 };
 
 const show = (id: string, date: string, artist: string, venue = 'Bowery Ballroom') => ({
