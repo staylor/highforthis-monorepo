@@ -13,9 +13,9 @@ import type {
 const siteSettingsQuery = gql`
   query SiteSettings {
     siteSettings {
+      id
       copyrightText
       emailAddress
-      id
       language
       siteTitle
       siteUrl
@@ -35,12 +35,12 @@ const updateSiteSettingsMutation = gql`
 const mediaSettingsQuery = gql`
   query MediaSettings {
     mediaSettings {
+      id
       crops {
         height
         name
         width
       }
-      id
     }
   }
 `;
@@ -56,22 +56,22 @@ const updateMediaSettingsMutation = gql`
 const podcastSettingsQuery = gql`
   query PodcastSettings {
     podcastSettings {
+      id
       category
       copyrightText
       description
       explicit
       feedLink
       generator
-      id
-      image {
-        ...FeaturedMedia_media
-      }
       itunesEmail
       itunesName
       language
       managingEditor
       title
       websiteLink
+      image {
+        ...FeaturedMedia_media
+      }
     }
   }
   ${featuredMediaFragment}

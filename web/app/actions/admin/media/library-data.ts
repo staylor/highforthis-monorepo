@@ -19,10 +19,10 @@ import type {
 
 const mediaFormFragment = gql`
   fragment MediaForm_media on MediaUpload {
+    id
     destination
     fileName
     fileSize
-    id
     mimeType
     originalName
     title
@@ -30,14 +30,14 @@ const mediaFormFragment = gql`
     ... on ImageUpload {
       altText
       caption
+      height
+      width
       crops {
         fileName
         fileSize
         height
         width
       }
-      height
-      width
     }
     ... on AudioUpload {
       description
@@ -72,10 +72,12 @@ const uploadsQuery = gql`
     uploads(after: $after, first: $first, mimeType: $mimeType, search: $search, type: $type)
       @cache(key: "admin") {
       count
+      mimeTypes
+      types
       edges {
         node {
-          destination
           id
+          destination
           mimeType
           originalName
           title
@@ -94,11 +96,9 @@ const uploadsQuery = gql`
           }
         }
       }
-      mimeTypes
       pageInfo {
         hasNextPage
       }
-      types
     }
   }
 `;
@@ -130,18 +130,18 @@ const updateMediaMutation = gql`
 const albumsQuery = gql`
   query AlbumCoversAdmin($term: String!) {
     appleMusicAlbums(term: $term) {
+      error
       albums {
         id
-        name
         artistName
-        releaseDate
         cover(size: 600)
+        name
+        releaseDate
         artwork {
-          width
           height
+          width
         }
       }
-      error
     }
   }
 `;

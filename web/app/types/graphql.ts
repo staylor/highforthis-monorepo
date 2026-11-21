@@ -304,11 +304,11 @@ export type VenueCoordinatesInput = {
   longitude?: number | null | undefined;
 };
 
-export type ArtistForm_ArtistFragment = { description: string | null, excludeFromSearch: boolean | null, id: string, name: string, slug: string, website: string | null, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null, featuredMedia: Array<
-    | { destination: string, fileName: string, id: string, type: string }
-    | { destination: string, fileName: string, id: string, type: string }
-    | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-    | { destination: string, fileName: string, id: string, type: string }
+export type ArtistForm_ArtistFragment = { id: string, description: string | null, excludeFromSearch: boolean | null, name: string, slug: string, website: string | null, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null, featuredMedia: Array<
+    | { id: string, destination: string, fileName: string, type: string }
+    | { id: string, destination: string, fileName: string, type: string }
+    | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+    | { id: string, destination: string, fileName: string, type: string }
   > | null };
 
 export type ArtistsAdminQueryVariables = Exact<{
@@ -318,7 +318,7 @@ export type ArtistsAdminQueryVariables = Exact<{
 }>;
 
 
-export type ArtistsAdminQuery = { artists: { count: number, edges: Array<{ node: { excludeFromSearch: boolean | null, id: string, name: string, slug: string, website: string | null, appleMusic: { id: string | null, url: string | null, artwork: { url: string | null } | null } | null } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ArtistsAdminQuery = { artists: { count: number, edges: Array<{ node: { id: string, excludeFromSearch: boolean | null, name: string, slug: string, website: string | null, appleMusic: { id: string | null, url: string | null, artwork: { url: string | null } | null } | null } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type UpdateArtistExcludeMutationVariables = Exact<{
   id: string;
@@ -340,23 +340,23 @@ export type ArtistEditQueryVariables = Exact<{
 }>;
 
 
-export type ArtistEditQuery = { artist: { description: string | null, excludeFromSearch: boolean | null, id: string, name: string, slug: string, website: string | null, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
-    > | null } | null, shows: { edges: Array<{ node: { attended: boolean | null, date: number, id: string, venue: { id: string, name: string } } }> } | null };
+export type ArtistEditQuery = { artist: { id: string, description: string | null, excludeFromSearch: boolean | null, name: string, slug: string, website: string | null, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null, featuredMedia: Array<
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
+    > | null } | null, shows: { edges: Array<{ node: { id: string, attended: boolean | null, date: number, venue: { id: string, name: string } } }> } | null };
 
 export type CreateArtistMutationVariables = Exact<{
   input: Types.CreateArtistInput;
 }>;
 
 
-export type CreateArtistMutation = { createArtist: { description: string | null, excludeFromSearch: boolean | null, id: string, name: string, slug: string, website: string | null, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
+export type CreateArtistMutation = { createArtist: { id: string, description: string | null, excludeFromSearch: boolean | null, name: string, slug: string, website: string | null, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null, featuredMedia: Array<
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
     > | null } | null };
 
 export type UpdateArtistMutationVariables = Exact<{
@@ -365,20 +365,20 @@ export type UpdateArtistMutationVariables = Exact<{
 }>;
 
 
-export type UpdateArtistMutation = { updateArtist: { description: string | null, excludeFromSearch: boolean | null, id: string, name: string, slug: string, website: string | null, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
+export type UpdateArtistMutation = { updateArtist: { id: string, description: string | null, excludeFromSearch: boolean | null, name: string, slug: string, website: string | null, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null, featuredMedia: Array<
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
     > | null } | null };
 
-type FeaturedMedia_Media_AudioUpload_Fragment = { destination: string, fileName: string, id: string, type: string };
+type FeaturedMedia_Media_AudioUpload_Fragment = { id: string, destination: string, fileName: string, type: string };
 
-type FeaturedMedia_Media_FileUpload_Fragment = { destination: string, fileName: string, id: string, type: string };
+type FeaturedMedia_Media_FileUpload_Fragment = { id: string, destination: string, fileName: string, type: string };
 
-type FeaturedMedia_Media_ImageUpload_Fragment = { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> };
+type FeaturedMedia_Media_ImageUpload_Fragment = { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> };
 
-type FeaturedMedia_Media_VideoUpload_Fragment = { destination: string, fileName: string, id: string, type: string };
+type FeaturedMedia_Media_VideoUpload_Fragment = { id: string, destination: string, fileName: string, type: string };
 
 export type FeaturedMedia_MediaFragment =
   | FeaturedMedia_Media_AudioUpload_Fragment
@@ -395,10 +395,10 @@ export type MediaPickerQueryVariables = Exact<{
 
 
 export type MediaPickerQuery = { uploads: { edges: Array<{ node:
-        | { destination: string, fileName: string, id: string, title: string | null, images: Array<{ fileName: string, width: number } | null> | null }
-        | { destination: string, fileName: string, id: string, title: string | null }
-        | { destination: string, fileName: string, id: string, title: string | null, crops: Array<{ fileName: string, width: number }> }
-        | { destination: string, fileName: string, id: string, title: string | null }
+        | { id: string, destination: string, fileName: string, title: string | null, images: Array<{ fileName: string, width: number } | null> | null }
+        | { id: string, destination: string, fileName: string, title: string | null }
+        | { id: string, destination: string, fileName: string, title: string | null, crops: Array<{ fileName: string, width: number }> }
+        | { id: string, destination: string, fileName: string, title: string | null }
        }>, pageInfo: { endCursor: string | null, hasNextPage: boolean | null } } | null };
 
 export type VideoPickerQueryVariables = Exact<{
@@ -407,15 +407,15 @@ export type VideoPickerQueryVariables = Exact<{
 }>;
 
 
-export type VideoPickerQuery = { videos: { edges: Array<{ node: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { endCursor: string | null, hasNextPage: boolean | null } } | null };
+export type VideoPickerQuery = { videos: { edges: Array<{ node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { endCursor: string | null, hasNextPage: boolean | null } } | null };
 
-type MediaForm_Media_AudioUpload_Fragment = { description: string | null, duration: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string, images: Array<{ fileName: string, fileSize: number, height: number, width: number } | null> | null };
+type MediaForm_Media_AudioUpload_Fragment = { description: string | null, duration: number | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string, images: Array<{ fileName: string, fileSize: number, height: number, width: number } | null> | null };
 
-type MediaForm_Media_FileUpload_Fragment = { description: string | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string };
+type MediaForm_Media_FileUpload_Fragment = { description: string | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string };
 
-type MediaForm_Media_ImageUpload_Fragment = { altText: string | null, caption: string | null, height: number | null, width: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string, crops: Array<{ fileName: string, fileSize: number, height: number, width: number }> };
+type MediaForm_Media_ImageUpload_Fragment = { altText: string | null, caption: string | null, height: number | null, width: number | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string, crops: Array<{ fileName: string, fileSize: number, height: number, width: number }> };
 
-type MediaForm_Media_VideoUpload_Fragment = { description: string | null, duration: number | null, height: number | null, width: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string };
+type MediaForm_Media_VideoUpload_Fragment = { description: string | null, duration: number | null, height: number | null, width: number | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string };
 
 export type MediaForm_MediaFragment =
   | MediaForm_Media_AudioUpload_Fragment
@@ -434,10 +434,10 @@ export type UploadsAdminQueryVariables = Exact<{
 
 
 export type UploadsAdminQuery = { uploads: { count: number, mimeTypes: Array<string> | null, types: Array<string> | null, edges: Array<{ node:
-        | { destination: string, id: string, mimeType: string, originalName: string, title: string | null, type: string, images: Array<{ fileName: string, width: number } | null> | null }
-        | { destination: string, id: string, mimeType: string, originalName: string, title: string | null, type: string }
-        | { destination: string, id: string, mimeType: string, originalName: string, title: string | null, type: string, crops: Array<{ fileName: string, width: number }> }
-        | { destination: string, id: string, mimeType: string, originalName: string, title: string | null, type: string }
+        | { id: string, destination: string, mimeType: string, originalName: string, title: string | null, type: string, images: Array<{ fileName: string, width: number } | null> | null }
+        | { id: string, destination: string, mimeType: string, originalName: string, title: string | null, type: string }
+        | { id: string, destination: string, mimeType: string, originalName: string, title: string | null, type: string, crops: Array<{ fileName: string, width: number }> }
+        | { id: string, destination: string, mimeType: string, originalName: string, title: string | null, type: string }
        }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type DeleteMediaMutationVariables = Exact<{
@@ -453,10 +453,10 @@ export type MediaAdminQueryVariables = Exact<{
 
 
 export type MediaAdminQuery = { media:
-    | { description: string | null, duration: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string, images: Array<{ fileName: string, fileSize: number, height: number, width: number } | null> | null }
-    | { description: string | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string }
-    | { altText: string | null, caption: string | null, height: number | null, width: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string, crops: Array<{ fileName: string, fileSize: number, height: number, width: number }> }
-    | { description: string | null, duration: number | null, height: number | null, width: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string }
+    | { description: string | null, duration: number | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string, images: Array<{ fileName: string, fileSize: number, height: number, width: number } | null> | null }
+    | { description: string | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string }
+    | { altText: string | null, caption: string | null, height: number | null, width: number | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string, crops: Array<{ fileName: string, fileSize: number, height: number, width: number }> }
+    | { description: string | null, duration: number | null, height: number | null, width: number | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string }
    | null };
 
 export type UpdateMediaMutationVariables = Exact<{
@@ -466,10 +466,10 @@ export type UpdateMediaMutationVariables = Exact<{
 
 
 export type UpdateMediaMutation = { updateMediaUpload:
-    | { description: string | null, duration: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string, images: Array<{ fileName: string, fileSize: number, height: number, width: number } | null> | null }
-    | { description: string | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string }
-    | { altText: string | null, caption: string | null, height: number | null, width: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string, crops: Array<{ fileName: string, fileSize: number, height: number, width: number }> }
-    | { description: string | null, duration: number | null, height: number | null, width: number | null, destination: string, fileName: string, fileSize: number, id: string, mimeType: string, originalName: string, title: string | null, type: string }
+    | { description: string | null, duration: number | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string, images: Array<{ fileName: string, fileSize: number, height: number, width: number } | null> | null }
+    | { description: string | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string }
+    | { altText: string | null, caption: string | null, height: number | null, width: number | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string, crops: Array<{ fileName: string, fileSize: number, height: number, width: number }> }
+    | { description: string | null, duration: number | null, height: number | null, width: number | null, id: string, destination: string, fileName: string, fileSize: number, mimeType: string, originalName: string, title: string | null, type: string }
    | null };
 
 export type AlbumCoversAdminQueryVariables = Exact<{
@@ -477,7 +477,7 @@ export type AlbumCoversAdminQueryVariables = Exact<{
 }>;
 
 
-export type AlbumCoversAdminQuery = { appleMusicAlbums: { error: string | null, albums: Array<{ id: string, name: string, artistName: string, releaseDate: string | null, cover: string, artwork: { width: number | null, height: number | null } }> } };
+export type AlbumCoversAdminQuery = { appleMusicAlbums: { error: string | null, albums: Array<{ id: string, artistName: string, cover: string, name: string, releaseDate: string | null, artwork: { height: number | null, width: number | null } }> } };
 
 export type AddAlbumCoversMutationVariables = Exact<{
   ids: Array<string> | string;
@@ -491,7 +491,7 @@ export type AddAlbumCoversMutation = { addAlbumCovers: Array<
     | { id: string }
   > };
 
-export type PodcastForm_PodcastFragment = { description: string, id: string, title: string, audio: { id: string, destination: string, fileName: string, type: string } | null, image: { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> } | null };
+export type PodcastForm_PodcastFragment = { id: string, description: string, title: string, audio: { id: string, destination: string, fileName: string, type: string } | null, image: { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> } | null };
 
 export type PodcastsAdminQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -514,7 +514,7 @@ export type PodcastEditQueryVariables = Exact<{
 }>;
 
 
-export type PodcastEditQuery = { podcast: { description: string, id: string, title: string, audio: { id: string, destination: string, fileName: string, type: string } | null, image: { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> } | null } | null };
+export type PodcastEditQuery = { podcast: { id: string, description: string, title: string, audio: { id: string, destination: string, fileName: string, type: string } | null, image: { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> } | null } | null };
 
 export type CreatePodcastMutationVariables = Exact<{
   input: Types.CreatePodcastInput;
@@ -529,9 +529,9 @@ export type UpdatePodcastMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePodcastMutation = { updatePodcast: { description: string, id: string, title: string, audio: { id: string, destination: string, fileName: string, type: string } | null, image: { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> } | null } | null };
+export type UpdatePodcastMutation = { updatePodcast: { id: string, description: string, title: string, audio: { id: string, destination: string, fileName: string, type: string } | null, image: { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> } | null } | null };
 
-export type PostForm_PostFragment = { date: number | null, id: string, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
+export type PostForm_PostFragment = { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
         | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, language: string | null, children: Array<
             | { type: string | null, version: number | null }
             | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
@@ -547,7 +547,7 @@ export type PostForm_PostFragment = { date: number | null, id: string, slug: str
             | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
             | Record<PropertyKey, never>
            | null> | null }
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, image: { destination: string, id: string, crops: Array<{ fileName: string, width: number }> } | null }
+        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
         | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null }
         | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, listType: Types.ListType | null, start: number | null, children: Array<
             | { checked: boolean | null, direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, value: number | null, version: number | null, children: Array<
@@ -562,13 +562,13 @@ export type PostForm_PostFragment = { date: number | null, id: string, slug: str
             | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
             | Record<PropertyKey, never>
            | null> | null }
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
+        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
         | Record<PropertyKey, never>
        | null> | null } | null } | null, featuredMedia: Array<
-    | { destination: string, fileName: string, id: string, type: string }
-    | { destination: string, fileName: string, id: string, type: string }
-    | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-    | { destination: string, fileName: string, id: string, type: string }
+    | { id: string, destination: string, fileName: string, type: string }
+    | { id: string, destination: string, fileName: string, type: string }
+    | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+    | { id: string, destination: string, fileName: string, type: string }
   > | null };
 
 export type PostsAdminQueryVariables = Exact<{
@@ -578,7 +578,7 @@ export type PostsAdminQueryVariables = Exact<{
 }>;
 
 
-export type PostsAdminQuery = { posts: { count: number, edges: Array<{ node: { date: number | null, id: string, slug: string, status: Types.PostStatus | null, title: string } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type PostsAdminQuery = { posts: { count: number, edges: Array<{ node: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, title: string } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type DeletePostMutationVariables = Exact<{
   ids: Array<string | null | undefined> | string;
@@ -592,7 +592,7 @@ export type PostEditQueryVariables = Exact<{
 }>;
 
 
-export type PostEditQuery = { post: { date: number | null, id: string, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
+export type PostEditQuery = { post: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, language: string | null, children: Array<
               | { type: string | null, version: number | null }
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
@@ -608,7 +608,7 @@ export type PostEditQuery = { post: { date: number | null, id: string, slug: str
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
               | Record<PropertyKey, never>
              | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, image: { destination: string, id: string, crops: Array<{ fileName: string, width: number }> } | null }
+          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null }
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, listType: Types.ListType | null, start: number | null, children: Array<
               | { checked: boolean | null, direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, value: number | null, version: number | null, children: Array<
@@ -623,13 +623,13 @@ export type PostEditQuery = { post: { date: number | null, id: string, slug: str
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
               | Record<PropertyKey, never>
              | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
+          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
           | Record<PropertyKey, never>
          | null> | null } | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
     > | null } | null };
 
 export type CreatePostMutationVariables = Exact<{
@@ -637,7 +637,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { createPost: { date: number | null, id: string, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
+export type CreatePostMutation = { createPost: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, language: string | null, children: Array<
               | { type: string | null, version: number | null }
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
@@ -653,7 +653,7 @@ export type CreatePostMutation = { createPost: { date: number | null, id: string
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
               | Record<PropertyKey, never>
              | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, image: { destination: string, id: string, crops: Array<{ fileName: string, width: number }> } | null }
+          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null }
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, listType: Types.ListType | null, start: number | null, children: Array<
               | { checked: boolean | null, direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, value: number | null, version: number | null, children: Array<
@@ -668,13 +668,13 @@ export type CreatePostMutation = { createPost: { date: number | null, id: string
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
               | Record<PropertyKey, never>
              | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
+          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
           | Record<PropertyKey, never>
          | null> | null } | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
     > | null } | null };
 
 export type UpdatePostMutationVariables = Exact<{
@@ -683,7 +683,7 @@ export type UpdatePostMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePostMutation = { updatePost: { date: number | null, id: string, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
+export type UpdatePostMutation = { updatePost: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, language: string | null, children: Array<
               | { type: string | null, version: number | null }
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
@@ -699,7 +699,7 @@ export type UpdatePostMutation = { updatePost: { date: number | null, id: string
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
               | Record<PropertyKey, never>
              | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, image: { destination: string, id: string, crops: Array<{ fileName: string, width: number }> } | null }
+          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null }
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, listType: Types.ListType | null, start: number | null, children: Array<
               | { checked: boolean | null, direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, value: number | null, version: number | null, children: Array<
@@ -714,19 +714,19 @@ export type UpdatePostMutation = { updatePost: { date: number | null, id: string
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
               | Record<PropertyKey, never>
              | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
+          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
           | Record<PropertyKey, never>
          | null> | null } | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
     > | null } | null };
 
 export type SiteSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SiteSettingsQuery = { siteSettings: { copyrightText: string | null, emailAddress: string | null, id: string, language: string | null, siteTitle: string | null, siteUrl: string | null, tagline: string | null } };
+export type SiteSettingsQuery = { siteSettings: { id: string, copyrightText: string | null, emailAddress: string | null, language: string | null, siteTitle: string | null, siteUrl: string | null, tagline: string | null } };
 
 export type UpdateSiteSettingsMutationVariables = Exact<{
   id: string;
@@ -752,7 +752,7 @@ export type UpdateMediaSettingsMutation = { updateMediaSettings: { id: string } 
 export type PodcastSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PodcastSettingsQuery = { podcastSettings: { category: string | null, copyrightText: string | null, description: string | null, explicit: string | null, feedLink: string | null, generator: string | null, id: string, itunesEmail: string | null, itunesName: string | null, language: string | null, managingEditor: string | null, title: string | null, websiteLink: string | null, image: { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> } | null } };
+export type PodcastSettingsQuery = { podcastSettings: { id: string, category: string | null, copyrightText: string | null, description: string | null, explicit: string | null, feedLink: string | null, generator: string | null, itunesEmail: string | null, itunesName: string | null, language: string | null, managingEditor: string | null, title: string | null, websiteLink: string | null, image: { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> } | null } };
 
 export type UpdatePodcastSettingsMutationVariables = Exact<{
   id: string;
@@ -762,7 +762,7 @@ export type UpdatePodcastSettingsMutationVariables = Exact<{
 
 export type UpdatePodcastSettingsMutation = { updatePodcastSettings: { id: string } | null };
 
-export type ShowForm_ShowFragment = { attended: boolean | null, date: number, id: string, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } };
+export type ShowForm_ShowFragment = { id: string, attended: boolean | null, date: number, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } };
 
 export type ShowForm_EntitiesFragment = { artists: { edges: Array<{ node: { id: string, name: string } }> } | null, venues: { edges: Array<{ node: { id: string, name: string } }> } | null };
 
@@ -774,7 +774,7 @@ export type ShowsAdminQueryVariables = Exact<{
 }>;
 
 
-export type ShowsAdminQuery = { shows: { count: number | null, edges: Array<{ node: { attended: boolean | null, date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ShowsAdminQuery = { shows: { count: number | null, edges: Array<{ node: { id: string, attended: boolean | null, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type UpdateShowAttendedMutationVariables = Exact<{
   id: string;
@@ -794,7 +794,7 @@ export type DeleteShowMutation = { removeShow: boolean | null };
 export type ShowEntitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ShowEntitiesQuery = { show: { attended: boolean | null, date: number, id: string, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } } | null, artists: { edges: Array<{ node: { id: string, name: string } }> } | null, venues: { edges: Array<{ node: { id: string, name: string } }> } | null };
+export type ShowEntitiesQuery = { show: { id: string, attended: boolean | null, date: number, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } } | null, artists: { edges: Array<{ node: { id: string, name: string } }> } | null, venues: { edges: Array<{ node: { id: string, name: string } }> } | null };
 
 export type CreateShowMutationVariables = Exact<{
   input: Types.CreateShowInput;
@@ -808,7 +808,7 @@ export type ShowEditQueryVariables = Exact<{
 }>;
 
 
-export type ShowEditQuery = { show: { attended: boolean | null, date: number, id: string, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } } | null, artists: { edges: Array<{ node: { id: string, name: string } }> } | null, venues: { edges: Array<{ node: { id: string, name: string } }> } | null };
+export type ShowEditQuery = { show: { id: string, attended: boolean | null, date: number, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } } | null, artists: { edges: Array<{ node: { id: string, name: string } }> } | null, venues: { edges: Array<{ node: { id: string, name: string } }> } | null };
 
 export type UpdateShowMutationVariables = Exact<{
   id: string;
@@ -816,7 +816,7 @@ export type UpdateShowMutationVariables = Exact<{
 }>;
 
 
-export type UpdateShowMutation = { updateShow: { attended: boolean | null, date: number, id: string, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } } | null };
+export type UpdateShowMutation = { updateShow: { id: string, attended: boolean | null, date: number, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } } | null };
 
 export type BulkCreateShowsMutationVariables = Exact<{
   input: Array<Types.BulkCreateShowInput> | Types.BulkCreateShowInput;
@@ -831,17 +831,17 @@ export type VenueListingsAdminQueryVariables = Exact<{
 }>;
 
 
-export type VenueListingsAdminQuery = { venues: { edges: Array<{ node: { id: string, listingsUrl: string | null, name: string } }> } | null, venueListings?: { error: string | null, source: string | null, listings: Array<{ cancelled: boolean, dateChanged: boolean, headliners: Array<string>, localDate: string | null, localTime: string | null, newArtists: Array<string>, sourceId: string, status: string | null, support: Array<string>, url: string | null, show: { id: string } | null }> } };
+export type VenueListingsAdminQuery = { venueListings?: { error: string | null, source: string | null, listings: Array<{ cancelled: boolean, dateChanged: boolean, headliners: Array<string>, localDate: string | null, localTime: string | null, newArtists: Array<string>, sourceId: string, status: string | null, support: Array<string>, url: string | null, show: { id: string } | null }> }, venues: { edges: Array<{ node: { id: string, listingsUrl: string | null, name: string } }> } | null };
 
 export type ImportListingsMutationVariables = Exact<{
-  venueId: string;
   input: Array<Types.ImportListingInput> | Types.ImportListingInput;
+  venueId: string;
 }>;
 
 
 export type ImportListingsMutation = { importListings: { artistsCreated: number, showsCreated: number } };
 
-export type UserForm_UserFragment = { bio: string | null, email: string, id: string, name: string | null, roles: Array<string | null> | null };
+export type UserForm_UserFragment = { id: string, bio: string | null, email: string, name: string | null, roles: Array<string | null> | null };
 
 export type UsersAdminQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -864,7 +864,7 @@ export type UserEditQueryVariables = Exact<{
 }>;
 
 
-export type UserEditQuery = { user: { bio: string | null, email: string, id: string, name: string | null, roles: Array<string | null> | null } | null };
+export type UserEditQuery = { user: { id: string, bio: string | null, email: string, name: string | null, roles: Array<string | null> | null } | null };
 
 export type CreateUserMutationVariables = Exact<{
   input: Types.CreateUserInput;
@@ -879,13 +879,13 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { updateUser: { bio: string | null, email: string, id: string, name: string | null, roles: Array<string | null> | null } | null };
+export type UpdateUserMutation = { updateUser: { id: string, bio: string | null, email: string, name: string | null, roles: Array<string | null> | null } | null };
 
-export type VenueForm_VenueFragment = { capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, id: string, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
-    | { destination: string, fileName: string, id: string, type: string }
-    | { destination: string, fileName: string, id: string, type: string }
-    | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-    | { destination: string, fileName: string, id: string, type: string }
+export type VenueForm_VenueFragment = { id: string, capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
+    | { id: string, destination: string, fileName: string, type: string }
+    | { id: string, destination: string, fileName: string, type: string }
+    | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+    | { id: string, destination: string, fileName: string, type: string }
   > | null };
 
 export type VenuesAdminQueryVariables = Exact<{
@@ -895,8 +895,8 @@ export type VenuesAdminQueryVariables = Exact<{
 }>;
 
 
-export type VenuesAdminQuery = { venues: { count: number, edges: Array<{ node: { address: string | null, capacity: string | null, excludeFromSearch: boolean | null, id: string, name: string, permanentlyClosed: boolean | null, slug: string, website: string | null, featuredMedia: Array<
-          | { destination: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
+export type VenuesAdminQuery = { venues: { count: number, edges: Array<{ node: { id: string, address: string | null, capacity: string | null, excludeFromSearch: boolean | null, name: string, permanentlyClosed: boolean | null, slug: string, website: string | null, featuredMedia: Array<
+          | { id: string, destination: string, type: string, crops: Array<{ fileName: string, width: number }> }
           | Record<PropertyKey, never>
         > | null } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
@@ -920,11 +920,11 @@ export type VenueEditQueryVariables = Exact<{
 }>;
 
 
-export type VenueEditQuery = { shows: { edges: Array<{ node: { date: number, id: string, title: string | null, artists: Array<{ id: string, name: string }> } }> } | null, venue: { capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, id: string, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
+export type VenueEditQuery = { shows: { edges: Array<{ node: { id: string, date: number, title: string | null, artists: Array<{ id: string, name: string }> } }> } | null, venue: { id: string, capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
     > | null } | null };
 
 export type CreateVenueMutationVariables = Exact<{
@@ -932,11 +932,11 @@ export type CreateVenueMutationVariables = Exact<{
 }>;
 
 
-export type CreateVenueMutation = { createVenue: { capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, id: string, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
+export type CreateVenueMutation = { createVenue: { id: string, capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
     > | null } | null };
 
 export type UpdateVenueMutationVariables = Exact<{
@@ -945,14 +945,14 @@ export type UpdateVenueMutationVariables = Exact<{
 }>;
 
 
-export type UpdateVenueMutation = { updateVenue: { capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, id: string, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
+export type UpdateVenueMutation = { updateVenue: { id: string, capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
     > | null } | null };
 
-export type VideoForm_VideoFragment = { dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ height: number, url: string, width: number }> };
+export type VideoForm_VideoFragment = { id: string, dataPlaylistId: string, dataType: string, slug: string, title: string, year: number, thumbnails: Array<{ height: number, url: string, width: number }> };
 
 export type VideosAdminQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -976,7 +976,7 @@ export type VideoEditQueryVariables = Exact<{
 }>;
 
 
-export type VideoEditQuery = { video: { dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ height: number, url: string, width: number }> } | null };
+export type VideoEditQuery = { video: { id: string, dataPlaylistId: string, dataType: string, slug: string, title: string, year: number, thumbnails: Array<{ height: number, url: string, width: number }> } | null };
 
 export type UpdateVideoMutationVariables = Exact<{
   id: string;
@@ -984,7 +984,7 @@ export type UpdateVideoMutationVariables = Exact<{
 }>;
 
 
-export type UpdateVideoMutation = { updateVideo: { dataPlaylistId: string, dataType: string, id: string, slug: string, title: string, year: number, thumbnails: Array<{ height: number, url: string, width: number }> } | null };
+export type UpdateVideoMutation = { updateVideo: { id: string, dataPlaylistId: string, dataType: string, slug: string, title: string, year: number, thumbnails: Array<{ height: number, url: string, width: number }> } | null };
 
 export type ArtistQueryVariables = Exact<{
   first?: number | null | undefined;
@@ -992,7 +992,7 @@ export type ArtistQueryVariables = Exact<{
 }>;
 
 
-export type ArtistQuery = { artist: { id: string, name: string, website: string | null, appleMusic: { id: string | null, url: string | null, artwork: { url: string | null } | null } | null } | null, attended: { edges: Array<{ node: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { city: string | null, id: string, name: string, slug: string, state: string | null } } }> } | null, shows: { edges: Array<{ cursor: string, node: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ArtistQuery = { artist: { id: string, name: string, website: string | null, appleMusic: { id: string | null, url: string | null, artwork: { url: string | null } | null } | null } | null, attended: { edges: Array<{ node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }> } | null, shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type VenueQueryVariables = Exact<{
   first?: number | null | undefined;
@@ -1000,11 +1000,11 @@ export type VenueQueryVariables = Exact<{
 }>;
 
 
-export type VenueQuery = { attended: { edges: Array<{ node: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { city: string | null, id: string, name: string, slug: string, state: string | null } } }> } | null, shows: { edges: Array<{ cursor: string, node: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null, venue: { address: string | null, capacity: string | null, id: string, name: string, permanentlyClosed: boolean | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string }
-      | { destination: string, fileName: string, id: string, type: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, fileName: string, id: string, type: string }
+export type VenueQuery = { attended: { edges: Array<{ node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }> } | null, shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null, venue: { id: string, address: string | null, capacity: string | null, name: string, permanentlyClosed: boolean | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string }
+      | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string, fileName: string, type: string }
     > | null } | null };
 
 export type HomeQueryVariables = Exact<{
@@ -1018,33 +1018,33 @@ export type HomeQueryVariables = Exact<{
 
 
 export type HomeQuery = { posts: { edges: Array<{ node: { id: string, slug: string, summary: string | null, title: string, editorState: { root: { children: Array<
-              | { image: { destination: string, id: string, crops: Array<{ fileName: string, width: number }> } | null }
+              | { image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
               | Record<PropertyKey, never>
              | null> | null } | null } | null, featuredMedia: Array<
-          | { destination: string, id: string }
-          | { destination: string, id: string }
-          | { destination: string, id: string, crops: Array<{ fileName: string, width: number }> }
-          | { destination: string, id: string }
-        > | null } }> } | null, videos: { count: number, edges: Array<{ cursor: string, node: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
+          | { id: string, destination: string }
+          | { id: string, destination: string }
+          | { id: string, destination: string, crops: Array<{ fileName: string, width: number }> }
+          | { id: string, destination: string }
+        > | null } }> } | null, videos: { count: number, edges: Array<{ cursor: string, node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
 
 export type PodcastsQueryVariables = Exact<{
   first?: number | null | undefined;
 }>;
 
 
-export type PodcastsQuery = { podcasts: { edges: Array<{ node: { description: string, id: string, title: string } }> } | null };
+export type PodcastsQuery = { podcasts: { edges: Array<{ node: { id: string, description: string, title: string } }> } | null };
 
 export type PodcastQueryVariables = Exact<{
   id: string;
 }>;
 
 
-export type PodcastQuery = { podcast: { description: string, id: string, title: string, audio: { destination: string, duration: number | null, fileName: string, id: string } | null } | null };
+export type PodcastQuery = { podcast: { id: string, description: string, title: string, audio: { id: string, destination: string, duration: number | null, fileName: string } | null } | null };
 
 export type PodcastFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PodcastFeedQuery = { podcasts: { edges: Array<{ node: { date: number | null, description: string, id: string, title: string, audio: { destination: string, duration: number | null, fileName: string, fileSize: number, id: string } | null } }> } | null, podcastSettings: { category: string | null, copyrightText: string | null, description: string | null, explicit: string | null, feedLink: string | null, generator: string | null, id: string, itunesEmail: string | null, itunesName: string | null, language: string | null, managingEditor: string | null, title: string | null, websiteLink: string | null, image: { destination: string, fileName: string, id: string } | null } };
+export type PodcastFeedQuery = { podcasts: { edges: Array<{ node: { id: string, date: number | null, description: string, title: string, audio: { id: string, destination: string, duration: number | null, fileName: string, fileSize: number } | null } }> } | null, podcastSettings: { id: string, category: string | null, copyrightText: string | null, description: string | null, explicit: string | null, feedLink: string | null, generator: string | null, itunesEmail: string | null, itunesName: string | null, language: string | null, managingEditor: string | null, title: string | null, websiteLink: string | null, image: { id: string, destination: string, fileName: string } | null } };
 
 export type PostsQueryVariables = Exact<{
   first?: number | null | undefined;
@@ -1052,13 +1052,13 @@ export type PostsQueryVariables = Exact<{
 
 
 export type PostsQuery = { posts: { edges: Array<{ node: { id: string, slug: string, summary: string | null, title: string, editorState: { root: { children: Array<
-              | { image: { destination: string, id: string, crops: Array<{ fileName: string, width: number }> } | null }
+              | { image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
               | Record<PropertyKey, never>
              | null> | null } | null } | null, featuredMedia: Array<
-          | { destination: string, id: string }
-          | { destination: string, id: string }
-          | { destination: string, id: string, crops: Array<{ fileName: string, width: number }> }
-          | { destination: string, id: string }
+          | { id: string, destination: string }
+          | { id: string, destination: string }
+          | { id: string, destination: string, crops: Array<{ fileName: string, width: number }> }
+          | { id: string, destination: string }
         > | null } }> } | null };
 
 export type PostQueryVariables = Exact<{
@@ -1082,7 +1082,7 @@ export type PostQuery = { post: { id: string, slug: string, summary: string | nu
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
               | Record<PropertyKey, never>
              | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, image: { destination: string, id: string, crops: Array<{ fileName: string, width: number }> } | null }
+          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null }
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, listType: Types.ListType | null, start: number | null, children: Array<
               | { children: Array<
@@ -1097,19 +1097,19 @@ export type PostQuery = { post: { id: string, slug: string, summary: string | nu
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
               | Record<PropertyKey, never>
              | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
+          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
           | Record<PropertyKey, never>
          | null> | null } | null } | null, featuredMedia: Array<
-      | { destination: string, id: string }
-      | { destination: string, id: string }
-      | { destination: string, id: string, crops: Array<{ fileName: string, width: number }> }
-      | { destination: string, id: string }
+      | { id: string, destination: string }
+      | { id: string, destination: string }
+      | { id: string, destination: string, crops: Array<{ fileName: string, width: number }> }
+      | { id: string, destination: string }
     > | null } | null };
 
 export type AppQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AppQuery = { apiKeys: { googleMaps: string | null } | null, podcastSettings: { description: string | null, feedLink: string | null, id: string, title: string | null, websiteLink: string | null, image: { destination: string, fileName: string, id: string } | null }, shows: { edges: Array<{ node: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }> } | null, siteSettings: { copyrightText: string | null, id: string, language: string | null, siteTitle: string | null, siteUrl: string | null, tagline: string | null } };
+export type AppQuery = { apiKeys: { googleMaps: string | null } | null, podcastSettings: { id: string, description: string | null, feedLink: string | null, title: string | null, websiteLink: string | null, image: { id: string, destination: string, fileName: string } | null }, shows: { edges: Array<{ node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }> } | null, siteSettings: { id: string, copyrightText: string | null, language: string | null, siteTitle: string | null, siteUrl: string | null, tagline: string | null } };
 
 export type ShowsQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -1117,7 +1117,7 @@ export type ShowsQueryVariables = Exact<{
 }>;
 
 
-export type ShowsQuery = { shows: { edges: Array<{ cursor: string, node: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ShowsQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type ShowsHistoryQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -1126,7 +1126,7 @@ export type ShowsHistoryQueryVariables = Exact<{
 }>;
 
 
-export type ShowsHistoryQuery = { shows: { edges: Array<{ cursor: string, node: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ShowsHistoryQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type ShowStatsQueryVariables = Exact<{
   entity: Types.ShowEntityType;
@@ -1143,7 +1143,7 @@ export type ShowQueryVariables = Exact<{
 }>;
 
 
-export type ShowQuery = { show: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } | null };
+export type ShowQuery = { show: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } | null };
 
 export type VideosQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -1155,33 +1155,33 @@ export type VideosQueryVariables = Exact<{
 }>;
 
 
-export type VideosQuery = { videos: { count: number, edges: Array<{ cursor: string, node: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
+export type VideosQuery = { videos: { count: number, edges: Array<{ cursor: string, node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
 
 export type VideoQueryVariables = Exact<{
   slug?: string | null | undefined;
 }>;
 
 
-export type VideoQuery = { video: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null };
+export type VideoQuery = { video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null };
 
-export type PostArtwork_PostFragment = { editorState: { root: { children: Array<
-        | { image: { destination: string, id: string, crops: Array<{ fileName: string, width: number }> } | null }
+export type PostArtwork_PostFragment = { id: string, editorState: { root: { children: Array<
+        | { image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
         | Record<PropertyKey, never>
        | null> | null } | null } | null, featuredMedia: Array<
-    | { destination: string, id: string }
-    | { destination: string, id: string }
-    | { destination: string, id: string, crops: Array<{ fileName: string, width: number }> }
-    | { destination: string, id: string }
+    | { id: string, destination: string }
+    | { id: string, destination: string }
+    | { id: string, destination: string, crops: Array<{ fileName: string, width: number }> }
+    | { id: string, destination: string }
   > | null };
 
 export type TextNodes_LinebreakNodeFragment = { type: string | null, version: number | null };
 
 export type TextNodes_TextNodeFragment = { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null };
 
-export type ShowsGrid_ShowsFragment = { edges: Array<{ cursor: string, node: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } };
+export type ShowsGrid_ShowsFragment = { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } };
 
-export type Attended_ShowsFragment = { edges: Array<{ node: { date: number, id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { city: string | null, id: string, name: string, slug: string, state: string | null } } }> };
+export type Attended_ShowsFragment = { edges: Array<{ node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }> };
 
-export type Video_VideoFragment = { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> };
+export type Video_VideoFragment = { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> };
 
-export type Videos_VideosFragment = { videos: { count: number, edges: Array<{ cursor: string, node: { dataId: string, id: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
+export type Videos_VideosFragment = { videos: { count: number, edges: Array<{ cursor: string, node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };

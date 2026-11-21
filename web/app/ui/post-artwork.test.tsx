@@ -17,6 +17,7 @@ function image(id: string, widths = [300, 640]) {
 
 function post(editorImageCount: number): PostArtwork_PostFragment {
   return {
+    id: 'post-1',
     editorState: {
       root: {
         children: Array.from({ length: editorImageCount }, (_, index) => ({

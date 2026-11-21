@@ -15,9 +15,9 @@ import { uploadUrl } from '#/ui/public/media.ts';
 /** What a form's query asks for to fill its featured media field. */
 export const featuredMediaFragment = gql`
   fragment FeaturedMedia_media on MediaUpload {
+    id
     destination
     fileName
-    id
     type
     ... on ImageUpload {
       crops {
@@ -33,9 +33,9 @@ const mediaPickerQuery = gql`
     uploads(after: $cursor, first: $first, type: $type) @cache(key: "modal") {
       edges {
         node {
+          id
           destination
           fileName
-          id
           title
           ... on ImageUpload {
             crops {
@@ -64,15 +64,15 @@ const videoPickerQuery = gql`
     videos(after: $cursor, first: $first) @cache(key: "modal") {
       edges {
         node {
-          dataId
           id
+          dataId
           slug
+          title
           thumbnails {
             height
             url
             width
           }
-          title
         }
       }
       pageInfo {

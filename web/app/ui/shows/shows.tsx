@@ -14,15 +14,15 @@ export const showsGridFragment = gql`
     edges {
       cursor
       node {
+        id
+        date
+        title
+        url
         artists {
           id
           name
           slug
         }
-        date
-        id
-        title
-        url
         venue {
           id
           name
@@ -40,18 +40,18 @@ export const attendedFragment = gql`
   fragment Attended_shows on ShowConnection {
     edges {
       node {
+        id
+        date
+        title
+        url
         artists {
           id
           name
           slug
         }
-        date
-        id
-        title
-        url
         venue {
-          city
           id
+          city
           name
           slug
           state

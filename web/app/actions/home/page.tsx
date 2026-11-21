@@ -26,6 +26,7 @@ export const homeQuery = gql`
     $last: Int
     $year: Int
   ) {
+    ...Videos_videos
     posts(first: 5, status: PUBLISH) @cache(key: "latest") {
       edges {
         node {
@@ -37,7 +38,6 @@ export const homeQuery = gql`
         }
       }
     }
-    ...Videos_videos
   }
   ${postArtworkFragment}
   ${videosFragment}

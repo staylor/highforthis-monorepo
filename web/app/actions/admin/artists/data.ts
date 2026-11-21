@@ -17,21 +17,21 @@ import type {
 
 const artistFormFragment = gql`
   fragment ArtistForm_artist on Artist {
-    appleMusic {
-      artwork {
-        url
-      }
-      id
-    }
+    id
     description
     excludeFromSearch
-    featuredMedia {
-      ...FeaturedMedia_media
-    }
-    id
     name
     slug
     website
+    appleMusic {
+      id
+      artwork {
+        url
+      }
+    }
+    featuredMedia {
+      ...FeaturedMedia_media
+    }
   }
   ${featuredMediaFragment}
 `;
@@ -42,18 +42,18 @@ const artistsQuery = gql`
       count
       edges {
         node {
-          appleMusic {
-            artwork {
-              url
-            }
-            id
-            url
-          }
-          excludeFromSearch
           id
+          excludeFromSearch
           name
           slug
           website
+          appleMusic {
+            id
+            url
+            artwork {
+              url
+            }
+          }
         }
       }
       pageInfo {
@@ -85,9 +85,9 @@ const artistQuery = gql`
     shows(artist: { id: $id }, first: 200) {
       edges {
         node {
+          id
           attended
           date
-          id
           venue {
             id
             name

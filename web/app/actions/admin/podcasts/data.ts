@@ -12,17 +12,17 @@ import type { PodcastEditQuery, PodcastsAdminQuery } from '#/types/graphql.ts';
 
 const podcastFormFragment = gql`
   fragment PodcastForm_podcast on Podcast {
+    id
+    description
+    title
     audio {
       ...FeaturedMedia_media
       id
     }
-    description
-    id
     image {
       ...FeaturedMedia_media
       id
     }
-    title
   }
   ${featuredMediaFragment}
 `;

@@ -9,39 +9,39 @@ export const feedQuery = gql`
     podcasts {
       edges {
         node {
+          id
+          date
+          description
+          title
           audio {
+            id
             destination
             duration
             fileName
             fileSize
-            id
           }
-          date
-          description
-          id
-          title
         }
       }
     }
     podcastSettings {
+      id
       category
       copyrightText
       description
       explicit
       feedLink
       generator
-      id
-      image {
-        destination
-        fileName
-        id
-      }
       itunesEmail
       itunesName
       language
       managingEditor
       title
       websiteLink
+      image {
+        id
+        destination
+        fileName
+      }
     }
   }
 `;
