@@ -16,7 +16,6 @@
     "@graphql-codegen/add": "8.0.0",
     "@graphql-codegen/cli": "8.0.0",
     "@graphql-codegen/import-types-preset": "5.0.0",
-    "@graphql-codegen/introspection": "7.0.0",
     "@graphql-codegen/schema-ast": "7.0.0",
     "@graphql-codegen/typescript": "7.0.1",
     "@graphql-codegen/typescript-operations": "7.0.1",
@@ -42,7 +41,7 @@
   "scripts": {
     "bootstrap": "bash scripts/bootstrap",
     "dev": "pnpm --filter @highforthis/shared build && pnpm --parallel --filter @highforthis/graphql --filter @highforthis/web dev:service",
-    "codegen": "graphql-codegen && pnpm lint-fix && pnpm codegen:ios",
+    "codegen": "graphql-codegen && pnpm codegen:ios",
     "codegen:ios": "sh apple/scripts/generate-api.sh",
     "db:refresh": "pnpm --filter @highforthis/graphql db:refresh",
     "db:reset": "pnpm --filter @highforthis/graphql db:reset",

@@ -72,22 +72,18 @@ That builds `shared`, runs `pnpm e2e:admin`, installs Playwright's Chromium if i
 
 ## GraphQL Codegen
 
-The root `codegen.ts` generates:
+The root `codegen.ts` builds the schema from the type definitions in [`graphql/src/schema`](./graphql/src/schema), the same ones the server uses, so it doesn't need the server running. It generates:
 
 - `graphql/schema.graphql` — SDL schema file
-- `graphql/schema.json` — Introspection JSON
 - `graphql/types/graphql.ts` — TypeScript types for the server
 - `web/app/types/schema.ts` and `web/app/types/graphql.ts` — TypeScript schema types, and the site's and admin's operations
 - `apple/HighForThisAPI/` — Swift types for the app (via Apollo iOS, from `graphql/schema.graphql`)
 
-Requires the GraphQL server to be running locally:
-
 ```bash
-pnpm graphql:dev
 pnpm codegen
 ```
 
-`pnpm codegen:ios` regenerates only `apple/HighForThisAPI/`, from the committed schema, so it doesn't need the server. See [`apple/README.md`](./apple/README.md).
+CI fails when the schema or an operation changed without regenerating the TypeScript types. `pnpm codegen:ios` regenerates only `apple/HighForThisAPI/`, from the committed schema. See [`apple/README.md`](./apple/README.md).
 
 ## Observability
 

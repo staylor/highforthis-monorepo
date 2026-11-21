@@ -1,6 +1,5 @@
 # graphql-codegen (pnpm codegen)
 graphql/schema.graphql linguist-generated=true
-graphql/schema.json linguist-generated=true
 graphql/types/graphql.ts linguist-generated=true
 web/app/types/graphql.ts linguist-generated=true
 web/app/types/schema.ts linguist-generated=true
