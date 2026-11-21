@@ -108,10 +108,12 @@ describe('admin dashboard', () => {
   });
 
   it('shows the views, sessions, chart and top pages', async (t) => {
+    // Noon on November 18th in New York
+    t.useFakeTimers({ now: new Date('2026-11-18T17:00:00Z') });
     Object.assign(process.env, openObserve);
     stubServers(t, (sql) => {
       if (sql.includes('histogram')) {
-        return Response.json({ hits: [{ hour: new Date().toISOString(), views: 1200 }] });
+        return Response.json({ hits: [{ hour: '2026-11-18T16:00:00', views: 1200 }] });
       }
       if (sql.includes('session_id')) {
         return Response.json({ hits: [{ views: 1200, sessions: 340 }] });
@@ -123,7 +125,7 @@ describe('admin dashboard', () => {
     assert.match(html, />1,200<\/div>/);
     assert.match(html, />340<\/div>/);
     assert.match(html, /<svg[^>]*aria-label="Page views per day over the last 30 days"/);
-    assert.match(html, /Peak: 1200 views/);
+    assert.match(html, /<span>Oct 20<\/span><span>Peak: 1200 views<\/span><span>Nov 18<\/span>/);
     assert.match(html, /<a[^>]*href="https:\/\/highforthis\.com\/shows"[^>]*>\/shows<\/a>/);
   });
 
