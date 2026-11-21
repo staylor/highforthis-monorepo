@@ -16,6 +16,12 @@ import { parseConnection, emptyConnection } from './utils/collection';
 import { removeEntities, resolveJoin, timestampResolver } from './utils/helpers';
 import { bulkCreateShowsSchema, createShowSchema, updateShowSchema } from './validations';
 
+/** What `shows` answers with: a page of shows, and the filter `years` lists the years of. */
+interface ShowConnectionSource extends Awaited<ReturnType<typeof parseConnection>> {
+  // What the shows were filtered by, apart from their dates, or null when none can match
+  filter?: Prisma.ShowWhereInput | null;
+}
+
 interface EntityWithType {
   type: string;
   name?: string;
@@ -97,13 +103,12 @@ const resolvers = {
     },
   },
   ShowConnection: {
-    async years(_0: unknown, args: QueryShowsArgs) {
-      const where: Prisma.ShowWhereInput = {};
-      if (args.attended) {
-        where.attended = true;
-      }
+    // A field's resolver only gets its own arguments, so the years come from the filter `shows`
+    // put on the connection
+    async years({ filter = {} }: Pick<ShowConnectionSource, 'filter'>) {
+      if (filter === null) return [];
       const results = await prisma.show.findMany({
-        where,
+        where: filter,
         select: { date: true },
       });
       const yearSet = new Set(results.map((r) => new Date(r.date).getFullYear()));
@@ -111,46 +116,48 @@ const resolvers = {
     },
   },
   Query: {
-    async shows(_: unknown, args: QueryShowsArgs) {
+    async shows(_: unknown, args: QueryShowsArgs): Promise<ShowConnectionSource> {
       const { artist, venue, latest, attended, year, search, order, ...connectionArgs } = args;
-      const where: Prisma.ShowWhereInput = {};
+      // Everything but the dates, which `years` leaves out
+      const filter: Prisma.ShowWhereInput = {};
+      let date: Prisma.ShowWhereInput['date'];
 
       if (attended) {
-        where.attended = true;
+        filter.attended = true;
       } else if (latest) {
-        where.date = { gte: new Date() };
+        date = { gte: new Date() };
       }
 
       if (year) {
         const startDate = new Date(`${year}-01-01T00:00:00Z`);
         const endDate = new Date(`${year + 1}-01-01T00:00:00Z`);
-        where.date = { gte: startDate, lt: endDate };
+        date = { gte: startDate, lt: endDate };
       }
 
       if (artist?.id) {
-        where.artists = { some: { artistId: artist.id } };
+        filter.artists = { some: { artistId: artist.id } };
       } else if (artist?.slug) {
         const node = await prisma.artist.findUnique({ where: { slug: artist.slug } });
         if (node) {
-          where.artists = { some: { artistId: node.id } };
+          filter.artists = { some: { artistId: node.id } };
         } else {
-          return emptyConnection();
+          return { ...emptyConnection(), filter: null };
         }
       }
 
       if (venue?.id) {
-        where.venueId = venue.id;
+        filter.venueId = venue.id;
       } else if (venue?.slug) {
         const node = await prisma.venue.findUnique({ where: { slug: venue.slug } });
         if (node) {
-          where.venueId = node.id;
+          filter.venueId = node.id;
         } else {
-          return emptyConnection();
+          return { ...emptyConnection(), filter: null };
         }
       }
 
       if (search) {
-        where.OR = [
+        filter.OR = [
           { title: { contains: search, mode: 'insensitive' } },
           { venue: { name: { contains: search, mode: 'insensitive' } } },
           { artists: { some: { artist: { name: { contains: search, mode: 'insensitive' } } } } },
@@ -158,11 +165,11 @@ const resolvers = {
       }
 
       const connection = await parseConnection(prisma.show, connectionArgs, {
-        where,
+        where: date ? { ...filter, date } : filter,
         orderBy: { date: order === 'ASC' || (!order && latest) ? 'asc' : 'desc' },
       });
       await includeVenuesAndArtists(connection.edges.map(({ node }) => node as Show));
-      return connection;
+      return { ...connection, filter };
     },
 
     async show(_: unknown, { id, lastAdded }: QueryShowArgs) {
