@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import resolvers from '../Show';
 
 const db = vi.hoisted(() => ({
+  artist: { findUnique: vi.fn() },
   show: { count: vi.fn(), findMany: vi.fn(), update: vi.fn() },
   showArtist: { findMany: vi.fn() },
   venue: { findMany: vi.fn(), findUnique: vi.fn() },
@@ -103,5 +104,59 @@ describe('shows', () => {
     await expect(shows()).resolves.toEqual([]);
     expect(db.showArtist.findMany).not.toHaveBeenCalled();
     expect(db.venue.findMany).not.toHaveBeenCalled();
+  });
+});
+
+describe('ShowConnection.years', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+    db.show.count.mockResolvedValue(0);
+    db.show.findMany.mockResolvedValue([]);
+  });
+
+  const years = async (args: Parameters<typeof resolvers.Query.shows>[1]) => {
+    const connection = await resolvers.Query.shows({}, { first: 50, ...args });
+    db.show.findMany.mockResolvedValueOnce([
+      { date: new Date('2019-05-01T20:00:00Z') },
+      { date: new Date('2024-03-01T20:00:00Z') },
+      { date: new Date('2019-09-01T20:00:00Z') },
+    ]);
+    const list = await resolvers.ShowConnection.years(connection);
+    return { list, where: db.show.findMany.mock.lastCall?.[0].where };
+  };
+
+  // The app's history asks for the years it can filter by, which once listed every show's
+  it('lists the years of the shows the list was filtered to, newest first', async () => {
+    const { list, where } = await years({ attended: true });
+
+    expect(list).toEqual([2024, 2019]);
+    expect(where).toEqual({ attended: true });
+  });
+
+  it("leaves out the list's dates, so every year stays in the menu", async () => {
+    const { where } = await years({ attended: true, year: 2019 });
+
+    expect(db.show.findMany.mock.calls[0][0].where).toEqual({
+      attended: true,
+      date: { gte: new Date('2019-01-01T00:00:00Z'), lt: new Date('2020-01-01T00:00:00Z') },
+    });
+    expect(where).toEqual({ attended: true });
+  });
+
+  it("keeps to the artist's shows", async () => {
+    db.artist.findUnique.mockResolvedValue({ id: 'artist-1' });
+
+    const { where } = await years({ attended: true, artist: { slug: 'wilco' } });
+
+    expect(where).toEqual({ attended: true, artists: { some: { artistId: 'artist-1' } } });
+  });
+
+  it('has no years for an artist that does not exist', async () => {
+    db.artist.findUnique.mockResolvedValue(null);
+
+    const connection = await resolvers.Query.shows({}, { artist: { slug: 'nobody' } });
+
+    await expect(resolvers.ShowConnection.years(connection)).resolves.toEqual([]);
+    expect(db.show.findMany).not.toHaveBeenCalled();
   });
 });
