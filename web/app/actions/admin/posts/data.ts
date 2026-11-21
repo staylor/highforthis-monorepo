@@ -117,7 +117,7 @@ const postFormFragment = gql`
 
 const postsQuery = gql`
   query PostsAdmin($after: String, $first: Int, $search: String) {
-    posts(after: $after, first: $first, search: $search) @cache(key: "admin") {
+    posts(after: $after, first: $first, search: $search) {
       count
       edges {
         node {

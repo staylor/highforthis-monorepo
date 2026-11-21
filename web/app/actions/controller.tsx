@@ -2,6 +2,7 @@ import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
 import { assets } from '#/assets.ts';
+import type { Variables } from '#/lib/graphql.ts';
 import { routes } from '#/routes.ts';
 import type {
   ArtistQuery,
@@ -43,10 +44,7 @@ export default createController(routes, {
     home: {
       middleware: prefetch,
       async handler(context) {
-        const data = await context.gql.query<HomeQuery>(homeQuery, {
-          cacheKey: 'home-videos',
-          first: 9,
-        });
+        const data = await context.gql.query<HomeQuery>(homeQuery, { first: 9 });
         return renderPage(context, <HomePage data={data} artworkSeed={crypto.randomUUID()} />);
       },
     },
@@ -138,7 +136,7 @@ export default createController(routes, {
         const { year } = context.params;
         const after = context.url.searchParams.get('after');
         const before = context.url.searchParams.get('before');
-        const variables: Record<string, unknown> = { cacheKey: 'videos' };
+        const variables: Variables = {};
         if (before && !after) {
           variables.last = 9;
           variables.before = before;

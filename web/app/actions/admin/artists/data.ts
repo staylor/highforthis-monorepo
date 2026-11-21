@@ -38,7 +38,7 @@ const artistFormFragment = gql`
 
 const artistsQuery = gql`
   query ArtistsAdmin($after: String, $first: Int, $search: String) {
-    artists(after: $after, first: $first, search: $search) @cache(key: "admin") {
+    artists(after: $after, first: $first, search: $search) {
       count
       edges {
         node {

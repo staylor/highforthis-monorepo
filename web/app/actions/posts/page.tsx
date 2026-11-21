@@ -21,7 +21,7 @@ import { videoFragment } from '#/ui/videos.tsx';
 
 export const postsQuery = gql`
   query Posts($first: Int) {
-    posts(first: $first, status: PUBLISH) @cache(key: "posts") {
+    posts(first: $first, status: PUBLISH) {
       edges {
         node {
           ...PostArtwork_post

@@ -12,7 +12,6 @@
     "node": ">=24.14.0"
   },
   "dependencies": {
-    "@apollo/client": "4.3.8",
     "@highforthis/shared": "workspace:*",
     "@lexical/a11y": "0.53.0",
     "@lexical/clipboard": "0.53.0",

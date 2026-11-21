@@ -1,15 +1,10 @@
-import type { OperationVariables } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
 
-/**
- * What the admin's data functions take instead of a request, so they don't depend on a
- * framework. A failed operation is logged and comes back as empty data, which is how
- * `submitForm` and `deleteSelected` tell that it failed.
- */
-export interface GraphQLClient {
-  query<T>(query: DocumentNode, variables?: OperationVariables): Promise<T>;
-  mutate<T>(mutation: DocumentNode, variables?: OperationVariables): Promise<T>;
-}
+import type { GraphQLClient, Variables } from '#/lib/graphql.ts';
+
+// The admin's data functions take a GraphQL client instead of a request, so they don't depend on
+// a framework
+export type { GraphQLClient };
 
 // Turns submitted strings into the numbers and booleans GraphQL expects, and drops empty values
 function isObject(val: any) {
@@ -169,7 +164,7 @@ export interface FormArgs {
 interface SubmitFormArgs extends FormArgs, ParseFormOptions {
   mutation: DocumentNode;
   // Merged under the form's fields; `input` holds defaults for fields a form can leave out
-  variables?: OperationVariables;
+  variables?: Variables & { input?: Variables };
   // On an add page, the mutation field holding the new item's ID, so the redirect goes to its
   // edit page
   createMutation?: string;
@@ -192,15 +187,7 @@ export async function submitForm({
     clearElementFormats(input.editorState.root);
   }
 
-  const mergedVariables = { ...variables };
-  if (mergedVariables.input) {
-    mergedVariables.input = {
-      ...mergedVariables.input,
-      ...input,
-    };
-  } else {
-    mergedVariables.input = input;
-  }
+  const mergedVariables = { ...variables, input: { ...variables?.input, ...input } };
   const result = await gql.mutate<Record<string, { id: string } | null>>(mutation, mergedVariables);
   // The client turns a GraphQL error, such as input the server rejects, into empty data
   const saved = createMutation ? result[createMutation] : Object.values(result)[0];

@@ -2,9 +2,8 @@ import { cop } from 'remix/middleware/cop';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createContextKey, type Middleware } from 'remix/router';
 
-import { createAdminGraphQLClient } from '#/lib/admin/graphql.ts';
 import { adminToken, expiredAdminCookie } from '#/lib/adminSession.ts';
-import { graphqlHost, type GraphQLClient } from '#/lib/graphql.ts';
+import { createGraphQLClient, graphqlHost, type GraphQLClient } from '#/lib/graphql.ts';
 
 // List both on every admin controller, `sameOrigin()` first: controller middleware doesn't
 // apply to nested route maps.
@@ -48,7 +47,7 @@ export function requireAdmin(): Middleware<{
       return new Response('Unable to validate the admin session', { status: 503 });
     }
 
-    context.set(Admin, { token, gql: createAdminGraphQLClient(token) }, { property: 'admin' });
+    context.set(Admin, { token, gql: createGraphQLClient(token) }, { property: 'admin' });
     return next();
   };
 }

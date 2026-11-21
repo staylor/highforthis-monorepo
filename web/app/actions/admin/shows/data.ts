@@ -40,7 +40,7 @@ const showFormFragment = gql`
 
 const showFormEntitiesFragment = gql`
   fragment ShowForm_entities on Query {
-    artists(filtered: true, first: 500) @cache(key: "admin") {
+    artists(filtered: true, first: 500) {
       edges {
         node {
           id
@@ -48,7 +48,7 @@ const showFormEntitiesFragment = gql`
         }
       }
     }
-    venues(filtered: true, first: 500) @cache(key: "admin") {
+    venues(filtered: true, first: 500) {
       edges {
         node {
           id
@@ -61,7 +61,7 @@ const showFormEntitiesFragment = gql`
 
 const showsQuery = gql`
   query ShowsAdmin($after: String, $first: Int, $order: ShowOrder, $search: String) {
-    shows(after: $after, first: $first, order: $order, search: $search) @cache(key: "admin") {
+    shows(after: $after, first: $first, order: $order, search: $search) {
       count
       edges {
         node {

@@ -21,7 +21,7 @@ const userFormFragment = gql`
 
 const usersQuery = gql`
   query UsersAdmin($after: String, $first: Int, $search: String) {
-    users(after: $after, first: $first, search: $search) @cache(key: "admin") {
+    users(after: $after, first: $first, search: $search) {
       count
       edges {
         node {

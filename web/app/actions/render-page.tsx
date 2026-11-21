@@ -33,7 +33,7 @@ const appQuery = gql`
         fileName
       }
     }
-    shows(first: 30, latest: true) @cache(key: "sidebar") {
+    shows(first: 30, latest: true) {
       edges {
         node {
           id

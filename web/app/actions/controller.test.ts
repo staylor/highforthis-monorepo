@@ -10,7 +10,7 @@ import { routes } from '#/routes.ts';
 const origin = 'http://localhost';
 
 /**
- * Stand-in for the GraphQL server. Apollo's HttpLink goes through global fetch, so one stub
+ * Stand-in for the GraphQL server. The GraphQL client goes through global fetch, so one stub
  * covers every query.
  */
 function stubGraphQL(t: TestContext, handlers: Record<string, (body: any) => unknown>) {

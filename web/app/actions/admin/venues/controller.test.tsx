@@ -55,7 +55,6 @@ const venues = {
         permanentlyClosed: false,
         featuredMedia: [
           {
-            __typename: 'ImageUpload',
             id: 'm1',
             destination: '2024/05',
             type: 'image',
@@ -84,9 +83,7 @@ const venues = {
   pageInfo: { hasNextPage: false },
 };
 
-// GraphQL answers with __typename, which Apollo needs to fill the form's fragments
 const venue = {
-  __typename: 'Venue',
   id: 'v1',
   name: 'Ryman Auditorium',
   slug: 'ryman-auditorium',
@@ -98,7 +95,7 @@ const venue = {
   city: 'Nashville',
   state: 'TN',
   postalCode: '37219',
-  coordinates: { __typename: 'VenueCoordinates', latitude: 36.1612, longitude: -86.7785 },
+  coordinates: { latitude: 36.1612, longitude: -86.7785 },
   excludeFromSearch: false,
   permanentlyClosed: false,
   featuredMedia: [],
@@ -107,23 +104,21 @@ const venue = {
 const shows = [
   {
     node: {
-      __typename: 'Show',
       id: 's1',
       date: Date.UTC(2024, 4, 10, 12),
       title: null,
       artists: [
-        { __typename: 'Artist', id: 'a1', name: 'Wilco' },
-        { __typename: 'Artist', id: 'a2', name: 'Spoon' },
+        { id: 'a1', name: 'Wilco' },
+        { id: 'a2', name: 'Spoon' },
       ],
     },
   },
   {
     node: {
-      __typename: 'Show',
       id: 's2',
       date: Date.UTC(2023, 9, 1, 12),
       title: 'Opry Birthday Bash',
-      artists: [{ __typename: 'Artist', id: 'a3', name: 'Various' }],
+      artists: [{ id: 'a3', name: 'Various' }],
     },
   },
 ];
@@ -224,7 +219,7 @@ describe('admin venues', () => {
   });
 
   it('shows a venue with its address, coordinates, listings link and shows', async (t) => {
-    stubGraphQL(t, { VenueEdit: { venue, shows: { __typename: 'ShowConnection', edges: shows } } });
+    stubGraphQL(t, { VenueEdit: { venue, shows: { edges: shows } } });
     const html = await (await get('/admin/venue/v1')).text();
     assert.match(html, /<a href="\/venue\/ryman-auditorium" target="_blank"/);
     // Web serves the listings page too, so the link doesn't need a full load

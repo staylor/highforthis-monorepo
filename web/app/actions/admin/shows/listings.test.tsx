@@ -46,7 +46,6 @@ const venues = {
 };
 
 const listing = (fields: Record<string, unknown>) => ({
-  __typename: 'Listing',
   cancelled: false,
   dateChanged: false,
   headliners: [],
@@ -62,7 +61,6 @@ const listing = (fields: Record<string, unknown>) => ({
 });
 
 const venueListings = {
-  __typename: 'VenueListings',
   error: null,
   source: 'aeg',
   listings: [
@@ -75,7 +73,7 @@ const venueListings = {
     listing({
       sourceId: 'l2',
       headliners: ['Big Thief'],
-      show: { __typename: 'Show', id: 's7' },
+      show: { id: 's7' },
       dateChanged: true,
     }),
     listing({ sourceId: 'l3', headliners: ['Lorde'], cancelled: true }),
@@ -148,7 +146,6 @@ describe('admin venue listings', () => {
       VenueListingsAdmin: {
         venues,
         venueListings: {
-          __typename: 'VenueListings',
           error: "nope isn't a URL.",
           source: null,
           listings: [],

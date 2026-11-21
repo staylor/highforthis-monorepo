@@ -1,8 +1,9 @@
-import type { OperationVariables } from '@apollo/client/core';
 import { getOperationAST, type DocumentNode } from 'graphql';
 import { gql } from 'graphql-tag';
 import * as assert from 'remix/assert';
 import { describe, it } from 'remix/test';
+
+import type { Variables } from '#/lib/graphql.ts';
 
 import { deleteSelected, isRedirect, parseForm, submitForm, type GraphQLClient } from './forms.ts';
 import { addPageOffset, addSearchParam } from './list-variables.ts';
@@ -31,7 +32,7 @@ const deleteMutation = gql`
   }
 `;
 
-type Call = { operation?: string; variables?: OperationVariables };
+type Call = { operation?: string; variables?: Variables };
 
 /** A GraphQL client whose mutations resolve to the given data, recording each one by name. */
 function stubGraphQL(mutate: unknown = {}) {
@@ -40,7 +41,7 @@ function stubGraphQL(mutate: unknown = {}) {
     async query() {
       return {} as never;
     },
-    async mutate(document: DocumentNode, variables?: OperationVariables) {
+    async mutate(document: DocumentNode, variables?: Variables) {
       calls.push({ operation: getOperationAST(document)?.name?.value, variables });
       return mutate as never;
     },

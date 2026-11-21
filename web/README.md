@@ -8,7 +8,7 @@ Remix 3 has no bundler. The server renders every page, the browser runtime turns
 
 - **[Remix 3](https://github.com/remix-run/remix)**: routing, server rendering, client entries and the asset server
 - **CSS** from Remix's `css()` mixin in components, which renders each page's rules into its `<head>`, and a few plain stylesheets in `app/styles/public/` (see [Styles](#styles))
-- **[Apollo Client](https://www.apollographql.com/docs/react/)** core, on the server only
+- **GraphQL** through a small `fetch` client (`app/lib/graphql.ts`), on the server only: each request gets its own, so there's no cache to keep
 - **[i18next](https://www.i18next.com/)**, on the server; client entries get translated strings as props
 - **OpenObserve browser RUM**, which records page views for the admin dashboard
 
@@ -101,7 +101,7 @@ app/
 ├── actions/           # Controllers and pages, by route
 │   └── public/        # Browser entry, RUM and other client modules
 ├── ui/                # Components (ui/public/ holds client entries)
-├── lib/               # GraphQL clients and Apollo cache config, i18n, RUM config, admin session and forms
+├── lib/               # GraphQL client, i18n, RUM config, admin session and forms
 ├── middleware/        # Proxies, GraphQL client, translations, admin session checks
 ├── styles/public/     # Global stylesheets: tokens, reset, and the site's and admin's base styles
 └── types/             # Generated GraphQL schema and operation types

@@ -43,9 +43,6 @@ const config: CodegenConfig = {
         useTypeImports: true,
       },
     },
-    './web/app/lib/apollo/fragment-matcher.js': {
-      plugins: ['fragment-matcher'],
-    },
     './web/app/types/schema.ts': {
       plugins: ['typescript'],
       config: {

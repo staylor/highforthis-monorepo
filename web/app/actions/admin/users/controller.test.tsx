@@ -128,9 +128,7 @@ describe('admin users', () => {
   });
 
   it("edits a user, leaving the password alone when it's left empty", async (t) => {
-    // GraphQL answers with __typename, which Apollo needs to fill the form's fragment
     const user = {
-      __typename: 'User',
       id: 'u1',
       name: 'Ada',
       email: 'ada@example.com',
