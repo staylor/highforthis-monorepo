@@ -37,6 +37,7 @@ import controller from './actions/controller.tsx';
 import podcastController from './actions/podcast/controller.tsx';
 import showsController from './actions/shows/controller.tsx';
 import { assets } from './assets.ts';
+import { tracedMatcher } from './lib/tracing.ts';
 import {
   graphql,
   openObserveBundles,
@@ -56,8 +57,10 @@ const inPublic = (path: string) => publicEntries.has(path.split('/', 1)[0]);
 
 // Add the security headers, time each request, reject WordPress probes, compress, serve public/
 // and the OpenObserve SDK bundles, forward API paths to GraphQL, then render. HTTP logging stays
-// on the Node server in server.ts, because pino-http needs Node's req/res.
+// on the Node server in server.ts, because pino-http needs Node's req/res. The matcher names each
+// request's trace span after the route that matched it.
 export const router = createRouter({
+  matcher: tracedMatcher(),
   middleware: [
     securityHeaders(),
     serverTiming(),

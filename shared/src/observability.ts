@@ -1,3 +1,5 @@
+import { createRequire } from 'node:module';
+
 import { context, logs, metrics, propagation, trace } from '@opentelemetry/api';
 import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks';
 import {
@@ -26,6 +28,7 @@ import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk
 import { BatchSpanProcessor, TracerProvider } from '@opentelemetry/sdk-trace';
 import {
   ATTR_DEPLOYMENT_ENVIRONMENT_NAME,
+  ATTR_HTTP_ROUTE,
   ATTR_SERVICE_INSTANCE_ID,
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_NAMESPACE,
@@ -66,6 +69,17 @@ function positiveInteger(value: string | undefined, fallback: number): number {
   const parsed = Number(value);
 
   return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+/**
+ * Names the active span, an incoming request's, after the route that matched it, such as
+ * `GET /shows/:id`, so traces group by route rather than by URL. The HTTP instrumentation can't
+ * know the app's routes, so it names the span after the method alone.
+ */
+export function nameRequestSpan(method: string, route: string) {
+  const span = trace.getActiveSpan();
+  span?.setAttribute(ATTR_HTTP_ROUTE, route);
+  span?.updateName(`${method} ${route}`);
 }
 
 export function startObservability({
@@ -139,6 +153,13 @@ export function startObservability({
       new RuntimeNodeInstrumentation(),
     ],
   });
+  // The HTTP instrumentation patches node:http when something require()s it, and ES module
+  // imports never do. Without a CommonJS dependency that happens to require it (graphql has
+  // some, web has none), incoming requests would go untraced. Requiring the modules here patches
+  // http.Server.prototype, which servers created through ES module imports share.
+  const require = createRequire(import.meta.url);
+  require('node:http');
+  require('node:https');
 
   let shutdownPromise: Promise<void> | undefined;
   const shutdown = (): Promise<void> => {
