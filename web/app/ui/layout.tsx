@@ -7,7 +7,6 @@ import { Link } from './link.tsx';
 import { DarkMode } from './public/dark-mode.tsx';
 import { MobileMenu } from './public/mobile-menu.tsx';
 import { NavLink } from './public/nav-link.tsx';
-import { Revalidate } from './public/revalidate.tsx';
 import { lg, md, text } from './public/styles.ts';
 import { AccentLine } from './section-header.tsx';
 import { Sidebar } from './sidebar.tsx';
@@ -38,7 +37,7 @@ export function Wrapper(handle: Handle<{ children?: RemixNode }>) {
 
 /** The site frame: header, nav, homepage sidebar, footer. */
 export function Layout(handle: Handle<{ children?: RemixNode }>) {
-  const { t, root, pathname, isAuthenticated, graphqlHost } = getApp(handle);
+  const { t, root, pathname } = getApp(handle);
 
   return () => {
     const { siteSettings, shows } = root;
@@ -53,7 +52,6 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
           flexDirection: 'column',
         })}
       >
-        {isAuthenticated && <Revalidate graphqlHost={graphqlHost} />}
         <header
           mix={css({
             position: 'sticky',

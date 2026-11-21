@@ -2,7 +2,7 @@
 
 The public High For This site and its admin, built with [Remix 3](https://github.com/remix-run/remix). This server forwards the API (`/graphql`, `/uploads`) and passkey sign-in (`/auth/passkeys`) to GraphQL, so passkeys belong to the site's domain. It forwards media uploads (`/upload`) too, adding the admin's token from the session cookie, which the upload page can't read.
 
-Remix 3 has no bundler. The server renders every page, the browser runtime turns same-origin links into client navigations, and the few interactive parts (dark mode, the mobile menu, video thumbnails, the sphere setlists, live refresh) hydrate as client entries. The asset server compiles browser modules on request and serves them unbundled through an import map, fingerprinted in production.
+Remix 3 has no bundler. The server renders every page, the browser runtime turns same-origin links into client navigations, and the few interactive parts (dark mode, the mobile menu, video thumbnails, the sphere setlists) hydrate as client entries. The asset server compiles browser modules on request and serves them unbundled through an import map, fingerprinted in production.
 
 ## Stack
 
@@ -45,7 +45,7 @@ pnpm web:dev   # just this app
 | `OPENOBSERVE_RUM_ENVIRONMENT` | Deployment environment (defaults to the Railway environment or `NODE_ENV`) |
 | `OPENOBSERVE_RUM_VERSION` | Deployed version (defaults to the Railway Git SHA) |
 
-Signing in keeps the admin's GraphQL token in a cookie signed with `remix/cookie` (`app/lib/adminSession.ts`), for 12 hours. Public pages only read it to know someone is signed in, which turns on live refresh.
+Signing in keeps the admin's GraphQL token in a cookie signed with `remix/cookie` (`app/lib/adminSession.ts`), for 12 hours. Public pages only read it to know someone is signed in: an admin's pages aren't cached, so they show edits right away.
 
 ### Admin pages
 

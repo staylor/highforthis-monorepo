@@ -2,6 +2,7 @@ import * as assert from 'remix/assert';
 import { describe, it, type TestContext } from 'remix/test';
 
 import { testSecret, testSession } from '#/lib/adminSession.fixtures.ts';
+import { graphqlHost } from '#/lib/graphql.ts';
 import { openObserveBundleFiles, openObserveScripts } from '#/lib/openobserve-bundles.ts';
 import { router } from '#/router.ts';
 import { routes } from '#/routes.ts';
@@ -186,20 +187,28 @@ describe('admin', () => {
     assert.equal(dashboard.headers.get('location'), '/login/unauthorized');
   });
 
-  it('turns on live refresh only for a signed-in admin', async (t) => {
+  it('gives a signed-in admin the public page a visitor gets', async (t) => {
     stubGraphQL(t, { 'graphql:App': () => ({ data: {} }), 'graphql:Home': () => ({ data: {} }) });
     process.env.TOKEN_SECRET = testSecret;
-    const home = (cookie?: string) =>
-      router.fetch(new Request(new URL('/', origin), { headers: cookie ? { cookie } : {} }));
+    const home = async (cookie?: string) => {
+      const request = new Request(new URL('/', origin), { headers: cookie ? { cookie } : {} });
+      return (await router.fetch(request)).text();
+    };
+    // The client entries a page hydrates, by name
+    const entries = (html: string) =>
+      Array.from(html.matchAll(/"exportName":"(\w+)"/g), ([, name]) => name);
     try {
-      assert.match(await (await home(testSession)).text(), /"exportName":"Revalidate"/);
-      assert.doesNotMatch(await (await home()).text(), /"exportName":"Revalidate"/);
+      // Live refresh pointed an admin's browser at GraphQL's /sse, which GraphQL stopped serving.
+      // Browsers reach GraphQL only through this server, so no page names its host.
+      const admin = await home(testSession);
+      assert.deepEqual(entries(admin), entries(await home()));
+      assert.ok(!admin.includes(graphqlHost), `the page names GraphQL's host, ${graphqlHost}`);
     } finally {
       delete process.env.TOKEN_SECRET;
     }
   });
 
-  it("lets a click reuse a prefetched page, unless an admin's live refresh needs it new", async (t) => {
+  it("lets a click reuse a prefetched page, but not a signed-in admin's", async (t) => {
     stubGraphQL(t, { 'graphql:App': () => ({ data: {} }) });
     process.env.TOKEN_SECRET = testSecret;
     const page = (path: string, cookie?: string) =>
