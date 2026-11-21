@@ -1,13 +1,8 @@
 import type { Prisma, Video } from '@prisma/client';
-import type {
-  MutationCreateVideoArgs,
-  MutationRemoveVideoArgs,
-  MutationUpdateVideoArgs,
-  QueryVideoArgs,
-  QueryVideosArgs,
-} from 'types/graphql';
+import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
+import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
@@ -16,15 +11,21 @@ import { createVideoSchema, updateVideoSchema } from './validations';
 
 const videoIncludes = {
   thumbnails: true,
-};
+} satisfies Prisma.VideoInclude;
+
+/** A video, with its thumbnails when its query included them */
+export type VideoSource = WithIncludes<
+  Video,
+  Prisma.VideoGetPayload<{ include: typeof videoIncludes }>
+>;
 
 const resolvers = {
   Video: {
     publishedAt: timestampResolver('publishedAt'),
     createdAt: timestampResolver('createdAt'),
     updatedAt: timestampResolver('updatedAt'),
-    thumbnails(video: Video) {
-      if ('thumbnails' in video && Array.isArray(video.thumbnails)) return video.thumbnails;
+    thumbnails(video) {
+      if (video.thumbnails) return video.thumbnails;
       return prisma.videoThumbnail.findMany({ where: { videoId: video.id } });
     },
   },
@@ -40,7 +41,7 @@ const resolvers = {
     },
   },
   Query: {
-    async videos(_: unknown, args: QueryVideosArgs) {
+    async videos(_, args) {
       const { year, search, ...connectionArgs } = args;
       const where: Prisma.VideoWhereInput = {};
       if (year) where.year = year;
@@ -57,17 +58,18 @@ const resolvers = {
       });
     },
 
-    video(_: unknown, { id, slug }: QueryVideoArgs) {
+    video(_, { id, slug }) {
       if (id) {
         return prisma.video.findUnique({ where: { id }, include: videoIncludes });
       }
       if (slug) {
         return prisma.video.findUnique({ where: { slug }, include: videoIncludes });
       }
+      return null;
     },
   },
   Mutation: {
-    async createVideo(_: unknown, { input }: MutationCreateVideoArgs) {
+    async createVideo(_, { input }) {
       const { publishedAt, ...rest } = createVideoSchema.parse(input);
       const slug = await getUniqueSlug(prisma.video, rest.title);
       return prisma.video.create({
@@ -76,7 +78,7 @@ const resolvers = {
       });
     },
 
-    async updateVideo(_: unknown, { id, input }: MutationUpdateVideoArgs) {
+    async updateVideo(_, { id, input }) {
       const { publishedAt, ...rest } = updateVideoSchema.parse(input);
       return prisma.video.update({
         where: { id },
@@ -89,10 +91,10 @@ const resolvers = {
       });
     },
 
-    async removeVideo(_: unknown, { ids }: MutationRemoveVideoArgs) {
+    async removeVideo(_, { ids }) {
       return removeEntities(prisma.video, ids);
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

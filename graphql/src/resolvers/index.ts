@@ -1,4 +1,6 @@
-import { requireAdmin, type Resolver } from '#/authorization';
+import type { MutationResolvers, QueryResolvers, Resolvers } from 'types/graphql';
+
+import { type AnyResolver, requireAdmin } from '#/authorization';
 import APIKeys from '#/resolvers/APIKeys';
 import AppleMusic from '#/resolvers/AppleMusic';
 import Artist from '#/resolvers/Artist';
@@ -13,9 +15,7 @@ import User from '#/resolvers/User';
 import Venue from '#/resolvers/Venue';
 import Video from '#/resolvers/Video';
 
-type ResolverMap = Record<string, Record<string, unknown>>;
-
-const modules: ResolverMap[] = [
+const modules: Resolvers[] = [
   APIKeys,
   AppleMusic,
   Artist,
@@ -31,25 +31,44 @@ const modules: ResolverMap[] = [
   Video,
 ];
 
-const resolvers = modules.reduce<ResolverMap>((merged, mod) => {
-  for (const [key, value] of Object.entries(mod)) {
-    merged[key] = { ...merged[key], ...value };
+// Each module's types, with the fields the modules add to the same type merged into one
+const merged = modules.reduce<Record<string, object>>((all, mod) => {
+  for (const [type, fields] of Object.entries(mod)) {
+    all[type] = { ...all[type], ...fields };
   }
-  return merged;
-}, {});
+  return all;
+}, {}) as Resolvers;
+
+/** The fields, with the ones `names` lists for admins only */
+function forAdmins<TFields extends { [Name in keyof TFields]?: AnyResolver }>(
+  fields: TFields,
+  names: (keyof TFields)[]
+): TFields {
+  const guarded = { ...fields };
+  for (const name of names) {
+    const resolver = fields[name];
+    if (typeof resolver !== 'function') {
+      throw new Error(`Unknown admin field: ${String(name)}`);
+    }
+    guarded[name] = requireAdmin(resolver);
+  }
+  return guarded;
+}
 
 // Every mutation, and any query listed here, requires an admin.
-const adminQueries = ['appleMusicAlbums', 'user', 'users', 'venueListings'];
+const adminQueries: (keyof QueryResolvers)[] = [
+  'appleMusicAlbums',
+  'user',
+  'users',
+  'venueListings',
+];
 
-for (const [name, resolver] of Object.entries(resolvers.Mutation)) {
-  resolvers.Mutation[name] = requireAdmin(resolver as Resolver);
-}
-for (const name of adminQueries) {
-  const resolver = resolvers.Query[name];
-  if (typeof resolver !== 'function') {
-    throw new Error(`Unknown admin query: ${name}`);
-  }
-  resolvers.Query[name] = requireAdmin(resolver as Resolver);
-}
+const { Query = {}, Mutation = {} } = merged;
+
+const resolvers = {
+  ...merged,
+  Query: forAdmins(Query, adminQueries),
+  Mutation: forAdmins(Mutation, Object.keys(Mutation) as (keyof MutationResolvers)[]),
+} satisfies Resolvers;
 
 export default resolvers;

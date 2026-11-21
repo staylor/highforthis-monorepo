@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql';
+import { GraphQLError, type GraphQLResolveInfo } from 'graphql';
 import type { Middleware } from 'remix/router';
 
 import { AuthUser } from '#/http';
@@ -8,15 +8,17 @@ export function isAdmin(user?: UserWithRoles | null): user is UserWithRoles {
   return Boolean(user?.roles.some((role) => role.name === 'admin'));
 }
 
-export type Resolver = (
-  parent: unknown,
-  args: unknown,
+/** Any field's resolver, as far as requireAdmin can tell */
+export type AnyResolver = (
+  parent: never,
+  args: never,
   context: AppContext,
-  info: unknown
+  info: GraphQLResolveInfo
 ) => unknown;
 
-export function requireAdmin(resolver: Resolver): Resolver {
-  return (parent, args, context, info) => {
+/** The resolver, for admins only: anyone else gets an error */
+export function requireAdmin<TResolver extends AnyResolver>(resolver: TResolver): TResolver {
+  const guarded: AnyResolver = (parent, args, context, info) => {
     if (!isAdmin(context.authUser)) {
       throw new GraphQLError('Admin access required', {
         extensions: { code: context.authUser ? 'FORBIDDEN' : 'UNAUTHENTICATED' },
@@ -24,6 +26,8 @@ export function requireAdmin(resolver: Resolver): Resolver {
     }
     return resolver(parent, args, context, info);
   };
+  // It takes what the resolver takes, and answers what it answers
+  return guarded as TResolver;
 }
 
 /** Answers 401 unless `jwt()` found an admin. */

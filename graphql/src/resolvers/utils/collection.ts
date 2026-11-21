@@ -30,16 +30,28 @@ interface FindManyArgs {
   include?: Record<string, unknown>;
 }
 
-interface PaginatedDelegate {
-  findMany: (args: FindManyArgs & { skip: number; take: number }) => Promise<unknown[]>;
+interface PaginatedDelegate<TNode> {
+  findMany: (args: FindManyArgs & { skip: number; take: number }) => Promise<TNode[]>;
   count: (args?: { where: Record<string, unknown> }) => Promise<number>;
 }
 
-export async function parseConnection(
-  delegate: PaginatedDelegate,
+/** A page of records, as the `...Connection` types answer it */
+export interface Connection<TNode> {
+  count: number;
+  edges: { cursor: string; node: TNode }[];
+  pageInfo: {
+    startCursor: string | null;
+    endCursor: string | null;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+  };
+}
+
+export async function parseConnection<TNode>(
+  delegate: PaginatedDelegate<TNode>,
   connectionArgs: ConnectionArgs,
   findManyArgs: FindManyArgs = {}
-) {
+): Promise<Connection<TNode>> {
   const { first = 10, after = null, last = 10, before = null, ..._rest } = connectionArgs;
 
   let limit = 10;
@@ -103,7 +115,7 @@ export async function parseConnection(
   };
 }
 
-export const emptyConnection = () => ({
+export const emptyConnection = (): Connection<never> => ({
   count: 0,
   edges: [],
   pageInfo: {

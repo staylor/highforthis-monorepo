@@ -1,3 +1,5 @@
+import type { Resolvers } from 'types/graphql';
+
 import env from '#/env';
 
 const resolvers = {
@@ -9,6 +11,6 @@ const resolvers = {
       };
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

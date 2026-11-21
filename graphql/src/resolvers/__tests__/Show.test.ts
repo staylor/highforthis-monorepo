@@ -1,13 +1,14 @@
-import type { Artist, Show, ShowArtist, Venue } from '@prisma/client';
+import type { Artist, Show, Venue } from '@prisma/client';
+import type { ShowEntityType } from 'types/graphql';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import resolvers from '../Show';
 
 const db = vi.hoisted(() => ({
-  artist: { findUnique: vi.fn() },
-  show: { count: vi.fn(), findMany: vi.fn(), update: vi.fn() },
-  showArtist: { findMany: vi.fn() },
-  venue: { findMany: vi.fn(), findUnique: vi.fn() },
+  artist: { findMany: vi.fn(), findUnique: vi.fn() },
+  show: { count: vi.fn(), findMany: vi.fn(), groupBy: vi.fn(), update: vi.fn() },
+  showArtist: { findMany: vi.fn(), groupBy: vi.fn() },
+  venue: { findMany: vi.fn(), findUniqueOrThrow: vi.fn() },
 }));
 
 vi.mock('#/database', () => ({ default: db }));
@@ -68,7 +69,7 @@ describe('shows', () => {
 
   const shows = async () => {
     const connection = await resolvers.Query.shows({}, { attended: true, first: 1000 });
-    return connection.edges.map(({ node }) => node as Show & { artists: ShowArtist[] });
+    return connection.edges.map(({ node }) => node);
   };
 
   it('gives each show its venue and artists', async () => {
@@ -80,7 +81,17 @@ describe('shows', () => {
     expect(resolvers.Show.artists(first)).toEqual([artist('artist-1'), artist('artist-3')]);
     expect(resolvers.Show.artists(second)).toEqual([artist('artist-2')]);
     expect(resolvers.Show.artists(third)).toEqual([]);
-    expect(db.venue.findUnique).not.toHaveBeenCalled();
+    expect(db.venue.findUniqueOrThrow).not.toHaveBeenCalled();
+  });
+
+  // Show.venue is non-null, so a venue that can't be found is an error, not null
+  it('looks up the venue of a show loaded without it', async () => {
+    db.venue.findUniqueOrThrow.mockResolvedValue(venue('venue-2'));
+
+    await expect(resolvers.Show.venue(show('show-2', 'venue-2'))).resolves.toEqual(
+      venue('venue-2')
+    );
+    expect(db.venue.findUniqueOrThrow).toHaveBeenCalledWith({ where: { id: 'venue-2' } });
   });
 
   // An IN list of hundreds of IDs on ShowArtist.showId took Postgres longer to plan than to run
@@ -158,5 +169,53 @@ describe('ShowConnection.years', () => {
 
     await expect(resolvers.ShowConnection.years(connection)).resolves.toEqual([]);
     expect(db.show.findMany).not.toHaveBeenCalled();
+  });
+});
+
+describe('showStats', () => {
+  const artist = (id: string, name: string) => ({ id, name }) as Artist;
+  const venue = (id: string, name: string) => ({ id, name }) as Venue;
+  // The schema's enum, which tests can't import: the server only imports its types
+  const showStats = (entity: `${ShowEntityType}`) =>
+    resolvers.Query.showStats({}, { entity: entity as ShowEntityType });
+
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it('counts the shows seen of each artist, most first', async () => {
+    db.showArtist.groupBy.mockResolvedValue([
+      { artistId: 'artist-1', _count: { artistId: 2 } },
+      { artistId: 'artist-2', _count: { artistId: 5 } },
+    ]);
+    db.artist.findMany.mockResolvedValue([
+      artist('artist-1', 'Wilco'),
+      artist('artist-2', 'Spoon'),
+    ]);
+
+    const stats = await showStats('ARTIST');
+
+    expect(stats).toEqual([
+      { count: 5, entity: { id: 'artist-2', name: 'Spoon', type: 'artist' } },
+      { count: 2, entity: { id: 'artist-1', name: 'Wilco', type: 'artist' } },
+    ]);
+    expect(stats.map(({ entity }) => resolvers.ShowEntity.__resolveType(entity))).toEqual([
+      'Artist',
+      'Artist',
+    ]);
+  });
+
+  // It was answered as just { type: 'venue' }, and Venue.name can't be null, so the whole
+  // query failed
+  it('leaves out a venue deleted after its shows were counted', async () => {
+    db.show.groupBy.mockResolvedValue([
+      { venueId: 'venue-1', _count: { venueId: 3 } },
+      { venueId: 'venue-gone', _count: { venueId: 4 } },
+    ]);
+    db.venue.findMany.mockResolvedValue([venue('venue-1', 'Brooklyn Steel')]);
+
+    await expect(showStats('VENUE')).resolves.toEqual([
+      { count: 3, entity: { id: 'venue-1', name: 'Brooklyn Steel', type: 'venue' } },
+    ]);
   });
 });

@@ -19,6 +19,7 @@
     "@graphql-codegen/schema-ast": "7.0.0",
     "@graphql-codegen/typescript": "7.0.1",
     "@graphql-codegen/typescript-operations": "7.0.1",
+    "@graphql-codegen/typescript-resolvers": "7.0.1",
     "@graphql-eslint/eslint-plugin": "4.4.2",
     "@lexical/eslint-plugin": "0.53.0",
     "@types/ffprobe": "1.1.8",

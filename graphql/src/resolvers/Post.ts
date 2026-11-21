@@ -1,15 +1,9 @@
 import type { Prisma, Post } from '@prisma/client';
-import type {
-  MutationRemovePostArgs,
-  MutationUpdatePostArgs,
-  MutationCreatePostArgs,
-  QueryPostArgs,
-  QueryPostsArgs,
-} from 'types/graphql';
+import type { Resolvers } from 'types/graphql';
 
 import { isAdmin } from '#/authorization';
 import prisma from '#/database';
-import type { AppContext } from '#/models';
+import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 import { extractText } from '#/utils/lexical';
 
@@ -20,28 +14,36 @@ import { createPostSchema, updatePostSchema } from './validations';
 
 // The artwork on post lists picks a size from each image's crops, which took a query per image
 // when ImageUpload.crops loaded them
-const featuredMediaIncludes = { media: { include: { crops: true } } };
+const featuredMediaIncludes = {
+  media: { include: { crops: true } },
+} satisfies Prisma.PostFeaturedMediaInclude;
 
 const postIncludes = {
   featuredMedia: { include: featuredMediaIncludes },
   artists: { include: { artist: true } },
-};
+} satisfies Prisma.PostInclude;
+
+/** A post, with its featured media and artists when its query included them */
+export type PostSource = WithIncludes<
+  Post,
+  Prisma.PostGetPayload<{ include: typeof postIncludes }>
+>;
 
 const resolvers = {
   Post: {
-    date(post: Post) {
+    date(post) {
       return new Date(post.date || post.createdAt).getTime();
     },
-    featuredMedia(post: Post) {
-      return resolveJoin(post, 'featuredMedia', 'media', () =>
+    featuredMedia(post) {
+      return resolveJoin(post.featuredMedia, 'media', () =>
         prisma.postFeaturedMedia.findMany({
           where: { postId: post.id },
           include: featuredMediaIncludes,
         })
       );
     },
-    artists(post: Post) {
-      return resolveJoin(post, 'artists', 'artist', () =>
+    artists(post) {
+      return resolveJoin(post.artists, 'artist', () =>
         prisma.postArtist.findMany({
           where: { postId: post.id },
           include: { artist: true },
@@ -50,7 +52,7 @@ const resolvers = {
     },
   },
   Query: {
-    async posts(_: unknown, args: QueryPostsArgs, { authUser }: AppContext) {
+    async posts(_, args, { authUser }) {
       const { search, status, ...connectionArgs } = args;
       const where: Prisma.PostWhereInput = {};
       const userCanSee = isAdmin(authUser);
@@ -74,7 +76,7 @@ const resolvers = {
       });
     },
 
-    async post(_: unknown, { id, slug }: QueryPostArgs, { authUser }: AppContext) {
+    async post(_, { id, slug }, { authUser }) {
       let post;
       if (id) {
         post = await prisma.post.findUnique({ where: { id }, include: postIncludes });
@@ -93,7 +95,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    async createPost(_: unknown, { input }: MutationCreatePostArgs) {
+    async createPost(_, { input }) {
       const {
         featuredMedia,
         artists: inputArtists,
@@ -127,7 +129,7 @@ const resolvers = {
       });
     },
 
-    async updatePost(_: unknown, { id, input }: MutationUpdatePostArgs) {
+    async updatePost(_, { id, input }) {
       const {
         featuredMedia,
         artists: inputArtists,
@@ -166,10 +168,10 @@ const resolvers = {
       return prisma.post.update({ where: { id }, data: updateData, include: postIncludes });
     },
 
-    async removePost(_: unknown, { ids }: MutationRemovePostArgs) {
+    async removePost(_, { ids }) {
       return removeEntities(prisma.post, ids);
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

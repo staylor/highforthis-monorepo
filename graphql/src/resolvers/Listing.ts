@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql';
-import type { MutationImportListingsArgs, QueryVenueListingsArgs } from 'types/graphql';
+import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
 import { getListings, matchListing, normalizeName } from '#/listings';
@@ -33,7 +33,7 @@ async function venueListingsUrl(venueId: string) {
 
 const resolvers = {
   Query: {
-    async venueListings(_: unknown, { venueId }: QueryVenueListingsArgs) {
+    async venueListings(_, { venueId }) {
       let result;
       try {
         result = await getListings(await venueListingsUrl(venueId));
@@ -61,7 +61,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    async importListings(_: unknown, { venueId, input }: MutationImportListingsArgs) {
+    async importListings(_, { venueId, input }) {
       const selections = new Map(
         importListingsSchema.parse(input).map((selection) => [selection.sourceId, selection])
       );
@@ -124,6 +124,6 @@ const resolvers = {
       );
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;

@@ -1,14 +1,9 @@
 import type { Prisma, Venue } from '@prisma/client';
-import type {
-  MutationCreateVenueArgs,
-  MutationRemoveVenueArgs,
-  MutationUpdateVenueArgs,
-  QueryVenueArgs,
-  QueryVenuesArgs,
-} from 'types/graphql';
+import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
 import { ADDRESS_FIELDS, geocodeVenue } from '#/geocode';
+import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
@@ -17,22 +12,28 @@ import { createVenueSchema, updateVenueSchema } from './validations';
 
 const venueIncludes = {
   featuredMedia: { include: { media: true } },
-};
+} satisfies Prisma.VenueInclude;
+
+/** A venue, with its featured media when its query included them */
+export type VenueSource = WithIncludes<
+  Venue,
+  Prisma.VenueGetPayload<{ include: typeof venueIncludes }>
+>;
 
 const resolvers = {
   Venue: {
     // "Street" over "City, ST 12345", leaving out whatever isn't set
-    address(venue: Venue) {
+    address(venue) {
       const region = [venue.state, venue.postalCode].filter(Boolean).join(' ');
       const locality = [venue.city, region].filter(Boolean).join(', ');
       return [venue.streetAddress?.trim(), locality].filter(Boolean).join('\n') || null;
     },
-    coordinates(venue: Venue) {
+    coordinates(venue) {
       if (venue.latitude === null && venue.longitude === null) return null;
       return { latitude: venue.latitude, longitude: venue.longitude };
     },
-    featuredMedia(venue: Venue) {
-      return resolveJoin(venue, 'featuredMedia', 'media', () =>
+    featuredMedia(venue) {
+      return resolveJoin(venue.featuredMedia, 'media', () =>
         prisma.venueFeaturedMedia.findMany({
           where: { venueId: venue.id },
           include: { media: true },
@@ -41,7 +42,7 @@ const resolvers = {
     },
   },
   Query: {
-    async venues(_: unknown, args: QueryVenuesArgs) {
+    async venues(_, args) {
       const { search, filtered, ...connectionArgs } = args;
       const where: Prisma.VenueWhereInput = {};
       if (search) {
@@ -63,17 +64,18 @@ const resolvers = {
       });
     },
 
-    async venue(_: unknown, { id, slug }: QueryVenueArgs) {
+    async venue(_, { id, slug }) {
       if (id) {
         return prisma.venue.findUnique({ where: { id }, include: venueIncludes });
       }
       if (slug) {
         return prisma.venue.findUnique({ where: { slug }, include: venueIncludes });
       }
+      return null;
     },
   },
   Mutation: {
-    async createVenue(_: unknown, { input }: MutationCreateVenueArgs) {
+    async createVenue(_, { input }) {
       const { featuredMedia, coordinates, ...data } = createVenueSchema.parse(input);
       const slug = await getUniqueSlug(prisma.venue, data.name);
       // Look the venue up unless its coordinates were entered
@@ -94,7 +96,7 @@ const resolvers = {
       });
     },
 
-    async updateVenue(_: unknown, { id, input }: MutationUpdateVenueArgs) {
+    async updateVenue(_, { id, input }) {
       const { featuredMedia, coordinates, ...data } = updateVenueSchema.parse(input);
       const updateData: Record<string, unknown> = { ...data };
       if (coordinates) {
@@ -127,10 +129,10 @@ const resolvers = {
         : venue;
     },
 
-    async removeVenue(_: unknown, { ids }: MutationRemoveVenueArgs) {
+    async removeVenue(_, { ids }) {
       return removeEntities(prisma.venue, ids);
     },
   },
-};
+} satisfies Resolvers;
 
 export default resolvers;
