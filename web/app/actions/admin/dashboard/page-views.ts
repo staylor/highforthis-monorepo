@@ -22,16 +22,23 @@ type PageViewsResult =
 // YYYY-MM-DD in the site's time zone
 const dateKey = (date: Date) => date.toLocaleDateString('en-CA', { timeZone: TIME_ZONE });
 
+// The last `days` dates up to today in the site's time zone, oldest first. Counts back calendar
+// days rather than 24 hours at a time, since the day the clocks change is 23 or 25 hours long.
+function lastDates(now: Date, days: number) {
+  const [year, month, day] = dateKey(now).split('-').map(Number);
+  return Array.from({ length: days }, (_, index) =>
+    // Date.UTC rolls a day before the 1st back into the month before
+    new Date(Date.UTC(year, month - 1, day - (days - 1 - index))).toISOString().slice(0, 10)
+  );
+}
+
 // Sums hourly view counts into the last `days` days, oldest first, with empty days as 0.
 export function dailyViews(
   hours: { hour: string; views: number }[],
   now: Date,
   days = DAYS
 ): PageViews['days'] {
-  const totals = new Map<string, number>();
-  for (let i = days - 1; i >= 0; i -= 1) {
-    totals.set(dateKey(new Date(now.getTime() - i * 24 * 60 * 60 * 1000)), 0);
-  }
+  const totals = new Map<string, number>(lastDates(now, days).map((date) => [date, 0]));
   for (const { hour, views } of hours) {
     // OpenObserve's histogram buckets are UTC, without a zone suffix
     const key = dateKey(new Date(hour.endsWith('Z') ? hour : `${hour}Z`));

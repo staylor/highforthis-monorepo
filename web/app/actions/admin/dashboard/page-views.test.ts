@@ -40,6 +40,32 @@ describe('dailyViews', () => {
       { date: '2026-11-18', views: 0 },
     ]);
   });
+
+  // New York's clocks went back an hour at 2am on November 1st, 2026, and go forward an hour at
+  // 2am on March 14th, 2027, so those days are 25 and 23 hours long.
+
+  it('has 30 days just before midnight in the month after the clocks go back', () => {
+    // 11:30pm on November 20th. Counting back 24 hours at a time lands on November 1st twice.
+    const days = dailyViews([], new Date('2026-11-21T04:30:00Z'));
+    assert.equal(days.length, 30);
+    assert.deepEqual(days[0], { date: '2026-10-22', views: 0 });
+    assert.deepEqual(days.at(-1), { date: '2026-11-20', views: 0 });
+  });
+
+  it('keeps the day the clocks go forward, just after midnight', () => {
+    // 12:30am on March 15th. 24 hours earlier was 11:30pm on the 13th.
+    const days = dailyViews(
+      // noon on the 14th
+      [{ hour: '2027-03-14T16:00:00', views: 5 }],
+      new Date('2027-03-15T04:30:00Z'),
+      3
+    );
+    assert.deepEqual(days, [
+      { date: '2027-03-13', views: 0 },
+      { date: '2027-03-14', views: 5 },
+      { date: '2027-03-15', views: 0 },
+    ]);
+  });
 });
 
 describe('topPages', () => {
