@@ -39,7 +39,7 @@ const venueFormFragment = gql`
 
 const venuesQuery = gql`
   query VenuesAdmin($after: String, $first: Int, $search: String) {
-    venues(after: $after, first: $first, search: $search) @cache(key: "admin") {
+    venues(after: $after, first: $first, search: $search) {
       count
       edges {
         node {

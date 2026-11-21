@@ -30,7 +30,7 @@ export const featuredMediaFragment = gql`
 
 const mediaPickerQuery = gql`
   query MediaPicker($cursor: String, $first: Int, $type: String) {
-    uploads(after: $cursor, first: $first, type: $type) @cache(key: "modal") {
+    uploads(after: $cursor, first: $first, type: $type) {
       edges {
         node {
           id
@@ -61,7 +61,7 @@ const mediaPickerQuery = gql`
 
 const videoPickerQuery = gql`
   query VideoPicker($cursor: String, $first: Int) {
-    videos(after: $cursor, first: $first) @cache(key: "modal") {
+    videos(after: $cursor, first: $first) {
       edges {
         node {
           id

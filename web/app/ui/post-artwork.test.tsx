@@ -8,7 +8,6 @@ import { PostArtwork } from './post-artwork.tsx';
 
 function image(id: string, widths = [300, 640]) {
   return {
-    __typename: 'ImageUpload' as const,
     crops: widths.map((width) => ({ fileName: `${id}-${width}.jpg`, width })),
     destination: 'posts',
     id,
@@ -21,7 +20,6 @@ function post(editorImageCount: number): PostArtwork_PostFragment {
     editorState: {
       root: {
         children: Array.from({ length: editorImageCount }, (_, index) => ({
-          __typename: 'ImageNode' as const,
           image: image(`editor-${index + 1}`),
         })),
       },

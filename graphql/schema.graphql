@@ -3,8 +3,6 @@ schema {
   mutation: Mutation
 }
 
-directive @cache(key: String = "") on FIELD
-
 type APIKeys {
   googleMaps: String
 }

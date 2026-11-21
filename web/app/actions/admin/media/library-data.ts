@@ -69,8 +69,7 @@ const uploadsQuery = gql`
     $search: String
     $type: String
   ) {
-    uploads(after: $after, first: $first, mimeType: $mimeType, search: $search, type: $type)
-      @cache(key: "admin") {
+    uploads(after: $after, first: $first, mimeType: $mimeType, search: $search, type: $type) {
       count
       mimeTypes
       types

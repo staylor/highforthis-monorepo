@@ -46,14 +46,11 @@ const podcasts = {
   pageInfo: { hasNextPage: false },
 };
 
-// GraphQL answers with __typename, which Apollo needs to fill the form's fragments
 const podcast = {
-  __typename: 'Podcast',
   id: 'p1',
   title: 'Episode 1',
   description: 'The first one',
   image: {
-    __typename: 'ImageUpload',
     id: 'm1',
     destination: '2024/07',
     fileName: 'cover.jpg',
@@ -61,7 +58,6 @@ const podcast = {
     crops: [{ fileName: 'cover-300.jpg', width: 300 }],
   },
   audio: {
-    __typename: 'AudioUpload',
     id: 'a1',
     destination: '2024/07',
     fileName: 'episode-1.mp3',

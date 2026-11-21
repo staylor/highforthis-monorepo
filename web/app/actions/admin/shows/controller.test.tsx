@@ -41,7 +41,7 @@ const post = (path: string, body: string) =>
 // 8:00 PM on May 10, 2024 wherever the tests run, since the list shows the server's time
 const showTime = new Date(2024, 4, 10, 20, 0).getTime();
 
-const ryman = { __typename: 'Venue', id: 'v1', name: 'Ryman', slug: 'ryman' };
+const ryman = { id: 'v1', name: 'Ryman', slug: 'ryman' };
 
 const shows = {
   count: 2,
@@ -75,33 +75,23 @@ const shows = {
   pageInfo: { hasNextPage: false },
 };
 
-// GraphQL answers with __typename, which Apollo needs to fill the form's fragments
 const show = {
-  __typename: 'Show',
   id: 's1',
   title: 'Night One',
   url: null,
   notes: 'Great',
   date: showTime,
   attended: true,
-  artists: [{ __typename: 'Artist', id: 'a1', name: 'Wilco' }],
-  venue: { __typename: 'Venue', id: 'v1', name: 'Ryman' },
+  artists: [{ id: 'a1', name: 'Wilco' }],
+  venue: { id: 'v1', name: 'Ryman' },
 };
 
 const entities = {
   artists: {
-    __typename: 'ArtistConnection',
-    edges: [
-      { __typename: 'ArtistEdge', node: { __typename: 'Artist', id: 'a2', name: 'Spoon' } },
-      { __typename: 'ArtistEdge', node: { __typename: 'Artist', id: 'a1', name: 'Wilco' } },
-    ],
+    edges: [{ node: { id: 'a2', name: 'Spoon' } }, { node: { id: 'a1', name: 'Wilco' } }],
   },
   venues: {
-    __typename: 'VenueConnection',
-    edges: [
-      { __typename: 'VenueEdge', node: { __typename: 'Venue', id: 'v2', name: '9:30 Club' } },
-      { __typename: 'VenueEdge', node: { __typename: 'Venue', id: 'v1', name: 'Ryman' } },
-    ],
+    edges: [{ node: { id: 'v2', name: '9:30 Club' } }, { node: { id: 'v1', name: 'Ryman' } }],
   },
 };
 

@@ -33,10 +33,6 @@ const typeDefs = `#graphql
 
   type Mutation
 
-  directive @cache(
-    key: String = ""
-  ) on FIELD
-
   type PageInfo {
     startCursor: String
     endCursor: String

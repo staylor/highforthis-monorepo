@@ -41,12 +41,10 @@ const post = (path: string, body: string) =>
 const storage = 'https://storage.googleapis.com/wonderboymusic';
 
 const uploads = {
-  __typename: 'MediaUploadConnection',
   count: 2,
   edges: [
     {
       node: {
-        __typename: 'ImageUpload',
         id: 'm1',
         title: 'Wilco live',
         originalName: 'wilco.jpg',
@@ -61,7 +59,6 @@ const uploads = {
     },
     {
       node: {
-        __typename: 'AudioUpload',
         id: 'a1',
         title: null,
         originalName: 'episode.mp3',
@@ -78,7 +75,6 @@ const uploads = {
 };
 
 const image = {
-  __typename: 'ImageUpload',
   id: 'm1',
   type: 'image',
   title: 'Wilco live',
@@ -151,17 +147,15 @@ describe('admin media library', () => {
     const operations = stubGraphQL(t, {
       AlbumCoversAdmin: {
         appleMusicAlbums: {
-          __typename: 'AppleMusicAlbumResults',
           error: null,
           albums: [
             {
-              __typename: 'AppleMusicAlbum',
               id: 'al1',
               name: 'Yankee Hotel Foxtrot',
               artistName: 'Wilco',
               releaseDate: '2002-04-23',
               cover: 'https://art.example/yhf.jpg',
-              artwork: { __typename: 'AppleMusicArtwork', width: 3000, height: 3000 },
+              artwork: { width: 3000, height: 3000 },
             },
           ],
         },
@@ -220,7 +214,6 @@ describe('admin media library', () => {
     stubGraphQL(t, {
       MediaAdmin: {
         media: {
-          __typename: 'VideoUpload',
           id: 'v1',
           type: 'video',
           title: 'Clip',

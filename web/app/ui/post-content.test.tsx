@@ -7,7 +7,6 @@ import { ListType, type EditorState } from '#/types/graphql.ts';
 import { PostContent } from './post-content.tsx';
 
 const text = (value: string, format = 0) => ({
-  __typename: 'TextNode',
   format,
   text: value,
   type: 'text',

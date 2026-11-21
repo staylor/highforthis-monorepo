@@ -55,9 +55,7 @@ const videos = {
   years: [2025, 2024, 2023],
 };
 
-// GraphQL answers with __typename, which Apollo needs to fill the form's fragment
 const video = {
-  __typename: 'Video',
   id: 'v1',
   title: 'Wilco - Live at the Ryman',
   slug: 'wilco-live-at-the-ryman',
@@ -65,8 +63,8 @@ const video = {
   dataPlaylistId: 'PL2024',
   year: 2024,
   thumbnails: [
-    { __typename: 'VideoThumbnail', width: 120, height: 90, url: 'https://i.ytimg.com/120.jpg' },
-    { __typename: 'VideoThumbnail', width: 480, height: 360, url: 'https://i.ytimg.com/480.jpg' },
+    { width: 120, height: 90, url: 'https://i.ytimg.com/120.jpg' },
+    { width: 480, height: 360, url: 'https://i.ytimg.com/480.jpg' },
   ],
 };
 

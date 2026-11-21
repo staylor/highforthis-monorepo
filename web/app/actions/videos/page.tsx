@@ -9,14 +9,7 @@ import { Videos, videoFragment, videosFragment } from '#/ui/videos.tsx';
 import { YearSelect } from './public/year-select.tsx';
 
 export const videosQuery = gql`
-  query Videos(
-    $after: String
-    $before: String
-    $cacheKey: String
-    $first: Int
-    $last: Int
-    $year: Int
-  ) {
+  query Videos($after: String, $before: String, $first: Int, $last: Int, $year: Int) {
     ...Videos_videos
   }
   ${videosFragment}

@@ -71,19 +71,16 @@ const artists = {
   pageInfo: { hasNextPage: false },
 };
 
-// GraphQL answers with __typename, which Apollo needs to fill the form's fragments
 const artist = {
-  __typename: 'Artist',
   id: 'a1',
   name: 'Wilco',
   slug: 'wilco',
   description: 'From Chicago',
   website: 'https://wilcoworld.net',
   excludeFromSearch: true,
-  appleMusic: { __typename: 'AppleMusicData', id: 'am1', artwork: { url: 'https://art/{w}.jpg' } },
+  appleMusic: { id: 'am1', artwork: { url: 'https://art/{w}.jpg' } },
   featuredMedia: [
     {
-      __typename: 'ImageUpload',
       id: 'm1',
       destination: '2024/05',
       fileName: 'wilco.jpg',
@@ -98,11 +95,10 @@ const artist = {
 
 const shows = Array.from({ length: 12 }, (_, i) => ({
   node: {
-    __typename: 'Show',
     id: `s${i}`,
     date: Date.UTC(2024, 4, 10 + i, 12),
     attended: true,
-    venue: { __typename: 'Venue', id: 'v1', name: 'Ryman' },
+    venue: { id: 'v1', name: 'Ryman' },
   },
 }));
 
@@ -191,7 +187,7 @@ describe('admin artists', () => {
 
   it('shows an artist with their artwork, featured media and shows', async (t) => {
     stubGraphQL(t, {
-      ArtistEdit: { artist, shows: { __typename: 'ShowConnection', edges: shows } },
+      ArtistEdit: { artist, shows: { edges: shows } },
     });
     const html = await (await get('/admin/artist/a1?message=updated')).text();
     assert.match(html, /<img src="https:\/\/art\/300.jpg" alt="Wilco"/);
@@ -208,7 +204,7 @@ describe('admin artists', () => {
   });
 
   it('leaves the shows box out when an artist has none', async (t) => {
-    stubGraphQL(t, { ArtistEdit: { artist, shows: { __typename: 'ShowConnection', edges: [] } } });
+    stubGraphQL(t, { ArtistEdit: { artist, shows: { edges: [] } } });
     const html = await (await get('/admin/artist/a1')).text();
     assert.match(html, /<h1[^>]*>Edit Artist<\/h1>/);
     assert.doesNotMatch(html, /Add Show/);
@@ -255,11 +251,9 @@ describe('admin media picker', () => {
   });
 
   const uploads = {
-    __typename: 'MediaUploadConnection',
     edges: [
       {
         node: {
-          __typename: 'ImageUpload',
           id: 'm1',
           title: 'Wilco live',
           destination: '2024/05',
@@ -272,7 +266,6 @@ describe('admin media picker', () => {
       },
       {
         node: {
-          __typename: 'ImageUpload',
           id: 'm2',
           title: null,
           destination: '2024/06',
@@ -325,11 +318,9 @@ describe('admin media picker', () => {
     const operations = stubGraphQL(t, {
       MediaPicker: {
         uploads: {
-          __typename: 'MediaUploadConnection',
           edges: [
             {
               node: {
-                __typename: 'AudioUpload',
                 id: 'a1',
                 title: 'Episode 1',
                 destination: '2024/07',
@@ -364,24 +355,20 @@ describe('admin media picker', () => {
     const operations = stubGraphQL(t, {
       VideoPicker: {
         videos: {
-          __typename: 'VideoConnection',
           edges: [
             {
               node: {
-                __typename: 'Video',
                 id: 'v1',
                 dataId: 'yt1',
                 slug: 'live',
                 title: 'Live',
                 thumbnails: [
                   {
-                    __typename: 'VideoThumbnail',
                     url: 'https://i.ytimg.com/120.jpg',
                     width: 120,
                     height: 90,
                   },
                   {
-                    __typename: 'VideoThumbnail',
                     url: 'https://i.ytimg.com/640.jpg',
                     width: 640,
                     height: 480,

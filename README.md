@@ -78,7 +78,6 @@ The root `codegen.ts` generates:
 - `graphql/schema.json` — Introspection JSON
 - `graphql/types/graphql.ts` — TypeScript types for the server
 - `web/app/types/schema.ts` and `web/app/types/graphql.ts` — TypeScript schema types, and the site's and admin's operations
-- `web/app/lib/apollo/fragment-matcher.js` — Fragment matcher for Apollo Client
 - `apple/HighForThisAPI/` — Swift types for the app (via Apollo iOS, from `graphql/schema.graphql`)
 
 Requires the GraphQL server to be running locally:

@@ -25,8 +25,7 @@ export const videoFragment = gql`
 
 export const videosFragment = gql`
   fragment Videos_videos on Query {
-    videos(after: $after, before: $before, first: $first, last: $last, year: $year)
-      @cache(key: $cacheKey) {
+    videos(after: $after, before: $before, first: $first, last: $last, year: $year) {
       count
       edges {
         cursor

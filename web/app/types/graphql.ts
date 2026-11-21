@@ -1010,7 +1010,6 @@ export type VenueQuery = { attended: { edges: Array<{ node: { id: string, date: 
 export type HomeQueryVariables = Exact<{
   after?: string | null | undefined;
   before?: string | null | undefined;
-  cacheKey?: string | null | undefined;
   first?: number | null | undefined;
   last?: number | null | undefined;
   year?: number | null | undefined;
@@ -1148,7 +1147,6 @@ export type ShowQuery = { show: { id: string, date: number, title: string | null
 export type VideosQueryVariables = Exact<{
   after?: string | null | undefined;
   before?: string | null | undefined;
-  cacheKey?: string | null | undefined;
   first?: number | null | undefined;
   last?: number | null | undefined;
   year?: number | null | undefined;

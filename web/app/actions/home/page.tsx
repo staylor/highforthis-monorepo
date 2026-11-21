@@ -18,16 +18,9 @@ import { AccentLine, SectionHeader } from '#/ui/section-header.tsx';
 import { Videos, videosFragment } from '#/ui/videos.tsx';
 
 export const homeQuery = gql`
-  query Home(
-    $after: String
-    $before: String
-    $cacheKey: String
-    $first: Int
-    $last: Int
-    $year: Int
-  ) {
+  query Home($after: String, $before: String, $first: Int, $last: Int, $year: Int) {
     ...Videos_videos
-    posts(first: 5, status: PUBLISH) @cache(key: "latest") {
+    posts(first: 5, status: PUBLISH) {
       edges {
         node {
           ...PostArtwork_post

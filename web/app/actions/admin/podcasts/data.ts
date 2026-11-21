@@ -29,7 +29,7 @@ const podcastFormFragment = gql`
 
 const podcastsQuery = gql`
   query PodcastsAdmin($after: String, $first: Int, $search: String) {
-    podcasts(after: $after, first: $first, search: $search) @cache(key: "admin") {
+    podcasts(after: $after, first: $first, search: $search) {
       count
       edges {
         node {

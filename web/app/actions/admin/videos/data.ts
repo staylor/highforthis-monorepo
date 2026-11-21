@@ -27,7 +27,7 @@ const videoFormFragment = gql`
 
 const videosQuery = gql`
   query VideosAdmin($after: String, $first: Int, $search: String, $year: Int) {
-    videos(after: $after, first: $first, search: $search, year: $year) @cache(key: "admin") {
+    videos(after: $after, first: $first, search: $search, year: $year) {
       count
       years
       edges {

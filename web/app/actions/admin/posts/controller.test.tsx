@@ -67,9 +67,7 @@ const posts = {
 };
 
 const editorState = {
-  __typename: 'EditorState',
   root: {
-    __typename: 'ElementNodeType',
     children: [],
     direction: 'ltr',
     format: '',
@@ -79,16 +77,14 @@ const editorState = {
   },
 };
 
-// GraphQL answers with __typename, which Apollo needs to fill the form's fragments
 const savedPost = {
-  __typename: 'Post',
   id: 'p1',
   title: 'Best of 2024',
   slug: 'best-of-2024',
   status: 'DRAFT',
   summary: 'The year in music',
   date: postTime,
-  artists: [{ __typename: 'Artist', id: 'a1', name: 'Wilco' }],
+  artists: [{ id: 'a1', name: 'Wilco' }],
   featuredMedia: [],
   editorState,
 };

@@ -39,7 +39,6 @@ const post = (path: string, body: string) =>
   );
 
 const siteSettings = {
-  __typename: 'SiteSettings',
   id: 'site',
   siteTitle: 'High for This',
   tagline: 'Music, live',
@@ -100,11 +99,10 @@ describe('admin settings', () => {
     stubGraphQL(t, {
       MediaSettings: {
         mediaSettings: {
-          __typename: 'MediaSettings',
           id: 'media',
           crops: [
-            { __typename: 'MediaCropSetting', name: 'thumbnail', width: 150, height: 150 },
-            { __typename: 'MediaCropSetting', name: 'wide', width: 1200, height: null },
+            { name: 'thumbnail', width: 150, height: 150 },
+            { name: 'wide', width: 1200, height: null },
           ],
         },
       },
@@ -156,7 +154,6 @@ describe('admin settings', () => {
     stubGraphQL(t, {
       PodcastSettings: {
         podcastSettings: {
-          __typename: 'PodcastSettings',
           id: 'podcast',
           title: 'High for This',
           description: 'A podcast',
@@ -171,7 +168,6 @@ describe('admin settings', () => {
           explicit: 'false',
           category: 'Music',
           image: {
-            __typename: 'ImageUpload',
             id: 'm1',
             destination: '2024/07',
             fileName: 'cover.jpg',

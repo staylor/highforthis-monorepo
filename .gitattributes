@@ -2,7 +2,6 @@
 graphql/schema.graphql linguist-generated=true
 graphql/schema.json linguist-generated=true
 graphql/types/graphql.ts linguist-generated=true
-web/app/lib/apollo/fragment-matcher.js linguist-generated=true
 web/app/types/graphql.ts linguist-generated=true
 web/app/types/schema.ts linguist-generated=true
 
