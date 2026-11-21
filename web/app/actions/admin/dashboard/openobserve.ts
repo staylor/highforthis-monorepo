@@ -23,9 +23,20 @@ export function openObserveConfig(env = process.env): OpenObserveConfig | null {
 export async function search<T>(
   config: OpenObserveConfig,
   sql: string,
-  { start, end, size = 1000 }: { start: Date; end: Date; size?: number }
+  {
+    start,
+    end,
+    size = 1000,
+    type = 'logs',
+  }: {
+    start: Date;
+    end: Date;
+    size?: number;
+    // Logs and traces have separate streams, which can share a name, such as "default"
+    type?: 'logs' | 'traces' | 'metrics';
+  }
 ): Promise<T[]> {
-  const response = await fetch(`${config.url}/api/${config.organization}/_search`, {
+  const response = await fetch(`${config.url}/api/${config.organization}/_search?type=${type}`, {
     method: 'POST',
     headers: { Authorization: config.authorization, 'Content-Type': 'application/json' },
     body: JSON.stringify({

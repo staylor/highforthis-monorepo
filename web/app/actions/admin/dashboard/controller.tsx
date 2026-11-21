@@ -7,11 +7,21 @@ import { requireAdmin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
 import { getAdmin } from '#/ui/admin/context.tsx';
 import { Alert, Heading } from '#/ui/admin/page.tsx';
-import { dark, text } from '#/ui/public/styles.ts';
+import { dark, text, xl } from '#/ui/public/styles.ts';
 
 import { loadPageViews, type PageViews as PageViewsData } from './page-views.ts';
+import {
+  formatDuration,
+  formatShare,
+  loadPerformance,
+  rate,
+  type Performance as PerformanceData,
+  type Rating,
+  type VitalName,
+} from './performance.ts';
 
-// The public site's page views over the last 30 days, from OpenObserve.
+// How the public site has performed over the last week, and its page views over the last 30
+// days, from OpenObserve.
 
 const formatDate = (date: string) =>
   // Dates are YYYY-MM-DD in the site's time zone; noon UTC keeps them on the same day
@@ -25,16 +35,18 @@ const formatDate = (date: string) =>
 const secondary = { color: 'var(--neutral-600)', [dark]: { color: 'var(--neutral-400)' } };
 const white = { [dark]: { color: '#fff' } };
 
+const card = css({
+  borderRadius: '0.5rem',
+  border: '1px solid var(--neutral-200)',
+  padding: '1rem 1.25rem',
+  [dark]: { borderColor: 'rgb(255 255 255 / 0.1)' },
+});
+
+const sectionHeading = css({ marginBottom: '0.25rem', ...text.lg, fontWeight: 600, ...white });
+
 function Stat(handle: Handle<{ label: string; value: number }>) {
   return () => (
-    <div
-      mix={css({
-        borderRadius: '0.5rem',
-        border: '1px solid var(--neutral-200)',
-        padding: '1rem 1.25rem',
-        [dark]: { borderColor: 'rgb(255 255 255 / 0.1)' },
-      })}
-    >
+    <div mix={card}>
       <div mix={css({ ...text.sm, ...secondary })}>{handle.props.label}</div>
       <div
         mix={css({
@@ -197,12 +209,162 @@ function TopPages(handle: Handle<{ pages: PageViewsData['topPages'] }>) {
   };
 }
 
+// An em dash where there's nothing to show
+const none = '—';
+
+// Each rating's dot. The rating is also written out, so color isn't the only cue.
+const ratingColor: Record<Rating, string> = {
+  good: 'var(--green-700)',
+  needsImprovement: 'var(--amber-600)',
+  poor: 'var(--red-600)',
+};
+
+function Metric(handle: Handle<{ label: string; value: string; detail: string; rating?: Rating }>) {
+  return () => {
+    const { t } = getAdmin(handle);
+    const { label, value, detail, rating } = handle.props;
+    return (
+      <div mix={card}>
+        <div mix={css({ ...text.sm, ...secondary })}>{label}</div>
+        <div
+          mix={css({
+            marginTop: '0.25rem',
+            ...text['2xl'],
+            fontWeight: 600,
+            fontVariantNumeric: 'tabular-nums',
+            ...white,
+          })}
+        >
+          {value}
+        </div>
+        <div
+          mix={css({
+            marginTop: '0.25rem',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            columnGap: '0.5rem',
+            ...text.xs,
+            ...secondary,
+          })}
+        >
+          {rating && (
+            <span
+              mix={css({
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                fontWeight: 500,
+                color: 'var(--neutral-900)',
+                ...white,
+              })}
+            >
+              <span
+                mix={css({
+                  width: '0.5rem',
+                  height: '0.5rem',
+                  borderRadius: '9999px',
+                  backgroundColor: ratingColor[rating],
+                })}
+              />
+              {t(`dashboard.${rating}`)}
+            </span>
+          )}
+          <span>{detail}</span>
+        </div>
+      </div>
+    );
+  };
+}
+
+const metricGroup = css({ marginBottom: '0.5rem', ...text.sm, fontWeight: 500, ...secondary });
+// Two rows of two, or one row of four once the cards have room for their labels, so no card
+// sits on a row alone
+const metricGrid = css({
+  marginBottom: '1.5rem',
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '1rem',
+  [xl]: { gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' },
+});
+
+function Performance(handle: Handle<{ performance: PerformanceData }>) {
+  return () => {
+    const { t } = getAdmin(handle);
+    const { days, vitals, pages, errors, graphql } = handle.props.performance;
+    const vital = (name: VitalName, samples: string) => {
+      const { value } = vitals[name];
+      if (value === null) {
+        return { value: none, detail: t('dashboard.noData') };
+      }
+      return {
+        value: name === 'cls' ? value.toFixed(2) : formatDuration(value),
+        detail: samples,
+        rating: rate(name, value),
+      };
+    };
+    const duration = (ms: number | null) => (ms === null ? none : formatDuration(ms));
+    const pagesServed = pages.count
+      ? t('dashboard.pagesServed', { count: pages.count })
+      : t('dashboard.noData');
+    return (
+      <section mix={css({ marginBottom: '2.5rem', maxWidth: '56rem' })}>
+        <h2 mix={sectionHeading}>{t('dashboard.performance')}</h2>
+        <p mix={css({ marginBottom: '1.25rem', ...text.sm, ...secondary })}>
+          {t('dashboard.performanceRange', { count: days })}
+        </p>
+        <h3 mix={metricGroup}>{t('dashboard.visitors')}</h3>
+        <div mix={metricGrid}>
+          <Metric
+            label={t('dashboard.lcp')}
+            {...vital('lcp', t('dashboard.loads', { count: vitals.lcp.samples }))}
+          />
+          <Metric
+            label={t('dashboard.inp')}
+            {...vital('inp', t('dashboard.interactions', { count: vitals.inp.samples }))}
+          />
+          <Metric
+            label={t('dashboard.cls')}
+            {...vital('cls', t('dashboard.viewCount', { count: vitals.cls.samples }))}
+          />
+          <Metric
+            label={t('dashboard.ttfb')}
+            {...vital('ttfb', t('dashboard.loads', { count: vitals.ttfb.samples }))}
+          />
+        </div>
+        <h3 mix={metricGroup}>{t('dashboard.server')}</h3>
+        <div mix={metricGrid}>
+          <Metric label={t('dashboard.pageP50')} value={duration(pages.p50)} detail={pagesServed} />
+          <Metric label={t('dashboard.pageP95')} value={duration(pages.p95)} detail={pagesServed} />
+          <Metric
+            label={t('dashboard.serverErrors')}
+            value={errors.requests ? formatShare(errors.count, errors.requests) : none}
+            detail={
+              errors.requests
+                ? t('dashboard.errorsOf', { errors: errors.count, requests: errors.requests })
+                : t('dashboard.noData')
+            }
+          />
+          <Metric
+            label={t('dashboard.graphql')}
+            value={duration(graphql.p95)}
+            detail={
+              graphql.calls ? t('dashboard.calls', { count: graphql.calls }) : t('dashboard.noData')
+            }
+          />
+        </div>
+      </section>
+    );
+  };
+}
+
 function PageViews(handle: Handle<{ pageViews: PageViewsData }>) {
   return () => {
     const { t } = getAdmin(handle);
     const { days, views, sessions, topPages } = handle.props.pageViews;
     return (
       <section mix={css({ maxWidth: '56rem' })}>
+        <h2 mix={sectionHeading}>{t('dashboard.traffic')}</h2>
         <p mix={css({ marginBottom: '1rem', ...text.sm, ...secondary })}>
           {t('dashboard.range', { count: days.length })}
         </p>
@@ -235,14 +397,22 @@ export const dashboard = createAction(routes.admin.dashboard, {
   middleware: [requireAdmin()],
   async handler(context) {
     const t = getAdminT();
-    const result = await loadPageViews();
+    const [pageViews, performance] = await Promise.all([loadPageViews(), loadPerformance()]);
     return renderAdminPage(
       context,
       <>
         <Heading>{t('dashboard.label')}</Heading>
-        {result.status === 'ok' && <PageViews pageViews={result.pageViews} />}
-        {result.status === 'unconfigured' && <Alert>{t('dashboard.unconfigured')}</Alert>}
-        {result.status === 'error' && <Alert>{t('dashboard.error')}</Alert>}
+        {/* Both come from OpenObserve, so they're set up together */}
+        {pageViews.status === 'unconfigured' ? (
+          <Alert>{t('dashboard.unconfigured')}</Alert>
+        ) : (
+          <>
+            {performance.status === 'ok' && <Performance performance={performance.performance} />}
+            {performance.status === 'error' && <Alert>{t('dashboard.performanceError')}</Alert>}
+            {pageViews.status === 'ok' && <PageViews pageViews={pageViews.pageViews} />}
+            {pageViews.status === 'error' && <Alert>{t('dashboard.error')}</Alert>}
+          </>
+        )}
       </>,
       { title: t('dashboard.label') }
     );

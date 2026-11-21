@@ -132,7 +132,7 @@ describe('loadPageViews', () => {
     assert.deepEqual(pageViews.days.at(-1), { date: '2026-11-18', views: 3 });
     assert.deepEqual(pageViews.topPages, [{ path: '/shows', views: 3 }]);
     assert.equal(searches.length, 3);
-    assert.ok(searches.every(({ url }) => url === 'http://o2:5080/api/default/_search'));
+    assert.ok(searches.every(({ url }) => url === 'http://o2:5080/api/default/_search?type=logs'));
     assert.ok(searches.every(({ authorization }) => authorization?.startsWith('Basic ')));
   });
 

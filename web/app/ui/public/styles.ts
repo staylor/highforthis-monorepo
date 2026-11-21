@@ -8,6 +8,7 @@ export const xs = '@media (width >= 320px)';
 export const sm = '@media (width >= 40rem)';
 export const md = '@media (width >= 48rem)';
 export const lg = '@media (width >= 64rem)';
+export const xl = '@media (width >= 80rem)';
 
 /** Dark mode, for what light-dark() can't express: the `dark` class on <html>. */
 export const dark = ':where(.dark) &';
