@@ -26,11 +26,12 @@ const video = (id: string): Connection['edges'][number] => ({
 const render = (
   edges: Connection['edges'],
   pageInfo: Connection['pageInfo'],
-  search = new URLSearchParams()
+  search = new URLSearchParams(),
+  heading?: 'h3'
 ) =>
   renderToString(
     <AppProvider value={app}>
-      <Videos videos={{ count: edges.length, edges, pageInfo }} search={search} />
+      <Videos videos={{ count: edges.length, edges, pageInfo }} search={search} heading={heading} />
     </AppProvider>
   );
 
@@ -56,6 +57,17 @@ describe('Videos', () => {
       links(await render([video('1')], pageInfo, new URLSearchParams('before=cursor-2'))),
       ['?after=cursor-1']
     );
+  });
+
+  it("titles each video a level below the page's heading, or a section's when asked", async () => {
+    const pageInfo = { hasNextPage: false, hasPreviousPage: false };
+    const page = await render([video('1'), video('2')], pageInfo);
+    assert.equal(page.match(/<h2[ >]/g)?.length, 2);
+    assert.doesNotMatch(page, /<h1[ >]/);
+
+    const section = await render([video('1')], pageInfo, new URLSearchParams(), 'h3');
+    assert.match(section, /<h3[^>]*><a [^>]*href="\/video\/video-1"[^>]*>Video 1<\/a><\/h3>/);
+    assert.doesNotMatch(section, /<h[12][ >]/);
   });
 
   it('has no links on a single page', async () => {

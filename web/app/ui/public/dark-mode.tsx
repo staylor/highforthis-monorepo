@@ -14,7 +14,9 @@ function storage(action: (store: Storage) => string | null | void) {
 
 /**
  * The <html> class is set before paint by the inline script in Document, and
- * data-rmx-preserve-attrs="class" keeps client navigation from resetting it.
+ * data-rmx-preserve-attrs="class" keeps client navigation from resetting it. The checkbox is
+ * hidden from view but not from the keyboard or a screen reader: Tab reaches it, which rings
+ * the switch drawn after it, and Space flips it.
  */
 export const DarkMode = clientEntry(
   import.meta.url,
@@ -36,13 +38,13 @@ export const DarkMode = clientEntry(
             width: '3rem',
           })}
           for={handle.props.id}
-          aria-label={handle.props.label}
         >
           <input
             type="checkbox"
             id={handle.props.id}
+            aria-label={handle.props.label}
             mix={[
-              css({ display: 'none' }),
+              srOnly,
               on('change', (event) => {
                 checked = event.currentTarget.checked;
                 if (checked) {
@@ -83,10 +85,10 @@ export const DarkMode = clientEntry(
                 translate: '1.5rem 0',
                 backgroundColor: 'var(--pink)',
               },
+              ':focus-visible + &': { outline: '2px solid var(--pink)', outlineOffset: '2px' },
             })}
           />
         </label>
-        <span mix={srOnly}>{handle.props.label}</span>
       </div>
     );
   }

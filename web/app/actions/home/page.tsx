@@ -76,7 +76,7 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
         {data.videos && (
           <section>
             <SectionHeader label="Videos" viewAllLink="/videos" />
-            <Videos videos={data.videos} paginate={false} />
+            <Videos videos={data.videos} paginate={false} heading="h3" />
           </section>
         )}
         <AccentLine />
