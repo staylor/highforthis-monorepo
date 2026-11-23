@@ -2,19 +2,25 @@ import { ilike, inList, or, type TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
 import db from '#/database/db';
-import type { mediaUploads } from '#/database/tables';
-import { newId, venueFeaturedMedia, venueMedia, venues } from '#/database/tables';
+import type { Loaded } from '#/database/tables';
+import {
+  newId,
+  venueFeaturedMedia,
+  venueFeaturedMediaUpload,
+  venueMedia,
+  venues,
+} from '#/database/tables';
 import { ADDRESS_FIELDS, geocodeVenue } from '#/geocode';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeEntities } from './utils/helpers';
+import { parseInput, removeEntities, resolveJoin } from './utils/helpers';
 import { createVenueSchema, updateVenueSchema } from './validations';
 
 type Venue = TableRow<typeof venues>;
 
 /** A venue, with its featured media when its query loaded them */
-export type VenueSource = Venue & { featuredMedia?: TableRow<typeof mediaUploads>[] };
+export type VenueSource = Venue & { featuredMedia?: Loaded<typeof venueMedia> };
 
 const withMedia = { with: { featuredMedia: venueMedia } };
 
@@ -33,12 +39,13 @@ const resolvers = {
       if (venue.latitude === null && venue.longitude === null) return null;
       return { latitude: venue.latitude, longitude: venue.longitude };
     },
-    async featuredMedia(venue) {
-      if (venue.featuredMedia) {
-        return venue.featuredMedia;
-      }
-      const loaded = await db.find(venues, venue.id, withMedia);
-      return loaded?.featuredMedia ?? [];
+    featuredMedia(venue) {
+      return resolveJoin(venue.featuredMedia, 'media', () =>
+        db.findMany(venueFeaturedMedia, {
+          where: { venueId: venue.id },
+          with: { media: venueFeaturedMediaUpload },
+        })
+      );
     },
   },
   Query: {
