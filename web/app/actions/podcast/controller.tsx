@@ -7,6 +7,7 @@ import {
   prefetchRootData,
   renderNotFound,
   renderPage,
+  siteUrl,
 } from '#/actions/render-page.tsx';
 import { routes } from '#/routes.ts';
 import type { PodcastQuery, PodcastsQuery } from '#/types/graphql.ts';
@@ -67,10 +68,10 @@ export default createController(routes.podcast, {
         context.gql.query<PodcastsQuery>(podcastsQuery, { first: 10 }),
         loadRootData(context),
       ]);
-      const title = `Podcast: ${podcastSettings.title}`;
+      const title = podcastSettings?.title ? `Podcast: ${podcastSettings.title}` : 'Podcast';
       return renderPage(
         context,
-        <Podcast title={title} description={podcastSettings.description ?? ''}>
+        <Podcast title={title} description={podcastSettings?.description ?? ''}>
           {podcasts?.edges.map(({ node }) => (
             <Link href={routes.podcast.show.href({ id: node.id })} mix={episodeLink}>
               <h3
@@ -103,16 +104,16 @@ export default createController(routes.podcast, {
           title,
           meta: podcastMetaTags({
             title,
-            description: podcastSettings.description,
-            url: podcastSettings.websiteLink,
-            image: podcastSettings.image,
+            description: podcastSettings?.description,
+            url: podcastSettings?.websiteLink,
+            image: podcastSettings?.image,
           }),
         }
       );
     },
 
     async show(context) {
-      const [{ podcast }, { siteSettings, podcastSettings }] = await Promise.all([
+      const [{ podcast }, root] = await Promise.all([
         context.gql.query<PodcastQuery>(podcastQuery, {
           id: context.params.id,
         }),
@@ -136,8 +137,8 @@ export default createController(routes.podcast, {
           meta: podcastMetaTags({
             title: podcast.title,
             description: podcast.description,
-            url: `${siteSettings.siteUrl}/podcast/${podcast.id}`,
-            image: podcastSettings.image,
+            url: `${siteUrl(context, root)}/podcast/${podcast.id}`,
+            image: root.podcastSettings?.image,
           }),
         }
       );

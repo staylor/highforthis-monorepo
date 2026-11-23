@@ -1,6 +1,6 @@
 import type { DocumentNode } from 'graphql';
 
-import type { GraphQLClient, Variables } from '#/lib/graphql.ts';
+import { attempt, type GraphQLClient, type Variables } from '#/lib/graphql.ts';
 
 // The admin's data functions take a GraphQL client instead of a request, so they don't depend on
 // a framework
@@ -188,9 +188,11 @@ export async function submitForm({
   }
 
   const mergedVariables = { ...variables, input: { ...variables?.input, ...input } };
-  const result = await gql.mutate<Record<string, { id: string } | null>>(mutation, mergedVariables);
-  // The client turns a GraphQL error, such as input the server rejects, into empty data
-  const saved = createMutation ? result[createMutation] : Object.values(result)[0];
+  // A mutation fails when GraphQL turns its input down, or can't be reached
+  const { data } = await attempt(
+    gql.mutate<Record<string, { id: string } | null>>(mutation, mergedVariables)
+  );
+  const saved = data && (createMutation ? data[createMutation] : Object.values(data)[0]);
   // The form posts to its own URL, which can still say how the last save went
   const redirectUrl = new URL(url);
   redirectUrl.searchParams.delete('message');
@@ -222,10 +224,9 @@ export async function deleteSelected({
   const ids = formData.getAll('ids');
   const redirectUrl = new URL(url);
   if (ids.length > 0) {
-    // The remove mutations return true on success. The client turns a GraphQL error, such as
-    // a missing admin session, into empty data.
-    const result = await gql.mutate<Record<string, unknown>>(mutation, { ids });
-    if (!Object.values(result).includes(true)) {
+    // The remove mutations return true on success, and fail without an admin session
+    const { data } = await attempt(gql.mutate<Record<string, unknown>>(mutation, { ids }));
+    if (!data || !Object.values(data).includes(true)) {
       redirectUrl.searchParams.set('deleteFailed', ids.length.toString());
       return { redirectTo: redirectUrl.toString() };
     }

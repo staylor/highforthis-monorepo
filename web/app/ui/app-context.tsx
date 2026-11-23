@@ -1,11 +1,11 @@
 import type { Handle, RemixNode } from 'remix/component';
 
+import type { RootData } from '#/actions/render-page.tsx';
 import type { TFunction } from '#/lib/i18n.ts';
-import type { AppQuery } from '#/types/graphql.ts';
 
 export interface AppValue {
   t: TFunction;
-  root: AppQuery;
+  root: RootData;
   pathname: string;
 }
 

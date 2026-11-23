@@ -23,7 +23,13 @@ import { ArtistPage, artistQuery, VenuePage, venueQuery } from './entities/page.
 import { HomePage, homeQuery } from './home/page.tsx';
 import { feedQuery, feedTemplate } from './podcast/feed.ts';
 import { PostPage, postQuery, PostsPage, postsQuery } from './posts/page.tsx';
-import { loadRootData, prefetchRootData, renderNotFound, renderPage } from './render-page.tsx';
+import {
+  loadRootData,
+  prefetchRootData,
+  renderNotFound,
+  renderPage,
+  siteUrl,
+} from './render-page.tsx';
 import { Setlists, type Setlist, type Stats } from './sphere/public/setlists.tsx';
 import setlists from './sphere/setlists.json' with { type: 'json' };
 import { VideosPage, videoQuery, videosQuery } from './videos/page.tsx';
@@ -74,13 +80,12 @@ export default createController(routes, {
         if (!post) {
           return renderNotFound(context);
         }
-        const { siteSettings } = await loadRootData(context);
         const media = post.featuredMedia?.[0];
         const crop =
           media && 'crops' in media ? media.crops.find((c) => c.width === 640) : undefined;
         const featuredImage =
           media && crop ? uploadUrl(media.destination, crop.fileName) : undefined;
-        const url = `${siteSettings.siteUrl}/post/${post.slug}`;
+        const url = `${siteUrl(context, await loadRootData(context))}/post/${post.slug}`;
         return renderPage(context, <PostPage post={post} />, {
           title: post.title,
           meta: [

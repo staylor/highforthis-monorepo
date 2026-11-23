@@ -131,7 +131,6 @@ describe('admin dashboard', () => {
 
   it("says so when OpenObserve can't answer", async (t) => {
     Object.assign(process.env, openObserve);
-    t.mock.method(console, 'error', () => {});
     stubServers(t, () => new Response('down', { status: 502 }));
     const html = await dashboard();
     assert.match(html, /role="alert"[^>]*>Couldn't load performance/);

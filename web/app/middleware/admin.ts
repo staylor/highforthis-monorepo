@@ -3,7 +3,7 @@ import { createRedirectResponse } from 'remix/response/redirect';
 import { createContextKey, type Middleware } from 'remix/router';
 
 import { adminToken, expiredAdminCookie } from '#/lib/adminSession.ts';
-import { createGraphQLClient, graphqlHost, type GraphQLClient } from '#/lib/graphql.ts';
+import { createGraphQLClient, graphqlFetch, type GraphQLClient } from '#/lib/graphql.ts';
 
 // List both on every admin controller, `sameOrigin()` first: controller middleware doesn't
 // apply to nested route maps.
@@ -14,9 +14,6 @@ interface AdminSession {
 }
 
 export const Admin = createContextKey<AdminSession>();
-
-// Looked up per request rather than captured at startup, so tests can stub fetch.
-const fetchNow: typeof fetch = (input, init) => globalThis.fetch(input, init);
 
 const loginRedirect = (init?: ResponseInit) => createRedirectResponse('/login/unauthorized', init);
 
@@ -36,7 +33,7 @@ export function requireAdmin(): Middleware<{
       return loginRedirect();
     }
 
-    const response = await fetchNow(`${graphqlHost}/auth/session`, {
+    const response = await graphqlFetch('/auth/session', {
       headers: { Authorization: `Bearer ${token}` },
     });
     await response.body?.cancel();

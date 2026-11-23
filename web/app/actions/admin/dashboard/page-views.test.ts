@@ -164,7 +164,6 @@ describe('loadPageViews', () => {
 
   it("reports an error when OpenObserve can't answer", async (t) => {
     t.mock.method(globalThis, 'fetch', async () => new Response('down', { status: 502 }));
-    t.mock.method(console, 'error', () => {});
     assert.deepEqual(await loadPageViews(new Date(), config), { status: 'error' });
   });
 });

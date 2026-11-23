@@ -43,7 +43,7 @@
     "hmr": "NODE_ENV=development node --env-file-if-exists=.env hmr.ts",
     "build": "pnpm --filter @highforthis/shared build",
     "start": "NODE_ENV=production node --import remix/node-tsx server.ts",
-    "test": "NODE_ENV=test remix test --type server",
+    "test": "NODE_ENV=test LOG_LEVEL=silent remix test --type server",
     "typecheck": "tsgo"
   }
 }

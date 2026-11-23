@@ -9,6 +9,7 @@ import {
   type GraphQLClient,
 } from '#/lib/admin/forms.ts';
 import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import { attempt } from '#/lib/graphql.ts';
 import type { UpdateVenueFlagMutation, VenueEditQuery, VenuesAdminQuery } from '#/types/graphql.ts';
 
 const venueFormFragment = gql`
@@ -153,11 +154,13 @@ export async function setVenueFlag({
   formData: FormData;
 }) {
   const fields = parseForm(formData);
-  const result = await client.mutate<UpdateVenueFlagMutation>(updateVenueFlagMutation, {
-    id: fields.id,
-    input: { [flag]: fields[flag] === true },
-  });
-  return Boolean(result.updateVenue);
+  const { data } = await attempt(
+    client.mutate<UpdateVenueFlagMutation>(updateVenueFlagMutation, {
+      id: fields.id,
+      input: { [flag]: fields[flag] === true },
+    })
+  );
+  return Boolean(data?.updateVenue);
 }
 
 export function deleteVenues(args: FormArgs) {

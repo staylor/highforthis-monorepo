@@ -2,7 +2,7 @@ import * as http from 'node:http';
 
 import { createRequestListener, type ClientAddress } from 'remix/node-fetch-server';
 
-import { createHttpLogger, createLogger } from '@highforthis/shared/logger';
+import { createHttpLogger } from '@highforthis/shared/logger';
 import { startObservability } from '@highforthis/shared/observability';
 
 process.env.TZ = 'America/New_York';
@@ -13,8 +13,8 @@ assertSessionSecret();
 const { assets } = await import('./app/assets.ts');
 const { router } = await import('./app/router.ts');
 const { rememberClientAddress } = await import('./app/lib/client.ts');
+const { logger } = await import('./app/lib/logger.ts');
 
-const logger = createLogger({ serviceName: 'web' });
 const httpLogger = createHttpLogger(logger);
 
 const port = Number.parseInt(process.env.PORT || process.env.SERVER_PORT || '3000', 10);

@@ -9,6 +9,7 @@ import {
   type RedirectResult,
 } from '#/lib/admin/forms.ts';
 import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import { attempt } from '#/lib/graphql.ts';
 import type {
   BulkCreateShowsMutation,
   ShowEditQuery,
@@ -172,11 +173,13 @@ export async function setShowAttended({
   formData: FormData;
 }) {
   const { id, attended } = parseForm(formData);
-  const result = await client.mutate<UpdateShowAttendedMutation>(attendedMutation, {
-    id,
-    input: { attended: attended === true },
-  });
-  return Boolean(result.updateShow);
+  const { data } = await attempt(
+    client.mutate<UpdateShowAttendedMutation>(attendedMutation, {
+      id,
+      input: { attended: attended === true },
+    })
+  );
+  return Boolean(data?.updateShow);
 }
 
 export function deleteShows(args: FormArgs) {
@@ -235,10 +238,10 @@ export async function importShows({
     return { csv, errors: parsed.errors };
   }
 
-  const result = await client.mutate<Partial<BulkCreateShowsMutation>>(bulkCreateShowsMutation, {
-    input: parsed.shows,
-  });
-  const imported = result.bulkCreateShows;
+  const { data } = await attempt(
+    client.mutate<BulkCreateShowsMutation>(bulkCreateShowsMutation, { input: parsed.shows })
+  );
+  const imported = data?.bulkCreateShows;
 
   if (!imported) {
     return {

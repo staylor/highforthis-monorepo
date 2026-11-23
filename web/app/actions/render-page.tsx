@@ -64,19 +64,31 @@ const appQuery = gql`
   }
 `;
 
+/**
+ * What the App query answered, or nothing when it failed. Every page renders without it, as the
+ * error page has to while GraphQL is down.
+ */
+export type RootData = Partial<AppQuery>;
+
 // One App query per request, shared by the prefetch middleware and the page. Keyed by the
 // request rather than stored on the context, so any controller's context can use it, whatever
 // its middleware has added.
-const rootData = new WeakMap<Request, Promise<AppQuery>>();
+const rootData = new WeakMap<Request, Promise<RootData>>();
 
 /** Page actions share one memoized App query per request. */
-export function loadRootData(context: Pick<AppContext, 'gql' | 'request'>): Promise<AppQuery> {
+export function loadRootData(context: Pick<AppContext, 'gql' | 'request'>): Promise<RootData> {
   let data = rootData.get(context.request);
   if (!data) {
-    data = context.gql.query<AppQuery>(appQuery);
+    // The client has logged why it failed
+    data = context.gql.query<AppQuery>(appQuery).catch(() => ({}));
     rootData.set(context.request, data);
   }
   return data;
+}
+
+/** Where the site is, for links to its own pages: its setting, or failing that the request's. */
+export function siteUrl(context: Pick<AppContext, 'url'>, { siteSettings }: RootData) {
+  return siteSettings?.siteUrl || context.url.origin;
 }
 
 /** Controller middleware that starts the App query before the action runs its own. */

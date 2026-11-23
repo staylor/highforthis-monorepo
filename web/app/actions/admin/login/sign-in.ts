@@ -1,7 +1,4 @@
-import { graphqlHost } from '#/lib/graphql.ts';
-
-// Looked up per request rather than captured at startup, so tests can stub fetch.
-const fetchNow: typeof fetch = (input, init) => globalThis.fetch(input, init);
+import { graphqlFetch } from '#/lib/graphql.ts';
 
 /** A token to keep in the session, or why there isn't one. */
 type SignInResult = { token: string } | { error: 'failed' | 'throttled' };
@@ -10,7 +7,7 @@ const failed: SignInResult = { error: 'failed' };
 
 /** Posts JSON and returns the token GraphQL answers with, or why it turned the sign-in down. */
 async function token(path: string, data: Record<string, unknown>): Promise<SignInResult> {
-  const response = await fetchNow(`${graphqlHost}${path}`, {
+  const response = await graphqlFetch(path, {
     method: 'POST',
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
@@ -57,7 +54,7 @@ export async function signIn(formData: FormData): Promise<SignInResult> {
 /** Ends the token's session in GraphQL, so a copy of it stops working too. Best effort. */
 export async function signOut(token: string): Promise<void> {
   try {
-    const response = await fetchNow(`${graphqlHost}/auth/signout`, {
+    const response = await graphqlFetch('/auth/signout', {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
     });
