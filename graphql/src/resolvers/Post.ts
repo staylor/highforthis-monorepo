@@ -1,33 +1,37 @@
-import type { Prisma, Post } from '@prisma/client';
+import { ilike, or, type TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
 import { isAdmin } from '#/authorization';
-import prisma from '#/database';
-import type { WithIncludes } from '#/models';
-import { getUniqueSlug } from '#/models/utils';
+import db from '#/database/db';
+import { containing } from '#/database/search';
+import type { Loaded } from '#/database/tables';
+import {
+  newId,
+  postArtists,
+  postFeaturedMedia,
+  postFeaturedMediaUpload,
+  postMedia,
+  posts,
+  postTagArtist,
+  postTags,
+} from '#/database/tables';
+import { getUniqueSlug, slugsIn } from '#/models/utils';
 import { extractText } from '#/utils/lexical';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeEntities, resolveJoin } from './utils/helpers';
+import { parseInput, removeRows, resolveJoin } from './utils/helpers';
 import resolveTags from './utils/resolveTags';
 import { createPostSchema, updatePostSchema } from './validations';
 
-// The artwork on post lists picks a size from each image's crops, which took a query per image
-// when ImageUpload.crops loaded them
-const featuredMediaIncludes = {
-  media: { include: { crops: true } },
-} satisfies Prisma.PostFeaturedMediaInclude;
+type Post = TableRow<typeof posts>;
 
-const postIncludes = {
-  featuredMedia: { include: featuredMediaIncludes },
-  artists: { include: { artist: true } },
-} satisfies Prisma.PostInclude;
+const postIncludes = { featuredMedia: postMedia, artists: postTags };
 
-/** A post, with its featured media and artists when its query included them */
-export type PostSource = WithIncludes<
-  Post,
-  Prisma.PostGetPayload<{ include: typeof postIncludes }>
->;
+/** A post, with its featured media and artists when its query loaded them */
+export type PostSource = Post & {
+  featuredMedia?: Loaded<typeof postMedia>;
+  artists?: Loaded<typeof postTags>;
+};
 
 const resolvers = {
   Post: {
@@ -36,52 +40,55 @@ const resolvers = {
     },
     featuredMedia(post) {
       return resolveJoin(post.featuredMedia, 'media', () =>
-        prisma.postFeaturedMedia.findMany({
+        db.findMany(postFeaturedMedia, {
           where: { postId: post.id },
-          include: featuredMediaIncludes,
+          with: { media: postFeaturedMediaUpload },
         })
       );
     },
     artists(post) {
       return resolveJoin(post.artists, 'artist', () =>
-        prisma.postArtist.findMany({
-          where: { postId: post.id },
-          include: { artist: true },
-        })
+        db.findMany(postArtists, { where: { postId: post.id }, with: { artist: postTagArtist } })
       );
     },
   },
   Query: {
     async posts(_, args, { authUser }) {
       const { search, status, ...connectionArgs } = args;
-      const where: Prisma.PostWhereInput = {};
+      let query = db.query(posts);
       const userCanSee = isAdmin(authUser);
       if (!userCanSee) {
-        where.status = 'PUBLISH';
+        query = query.where({ status: 'PUBLISH' });
       } else if (status) {
-        where.status = status;
+        query = query.where({ status });
       }
       if (search) {
-        where.OR = [
-          { title: { contains: search, mode: 'insensitive' } },
-          { slug: { contains: search, mode: 'insensitive' } },
-          { summary: { contains: search, mode: 'insensitive' } },
-          { contentBody: { contains: search, mode: 'insensitive' } },
-        ];
+        const pattern = containing(search);
+        query = query.where(
+          or(
+            ilike('title', pattern),
+            ilike('slug', pattern),
+            ilike('summary', pattern),
+            ilike('contentBody', pattern)
+          )
+        );
       }
-      return parseConnection(prisma.post, connectionArgs, {
-        where,
-        orderBy: { date: 'desc' },
-        include: postIncludes,
-      });
+      return parseConnection(
+        {
+          count: () => query.count(),
+          findMany: ({ skip, take }) =>
+            query.with(postIncludes).orderBy('date', 'desc').offset(skip).limit(take).all(),
+        },
+        connectionArgs
+      );
     },
 
     async post(_, { id, slug }, { authUser }) {
       let post;
       if (id) {
-        post = await prisma.post.findUnique({ where: { id }, include: postIncludes });
+        post = await db.find(posts, id, { with: postIncludes });
       } else if (slug) {
-        post = await prisma.post.findUnique({ where: { slug }, include: postIncludes });
+        post = await db.findOne(posts, { where: { slug }, with: postIncludes });
       }
 
       if (!post) return null;
@@ -103,7 +110,7 @@ const resolvers = {
         date,
         ...rest
       } = parseInput(createPostSchema, input);
-      const slug = await getUniqueSlug(prisma.post, rest.title);
+      const slug = await getUniqueSlug(slugsIn(db, posts), rest.title);
       const contentBody = editorState ? extractText(editorState) : null;
 
       let artistIds: string[] = [];
@@ -111,22 +118,30 @@ const resolvers = {
         artistIds = await resolveTags(inputArtists);
       }
 
-      return prisma.post.create({
-        data: {
+      const id = newId();
+      await db.transaction(async (tx) => {
+        await tx.create(posts, {
           ...rest,
+          id,
           slug,
           contentBody,
           editorState: editorState ?? undefined,
           date: date ? new Date(date) : new Date(),
-          featuredMedia: featuredMedia?.length
-            ? { create: featuredMedia.map((mediaId) => ({ mediaId })) }
-            : undefined,
-          artists: artistIds.length
-            ? { create: artistIds.map((artistId) => ({ artistId })) }
-            : undefined,
-        },
-        include: postIncludes,
+        });
+        if (featuredMedia?.length) {
+          await tx.createMany(
+            postFeaturedMedia,
+            featuredMedia.map((mediaId) => ({ postId: id, mediaId }))
+          );
+        }
+        if (artistIds.length) {
+          await tx.createMany(
+            postArtists,
+            artistIds.map((artistId) => ({ postId: id, artistId }))
+          );
+        }
       });
+      return db.find(posts, id, { with: postIncludes });
     },
 
     async updatePost(_, { id, input }) {
@@ -137,22 +152,23 @@ const resolvers = {
         date,
         ...data
       } = parseInput(updatePostSchema, input);
-      const updateData: Prisma.PostUpdateInput = { ...data };
+      const values: Partial<Post> = { ...data };
       // Every post has a date, so one left out or sent as null keeps the saved one
       if (date) {
-        updateData.date = new Date(date);
+        values.date = new Date(date);
       }
       if (editorState) {
-        updateData.editorState = editorState;
-        updateData.contentBody = extractText(editorState);
+        values.editorState = editorState;
+        values.contentBody = extractText(editorState);
       }
 
       if (typeof featuredMedia !== 'undefined') {
-        await prisma.postFeaturedMedia.deleteMany({ where: { postId: id } });
+        await db.deleteMany(postFeaturedMedia, { where: { postId: id } });
         if (featuredMedia?.length) {
-          await prisma.postFeaturedMedia.createMany({
-            data: featuredMedia.map((mediaId) => ({ postId: id, mediaId })),
-          });
+          await db.createMany(
+            postFeaturedMedia,
+            featuredMedia.map((mediaId) => ({ postId: id, mediaId }))
+          );
         }
       }
 
@@ -160,18 +176,19 @@ const resolvers = {
       if (inputArtists?.length) {
         artistIds = await resolveTags(inputArtists);
       }
-      await prisma.postArtist.deleteMany({ where: { postId: id } });
+      await db.deleteMany(postArtists, { where: { postId: id } });
       if (artistIds.length) {
-        await prisma.postArtist.createMany({
-          data: artistIds.map((artistId) => ({ postId: id, artistId })),
-        });
+        await db.createMany(
+          postArtists,
+          artistIds.map((artistId) => ({ postId: id, artistId }))
+        );
       }
 
-      return prisma.post.update({ where: { id }, data: updateData, include: postIncludes });
+      return db.update(posts, id, values, { with: postIncludes });
     },
 
     async removePost(_, { ids }) {
-      return removeEntities(prisma.post, ids);
+      return removeRows(posts, ids);
     },
   },
 } satisfies Resolvers;

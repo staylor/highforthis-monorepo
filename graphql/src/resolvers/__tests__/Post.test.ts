@@ -1,29 +1,40 @@
 import { ApolloServer } from '@apollo/server';
+import { inList } from 'remix/data-table';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { mediaDetails, mediaUploads, postMedia, posts, postTags } from '#/database/tables';
 import type { AppContext } from '#/models';
 import resolvers from '#/resolvers';
 import typeDefs from '#/schema';
 
 import postResolvers from '../Post';
 
-const db = vi.hoisted(() => ({
-  post: { count: vi.fn(), findMany: vi.fn(), update: vi.fn() },
-  postArtist: { deleteMany: vi.fn() },
-  mediaUpload: { findUnique: vi.fn() },
-  imageUploadCrop: { findMany: vi.fn() },
+const { db, postsQuery } = vi.hoisted(() => ({
+  db: {
+    createMany: vi.fn(),
+    deleteMany: vi.fn(),
+    findMany: vi.fn(),
+    query: vi.fn(),
+    update: vi.fn(),
+  },
+  postsQuery: {
+    all: vi.fn(),
+    count: vi.fn(),
+    limit: vi.fn(),
+    offset: vi.fn(),
+    orderBy: vi.fn(),
+    where: vi.fn(),
+    with: vi.fn(),
+  },
 }));
 
-vi.mock('#/database', () => ({ default: db }));
+vi.mock('#/database', () => ({ default: {} }));
+vi.mock('#/database/db', () => ({ default: db }));
 
 const crops = (id: string) => [{ fileName: `${id}-640.jpg`, width: 640, height: 480, fileSize: 1 }];
 
-// Images as Prisma loads them: with their crops only when the query includes them
-const image = (id: string, include?: { crops?: boolean }) => ({
-  id,
-  type: 'image',
-  ...(include?.crops && { crops: crops(id) }),
-});
+// An image as its query loads it, with its crops
+const image = (id: string) => ({ id, type: 'image', crops: crops(id) });
 
 // What the artwork on the home page and /posts asks for
 const artworkQuery = /* GraphQL */ `
@@ -71,9 +82,18 @@ describe('posts', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
-    db.post.count.mockResolvedValue(1);
-    db.post.findMany.mockImplementation(async ({ include }) => {
-      const { media } = include.featuredMedia.include;
+    for (const step of [
+      postsQuery.limit,
+      postsQuery.offset,
+      postsQuery.orderBy,
+      postsQuery.where,
+      postsQuery.with,
+    ]) {
+      step.mockReturnValue(postsQuery);
+    }
+    db.query.mockReturnValue(postsQuery);
+    postsQuery.count.mockResolvedValue(1);
+    postsQuery.all.mockImplementation(async () => {
       return [
         {
           id: 'post-1',
@@ -87,14 +107,13 @@ describe('posts', () => {
               ],
             },
           },
-          featuredMedia: [{ media: image('featured', media === true ? undefined : media.include) }],
+          featuredMedia: [{ media: image('featured') }],
         },
       ];
     });
-    db.mediaUpload.findUnique.mockImplementation(async ({ where, include }) =>
-      image(where.id, include)
+    db.findMany.mockImplementation(async (table, { where }) =>
+      table === mediaUploads ? where.value.map(image) : []
     );
-    db.imageUploadCrop.findMany.mockImplementation(async ({ where }) => crops(where.mediaId));
   });
 
   afterAll(() => server.stop());
@@ -130,7 +149,12 @@ describe('posts', () => {
         ],
       },
     });
-    expect(db.imageUploadCrop.findMany).not.toHaveBeenCalled();
+    // The post's images in one query, with their crops, and the featured media's with the post
+    expect(db.findMany).toHaveBeenCalledExactlyOnceWith(mediaUploads, {
+      where: inList('id', ['body-1', 'body-2']),
+      with: { crops: mediaDetails.crops },
+    });
+    expect(postsQuery.with).toHaveBeenCalledWith({ featuredMedia: postMedia, artists: postTags });
   });
 });
 
@@ -139,26 +163,29 @@ describe('updatePost', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
-    db.post.update.mockResolvedValue({ id: 'post-1' });
+    db.update.mockResolvedValue({ id: 'post-1' });
   });
 
   it('saves a new date', async () => {
     await updatePost({}, { id: 'post-1', input: { date: Date.UTC(2026, 10, 21) } });
 
-    expect(db.post.update).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        where: { id: 'post-1' },
-        data: { date: new Date('2026-11-21T00:00:00Z') },
-      })
+    expect(db.update).toHaveBeenLastCalledWith(
+      posts,
+      'post-1',
+      { date: new Date('2026-11-21T00:00:00Z') },
+      expect.anything()
     );
   });
 
-  // Prisma turns away a null date, since every post has one
+  // The column is NOT NULL, since every post has a date
   it('keeps the saved date when the date is sent as null', async () => {
     await updatePost({}, { id: 'post-1', input: { date: null, title: 'Renamed' } });
 
-    expect(db.post.update).toHaveBeenLastCalledWith(
-      expect.objectContaining({ data: { title: 'Renamed' } })
+    expect(db.update).toHaveBeenLastCalledWith(
+      posts,
+      'post-1',
+      { title: 'Renamed' },
+      expect.anything()
     );
   });
 });

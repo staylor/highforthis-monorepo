@@ -330,3 +330,64 @@ export const showLineup = hasMany(shows, showArtists, { foreignKey: 'showId' }).
 
 /** A show's venue */
 export const showVenue = belongsTo(shows, venues, { foreignKey: 'venueId' });
+
+// --- Post ---
+
+export const posts = table({
+  name: 'Post',
+  columns: {
+    id: c.text(),
+    title: c.text(),
+    slug: c.text(),
+    editorState: c.json().nullable(),
+    contentBody: c.text().nullable(),
+    summary: c.text().nullable(),
+    status: c.text(),
+    date: timestamp(),
+    createdAt: timestamp(),
+    updatedAt: timestamp(),
+  },
+  timestamps,
+  beforeWrite: skipUndefined,
+});
+
+export const postFeaturedMedia = table({
+  name: 'PostFeaturedMedia',
+  columns: {
+    postId: c.text(),
+    mediaId: c.text(),
+  },
+  primaryKey: ['postId', 'mediaId'],
+  beforeWrite: skipUndefined,
+});
+
+export const postArtists = table({
+  name: 'PostArtist',
+  columns: {
+    postId: c.text(),
+    artistId: c.text(),
+  },
+  primaryKey: ['postId', 'artistId'],
+  beforeWrite: skipUndefined,
+});
+
+/**
+ * The media a post's featured-media row joins, with its crops: the artwork on post lists picks a
+ * size from them, which took a query per image when ImageUpload.crops loaded them
+ */
+export const postFeaturedMediaUpload = belongsTo(postFeaturedMedia, mediaUploads, {
+  foreignKey: 'mediaId',
+}).with({ crops: mediaDetails.crops });
+
+/** A post's featured-media rows, each with its media */
+export const postMedia = hasMany(posts, postFeaturedMedia, { foreignKey: 'postId' }).with({
+  media: postFeaturedMediaUpload,
+});
+
+/** The artist a post's tag row joins */
+export const postTagArtist = belongsTo(postArtists, artists, { foreignKey: 'artistId' });
+
+/** The artists a post is tagged with: its tag rows, each with its artist */
+export const postTags = hasMany(posts, postArtists, { foreignKey: 'postId' }).with({
+  artist: postTagArtist,
+});
