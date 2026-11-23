@@ -8,7 +8,7 @@ import { getUniqueSlug } from '#/models/utils';
 import { extractText } from '#/utils/lexical';
 
 import { parseConnection } from './utils/collection';
-import { removeEntities, resolveJoin } from './utils/helpers';
+import { parseInput, removeEntities, resolveJoin } from './utils/helpers';
 import resolveTags from './utils/resolveTags';
 import { createPostSchema, updatePostSchema } from './validations';
 
@@ -102,7 +102,7 @@ const resolvers = {
         editorState,
         date,
         ...rest
-      } = createPostSchema.parse(input);
+      } = parseInput(createPostSchema, input);
       const slug = await getUniqueSlug(prisma.post, rest.title);
       const contentBody = editorState ? extractText(editorState) : null;
 
@@ -136,7 +136,7 @@ const resolvers = {
         editorState,
         date,
         ...data
-      } = updatePostSchema.parse(input);
+      } = parseInput(updatePostSchema, input);
       const updateData: Prisma.PostUpdateInput = { ...data };
       // Every post has a date, so one left out or sent as null keeps the saved one
       if (date) {

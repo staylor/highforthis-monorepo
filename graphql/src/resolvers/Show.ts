@@ -6,7 +6,7 @@ import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
 import { type Connection, parseConnection, emptyConnection } from './utils/collection';
-import { removeEntities, resolveJoin, timestampResolver } from './utils/helpers';
+import { parseInput, removeEntities, resolveJoin, timestampResolver } from './utils/helpers';
 import { bulkCreateShowsSchema, createShowSchema, updateShowSchema } from './validations';
 
 const showIncludes = {
@@ -210,7 +210,7 @@ const resolvers = {
   },
   Mutation: {
     async bulkCreateShows(_, { input }) {
-      const shows = bulkCreateShowsSchema.parse(input);
+      const shows = parseInput(bulkCreateShowsSchema, input);
 
       return prisma.$transaction(
         async (transaction) => {
@@ -292,7 +292,7 @@ const resolvers = {
     },
 
     async createShow(_, { input }) {
-      const { artists, venue, date, ...data } = createShowSchema.parse(input);
+      const { artists, venue, date, ...data } = parseInput(createShowSchema, input);
       return prisma.show.create({
         data: {
           ...data,
@@ -307,7 +307,7 @@ const resolvers = {
     },
 
     async updateShow(_, { id, input }) {
-      const validated = updateShowSchema.parse(input);
+      const validated = parseInput(updateShowSchema, input);
       const { artists, venue, date, ...data } = validated;
       const values: Prisma.ShowUncheckedUpdateInput = { ...data };
 
