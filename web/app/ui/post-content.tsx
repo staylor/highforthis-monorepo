@@ -168,8 +168,9 @@ export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }
           );
         }
         case 'video': {
-          const video = (elem as VideoNode).video as VideoType;
-          return <Video key={video.id} video={video} embed />;
+          // a video that was deleted, or a node saved without one, loads as null
+          const video = (elem as VideoNode).video as VideoType | null;
+          return video ? <Video key={video.id} video={video} embed /> : null;
         }
       }
       return null;
