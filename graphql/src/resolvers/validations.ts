@@ -55,7 +55,6 @@ export const addAlbumCoversSchema = z.array(z.string().regex(/^\d+$/)).min(1).ma
 
 export const createPodcastSchema = z.object({
   audio: z.string().nullish(),
-  date: z.number().nullish(),
   description: z.string().optional(),
   image: z.string().nullish(),
   title: z.string().min(1),
@@ -63,7 +62,6 @@ export const createPodcastSchema = z.object({
 
 export const updatePodcastSchema = z.object({
   audio: z.string().nullish(),
-  date: z.number().nullish(),
   description: z.string().optional(),
   image: z.string().nullish(),
   title: z.string().min(1),
