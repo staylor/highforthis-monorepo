@@ -1,9 +1,26 @@
 import { randomUUID } from 'node:crypto';
 
-import { column as c, hasManyThrough, hasMany, table, type ColumnBuilder } from 'remix/data-table';
+import {
+  belongsTo,
+  column as c,
+  hasMany,
+  table,
+  type AnyTable,
+  type ColumnBuilder,
+  type Relation,
+  type TableRowWith,
+} from 'remix/data-table';
 
 // The tables `prisma db push` made, described for remix/data-table. These describe the database;
 // they don't create or change it.
+
+/** What a relation loads: a list of rows, or a row or null */
+export type Loaded<TRelation> =
+  TRelation extends Relation<AnyTable, infer TTarget, infer TCardinality, infer TLoaded>
+    ? TCardinality extends 'many'
+      ? TableRowWith<TTarget, TLoaded>[]
+      : TableRowWith<TTarget, TLoaded> | null
+    : never;
 
 // `timestamp()` is untyped, and the driver reads these columns back as dates
 const timestamp = () => c.timestamp() as ColumnBuilder<Date>;
@@ -39,7 +56,7 @@ export const venues = table({
   timestamps,
 });
 
-export const mediaUploads = table({
+const mediaUploads = table({
   name: 'MediaUpload',
   columns: {
     id: c.text(),
@@ -73,9 +90,15 @@ export const venueFeaturedMedia = table({
   primaryKey: ['venueId', 'mediaId'],
 });
 
-/** A venue's featured media, through the join table */
-export const venueMedia = hasManyThrough(venues, mediaUploads, {
-  through: hasMany(venues, venueFeaturedMedia, { foreignKey: 'venueId' }),
-  throughTargetKey: 'mediaId',
-  throughForeignKey: 'id',
+// A join table's rows come back in the order they were saved, as Prisma loaded them. Loading their
+// media through `hasManyThrough` would put them in the order of the media table instead.
+
+/** The media a venue's featured-media row joins */
+export const venueFeaturedMediaUpload = belongsTo(venueFeaturedMedia, mediaUploads, {
+  foreignKey: 'mediaId',
+});
+
+/** A venue's featured-media rows, each with its media */
+export const venueMedia = hasMany(venues, venueFeaturedMedia, { foreignKey: 'venueId' }).with({
+  media: venueFeaturedMediaUpload,
 });

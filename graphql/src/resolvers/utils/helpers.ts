@@ -40,18 +40,20 @@ export async function removeEntities(
 }
 
 /**
- * The records on the other side of a join table: from the joins a record's query included, or
- * from `query` when it didn't include them
+ * The records on the other side of a join table, in the join table's order: from the joins a
+ * record's query included, or from `query` when it didn't include them. A join's foreign key
+ * means it has its record, which a loaded relation types as possibly missing.
  */
 export function resolveJoin<TJoin, TKey extends keyof TJoin>(
   included: TJoin[] | undefined,
   key: TKey,
   query: () => Promise<TJoin[]>
-): TJoin[TKey][] | Promise<TJoin[TKey][]> {
-  if (included) {
-    return included.map((join) => join[key]);
-  }
-  return query().then((joins) => joins.map((join) => join[key]));
+): NonNullable<TJoin[TKey]>[] | Promise<NonNullable<TJoin[TKey]>[]> {
+  const records = (joins: TJoin[]) =>
+    joins
+      .map((join) => join[key])
+      .filter((record): record is NonNullable<TJoin[TKey]> => record !== null);
+  return included ? records(included) : query().then(records);
 }
 
 /** Resolves an abstract type from a record's `type`, or `fallback` for one `typeMap` doesn't name */
