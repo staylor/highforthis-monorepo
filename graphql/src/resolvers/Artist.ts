@@ -6,6 +6,7 @@ import prisma from '#/database';
 import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
+import { fillAppleMusic } from './utils/appleMusicData';
 import { parseConnection } from './utils/collection';
 import { parseInput, removeEntities, resolveJoin } from './utils/helpers';
 import { createArtistSchema, updateArtistSchema } from './validations';
@@ -72,6 +73,17 @@ async function upsertAppleMusic(artistId: string, appleMusic: AppleMusicInput) {
   }
 }
 
+/**
+ * A saved artist, with Apple Music's data looked up when the artist had none. Saving an artist
+ * again is how to look once more for one Apple Music didn't have.
+ */
+async function withAppleMusic(artist: Prisma.ArtistGetPayload<{ include: typeof artistIncludes }>) {
+  if (artist.appleMusic || !(await fillAppleMusic([artist.id]))) {
+    return artist;
+  }
+  return prisma.artist.findUniqueOrThrow({ where: { id: artist.id }, include: artistIncludes });
+}
+
 const resolvers = {
   Artist: {
     appleMusic(artist) {
@@ -132,7 +144,7 @@ const resolvers = {
     async createArtist(_, { input }) {
       const { featuredMedia, ...data } = parseInput(createArtistSchema, input);
       const slug = await getUniqueSlug(prisma.artist, data.name);
-      return prisma.artist.create({
+      const artist = await prisma.artist.create({
         data: {
           ...data,
           slug,
@@ -142,6 +154,7 @@ const resolvers = {
         },
         include: artistIncludes,
       });
+      return withAppleMusic(artist);
     },
 
     async updateArtist(_, { id, input }) {
@@ -157,7 +170,8 @@ const resolvers = {
       if (appleMusic) {
         await upsertAppleMusic(id, appleMusic);
       }
-      return prisma.artist.update({ where: { id }, data, include: artistIncludes });
+      const artist = await prisma.artist.update({ where: { id }, data, include: artistIncludes });
+      return withAppleMusic(artist);
     },
 
     async removeArtist(_, { ids }) {

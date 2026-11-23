@@ -3,8 +3,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import resolveTags from '../resolveTags';
 
 const artist = vi.hoisted(() => ({ count: vi.fn(), create: vi.fn(), findFirst: vi.fn() }));
+const fillAppleMusicLater = vi.hoisted(() => vi.fn());
 
 vi.mock('#/database', () => ({ default: { artist } }));
+vi.mock('../appleMusicData', () => ({ fillAppleMusicLater }));
 
 /** The artists there are, by name */
 function artists(names: Record<string, string>) {
@@ -35,6 +37,14 @@ describe('resolveTags', () => {
     expect(artist.create).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({ data: { name: 'Sum 41', slug: 'sum-41' } })
     );
+  });
+
+  it("looks up Apple Music's data for the artists it added, and only those", async () => {
+    artists({ phish: 'artist-1' });
+
+    await resolveTags(['Phish', 'Sum 41']);
+
+    expect(fillAppleMusicLater).toHaveBeenCalledExactlyOnceWith(['new-sum-41']);
   });
 
   it('finds an artist however the name is capitalized or spaced', async () => {

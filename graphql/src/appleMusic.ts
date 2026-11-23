@@ -33,6 +33,20 @@ const searchSchema = z.object({
 
 const albumsSchema = z.object({ data: z.array(albumSchema) });
 
+const artistSchema = z.object({
+  id: z.string(),
+  attributes: z.object({
+    name: z.string(),
+    url: z.string().optional(),
+    genreNames: z.array(z.string()).optional(),
+    artwork: artworkSchema.optional(),
+  }),
+});
+
+const artistSearchSchema = z.object({
+  results: z.object({ artists: z.object({ data: z.array(artistSchema) }).optional() }),
+});
+
 type Artwork = z.infer<typeof artworkSchema>;
 
 export interface Album {
@@ -42,6 +56,20 @@ export interface Album {
   releaseDate: string | null;
   url: string | null;
   artwork: Artwork;
+}
+
+/** An artist in Apple Music's catalog */
+export interface CatalogArtist {
+  id: string;
+  name: string;
+  url: string | null;
+  genreNames: string[];
+  artwork: Artwork | null;
+}
+
+/** Whether the MusicKit key the Apple Music API needs is set */
+export function hasAppleMusicKeys() {
+  return Boolean(env.APPLE_MUSIC_KEY_ID && env.APPLE_MUSIC_TEAM_ID && env.APPLE_MUSIC_PRIVATE_KEY);
 }
 
 // A developer token for the Apple Music API, signed with a MusicKit private key
@@ -92,6 +120,20 @@ export async function searchAlbums(term: string) {
     await catalog('/search', { term, types: 'albums', limit: '25' })
   );
   return toAlbums(results.albums?.data ?? []);
+}
+
+/** The artists Apple Music finds for a name, the likeliest first */
+export async function searchArtists(term: string): Promise<CatalogArtist[]> {
+  const { results } = artistSearchSchema.parse(
+    await catalog('/search', { term, types: 'artists', limit: '10' })
+  );
+  return (results.artists?.data ?? []).map(({ id, attributes }) => ({
+    id,
+    name: attributes.name,
+    url: attributes.url ?? null,
+    genreNames: attributes.genreNames ?? [],
+    artwork: attributes.artwork ?? null,
+  }));
 }
 
 export async function getAlbums(ids: string[]) {

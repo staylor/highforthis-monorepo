@@ -31,7 +31,7 @@ In development (`pnpm dev`), only `DATABASE_URL` is needed. Everything else is o
 | `GCS_CLIENT_EMAIL`                | Yes                    | GCS service account email                         |
 | `GCS_PRIVATE_KEY`                 | Yes                    | GCS service account private key                   |
 | `YOUTUBE_API_KEY`                 | Yes                    | YouTube Data API key, for the video import job    |
-| `APPLE_MUSIC_KEY_ID`              |                        | MusicKit key ID, for album covers                 |
+| `APPLE_MUSIC_KEY_ID`              |                        | MusicKit key ID, for album covers and artist data |
 | `APPLE_MUSIC_TEAM_ID`             |                        | Apple Developer team ID                           |
 | `APPLE_MUSIC_PRIVATE_KEY`         |                        | MusicKit private key (the .p8 file's contents)    |
 | `GOOGLE_MAPS_GEOLOCATION_API_KEY` |                        | Google key for geocoding addresses (server only)  |
@@ -124,7 +124,7 @@ src/
 └── jobs/             # Scheduled tasks (cron)
 tools/
 ├── database/         # Seed dump, reset, and production refresh scripts
-├── apple-music/      # Looks up the Apple Music data of artists that have none
+├── apple-music.ts    # Looks up Apple Music's data for the artists that have none
 ├── websites/         # A browser snippet that reads setlists from setlist.fm
 ├── youtube.ts        # Runs the YouTube import
 ├── shows.ts          # Runs the cleanup of old shows

@@ -19,4 +19,3 @@ e2e/test-results
 *.log
 *.p8
 graphql/dump/latest-production.dump
-graphql/tools/apple-music/search/responses

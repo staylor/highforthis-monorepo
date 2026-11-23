@@ -5,6 +5,7 @@ import prisma from '#/database';
 import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
+import { fillAppleMusicLater } from './utils/appleMusicData';
 import { type Connection, parseConnection, emptyConnection } from './utils/collection';
 import { parseInput, removeEntities, resolveJoin, timestampResolver } from './utils/helpers';
 import { bulkCreateShowsSchema, createShowSchema, updateShowSchema } from './validations';
@@ -211,8 +212,9 @@ const resolvers = {
   Mutation: {
     async bulkCreateShows(_, { input }) {
       const shows = parseInput(bulkCreateShowsSchema, input);
+      const newArtists: string[] = [];
 
-      return prisma.$transaction(
+      const result = await prisma.$transaction(
         async (transaction) => {
           const artists = new Map<string, string>();
           const venues = new Map<string, string>();
@@ -235,6 +237,7 @@ const resolvers = {
                 },
               });
               artistsCreated += 1;
+              newArtists.push(artist.id);
             }
             artists.set(key, artist.id);
             return artist.id;
@@ -289,6 +292,8 @@ const resolvers = {
         },
         { timeout: 30_000 }
       );
+      fillAppleMusicLater(newArtists);
+      return result;
     },
 
     async createShow(_, { input }) {

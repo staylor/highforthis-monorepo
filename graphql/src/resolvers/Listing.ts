@@ -4,6 +4,7 @@ import prisma from '#/database';
 import { getListings, matchListing, normalizeName } from '#/listings';
 import { getUniqueSlug } from '#/models/utils';
 
+import { fillAppleMusicLater } from './utils/appleMusicData';
 import { badInput, parseInput } from './utils/helpers';
 import { importListingsSchema } from './validations';
 
@@ -68,8 +69,9 @@ const resolvers = {
       const { listings } = await getListings(await venueListingsUrl(venueId));
       const byId = new Map(listings.map((listing) => [listing.sourceId, listing]));
       const shows = await recentShows(venueId);
+      const newArtists: string[] = [];
 
-      return prisma.$transaction(
+      const result = await prisma.$transaction(
         async (transaction) => {
           const artistIds = new Map(
             (await transaction.artist.findMany({ select: { id: true, name: true } })).map(
@@ -98,6 +100,7 @@ const resolvers = {
                 }));
                 artistIds.set(key, id);
                 artistsCreated += 1;
+                newArtists.push(id);
               }
               ids.add(id);
             }
@@ -120,6 +123,8 @@ const resolvers = {
         },
         { timeout: 30_000 }
       );
+      fillAppleMusicLater(newArtists);
+      return result;
     },
   },
 } satisfies Resolvers;

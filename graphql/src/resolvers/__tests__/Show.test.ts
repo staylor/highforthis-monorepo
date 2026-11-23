@@ -5,13 +5,64 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import resolvers from '../Show';
 
 const db = vi.hoisted(() => ({
+  $transaction: vi.fn(),
   artist: { findMany: vi.fn(), findUnique: vi.fn() },
   show: { count: vi.fn(), findMany: vi.fn(), groupBy: vi.fn(), update: vi.fn() },
   showArtist: { findMany: vi.fn(), groupBy: vi.fn() },
   venue: { findMany: vi.fn(), findUniqueOrThrow: vi.fn() },
 }));
+const fillAppleMusicLater = vi.hoisted(() => vi.fn());
 
 vi.mock('#/database', () => ({ default: db }));
+vi.mock('../utils/appleMusicData', () => ({ fillAppleMusicLater }));
+
+describe('bulkCreateShows', () => {
+  // The shows, and the artists and venues they add, are saved together or not at all
+  const transaction = {
+    artist: { count: vi.fn(), create: vi.fn(), findFirst: vi.fn() },
+    show: { create: vi.fn() },
+    venue: { count: vi.fn(), create: vi.fn(), findFirst: vi.fn() },
+  };
+
+  beforeEach(() => {
+    vi.resetAllMocks();
+    transaction.artist.count.mockResolvedValue(0);
+    transaction.artist.findFirst.mockImplementation(async ({ where }) =>
+      where.name.equals === 'Phish' ? { id: 'artist-phish' } : null
+    );
+    transaction.artist.create.mockImplementation(async ({ data }) => ({ id: `new-${data.slug}` }));
+    transaction.venue.findFirst.mockResolvedValue({ id: 'venue-1' });
+  });
+
+  const shows = [
+    { artists: ['Phish', 'Goose'], date: Date.UTC(2026, 11, 30), venue: 'Madison Square Garden' },
+    { artists: ['Goose', 'Geese'], date: Date.UTC(2026, 11, 31), venue: 'Madison Square Garden' },
+  ];
+
+  it("looks up Apple Music's data for the artists it added, once they are saved", async () => {
+    db.$transaction.mockImplementation(async (save) => {
+      const result = await save(transaction);
+      expect(fillAppleMusicLater).not.toHaveBeenCalled();
+      return result;
+    });
+
+    await expect(resolvers.Mutation.bulkCreateShows({}, { input: shows })).resolves.toEqual({
+      artistsCreated: 2,
+      showsCreated: 2,
+      venuesCreated: 0,
+    });
+    expect(fillAppleMusicLater).toHaveBeenCalledExactlyOnceWith(['new-goose', 'new-geese']);
+  });
+
+  it('looks nothing up when the shows could not be saved', async () => {
+    db.$transaction.mockRejectedValue(new Error('Transaction failed'));
+
+    await expect(resolvers.Mutation.bulkCreateShows({}, { input: shows })).rejects.toThrow(
+      'Transaction failed'
+    );
+    expect(fillAppleMusicLater).not.toHaveBeenCalled();
+  });
+});
 
 describe('updateShow', () => {
   beforeEach(() => {
