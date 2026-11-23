@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { field, hydrated } from '../support/ui.ts';
+import { deleteRow, field, hydrated } from '../support/ui.ts';
 
 // Videos come from YouTube's import, so the test adds one through GraphQL.
 
@@ -41,7 +41,7 @@ test('filters videos by year, edits one and deletes it', async ({ page, prefix, 
   expect((await graphql.video(video.id))?.title).toBe(`${prefix} Video, edited`);
 
   await page.goto(`/admin/video?year=${year}`);
-  await row.getByRole('button', { name: 'Delete' }).click();
+  await deleteRow(page, row);
   await expect(page.getByText('Deleted 1 video.')).toBeVisible();
   // The delete comes back to the same filter
   await expect(page).toHaveURL(new RegExp(`[?&]year=${year}`));

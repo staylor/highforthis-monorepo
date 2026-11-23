@@ -103,6 +103,29 @@ describe('admin shows', () => {
     delete process.env.TOKEN_SECRET;
   });
 
+  it('lists a show whose artists have all been deleted, so it can be fixed', async (t) => {
+    const orphan = {
+      id: 's3',
+      title: null,
+      url: null,
+      date: showTime,
+      attended: false,
+      artists: [],
+      venue: ryman,
+    };
+    stubGraphQL(t, {
+      ShowsAdmin: {
+        shows: { count: 1, edges: [{ node: orphan }], pageInfo: { hasNextPage: false } },
+      },
+    });
+    const response = await get('/admin/show');
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.match(html, /<a href="\/admin\/show\/s3">\(no title\)<\/a>/);
+    assert.match(html, /No artists/);
+    assert.match(html, /<input type="checkbox" aria-label="Attended: Ryman"/);
+  });
+
   it('lists shows with their artists, venues, "attended" boxes and dates', async (t) => {
     const operations = stubGraphQL(t, { ShowsAdmin: { shows } });
     const html = await (

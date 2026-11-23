@@ -1,3 +1,4 @@
+import { routes } from '#/routes.ts';
 import type { Show } from '#/types/graphql.ts';
 import { colorTransition, text } from '#/ui/public/styles.ts';
 
@@ -41,18 +42,25 @@ export const formatDate = (date?: number) => {
 
 type ShowLike = Pick<Show, 'id' | 'title' | 'url'> & {
   artists: Array<Pick<Show['artists'][number], 'name' | 'slug'>>;
+  venue?: Pick<Show['venue'], 'name'>;
 };
 
+/**
+ * What to call a show: its title, or who's playing. A show can be left with neither when its
+ * artists are deleted, and then it goes by where it is.
+ */
 export const formatArtists = (show: ShowLike) => {
   if (show.title) {
     return show.title;
   }
-  return show.artists.map(({ name }) => name).join(' / ');
+  return show.artists.map(({ name }) => name).join(' / ') || (show.venue?.name ?? '');
 };
 
+/** A show's page, or its artist's when the show is one artist and nothing more. */
 export const formatShowLink = (show: ShowLike) => {
-  if (show.title || show.url || show.artists.length > 1) {
-    return `/shows/${show.id}`;
+  const [artist, ...others] = show.artists;
+  if (show.title || show.url || !artist || others.length > 0) {
+    return routes.shows.show.href({ id: show.id });
   }
-  return `/artist/${show.artists[0].slug}`;
+  return routes.artist.href({ slug: artist.slug });
 };

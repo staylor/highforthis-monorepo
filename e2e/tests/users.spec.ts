@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 
 import { expect, test } from '../support/test.ts';
-import { addedId, field } from '../support/ui.ts';
+import { addedId, deleteRow, field } from '../support/ui.ts';
 
 test('adds a user, edits them and deletes them from the list', async ({
   page,
@@ -35,7 +35,7 @@ test('adds a user, edits them and deletes them from the list', async ({
 
   await page.goto(`/admin/user?search=${encodeURIComponent(prefix)}`);
   const row = page.getByRole('row').filter({ hasText: name });
-  await row.getByRole('button', { name: 'Delete' }).click();
+  await deleteRow(page, row);
   await expect(page.getByText('Deleted 1 user.')).toBeVisible();
   await expect(row).toHaveCount(0);
   expect(await graphql.user(id)).toBeNull();

@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { addedId, field, hydrated } from '../support/ui.ts';
+import { addedId, deleteRow, field, hydrated } from '../support/ui.ts';
 
 test('adds a venue with its details, closes it from the list and deletes it', async ({
   page,
@@ -58,7 +58,7 @@ test('adds a venue with its details, closes it from the list and deletes it', as
   // The other box saved on the edit page
   await expect(row.getByRole('checkbox', { name: `Exclude from search: ${name}` })).toBeChecked();
 
-  await row.getByRole('button', { name: 'Delete' }).click();
+  await deleteRow(page, row);
   await expect(page.getByText('Deleted 1 venue.')).toBeVisible();
   await expect(row).toHaveCount(0);
   expect(await graphql.venue(id)).toBeNull();

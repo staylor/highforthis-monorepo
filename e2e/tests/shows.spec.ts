@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 
 import { expect, test } from '../support/test.ts';
-import { addedId, cell, field, hydrated } from '../support/ui.ts';
+import { addedId, cell, deleteRow, field, hydrated } from '../support/ui.ts';
 
 // The artists picker and the date are client entries, which work once the page's scripts have
 // loaded.
@@ -61,7 +61,7 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
   await attended.uncheck();
   await expect.poll(async () => (await graphql.show(id))?.attended).toBe(false);
 
-  await row.getByRole('button', { name: 'Delete' }).click();
+  await deleteRow(page, row);
   await expect(page.getByText('Deleted 1 show.')).toBeVisible();
   await expect(row).toHaveCount(0);
   expect(await graphql.show(id)).toBeNull();

@@ -48,6 +48,16 @@ export async function addedId(page: Page, section: string): Promise<string> {
 }
 
 /**
+ * Clicks a list row's Delete and answers the browser's "Delete this?" with OK. The question is the
+ * button's client entry, so this waits for the page to hydrate.
+ */
+export async function deleteRow(page: Page, row: Locator) {
+  await hydrated(page);
+  page.once('dialog', (dialog) => dialog.accept());
+  await row.getByRole('button', { name: 'Delete' }).click();
+}
+
+/**
  * Waits for the page's client entries to hydrate. Until then their buttons and selects do nothing;
  * text typed, boxes toggled and files chosen are replayed once they hydrate.
  */

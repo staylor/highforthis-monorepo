@@ -166,8 +166,8 @@ export function ShowsGrid(handle: Handle<GridProps>) {
     const months: Record<string, number> = {};
     const sorted = [...shows.edges].sort(({ node: a }, { node: b }) => {
       if (a.date === b.date) {
-        const artistA = a.artists[0].name;
-        const artistB = b.artists[0].name;
+        const artistA = a.artists[0]?.name ?? '';
+        const artistB = b.artists[0]?.name ?? '';
         if (artistA === artistB) {
           return 0;
         }

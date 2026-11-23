@@ -338,6 +338,7 @@
       "tickets": "Tickets",
       "view": "View Listings"
     },
+    "noArtists": "No artists",
     "notes": "Notes",
     "search": "Search Shows",
     "title": "Title",
@@ -350,6 +351,7 @@
     "apply": "Apply",
     "bulkActions": "Bulk Actions",
     "delete": "Delete",
+    "deleteConfirm": "Delete this? It can't be undone.",
     "deleteFailed_one": "Couldn't delete the selected item. If your session has expired, sign in and try again.",
     "deleteFailed_other": "Couldn't delete the {{count}} selected items. If your session has expired, sign in and try again.",
     "edit": "Edit",

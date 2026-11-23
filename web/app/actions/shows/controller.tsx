@@ -11,7 +11,7 @@ import { Heading1, Heading2 } from '#/ui/heading.tsx';
 import { Link } from '#/ui/link.tsx';
 import { md, text, type Styles } from '#/ui/public/styles.ts';
 import { Shows, ShowsList, showsGridFragment } from '#/ui/shows/shows.tsx';
-import { formatDate } from '#/ui/shows/utils.ts';
+import { formatArtists, formatDate } from '#/ui/shows/utils.ts';
 
 const showsQuery = gql`
   query Shows($after: String, $first: Int) {
@@ -263,34 +263,38 @@ export default createController(routes.shows, {
               [md]: { marginRight: '2rem' },
             })}
           >
-            <Artwork
-              name={artist.name}
-              data={artist.appleMusic || {}}
-              styles={{
-                marginInline: 'auto',
-                borderRadius: '0.5rem',
-                [md]: { marginLeft: 0 },
-              }}
-            />
+            {artist && (
+              <Artwork
+                name={artist.name}
+                data={artist.appleMusic || {}}
+                styles={{
+                  marginInline: 'auto',
+                  borderRadius: '0.5rem',
+                  [md]: { marginLeft: 0 },
+                }}
+              />
+            )}
           </div>
           <div mix={css({ [md]: { marginTop: '1rem' } })}>
             <p mix={css({ marginBottom: '0.75rem', ...text.lg })}>
               {d.monthName} {d.day}, {d.year} - {d.time}
             </p>
             {show.title && <Heading1>{show.title}</Heading1>}
-            <ArtistHeading styles={{ fontFamily: 'var(--font-sans)' }}>
-              {show.artists.map((artist, i) => (
-                <Link
-                  href={routes.artist.href({ slug: artist.slug })}
-                  mix={css({
-                    display: 'block',
-                    marginBottom: i < lastIndex ? '0.25rem' : undefined,
-                  })}
-                >
-                  {artist.name} →
-                </Link>
-              ))}
-            </ArtistHeading>
+            {artist && (
+              <ArtistHeading styles={{ fontFamily: 'var(--font-sans)' }}>
+                {show.artists.map((artist, i) => (
+                  <Link
+                    href={routes.artist.href({ slug: artist.slug })}
+                    mix={css({
+                      display: 'block',
+                      marginBottom: i < lastIndex ? '0.25rem' : undefined,
+                    })}
+                  >
+                    {artist.name} →
+                  </Link>
+                ))}
+              </ArtistHeading>
+            )}
             <Heading2 styles={{ marginTop: '1rem' }}>
               <Link
                 href={routes.venue.href({ slug: show.venue.slug })}
@@ -321,7 +325,7 @@ export default createController(routes.shows, {
           </div>
         </article>,
         {
-          title: show.title || show.artists.map(({ name }) => name).join(' / '),
+          title: formatArtists(show),
         }
       );
     },
