@@ -287,3 +287,46 @@ export const mediaCropSettings = table({
   },
   beforeWrite: skipUndefined,
 });
+
+// --- Show ---
+
+export const shows = table({
+  name: 'Show',
+  columns: {
+    id: c.text(),
+    title: c.text().nullable(),
+    notes: c.text().nullable(),
+    date: timestamp(),
+    url: c.text().nullable(),
+    attended: c.boolean(),
+    venueId: c.text(),
+    // The venue listing a show was added from: "aeg" or "ticketmaster", and its event ID there
+    source: c.text().nullable(),
+    sourceId: c.text().nullable(),
+    createdAt: timestamp(),
+    updatedAt: timestamp(),
+  },
+  timestamps,
+  beforeWrite: skipUndefined,
+});
+
+export const showArtists = table({
+  name: 'ShowArtist',
+  columns: {
+    showId: c.text(),
+    artistId: c.text(),
+  },
+  primaryKey: ['showId', 'artistId'],
+  beforeWrite: skipUndefined,
+});
+
+/** The artist a show's lineup row joins */
+export const lineupArtist = belongsTo(showArtists, artists, { foreignKey: 'artistId' });
+
+/** A show's lineup: its artist rows, in the order they were saved, each with its artist */
+export const showLineup = hasMany(shows, showArtists, { foreignKey: 'showId' }).with({
+  artist: lineupArtist,
+});
+
+/** A show's venue */
+export const showVenue = belongsTo(shows, venues, { foreignKey: 'venueId' });

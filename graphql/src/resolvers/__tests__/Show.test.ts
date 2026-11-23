@@ -1,37 +1,77 @@
-import type { Artist, Show, Venue } from '@prisma/client';
+import { and, eq, gte, inList, lt, type TableRow } from 'remix/data-table';
 import type { ShowEntityType } from 'types/graphql';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import {
+  artists as artistsTable,
+  showArtists as showArtistsTable,
+  shows as showsTable,
+  venues as venuesTable,
+} from '#/database/tables';
+
 import resolvers from '../Show';
 
-const db = vi.hoisted(() => ({
-  $transaction: vi.fn(),
-  artist: { findMany: vi.fn(), findUnique: vi.fn() },
-  show: { count: vi.fn(), findMany: vi.fn(), groupBy: vi.fn(), update: vi.fn() },
-  showArtist: { findMany: vi.fn(), groupBy: vi.fn() },
-  venue: { findMany: vi.fn(), findUniqueOrThrow: vi.fn() },
+type Artist = TableRow<typeof artistsTable>;
+type Show = TableRow<typeof showsTable>;
+type Venue = TableRow<typeof venuesTable>;
+
+/** A query whose steps each answer the query, as the builder's do */
+function chain() {
+  const query = {
+    all: vi.fn(),
+    count: vi.fn(),
+    join: vi.fn(),
+    limit: vi.fn(),
+    offset: vi.fn(),
+    orderBy: vi.fn(),
+    select: vi.fn(),
+    where: vi.fn(),
+    with: vi.fn(),
+  };
+  return query;
+}
+
+const { db, showsQuery, searchQuery, tx } = vi.hoisted(() => ({
+  db: {
+    exec: vi.fn(),
+    find: vi.fn(),
+    findMany: vi.fn(),
+    findOne: vi.fn(),
+    query: vi.fn(),
+    transaction: vi.fn(),
+    update: vi.fn(),
+  },
+  showsQuery: {} as ReturnType<typeof chain>,
+  searchQuery: {} as ReturnType<typeof chain>,
+  // The shows, and the artists and venues they add, are saved together or not at all
+  tx: { count: vi.fn(), create: vi.fn(), createMany: vi.fn(), findOne: vi.fn() },
 }));
 const fillAppleMusicLater = vi.hoisted(() => vi.fn());
 
-vi.mock('#/database', () => ({ default: db }));
+vi.mock('#/database/db', () => ({ default: db }));
 vi.mock('../utils/appleMusicData', () => ({ fillAppleMusicLater }));
 
-describe('bulkCreateShows', () => {
-  // The shows, and the artists and venues they add, are saved together or not at all
-  const transaction = {
-    artist: { count: vi.fn(), create: vi.fn(), findFirst: vi.fn() },
-    show: { create: vi.fn() },
-    venue: { count: vi.fn(), create: vi.fn(), findFirst: vi.fn() },
-  };
+/** Resets the mocks, with the shows query and the queries a search makes each answering itself */
+function resetMocks() {
+  vi.resetAllMocks();
+  Object.assign(showsQuery, chain());
+  Object.assign(searchQuery, chain());
+  for (const query of [showsQuery, searchQuery]) {
+    for (const step of ['join', 'limit', 'offset', 'orderBy', 'select', 'where', 'with'] as const) {
+      query[step].mockReturnValue(query);
+    }
+  }
+  db.query.mockImplementation((table) => (table === showsTable ? showsQuery : searchQuery));
+}
 
+describe('bulkCreateShows', () => {
   beforeEach(() => {
-    vi.resetAllMocks();
-    transaction.artist.count.mockResolvedValue(0);
-    transaction.artist.findFirst.mockImplementation(async ({ where }) =>
-      where.name.equals === 'Phish' ? { id: 'artist-phish' } : null
-    );
-    transaction.artist.create.mockImplementation(async ({ data }) => ({ id: `new-${data.slug}` }));
-    transaction.venue.findFirst.mockResolvedValue({ id: 'venue-1' });
+    resetMocks();
+    tx.count.mockResolvedValue(0);
+    tx.findOne.mockImplementation(async (table, { where }) => {
+      if (table === venuesTable) return { id: 'venue-1' };
+      return where.value === 'Phish' ? { id: 'artist-phish' } : null;
+    });
   });
 
   const shows = [
@@ -40,8 +80,8 @@ describe('bulkCreateShows', () => {
   ];
 
   it("looks up Apple Music's data for the artists it added, once they are saved", async () => {
-    db.$transaction.mockImplementation(async (save) => {
-      const result = await save(transaction);
+    db.transaction.mockImplementation(async (save) => {
+      const result = await save(tx);
       expect(fillAppleMusicLater).not.toHaveBeenCalled();
       return result;
     });
@@ -51,11 +91,15 @@ describe('bulkCreateShows', () => {
       showsCreated: 2,
       venuesCreated: 0,
     });
-    expect(fillAppleMusicLater).toHaveBeenCalledExactlyOnceWith(['new-goose', 'new-geese']);
+    const added = tx.create.mock.calls
+      .filter(([table]) => table === artistsTable)
+      .map(([, artist]) => artist);
+    expect(added.map(({ name }) => name)).toEqual(['Goose', 'Geese']);
+    expect(fillAppleMusicLater).toHaveBeenCalledExactlyOnceWith(added.map(({ id }) => id));
   });
 
   it('looks nothing up when the shows could not be saved', async () => {
-    db.$transaction.mockRejectedValue(new Error('Transaction failed'));
+    db.transaction.mockRejectedValue(new Error('Transaction failed'));
 
     await expect(resolvers.Mutation.bulkCreateShows({}, { input: shows })).rejects.toThrow(
       'Transaction failed'
@@ -66,17 +110,18 @@ describe('bulkCreateShows', () => {
 
 describe('updateShow', () => {
   beforeEach(() => {
-    db.show.update.mockImplementation(async ({ data }: { data: Record<string, unknown> }) => ({
-      id: 'show-1',
-      ...data,
-    }));
+    resetMocks();
+    db.update.mockImplementation(async (_table, id, values) => ({ id, ...values }));
   });
 
   it('keeps the title, notes and URL when only Attended changes', async () => {
     await resolvers.Mutation.updateShow({}, { id: 'show-1', input: { attended: true } });
 
-    expect(db.show.update).toHaveBeenLastCalledWith(
-      expect.objectContaining({ where: { id: 'show-1' }, data: { attended: true } })
+    expect(db.update).toHaveBeenLastCalledWith(
+      showsTable,
+      'show-1',
+      { attended: true },
+      expect.anything()
     );
   });
 
@@ -86,8 +131,11 @@ describe('updateShow', () => {
       { id: 'show-1', input: { attended: false, notes: null, title: null, url: null } }
     );
 
-    expect(db.show.update).toHaveBeenLastCalledWith(
-      expect.objectContaining({ data: { attended: false, notes: null, title: null, url: null } })
+    expect(db.update).toHaveBeenLastCalledWith(
+      showsTable,
+      'show-1',
+      { attended: false, notes: null, title: null, url: null },
+      expect.anything()
     );
   });
 });
@@ -96,26 +144,27 @@ describe('shows', () => {
   const show = (id: string, venueId: string) => ({ id, venueId }) as Show;
   const venue = (id: string) => ({ id, name: id }) as Venue;
   const artist = (id: string) => ({ id, name: id }) as Artist;
-  const link = (showId: string, artistId: string) => ({
-    showId,
-    artistId,
-    artist: artist(artistId),
-  });
 
   beforeEach(() => {
-    vi.resetAllMocks();
-    db.show.count.mockResolvedValue(3);
-    db.show.findMany.mockResolvedValue([
+    resetMocks();
+    showsQuery.count.mockResolvedValue(3);
+    showsQuery.all.mockResolvedValue([
       show('show-1', 'venue-1'),
       show('show-2', 'venue-2'),
       show('show-3', 'venue-1'),
     ]);
-    db.venue.findMany.mockResolvedValue([venue('venue-1'), venue('venue-2')]);
-    db.showArtist.findMany.mockResolvedValue([
-      link('show-1', 'artist-1'),
-      link('show-2', 'artist-2'),
-      link('show-1', 'artist-3'),
-    ]);
+    db.exec.mockResolvedValue({
+      rows: [
+        { showId: 'show-1', artistId: 'artist-1' },
+        { showId: 'show-2', artistId: 'artist-2' },
+        { showId: 'show-1', artistId: 'artist-3' },
+      ],
+    });
+    db.findMany.mockImplementation(async (table) =>
+      table === venuesTable
+        ? [venue('venue-1'), venue('venue-2')]
+        : [artist('artist-1'), artist('artist-2'), artist('artist-3')]
+    );
   });
 
   const shows = async () => {
@@ -126,65 +175,74 @@ describe('shows', () => {
   it('gives each show its venue and artists', async () => {
     const [first, second, third] = await shows();
 
-    expect(resolvers.Show.venue(first)).toEqual(venue('venue-1'));
-    expect(resolvers.Show.venue(second)).toEqual(venue('venue-2'));
-    expect(resolvers.Show.venue(third)).toEqual(venue('venue-1'));
+    await expect(resolvers.Show.venue(first)).resolves.toEqual(venue('venue-1'));
+    await expect(resolvers.Show.venue(second)).resolves.toEqual(venue('venue-2'));
+    await expect(resolvers.Show.venue(third)).resolves.toEqual(venue('venue-1'));
     expect(resolvers.Show.artists(first)).toEqual([artist('artist-1'), artist('artist-3')]);
     expect(resolvers.Show.artists(second)).toEqual([artist('artist-2')]);
     expect(resolvers.Show.artists(third)).toEqual([]);
-    expect(db.venue.findUniqueOrThrow).not.toHaveBeenCalled();
+    expect(db.find).not.toHaveBeenCalled();
   });
 
   // Show.venue is non-null, so a venue that can't be found is an error, not null
   it('looks up the venue of a show loaded without it', async () => {
-    db.venue.findUniqueOrThrow.mockResolvedValue(venue('venue-2'));
+    db.find.mockResolvedValue(venue('venue-2'));
 
     await expect(resolvers.Show.venue(show('show-2', 'venue-2'))).resolves.toEqual(
       venue('venue-2')
     );
-    expect(db.venue.findUniqueOrThrow).toHaveBeenCalledWith({ where: { id: 'venue-2' } });
+    expect(db.find).toHaveBeenCalledWith(venuesTable, 'venue-2');
+
+    db.find.mockResolvedValue(null);
+    await expect(resolvers.Show.venue(show('show-2', 'venue-gone'))).rejects.toThrow(
+      'Show show-2 has no venue'
+    );
   });
 
   // An IN list of hundreds of IDs on ShowArtist.showId took Postgres longer to plan than to run
   it("finds the artists through the shows' IDs, and each venue once", async () => {
     await shows();
 
-    expect(db.show.findMany.mock.calls[0][0]).not.toHaveProperty('include');
-    expect(db.showArtist.findMany).toHaveBeenCalledWith({
-      where: { show: { id: { in: ['show-1', 'show-2', 'show-3'] } } },
-      include: { artist: true },
+    expect(showsQuery.with).not.toHaveBeenCalled();
+    const [[lineups]] = db.exec.mock.calls;
+    expect(lineups.text.replace(/\s+/g, ' ').trim()).toBe(
+      'select "showId", "artistId" from "ShowArtist" where "showId" in (select id from "Show" where id in (?, ?, ?))'
+    );
+    expect(lineups.values).toEqual(['show-1', 'show-2', 'show-3']);
+    expect(db.findMany).toHaveBeenCalledWith(venuesTable, {
+      where: inList('id', ['venue-1', 'venue-2']),
     });
-    expect(db.venue.findMany).toHaveBeenCalledWith({
-      where: { id: { in: ['venue-1', 'venue-2'] } },
+    expect(db.findMany).toHaveBeenCalledWith(artistsTable, {
+      where: inList('id', ['artist-1', 'artist-2', 'artist-3']),
     });
   });
 
   it('looks nothing up for an empty page', async () => {
-    db.show.count.mockResolvedValue(0);
-    db.show.findMany.mockResolvedValue([]);
+    showsQuery.count.mockResolvedValue(0);
+    showsQuery.all.mockResolvedValue([]);
 
     await expect(shows()).resolves.toEqual([]);
-    expect(db.showArtist.findMany).not.toHaveBeenCalled();
-    expect(db.venue.findMany).not.toHaveBeenCalled();
+    expect(db.exec).not.toHaveBeenCalled();
+    expect(db.findMany).not.toHaveBeenCalled();
   });
 });
 
 describe('ShowConnection.years', () => {
   beforeEach(() => {
-    vi.resetAllMocks();
-    db.show.count.mockResolvedValue(0);
-    db.show.findMany.mockResolvedValue([]);
+    resetMocks();
+    showsQuery.count.mockResolvedValue(0);
+    showsQuery.all.mockResolvedValue([]);
   });
 
   const years = async (args: Parameters<typeof resolvers.Query.shows>[1]) => {
     const connection = await resolvers.Query.shows({}, { first: 50, ...args });
-    db.show.findMany.mockResolvedValueOnce([
+    showsQuery.all.mockResolvedValueOnce([
       { date: new Date('2019-05-01T20:00:00Z') },
       { date: new Date('2024-03-01T20:00:00Z') },
       { date: new Date('2019-09-01T20:00:00Z') },
     ]);
     const list = await resolvers.ShowConnection.years(connection);
-    return { list, where: db.show.findMany.mock.lastCall?.[0].where };
+    return { list, where: showsQuery.where.mock.lastCall?.[0] };
   };
 
   // The app's history asks for the years it can filter by, which once listed every show's
@@ -192,34 +250,41 @@ describe('ShowConnection.years', () => {
     const { list, where } = await years({ attended: true });
 
     expect(list).toEqual([2024, 2019]);
-    expect(where).toEqual({ attended: true });
+    expect(where).toEqual(and(eq('attended', true)));
   });
 
   it("leaves out the list's dates, so every year stays in the menu", async () => {
     const { where } = await years({ attended: true, year: 2019 });
 
-    expect(db.show.findMany.mock.calls[0][0].where).toEqual({
-      attended: true,
-      date: { gte: new Date('2019-01-01T00:00:00Z'), lt: new Date('2020-01-01T00:00:00Z') },
-    });
-    expect(where).toEqual({ attended: true });
+    expect(showsQuery.where.mock.calls[0][0]).toEqual(
+      and(
+        and(eq('attended', true)),
+        and(
+          gte('date', new Date('2019-01-01T00:00:00Z')),
+          lt('date', new Date('2020-01-01T00:00:00Z'))
+        )
+      )
+    );
+    expect(where).toEqual(and(eq('attended', true)));
   });
 
   it("keeps to the artist's shows", async () => {
-    db.artist.findUnique.mockResolvedValue({ id: 'artist-1' });
+    db.findOne.mockResolvedValue({ id: 'artist-1' });
+    db.findMany.mockResolvedValue([{ showId: 'show-9', artistId: 'artist-1' }]);
 
     const { where } = await years({ attended: true, artist: { slug: 'wilco' } });
 
-    expect(where).toEqual({ attended: true, artists: { some: { artistId: 'artist-1' } } });
+    expect(db.findMany).toHaveBeenCalledWith(showArtistsTable, { where: { artistId: 'artist-1' } });
+    expect(where).toEqual(and(eq('attended', true), inList('id', ['show-9'])));
   });
 
   it('has no years for an artist that does not exist', async () => {
-    db.artist.findUnique.mockResolvedValue(null);
+    db.findOne.mockResolvedValue(null);
 
     const connection = await resolvers.Query.shows({}, { artist: { slug: 'nobody' } });
 
     await expect(resolvers.ShowConnection.years(connection)).resolves.toEqual([]);
-    expect(db.show.findMany).not.toHaveBeenCalled();
+    expect(db.query).not.toHaveBeenCalled();
   });
 });
 
@@ -231,18 +296,17 @@ describe('showStats', () => {
     resolvers.Query.showStats({}, { entity: entity as ShowEntityType });
 
   beforeEach(() => {
-    vi.resetAllMocks();
+    resetMocks();
   });
 
   it('counts the shows seen of each artist, most first', async () => {
-    db.showArtist.groupBy.mockResolvedValue([
-      { artistId: 'artist-1', _count: { artistId: 2 } },
-      { artistId: 'artist-2', _count: { artistId: 5 } },
-    ]);
-    db.artist.findMany.mockResolvedValue([
-      artist('artist-1', 'Wilco'),
-      artist('artist-2', 'Spoon'),
-    ]);
+    db.exec.mockResolvedValue({
+      rows: [
+        { id: 'artist-1', count: 2 },
+        { id: 'artist-2', count: 5 },
+      ],
+    });
+    db.findMany.mockResolvedValue([artist('artist-1', 'Wilco'), artist('artist-2', 'Spoon')]);
 
     const stats = await showStats('ARTIST');
 
@@ -259,11 +323,13 @@ describe('showStats', () => {
   // It was answered as just { type: 'venue' }, and Venue.name can't be null, so the whole
   // query failed
   it('leaves out a venue deleted after its shows were counted', async () => {
-    db.show.groupBy.mockResolvedValue([
-      { venueId: 'venue-1', _count: { venueId: 3 } },
-      { venueId: 'venue-gone', _count: { venueId: 4 } },
-    ]);
-    db.venue.findMany.mockResolvedValue([venue('venue-1', 'Brooklyn Steel')]);
+    db.exec.mockResolvedValue({
+      rows: [
+        { id: 'venue-1', count: 3 },
+        { id: 'venue-gone', count: 4 },
+      ],
+    });
+    db.findMany.mockResolvedValue([venue('venue-1', 'Brooklyn Steel')]);
 
     await expect(showStats('VENUE')).resolves.toEqual([
       { count: 3, entity: { id: 'venue-1', name: 'Brooklyn Steel', type: 'venue' } },

@@ -1,62 +1,116 @@
-import type { Prisma, Artist, Venue, Show } from '@prisma/client';
+import {
+  and,
+  eq,
+  gte,
+  ilike,
+  inList,
+  lt,
+  or,
+  sql,
+  type Predicate,
+  type SqlStatement,
+  type TableColumnName,
+  type TableRow,
+} from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
-import prisma from '#/database';
-import type { WithIncludes } from '#/models';
-import { getUniqueSlug } from '#/models/utils';
+import db from '#/database/db';
+import { containing, matching } from '#/database/search';
+import type { Loaded } from '#/database/tables';
+import {
+  artists,
+  lineupArtist,
+  newId,
+  showArtists,
+  showLineup,
+  shows,
+  showVenue,
+  venues,
+} from '#/database/tables';
+import { getUniqueSlug, slugsIn } from '#/models/utils';
 
 import { fillAppleMusicLater } from './utils/appleMusicData';
 import { type Connection, parseConnection, emptyConnection } from './utils/collection';
-import { parseInput, removeEntities, resolveJoin, timestampResolver } from './utils/helpers';
+import { parseInput, removeRows, resolveJoin, timestampResolver } from './utils/helpers';
 import { bulkCreateShowsSchema, createShowSchema, updateShowSchema } from './validations';
 
-const showIncludes = {
-  artists: { include: { artist: true } },
-  venue: true,
-} satisfies Prisma.ShowInclude;
+type Show = TableRow<typeof shows>;
+type ShowFilter = Predicate<TableColumnName<typeof shows>>;
+type Artist = TableRow<typeof artists>;
+type Venue = TableRow<typeof venues>;
 
-/** A show, with its artists and venue when its query included them */
-export type ShowSource = WithIncludes<
-  Show,
-  Prisma.ShowGetPayload<{ include: typeof showIncludes }>
->;
+const showIncludes = { artists: showLineup, venue: showVenue };
+
+/** A show, with its artists and venue when its query loaded them */
+export type ShowSource = Show & {
+  artists?: Loaded<typeof showLineup>;
+  venue?: Loaded<typeof showVenue>;
+};
 
 /** What `shows` answers with: a page of shows, and the filter `years` lists the years of. */
 export interface ShowConnectionSource extends Connection<ShowSource> {
   // What the shows were filtered by, apart from their dates, or null when none can match
-  filter?: Prisma.ShowWhereInput | null;
+  filter?: ShowFilter | null;
 }
 
 /** An artist or a venue in the show stats, and which of the two it is */
 export type ShowEntitySource = (Artist & { type: 'artist' }) | (Venue & { type: 'venue' });
 
 /**
- * Adds each show's venue and artists, as `include: showIncludes` would. That include finds the
- * artists with an IN list of every show's ID on ShowArtist.showId, and Postgres plans one by
- * checking each ID against the column's most common values: for the ~550 shows on the history
- * page, planning took 3.5 ms of a 5 ms query. Going through Show's IDs, which have no common
- * values, plans in about 0.4 ms.
+ * Adds each show's venue and artists, as loading `showIncludes` would. That finds the artists with
+ * an IN list of every show's ID on ShowArtist.showId, and Postgres plans one by checking each ID
+ * against the column's most common values: for the ~550 shows on the history page, planning took
+ * 3.5 ms of a 5 ms query. Going through Show's IDs, which have no common values, plans in about
+ * 0.4 ms.
+ *
+ * The query is the one Prisma ran for this. Nothing orders a show's artists, so they come in the
+ * order of the plan Postgres picks: the order they were saved when it reads the whole table, and
+ * by artist ID when it reads the primary key's index instead. The same query keeps the same plans.
  */
-async function includeVenuesAndArtists(shows: Show[]) {
-  if (shows.length === 0) return;
-  const [venues, showArtists] = await Promise.all([
-    prisma.venue.findMany({
-      where: { id: { in: [...new Set(shows.map((show) => show.venueId))] } },
-    }),
-    prisma.showArtist.findMany({
-      where: { show: { id: { in: shows.map((show) => show.id) } } },
-      include: { artist: true },
-    }),
+async function includeVenuesAndArtists(page: ShowSource[]) {
+  if (page.length === 0) return;
+  const showIds = page.map((show) => show.id);
+  const [venueRows, { rows = [] }] = await Promise.all([
+    db.findMany(venues, { where: inList('id', [...new Set(page.map((show) => show.venueId))]) }),
+    db.exec(sql`
+      select "showId", "artistId" from "ShowArtist"
+      where "showId" in (select id from "Show" where id in ${showIds})
+    `),
   ]);
+  const lineups = rows as { showId: string; artistId: string }[];
+  const artistRows = lineups.length
+    ? await db.findMany(artists, {
+        where: inList('id', [...new Set(lineups.map((row) => row.artistId))]),
+      })
+    : [];
 
-  const venuesById = new Map(venues.map((venue) => [venue.id, venue]));
-  const showArtistsByShow = Map.groupBy(showArtists, (showArtist) => showArtist.showId);
-  for (const show of shows) {
+  const venuesById = new Map(venueRows.map((venue) => [venue.id, venue]));
+  const artistsById = new Map(artistRows.map((artist) => [artist.id, artist]));
+  const lineupsByShow = Map.groupBy(
+    lineups.map((row) => ({ ...row, artist: artistsById.get(row.artistId) ?? null })),
+    (row) => row.showId
+  );
+  for (const show of page) {
     Object.assign(show, {
       venue: venuesById.get(show.venueId) ?? null,
-      artists: showArtistsByShow.get(show.id) ?? [],
+      artists: lineupsByShow.get(show.id) ?? [],
     });
   }
+}
+
+/** The shows an artist is in */
+async function showsOf(artistId: string) {
+  const lineups = await db.findMany(showArtists, { where: { artistId } });
+  return inList(
+    'id',
+    lineups.map((row) => row.showId)
+  );
+}
+
+/** How many attended shows each artist or venue has, as the IDs and counts a query selects */
+async function countAttended(statement: SqlStatement) {
+  const { rows = [] } = await db.exec(statement);
+  return rows as { id: string; count: number }[];
 }
 
 async function getEntityStats<
@@ -84,18 +138,19 @@ const resolvers = {
     date: timestampResolver('date'),
     artists(show) {
       return resolveJoin(show.artists, 'artist', () =>
-        prisma.showArtist.findMany({
-          where: { showId: show.id },
-          include: { artist: true },
-        })
+        db.findMany(showArtists, { where: { showId: show.id }, with: { artist: lineupArtist } })
       );
     },
-    venue(show) {
+    async venue(show) {
       if (show.venue) {
         return show.venue;
       }
       // Every show has a venue
-      return prisma.venue.findUniqueOrThrow({ where: { id: show.venueId } });
+      const venue = await db.find(venues, show.venueId);
+      if (!venue) {
+        throw new Error(`Show ${show.id} has no venue`);
+      }
+      return venue;
     },
   },
   ShowEntity: {
@@ -106,12 +161,10 @@ const resolvers = {
   ShowConnection: {
     // A field's resolver only gets its own arguments, so the years come from the filter `shows`
     // put on the connection
-    async years({ filter = {} }) {
+    async years({ filter }) {
       if (filter === null) return [];
-      const results = await prisma.show.findMany({
-        where: filter,
-        select: { date: true },
-      });
+      const query = db.query(shows);
+      const results = await (filter ? query.where(filter) : query).select('date').all();
       const yearSet = new Set(results.map((r) => new Date(r.date).getFullYear()));
       return Array.from(yearSet).sort((a, b) => b - a);
     },
@@ -120,219 +173,240 @@ const resolvers = {
     async shows(_, args) {
       const { artist, venue, latest, attended, year, search, order, ...connectionArgs } = args;
       // Everything but the dates, which `years` leaves out
-      const filter: Prisma.ShowWhereInput = {};
-      let date: Prisma.ShowWhereInput['date'];
+      const conditions: ShowFilter[] = [];
+      let dates: ShowFilter | undefined;
 
       if (attended) {
-        filter.attended = true;
+        conditions.push(eq('attended', true));
       } else if (latest) {
-        date = { gte: new Date() };
+        dates = gte('date', new Date());
       }
 
       if (year) {
         const startDate = new Date(`${year}-01-01T00:00:00Z`);
         const endDate = new Date(`${year + 1}-01-01T00:00:00Z`);
-        date = { gte: startDate, lt: endDate };
+        dates = and(gte('date', startDate), lt('date', endDate));
       }
 
       if (artist?.id) {
-        filter.artists = { some: { artistId: artist.id } };
+        conditions.push(await showsOf(artist.id));
       } else if (artist?.slug) {
-        const node = await prisma.artist.findUnique({ where: { slug: artist.slug } });
+        const node = await db.findOne(artists, { where: { slug: artist.slug } });
         if (node) {
-          filter.artists = { some: { artistId: node.id } };
+          conditions.push(await showsOf(node.id));
         } else {
           return { ...emptyConnection(), filter: null };
         }
       }
 
       if (venue?.id) {
-        filter.venueId = venue.id;
+        conditions.push(eq('venueId', venue.id));
       } else if (venue?.slug) {
-        const node = await prisma.venue.findUnique({ where: { slug: venue.slug } });
+        const node = await db.findOne(venues, { where: { slug: venue.slug } });
         if (node) {
-          filter.venueId = node.id;
+          conditions.push(eq('venueId', node.id));
         } else {
           return { ...emptyConnection(), filter: null };
         }
       }
 
       if (search) {
-        filter.OR = [
-          { title: { contains: search, mode: 'insensitive' } },
-          { venue: { name: { contains: search, mode: 'insensitive' } } },
-          { artists: { some: { artist: { name: { contains: search, mode: 'insensitive' } } } } },
-        ];
+        // A show's title, its venue's name, or one of its artists' names
+        const pattern = containing(search);
+        const [venueMatches, artistMatches] = await Promise.all([
+          db.query(venues).where(ilike('name', pattern)).select('id').all(),
+          db
+            .query(showArtists)
+            .join(artists, eq(artists.id, showArtists.artistId))
+            .where(ilike(artists.name, pattern))
+            .select({ showId: showArtists.showId })
+            .all(),
+        ]);
+        conditions.push(
+          or(
+            ilike('title', pattern),
+            inList(
+              'venueId',
+              venueMatches.map((match) => match.id)
+            ),
+            inList(
+              'id',
+              artistMatches.map((match) => match.showId)
+            )
+          )
+        );
       }
 
-      const connection = await parseConnection(prisma.show, connectionArgs, {
-        where: date ? { ...filter, date } : filter,
-        orderBy: { date: order === 'ASC' || (!order && latest) ? 'asc' : 'desc' },
-      });
+      const filter = and(...conditions);
+      const query = db.query(shows).where(dates ? and(filter, dates) : filter);
+      const direction = order === 'ASC' || (!order && latest) ? 'asc' : 'desc';
+      const connection = await parseConnection<ShowSource>(
+        {
+          count: () => query.count(),
+          findMany: ({ skip, take }) =>
+            query.orderBy('date', direction).offset(skip).limit(take).all(),
+        },
+        connectionArgs
+      );
       await includeVenuesAndArtists(connection.edges.map(({ node }) => node));
       return { ...connection, filter };
     },
 
     async show(_, { id, lastAdded }) {
       if (lastAdded) {
-        return prisma.show.findFirst({ orderBy: { createdAt: 'desc' }, include: showIncludes });
+        return db.query(shows).with(showIncludes).orderBy('createdAt', 'desc').first();
       }
       if (id) {
-        return prisma.show.findUnique({ where: { id }, include: showIncludes });
+        return db.find(shows, id, { with: showIncludes });
       }
       return null;
     },
 
     async showStats(_, { entity }) {
       if (entity.toLowerCase() === 'artist') {
-        const results = await prisma.showArtist.groupBy({
-          by: ['artistId'],
-          where: { show: { attended: true } },
-          _count: { artistId: true },
-        });
+        const counts = await countAttended(sql`
+          select "artistId" as id, count(*)::int as count from "ShowArtist"
+          where "showId" in (select id from "Show" where attended)
+          group by "artistId"
+        `);
         return getEntityStats(
-          results.map((r) => ({ id: r.artistId, count: r._count.artistId })),
-          (ids) => prisma.artist.findMany({ where: { id: { in: ids } } }),
+          counts,
+          (ids) => db.findMany(artists, { where: inList('id', ids) }),
           'artist'
         );
       }
 
-      const results = await prisma.show.groupBy({
-        by: ['venueId'],
-        where: { attended: true },
-        _count: { venueId: true },
-      });
+      const counts = await countAttended(sql`
+        select "venueId" as id, count(*)::int as count from "Show"
+        where attended
+        group by "venueId"
+      `);
       return getEntityStats(
-        results.map((r) => ({ id: r.venueId, count: r._count.venueId })),
-        (ids) => prisma.venue.findMany({ where: { id: { in: ids } } }),
+        counts,
+        (ids) => db.findMany(venues, { where: inList('id', ids) }),
         'venue'
       );
     },
   },
   Mutation: {
     async bulkCreateShows(_, { input }) {
-      const shows = parseInput(bulkCreateShowsSchema, input);
+      const entries = parseInput(bulkCreateShowsSchema, input);
       const newArtists: string[] = [];
 
-      const result = await prisma.$transaction(
-        async (transaction) => {
-          const artists = new Map<string, string>();
-          const venues = new Map<string, string>();
-          let artistsCreated = 0;
-          let venuesCreated = 0;
+      const result = await db.transaction(async (tx) => {
+        const artistIds = new Map<string, string>();
+        const venueIds = new Map<string, string>();
+        let artistsCreated = 0;
+        let venuesCreated = 0;
 
-          const findOrCreateArtist = async (name: string) => {
-            const key = name.toLocaleLowerCase();
-            const cached = artists.get(key);
-            if (cached) return cached;
+        const findOrCreateArtist = async (name: string) => {
+          const key = name.toLocaleLowerCase();
+          const cached = artistIds.get(key);
+          if (cached) return cached;
 
-            let artist = await transaction.artist.findFirst({
-              where: { name: { equals: name, mode: 'insensitive' } },
+          let id = (await tx.findOne(artists, { where: ilike('name', matching(name)) }))?.id;
+          if (!id) {
+            id = newId();
+            await tx.create(artists, {
+              id,
+              name,
+              slug: await getUniqueSlug(slugsIn(tx, artists), name),
             });
-            if (!artist) {
-              artist = await transaction.artist.create({
-                data: {
-                  name,
-                  slug: await getUniqueSlug(transaction.artist, name),
-                },
-              });
-              artistsCreated += 1;
-              newArtists.push(artist.id);
-            }
-            artists.set(key, artist.id);
-            return artist.id;
-          };
-
-          const findOrCreateVenue = async (name: string) => {
-            const key = name.toLocaleLowerCase();
-            const cached = venues.get(key);
-            if (cached) return cached;
-
-            let venue = await transaction.venue.findFirst({
-              where: { name: { equals: name, mode: 'insensitive' } },
-            });
-            if (!venue) {
-              venue = await transaction.venue.create({
-                data: {
-                  name,
-                  slug: await getUniqueSlug(transaction.venue, name),
-                },
-              });
-              venuesCreated += 1;
-            }
-            venues.set(key, venue.id);
-            return venue.id;
-          };
-
-          for (const show of shows) {
-            const venueId = await findOrCreateVenue(show.venue);
-            const artistIds: string[] = [];
-            for (const artistName of show.artists) {
-              artistIds.push(await findOrCreateArtist(artistName));
-            }
-            const uniqueArtistIds = [...new Set(artistIds)];
-
-            await transaction.show.create({
-              data: {
-                attended: show.attended ?? false,
-                date: new Date(show.date),
-                venueId,
-                artists: {
-                  create: uniqueArtistIds.map((artistId) => ({ artistId })),
-                },
-              },
-            });
+            artistsCreated += 1;
+            newArtists.push(id);
           }
+          artistIds.set(key, id);
+          return id;
+        };
 
-          return {
-            artistsCreated,
-            showsCreated: shows.length,
-            venuesCreated,
-          };
-        },
-        { timeout: 30_000 }
-      );
+        const findOrCreateVenue = async (name: string) => {
+          const key = name.toLocaleLowerCase();
+          const cached = venueIds.get(key);
+          if (cached) return cached;
+
+          let id = (await tx.findOne(venues, { where: ilike('name', matching(name)) }))?.id;
+          if (!id) {
+            id = newId();
+            await tx.create(venues, {
+              id,
+              name,
+              slug: await getUniqueSlug(slugsIn(tx, venues), name),
+            });
+            venuesCreated += 1;
+          }
+          venueIds.set(key, id);
+          return id;
+        };
+
+        for (const show of entries) {
+          const venueId = await findOrCreateVenue(show.venue);
+          const ids: string[] = [];
+          for (const artistName of show.artists) {
+            ids.push(await findOrCreateArtist(artistName));
+          }
+          const uniqueArtistIds = [...new Set(ids)];
+
+          const showId = newId();
+          await tx.create(shows, {
+            id: showId,
+            attended: show.attended ?? false,
+            date: new Date(show.date),
+            venueId,
+          });
+          await tx.createMany(
+            showArtists,
+            uniqueArtistIds.map((artistId) => ({ showId, artistId }))
+          );
+        }
+
+        return {
+          artistsCreated,
+          showsCreated: entries.length,
+          venuesCreated,
+        };
+      });
       fillAppleMusicLater(newArtists);
       return result;
     },
 
     async createShow(_, { input }) {
-      const { artists, venue, date, ...data } = parseInput(createShowSchema, input);
-      return prisma.show.create({
-        data: {
-          ...data,
-          date: new Date(date),
-          venueId: venue,
-          artists: artists?.length
-            ? { create: artists.map((artistId) => ({ artistId })) }
-            : undefined,
-        },
-        include: showIncludes,
+      const { artists: artistIds, venue, date, ...data } = parseInput(createShowSchema, input);
+      const id = newId();
+      await db.transaction(async (tx) => {
+        await tx.create(shows, { ...data, id, date: new Date(date), venueId: venue });
+        if (artistIds.length) {
+          await tx.createMany(
+            showArtists,
+            artistIds.map((artistId) => ({ showId: id, artistId }))
+          );
+        }
       });
+      return db.find(shows, id, { with: showIncludes });
     },
 
     async updateShow(_, { id, input }) {
       const validated = parseInput(updateShowSchema, input);
-      const { artists, venue, date, ...data } = validated;
-      const values: Prisma.ShowUncheckedUpdateInput = { ...data };
+      const { artists: artistIds, venue, date, ...data } = validated;
+      const values: Partial<Show> = { ...data };
 
       if (date) values.date = new Date(date);
       if (venue) values.venueId = venue;
 
-      if (typeof artists !== 'undefined') {
-        await prisma.showArtist.deleteMany({ where: { showId: id } });
-        if (artists?.length) {
-          await prisma.showArtist.createMany({
-            data: artists.map((artistId) => ({ showId: id, artistId })),
-          });
+      if (typeof artistIds !== 'undefined') {
+        await db.deleteMany(showArtists, { where: { showId: id } });
+        if (artistIds?.length) {
+          await db.createMany(
+            showArtists,
+            artistIds.map((artistId) => ({ showId: id, artistId }))
+          );
         }
       }
 
-      return prisma.show.update({ where: { id }, data: values, include: showIncludes });
+      return db.update(shows, id, values, { with: showIncludes });
     },
 
     async removeShow(_, { ids }) {
-      return removeEntities(prisma.show, ids);
+      return removeRows(shows, ids);
     },
   },
 } satisfies Resolvers;

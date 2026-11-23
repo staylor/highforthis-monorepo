@@ -1,8 +1,10 @@
+import { and, gte } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
-import prisma from '#/database';
+import db from '#/database/db';
+import { artists, newId, showArtists, showLineup, shows, venues } from '#/database/tables';
 import { getListings, matchListing, normalizeName } from '#/listings';
-import { getUniqueSlug } from '#/models/utils';
+import { getUniqueSlug, slugsIn } from '#/models/utils';
 
 import { fillAppleMusicLater } from './utils/appleMusicData';
 import { badInput, parseInput } from './utils/helpers';
@@ -12,17 +14,14 @@ import { importListingsSchema } from './validations';
 const RECENT_MS = 2 * 24 * 60 * 60 * 1000;
 
 function recentShows(venueId: string) {
-  return prisma.show.findMany({
-    where: { venueId, date: { gte: new Date(Date.now() - RECENT_MS) } },
-    include: { artists: { include: { artist: true } } },
+  return db.findMany(shows, {
+    where: and({ venueId }, gte('date', new Date(Date.now() - RECENT_MS))),
+    with: { artists: showLineup },
   });
 }
 
 async function venueListingsUrl(venueId: string) {
-  const venue = await prisma.venue.findUnique({
-    where: { id: venueId },
-    select: { listingsUrl: true },
-  });
+  const venue = await db.find(venues, venueId);
   if (!venue) {
     throw badInput('Venue not found.');
   }
@@ -42,18 +41,18 @@ const resolvers = {
         return { source: null, error: (error as Error).message, listings: [] };
       }
 
-      const [shows, artists] = await Promise.all([
+      const [recent, names] = await Promise.all([
         recentShows(venueId),
-        prisma.artist.findMany({ select: { name: true } }),
+        db.query(artists).select('name').all(),
       ]);
-      const known = new Set(artists.map(({ name }) => normalizeName(name)));
+      const known = new Set(names.map(({ name }) => normalizeName(name)));
 
       return {
         source: result.source,
         error: null,
         listings: result.listings.map((listing) => ({
           ...listing,
-          ...matchListing(listing, shows),
+          ...matchListing(listing, recent),
           newArtists: [...listing.headliners, ...listing.support].filter(
             (name) => !known.has(normalizeName(name))
           ),
@@ -68,61 +67,65 @@ const resolvers = {
       );
       const { listings } = await getListings(await venueListingsUrl(venueId));
       const byId = new Map(listings.map((listing) => [listing.sourceId, listing]));
-      const shows = await recentShows(venueId);
+      const recent = await recentShows(venueId);
       const newArtists: string[] = [];
 
-      const result = await prisma.$transaction(
-        async (transaction) => {
-          const artistIds = new Map(
-            (await transaction.artist.findMany({ select: { id: true, name: true } })).map(
-              ({ id, name }) => [normalizeName(name), id]
-            )
-          );
-          let artistsCreated = 0;
-          let showsCreated = 0;
+      const result = await db.transaction(async (tx) => {
+        const artistIds = new Map(
+          (await tx.query(artists).select('id', 'name').all()).map(({ id, name }) => [
+            normalizeName(name),
+            id,
+          ])
+        );
+        let artistsCreated = 0;
+        let showsCreated = 0;
 
-          for (const { sourceId, artists } of selections.values()) {
-            const listing = byId.get(sourceId);
-            if (!listing?.startsAt || listing.cancelled) {
-              throw badInput(`Listing ${sourceId} is gone, cancelled, or doesn't have a date yet.`);
-            }
-            if (matchListing(listing, shows).show) {
-              continue;
-            }
-
-            const ids = new Set<string>();
-            for (const name of artists) {
-              const key = normalizeName(name);
-              let id = artistIds.get(key);
-              if (!id) {
-                ({ id } = await transaction.artist.create({
-                  data: { name, slug: await getUniqueSlug(transaction.artist, name) },
-                }));
-                artistIds.set(key, id);
-                artistsCreated += 1;
-                newArtists.push(id);
-              }
-              ids.add(id);
-            }
-
-            await transaction.show.create({
-              data: {
-                attended: false,
-                date: listing.startsAt,
-                url: listing.url,
-                venueId,
-                source: listing.source,
-                sourceId,
-                artists: { create: [...ids].map((artistId) => ({ artistId })) },
-              },
-            });
-            showsCreated += 1;
+        for (const { sourceId, artists: names } of selections.values()) {
+          const listing = byId.get(sourceId);
+          if (!listing?.startsAt || listing.cancelled) {
+            throw badInput(`Listing ${sourceId} is gone, cancelled, or doesn't have a date yet.`);
+          }
+          if (matchListing(listing, recent).show) {
+            continue;
           }
 
-          return { artistsCreated, showsCreated };
-        },
-        { timeout: 30_000 }
-      );
+          const ids = new Set<string>();
+          for (const name of names) {
+            const key = normalizeName(name);
+            let id = artistIds.get(key);
+            if (!id) {
+              id = newId();
+              await tx.create(artists, {
+                id,
+                name,
+                slug: await getUniqueSlug(slugsIn(tx, artists), name),
+              });
+              artistIds.set(key, id);
+              artistsCreated += 1;
+              newArtists.push(id);
+            }
+            ids.add(id);
+          }
+
+          const showId = newId();
+          await tx.create(shows, {
+            id: showId,
+            attended: false,
+            date: listing.startsAt,
+            url: listing.url,
+            venueId,
+            source: listing.source,
+            sourceId,
+          });
+          await tx.createMany(
+            showArtists,
+            [...ids].map((artistId) => ({ showId, artistId }))
+          );
+          showsCreated += 1;
+        }
+
+        return { artistsCreated, showsCreated };
+      });
       fillAppleMusicLater(newArtists);
       return result;
     },
