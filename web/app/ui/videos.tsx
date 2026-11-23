@@ -52,15 +52,19 @@ const findThumb = (thumbs: Video_VideoFragment['thumbnails']) => {
   return undefined;
 };
 
+/** The heading a video's title is in a grid of them: one level below the heading over the grid. */
+type TitleHeading = 'h2' | 'h3';
+
 export function Video(
   handle: Handle<{
     video: Video_VideoFragment;
     single?: boolean;
     embed?: boolean;
+    heading?: TitleHeading;
   }>
 ) {
   return () => {
-    const { video, single = false, embed = false } = handle.props;
+    const { video, single = false, embed = false, heading: Title = 'h2' } = handle.props;
     if (!video) {
       return null;
     }
@@ -92,9 +96,9 @@ export function Video(
         {single ? (
           <TextTitle>{video.title}</TextTitle>
         ) : (
-          <h1 mix={css({ fontSize: '1rem', lineHeight: 1.375, fontWeight: 600 })}>
+          <Title mix={css({ fontSize: '1rem', lineHeight: 1.375, fontWeight: 600 })}>
             <Link href={href}>{video.title}</Link>
-          </h1>
+          </Title>
         )}
       </article>
     );
@@ -119,12 +123,14 @@ export function Videos(
     videos: NonNullable<Videos_VideosFragment['videos']>;
     paginate?: boolean;
     search?: URLSearchParams;
+    /** For a grid under a section's own heading, as on the home page. */
+    heading?: TitleHeading;
   }>
 ) {
   const { t } = getApp(handle);
 
   return () => {
-    const { videos, paginate = true, search } = handle.props;
+    const { videos, paginate = true, search, heading } = handle.props;
     // The links page from the first and last videos here, so a page without any has neither
     const first = videos.edges.at(0);
     const last = videos.edges.at(-1);
@@ -143,7 +149,7 @@ export function Videos(
         >
           {videos.edges.length === 0 && <p>{t('videos.noFound')}</p>}
           {videos.edges.map((edge) => (
-            <Video key={edge.node.id} video={edge.node} />
+            <Video key={edge.node.id} video={edge.node} heading={heading} />
           ))}
         </div>
         {paginate && (hasPrevious || hasNext) && (
