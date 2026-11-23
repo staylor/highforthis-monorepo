@@ -1,14 +1,17 @@
 import { css } from 'remix/component';
-import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
 import { selectedMedia } from '#/actions/admin/media/data.ts';
 import {
+  backTo,
+  backToList,
+  renderAdminNotFound,
   renderAdminPage,
   type AdminContext,
   type AdminPageContext,
 } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
+import { dateTime } from '#/lib/admin/date-time.ts';
+import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -36,20 +39,6 @@ type PostRow = NonNullable<PostsAdminQuery['posts']>['edges'][number]['node'];
 type Post = NonNullable<PostEditQuery['post']>;
 // What a save that failed submitted, which the form shows in place of what's saved
 type Values = SaveFailure['values'];
-
-const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
-
-const pad = (n: number) => String(n).padStart(2, '0');
-
-function postDate(timestamp?: number | null) {
-  if (!timestamp) {
-    return null;
-  }
-  const d = new Date(timestamp);
-  const hours = d.getHours();
-  const time = `${hours % 12 || 12}:${pad(d.getMinutes())}${hours < 12 ? 'am' : 'pm'}`;
-  return `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${d.getFullYear()} at ${time}`;
-}
 
 function bodyFields(t: TFunction, post?: Post, values?: Values): Field[] {
   return [
@@ -188,7 +177,7 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
   const t = getAdminT();
   const { post } = await loadPost({ gql: context.admin.gql, id });
   if (!post) {
-    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+    return renderAdminNotFound(context);
   }
   const label = t('posts.edit');
   const values = failure?.values;
@@ -239,7 +228,7 @@ export const postsList = createController(posts.list, {
           },
         },
         { label: t('posts.slug'), render: (post: PostRow) => post.slug },
-        { label: t('posts.date'), render: (post: PostRow) => postDate(post.date) },
+        { label: t('posts.date'), render: (post: PostRow) => post.date && dateTime(post.date) },
       ];
 
       return renderAdminPage(
@@ -260,7 +249,7 @@ export const postsList = createController(posts.list, {
     async action(context) {
       const formData = await context.request.formData();
       if (formData.get('intent') !== 'delete') {
-        return createRedirectResponse(`${context.url.pathname}${context.url.search}`, 303);
+        return backToList(context.url);
       }
       return backTo(await deletePosts({ gql: context.admin.gql, formData, url: context.url }));
     },

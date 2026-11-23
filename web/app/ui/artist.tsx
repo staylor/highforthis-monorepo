@@ -3,6 +3,7 @@ import { css, type Handle, type RemixNode } from 'remix/component';
 import type { AppleMusicData } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
+import { artworkUrl } from './public/media.ts';
 import { md, merge, pinkButton, text, type Styles } from './public/styles.ts';
 
 const DEFAULT_IMAGE_SIZE = 300;
@@ -29,7 +30,7 @@ export function Artwork(
     const image = (
       <img
         mix={css(merge({ display: 'block' }, !url ? styles : undefined))}
-        src={artwork.url.replace(/\{[wh]\}/g, String(imageSize))}
+        src={artworkUrl(artwork.url, imageSize)}
         alt={name}
         width={imageSize}
         height={imageSize}

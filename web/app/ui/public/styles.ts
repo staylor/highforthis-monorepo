@@ -87,8 +87,8 @@ export const pinkButton = {
   },
 } satisfies Styles;
 
-/** Hidden, except from screen readers. */
-export const srOnly = css({
+/** Hidden, except from screen readers: the styles, to use under a breakpoint or a selector. */
+export const visuallyHidden = {
   position: 'absolute',
   width: 1,
   height: 1,
@@ -98,4 +98,7 @@ export const srOnly = css({
   clip: 'rect(0, 0, 0, 0)',
   whiteSpace: 'nowrap',
   borderWidth: 0,
-});
+} satisfies Styles;
+
+/** Hidden, except from screen readers. */
+export const srOnly = css(visuallyHidden);

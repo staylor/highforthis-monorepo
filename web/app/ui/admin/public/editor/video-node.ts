@@ -1,7 +1,8 @@
 import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import type { NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 
-import type { Video, VideoThumbnail } from '#/types/graphql.ts';
+import type { Video } from '#/types/graphql.ts';
+import { findThumbnail } from '#/ui/public/media.ts';
 
 // this data gets saved
 type SerializedVideoNode = Spread<{ videoId: string }, SerializedLexicalNode>;
@@ -33,9 +34,6 @@ function playIcon() {
   return svg;
 }
 
-const findThumb = (thumbs: VideoThumbnail[]) =>
-  [640, 480, 320].map((width) => thumbs.find((t) => t.width === width)).find(Boolean);
-
 /**
  * The video as the editor shows it, the same as on the site: its thumbnail, which plays the video
  * in place when clicked, and its title.
@@ -44,7 +42,7 @@ function renderVideo(video: Video) {
   const href = `/video/${video.slug}`;
 
   const figure = element('figure', '');
-  const thumb = findThumb(video.thumbnails);
+  const thumb = findThumbnail(video.thumbnails);
   if (thumb) {
     const img = element('img', '');
     img.src = thumb.url;

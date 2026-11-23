@@ -24,8 +24,13 @@ export const videoQuery = gql`
   ${videoFragment}
 `;
 
-const currentYear = new Date().getFullYear() + 1;
-const yearChoices = [...Array(currentYear - 2011).keys()].map((i) => 2011 + i).reverse();
+// The years there are videos from, newest first
+const FIRST_YEAR = 2011;
+const yearChoices = () =>
+  Array.from(
+    { length: new Date().getFullYear() - FIRST_YEAR + 1 },
+    (_, i) => FIRST_YEAR + i
+  ).reverse();
 
 export function VideosPage(
   handle: Handle<{
@@ -49,7 +54,11 @@ export function VideosPage(
           })}
         >
           <Heading1>{year ? `${year} Videos` : 'Videos'}</Heading1>
-          <YearSelect value={year || ''} placeholder={t('nav.videosByYear')} years={yearChoices} />
+          <YearSelect
+            value={year || ''}
+            placeholder={t('nav.videosByYear')}
+            years={yearChoices()}
+          />
         </div>
         <Videos videos={videos} search={search} />
       </>

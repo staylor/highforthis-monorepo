@@ -1,8 +1,8 @@
 import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { lg, merge, sm, text } from '#/ui/public/styles.ts';
+import { lg, merge, sm, text, xl } from '#/ui/public/styles.ts';
 
-import { button, disabledFades } from './styles.ts';
+import { button, checkbox, disabledFades } from './styles.ts';
 
 interface Album {
   id: string;
@@ -69,7 +69,7 @@ export const CoverPicker = clientEntry(
               gap: '1rem',
               [sm]: { gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' },
               [lg]: { gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' },
-              '@media (width >= 80rem)': { gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' },
+              [xl]: { gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' },
             })}
           >
             {albums.map((album) => {
@@ -96,14 +96,8 @@ export const CoverPicker = clientEntry(
                       value={album.id}
                       checked={checked}
                       mix={[
-                        css({
-                          marginTop: '0.125rem',
-                          borderRadius: '0.25rem',
-                          borderColor: 'var(--gray-300)',
-                          color: 'var(--pink)',
-                          boxShadow: 'var(--shadow-sm)',
-                          '&:focus': { boxShadow: '0 0 0 2px #fff, 0 0 0 4px var(--pink)' },
-                        }),
+                        checkbox,
+                        css({ marginTop: '0.125rem' }),
                         on('change', (event) => {
                           if (event.currentTarget.checked) {
                             selected.add(album.id);

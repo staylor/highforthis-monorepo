@@ -6,6 +6,7 @@ import type { Video_VideoFragment, Videos_VideosFragment } from '#/types/graphql
 import { getApp } from './app-context.tsx';
 import { TextTitle } from './heading.tsx';
 import { Link } from './link.tsx';
+import { findThumbnail } from './public/media.ts';
 import { lg, merge, pinkButton, sm, text } from './public/styles.ts';
 import { VideoThumbnail } from './public/video-thumbnail.tsx';
 
@@ -42,16 +43,6 @@ export const videosFragment = gql`
   ${videoFragment}
 `;
 
-const findThumb = (thumbs: Video_VideoFragment['thumbnails']) => {
-  for (const size of [640, 480, 320]) {
-    const thumb = thumbs.find((t) => t.width === size);
-    if (thumb) {
-      return thumb;
-    }
-  }
-  return undefined;
-};
-
 /** The heading a video's title is in a grid of them: one level below the heading over the grid. */
 type TitleHeading = 'h2' | 'h3';
 
@@ -74,7 +65,7 @@ export function Video(
         href={href}
         dataId={video.dataId}
         title={video.title}
-        thumbUrl={findThumb(video.thumbnails)?.url}
+        thumbUrl={findThumbnail(video.thumbnails)?.url}
         embedded={embed}
       />
     );

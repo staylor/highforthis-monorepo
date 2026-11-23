@@ -19,6 +19,7 @@ import { Heading1 } from '#/ui/heading.tsx';
 import { uploadUrl } from '#/ui/public/media.ts';
 import { Video } from '#/ui/videos.tsx';
 
+import { sharingTags } from './document.tsx';
 import { ArtistPage, artistQuery, VenuePage, venueQuery } from './entities/page.tsx';
 import { HomePage, homeQuery } from './home/page.tsx';
 import { feedQuery, feedTemplate } from './podcast/feed.ts';
@@ -33,6 +34,15 @@ import {
 import { Setlists, type Setlist, type Stats } from './sphere/public/setlists.tsx';
 import setlists from './sphere/setlists.json' with { type: 'json' };
 import { VideosPage, videoQuery, videosQuery } from './videos/page.tsx';
+
+// How many times each song was played at the Sphere, most played first
+const songCounts: Stats = {};
+for (const { sets } of setlists as Setlist[]) {
+  for (const song of sets.flat()) {
+    songCounts[song] = (songCounts[song] ?? 0) + 1;
+  }
+}
+const sortedStats = Object.fromEntries(Object.entries(songCounts).sort(([, a], [, b]) => b - a));
 
 // Pages that run their own query start the App query first, so the two run together. The rest
 // of this controller's actions (assets, health, feeds) don't render a page, so they skip it.
@@ -88,18 +98,13 @@ export default createController(routes, {
         const url = `${siteUrl(context, await loadRootData(context))}/post/${post.slug}`;
         return renderPage(context, <PostPage post={post} />, {
           title: post.title,
-          meta: [
-            { property: 'og:type', content: 'article' },
-            { property: 'og:title', content: post.title },
-            { property: 'og:description', content: post.summary },
-            { property: 'og:url', content: url },
-            { property: 'og:image', content: featuredImage },
-            { property: 'twitter:title', content: post.title },
-            { property: 'twitter:description', content: post.summary },
-            { property: 'twitter:url', content: url },
-            { property: 'twitter:image', content: featuredImage },
-            { property: 'twitter:card', content: 'summary_large_image' },
-          ],
+          meta: sharingTags({
+            title: post.title,
+            description: post.summary,
+            url,
+            image: featuredImage,
+            largeImage: true,
+          }),
         });
       },
     },
@@ -195,13 +200,6 @@ export default createController(routes, {
 
     sphere(context) {
       const { t } = context;
-      const stats: Stats = {};
-      for (const { sets } of setlists as Setlist[]) {
-        for (const song of sets.flat()) {
-          stats[song] = (stats[song] ?? 0) + 1;
-        }
-      }
-      const sortedStats = Object.fromEntries(Object.entries(stats).sort(([, a], [, b]) => b - a));
       return renderPage(
         context,
         <article mix={css({ marginTop: '2rem' })}>
@@ -219,7 +217,7 @@ export default createController(routes, {
               songOne: t('sphere.stats.song_one'),
               songOther: t('sphere.stats.song_other'),
               songsSummary: t('sphere.stats.songs', {
-                songCount: Object.keys(stats).length,
+                songCount: Object.keys(songCounts).length,
                 setlistCount: setlists.length,
               }),
             }}

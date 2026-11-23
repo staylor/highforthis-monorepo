@@ -35,14 +35,18 @@ export const toolbarSelect = merge(input, {
   ...text.sm,
 });
 
-/** A checkbox in pink. */
-export const checkbox = {
+/** The admin's checkbox: pink, with a pink ring while it has focus. */
+export const checkbox = css({
   borderRadius: '0.25rem',
   borderColor: 'var(--gray-300)',
   color: 'var(--pink)',
   boxShadow: 'var(--shadow-sm)',
-  '&:focus': { boxShadow: '0 0 0 3px var(--pink), var(--shadow-sm)' },
-} satisfies Styles;
+  '&:focus': {
+    borderColor: 'var(--pink)',
+    boxShadow: '0 0 0 2px #fff, 0 0 0 4px var(--pink), var(--shadow-sm)',
+  },
+  '&:disabled': { opacity: 0.4 },
+});
 
 export const heading1 = {
   fontWeight: 900,

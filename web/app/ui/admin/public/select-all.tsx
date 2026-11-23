@@ -1,8 +1,6 @@
-import { clientEntry, css, on, ref, type Handle } from 'remix/component';
+import { clientEntry, on, ref, type Handle } from 'remix/component';
 
 import { checkbox } from './styles.ts';
-
-const box = css(checkbox);
 
 // The list table's header box: checks or unchecks every row's box, and shows whether all, some
 // or none of the rows are checked as rows are ticked by hand. The table has one above its rows
@@ -43,7 +41,7 @@ export const SelectAll = clientEntry(
           type="checkbox"
           aria-label={handle.props.label}
           mix={[
-            box,
+            checkbox,
             ref((node, signal) => {
               input = node;
               // Row boxes and the other header box report their changes to the table

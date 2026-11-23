@@ -1,9 +1,12 @@
 import type { RemixNode } from 'remix/component';
+import { createRedirectResponse } from 'remix/response/redirect';
 
 import { loadRootData, titleTemplate } from '#/actions/render-page.tsx';
+import type { RedirectResult } from '#/lib/admin/forms.ts';
 import type { GraphQLClient } from '#/lib/graphql.ts';
 import { getAdminT } from '#/lib/i18n.ts';
 import type { AppContext } from '#/router.ts';
+import { Heading } from '#/ui/admin/page.tsx';
 
 import { AdminDocument } from './document.tsx';
 
@@ -40,3 +43,16 @@ export async function renderAdminPage(
     { status: options.status }
   );
 }
+
+/** The page for an artist, a post or the like that isn't there to edit. */
+export function renderAdminNotFound(context: AdminPageContext) {
+  return renderAdminPage(context, <Heading>{getAdminT()('table.noItems')}</Heading>, {
+    status: 404,
+  });
+}
+
+/** Goes where a save or a delete said to, as a GET. */
+export const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
+
+/** Back to the list a form was posted from, as it was: its page, search and filters. */
+export const backToList = (url: URL) => createRedirectResponse(`${url.pathname}${url.search}`, 303);

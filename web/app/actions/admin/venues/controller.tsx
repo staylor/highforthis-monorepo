@@ -1,14 +1,16 @@
 import { css } from 'remix/component';
-import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
 import { selectedMedia } from '#/actions/admin/media/data.ts';
 import {
+  backTo,
+  backToList,
+  renderAdminNotFound,
   renderAdminPage,
   type AdminContext,
   type AdminPageContext,
 } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
+import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -41,8 +43,6 @@ const venues = routes.admin.venues;
 
 type VenueRow = NonNullable<VenuesAdminQuery['venues']>['edges'][number]['node'];
 type Venue = NonNullable<VenueEditQuery['venue']>;
-
-const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
 
 const flags = new Set<unknown>(['excludeFromSearch', 'permanentlyClosed'] satisfies VenueFlag[]);
 const isFlag = (intent: unknown): intent is VenueFlag => flags.has(intent);
@@ -209,7 +209,7 @@ export const venuesList = createController(venues.list, {
         const saved = await setVenueFlag({ gql: context.admin.gql, flag: intent, formData });
         return new Response(null, { status: saved ? 204 : 500 });
       }
-      return createRedirectResponse(`${context.url.pathname}${context.url.search}`, 303);
+      return backToList(context.url);
     },
   },
 });
@@ -250,7 +250,7 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
   const t = getAdminT();
   const { venue, shows } = await loadVenue({ gql: context.admin.gql, id });
   if (!venue) {
-    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+    return renderAdminNotFound(context);
   }
   const label = t('venues.edit');
   const venueShows = (shows?.edges ?? []).map(({ node }) => ({

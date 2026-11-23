@@ -2,7 +2,7 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import { renderAdminPage, type AdminContext } from '#/actions/admin/render-page.tsx';
+import { backTo, renderAdminPage, type AdminContext } from '#/actions/admin/render-page.tsx';
 import { isRedirect } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
@@ -171,7 +171,7 @@ export const showListings = createController(listingsRoute, {
       const formData = await context.request.formData();
       const result = await importListings({ gql: context.admin.gql, venueId, formData });
       if (isRedirect(result)) {
-        return createRedirectResponse(result.redirectTo, 303);
+        return backTo(result);
       }
       return renderListingsPage(context, venueId, { failed: true });
     },

@@ -1,12 +1,14 @@
-import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
 import {
+  backTo,
+  backToList,
+  renderAdminNotFound,
   renderAdminPage,
   type AdminContext,
   type AdminPageContext,
 } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
+import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -22,8 +24,6 @@ import { createUser, deleteUsers, loadUser, loadUsers, updateUser } from './data
 // route maps.
 
 const users = routes.admin.users;
-
-const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
 
 function userFields(): Field[] {
   const t = getAdminT();
@@ -94,7 +94,7 @@ export const usersList = createController(users.list, {
     async action(context) {
       const formData = await context.request.formData();
       if (formData.get('intent') !== 'delete') {
-        return createRedirectResponse(`${context.url.pathname}${context.url.search}`, 303);
+        return backToList(context.url);
       }
       return backTo(await deleteUsers({ gql: context.admin.gql, formData, url: context.url }));
     },
@@ -132,7 +132,7 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
   const t = getAdminT();
   const { user } = await loadUser({ gql: context.admin.gql, id });
   if (!user) {
-    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+    return renderAdminNotFound(context);
   }
   return renderAdminPage(
     context,
