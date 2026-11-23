@@ -16,11 +16,10 @@ export function titleTemplate(title: string | undefined | null, siteSettings?: S
   return template.replace('%s', title || siteSettings?.tagline || SITE_TAGLINE);
 }
 
+// What every page shows: the site's name and footer, and the podcast's feed and details. What
+// one page shows, such as the home page's upcoming shows, is in that page's own query.
 const appQuery = gql`
   query App {
-    apiKeys {
-      googleMaps
-    }
     podcastSettings {
       id
       description
@@ -31,26 +30,6 @@ const appQuery = gql`
         id
         destination
         fileName
-      }
-    }
-    shows(first: 30, latest: true) {
-      edges {
-        node {
-          id
-          date
-          title
-          url
-          artists {
-            id
-            name
-            slug
-          }
-          venue {
-            id
-            name
-            slug
-          }
-        }
       }
     }
     siteSettings {

@@ -15,6 +15,7 @@ import {
   text,
 } from '#/ui/public/styles.ts';
 import { AccentLine, SectionHeader } from '#/ui/section-header.tsx';
+import { Sidebar } from '#/ui/sidebar.tsx';
 import { Videos, videosFragment } from '#/ui/videos.tsx';
 
 export const homeQuery = gql`
@@ -28,6 +29,26 @@ export const homeQuery = gql`
           slug
           summary
           title
+        }
+      }
+    }
+    shows(first: 30, latest: true) {
+      edges {
+        node {
+          id
+          date
+          title
+          url
+          artists {
+            id
+            name
+            slug
+          }
+          venue {
+            id
+            name
+            slug
+          }
         }
       }
     }
@@ -46,6 +67,12 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
 
     return (
       <>
+        {data.shows && (
+          <>
+            <Sidebar shows={data.shows} />
+            <AccentLine />
+          </>
+        )}
         {data.videos && (
           <section>
             <SectionHeader label="Videos" viewAllLink="/videos" />

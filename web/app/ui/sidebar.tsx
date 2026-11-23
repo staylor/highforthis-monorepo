@@ -1,6 +1,6 @@
 import { css, type Handle } from 'remix/component';
 
-import type { AppQuery } from '#/types/graphql.ts';
+import type { HomeQuery } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';
@@ -8,7 +8,7 @@ import { card, colorTransition, lg, linkHover, merge, sm, text } from './public/
 import { SectionHeader } from './section-header.tsx';
 import { formatArtists, formatShowLink, monthNames, weekdayNames } from './shows/utils.ts';
 
-type Shows = NonNullable<AppQuery['shows']>;
+type Shows = NonNullable<HomeQuery['shows']>;
 type Edges = Shows['edges'];
 
 function groupShowsByMonth(edges: Edges) {
@@ -65,6 +65,7 @@ const showCard = css(
   })
 );
 
+/** The home page's upcoming shows, by month. */
 export function Sidebar(handle: Handle<{ shows: Shows }>) {
   const { t } = getApp(handle);
 
