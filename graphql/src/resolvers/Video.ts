@@ -6,7 +6,7 @@ import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
-import { removeEntities, timestampResolver } from './utils/helpers';
+import { parseInput, removeEntities, timestampResolver } from './utils/helpers';
 import { createVideoSchema, updateVideoSchema } from './validations';
 
 const videoIncludes = {
@@ -70,7 +70,7 @@ const resolvers = {
   },
   Mutation: {
     async createVideo(_, { input }) {
-      const { publishedAt, ...rest } = createVideoSchema.parse(input);
+      const { publishedAt, ...rest } = parseInput(createVideoSchema, input);
       const slug = await getUniqueSlug(prisma.video, rest.title);
       return prisma.video.create({
         data: { ...rest, slug, publishedAt: new Date(publishedAt) },
@@ -79,7 +79,7 @@ const resolvers = {
     },
 
     async updateVideo(_, { id, input }) {
-      const { publishedAt, ...rest } = updateVideoSchema.parse(input);
+      const { publishedAt, ...rest } = parseInput(updateVideoSchema, input);
       return prisma.video.update({
         where: { id },
         data: {

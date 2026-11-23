@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql';
+import { badInput } from './helpers';
 
 function base64(i: string) {
   return Buffer.from(i, 'utf8').toString('base64');
@@ -15,7 +15,7 @@ function cursorToOffset(cursor: string) {
   const [, offset] = CURSOR.exec(unbase64(cursor)) ?? [];
   // Cursors come from a connection's edges, so any other is the request's mistake
   if (offset === undefined) {
-    throw new GraphQLError('Invalid cursor', { extensions: { code: 'BAD_USER_INPUT' } });
+    throw badInput('Invalid cursor');
   }
   return Number(offset);
 }

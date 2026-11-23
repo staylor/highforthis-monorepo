@@ -5,7 +5,7 @@ import prisma from '#/database';
 import type { WithIncludes } from '#/models';
 
 import { parseConnection } from './utils/collection';
-import { removeEntities, timestampResolver } from './utils/helpers';
+import { parseInput, removeEntities, timestampResolver } from './utils/helpers';
 import { createPodcastSchema, updatePodcastSchema } from './validations';
 
 const podcastIncludes = {
@@ -58,7 +58,7 @@ const resolvers = {
   },
   Mutation: {
     async createPodcast(_, { input }) {
-      const { audio, image, ...data } = createPodcastSchema.parse(input);
+      const { audio, image, ...data } = parseInput(createPodcastSchema, input);
       // The unchecked input takes audioId and imageId as they are
       const podcastData: Prisma.PodcastUncheckedCreateInput = {
         ...data,
@@ -72,7 +72,7 @@ const resolvers = {
     },
 
     async updatePodcast(_, { id, input }) {
-      const { audio, image, ...data } = updatePodcastSchema.parse(input);
+      const { audio, image, ...data } = parseInput(updatePodcastSchema, input);
       const podcastData: Prisma.PodcastUncheckedUpdateInput = {
         ...data,
         audioId: audio ?? undefined,

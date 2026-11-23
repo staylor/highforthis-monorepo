@@ -7,7 +7,7 @@ import prisma from '#/database';
 import type { WithIncludes } from '#/models';
 
 import { parseConnection } from './utils/collection';
-import { removeEntities, resolveJoin } from './utils/helpers';
+import { badInput, parseInput, removeEntities, resolveJoin } from './utils/helpers';
 import { createUserSchema, updateUserSchema } from './validations';
 
 const SALT_ROUNDS = 10;
@@ -52,13 +52,13 @@ const resolvers = {
   },
   Mutation: {
     async createUser(_, { input }) {
-      const { password, roles, ...fields } = createUserSchema.parse(input);
+      const { password, roles, ...fields } = parseInput(createUserSchema, input);
       if (!fields.email || !password) {
-        throw new Error('Email and Password are required.');
+        throw badInput('Email and Password are required.');
       }
       const exists = await prisma.user.count({ where: { email: fields.email } });
       if (exists) {
-        throw new Error('Email already exists.');
+        throw badInput('Email already exists.');
       }
       const hash = await bcrypt.hash(password, SALT_ROUNDS);
       return prisma.user.create({
@@ -73,14 +73,14 @@ const resolvers = {
     },
 
     async updateUser(_, { id, input }) {
-      const { password, roles, ...fields } = updateUserSchema.parse(input);
+      const { password, roles, ...fields } = parseInput(updateUserSchema, input);
       const user = await prisma.user.findUnique({ where: { id } });
-      if (!user) throw new Error('User not found');
+      if (!user) throw badInput('User not found');
 
       if (fields.email && fields.email !== user.email) {
         const exists = await prisma.user.count({ where: { email: fields.email } });
         if (exists) {
-          throw new Error('Email already exists.');
+          throw badInput('Email already exists.');
         }
       }
 

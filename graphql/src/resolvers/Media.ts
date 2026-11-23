@@ -5,7 +5,7 @@ import prisma from '#/database';
 import type { WithIncludes } from '#/models';
 
 import { parseConnection } from './utils/collection';
-import { removeEntities, resolveJoin, resolveType } from './utils/helpers';
+import { parseInput, removeEntities, resolveJoin, resolveType } from './utils/helpers';
 import { updateMediaUploadSchema } from './validations';
 
 const mediaIncludes = {
@@ -103,7 +103,7 @@ const resolvers = {
   },
   Mutation: {
     async updateMediaUpload(_, { id, input }) {
-      const data = updateMediaUploadSchema.parse(input);
+      const data = parseInput(updateMediaUploadSchema, input);
       return prisma.mediaUpload.update({ where: { id }, data, include: mediaIncludes });
     },
 

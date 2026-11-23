@@ -4,6 +4,7 @@ import { artworkUrl, getAlbums, searchAlbums } from '#/appleMusic';
 import prisma from '#/database';
 import { uploadFromUrl } from '#/uploads';
 
+import { parseInput } from './utils/helpers';
 import { addAlbumCoversSchema } from './validations';
 
 const resolvers = {
@@ -24,7 +25,7 @@ const resolvers = {
   Mutation: {
     // The albums are looked up again, so the server only downloads Apple's own artwork
     async addAlbumCovers(_, { ids }) {
-      const albums = await getAlbums(addAlbumCoversSchema.parse(ids));
+      const albums = await getAlbums(parseInput(addAlbumCoversSchema, ids));
       const mediaIds: string[] = [];
       // One at a time: a full-size cover can be several megabytes
       for (const { name, artistName, artwork } of albums) {

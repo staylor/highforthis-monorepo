@@ -7,7 +7,7 @@ import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
-import { removeEntities, resolveJoin } from './utils/helpers';
+import { parseInput, removeEntities, resolveJoin } from './utils/helpers';
 import { createVenueSchema, updateVenueSchema } from './validations';
 
 const venueIncludes = {
@@ -76,7 +76,7 @@ const resolvers = {
   },
   Mutation: {
     async createVenue(_, { input }) {
-      const { featuredMedia, coordinates, ...data } = createVenueSchema.parse(input);
+      const { featuredMedia, coordinates, ...data } = parseInput(createVenueSchema, input);
       const slug = await getUniqueSlug(prisma.venue, data.name);
       // Look the venue up unless its coordinates were entered
       const location =
@@ -97,7 +97,7 @@ const resolvers = {
     },
 
     async updateVenue(_, { id, input }) {
-      const { featuredMedia, coordinates, ...data } = updateVenueSchema.parse(input);
+      const { featuredMedia, coordinates, ...data } = parseInput(updateVenueSchema, input);
       const updateData: Prisma.VenueUpdateInput = { ...data };
       if (coordinates) {
         updateData.latitude = coordinates.latitude;

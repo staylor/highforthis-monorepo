@@ -7,7 +7,7 @@ import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
-import { removeEntities, resolveJoin } from './utils/helpers';
+import { parseInput, removeEntities, resolveJoin } from './utils/helpers';
 import { createArtistSchema, updateArtistSchema } from './validations';
 
 type AppleMusicInput = NonNullable<z.infer<typeof updateArtistSchema>['appleMusic']>;
@@ -130,7 +130,7 @@ const resolvers = {
   },
   Mutation: {
     async createArtist(_, { input }) {
-      const { featuredMedia, ...data } = createArtistSchema.parse(input);
+      const { featuredMedia, ...data } = parseInput(createArtistSchema, input);
       const slug = await getUniqueSlug(prisma.artist, data.name);
       return prisma.artist.create({
         data: {
@@ -145,7 +145,7 @@ const resolvers = {
     },
 
     async updateArtist(_, { id, input }) {
-      const { featuredMedia, appleMusic, ...data } = updateArtistSchema.parse(input);
+      const { featuredMedia, appleMusic, ...data } = parseInput(updateArtistSchema, input);
       if (typeof featuredMedia !== 'undefined') {
         await prisma.artistFeaturedMedia.deleteMany({ where: { artistId: id } });
         if (featuredMedia?.length) {

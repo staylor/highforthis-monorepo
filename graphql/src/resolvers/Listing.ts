@@ -1,10 +1,10 @@
-import { GraphQLError } from 'graphql';
 import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
 import { getListings, matchListing, normalizeName } from '#/listings';
 import { getUniqueSlug } from '#/models/utils';
 
+import { badInput, parseInput } from './utils/helpers';
 import { importListingsSchema } from './validations';
 
 // Listings start today; the margin covers shows in other time zones
@@ -23,10 +23,10 @@ async function venueListingsUrl(venueId: string) {
     select: { listingsUrl: true },
   });
   if (!venue) {
-    throw new GraphQLError('Venue not found.');
+    throw badInput('Venue not found.');
   }
   if (!venue.listingsUrl) {
-    throw new GraphQLError("This venue doesn't have a listings page.");
+    throw badInput("This venue doesn't have a listings page.");
   }
   return venue.listingsUrl;
 }
@@ -63,7 +63,7 @@ const resolvers = {
   Mutation: {
     async importListings(_, { venueId, input }) {
       const selections = new Map(
-        importListingsSchema.parse(input).map((selection) => [selection.sourceId, selection])
+        parseInput(importListingsSchema, input).map((selection) => [selection.sourceId, selection])
       );
       const { listings } = await getListings(await venueListingsUrl(venueId));
       const byId = new Map(listings.map((listing) => [listing.sourceId, listing]));
@@ -82,9 +82,7 @@ const resolvers = {
           for (const { sourceId, artists } of selections.values()) {
             const listing = byId.get(sourceId);
             if (!listing?.startsAt || listing.cancelled) {
-              throw new GraphQLError(
-                `Listing ${sourceId} is gone, cancelled, or doesn't have a date yet.`
-              );
+              throw badInput(`Listing ${sourceId} is gone, cancelled, or doesn't have a date yet.`);
             }
             if (matchListing(listing, shows).show) {
               continue;

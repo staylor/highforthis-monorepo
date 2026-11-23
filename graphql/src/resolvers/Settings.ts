@@ -3,6 +3,7 @@ import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
 
+import { parseInput } from './utils/helpers';
 import { siteSettingsSchema, mediaSettingsSchema, podcastSettingsSchema } from './validations';
 
 /**
@@ -45,7 +46,7 @@ const resolvers = {
   },
   Mutation: {
     async updateSiteSettings(_, { id, input }) {
-      const data = siteSettingsSchema.parse(input);
+      const data = parseInput(siteSettingsSchema, input);
       return prisma.siteSettings.upsert({
         where: { id },
         create: { id, ...data },
@@ -53,7 +54,7 @@ const resolvers = {
       });
     },
     async updateMediaSettings(_, { id, input }) {
-      const { crops, ...rest } = mediaSettingsSchema.parse(input);
+      const { crops, ...rest } = parseInput(mediaSettingsSchema, input);
       const settings = await prisma.mediaSettings.upsert({
         where: { id },
         create: { id, ...rest },
@@ -70,7 +71,7 @@ const resolvers = {
       return settings;
     },
     async updatePodcastSettings(_, { id, input }) {
-      const { image, ...data } = podcastSettingsSchema.parse(input);
+      const { image, ...data } = parseInput(podcastSettingsSchema, input);
       return prisma.podcastSettings.upsert({
         where: { id },
         create: { id, ...data, imageId: image },

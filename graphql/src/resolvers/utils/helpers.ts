@@ -1,3 +1,28 @@
+import { GraphQLError } from 'graphql';
+import type { z } from 'zod';
+
+/** An error for something the request got wrong, which isn't the server's failure */
+export const badInput = (message: string) =>
+  new GraphQLError(message, { extensions: { code: 'BAD_USER_INPUT' } });
+
+/**
+ * A mutation's input as its schema reads it. Input the schema turns down is answered with what's
+ * wrong in each field.
+ */
+export function parseInput<TSchema extends z.ZodType>(
+  schema: TSchema,
+  input: unknown
+): z.output<TSchema> {
+  const result = schema.safeParse(input);
+  if (result.success) {
+    return result.data;
+  }
+  const problems = result.error.issues.map(({ path, message }) =>
+    path.length ? `${path.join('.')}: ${message}` : message
+  );
+  throw badInput(`Invalid input (${problems.join('; ')})`);
+}
+
 interface DeleteDelegate {
   deleteMany: (args: { where: { id: { in: string[] } } }) => Promise<unknown>;
 }
