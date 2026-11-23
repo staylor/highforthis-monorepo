@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { randomInt } from 'node:crypto';
 
 import {
   belongsTo,
@@ -40,8 +40,20 @@ function skipUndefined<TRow extends Record<string, unknown>>({
   return { value: Object.fromEntries(defined) as Partial<TRow> };
 }
 
-/** An ID for a new row. Prisma made CUIDs, which are also text, so the two can share a column. */
-export const newId = () => randomUUID();
+// IDs are made the way Prisma's `cuid()` made them: a "c", then the time, a counter, a block for
+// the process and random characters, all in base 36. They sort by when they were made, which
+// matters where rows come back in the order of an index on an ID: one show's artists, for one.
+const BLOCK = 36 ** 4;
+const block = (value: number) => value.toString(36).padStart(4, '0');
+const processBlock = block(process.pid % BLOCK);
+let counter = randomInt(BLOCK);
+
+/** An ID for a new row, as Prisma's `cuid()` would make it */
+export function newId() {
+  counter = (counter + 1) % BLOCK;
+  const time = Date.now().toString(36);
+  return `c${time}${block(counter)}${processBlock}${block(randomInt(BLOCK))}${block(randomInt(BLOCK))}`;
+}
 
 export const venues = table({
   name: 'Venue',
