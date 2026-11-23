@@ -8,6 +8,7 @@ import {
   type SelectionSetNode,
   type ValueNode,
 } from 'graphql';
+import { DataTableError } from 'remix/data-table';
 
 import type { createLogger } from '@highforthis/shared/logger';
 
@@ -155,9 +156,18 @@ export function queryLimits(): ApolloServerPlugin<AppContext> {
   };
 }
 
+/** Whether an error came from the database or its client, either Prisma or remix/data-table */
+function isDatabaseError(error: unknown): error is Error {
+  return (
+    error instanceof DataTableError ||
+    (error instanceof Error && error.name.startsWith('PrismaClient'))
+  );
+}
+
 /**
  * Keeps server internals out of answers: stack traces only in development, and database errors,
- * whose messages quote the query and the source, logged and answered with a plain message.
+ * whose messages and causes quote the query, the tables and the source, logged and answered with a
+ * plain message.
  */
 export function errorOptions(
   logger: Logger
@@ -166,7 +176,7 @@ export function errorOptions(
     includeStacktraceInErrorResponses: process.env.NODE_ENV === 'development',
     formatError(formatted, error) {
       const original = unwrapResolverError(error);
-      if (original instanceof Error && original.name.startsWith('PrismaClient')) {
+      if (isDatabaseError(original)) {
         logger.error({ err: original, path: formatted.path }, 'Database error in a resolver');
         return {
           message: 'Internal server error',
