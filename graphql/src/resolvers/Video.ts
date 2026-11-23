@@ -1,23 +1,22 @@
-import type { Prisma, Video } from '@prisma/client';
+import { ilike, ne, or, type TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
-import prisma from '#/database';
-import type { WithIncludes } from '#/models';
-import { getUniqueSlug } from '#/models/utils';
+import db from '#/database/db';
+import { containing } from '#/database/search';
+import type { Loaded } from '#/database/tables';
+import { newId, videos, videoThumbnailRows, videoThumbnails } from '#/database/tables';
+import { getUniqueSlug, slugsIn } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeEntities, timestampResolver } from './utils/helpers';
+import { parseInput, removeRows, timestampResolver } from './utils/helpers';
 import { createVideoSchema, updateVideoSchema } from './validations';
 
-const videoIncludes = {
-  thumbnails: true,
-} satisfies Prisma.VideoInclude;
+const videoIncludes = { thumbnails: videoThumbnailRows };
 
-/** A video, with its thumbnails when its query included them */
-export type VideoSource = WithIncludes<
-  Video,
-  Prisma.VideoGetPayload<{ include: typeof videoIncludes }>
->;
+/** A video, with its thumbnails when its query loaded them */
+export type VideoSource = TableRow<typeof videos> & {
+  thumbnails?: Loaded<typeof videoThumbnailRows>;
+};
 
 const resolvers = {
   Video: {
@@ -26,44 +25,52 @@ const resolvers = {
     updatedAt: timestampResolver('updatedAt'),
     thumbnails(video) {
       if (video.thumbnails) return video.thumbnails;
-      return prisma.videoThumbnail.findMany({ where: { videoId: video.id } });
+      return db.findMany(videoThumbnails, { where: { videoId: video.id } });
     },
   },
   VideoConnection: {
     async years() {
-      const results = await prisma.video.findMany({
-        distinct: ['year'],
-        select: { year: true },
-        where: { year: { not: 0 } },
-        orderBy: { year: 'desc' },
-      });
+      const results = await db
+        .query(videos)
+        .where(ne('year', 0))
+        .select('year')
+        .distinct()
+        .orderBy('year', 'desc')
+        .all();
       return results.map((r) => r.year);
     },
   },
   Query: {
     async videos(_, args) {
       const { year, search, ...connectionArgs } = args;
-      const where: Prisma.VideoWhereInput = {};
-      if (year) where.year = year;
+      let query = db.query(videos);
+      if (year) query = query.where({ year });
       if (search) {
-        where.OR = [
-          { title: { contains: search, mode: 'insensitive' } },
-          { slug: { contains: search, mode: 'insensitive' } },
-        ];
+        const pattern = containing(search);
+        query = query.where(or(ilike('title', pattern), ilike('slug', pattern)));
       }
-      return parseConnection(prisma.video, connectionArgs, {
-        where,
-        orderBy: [{ year: 'desc' }, { position: 'desc' }],
-        include: videoIncludes,
-      });
+      return parseConnection(
+        {
+          count: () => query.count(),
+          findMany: ({ skip, take }) =>
+            query
+              .with(videoIncludes)
+              .orderBy('year', 'desc')
+              .orderBy('position', 'desc')
+              .offset(skip)
+              .limit(take)
+              .all(),
+        },
+        connectionArgs
+      );
     },
 
     video(_, { id, slug }) {
       if (id) {
-        return prisma.video.findUnique({ where: { id }, include: videoIncludes });
+        return db.find(videos, id, { with: videoIncludes });
       }
       if (slug) {
-        return prisma.video.findUnique({ where: { slug }, include: videoIncludes });
+        return db.findOne(videos, { where: { slug }, with: videoIncludes });
       }
       return null;
     },
@@ -71,28 +78,28 @@ const resolvers = {
   Mutation: {
     async createVideo(_, { input }) {
       const { publishedAt, ...rest } = parseInput(createVideoSchema, input);
-      const slug = await getUniqueSlug(prisma.video, rest.title);
-      return prisma.video.create({
-        data: { ...rest, slug, publishedAt: new Date(publishedAt) },
-        include: videoIncludes,
-      });
+      const slug = await getUniqueSlug(slugsIn(db, videos), rest.title);
+      const id = newId();
+      await db.create(videos, { ...rest, id, slug, publishedAt: new Date(publishedAt) });
+      return db.find(videos, id, { with: videoIncludes });
     },
 
     async updateVideo(_, { id, input }) {
       const { publishedAt, ...rest } = parseInput(updateVideoSchema, input);
-      return prisma.video.update({
-        where: { id },
-        data: {
+      return db.update(
+        videos,
+        id,
+        {
           ...rest,
           // A form that leaves the date out sends no publishedAt, which keeps the saved one
           ...(publishedAt !== undefined && { publishedAt: new Date(publishedAt) }),
         },
-        include: videoIncludes,
-      });
+        { with: videoIncludes }
+      );
     },
 
     async removeVideo(_, { ids }) {
-      return removeEntities(prisma.video, ids);
+      return removeRows(videos, ids);
     },
   },
 } satisfies Resolvers;

@@ -275,6 +275,53 @@ export const mediaDetails = {
 
 // --- Settings ---
 
+/** The one row of each kind of settings has the ID 'site', 'media' or 'podcast' */
+export const siteSettings = table({
+  name: 'SiteSettings',
+  columns: {
+    id: c.text(),
+    siteTitle: c.text().nullable(),
+    tagline: c.text().nullable(),
+    siteUrl: c.text().nullable(),
+    emailAddress: c.text().nullable(),
+    language: c.text().nullable(),
+    copyrightText: c.text().nullable(),
+  },
+  beforeWrite: skipUndefined,
+});
+
+export const mediaSettings = table({
+  name: 'MediaSettings',
+  columns: { id: c.text() },
+  beforeWrite: skipUndefined,
+});
+
+export const podcastSettings = table({
+  name: 'PodcastSettings',
+  columns: {
+    id: c.text(),
+    title: c.text().nullable(),
+    description: c.text().nullable(),
+    managingEditor: c.text().nullable(),
+    copyrightText: c.text().nullable(),
+    websiteLink: c.text().nullable(),
+    feedLink: c.text().nullable(),
+    imageId: c.text().nullable(),
+    itunesName: c.text().nullable(),
+    itunesEmail: c.text().nullable(),
+    generator: c.text().nullable(),
+    language: c.text().nullable(),
+    explicit: c.text().nullable(),
+    category: c.text().nullable(),
+  },
+  beforeWrite: skipUndefined,
+});
+
+/** The podcast's image */
+export const podcastSettingsImage = belongsTo(podcastSettings, mediaUploads, {
+  foreignKey: 'imageId',
+});
+
 /** The sizes an uploaded image is cropped to, which belong to the one media settings row */
 export const mediaCropSettings = table({
   name: 'MediaCropSetting',
@@ -391,3 +438,63 @@ export const postTagArtist = belongsTo(postArtists, artists, { foreignKey: 'arti
 export const postTags = hasMany(posts, postArtists, { foreignKey: 'postId' }).with({
   artist: postTagArtist,
 });
+
+// --- Podcast ---
+
+export const podcasts = table({
+  name: 'Podcast',
+  columns: {
+    id: c.text(),
+    title: c.text(),
+    description: c.text(),
+    audioId: c.text().nullable(),
+    imageId: c.text().nullable(),
+    createdAt: timestamp(),
+    updatedAt: timestamp(),
+  },
+  timestamps,
+  beforeWrite: skipUndefined,
+});
+
+/** An episode's audio and image */
+export const podcastMedia = {
+  audio: belongsTo(podcasts, mediaUploads, { foreignKey: 'audioId' }),
+  image: belongsTo(podcasts, mediaUploads, { foreignKey: 'imageId' }),
+};
+
+// --- Video ---
+
+export const videos = table({
+  name: 'Video',
+  columns: {
+    id: c.text(),
+    dataId: c.text(),
+    slug: c.text(),
+    dataType: c.text(),
+    dataPlaylistId: c.text(),
+    year: c.integer(),
+    publishedAt: timestamp(),
+    publishedISO: c.text(),
+    title: c.text(),
+    position: c.integer(),
+    createdAt: timestamp(),
+    updatedAt: timestamp(),
+  },
+  timestamps,
+  beforeWrite: skipUndefined,
+});
+
+export const videoThumbnails = table({
+  name: 'VideoThumbnail',
+  columns: {
+    id: c.text(),
+    videoId: c.text(),
+    url: c.text(),
+    width: c.integer(),
+    height: c.integer(),
+  },
+  beforeWrite: skipUndefined,
+});
+
+/** A video's thumbnails */
+export const videoThumbnailRows = hasMany(videos, videoThumbnails, { foreignKey: 'videoId' });

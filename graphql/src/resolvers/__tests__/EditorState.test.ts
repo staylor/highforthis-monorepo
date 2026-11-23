@@ -5,7 +5,7 @@ import typeDefs from '#/schema';
 
 import resolvers from '../EditorState';
 
-vi.mock('#/database', () => ({ default: {} }));
+vi.mock('#/database/db', () => ({ default: {} }));
 
 const schema = buildSchema(typeDefs);
 

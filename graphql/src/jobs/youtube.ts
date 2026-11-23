@@ -1,10 +1,12 @@
+import { and, inList } from 'remix/data-table';
 import { z } from 'zod';
 
 import { createLogger } from '@highforthis/shared/logger';
 
-import prisma from '#/database';
+import db from '#/database/db';
+import { newId, videos, videoThumbnails } from '#/database/tables';
 import env from '#/env';
-import { getUniqueSlug } from '#/models/utils';
+import { getUniqueSlug, slugsIn } from '#/models/utils';
 
 const API = 'https://www.googleapis.com/youtube/v3';
 const PER_PAGE = '50';
@@ -98,22 +100,25 @@ async function saveVideo(
 
   // Two videos can have the same title, so a new video gets a unique slug. An existing video
   // keeps its slug, and with it its page's address.
-  const existing = await prisma.video.findUnique({
-    where: { dataId: data.dataId },
-    select: { id: true },
-  });
-  const video = existing
-    ? await prisma.video.update({ where: { id: existing.id }, data })
-    : await prisma.video.create({
-        data: { ...data, slug: await getUniqueSlug(prisma.video, snippet.title) },
-      });
+  const existing = await db.findOne(videos, { where: { dataId: data.dataId } });
+  const videoId = existing?.id ?? newId();
+  if (existing) {
+    await db.update(videos, videoId, data);
+  } else {
+    await db.create(videos, {
+      ...data,
+      id: videoId,
+      slug: await getUniqueSlug(slugsIn(db, videos), snippet.title),
+    });
+  }
 
   // Replace thumbnails
-  await prisma.videoThumbnail.deleteMany({ where: { videoId: video.id } });
+  await db.deleteMany(videoThumbnails, { where: { videoId } });
   if (thumbnails.length) {
-    await prisma.videoThumbnail.createMany({
-      data: thumbnails.map((thumbnail) => ({ ...thumbnail, videoId: video.id })),
-    });
+    await db.createMany(
+      videoThumbnails,
+      thumbnails.map((thumbnail) => ({ ...thumbnail, id: newId(), videoId }))
+    );
   }
 
   return Boolean(existing);
@@ -133,10 +138,11 @@ async function importPlaylist(year: number, playlistId: string) {
     return;
   }
 
-  const existing = await prisma.video.findMany({
-    where: { dataPlaylistId: playlistId },
-    select: { dataId: true },
-  });
+  const existing = await db
+    .query(videos)
+    .where({ dataPlaylistId: playlistId })
+    .select('dataId')
+    .all();
 
   // One at a time, so two new videos with the same title can't claim the same slug
   let added = 0;
@@ -150,8 +156,8 @@ async function importPlaylist(year: number, playlistId: string) {
   const listed = new Set(items.map((item) => item.contentDetails.videoId));
   const removed = existing.map(({ dataId }) => dataId).filter((dataId) => !listed.has(dataId));
   if (removed.length) {
-    await prisma.video.deleteMany({
-      where: { dataId: { in: removed }, dataPlaylistId: playlistId },
+    await db.deleteMany(videos, {
+      where: and(inList('dataId', removed), { dataPlaylistId: playlistId }),
     });
   }
 

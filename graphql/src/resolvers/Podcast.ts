@@ -1,35 +1,33 @@
-import type { Prisma, Podcast } from '@prisma/client';
+import { ilike, or, type TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
-import prisma from '#/database';
-import type { WithIncludes } from '#/models';
+import db from '#/database/db';
+import { containing } from '#/database/search';
+import type { Loaded } from '#/database/tables';
+import { mediaUploads, newId, podcastMedia, podcasts } from '#/database/tables';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeEntities, timestampResolver } from './utils/helpers';
+import { parseInput, removeRows, timestampResolver } from './utils/helpers';
 import { createPodcastSchema, updatePodcastSchema } from './validations';
 
-const podcastIncludes = {
-  audio: true,
-  image: true,
-} satisfies Prisma.PodcastInclude;
+type PodcastMedia = typeof podcastMedia;
 
-/** A podcast, with its audio and image when its query included them */
-export type PodcastSource = WithIncludes<
-  Podcast,
-  Prisma.PodcastGetPayload<{ include: typeof podcastIncludes }>
->;
+/** A podcast, with its audio and image when its query loaded them */
+export type PodcastSource = TableRow<typeof podcasts> & {
+  [TName in keyof PodcastMedia]?: Loaded<PodcastMedia[TName]>;
+};
 
 const resolvers = {
   Podcast: {
     audio(podcast) {
       if (podcast.audio !== undefined) return podcast.audio;
       if (!podcast.audioId) return null;
-      return prisma.mediaUpload.findUnique({ where: { id: podcast.audioId } });
+      return db.find(mediaUploads, podcast.audioId);
     },
     image(podcast) {
       if (podcast.image !== undefined) return podcast.image;
       if (!podcast.imageId) return null;
-      return prisma.mediaUpload.findUnique({ where: { id: podcast.imageId } });
+      return db.find(mediaUploads, podcast.imageId);
     },
     // When the episode was added. Editing one doesn't publish it again.
     date: timestampResolver('createdAt'),
@@ -37,56 +35,56 @@ const resolvers = {
   Query: {
     async podcasts(_, args) {
       const { search, order, ...connectionArgs } = args;
-      const where: Prisma.PodcastWhereInput = {};
+      let query = db.query(podcasts);
       if (search) {
-        where.OR = [
-          { title: { contains: search, mode: 'insensitive' } },
-          { description: { contains: search, mode: 'insensitive' } },
-        ];
+        const pattern = containing(search);
+        query = query.where(or(ilike('title', pattern), ilike('description', pattern)));
       }
-      return parseConnection(prisma.podcast, connectionArgs, {
-        where,
-        orderBy: { createdAt: order === 'ASC' ? 'asc' : 'desc' },
-        include: podcastIncludes,
-      });
+      return parseConnection(
+        {
+          count: () => query.count(),
+          findMany: ({ skip, take }) =>
+            query
+              .with(podcastMedia)
+              .orderBy('createdAt', order === 'ASC' ? 'asc' : 'desc')
+              .offset(skip)
+              .limit(take)
+              .all(),
+        },
+        connectionArgs
+      );
     },
 
     async podcast(_, { id }) {
       if (!id) return null;
-      return prisma.podcast.findUnique({ where: { id }, include: podcastIncludes });
+      return db.find(podcasts, id, { with: podcastMedia });
     },
   },
   Mutation: {
     async createPodcast(_, { input }) {
       const { audio, image, ...data } = parseInput(createPodcastSchema, input);
-      // The unchecked input takes audioId and imageId as they are
-      const podcastData: Prisma.PodcastUncheckedCreateInput = {
+      const id = newId();
+      await db.create(podcasts, {
         ...data,
+        id,
         audioId: audio ?? undefined,
         imageId: image ?? undefined,
-      };
-      return prisma.podcast.create({
-        data: podcastData,
-        include: podcastIncludes,
       });
+      return db.find(podcasts, id, { with: podcastMedia });
     },
 
     async updatePodcast(_, { id, input }) {
       const { audio, image, ...data } = parseInput(updatePodcastSchema, input);
-      const podcastData: Prisma.PodcastUncheckedUpdateInput = {
-        ...data,
-        audioId: audio ?? undefined,
-        imageId: image ?? undefined,
-      };
-      return prisma.podcast.update({
-        where: { id },
-        data: podcastData,
-        include: podcastIncludes,
-      });
+      return db.update(
+        podcasts,
+        id,
+        { ...data, audioId: audio ?? undefined, imageId: image ?? undefined },
+        { with: podcastMedia }
+      );
     },
 
     async removePodcast(_, { ids }) {
-      return removeEntities(prisma.podcast, ids);
+      return removeRows(podcasts, ids);
     },
   },
 } satisfies Resolvers;

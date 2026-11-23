@@ -1,4 +1,3 @@
-import type { MediaSettings as MediaSettingsRecord } from '@prisma/client';
 import type { GraphQLResolveInfo } from 'graphql';
 
 import type { Album } from '../src/appleMusic';
@@ -8,7 +7,7 @@ import type { EditorNodeData } from '../src/resolvers/EditorState';
 import type { MediaUploadSource } from '../src/resolvers/Media';
 import type { PodcastSource } from '../src/resolvers/Podcast';
 import type { PostSource } from '../src/resolvers/Post';
-import type { PodcastSettingsSource } from '../src/resolvers/Settings';
+import type { MediaSettingsSource, PodcastSettingsSource } from '../src/resolvers/Settings';
 import type { ShowSource, ShowConnectionSource, ShowEntitySource } from '../src/resolvers/Show';
 import type { UserSource } from '../src/resolvers/User';
 import type { VenueSource } from '../src/resolvers/Venue';
@@ -1381,7 +1380,7 @@ export type ResolversTypes = {
   Listing: ResolverTypeWrapper<Omit<Listing, 'show'> & { show?: Maybe<ResolversTypes['Show']> }>;
   MediaCropSetting: ResolverTypeWrapper<MediaCropSetting>;
   MediaCropSettingInput: MediaCropSettingInput;
-  MediaSettings: ResolverTypeWrapper<MediaSettingsRecord>;
+  MediaSettings: ResolverTypeWrapper<MediaSettingsSource>;
   MediaSettingsInput: MediaSettingsInput;
   MediaUpload: ResolverTypeWrapper<MediaUploadSource>;
   MediaUploadConnection: ResolverTypeWrapper<Connection<MediaUploadSource>>;
@@ -1493,7 +1492,7 @@ export type ResolversParentTypes = {
   Listing: Omit<Listing, 'show'> & { show?: Maybe<ResolversParentTypes['Show']> };
   MediaCropSetting: MediaCropSetting;
   MediaCropSettingInput: MediaCropSettingInput;
-  MediaSettings: MediaSettingsRecord;
+  MediaSettings: MediaSettingsSource;
   MediaSettingsInput: MediaSettingsInput;
   MediaUpload: MediaUploadSource;
   MediaUploadConnection: Connection<MediaUploadSource>;
