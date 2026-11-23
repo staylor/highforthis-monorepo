@@ -5,7 +5,7 @@ interface ExistingShow {
   date: Date;
   source: string | null;
   sourceId: string | null;
-  artists: { artist: { name: string } }[];
+  artists: { artist: { name: string } | null }[];
 }
 
 // Compares artist names without regard to case, accents or punctuation: "Dinosaur Jr." = "dinosaur jr"
@@ -39,7 +39,7 @@ export function matchListing<T extends ExistingShow>(listing: Listing, shows: T[
     (show) =>
       show.source !== listing.source &&
       dayKey(show.date, listing.timeZone) === listing.localDate &&
-      show.artists.some(({ artist }) => names.has(normalizeName(artist.name)))
+      show.artists.some(({ artist }) => artist !== null && names.has(normalizeName(artist.name)))
   );
   return { show: sameDay ?? null, dateChanged: false };
 }

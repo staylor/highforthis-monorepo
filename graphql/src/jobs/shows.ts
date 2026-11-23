@@ -1,6 +1,9 @@
+import { and, lt } from 'remix/data-table';
+
 import { createLogger } from '@highforthis/shared/logger';
 
-import prisma from '#/database';
+import db from '#/database/db';
+import { shows } from '#/database/tables';
 
 const logger = createLogger({ serviceName: 'graphql' });
 
@@ -8,14 +11,11 @@ const logger = createLogger({ serviceName: 'graphql' });
 async function cleanupShows() {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setDate(sixMonthsAgo.getDate() - 180);
-  const { count } = await prisma.show.deleteMany({
-    where: {
-      date: { lt: sixMonthsAgo },
-      attended: false,
-    },
+  const { affectedRows } = await db.deleteMany(shows, {
+    where: and(lt('date', sixMonthsAgo), { attended: false }),
   });
-  if (count) {
-    logger.info({ removed: count }, 'Removed old shows that were not attended');
+  if (affectedRows) {
+    logger.info({ removed: affectedRows }, 'Removed old shows that were not attended');
   }
 }
 
