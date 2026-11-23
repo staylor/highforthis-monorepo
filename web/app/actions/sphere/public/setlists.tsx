@@ -135,9 +135,8 @@ export const Setlists = clientEntry(
             {showStats ? messages.hide : messages.show}
           </button>
           {/*
-            A ternary, not `{currentSong && …}`: with remix@3.2.0, when a slot holding ''
-            becomes an element, the element is appended after its later siblings
-            (repro: /dev/slots).
+            A ternary, not `{currentSong && …}`: with remix@3.2.0, when a hydrated slot
+            holding '' became an element, the element was appended after its later siblings.
           */}
           {showStats ? (
             <div>

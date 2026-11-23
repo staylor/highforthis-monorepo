@@ -24,7 +24,7 @@ const hmrProxyPort = process.env.HMR_PROXY_PORT
 const isHmr = process.env.REMIX_NODE_HMR === '1';
 // On Railway, requests arrive through its edge, which terminates HTTPS and replaces any
 // X-Forwarded-Proto, -Host and -For the client sent. Trusting them gives requests their
-// https:// URL, which the admin proxy forwards so the admin's redirects stay on https.
+// https:// URL, which keeps redirects on https and lets the admin's form posts pass sameOrigin().
 const behindRailway = Boolean(process.env.RAILWAY_ENVIRONMENT_NAME);
 
 // The router doesn't see the client's address, so it's kept beside the request for the sign-in

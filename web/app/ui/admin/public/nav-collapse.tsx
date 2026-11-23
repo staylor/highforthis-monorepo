@@ -5,8 +5,8 @@ import { colorTransition, text } from '#/ui/public/styles.ts';
 import { Icon } from './icon.tsx';
 
 // Collapses the sidebar to a rail of icons, or expands it. The state is `data-nav="collapsed"`
-// on <html>, which the admin document sets before first paint from the same storage key the
-// React admin used, and which client navigation keeps. The shell's styles do the rest.
+// on <html>, which the admin document sets before first paint from the stored choice, and which
+// client navigation keeps. The shell's styles do the rest.
 
 const STORAGE_KEY = 'adminNavCollapsed';
 

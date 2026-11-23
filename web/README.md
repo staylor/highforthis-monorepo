@@ -1,6 +1,6 @@
 # @highforthis/web
 
-The public High For This site and its admin, built with [Remix 3](https://github.com/remix-run/remix). This server forwards the API (`/graphql`, `/uploads`) and passkey sign-in (`/auth/passkeys`) to GraphQL, so passkeys belong to the site's domain. It forwards media uploads (`/upload`) too, adding the admin's token from the session cookie, which the upload page can't read.
+The public High For This site and its admin, built with [Remix 3](https://github.com/remix-run/remix). This server forwards the API (`/graphql`) and the start of a passkey sign-in (`/auth/passkeys/authenticate/options`) to GraphQL, so passkeys belong to the site's domain. It forwards media uploads (`/upload`) too, adding the admin's token from the session cookie, which the upload page can't read.
 
 Remix 3 has no bundler. The server renders every page, the browser runtime turns same-origin links into client navigations, and the few interactive parts (dark mode, the mobile menu, video thumbnails, the sphere setlists) hydrate as client entries. The asset server compiles browser modules on request and serves them unbundled through an import map, fingerprinted in production.
 
@@ -9,7 +9,7 @@ Remix 3 has no bundler. The server renders every page, the browser runtime turns
 - **[Remix 3](https://github.com/remix-run/remix)**: routing, server rendering, client entries and the asset server
 - **CSS** from Remix's `css()` mixin in components, which renders each page's rules into its `<head>`, and a few plain stylesheets in `app/styles/public/` (see [Styles](#styles))
 - **GraphQL** through a small `fetch` client (`app/lib/graphql.ts`), on the server only: each request gets its own, so there's no cache to keep. An operation that fails is logged and thrown, so a page whose query fails answers 500. Only the query every page shares (`loadRootData`) is optional, and pages render without it.
-- **[i18next](https://www.i18next.com/)**, on the server; client entries get translated strings as props
+- **[i18next](https://www.i18next.com/)**, on the server, with the site's strings in `app/lib/strings.en.json`; client entries get translated strings as props
 - **OpenObserve browser RUM**, which records page views for the admin dashboard
 
 ## Development
@@ -20,7 +20,7 @@ Remix 3 has no bundler. The server renders every page, the browser runtime turns
 pnpm web:dev   # just this app
 ```
 
-`pnpm dev` restarts the server on changes and rebuilds the CSS. `pnpm hmr` (in this folder) also hot-reloads server and browser modules.
+`pnpm dev` restarts the server on changes. `pnpm hmr` (in this folder) also hot-reloads server and browser modules.
 
 ### Environment Variables
 
@@ -49,7 +49,7 @@ Signing in keeps the admin's GraphQL token in a cookie signed with `remix/cookie
 
 ### Admin pages
 
-The admin was a React Router app until it moved here, one section at a time. Signing in is at `/login`, and the admin's pages are under `/admin`.
+Signing in is at `/login`, and the admin's pages are under `/admin`.
 
 - Admin controllers list `sameOrigin()` and `requireAdmin()` (`app/middleware/admin.ts`). They reject cross-site form posts and require an admin session GraphQL accepts, which then sits on `context.admin` with a GraphQL client that sends the token.
 - `renderAdminPage()` (`app/actions/admin/render-page.tsx`) renders a page in the admin's document and layout, from `app/ui/admin/`.
@@ -104,12 +104,12 @@ app/
 ├── actions/           # Controllers and pages, by route
 │   └── public/        # Browser entry, RUM and other client modules
 ├── ui/                # Components (ui/public/ holds client entries)
-├── lib/               # GraphQL client, i18n, RUM config, admin session and forms
+├── lib/               # GraphQL client, i18n and its strings, RUM config, admin session and forms
 ├── middleware/        # Proxies, GraphQL client, translations, admin session checks
 ├── styles/public/     # Global stylesheets: tokens, reset, and the site's and admin's base styles
 └── types/             # Generated GraphQL schema and operation types
 server.ts              # Node HTTP server and logging
-public/                # Static files and translations
+public/                # Static files
 ```
 
 Use the Remix skill in [`.agents/skills/remix/SKILL.md`](.agents/skills/remix/SKILL.md) when building features; it explains how to find the framework's guides and API docs in `node_modules/remix`.

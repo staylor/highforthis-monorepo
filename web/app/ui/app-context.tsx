@@ -10,9 +10,9 @@ export interface AppValue {
 }
 
 /**
- * Stands in for useRouteLoaderData('root'), useLocation() and useTranslation() during
- * server rendering. Client entries hydrate on their own and can't read it, so they
- * receive what they need as props.
+ * What every component can read during server rendering: the translations, the site's settings
+ * and the page's path. Client entries hydrate on their own and can't read it, so they receive
+ * what they need as props.
  */
 export function AppProvider(handle: Handle<{ value: AppValue; children?: RemixNode }, AppValue>) {
   handle.context.set(handle.props.value);
