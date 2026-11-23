@@ -1,3 +1,4 @@
+import type { AnyTable, Database } from 'remix/data-table';
 import slugifyUtil from 'slugify';
 
 // A name with no letters or digits, like the band !!!, has nothing to make a slug from
@@ -11,6 +12,11 @@ function slugify(value: string): string {
 type SlugCheckDelegate = {
   count: (args: { where: { slug: string } }) => Promise<number>;
 };
+
+/** The slugs in a remix/data-table table, for getUniqueSlug to check */
+export function slugsIn(database: Database, table: AnyTable): SlugCheckDelegate {
+  return { count: ({ where }) => database.count(table, { where }) };
+}
 
 export async function getUniqueSlug(
   delegate: SlugCheckDelegate,
