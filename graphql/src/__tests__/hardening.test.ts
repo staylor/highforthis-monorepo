@@ -1,4 +1,5 @@
 import { ApolloServer } from '@apollo/server';
+import { DataTableDatabaseError, DataTableValidationError } from 'remix/data-table';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { errorOptions, QUERY_LIMITS, queryLimits } from '#/hardening';
@@ -12,6 +13,8 @@ const typeDefs = `#graphql
     shows(first: Int, last: Int): ShowConnection
     show: Show
     broken: String
+    failedQuery: String
+    unknownColumn: String
     refused: String
   }
 `;
@@ -44,6 +47,14 @@ describe('hardening', () => {
             throw new PrismaClientKnownRequestError(
               'Invalid `prisma.show.findUnique()` at /app/x.ts'
             );
+          },
+          failedQuery: () => {
+            throw new DataTableDatabaseError('Database execution failed', {
+              cause: new Error('relation "Show" does not exist at /app/x.ts'),
+            });
+          },
+          unknownColumn: () => {
+            throw new DataTableValidationError('Unknown column "secret" for table "User"', []);
           },
           refused: () => {
             throw new Error('Admin access required');
@@ -136,6 +147,25 @@ describe('hardening', () => {
       expect(JSON.stringify(result)).not.toMatch(/prisma|\/app\//);
       expect(logger.error).toHaveBeenCalled();
     });
+
+    it.each(['failedQuery', 'unknownColumn'])(
+      'answers a remix/data-table error (%s) the same way',
+      async (field) => {
+        const result = await run(`{ ${field} }`);
+
+        expect(result.errors?.[0]).toEqual(
+          expect.objectContaining({
+            message: 'Internal server error',
+            extensions: { code: 'INTERNAL_SERVER_ERROR' },
+          })
+        );
+        expect(JSON.stringify(result)).not.toMatch(/Show|User|secret|Database execution/);
+        expect(logger.error).toHaveBeenCalledWith(
+          expect.objectContaining({ path: [field] }),
+          expect.any(String)
+        );
+      }
+    );
 
     it('keeps messages that are meant for the caller, without a stack trace', async () => {
       const result = await run('{ refused }');
