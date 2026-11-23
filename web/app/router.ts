@@ -46,7 +46,7 @@ import {
   translations,
 } from './middleware/app.ts';
 import { errorPage } from './middleware/error-page.tsx';
-import { securityHeaders } from './middleware/headers.ts';
+import { pageNonce, pagePolicy, securityHeaders } from './middleware/headers.ts';
 import { serverTiming, timed } from './middleware/timing.ts';
 import { routes } from './routes.ts';
 
@@ -56,7 +56,8 @@ const publicEntries = new Set(readdirSync('./public'));
 const inPublic = (path: string) => publicEntries.has(path.split('/', 1)[0]);
 
 // Add the security headers, time each request, reject WordPress probes, compress, serve public/
-// and the OpenObserve SDK bundles, forward API paths to GraphQL, then render. HTTP logging stays
+// and the OpenObserve SDK bundles, forward API paths to GraphQL, then render, with a policy for
+// each page's scripts. HTTP logging stays
 // on the Node server in server.ts, because pino-http needs Node's req/res. The matcher names each
 // request's trace span after the route that matched it.
 export const router = createRouter({
@@ -83,6 +84,8 @@ export const router = createRouter({
     timed('proxies', proxies()),
     timed('graphql', graphql()),
     timed('translations', translations()),
+    timed('pagePolicy', pagePolicy()),
+    pageNonce(),
     timed('render', render({ assets })),
     errorPage(),
   ],

@@ -18,6 +18,8 @@ interface DocumentProps {
   meta?: MetaTag[];
   head?: RemixNode;
   layout?: 'app' | 'bare';
+  /** The response's nonce, which the page's policy lets inline scripts run with. */
+  nonce?: string;
   children?: RemixNode;
 }
 
@@ -27,7 +29,7 @@ const darkModeScript = `try{if(localStorage.getItem('darkMode'))document.documen
 /** The <html> shell, <head> links and meta, and the layout choice. */
 export function Document(handle: Handle<DocumentProps>) {
   return () => {
-    const { app, title, meta = [], head, layout = 'app', children } = handle.props;
+    const { app, title, meta = [], head, layout = 'app', nonce, children } = handle.props;
     const { podcastSettings, siteSettings } = app.root;
     const { href, importMap, preloads } = scriptEntry;
 
@@ -44,9 +46,10 @@ export function Document(handle: Handle<DocumentProps>) {
             .map((tag) => (
               <meta property={tag.property} content={tag.content!} />
             ))}
-          <script innerHTML={unsafeHTML(darkModeScript)} />
+          <script nonce={nonce} innerHTML={unsafeHTML(darkModeScript)} />
           {rumConfig && (
             <script
+              nonce={nonce}
               innerHTML={unsafeHTML(
                 `window.__OPENOBSERVE_RUM__=${JSON.stringify(rumConfig).replace(/</g, '\\u003c')};`
               )}
@@ -76,7 +79,7 @@ export function Document(handle: Handle<DocumentProps>) {
           {preloads.map((preloadHref) => (
             <link key={preloadHref} rel="modulepreload" href={preloadHref} />
           ))}
-          <script type="module" src={href}></script>
+          <script type="module" src={href} nonce={nonce}></script>
         </head>
         <body>
           <AppProvider value={app}>

@@ -8,7 +8,7 @@ Remix 3 has no bundler. The server renders every page, the browser runtime turns
 
 - **[Remix 3](https://github.com/remix-run/remix)**: routing, server rendering, client entries and the asset server
 - **CSS** from Remix's `css()` mixin in components, which renders each page's rules into its `<head>`, and a few plain stylesheets in `app/styles/public/` (see [Styles](#styles))
-- **GraphQL** through a small `fetch` client (`app/lib/graphql.ts`), on the server only: each request gets its own, so there's no cache to keep
+- **GraphQL** through a small `fetch` client (`app/lib/graphql.ts`), on the server only: each request gets its own, so there's no cache to keep.
 - **[i18next](https://www.i18next.com/)**, on the server; client entries get translated strings as props
 - **OpenObserve browser RUM**, which records page views for the admin dashboard
 
@@ -78,6 +78,8 @@ pnpm start   # NODE_ENV=production; compiles, minifies and fingerprints modules 
 ```
 
 Assets are served from `/assets` by this server with immutable caching. On Railway, the CDN on the site's domain keeps them at the edge.
+
+Every page is sent with a Content Security Policy (`pagePolicy()` in `app/middleware/headers.ts`) that lets scripts run only from this site, or inline with the response's nonce. Remix gives the nonce to the import map and to the styles `css()` renders, and `Document` gives it to its own inline scripts from `context.nonce`. A new inline script needs the nonce too, and a script from another host needs adding to the policy.
 
 On Railway (detected by `RAILWAY_ENVIRONMENT_NAME`), the server trusts the `X-Forwarded-*` headers from Railway's edge, which replaces any the client sends, so requests get their public `https://` URL, which keeps redirects on https and lets form posts pass `sameOrigin()`.
 

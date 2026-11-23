@@ -10,6 +10,8 @@ interface AdminDocumentProps {
   title: string;
   /** Leaves out the nav, for signing in. */
   bare?: boolean;
+  /** The response's nonce, which the page's policy lets inline scripts run with. */
+  nonce?: string;
   children?: RemixNode;
 }
 
@@ -20,7 +22,7 @@ const beforePaintScript = `try{if(localStorage.getItem('adminNavCollapsed'))docu
 /** No RUM: page views count public pages only. */
 export function AdminDocument(handle: Handle<AdminDocumentProps>) {
   return () => {
-    const { admin, title, bare, children } = handle.props;
+    const { admin, title, bare, nonce, children } = handle.props;
     const { href, importMap, preloads } = scriptEntry;
 
     return (
@@ -30,7 +32,7 @@ export function AdminDocument(handle: Handle<AdminDocumentProps>) {
           <meta name="viewport" content="width=device-width,initial-scale=1" />
           <meta name="robots" content="noindex" />
           <title>{title}</title>
-          <script innerHTML={unsafeHTML(beforePaintScript)} />
+          <script nonce={nonce} innerHTML={unsafeHTML(beforePaintScript)} />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link
@@ -45,7 +47,7 @@ export function AdminDocument(handle: Handle<AdminDocumentProps>) {
           {preloads.map((preloadHref) => (
             <link key={preloadHref} rel="modulepreload" href={preloadHref} />
           ))}
-          <script type="module" src={href}></script>
+          <script type="module" src={href} nonce={nonce}></script>
         </head>
         <body>
           <AdminProvider value={admin}>
