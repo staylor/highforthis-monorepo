@@ -1,6 +1,10 @@
 import type { Bucket } from '@google-cloud/storage';
 
+import { createLogger } from '@highforthis/shared/logger';
+
 import env from '#/env';
+
+const logger = createLogger({ serviceName: 'graphql' });
 
 interface FileInfo {
   fileName: string;
@@ -46,8 +50,7 @@ class StorageAdapter {
     const filePath = `${this.uploadDir}/${relativeFile}`;
 
     await bucket.upload(filePath, { destination: relativeFile });
-    console.log(`${relativeFile} uploaded to ${bucket.name}.`);
-    // await bucket.file(relativeFile).makePublic();
+    logger.info({ file: relativeFile, bucket: bucket.name }, 'Copied an upload to the bucket');
 
     return true;
   }

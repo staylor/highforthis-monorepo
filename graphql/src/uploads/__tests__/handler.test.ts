@@ -29,6 +29,12 @@ const upload = (...files: [string, File][]) => {
 const audio = (name: string, contents: string, type = 'audio/mpeg') =>
   new File([contents], name, { type });
 
+/** The files left in the upload folder */
+const filesIn = async (dir: string) =>
+  (await fs.readdir(dir, { recursive: true, withFileTypes: true }))
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name);
+
 describe('handleUploads', () => {
   let uploadDir: string;
 
@@ -46,6 +52,13 @@ describe('handleUploads', () => {
   });
 
   it('stores each file, copies it to the bucket, and answers the media IDs in order', async () => {
+    // What each file held when the bucket got it
+    const copied = new Map<string, string>();
+    run.mockImplementation(async ([{ destination, fileName }]) => {
+      copied.set(fileName, await fs.readFile(path.join(destination, fileName), 'utf8'));
+      return [];
+    });
+
     const response = await handleUploads(
       upload(['uploads', audio('one.txt', 'first')], ['uploads', audio('two.txt', 'second')]),
       uploadDir
@@ -57,12 +70,14 @@ describe('handleUploads', () => {
       expect.objectContaining({ originalName: 'one.txt', mimeType: 'audio/mpeg', fileSize: 5 }),
       expect.objectContaining({ originalName: 'two.txt', mimeType: 'audio/mpeg', fileSize: 6 }),
     ]);
-    const stored = await fs.readFile(
-      path.join(uploadDir, records[1].destination, records[1].fileName),
-      'utf8'
-    );
-    expect(stored).toBe('second');
+    expect(records.map(({ fileName }) => copied.get(fileName))).toEqual(['first', 'second']);
     expect(run).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps no copy of a file once the bucket has it', async () => {
+    await handleUploads(upload(['uploads', audio('one.txt', 'first')]), uploadDir);
+
+    await expect(filesIn(uploadDir)).resolves.toEqual([]);
   });
 
   it('takes files over 2 MB', async () => {
@@ -155,6 +170,7 @@ describe('handleUploads', () => {
       )
     ).rejects.toThrow('bucket unavailable');
     expect(db.mediaUpload.create).not.toHaveBeenCalled();
+    await expect(filesIn(uploadDir)).resolves.toEqual([]);
   });
 
   it('answers no files for a body that is not multipart', async () => {

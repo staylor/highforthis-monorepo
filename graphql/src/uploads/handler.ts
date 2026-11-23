@@ -57,13 +57,11 @@ const uploadFileSchema = z.object({
   albumArtist: z.array(z.string()).optional(),
   genre: z.array(z.string()).optional(),
   images: z.array(audioImageSchema).optional(),
-  image: z.array(audioImageSchema).optional(),
 });
 
 // Records a stored file in the media library, with an image's crops or an audio file's details
 export async function createMediaUpload(file: unknown) {
-  const { crops, images, artist, albumArtist, genre, image, ...data } =
-    uploadFileSchema.parse(file);
+  const { crops, images, artist, albumArtist, genre, ...data } = uploadFileSchema.parse(file);
   const record = await prisma.mediaUpload.create({ data });
 
   // Image crops
@@ -77,11 +75,6 @@ export async function createMediaUpload(file: unknown) {
   if (images?.length) {
     await prisma.audioImage.createMany({
       data: images.map((i) => ({ ...i, mediaId: record.id })),
-    });
-  } else if (image?.length) {
-    // 'image' field from Audio upload metadata extraction
-    await prisma.audioImage.createMany({
-      data: image.map((i) => ({ ...i, mediaId: record.id })),
     });
   }
 
