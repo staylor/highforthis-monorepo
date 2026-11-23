@@ -1,13 +1,11 @@
 import slugifyUtil from 'slugify';
 
-const removePattern = /[#,$*_+~.()[\]'"!-:@]/g;
+// A name with no letters or digits, like the band !!!, has nothing to make a slug from
+const EMPTY_SLUG = 'untitled';
 
+/** The name in lowercase letters and digits, with hyphens between its words */
 function slugify(value: string): string {
-  return slugifyUtil(value, {
-    lower: true,
-    strict: true,
-    remove: removePattern,
-  });
+  return slugifyUtil(value, { lower: true, strict: true }) || EMPTY_SLUG;
 }
 
 type SlugCheckDelegate = {
