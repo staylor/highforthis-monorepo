@@ -8,6 +8,7 @@ import {
   type AnyTable,
   type ColumnBuilder,
   type Relation,
+  type TableBeforeWriteContext,
   type TableRowWith,
 } from 'remix/data-table';
 
@@ -27,6 +28,17 @@ const timestamp = () => c.timestamp() as ColumnBuilder<Date>;
 
 // Prisma's `@updatedAt` is set by the client, as these are
 const timestamps = { createdAt: 'createdAt', updatedAt: 'updatedAt' };
+
+/**
+ * Leaves out the columns a write gives as `undefined`, which Prisma skipped and pg would write as
+ * NULL. Every table writes through this.
+ */
+function skipUndefined<TRow extends Record<string, unknown>>({
+  value,
+}: TableBeforeWriteContext<TRow>) {
+  const defined = Object.entries(value).filter(([, column]) => column !== undefined);
+  return { value: Object.fromEntries(defined) as Partial<TRow> };
+}
 
 /** An ID for a new row. Prisma made CUIDs, which are also text, so the two can share a column. */
 export const newId = () => randomUUID();
@@ -54,6 +66,7 @@ export const venues = table({
     updatedAt: timestamp(),
   },
   timestamps,
+  beforeWrite: skipUndefined,
 });
 
 const mediaUploads = table({
@@ -79,6 +92,7 @@ const mediaUploads = table({
     updatedAt: timestamp(),
   },
   timestamps,
+  beforeWrite: skipUndefined,
 });
 
 export const venueFeaturedMedia = table({
@@ -88,6 +102,7 @@ export const venueFeaturedMedia = table({
     mediaId: c.text(),
   },
   primaryKey: ['venueId', 'mediaId'],
+  beforeWrite: skipUndefined,
 });
 
 // A join table's rows come back in the order they were saved, as Prisma loaded them. Loading their
