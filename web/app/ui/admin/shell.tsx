@@ -1,5 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
+import { routes } from '#/routes.ts';
 import { colorTransition, lg, sm, text, visuallyHidden } from '#/ui/public/styles.ts';
 
 import { getAdmin } from './context.tsx';
@@ -239,7 +240,7 @@ function Brand(handle: Handle) {
     const title = t('title');
     return (
       <a
-        href="/admin"
+        href={routes.admin.dashboard.href()}
         aria-label={title}
         mix={css({
           overflow: 'hidden',

@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle, type MixInput, type RemixNode } from 'remix/component';
 
+import { routes } from '#/routes.ts';
 import type { Attended_ShowsFragment, ShowsGrid_ShowsFragment } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
 import { Link } from '#/ui/link.tsx';
@@ -214,7 +215,7 @@ export function ShowsGrid(handle: Handle<GridProps>) {
             <span mix={venueBelow}>{node.venue.name}</span>
           </td>
           <td mix={venueCell}>
-            <Link mix={plainLink} href={`/venue/${node.venue.slug}`}>
+            <Link mix={plainLink} href={routes.venue.href({ slug: node.venue.slug })}>
               {node.venue.name}
             </Link>
           </td>
@@ -308,7 +309,7 @@ export function Attended(
     return (
       <article mix={css({ marginTop: '3rem' })}>
         <p mix={css({ marginBottom: '0.75rem', ...text.sm })}>
-          <Link href={`/shows/stats/${relation}`} mix={pinkLink}>
+          <Link href={routes.shows.stats.href({ entity: relation })} mix={pinkLink}>
             {trans(
               t,
               `shows.attended.${relation}`,
@@ -332,7 +333,9 @@ export function Attended(
                     <Link
                       mix={underlinedLink}
                       href={
-                        relation === 'artist' ? `/venue/${node.venue.slug}` : formatShowLink(node)
+                        relation === 'artist'
+                          ? routes.venue.href({ slug: node.venue.slug })
+                          : formatShowLink(node)
                       }
                     >
                       {relation === 'artist' ? node.venue.name : formatArtists(node)}

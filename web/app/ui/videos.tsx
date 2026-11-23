@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
+import { routes } from '#/routes.ts';
 import type { Video_VideoFragment, Videos_VideosFragment } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
@@ -59,7 +60,7 @@ export function Video(
     if (!video) {
       return null;
     }
-    const href = `/video/${video.slug}`;
+    const href = routes.video.href({ slug: video.slug });
     const thumbnail = (
       <VideoThumbnail
         href={href}

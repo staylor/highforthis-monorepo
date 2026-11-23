@@ -2,13 +2,22 @@ import { clientEntry, css, navigate, on, type Handle } from 'remix/component';
 
 import { colorTransition, dark, text } from '#/ui/public/styles.ts';
 
+interface YearSelectProps {
+  value: string;
+  placeholder: string;
+  /** Every year's page of videos. */
+  years: { year: number; href: string }[];
+  /** The page of videos from every year. */
+  allHref: string;
+}
+
 /**
  * The year picker needs JavaScript because the year is a path segment (/videos/:year),
  * not a query a GET form could submit.
  */
 export const YearSelect = clientEntry(
   import.meta.url,
-  function YearSelect(handle: Handle<{ value: string; placeholder: string; years: number[] }>) {
+  function YearSelect(handle: Handle<YearSelectProps>) {
     return () => (
       <select
         mix={[
@@ -31,13 +40,14 @@ export const YearSelect = clientEntry(
             },
           }),
           on('change', (event) => {
+            const { years, allHref } = handle.props;
             const year = event.currentTarget.value;
-            navigate(year ? `/videos/${year}` : '/videos');
+            navigate(years.find((choice) => String(choice.year) === year)?.href ?? allHref);
           }),
         ]}
       >
         <option value="">{handle.props.placeholder}</option>
-        {handle.props.years.map((year) => (
+        {handle.props.years.map(({ year }) => (
           <option value={String(year)} selected={String(year) === handle.props.value}>
             {year}
           </option>

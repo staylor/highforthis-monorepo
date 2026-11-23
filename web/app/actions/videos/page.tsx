@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
+import { routes } from '#/routes.ts';
 import type { VideosQuery } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
 import { Heading1 } from '#/ui/heading.tsx';
@@ -27,10 +28,9 @@ export const videoQuery = gql`
 // The years there are videos from, newest first
 const FIRST_YEAR = 2011;
 const yearChoices = () =>
-  Array.from(
-    { length: new Date().getFullYear() - FIRST_YEAR + 1 },
-    (_, i) => FIRST_YEAR + i
-  ).reverse();
+  Array.from({ length: new Date().getFullYear() - FIRST_YEAR + 1 }, (_, i) => FIRST_YEAR + i)
+    .reverse()
+    .map((year) => ({ year, href: routes.videos.href({ year: String(year) }) }));
 
 export function VideosPage(
   handle: Handle<{
@@ -58,6 +58,7 @@ export function VideosPage(
             value={year || ''}
             placeholder={t('nav.videosByYear')}
             years={yearChoices()}
+            allHref={routes.videos.href()}
           />
         </div>
         <Videos videos={videos} search={search} />

@@ -1,6 +1,7 @@
 import { css, unsafeHTML, type Handle, type RemixNode } from 'remix/component';
 
 import { sanitizeInlineHTML } from '#/lib/sanitize.ts';
+import { routes } from '#/routes.ts';
 
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';
@@ -39,6 +40,12 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
 
   return () => {
     const { siteSettings } = root;
+    const links = [
+      { href: routes.home.href(), label: t('nav.home') },
+      { href: routes.podcast.index.href(), label: t('nav.podcast') },
+      { href: routes.shows.index.href(), label: t('nav.shows') },
+      { href: routes.videos.href(), label: t('nav.videos') },
+    ];
     const siteTitle = siteSettings?.siteTitle || t('title');
 
     return (
@@ -70,7 +77,7 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
             })}
           >
             <Link
-              href="/"
+              href={routes.home.href()}
               mix={css({
                 fontFamily: 'var(--font-title)',
                 ...text['4xl'],
@@ -90,18 +97,11 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
                 [lg]: { display: 'flex' },
               })}
             >
-              <NavLink href="/" pathname={pathname}>
-                {t('nav.home')}
-              </NavLink>
-              <NavLink href="/podcast" pathname={pathname}>
-                {t('nav.podcast')}
-              </NavLink>
-              <NavLink href="/shows" pathname={pathname}>
-                {t('nav.shows')}
-              </NavLink>
-              <NavLink href="/videos" pathname={pathname}>
-                {t('nav.videos')}
-              </NavLink>
+              {links.map(({ href, label }) => (
+                <NavLink href={href} pathname={pathname}>
+                  {label}
+                </NavLink>
+              ))}
             </nav>
 
             <div mix={css({ display: 'flex', alignItems: 'center', gap: '1rem' })}>
@@ -121,14 +121,8 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
               </div>
               <MobileMenu
                 pathname={pathname}
-                labels={{
-                  menu: t('nav.menu'),
-                  home: t('nav.home'),
-                  podcast: t('nav.podcast'),
-                  shows: t('nav.shows'),
-                  videos: t('nav.videos'),
-                  darkMode: t('nav.darkMode'),
-                }}
+                links={links}
+                labels={{ menu: t('nav.menu'), darkMode: t('nav.darkMode') }}
               />
             </div>
           </div>

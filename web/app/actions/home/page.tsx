@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
+import { routes } from '#/routes.ts';
 import type { HomeQuery } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
 import { Link } from '#/ui/link.tsx';
@@ -75,7 +76,7 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
         )}
         {data.videos && (
           <section>
-            <SectionHeader label="Videos" viewAllLink="/videos" />
+            <SectionHeader label="Videos" viewAllLink={routes.videos.href()} />
             <Videos videos={data.videos} paginate={false} heading="h3" />
           </section>
         )}
@@ -84,7 +85,7 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
           <section>
             <SectionHeader
               label={t('posts.latest')}
-              viewAllLink="/posts"
+              viewAllLink={routes.posts.href()}
               viewAllText={t('posts.viewAll')}
             />
             <div
@@ -95,7 +96,7 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
               })}
             >
               <Link
-                href={`/post/${featured.node.slug}`}
+                href={routes.post.href({ slug: featured.node.slug })}
                 mix={css(
                   merge(card, {
                     border: 'none',
@@ -188,7 +189,7 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
               >
                 {rest.map(({ node }) => (
                   <Link
-                    href={`/post/${node.slug}`}
+                    href={routes.post.href({ slug: node.slug })}
                     mix={css(
                       merge(card, {
                         display: 'flex',

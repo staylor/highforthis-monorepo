@@ -219,7 +219,7 @@ export default createController(routes.shows, {
               {stats.map((stat) => (
                 <li key={stat.entity.id} mix={css(sizeFor(stat.count, size))}>
                   <Link
-                    href={`/${entity}/${stat.entity.slug}`}
+                    href={routes[entity].href({ slug: stat.entity.slug })}
                     mix={css({ '&:hover': { textDecoration: 'underline' } })}
                   >
                     {stat.entity.name}
