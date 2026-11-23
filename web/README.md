@@ -8,7 +8,7 @@ Remix 3 has no bundler. The server renders every page, the browser runtime turns
 
 - **[Remix 3](https://github.com/remix-run/remix)**: routing, server rendering, client entries and the asset server
 - **CSS** from Remix's `css()` mixin in components, which renders each page's rules into its `<head>`, and a few plain stylesheets in `app/styles/public/` (see [Styles](#styles))
-- **GraphQL** through a small `fetch` client (`app/lib/graphql.ts`), on the server only: each request gets its own, so there's no cache to keep.
+- **GraphQL** through a small `fetch` client (`app/lib/graphql.ts`), on the server only: each request gets its own, so there's no cache to keep. An operation that fails is logged and thrown, so a page whose query fails answers 500. Only the query every page shares (`loadRootData`) is optional, and pages render without it.
 - **[i18next](https://www.i18next.com/)**, on the server; client entries get translated strings as props
 - **OpenObserve browser RUM**, which records page views for the admin dashboard
 
@@ -53,6 +53,7 @@ The admin was a React Router app until it moved here, one section at a time. Sig
 
 - Admin controllers list `sameOrigin()` and `requireAdmin()` (`app/middleware/admin.ts`). They reject cross-site form posts and require an admin session GraphQL accepts, which then sits on `context.admin` with a GraphQL client that sends the token.
 - `renderAdminPage()` (`app/actions/admin/render-page.tsx`) renders a page in the admin's document and layout, from `app/ui/admin/`.
+- Forms save through `submitForm()` (`app/lib/admin/forms.ts`). Each form's data module lists its text fields, which stay strings and are sent as null when emptied. A save that fails renders the form's page again with what was submitted and, when GraphQL turned the input down, why. The form stays the same element on the page, so its client entries, such as the post editor, keep what was typed.
 - Admin pages use `admin.css` (see [Styles](#styles)) and their own strings, `app/lib/admin/strings.en.json`, loaded the first time an admin page asks for them.
 - Their client entries, such as the featured media picker and the list's inline toggle, live in `app/ui/admin/public/`. Links out of the admin, such as a list's "View" links to the public site, set `data-rmx-document={documentLoad(href)}` (`app/ui/admin/links.ts`), so they load in full instead of through client navigation.
 
