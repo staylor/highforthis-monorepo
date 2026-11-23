@@ -13,8 +13,9 @@ interface AdminDocumentProps {
   children?: RemixNode;
 }
 
-// Runs before first paint so dark mode and a collapsed sidebar (NavCollapse) don't flash
-const beforePaintScript = `try{var d=document.documentElement;if(localStorage.getItem('darkMode'))d.classList.add('dark');if(localStorage.getItem('adminNavCollapsed'))d.dataset.nav='collapsed'}catch(e){}`;
+// Runs before first paint so a collapsed sidebar (NavCollapse) doesn't flash. The admin has no
+// dark mode, so it leaves the site's setting alone.
+const beforePaintScript = `try{if(localStorage.getItem('adminNavCollapsed'))document.documentElement.dataset.nav='collapsed'}catch(e){}`;
 
 /** No RUM: page views count public pages only. */
 export function AdminDocument(handle: Handle<AdminDocumentProps>) {
@@ -23,7 +24,7 @@ export function AdminDocument(handle: Handle<AdminDocumentProps>) {
     const { href, importMap, preloads } = scriptEntry;
 
     return (
-      <html lang="en" data-rmx-preserve-attrs="class data-nav">
+      <html lang="en" data-rmx-preserve-attrs="data-nav">
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width,initial-scale=1" />

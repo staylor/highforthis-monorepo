@@ -9,7 +9,7 @@ import { routes } from '#/routes.ts';
 import { Heading } from '#/ui/admin/page.tsx';
 import { ConfirmButton } from '#/ui/admin/public/confirm-button.tsx';
 import { PasskeyRegister } from '#/ui/admin/public/passkey-register.tsx';
-import { dark, lg, text, type Styles } from '#/ui/public/styles.ts';
+import { lg, text, type Styles } from '#/ui/public/styles.ts';
 
 import { deletePasskey, listPasskeys, passkeyApi } from './data.ts';
 
@@ -23,20 +23,16 @@ const heading2 = css({
   ...text['2xl'],
   fontWeight: 700,
   [lg]: { marginBottom: '0.75rem' },
-  [dark]: { color: '#fff' },
 });
 const muted = css({
   display: 'block',
   ...text.sm,
   color: 'var(--neutral-600)',
-  [dark]: { color: 'var(--neutral-400)' },
 });
 const box = {
   borderRadius: '0.25rem',
   border: '1px solid var(--neutral-200)',
-  [dark]: { borderColor: 'rgb(255 255 255 / 0.1)' },
 } satisfies Styles;
-const lightText = css({ [dark]: { color: 'var(--neutral-300)' } });
 
 // A passkey, with a line between it and the next
 const passkeyRow = css({
@@ -45,10 +41,7 @@ const passkeyRow = css({
   justifyContent: 'space-between',
   gap: '1.25rem',
   padding: '1rem',
-  '& + &': {
-    borderTop: '1px solid var(--neutral-200)',
-    [dark]: { borderColor: 'rgb(255 255 255 / 0.1)' },
-  },
+  '& + &': { borderTop: '1px solid var(--neutral-200)' },
 });
 
 export const passkeysList = createController(passkeys.list, {
@@ -61,7 +54,7 @@ export const passkeysList = createController(passkeys.list, {
         context,
         <div mix={css({ maxWidth: '48rem' })}>
           <Heading>{t('passkeys.heading')}</Heading>
-          <p mix={[lightText, css({ marginBottom: '1.5rem' })]}>{t('passkeys.description')}</p>
+          <p mix={css({ marginBottom: '1.5rem' })}>{t('passkeys.description')}</p>
 
           <section mix={css({ ...box, marginBottom: '2.5rem', padding: '1.25rem' })}>
             <h2 mix={heading2}>{t('passkeys.addHeading')}</h2>
@@ -81,13 +74,13 @@ export const passkeysList = createController(passkeys.list, {
           <section>
             <h2 mix={heading2}>{t('passkeys.registeredHeading')}</h2>
             {registered.length === 0 ? (
-              <p mix={lightText}>{t('passkeys.none')}</p>
+              <p>{t('passkeys.none')}</p>
             ) : (
               <ul mix={css(box)}>
                 {registered.map((passkey) => (
                   <li key={passkey.id} mix={passkeyRow}>
                     <div>
-                      <strong mix={css({ display: 'block', [dark]: { color: '#fff' } })}>
+                      <strong mix={css({ display: 'block' })}>
                         {passkey.name || t('passkeys.unnamed')}
                       </strong>
                       <span mix={muted}>

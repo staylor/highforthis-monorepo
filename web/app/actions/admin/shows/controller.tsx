@@ -17,7 +17,7 @@ import { DateTimeInput } from '#/ui/admin/public/date-time-input.tsx';
 import { EntitiesPicker } from '#/ui/admin/public/entities-picker.tsx';
 import { InlineToggle } from '#/ui/admin/public/inline-toggle.tsx';
 import { input, saveButton, select } from '#/ui/admin/public/styles.ts';
-import { dark, merge, text } from '#/ui/public/styles.ts';
+import { merge, text } from '#/ui/public/styles.ts';
 import { formatArtists, formatShowLink } from '#/ui/shows/utils.ts';
 
 import {
@@ -330,7 +330,6 @@ function bulkPage(t: TFunction, result?: BulkImportErrors) {
           maxWidth: '42rem',
           ...text.sm,
           color: 'var(--neutral-700)',
-          [dark]: { color: 'var(--neutral-300)' },
           '& p + p': { marginTop: '0.5rem' },
         })}
       >
@@ -349,7 +348,6 @@ function bulkPage(t: TFunction, result?: BulkImportErrors) {
             padding: '0.75rem',
             ...text.xs,
             lineHeight: '1.25rem',
-            [dark]: { backgroundColor: 'rgb(255 255 255 / 0.1)' },
           })}
         >
           {exampleCsv}

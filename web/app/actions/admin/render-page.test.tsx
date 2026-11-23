@@ -63,9 +63,21 @@ describe('renderAdminPage', () => {
   it('collapses the sidebar from a stored choice before first paint, and keeps it', async (t) => {
     stubAppQuery(t);
     const html = await page('/admin/user');
-    assert.match(html, /<html[^>]*data-rmx-preserve-attrs="class data-nav"/);
-    assert.match(html, /localStorage\.getItem\('adminNavCollapsed'\)\)d\.dataset\.nav='collapsed'/);
+    assert.match(html, /<html[^>]*data-rmx-preserve-attrs="data-nav"/);
+    assert.match(
+      html,
+      /localStorage\.getItem\('adminNavCollapsed'\)\)document\.documentElement\.dataset\.nav='collapsed'/
+    );
     assert.match(html, /aria-expanded="true" aria-label="Collapse menu"/);
+  });
+
+  it("stays light when the public site's dark mode is on", async (t) => {
+    stubAppQuery(t);
+    const html = await page('/admin/user');
+    // The site keeps its choice under this key and puts `dark` on <html>, which the admin has no
+    // styles for
+    assert.doesNotMatch(html, /darkMode/);
+    assert.doesNotMatch(html, /classList/);
   });
 
   it('signs out with a posted form and a full page load, and opens the site in a new tab', async (t) => {

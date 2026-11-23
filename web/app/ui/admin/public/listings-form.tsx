@@ -1,6 +1,6 @@
 import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { dark, merge, text } from '#/ui/public/styles.ts';
+import { merge, text } from '#/ui/public/styles.ts';
 
 import { splitArtists } from './split-artists.ts';
 import { button, disabledFades, table, tableScroller, wideInput } from './styles.ts';
@@ -233,15 +233,7 @@ export const ListingsForm = clientEntry(
               gap: '1rem',
             })}
           >
-            <p
-              mix={css({
-                ...text.sm,
-                color: 'var(--neutral-600)',
-                [dark]: { color: 'var(--neutral-300)' },
-              })}
-            >
-              {summary}
-            </p>
+            <p mix={css({ ...text.sm, color: 'var(--neutral-600)' })}>{summary}</p>
             <label mix={css({ display: 'flex', alignItems: 'center', gap: '0.5rem', ...text.sm })}>
               <input
                 type="checkbox"

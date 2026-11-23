@@ -50,10 +50,6 @@
     @media (width >= 64rem) {
       margin-bottom: 0.75rem;
     }
-
-    :where(.dark) & {
-      color: #fff;
-    }
   }
 
   .editor-heading-h3 {

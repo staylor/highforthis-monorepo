@@ -7,7 +7,7 @@ import { requireAdmin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
 import { getAdmin } from '#/ui/admin/context.tsx';
 import { Alert, Heading } from '#/ui/admin/page.tsx';
-import { dark, text, xl } from '#/ui/public/styles.ts';
+import { text, xl } from '#/ui/public/styles.ts';
 
 import { loadPageViews, type PageViews as PageViewsData } from './page-views.ts';
 import {
@@ -31,18 +31,16 @@ const formatDate = (date: string) =>
     day: 'numeric',
   });
 
-// Gray text, lighter in dark mode
-const secondary = { color: 'var(--neutral-600)', [dark]: { color: 'var(--neutral-400)' } };
-const white = { [dark]: { color: '#fff' } };
+// Gray text
+const secondary = { color: 'var(--neutral-600)' };
 
 const card = css({
   borderRadius: '0.5rem',
   border: '1px solid var(--neutral-200)',
   padding: '1rem 1.25rem',
-  [dark]: { borderColor: 'rgb(255 255 255 / 0.1)' },
 });
 
-const sectionHeading = css({ marginBottom: '0.25rem', ...text.lg, fontWeight: 600, ...white });
+const sectionHeading = css({ marginBottom: '0.25rem', ...text.lg, fontWeight: 600 });
 
 function Stat(handle: Handle<{ label: string; value: number }>) {
   return () => (
@@ -54,7 +52,6 @@ function Stat(handle: Handle<{ label: string; value: number }>) {
           ...text['3xl'],
           fontWeight: 600,
           fontVariantNumeric: 'tabular-nums',
-          ...white,
         })}
       >
         {handle.props.value.toLocaleString('en-US')}
@@ -88,10 +85,7 @@ function DailyChart(handle: Handle<{ days: PageViewsData['days'] }>) {
             x2={width}
             y1={height}
             y2={height}
-            mix={css({
-              stroke: 'var(--neutral-300)',
-              [dark]: { stroke: 'rgb(255 255 255 / 0.2)' },
-            })}
+            mix={css({ stroke: 'var(--neutral-300)' })}
             stroke-width={1}
             vector-effect="non-scaling-stroke"
           />
@@ -120,7 +114,6 @@ function DailyChart(handle: Handle<{ days: PageViewsData['days'] }>) {
             justifyContent: 'space-between',
             ...text.xs,
             color: 'var(--neutral-500)',
-            [dark]: { color: 'var(--neutral-400)' },
           })}
         >
           <span>{formatDate(days[0].date)}</span>
@@ -144,7 +137,6 @@ function TopPages(handle: Handle<{ pages: PageViewsData['topPages'] }>) {
             textAlign: 'left',
             ...text.lg,
             fontWeight: 600,
-            ...white,
           })}
         >
           {t('dashboard.topPages')}
@@ -153,7 +145,6 @@ function TopPages(handle: Handle<{ pages: PageViewsData['topPages'] }>) {
           mix={css({
             borderBottom: '1px solid var(--neutral-200)',
             ...secondary,
-            [dark]: { borderColor: 'rgb(255 255 255 / 0.1)', color: 'var(--neutral-400)' },
           })}
         >
           <tr>
@@ -169,7 +160,6 @@ function TopPages(handle: Handle<{ pages: PageViewsData['topPages'] }>) {
               key={path}
               mix={css({
                 borderBottom: '1px solid var(--neutral-100)',
-                [dark]: { borderColor: 'rgb(255 255 255 / 0.05)' },
               })}
             >
               <td
@@ -196,7 +186,6 @@ function TopPages(handle: Handle<{ pages: PageViewsData['topPages'] }>) {
                   paddingBlock: '0.5rem',
                   textAlign: 'right',
                   fontVariantNumeric: 'tabular-nums',
-                  ...white,
                 })}
               >
                 {views.toLocaleString('en-US')}
@@ -232,7 +221,6 @@ function Metric(handle: Handle<{ label: string; value: string; detail: string; r
             ...text['2xl'],
             fontWeight: 600,
             fontVariantNumeric: 'tabular-nums',
-            ...white,
           })}
         >
           {value}
@@ -256,7 +244,6 @@ function Metric(handle: Handle<{ label: string; value: string; detail: string; r
                 gap: '0.375rem',
                 fontWeight: 500,
                 color: 'var(--neutral-900)',
-                ...white,
               })}
             >
               <span
