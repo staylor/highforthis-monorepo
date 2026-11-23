@@ -122,7 +122,7 @@ export default createController(routes.shows, {
           </p>
           {shows && <Shows shows={shows} />}
         </article>,
-        { title: 'Shows' }
+        { title: t('shows.heading') }
       );
     },
 
@@ -131,7 +131,7 @@ export default createController(routes.shows, {
         first: 200,
       });
       return renderPage(context, shows ? <ShowsList shows={shows} /> : null, {
-        title: 'Shows',
+        title: context.t('shows.heading'),
       });
     },
 
@@ -174,7 +174,7 @@ export default createController(routes.shows, {
           )}
           {shows && <Shows shows={shows} showMonths={false} />}
         </article>,
-        { title: year ? `${year} Shows > History` : 'Shows > History' }
+        { title: year ? t('shows.historyIn', { year }) : t('shows.history') }
       );
     },
 

@@ -2,10 +2,13 @@
   "admin": {
     "close": "Close",
     "details": "Details",
+    "dismiss": "Dismiss",
     "loading": "Loading…",
     "remove": "Remove",
     "saveFailed": "Couldn't save. Check the form and try again.",
     "submit": "Submit",
+    "title": "Admin",
+    "titleOf": "{{title}} » Admin",
     "viewSite": "View Site"
   },
   "artists": {

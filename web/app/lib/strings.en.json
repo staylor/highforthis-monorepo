@@ -18,6 +18,10 @@
     "message": "Something went wrong. Try again in a moment.",
     "title": "Error"
   },
+  "notFound": {
+    "message": "Yikes! Not Found!",
+    "title": "Not Found"
+  },
   "nav": {
     "darkMode": "Enable Dark Mode!",
     "home": "Home",
@@ -26,6 +30,9 @@
     "shows": "Shows",
     "videos": "Videos",
     "videosByYear": "-- Videos By Year --"
+  },
+  "podcast": {
+    "title": "Podcast: {{title}}"
   },
   "posts": {
     "heading": "Posts",
@@ -44,6 +51,10 @@
     },
     "attendedIn_one": "Show attended in {{year}}",
     "attendedIn_other": "Shows attended in {{year}}",
+    "fullCalendar": "Full Calendar →",
+    "heading": "Shows",
+    "history": "Shows > History",
+    "historyIn": "{{year}} Shows > History",
     "noRecommended": "No recommended shows at this time. Please check back soon.",
     "recommended": "Recommended Shows",
     "todaysDate": "Today's date is",
@@ -57,7 +68,10 @@
     "set1": "Set 1",
     "set2": "Set 2",
     "stats": {
+      "clear": "x",
+      "everyShow": "played at every show",
       "hide": "Hide stats",
+      "share": "{{percentage}}% of {{shows}} shows across {{weekends}} weekends",
       "show": "Show stats",
       "song_one": "{{song}} was played <strong>{{count}}</strong> time",
       "song_other": "{{song}} was played <strong>{{count}}</strong> times",
@@ -72,8 +86,12 @@
     "website": "Venue Website"
   },
   "videos": {
+    "heading": "Videos",
+    "headingIn": "{{year}} Videos",
     "next": "NEXT",
     "noFound": "No videos found.",
-    "previous": "PREVIOUS"
+    "previous": "PREVIOUS",
+    "titleIn": "{{year}} » Videos",
+    "viewAll": "View All →"
   }
 }

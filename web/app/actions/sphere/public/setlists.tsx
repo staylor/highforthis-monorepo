@@ -20,6 +20,10 @@ interface SetlistsProps {
     songOne: string;
     songOther: string;
     songsSummary: string;
+    everyShow: string;
+    /** "{{percentage}}% of {{shows}} shows across {{weekends}} weekends" */
+    share: string;
+    clear: string;
   };
 }
 
@@ -90,14 +94,14 @@ export const Setlists = clientEntry(
       const entries = Object.entries(stats);
       const totalShows = setlists.length;
       const weekends = Math.ceil(totalShows / 3);
-      let songPercentage = '';
+      let songPercentage: RemixNode = '';
       if (currentSong) {
-        const percentage = (stats[currentSong] / totalShows) * 100;
-        songPercentage = percentage % 1 === 0 ? percentage.toFixed(0) : percentage.toFixed(2);
+        const share = (stats[currentSong] / totalShows) * 100;
+        const percentage = share % 1 === 0 ? share.toFixed(0) : share.toFixed(2);
         songPercentage =
-          songPercentage === '100'
-            ? 'played at every show'
-            : `${songPercentage}% of ${totalShows} shows across ${weekends} weekends`;
+          percentage === '100'
+            ? messages.everyShow
+            : markup(messages.share, { percentage, shows: totalShows, weekends });
       }
 
       const setlistSet = (label: string, songs: string[], spaced = false) => (
@@ -174,7 +178,7 @@ export const Setlists = clientEntry(
                 type="button"
                 mix={[css({ marginInline: '0.75rem' }), on('click', () => select(currentSong))]}
               >
-                <strong>{'x'}</strong>
+                <strong>{messages.clear}</strong>
               </button>
             </div>
           ) : null}

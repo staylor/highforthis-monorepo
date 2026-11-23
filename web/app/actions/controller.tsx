@@ -72,11 +72,12 @@ export default createController(routes, {
         const { posts } = await context.gql.query<PostsQuery>(postsQuery, {
           first: 50,
         });
+        const title = context.t('posts.heading');
         if (!posts) {
-          return renderPage(context, null, { title: 'Posts' });
+          return renderPage(context, null, { title });
         }
         return renderPage(context, <PostsPage posts={posts} artworkSeed={crypto.randomUUID()} />, {
-          title: 'Posts',
+          title,
         });
       },
     },
@@ -164,7 +165,7 @@ export default createController(routes, {
           variables.year = Number(year);
         }
         const { videos } = await context.gql.query<VideosQuery>(videosQuery, variables);
-        const title = year ? `${year} » Videos` : 'Videos';
+        const title = year ? context.t('videos.titleIn', { year }) : context.t('videos.heading');
         if (!videos) {
           return renderPage(context, null, { title });
         }
@@ -214,6 +215,9 @@ export default createController(routes, {
               set1: t('sphere.set1'),
               set2: t('sphere.set2'),
               encore: t('sphere.encore'),
+              everyShow: t('sphere.stats.everyShow'),
+              share: t('sphere.stats.share'),
+              clear: t('sphere.stats.clear'),
               songOne: t('sphere.stats.song_one'),
               songOther: t('sphere.stats.song_other'),
               songsSummary: t('sphere.stats.songs', {

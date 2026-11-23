@@ -79,7 +79,7 @@ export function Sidebar(handle: Handle<{ shows: Shows }>) {
         <SectionHeader
           label={t('shows.upcoming')}
           viewAllLink={routes.shows.index.href()}
-          viewAllText="Full Calendar →"
+          viewAllText={t('shows.fullCalendar')}
         />
         {shows.edges.length === 0 && (
           <p mix={css({ ...text.sm, color: 'var(--muted)' })}>{t('shows.noRecommended')}</p>

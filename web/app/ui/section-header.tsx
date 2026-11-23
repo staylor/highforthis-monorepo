@@ -4,10 +4,10 @@ import { Link } from './link.tsx';
 import { colorTransition, md, text } from './public/styles.ts';
 
 export function SectionHeader(
-  handle: Handle<{ label: string; viewAllLink?: string; viewAllText?: string }>
+  handle: Handle<{ label: string; viewAllLink: string; viewAllText: string }>
 ) {
   return () => {
-    const { label, viewAllLink, viewAllText = 'View All →' } = handle.props;
+    const { label, viewAllLink, viewAllText } = handle.props;
     return (
       <div
         mix={css({
@@ -28,22 +28,20 @@ export function SectionHeader(
         >
           {label}
         </h2>
-        {viewAllLink && (
-          <Link
-            href={viewAllLink}
-            mix={css({
-              ...text.sm,
-              fontWeight: 500,
-              letterSpacing: '0.025em',
-              color: 'var(--muted)',
-              textTransform: 'uppercase',
-              ...colorTransition,
-              '&:hover': { color: 'var(--pink)' },
-            })}
-          >
-            {viewAllText}
-          </Link>
-        )}
+        <Link
+          href={viewAllLink}
+          mix={css({
+            ...text.sm,
+            fontWeight: 500,
+            letterSpacing: '0.025em',
+            color: 'var(--muted)',
+            textTransform: 'uppercase',
+            ...colorTransition,
+            '&:hover': { color: 'var(--pink)' },
+          })}
+        >
+          {viewAllText}
+        </Link>
       </div>
     );
   };

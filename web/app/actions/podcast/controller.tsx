@@ -68,7 +68,9 @@ export default createController(routes.podcast, {
         context.gql.query<PodcastsQuery>(podcastsQuery, { first: 10 }),
         loadRootData(context),
       ]);
-      const title = podcastSettings?.title ? `Podcast: ${podcastSettings.title}` : 'Podcast';
+      const title = podcastSettings?.title
+        ? context.t('podcast.title', { title: podcastSettings.title })
+        : context.t('nav.podcast');
       return renderPage(
         context,
         <Podcast title={title} description={podcastSettings?.description ?? ''}>
