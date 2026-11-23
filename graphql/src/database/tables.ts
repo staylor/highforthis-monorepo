@@ -42,9 +42,9 @@ function skipUndefined<TRow extends Record<string, unknown>>({
   return { value: Object.fromEntries(defined) as Partial<TRow> };
 }
 
-// IDs are made the way Prisma's `cuid()` made them: a "c", then the time, a counter, a block for
-// the process and random characters, all in base 36. They sort by when they were made, which
-// matters where rows come back in the order of an index on an ID: one show's artists, for one.
+// IDs are made the way Prisma's `cuid()` made them, so new rows' IDs look like the rest: a "c",
+// then the time, a counter, a block for the process and random characters, all in base 36. They
+// sort by when they were made.
 const BLOCK = 36 ** 4;
 const block = (value: number) => value.toString(36).padStart(4, '0');
 const processBlock = block(process.pid % BLOCK);
@@ -109,28 +109,30 @@ export const mediaUploads = table({
   beforeWrite: skipUndefined,
 });
 
+// A join table's rows make a list: saving it numbers them from 0 in `position`, and they're read in
+// that order. Loading the records they join through `hasManyThrough` would put those in their own
+// table's order instead.
+
 export const venueFeaturedMedia = table({
   name: 'VenueFeaturedMedia',
   columns: {
     venueId: c.text(),
     mediaId: c.text(),
+    position: c.integer(),
   },
   primaryKey: ['venueId', 'mediaId'],
   beforeWrite: skipUndefined,
 });
-
-// A join table's rows come back in the order they were saved, as Prisma loaded them. Loading their
-// media through `hasManyThrough` would put them in the order of the media table instead.
 
 /** The media a venue's featured-media row joins */
 export const venueFeaturedMediaUpload = belongsTo(venueFeaturedMedia, mediaUploads, {
   foreignKey: 'mediaId',
 });
 
-/** A venue's featured-media rows, each with its media */
-export const venueMedia = hasMany(venues, venueFeaturedMedia, { foreignKey: 'venueId' }).with({
-  media: venueFeaturedMediaUpload,
-});
+/** A venue's featured-media rows, in order, each with its media */
+export const venueMedia = hasMany(venues, venueFeaturedMedia, { foreignKey: 'venueId' })
+  .orderBy('position')
+  .with({ media: venueFeaturedMediaUpload });
 
 // --- Artist ---
 
@@ -193,6 +195,7 @@ export const artistFeaturedMedia = table({
   columns: {
     artistId: c.text(),
     mediaId: c.text(),
+    position: c.integer(),
   },
   primaryKey: ['artistId', 'mediaId'],
   beforeWrite: skipUndefined,
@@ -214,10 +217,10 @@ export const artistFeaturedMediaUpload = belongsTo(artistFeaturedMedia, mediaUpl
   foreignKey: 'mediaId',
 });
 
-/** An artist's featured-media rows, each with its media */
-export const artistMedia = hasMany(artists, artistFeaturedMedia, { foreignKey: 'artistId' }).with({
-  media: artistFeaturedMediaUpload,
-});
+/** An artist's featured-media rows, in order, each with its media */
+export const artistMedia = hasMany(artists, artistFeaturedMedia, { foreignKey: 'artistId' })
+  .orderBy('position')
+  .with({ media: artistFeaturedMediaUpload });
 
 // --- Media ---
 
@@ -363,6 +366,7 @@ export const showArtists = table({
   columns: {
     showId: c.text(),
     artistId: c.text(),
+    position: c.integer(),
   },
   primaryKey: ['showId', 'artistId'],
   beforeWrite: skipUndefined,
@@ -371,10 +375,10 @@ export const showArtists = table({
 /** The artist a show's lineup row joins */
 export const lineupArtist = belongsTo(showArtists, artists, { foreignKey: 'artistId' });
 
-/** A show's lineup: its artist rows, in the order they were saved, each with its artist */
-export const showLineup = hasMany(shows, showArtists, { foreignKey: 'showId' }).with({
-  artist: lineupArtist,
-});
+/** A show's lineup: its artist rows, from the headliner, each with its artist */
+export const showLineup = hasMany(shows, showArtists, { foreignKey: 'showId' })
+  .orderBy('position')
+  .with({ artist: lineupArtist });
 
 /** A show's venue */
 export const showVenue = belongsTo(shows, venues, { foreignKey: 'venueId' });
@@ -404,6 +408,7 @@ export const postFeaturedMedia = table({
   columns: {
     postId: c.text(),
     mediaId: c.text(),
+    position: c.integer(),
   },
   primaryKey: ['postId', 'mediaId'],
   beforeWrite: skipUndefined,
@@ -414,6 +419,7 @@ export const postArtists = table({
   columns: {
     postId: c.text(),
     artistId: c.text(),
+    position: c.integer(),
   },
   primaryKey: ['postId', 'artistId'],
   beforeWrite: skipUndefined,
@@ -427,18 +433,18 @@ export const postFeaturedMediaUpload = belongsTo(postFeaturedMedia, mediaUploads
   foreignKey: 'mediaId',
 }).with({ crops: mediaDetails.crops });
 
-/** A post's featured-media rows, each with its media */
-export const postMedia = hasMany(posts, postFeaturedMedia, { foreignKey: 'postId' }).with({
-  media: postFeaturedMediaUpload,
-});
+/** A post's featured-media rows, in order, each with its media */
+export const postMedia = hasMany(posts, postFeaturedMedia, { foreignKey: 'postId' })
+  .orderBy('position')
+  .with({ media: postFeaturedMediaUpload });
 
 /** The artist a post's tag row joins */
 export const postTagArtist = belongsTo(postArtists, artists, { foreignKey: 'artistId' });
 
-/** The artists a post is tagged with: its tag rows, each with its artist */
-export const postTags = hasMany(posts, postArtists, { foreignKey: 'postId' }).with({
-  artist: postTagArtist,
-});
+/** The artists a post is tagged with: its tag rows, in order, each with its artist */
+export const postTags = hasMany(posts, postArtists, { foreignKey: 'postId' })
+  .orderBy('position')
+  .with({ artist: postTagArtist });
 
 // --- Podcast ---
 

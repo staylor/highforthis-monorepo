@@ -61,11 +61,7 @@ export type ShowEntitySource = (Artist & { type: 'artist' }) | (Venue & { type: 
  * an IN list of every show's ID on ShowArtist.showId, and Postgres plans one by checking each ID
  * against the column's most common values: for the ~550 shows on the history page, planning took
  * 3.5 ms of a 5 ms query. Going through Show's IDs, which have no common values, plans in about
- * 0.4 ms.
- *
- * The query is the one Prisma ran for this. Nothing orders a show's artists, so they come in the
- * order of the plan Postgres picks: the order they were saved when it reads the whole table, and
- * by artist ID when it reads the primary key's index instead. The same query keeps the same plans.
+ * 0.4 ms. The rows come in lineup order, which grouping them by show keeps.
  */
 async function includeVenuesAndArtists(page: ShowSource[]) {
   if (page.length === 0) return;
@@ -75,6 +71,7 @@ async function includeVenuesAndArtists(page: ShowSource[]) {
     db.exec(sql`
       select "showId", "artistId" from "ShowArtist"
       where "showId" in (select id from "Show" where id in ${showIds})
+      order by "position"
     `),
   ]);
   const lineups = rows as { showId: string; artistId: string }[];
@@ -138,7 +135,11 @@ const resolvers = {
     date: timestampResolver('date'),
     artists(show) {
       return resolveJoin(show.artists, 'artist', () =>
-        db.findMany(showArtists, { where: { showId: show.id }, with: { artist: lineupArtist } })
+        db.findMany(showArtists, {
+          where: { showId: show.id },
+          orderBy: ['position', 'asc'],
+          with: { artist: lineupArtist },
+        })
       );
     },
     async venue(show) {
@@ -355,7 +356,7 @@ const resolvers = {
           });
           await tx.createMany(
             showArtists,
-            uniqueArtistIds.map((artistId) => ({ showId, artistId }))
+            uniqueArtistIds.map((artistId, position) => ({ showId, artistId, position }))
           );
         }
 
@@ -377,7 +378,7 @@ const resolvers = {
         if (artistIds.length) {
           await tx.createMany(
             showArtists,
-            artistIds.map((artistId) => ({ showId: id, artistId }))
+            artistIds.map((artistId, position) => ({ showId: id, artistId, position }))
           );
         }
       });
@@ -397,7 +398,7 @@ const resolvers = {
         if (artistIds?.length) {
           await db.createMany(
             showArtists,
-            artistIds.map((artistId) => ({ showId: id, artistId }))
+            artistIds.map((artistId, position) => ({ showId: id, artistId, position }))
           );
         }
       }
