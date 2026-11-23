@@ -70,8 +70,7 @@ const updateVideoMutation = gql`
   ${videoFormFragment}
 `;
 
-// Keeps a title like "1999" a string
-const skipKeys = ['title', 'slug'];
+const textFields = ['title', 'slug', 'dataType'];
 
 export function loadVideos({
   gql: client,
@@ -97,5 +96,5 @@ export function loadVideo({ gql: client, id }: { gql: GraphQLClient; id: string 
 }
 
 export function updateVideo({ id, ...args }: FormArgs & { id: string }) {
-  return submitForm({ ...args, mutation: updateVideoMutation, variables: { id }, skipKeys });
+  return submitForm({ ...args, mutation: updateVideoMutation, variables: { id }, textFields });
 }

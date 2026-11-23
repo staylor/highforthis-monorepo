@@ -246,7 +246,7 @@ describe('admin media library', () => {
     assert.deepEqual(operations, [
       {
         operationName: 'UpdateMedia',
-        variables: { id: 'm1', input: { title: '2024', caption: '', altText: 'Jeff' } },
+        variables: { id: 'm1', input: { title: '2024', caption: null, altText: 'Jeff' } },
       },
     ]);
   });

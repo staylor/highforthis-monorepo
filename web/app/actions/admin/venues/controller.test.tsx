@@ -236,9 +236,14 @@ describe('admin venues', () => {
     assert.match(html, />10\/01\/2023 Opry Birthday Bash<\/a>/);
   });
 
-  it('saves an edit, clearing the boxes and listings page left empty', async (t) => {
+  it('saves an edit, clearing the boxes and the fields left empty', async (t) => {
     const operations = stubGraphQL(t, { UpdateVenue: { updateVenue: venue } });
-    const response = await post('/admin/venue/v1', 'name=Ryman&listingsUrl=&capacity=2362');
+    const response = await post(
+      '/admin/venue/v1',
+      'name=Ryman&slug=ryman&description=&website=&listingsUrl=&capacity=2362&streetAddress=' +
+        '&city=Nashville&state=&postalCode=37219' +
+        '&coordinates%5Blatitude%5D=36.16&coordinates%5Blongitude%5D=-86.78'
+    );
     assert.equal(
       response.headers.get('location'),
       'http://localhost/admin/venue/v1?message=updated'
@@ -249,13 +254,37 @@ describe('admin venues', () => {
         id: 'v1',
         input: {
           excludeFromSearch: false,
-          listingsUrl: null,
           permanentlyClosed: false,
           name: 'Ryman',
+          slug: 'ryman',
+          description: null,
+          website: null,
+          listingsUrl: null,
+          // Digits, but text
           capacity: '2362',
+          streetAddress: null,
+          city: 'Nashville',
+          state: null,
+          postalCode: '37219',
+          coordinates: { latitude: 36.16, longitude: -86.78 },
         },
       },
     });
+  });
+
+  it('clears both coordinates when either is emptied, and leaves them alone when not sent', async (t) => {
+    const operations = stubGraphQL(t, { UpdateVenue: { updateVenue: venue } });
+    await post(
+      '/admin/venue/v1',
+      'name=Ryman&coordinates%5Blatitude%5D=&coordinates%5Blongitude%5D=-86.78'
+    );
+    assert.deepEqual(operations.at(-1)?.variables.input.coordinates, {
+      latitude: null,
+      longitude: null,
+    });
+
+    await post('/admin/venue/v1', 'name=Ryman');
+    assert.equal('coordinates' in operations.at(-1)!.variables.input, false);
   });
 
   it("answers 404 for a venue that doesn't exist", async (t) => {

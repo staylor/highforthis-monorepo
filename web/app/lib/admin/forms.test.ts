@@ -107,11 +107,21 @@ describe('parseForm', () => {
     assert.deepEqual(parseForm(formData), { title: 'Hello world', year: 2026, closed: false });
   });
 
-  it('leaves skipped keys as they were typed', () => {
-    const formData = form({ name: '311', slug: '311', year: '1994' });
-    assert.deepEqual(parseForm(formData, { skipKeys: ['name', 'slug'] }), {
+  it('leaves text fields as they were typed, and makes an emptied one null', () => {
+    const formData = form({
       name: '311',
-      slug: '311',
+      notes: 'true',
+      website: '',
+      tags: ['311', 'Low'],
+      year: '1994',
+      venue: '',
+    });
+    const textFields = ['name', 'notes', 'website', 'tags', 'summary'];
+    assert.deepEqual(parseForm(formData, { textFields }), {
+      name: '311',
+      notes: 'true',
+      website: null,
+      tags: ['311', 'Low'],
       year: 1994,
     });
   });

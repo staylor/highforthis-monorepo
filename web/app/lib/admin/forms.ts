@@ -6,7 +6,8 @@ import { attempt, type GraphQLClient, type Variables } from '#/lib/graphql.ts';
 // a framework
 export type { GraphQLClient };
 
-// Turns submitted strings into the numbers and booleans GraphQL expects, and drops empty values
+// Turns submitted strings into the numbers and booleans GraphQL expects, and drops empty values.
+// A form's text fields are left as they were typed (see ParseFormOptions).
 function isObject(val: any) {
   return val.constructor === Object;
 }
@@ -52,11 +53,11 @@ function parseBoolean(val: any) {
   return val === 'true';
 }
 
-function parseObject(obj: Record<string, any>, skipKeys?: string[]) {
+function parseObject(obj: Record<string, any>, textFields?: string[]) {
   const result: Record<string, any> = {};
   for (const key in obj) {
-    if (skipKeys?.includes(key)) {
-      result[key] = obj[key];
+    if (textFields?.includes(key)) {
+      result[key] = obj[key] === '' ? null : obj[key];
       continue;
     }
 
@@ -76,8 +77,11 @@ export const isRedirect = (result: unknown): result is RedirectResult =>
   typeof result === 'object' && result !== null && 'redirectTo' in result;
 
 interface ParseFormOptions {
-  // Keys whose values stay strings, like a name of "311"
-  skipKeys?: string[];
+  /**
+   * The form's text fields. What's typed in one stays a string, so a name of "311" isn't sent as
+   * a number, and one that was emptied is null, which clears what was saved.
+   */
+  textFields?: string[];
 }
 
 // A field's name as the keys it nests under: crops[0][width] is crops, 0, width
@@ -131,10 +135,10 @@ function nestFields(formData: FormData) {
   return fields;
 }
 
-// parseObject turns the values into numbers and booleans, since GraphQL rejects an `Int` sent as
-// a string, and drops empty fields
+// parseObject turns the other fields' values into numbers and booleans, since GraphQL rejects an
+// `Int` sent as a string, and drops the ones left empty, such as a select nothing was chosen in
 export function parseForm(formData: FormData, options?: ParseFormOptions) {
-  return parseObject(nestFields(formData), options?.skipKeys);
+  return parseObject(nestFields(formData), options?.textFields);
 }
 
 interface SubmittedNode {
@@ -163,7 +167,8 @@ export interface FormArgs {
 
 interface SubmitFormArgs extends FormArgs, ParseFormOptions {
   mutation: DocumentNode;
-  // Merged under the form's fields; `input` holds defaults for fields a form can leave out
+  // Merged under the form's fields; `input` holds defaults for fields a form can leave out, as
+  // it does an unchecked box
   variables?: Variables & { input?: Variables };
   // On an add page, the mutation field holding the new item's ID, so the redirect goes to its
   // edit page
@@ -179,9 +184,9 @@ export async function submitForm({
   mutation,
   variables,
   createMutation,
-  skipKeys,
+  textFields,
 }: SubmitFormArgs): Promise<RedirectResult> {
-  const input = parseForm(formData, { skipKeys });
+  const input = parseForm(formData, { textFields });
   if (input.editorState) {
     input.editorState = JSON.parse(input.editorState);
     clearElementFormats(input.editorState.root);

@@ -184,8 +184,7 @@ export function updateMedia({ id, ...args }: FormArgs & { id: string }) {
     ...args,
     mutation: updateMediaMutation,
     variables: { id },
-    // Text fields stay strings, such as a title of "2024", and emptying one clears it
-    skipKeys: ['title', 'description', 'caption', 'altText'],
+    textFields: ['title', 'description', 'caption', 'altText'],
   });
 }
 

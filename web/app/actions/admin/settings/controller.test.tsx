@@ -90,7 +90,10 @@ describe('admin settings', () => {
     assert.deepEqual(operations, [
       {
         operationName: 'UpdateSiteSettings',
-        variables: { id: 'site', input: { siteTitle: '1999', tagline: '', copyrightText: '2024' } },
+        variables: {
+          id: 'site',
+          input: { siteTitle: '1999', tagline: null, copyrightText: '2024' },
+        },
       },
     ]);
   });

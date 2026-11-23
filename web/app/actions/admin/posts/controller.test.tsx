@@ -187,7 +187,7 @@ describe('admin posts', () => {
       editorState: { root: { children: [], type: 'root', version: 1, format: 0 } },
       date: postTime,
       status: 'DRAFT',
-      summary: '',
+      summary: null,
       artists: ['Wilco', 'Spoon'],
       featuredMedia: 'm1',
     });
@@ -215,6 +215,16 @@ describe('admin posts', () => {
     assert.deepEqual(operations.at(-1), {
       operationName: 'UpdatePost',
       variables: { id: 'p1', input: { title: 'Best of 2024', status: 'PUBLISH' } },
+    });
+  });
+
+  it('keeps an artist tag that is all digits as text', async (t) => {
+    const operations = stubGraphQL(t, { UpdatePost: { updatePost: savedPost } });
+    await post('/admin/post/p1', 'title=Reunion&summary=&artists=311');
+    assert.deepEqual(operations.at(-1)?.variables.input, {
+      title: 'Reunion',
+      summary: null,
+      artists: '311',
     });
   });
 

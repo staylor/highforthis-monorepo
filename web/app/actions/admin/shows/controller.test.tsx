@@ -200,7 +200,15 @@ describe('admin shows', () => {
       {
         operationName: 'CreateShow',
         variables: {
-          input: { attended: false, date: showTime, artists: ['a1', 'a2'], venue: 'v1' },
+          input: {
+            attended: false,
+            title: null,
+            date: showTime,
+            artists: ['a1', 'a2'],
+            venue: 'v1',
+            url: null,
+            notes: null,
+          },
         },
       },
     ]);
@@ -230,6 +238,18 @@ describe('admin shows', () => {
           venue: 'v1',
         },
       },
+    });
+  });
+
+  it('keeps a title or notes that look like a number or a boolean as text', async (t) => {
+    const operations = stubGraphQL(t, { UpdateShow: { updateShow: show } });
+    await post('/admin/show/s1', `title=1999&notes=true&url=&date=${showTime}`);
+    assert.deepEqual(operations.at(-1)?.variables.input, {
+      attended: false,
+      title: '1999',
+      notes: 'true',
+      url: null,
+      date: showTime,
     });
   });
 

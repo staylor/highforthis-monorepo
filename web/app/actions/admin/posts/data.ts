@@ -168,8 +168,8 @@ const updatePostMutation = gql`
   ${postFormFragment}
 `;
 
-// Keeps a title like "2024" a string, and lets a summary be cleared
-const skipKeys = ['title', 'summary'];
+// The artists are tags, each an artist's name
+const textFields = ['title', 'summary', 'artists'];
 
 export function loadPosts({
   gql: client,
@@ -195,10 +195,10 @@ export function createPost(args: FormArgs) {
     ...args,
     mutation: createPostMutation,
     createMutation: 'createPost',
-    skipKeys,
+    textFields,
   });
 }
 
 export function updatePost({ id, ...args }: FormArgs & { id: string }) {
-  return submitForm({ ...args, mutation: updatePostMutation, variables: { id }, skipKeys });
+  return submitForm({ ...args, mutation: updatePostMutation, variables: { id }, textFields });
 }

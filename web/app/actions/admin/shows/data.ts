@@ -2,7 +2,6 @@ import { gql } from 'graphql-tag';
 
 import {
   deleteSelected,
-  parseForm,
   submitForm,
   type FormArgs,
   type GraphQLClient,
@@ -153,6 +152,8 @@ const bulkCreateShowsMutation = gql`
   }
 `;
 
+const textFields = ['title', 'notes', 'url'];
+
 export function loadShows({
   gql: client,
   searchParams,
@@ -172,11 +173,10 @@ export async function setShowAttended({
   gql: GraphQLClient;
   formData: FormData;
 }) {
-  const { id, attended } = parseForm(formData);
   const { data } = await attempt(
     client.mutate<UpdateShowAttendedMutation>(attendedMutation, {
-      id,
-      input: { attended: attended === true },
+      id: formData.get('id'),
+      input: { attended: formData.get('attended') === 'true' },
     })
   );
   return Boolean(data?.updateShow);
@@ -198,6 +198,7 @@ export function createShow(args: FormArgs) {
     createMutation: 'createShow',
     // An unchecked box isn't submitted
     variables: { input: { attended: false } },
+    textFields,
   });
 }
 
@@ -209,8 +210,9 @@ export function updateShow({ id, ...args }: FormArgs & { id: string }) {
   return submitForm({
     ...args,
     mutation: updateShowMutation,
-    // The form leaves out empty fields and unchecked boxes, so these defaults clear them
-    variables: { id, input: { attended: false, notes: null, title: null, url: null } },
+    // An unchecked box isn't submitted
+    variables: { id, input: { attended: false } },
+    textFields,
   });
 }
 

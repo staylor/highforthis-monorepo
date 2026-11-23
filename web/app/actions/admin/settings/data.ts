@@ -85,8 +85,8 @@ const updatePodcastSettingsMutation = gql`
   }
 `;
 
-// Every settings field is a string in the schema, so none may become a number or a boolean, as
-// a copyright year or an "explicit" of "false" would
+// Every settings field is text, so none may become a number or a boolean, as a copyright year or
+// an "explicit" of "false" would
 const siteKeys = ['copyrightText', 'emailAddress', 'language', 'siteTitle', 'siteUrl', 'tagline'];
 
 /** The podcast settings' text fields, in the form's order after the title and description. */
@@ -112,7 +112,7 @@ export function updateSiteSettings(args: FormArgs) {
     ...args,
     mutation: updateSiteSettingsMutation,
     variables: { id: 'site' },
-    skipKeys: siteKeys,
+    textFields: siteKeys,
   });
 }
 
@@ -161,6 +161,6 @@ export function updatePodcastSettings(args: FormArgs) {
     ...args,
     mutation: updatePodcastSettingsMutation,
     variables: { id: 'podcast' },
-    skipKeys: ['title', 'description', 'image', ...podcastTextKeys],
+    textFields: ['title', 'description', 'image', ...podcastTextKeys],
   });
 }

@@ -126,9 +126,21 @@ describe('admin users', () => {
           name: 'Lin',
           email: 'lin@example.com',
           password: 'pw',
+          bio: null,
           roles: ['admin', 'editor'],
         },
       },
+    });
+  });
+
+  it('keeps a name, a password or a bio that is all digits as text', async (t) => {
+    const operations = stubGraphQL(t, { UpdateUser: { updateUser: { id: 'u1' } } });
+    await post('/admin/user/u1', 'name=808&email=ada%40example.com&password=0123456789&bio=42');
+    assert.deepEqual(operations.at(-1)?.variables.input, {
+      name: '808',
+      email: 'ada@example.com',
+      password: '0123456789',
+      bio: '42',
     });
   });
 
@@ -152,14 +164,21 @@ describe('admin users', () => {
     assert.match(form, /<input type="password" name="password" autocomplete="off"/);
     assert.match(form, /User updated\./);
 
-    const response = await post('/admin/user/u1', 'name=Ada+L&email=ada%40example.com&password=');
+    const response = await post(
+      '/admin/user/u1',
+      'name=Ada+L&email=ada%40example.com&password=&bio='
+    );
     assert.equal(
       response.headers.get('location'),
       'http://localhost/admin/user/u1?message=updated'
     );
     assert.deepEqual(operations.at(-1), {
       operationName: 'UpdateUser',
-      variables: { id: 'u1', input: { name: 'Ada L', email: 'ada@example.com' } },
+      // GraphQL keeps the password it has when it's sent null, and clears the bio
+      variables: {
+        id: 'u1',
+        input: { name: 'Ada L', email: 'ada@example.com', password: null, bio: null },
+      },
     });
   });
 
