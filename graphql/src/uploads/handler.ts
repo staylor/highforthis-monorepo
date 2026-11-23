@@ -10,7 +10,16 @@ import {
 } from 'remix/form-data-parser/future';
 import { z } from 'zod';
 
-import prisma from '#/database';
+import db from '#/database/db';
+import {
+  audioAlbumArtists,
+  audioArtists,
+  audioGenres,
+  audioImages,
+  imageUploadCrops,
+  mediaUploads,
+  newId,
+} from '#/database/tables';
 
 import { storeFile } from './Storage';
 import mediaAdapter from './adapter';
@@ -62,44 +71,45 @@ const uploadFileSchema = z.object({
 // Records a stored file in the media library, with an image's crops or an audio file's details
 export async function createMediaUpload(file: unknown) {
   const { crops, images, artist, albumArtist, genre, ...data } = uploadFileSchema.parse(file);
-  const record = await prisma.mediaUpload.create({ data });
+  const mediaId = newId();
+  const names = (list: string[]) => list.map((name) => ({ id: newId(), mediaId, name }));
 
-  // Image crops
-  if (crops?.length) {
-    await prisma.imageUploadCrop.createMany({
-      data: crops.map((c) => ({ ...c, mediaId: record.id })),
-    });
-  }
+  await db.transaction(async (tx) => {
+    await tx.create(mediaUploads, { ...data, id: mediaId });
 
-  // Audio cover images
-  if (images?.length) {
-    await prisma.audioImage.createMany({
-      data: images.map((i) => ({ ...i, mediaId: record.id })),
-    });
-  }
+    // Image crops
+    if (crops?.length) {
+      await tx.createMany(
+        imageUploadCrops,
+        crops.map((crop) => ({ ...crop, id: newId(), mediaId }))
+      );
+    }
 
-  // Audio artists
-  if (artist?.length) {
-    await prisma.audioArtist.createMany({
-      data: artist.map((name) => ({ name, mediaId: record.id })),
-    });
-  }
+    // Audio cover images
+    if (images?.length) {
+      await tx.createMany(
+        audioImages,
+        images.map((image) => ({ ...image, id: newId(), mediaId }))
+      );
+    }
 
-  // Audio album artists
-  if (albumArtist?.length) {
-    await prisma.audioAlbumArtist.createMany({
-      data: albumArtist.map((name) => ({ name, mediaId: record.id })),
-    });
-  }
+    // Audio artists
+    if (artist?.length) {
+      await tx.createMany(audioArtists, names(artist));
+    }
 
-  // Audio genres
-  if (genre?.length) {
-    await prisma.audioGenre.createMany({
-      data: genre.map((name) => ({ name, mediaId: record.id })),
-    });
-  }
+    // Audio album artists
+    if (albumArtist?.length) {
+      await tx.createMany(audioAlbumArtists, names(albumArtist));
+    }
 
-  return record.id;
+    // Audio genres
+    if (genre?.length) {
+      await tx.createMany(audioGenres, names(genre));
+    }
+  });
+
+  return mediaId;
 }
 
 // The media uploader sends one file a request. A gigabyte covers any podcast episode or video clip.

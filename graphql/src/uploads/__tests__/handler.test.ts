@@ -6,16 +6,17 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import handleUploads from '../handler';
 
-const { db, run } = vi.hoisted(() => ({
-  db: {
-    mediaSettings: { findUnique: vi.fn() },
-    mediaCropSetting: { findMany: vi.fn() },
-    mediaUpload: { create: vi.fn() },
-  },
+const { db, newId, run } = vi.hoisted(() => ({
+  db: { create: vi.fn(), createMany: vi.fn(), findMany: vi.fn(), transaction: vi.fn() },
+  newId: vi.fn(),
   run: vi.fn(),
 }));
 
-vi.mock('#/database', () => ({ default: db }));
+vi.mock('#/database/db', () => ({ default: db }));
+vi.mock('#/database/tables', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('#/database/tables')>()),
+  newId,
+}));
 vi.mock('../adapter', () => ({ default: () => ({ run }) }));
 
 const upload = (...files: [string, File][]) => {
@@ -40,9 +41,10 @@ describe('handleUploads', () => {
 
   beforeEach(async () => {
     uploadDir = await fs.mkdtemp(path.join(os.tmpdir(), 'uploads-'));
-    db.mediaSettings.findUnique.mockResolvedValue(null);
+    db.findMany.mockResolvedValue([]);
+    db.transaction.mockImplementation((save: (tx: typeof db) => unknown) => save(db));
     let id = 0;
-    db.mediaUpload.create.mockImplementation(async () => ({ id: `media-${++id}` }));
+    newId.mockImplementation(() => `media-${++id}`);
     run.mockResolvedValue([]);
   });
 
@@ -65,7 +67,7 @@ describe('handleUploads', () => {
     );
 
     await expect(response.json()).resolves.toEqual(['media-1', 'media-2']);
-    const records = db.mediaUpload.create.mock.calls.map(([{ data }]) => data);
+    const records = db.create.mock.calls.map(([, data]) => data);
     expect(records).toEqual([
       expect.objectContaining({ originalName: 'one.txt', mimeType: 'audio/mpeg', fileSize: 5 }),
       expect.objectContaining({ originalName: 'two.txt', mimeType: 'audio/mpeg', fileSize: 6 }),
@@ -110,7 +112,7 @@ describe('handleUploads', () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toEqual({ error: 'Unexpected field: avatar' });
-    expect(db.mediaUpload.create).not.toHaveBeenCalled();
+    expect(db.create).not.toHaveBeenCalled();
   });
 
   it('refuses a file that is not an image, audio or video, without storing it', async () => {
@@ -122,14 +124,14 @@ describe('handleUploads', () => {
 
       expect(response.status, type).toBe(415);
     }
-    expect(db.mediaUpload.create).not.toHaveBeenCalled();
+    expect(db.create).not.toHaveBeenCalled();
     await expect(fs.readdir(uploadDir)).resolves.toEqual([]);
   });
 
   it("stores a file under its type's extension, whatever its name says", async () => {
     await handleUploads(upload(['uploads', audio('song.html', 'first')]), uploadDir);
 
-    const [[{ data }]] = db.mediaUpload.create.mock.calls;
+    const [[, data]] = db.create.mock.calls;
     expect(data).toEqual(
       expect.objectContaining({
         originalName: 'song.html',
@@ -145,7 +147,7 @@ describe('handleUploads', () => {
     );
 
     expect(response.status).toBe(415);
-    expect(db.mediaUpload.create).not.toHaveBeenCalled();
+    expect(db.create).not.toHaveBeenCalled();
   });
 
   it('refuses more than 10 files in a request', async () => {
@@ -157,7 +159,7 @@ describe('handleUploads', () => {
     const response = await handleUploads(upload(...files), uploadDir);
 
     expect(response.status).toBe(413);
-    expect(db.mediaUpload.create).not.toHaveBeenCalled();
+    expect(db.create).not.toHaveBeenCalled();
   });
 
   it('rejects when a file fails to store, once the others are done', async () => {
@@ -169,7 +171,7 @@ describe('handleUploads', () => {
         uploadDir
       )
     ).rejects.toThrow('bucket unavailable');
-    expect(db.mediaUpload.create).not.toHaveBeenCalled();
+    expect(db.create).not.toHaveBeenCalled();
     await expect(filesIn(uploadDir)).resolves.toEqual([]);
   });
 

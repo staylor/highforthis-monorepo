@@ -9,11 +9,9 @@ import { storeFile } from '../Storage';
 import type { StorageAdapter } from '../adapter';
 import Image from '../types/Image';
 
-const { findUnique, findMany } = vi.hoisted(() => ({ findUnique: vi.fn(), findMany: vi.fn() }));
+const findMany = vi.hoisted(() => vi.fn());
 
-vi.mock('#/database', () => ({
-  default: { mediaSettings: { findUnique }, mediaCropSetting: { findMany } },
-}));
+vi.mock('#/database/db', () => ({ default: { findMany } }));
 
 const imageFile = (buffer: Buffer) =>
   new File([new Uint8Array(buffer)], 'cover.jpg', { type: 'image/jpeg' });
@@ -53,7 +51,6 @@ describe('storeFile', () => {
 
   beforeEach(async () => {
     uploadDir = await fs.mkdtemp(path.join(os.tmpdir(), 'uploads-'));
-    findUnique.mockResolvedValue({ id: 'media' });
     findMany.mockResolvedValue([{ width: 150, height: 150 }]);
   });
 

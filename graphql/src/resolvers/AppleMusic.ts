@@ -1,7 +1,9 @@
+import { inList } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
 import { artworkUrl, getAlbums, searchAlbums } from '#/appleMusic';
-import prisma from '#/database';
+import db from '#/database/db';
+import { mediaDetails, mediaUploads } from '#/database/tables';
 import { uploadFromUrl } from '#/uploads';
 
 import { parseInput } from './utils/helpers';
@@ -37,9 +39,9 @@ const resolvers = {
           )
         );
       }
-      return prisma.mediaUpload.findMany({
-        where: { id: { in: mediaIds } },
-        include: { crops: true },
+      return db.findMany(mediaUploads, {
+        where: inList('id', mediaIds),
+        with: { crops: mediaDetails.crops },
       });
     },
   },
