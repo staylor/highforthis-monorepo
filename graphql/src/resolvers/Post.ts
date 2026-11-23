@@ -116,7 +116,7 @@ const resolvers = {
           ...rest,
           slug,
           contentBody,
-          editorState: (editorState ?? undefined) as Prisma.InputJsonValue | undefined,
+          editorState: editorState ?? undefined,
           date: date ? new Date(date) : new Date(),
           featuredMedia: featuredMedia?.length
             ? { create: featuredMedia.map((mediaId) => ({ mediaId })) }
@@ -134,11 +134,13 @@ const resolvers = {
         featuredMedia,
         artists: inputArtists,
         editorState,
+        date,
         ...data
       } = updatePostSchema.parse(input);
-      const updateData: Record<string, unknown> = { ...data };
-      if (data.date) {
-        updateData.date = new Date(data.date);
+      const updateData: Prisma.PostUpdateInput = { ...data };
+      // Every post has a date, so one left out or sent as null keeps the saved one
+      if (date) {
+        updateData.date = new Date(date);
       }
       if (editorState) {
         updateData.editorState = editorState;

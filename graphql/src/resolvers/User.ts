@@ -84,7 +84,7 @@ const resolvers = {
         }
       }
 
-      const data: Record<string, unknown> = { ...fields };
+      const data: Prisma.UserUpdateInput = { ...fields };
       if (password) {
         data.hash = await bcrypt.hash(password, SALT_ROUNDS);
       }

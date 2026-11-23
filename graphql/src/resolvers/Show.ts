@@ -309,7 +309,7 @@ const resolvers = {
     async updateShow(_, { id, input }) {
       const validated = updateShowSchema.parse(input);
       const { artists, venue, date, ...data } = validated;
-      const values: Record<string, unknown> = { ...data };
+      const values: Prisma.ShowUncheckedUpdateInput = { ...data };
 
       if (date) values.date = new Date(date);
       if (venue) values.venueId = venue;
