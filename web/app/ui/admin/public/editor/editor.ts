@@ -16,6 +16,7 @@ import type {
   EditorThemeClasses,
   LexicalEditor,
   SerializedEditorState,
+  SerializedLexicalNode,
 } from 'lexical';
 
 import ImageNode from './image-node.ts';
@@ -42,6 +43,28 @@ function $canShowPlaceholder(editor: LexicalEditor) {
       block.getIndent() === 0 &&
       block.getChildren().every((child) => $isTextNode(child)))
   );
+}
+
+interface LoadedNode extends SerializedLexicalNode {
+  children?: LoadedNode[];
+  image?: unknown;
+  video?: unknown;
+}
+
+/**
+ * The saved post without its images and videos whose media is gone (deleted, or saved without an
+ * id, so GraphQL sends null): they have nothing to show, and nothing to save.
+ */
+function withoutMissingMedia<T extends LoadedNode>(node: T): T {
+  if (!node.children) {
+    return node;
+  }
+  const gone = ({ type, image, video }: LoadedNode) =>
+    (type === 'image' && !image) || (type === 'video' && !video);
+  return {
+    ...node,
+    children: node.children.filter((child) => !gone(child)).map(withoutMissingMedia),
+  };
 }
 
 interface PostEditorOptions {
@@ -71,8 +94,12 @@ export function createPostEditor({ theme, editorState }: PostEditorOptions) {
     },
   });
 
-  if (editorState?.root?.children?.length) {
-    editor.setEditorState(editor.parseEditorState(editorState), { tag: HISTORY_MERGE_TAG });
+  const saved = editorState?.root && {
+    ...editorState,
+    root: withoutMissingMedia(editorState.root),
+  };
+  if (saved?.root.children.length) {
+    editor.setEditorState(editor.parseEditorState(saved), { tag: HISTORY_MERGE_TAG });
   } else {
     // without a saved body, the post starts with an empty paragraph to write in
     editor.update(

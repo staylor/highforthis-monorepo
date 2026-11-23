@@ -79,4 +79,13 @@ describe('PostContent', () => {
     assert.equal([...html.matchAll(/<li/g)].length, 1);
     assert.match(html, /Plain and <strong[^>]*>bold<\/strong>/);
   });
+
+  it('leaves out an image or a video that is gone', async () => {
+    const html = await render(
+      { type: 'image', image: null },
+      { type: 'video', video: null },
+      block('paragraph', [text('Still here')])
+    );
+    assert.match(html.replace(/<head>.*<\/head>/s, ''), /^<p[^>]*>Still here<\/p>$/);
+  });
 });

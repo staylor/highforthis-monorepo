@@ -11,6 +11,9 @@ export interface EditorNodeData {
   videoId?: string;
 }
 
+// Some older posts have media nodes saved without an id (videos that had gone, kept as an error
+// message). Those load as no media: Prisma rejects an undefined id, and panics when the lookups
+// are batched.
 const resolvers = {
   EditorNode: {
     __resolveType: resolveType(
@@ -34,6 +37,9 @@ const resolvers = {
     // Prisma batches the findUnique calls of one tick into one query, and the crops come with
     // it, instead of a query per image from ImageUpload.crops
     image(data) {
+      if (!data.imageId) {
+        return null;
+      }
       return prisma.mediaUpload.findUnique({
         where: { id: data.imageId },
         include: { crops: true },
@@ -42,6 +48,9 @@ const resolvers = {
   },
   VideoNode: {
     video(data) {
+      if (!data.videoId) {
+        return null;
+      }
       return prisma.video.findUnique({ where: { id: data.videoId } });
     },
   },

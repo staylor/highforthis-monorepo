@@ -89,6 +89,25 @@ describe('post editor', () => {
     assert.deepEqual(blocks[3], savedVideo);
   });
 
+  it('leaves out images and videos whose media is gone, so the post can be saved', (t) => {
+    const { children } = savedPost.root;
+    const { saved } = mountEditor(t, {
+      root: {
+        ...savedPost.root,
+        children: [
+          ...children,
+          { type: 'image', version: 1, image: null, size: 'FEATURE' },
+          { type: 'video', version: 1, video: null },
+        ],
+      },
+    } as unknown as typeof savedPost);
+
+    assert.deepEqual(
+      saved().root.children.map((node: { type: string }) => node.type),
+      ['heading', 'image', 'paragraph', 'video', 'list']
+    );
+  });
+
   it('starts a new post with an empty paragraph and shows the placeholder until there is text', (t) => {
     const { editor, placeholder } = mountEditor(t);
     assert.deepEqual(blockTypes(editor), ['paragraph']);

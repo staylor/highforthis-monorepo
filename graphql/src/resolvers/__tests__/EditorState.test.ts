@@ -182,3 +182,11 @@ describe('editor state', () => {
     expect(numbers).toMatchObject({ listType: 'number', start: 3 });
   });
 });
+
+describe('media nodes', () => {
+  // the database mock has no models, so a lookup would throw
+  it('load no image or video for nodes saved without an id', async () => {
+    expect(await resolvers.ImageNode.image({ type: 'image' })).toBeNull();
+    expect(await resolvers.VideoNode.video({ type: 'video' })).toBeNull();
+  });
+});
