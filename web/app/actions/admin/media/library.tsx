@@ -2,8 +2,8 @@ import { css, unsafeHTML } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
-import { renderAdminPage, type AdminPageContext } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type GraphQLClient, type RedirectResult } from '#/lib/admin/forms.ts';
+import { renderAdminPage, type AdminContext } from '#/actions/admin/render-page.tsx';
+import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -185,10 +185,7 @@ export const mediaUpload = createAction(media.upload, {
   },
 });
 
-async function renderAlbumCoversPage(
-  context: AdminPageContext & { admin: { gql: GraphQLClient } },
-  options: { failed?: boolean } = {}
-) {
+async function renderAlbumCoversPage(context: AdminContext, options: { failed?: boolean } = {}) {
   const t = getAdminT();
   const { appleMusicAlbums: results } = await searchAlbumCovers({
     gql: context.admin.gql,
@@ -371,7 +368,7 @@ function details(t: TFunction, upload: Media) {
   return null;
 }
 
-function mediaFields(t: TFunction, upload: Media): Field[] {
+function mediaFields(t: TFunction, upload: Media, values?: SaveFailure['values']): Field[] {
   const placeholder = t('media.placeholder');
   const isImage = upload.type === 'image';
   return [
@@ -383,7 +380,7 @@ function mediaFields(t: TFunction, upload: Media): Field[] {
         <input
           type="text"
           name="title"
-          value={upload.title ?? ''}
+          value={values ? (values.title ?? '') : (upload.title ?? '')}
           placeholder={placeholder}
           aria-label={placeholder}
           mix={css(
@@ -419,49 +416,47 @@ function mediaFields(t: TFunction, upload: Media): Field[] {
   ];
 }
 
+async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+  const t = getAdminT();
+  const { media: upload } = await loadMedia({ gql: context.admin.gql, id });
+  if (!upload) {
+    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+  }
+  const label = t('media.edit');
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <Message text={t('media.updated')} hidden={Boolean(failure)} />
+      <AdminForm
+        fields={mediaFields(t, upload, failure?.values)}
+        data={upload}
+        failure={failure}
+        buttonLabel={t('media.update')}
+        meta={
+          <div mix={css({ marginBlock: '1.5rem', display: 'block' })}>
+            <h3 mix={css({ marginBottom: '0.5rem', ...text.sm, fontWeight: 700 })}>
+              {t('admin.details')}
+            </h3>
+            {details(t, upload)}
+          </div>
+        }
+      />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const mediaEdit = createController(media.edit, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    async index(context) {
-      const t = getAdminT();
-      const { media: upload } = await loadMedia({ gql: context.admin.gql, id: context.params.id });
-      if (!upload) {
-        return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
-      }
-      const label = t('media.edit');
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <Message text={t('media.updated')} />
-          <AdminForm
-            fields={mediaFields(t, upload)}
-            data={upload}
-            buttonLabel={t('media.update')}
-            meta={
-              <div mix={css({ marginBlock: '1.5rem', display: 'block' })}>
-                <h3 mix={css({ marginBottom: '0.5rem', ...text.sm, fontWeight: 700 })}>
-                  {t('admin.details')}
-                </h3>
-                {details(t, upload)}
-              </div>
-            }
-          />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => editPage(context, context.params.id),
 
     async action(context) {
+      const { id } = context.params;
       const formData = await context.request.formData();
-      return backTo(
-        await updateMedia({
-          gql: context.admin.gql,
-          id: context.params.id,
-          formData,
-          url: context.url,
-        })
-      );
+      const result = await updateMedia({ gql: context.admin.gql, id, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
     },
   },
 });

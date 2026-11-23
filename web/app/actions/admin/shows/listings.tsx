@@ -2,9 +2,8 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import { renderAdminPage } from '#/actions/admin/render-page.tsx';
-import type { AdminPageContext } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type GraphQLClient } from '#/lib/admin/forms.ts';
+import { renderAdminPage, type AdminContext } from '#/actions/admin/render-page.tsx';
+import { isRedirect } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -77,7 +76,7 @@ function listingRow(t: TFunction, listing: Listing): ListingRow {
 }
 
 async function renderListingsPage(
-  context: AdminPageContext & { admin: { gql: GraphQLClient } },
+  context: AdminContext,
   venueId: string | undefined,
   options: { failed?: boolean } = {}
 ) {

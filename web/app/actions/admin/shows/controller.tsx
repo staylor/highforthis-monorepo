@@ -2,8 +2,8 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import { renderAdminPage } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type RedirectResult } from '#/lib/admin/forms.ts';
+import { renderAdminPage, type AdminContext } from '#/actions/admin/render-page.tsx';
+import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -72,9 +72,17 @@ function tonight() {
   return date.getTime();
 }
 
-function showFields(t: TFunction, data: ShowFormData): Field[] {
+function showFields(t: TFunction, data: ShowFormData, values?: SaveFailure['values']): Field[] {
   const show = data.show;
-  const venueId = show?.venue?.id ?? '';
+  const artists = choices(show?.artists ?? [], data.artists);
+  // What a save that failed submitted, or what's saved
+  const venueId: string = values ? (values.venue ?? '') : (show?.venue?.id ?? '');
+  const date = values?.date ? Number(values.date) : (show?.date ?? tonight());
+  const picked: Entity[] = values
+    ? [values.artists ?? []]
+        .flat()
+        .flatMap((id) => artists.find((artist) => artist.id === id) ?? [])
+    : (show?.artists ?? []).map(({ id, name }) => ({ id, name }));
   const venueLink = (href: string, label: string, marginLeft: string) => (
     <a
       href={href}
@@ -90,7 +98,7 @@ function showFields(t: TFunction, data: ShowFormData): Field[] {
       label: t('shows.date'),
       prop: 'date',
       type: 'custom',
-      render: () => <DateTimeInput name="date" value={show?.date ?? tonight()} id="field-date" />,
+      render: () => <DateTimeInput name="date" value={date} id="field-date" />,
     },
     {
       label: t('shows.artists'),
@@ -99,8 +107,8 @@ function showFields(t: TFunction, data: ShowFormData): Field[] {
       render: () => (
         <EntitiesPicker
           name="artists"
-          selected={(show?.artists ?? []).map(({ id, name }) => ({ id, name }))}
-          choices={choices(show?.artists ?? [], data.artists)}
+          selected={picked}
+          choices={artists}
           placeholder="---"
           removeLabel={t('admin.remove')}
           id="field-artists"
@@ -249,68 +257,74 @@ export const showsList = createController(shows.list, {
   },
 });
 
+async function addPage(context: AdminContext, failure?: SaveFailure) {
+  const t = getAdminT();
+  // The form starts out like the last show added, artists included
+  const data = await loadNewShow({ gql: context.admin.gql });
+  const label = t('shows.add');
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <AdminForm
+        fields={showFields(t, data, failure?.values)}
+        data={data.show}
+        failure={failure}
+        buttonLabel={label}
+      />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const showsAdd = createController(shows.add, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    async index(context) {
-      const t = getAdminT();
-      // The form starts out like the last show added, artists included
-      const data = await loadNewShow({ gql: context.admin.gql });
-      const label = t('shows.add');
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <Message text={t('shows.updated')} />
-          <AdminForm fields={showFields(t, data)} data={data.show} buttonLabel={label} />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => addPage(context),
 
+    // Goes to the new show's page, or shows the form again with what was entered
     async action(context) {
       const formData = await context.request.formData();
-      return backTo(await createShow({ gql: context.admin.gql, formData, url: context.url }));
+      const result = await createShow({ gql: context.admin.gql, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : addPage(context, result);
     },
   },
 });
 
+async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+  const t = getAdminT();
+  const data = await loadShow({ gql: context.admin.gql, id });
+  if (!data.show) {
+    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+  }
+  const label = t('shows.edit');
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <HeaderAdd href={shows.add.index.href()} label={t('shows.add')} />
+      <Message text={t('shows.updated')} hidden={Boolean(failure)} />
+      <AdminForm
+        fields={showFields(t, data, failure?.values)}
+        data={data.show}
+        failure={failure}
+        buttonLabel={t('shows.update')}
+      />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const showsEdit = createController(shows.edit, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    async index(context) {
-      const t = getAdminT();
-      const data = await loadShow({ gql: context.admin.gql, id: context.params.id });
-      if (!data.show) {
-        return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
-      }
-      const label = t('shows.edit');
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <HeaderAdd href={shows.add.index.href()} label={t('shows.add')} />
-          <Message text={t('shows.updated')} />
-          <AdminForm
-            fields={showFields(t, data)}
-            data={data.show}
-            buttonLabel={t('shows.update')}
-          />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => editPage(context, context.params.id),
 
     async action(context) {
+      const { id } = context.params;
       const formData = await context.request.formData();
-      return backTo(
-        await updateShow({
-          gql: context.admin.gql,
-          id: context.params.id,
-          formData,
-          url: context.url,
-        })
-      );
+      const result = await updateShow({ gql: context.admin.gql, id, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
     },
   },
 });

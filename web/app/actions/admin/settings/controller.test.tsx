@@ -21,10 +21,18 @@ function stubGraphQL(t: TestContext, answers: Record<string, unknown> = {}) {
     }
     const { operationName, variables } = JSON.parse(String(init?.body));
     operations.push({ operationName, variables });
-    return Response.json({ data: answers[operationName] ?? {} });
+    const answer = answers[operationName];
+    return answer instanceof Response ? answer.clone() : Response.json({ data: answer ?? {} });
   });
   return operations;
 }
+
+/** GraphQL's answer to input it turns down. */
+const invalid = (message: string) =>
+  Response.json(
+    { errors: [{ message, extensions: { code: 'BAD_USER_INPUT' } }], data: null },
+    { status: 400 }
+  );
 
 const get = (path: string, cookie = testSession) =>
   router.fetch(new Request(new URL(path, origin), { headers: cookie ? { cookie } : {} }));
@@ -209,12 +217,35 @@ describe('admin settings', () => {
     ]);
   });
 
-  it('says so when a save fails', async (t) => {
-    stubGraphQL(t);
-    const response = await post('/admin/settings/site', 'siteTitle=Anything');
-    assert.equal(
-      response.headers.get('location'),
-      'http://localhost/admin/settings/site?saveFailed=1'
+  it('shows the form again with what was entered when a save fails, and says why', async (t) => {
+    stubGraphQL(t, {
+      SiteSettings: { siteSettings: { id: 'site', siteTitle: 'High for This', tagline: 'Old' } },
+      UpdateSiteSettings: invalid('Invalid input (siteUrl: Invalid URL)'),
+    });
+    // The last save worked, which the page's address still says
+    const response = await post(
+      '/admin/settings/site?message=updated',
+      'siteTitle=New+title&tagline=&siteUrl=nope'
     );
+    assert.equal(response.status, 422);
+    const html = await response.text();
+    assert.match(html, /role="alert"[^>]*><p>Couldn't save\. Check the form and try again\.<\/p>/);
+    assert.match(html, /Invalid input \(siteUrl: Invalid URL\)/);
+    assert.match(html, /<input type="text" name="siteTitle" value="New title"/);
+    assert.match(html, /<input type="text" name="tagline" value=""/);
+    assert.match(html, /<input type="url" name="siteUrl" value="nope"/);
+    assert.doesNotMatch(html, /Settings Updated\./);
+  });
+
+  it("answers 502, without a reason, when GraphQL can't be reached to save", async (t) => {
+    stubGraphQL(t, {
+      UpdateSiteSettings: new Response('Bad Gateway', { status: 502 }),
+    });
+    const response = await post('/admin/settings/site', 'siteTitle=New+title');
+    assert.equal(response.status, 502);
+    const html = await response.text();
+    assert.match(html, /Couldn't save\. Check the form and try again\./);
+    assert.match(html, /<input type="text" name="siteTitle" value="New title"/);
+    assert.doesNotMatch(html, /Bad Gateway/);
   });
 });

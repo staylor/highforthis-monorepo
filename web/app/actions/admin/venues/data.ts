@@ -138,19 +138,15 @@ const textFields = [
   'postalCode',
 ];
 
-const coordinateFields = ['coordinates[latitude]', 'coordinates[longitude]'];
-
 /**
- * A venue's coordinates are saved as a pair. When the form has either one emptied, both are
- * cleared, and the save looks the address up again.
+ * A venue's coordinates are saved as a pair. Parsing leaves out one that was emptied, and then
+ * both are cleared, so the save looks the address up again.
  */
-function clearedCoordinates(formData: FormData) {
-  const submitted = coordinateFields.map((name) => formData.get(name));
-  if (submitted.includes(null) || submitted.every((value) => String(value).trim())) {
-    return {};
+function pairCoordinates(input: Record<string, any>) {
+  const { coordinates } = input;
+  if (coordinates && (coordinates.latitude === undefined || coordinates.longitude === undefined)) {
+    input.coordinates = { latitude: null, longitude: null };
   }
-  coordinateFields.forEach((name) => formData.delete(name));
-  return { coordinates: { latitude: null, longitude: null } };
 }
 
 export function loadVenues({
@@ -207,15 +203,9 @@ export function updateVenue({ id, ...args }: FormArgs & { id: string }) {
   return submitForm({
     ...args,
     mutation: updateVenueMutation,
-    variables: {
-      id,
-      // An unchecked box isn't submitted, so these defaults clear them
-      input: {
-        excludeFromSearch: false,
-        permanentlyClosed: false,
-        ...clearedCoordinates(args.formData),
-      },
-    },
+    // An unchecked box isn't submitted, so these defaults clear them
+    variables: { id, input: { excludeFromSearch: false, permanentlyClosed: false } },
     textFields,
+    prepare: pairCoordinates,
   });
 }

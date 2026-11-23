@@ -21,10 +21,18 @@ function stubGraphQL(t: TestContext, answers: Record<string, unknown> = {}) {
     }
     const { operationName, variables } = JSON.parse(String(init?.body));
     operations.push({ operationName, variables });
-    return Response.json({ data: answers[operationName] ?? {} });
+    const answer = answers[operationName];
+    return answer instanceof Response ? answer.clone() : Response.json({ data: answer ?? {} });
   });
   return operations;
 }
+
+/** GraphQL's answer to input it turns down. */
+const invalid = (message: string) =>
+  Response.json(
+    { errors: [{ message, extensions: { code: 'BAD_USER_INPUT' } }], data: null },
+    { status: 400 }
+  );
 
 const get = (path: string, cookie = testSession) =>
   router.fetch(new Request(new URL(path, origin), { headers: cookie ? { cookie } : {} }));
@@ -234,6 +242,34 @@ describe('admin artists', () => {
         },
       },
     });
+  });
+
+  it('shows an edit that failed as it was entered, boxes included', async (t) => {
+    stubGraphQL(t, {
+      ArtistEdit: { artist, shows: { edges: shows } },
+      UpdateArtist: invalid('Invalid input (slug: Invalid input: expected string, received null)'),
+    });
+    // The saved artist is excluded from search, and this edit unchecks the box
+    const response = await post('/admin/artist/a1', 'name=Wilco&slug=&description=New&website=');
+    assert.equal(response.status, 422);
+    const html = await response.text();
+    assert.match(html, /role="alert"[^>]*><p>Couldn't save\./);
+    assert.match(html, /slug: Invalid input: expected string, received null/);
+    assert.match(html, /<input type="text" name="slug" value="" required/);
+    assert.match(html, /<textarea name="description"[^>]*>New<\/textarea>/);
+    assert.match(html, /<input type="checkbox" name="excludeFromSearch" value="true" id=/);
+    // The rest of the page is the artist's, as it is saved
+    assert.match(html, /Edit Artist/);
+    assert.match(html, /<a href="\/admin\/show\/s0"/);
+  });
+
+  it('shows an add that failed as it was entered', async (t) => {
+    stubGraphQL(t, { CreateArtist: invalid('Invalid input (name: Too small)') });
+    const response = await post('/admin/artist/add', 'name=&description=From+Chicago&website=');
+    assert.equal(response.status, 422);
+    const html = await response.text();
+    assert.match(html, /Add Artist/);
+    assert.match(html, /<textarea name="description"[^>]*>From Chicago<\/textarea>/);
   });
 
   it("answers 404 for an artist that doesn't exist", async (t) => {

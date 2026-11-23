@@ -173,20 +173,41 @@ describe('submitForm', () => {
     });
   });
 
-  it('says the save failed when GraphQL refuses it', async () => {
+  it("hands back what was submitted when GraphQL can't save it", async () => {
     const result = await submitForm({
       gql: stubGraphQL(refused).client,
-      formData: form({ title: 'New title' }),
+      formData: form({ title: 'New title', year: '2026', 'crops[0][name]': 'thumb', notes: '' }),
       url: new URL('http://localhost/admin/thing/1?tab=meta&message=updated'),
       mutation: saveMutation,
       variables: { id: '1' },
     });
+    // As submitted, for the form to show again: still strings, empty ones included
     assert.deepEqual(result, {
-      redirectTo: 'http://localhost/admin/thing/1?tab=meta&saveFailed=1',
+      values: { title: 'New title', year: '2026', crops: [{ name: 'thumb' }], notes: '' },
+      reason: undefined,
+      status: 502,
+    });
+    assert.ok(!isRedirect(result));
+  });
+
+  it('says what GraphQL found wrong with the input', async () => {
+    const invalid = new GraphQLRequestError('SaveThing failed: Invalid input (title: Too small)');
+    invalid.invalid = 'Invalid input (title: Too small)';
+    const result = await submitForm({
+      gql: stubGraphQL(invalid).client,
+      formData: form({ title: '' }),
+      url: new URL('http://localhost/admin/thing/1'),
+      mutation: saveMutation,
+      variables: { id: '1' },
+    });
+    assert.deepEqual(result, {
+      values: { title: '' },
+      reason: 'Invalid input (title: Too small)',
+      status: 422,
     });
   });
 
-  it('stays on the add page when adding fails', async () => {
+  it("hands back what was submitted when there's nothing to save it to", async () => {
     const result = await submitForm({
       gql: stubGraphQL({ createThing: null }).client,
       formData: form({ title: 'First' }),
@@ -194,18 +215,22 @@ describe('submitForm', () => {
       mutation: createMutation,
       createMutation: 'createThing',
     });
-    assert.deepEqual(result, { redirectTo: 'http://localhost/admin/thing/add?saveFailed=1' });
+    assert.deepEqual(result, { values: { title: 'First' }, reason: undefined, status: 422 });
   });
 
-  it("drops the last save's failure once a save works", async () => {
-    const result = await submitForm({
-      gql: stubGraphQL({ saveThing: { id: '1' } }).client,
-      formData: form({ title: 'New title' }),
-      url: new URL('http://localhost/admin/thing/1?saveFailed=1'),
+  it('lets a form adjust its fields before they are sent', async () => {
+    const { client, calls } = stubGraphQL({ saveThing: { id: '1' } });
+    await submitForm({
+      gql: client,
+      formData: form({ description: '' }),
+      url: new URL('http://localhost/admin/thing/1'),
       mutation: saveMutation,
-      variables: { id: '1' },
+      textFields: ['description'],
+      prepare(input) {
+        input.description ??= '';
+      },
     });
-    assert.deepEqual(result, { redirectTo: 'http://localhost/admin/thing/1?message=updated' });
+    assert.deepEqual(calls[0].variables, { input: { description: '' } });
   });
 
   it("sends the editor's state as JSON, with element formats as numbers", async () => {
@@ -245,7 +270,7 @@ describe('submitForm', () => {
 
   it('returns a redirect', async () => {
     const result = await submitForm({
-      gql: stubGraphQL().client,
+      gql: stubGraphQL({ saveThing: { id: '1' } }).client,
       formData: form({}),
       url: new URL('http://localhost/admin/thing/1'),
       mutation: saveMutation,

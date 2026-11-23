@@ -1,9 +1,10 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
+import type { SaveFailure } from '#/lib/admin/forms.ts';
 import { lg, merge, sm, text } from '#/ui/public/styles.ts';
 
 import { getAdmin } from './context.tsx';
-import { Message } from './message.tsx';
+import { Alert } from './page.tsx';
 import { checkbox, label, saveButton, select, wideInput } from './public/styles.ts';
 
 // A plain POST form whose fields are described by data. A custom field renders what it's
@@ -20,6 +21,8 @@ export interface Field {
   prop: string;
   type?: 'text' | 'textarea' | 'select' | 'hidden' | 'checkbox' | 'custom';
   inputType?: 'text' | 'email' | 'password' | 'url';
+  /** The browser won't submit the form while a text field that's required is empty. */
+  required?: boolean;
   autoComplete?: boolean;
   placeholder?: string;
   choices?: Choice[];
@@ -95,6 +98,7 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
       name: field.prop,
       value: String(value ?? ''),
       placeholder: field.placeholder,
+      required: field.required,
       autocomplete,
       mix: wideInput,
       id,
@@ -110,9 +114,27 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
   };
 }
 
+type FormData = Record<string, unknown> | null;
+
+/**
+ * What a field shows: what's saved, or what was submitted when the save failed. A box that was
+ * left unchecked isn't in what was submitted.
+ */
+function fieldValue(field: Field, data?: FormData, values?: SaveFailure['values']) {
+  if (!values) {
+    return data?.[field.prop];
+  }
+  if (field.type === 'checkbox') {
+    return values[field.prop] === 'true';
+  }
+  return field.prop in values ? values[field.prop] : data?.[field.prop];
+}
+
 interface AdminFormProps {
   fields: Field[];
-  data?: Record<string, unknown> | null;
+  data?: FormData;
+  /** The save that just failed, whose fields the form shows again in place of what's saved. */
+  failure?: SaveFailure;
   buttonLabel?: string;
   /** A box beside the fields on wide screens, such as an artist's shows. */
   meta?: RemixNode;
@@ -124,9 +146,11 @@ interface AdminFormProps {
 }
 
 /** A field with its label, for a form's own boxes, such as a post's date and status. */
-export function FormField(handle: Handle<{ field: Field; data?: Record<string, unknown> | null }>) {
+export function FormField(
+  handle: Handle<{ field: Field; data?: FormData; values?: SaveFailure['values'] }>
+) {
   return () => {
-    const { field, data } = handle.props;
+    const { field, data, values } = handle.props;
     const id = `field-${field.prop}`;
     if (field.type === 'custom') {
       return (
@@ -143,7 +167,7 @@ export function FormField(handle: Handle<{ field: Field; data?: Record<string, u
             {field.label}
           </label>
         )}
-        <FieldInput field={field} value={data?.[field.prop]} id={id} />
+        <FieldInput field={field} value={fieldValue(field, data, values)} id={id} />
       </div>
     );
   };
@@ -162,7 +186,7 @@ const boxBody = css({ padding: '0.375rem 1.25rem 1.25rem', ...text.sm });
 export function AdminForm(handle: Handle<AdminFormProps>) {
   return () => {
     const { t } = getAdmin(handle);
-    const { fields, data, buttonLabel, meta, info } = handle.props;
+    const { fields, data, failure, buttonLabel, meta, info } = handle.props;
     const button = (
       <button type="submit" mix={saveButton}>
         {buttonLabel || t('admin.submit')}
@@ -176,7 +200,17 @@ export function AdminForm(handle: Handle<AdminFormProps>) {
           '&::after': { content: '""', clear: 'both', display: 'table' },
         })}
       >
-        <Message param="saveFailed" text={t('admin.saveFailed')} />
+        {/* Always here, so the form is the same element whether or not the last save failed */}
+        <div>
+          {failure && (
+            <Alert>
+              <p>{t('admin.saveFailed')}</p>
+              {failure.reason && (
+                <p mix={css({ marginTop: '0.25rem', whiteSpace: 'pre-line' })}>{failure.reason}</p>
+              )}
+            </Alert>
+          )}
+        </div>
         <form method="post">
           <fieldset
             data-sidebar={sidebar || undefined}
@@ -192,7 +226,7 @@ export function AdminForm(handle: Handle<AdminFormProps>) {
           >
             <div mix={css({ width: '100%', maxWidth: '42rem', minWidth: 0 })}>
               {fields.map((field) => (
-                <FormField field={field} data={data} />
+                <FormField field={field} data={data} values={failure?.values} />
               ))}
               {!info && button}
             </div>
