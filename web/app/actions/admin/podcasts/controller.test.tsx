@@ -106,7 +106,8 @@ describe('admin podcasts', () => {
     );
     assert.deepEqual(operations.at(-1), {
       operationName: 'CreatePodcast',
-      variables: { input: { title: '2024', image: 'm1', audio: 'a1' } },
+      // A podcast's description is never null
+      variables: { input: { title: '2024', description: '', image: 'm1', audio: 'a1' } },
     });
   });
 
@@ -133,6 +134,15 @@ describe('admin podcasts', () => {
     assert.deepEqual(operations.at(-1), {
       operationName: 'UpdatePodcast',
       variables: { id: 'p1', input: { title: 'Episode One', image: 'm2', audio: 'a1' } },
+    });
+  });
+
+  it('saves an emptied description as an empty one, since a podcast always has one', async (t) => {
+    const operations = stubGraphQL(t, { UpdatePodcast: { updatePodcast: podcast } });
+    await post('/admin/podcast/p1', 'title=Episode+One&description=');
+    assert.deepEqual(operations.at(-1)?.variables.input, {
+      title: 'Episode One',
+      description: '',
     });
   });
 

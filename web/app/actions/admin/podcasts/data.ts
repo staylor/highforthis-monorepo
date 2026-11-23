@@ -76,8 +76,16 @@ const updatePodcastMutation = gql`
   ${podcastFormFragment}
 `;
 
-// Keeps a title like "2024" a string
-const skipKeys = ['title'];
+const textFields = ['title', 'description'];
+
+/** A podcast always has a description, so one that was emptied is saved empty instead of null. */
+function emptiedDescription(formData: FormData) {
+  if (formData.get('description') !== '') {
+    return {};
+  }
+  formData.delete('description');
+  return { description: '' };
+}
 
 export function loadPodcasts({
   gql: client,
@@ -103,10 +111,16 @@ export function createPodcast(args: FormArgs) {
     ...args,
     mutation: createPodcastMutation,
     createMutation: 'createPodcast',
-    skipKeys,
+    variables: { input: emptiedDescription(args.formData) },
+    textFields,
   });
 }
 
 export function updatePodcast({ id, ...args }: FormArgs & { id: string }) {
-  return submitForm({ ...args, mutation: updatePodcastMutation, variables: { id }, skipKeys });
+  return submitForm({
+    ...args,
+    mutation: updatePodcastMutation,
+    variables: { id, input: emptiedDescription(args.formData) },
+    textFields,
+  });
 }

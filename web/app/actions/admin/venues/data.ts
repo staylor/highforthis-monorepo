@@ -3,7 +3,6 @@ import { gql } from 'graphql-tag';
 import { featuredMediaFragment } from '#/actions/admin/media/data.ts';
 import {
   deleteSelected,
-  parseForm,
   submitForm,
   type FormArgs,
   type GraphQLClient,
@@ -126,8 +125,33 @@ const updateVenueMutation = gql`
   ${venueFormFragment}
 `;
 
-// String fields in the schema that a form can fill with digits
-const skipKeys = ['name', 'slug', 'capacity', 'postalCode'];
+const textFields = [
+  'name',
+  'slug',
+  'description',
+  'website',
+  'listingsUrl',
+  'capacity',
+  'streetAddress',
+  'city',
+  'state',
+  'postalCode',
+];
+
+const coordinateFields = ['coordinates[latitude]', 'coordinates[longitude]'];
+
+/**
+ * A venue's coordinates are saved as a pair. When the form has either one emptied, both are
+ * cleared, and the save looks the address up again.
+ */
+function clearedCoordinates(formData: FormData) {
+  const submitted = coordinateFields.map((name) => formData.get(name));
+  if (submitted.includes(null) || submitted.every((value) => String(value).trim())) {
+    return {};
+  }
+  coordinateFields.forEach((name) => formData.delete(name));
+  return { coordinates: { latitude: null, longitude: null } };
+}
 
 export function loadVenues({
   gql: client,
@@ -153,11 +177,10 @@ export async function setVenueFlag({
   flag: VenueFlag;
   formData: FormData;
 }) {
-  const fields = parseForm(formData);
   const { data } = await attempt(
     client.mutate<UpdateVenueFlagMutation>(updateVenueFlagMutation, {
-      id: fields.id,
-      input: { [flag]: fields[flag] === true },
+      id: formData.get('id'),
+      input: { [flag]: formData.get(flag) === 'true' },
     })
   );
   return Boolean(data?.updateVenue);
@@ -176,7 +199,7 @@ export function createVenue(args: FormArgs) {
     ...args,
     mutation: createVenueMutation,
     createMutation: 'createVenue',
-    skipKeys,
+    textFields,
   });
 }
 
@@ -184,11 +207,15 @@ export function updateVenue({ id, ...args }: FormArgs & { id: string }) {
   return submitForm({
     ...args,
     mutation: updateVenueMutation,
-    // The form leaves out empty fields and unchecked boxes, so these defaults clear them
     variables: {
       id,
-      input: { excludeFromSearch: false, listingsUrl: null, permanentlyClosed: false },
+      // An unchecked box isn't submitted, so these defaults clear them
+      input: {
+        excludeFromSearch: false,
+        permanentlyClosed: false,
+        ...clearedCoordinates(args.formData),
+      },
     },
-    skipKeys,
+    textFields,
   });
 }

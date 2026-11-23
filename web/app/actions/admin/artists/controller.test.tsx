@@ -181,7 +181,7 @@ describe('admin artists', () => {
     );
     assert.deepEqual(operations.at(-1), {
       operationName: 'CreateArtist',
-      variables: { input: { name: '311' } },
+      variables: { input: { name: '311', description: null, website: null } },
     });
   });
 
@@ -229,6 +229,7 @@ describe('admin artists', () => {
           name: '311',
           slug: '311',
           description: 'Hi',
+          website: null,
           featuredMedia: 'm2',
         },
       },

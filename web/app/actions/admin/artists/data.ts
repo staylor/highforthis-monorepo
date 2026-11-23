@@ -3,7 +3,6 @@ import { gql } from 'graphql-tag';
 import { featuredMediaFragment } from '#/actions/admin/media/data.ts';
 import {
   deleteSelected,
-  parseForm,
   submitForm,
   type FormArgs,
   type GraphQLClient,
@@ -118,8 +117,7 @@ const updateArtistMutation = gql`
   ${artistFormFragment}
 `;
 
-// Keeps names like "311" strings, when saving a new artist and an edited one
-const skipKeys = ['name', 'slug'];
+const textFields = ['name', 'slug', 'description', 'website'];
 
 export function loadArtists({
   gql: client,
@@ -140,11 +138,10 @@ export async function setArtistExcludeFromSearch({
   gql: GraphQLClient;
   formData: FormData;
 }) {
-  const { id, excludeFromSearch } = parseForm(formData);
   const { data } = await attempt(
     client.mutate<UpdateArtistExcludeMutation>(excludeArtistMutation, {
-      id,
-      input: { excludeFromSearch: excludeFromSearch === true },
+      id: formData.get('id'),
+      input: { excludeFromSearch: formData.get('excludeFromSearch') === 'true' },
     })
   );
   return Boolean(data?.updateArtist);
@@ -163,7 +160,7 @@ export function createArtist(args: FormArgs) {
     ...args,
     mutation: createArtistMutation,
     createMutation: 'createArtist',
-    skipKeys,
+    textFields,
   });
 }
 
@@ -171,7 +168,7 @@ export function updateArtist({ id, ...args }: FormArgs & { id: string }) {
   return submitForm({
     ...args,
     mutation: updateArtistMutation,
-    skipKeys,
+    textFields,
     // An unchecked box isn't submitted, so this default clears it
     variables: { id, input: { excludeFromSearch: false } },
   });

@@ -68,6 +68,9 @@ const updateUserMutation = gql`
   ${userFormFragment}
 `;
 
+// A password left empty is sent as null, which keeps the one the user has
+const textFields = ['name', 'email', 'password', 'bio'];
+
 export function loadUsers({
   gql,
   searchParams,
@@ -88,9 +91,14 @@ export function loadUser({ gql, id }: { gql: GraphQLClient; id: string }) {
 }
 
 export function createUser(args: FormArgs) {
-  return submitForm({ ...args, mutation: createUserMutation, createMutation: 'createUser' });
+  return submitForm({
+    ...args,
+    mutation: createUserMutation,
+    createMutation: 'createUser',
+    textFields,
+  });
 }
 
 export function updateUser({ id, ...args }: FormArgs & { id: string }) {
-  return submitForm({ ...args, mutation: updateUserMutation, variables: { id } });
+  return submitForm({ ...args, mutation: updateUserMutation, variables: { id }, textFields });
 }
