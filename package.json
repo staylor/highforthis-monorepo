@@ -50,7 +50,7 @@
     "observability:dev:podman": "bash observability/dev.sh podman",
     "build": "pnpm --filter @highforthis/shared build && pnpm --filter @highforthis/graphql build:service",
     "knip": "pnpm --filter @highforthis/shared build && knip",
-    "lint": "oxlint --report-unused-disable-directives-severity=error && oxfmt --check && pnpm lint:graphql",
+    "lint": "oxlint --report-unused-disable-directives-severity=error --deny-warnings && oxfmt --check && pnpm lint:graphql --max-warnings 0",
     "lint-fix": "oxlint --fix && oxfmt && pnpm lint:graphql --fix",
     "lint:graphql": "eslint --cache --cache-strategy content --cache-location ./node_modules/.cache/eslint --report-unused-disable-directives .",
     "test:graphql": "pnpm --filter @highforthis/graphql test",
