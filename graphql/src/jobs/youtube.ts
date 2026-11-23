@@ -1,125 +1,103 @@
+import { z } from 'zod';
+
+import { createLogger } from '@highforthis/shared/logger';
+
 import prisma from '#/database';
 import env from '#/env';
 import { getUniqueSlug } from '#/models/utils';
 
-const API_HOST = 'https://www.googleapis.com';
-const PLAYLISTS_PATH = '/youtube/v3/playlists';
-const PLAYLIST_PATH = '/youtube/v3/playlistItems';
+const API = 'https://www.googleapis.com/youtube/v3';
 const PER_PAGE = '50';
 const CHANNEL_ID = 'UCwQRSPBN5eGmO1nYE40t1hw';
 
 const API_KEY = env.YOUTUBE_API_KEY ?? '';
 
-interface YouTubeThumbnail {
-  url: string;
-  width: number;
-  height: number;
-}
+const logger = createLogger({ serviceName: 'graphql' });
 
-interface YouTubeSnippet {
-  title: string;
-  position: number;
-  thumbnails?: Record<string, YouTubeThumbnail>;
-}
+const playlistSchema = z.object({
+  id: z.string(),
+  snippet: z.object({ title: z.string() }),
+});
 
-interface YouTubeContentDetails {
-  videoId: string;
-  videoPublishedAt: string;
-}
+const playlistItemSchema = z.object({
+  snippet: z.object({
+    title: z.string(),
+    position: z.number(),
+    thumbnails: z
+      .record(
+        z.string(),
+        z.object({ url: z.string(), width: z.number().optional(), height: z.number().optional() })
+      )
+      .optional(),
+  }),
+  // A private or deleted video has no publish date
+  contentDetails: z.object({ videoId: z.string(), videoPublishedAt: z.string().optional() }),
+});
 
-interface YouTubePlaylistItem {
-  snippet: YouTubeSnippet;
-  contentDetails: YouTubeContentDetails;
-}
+type PlaylistItem = z.infer<typeof playlistItemSchema>;
+type PublishedItem = PlaylistItem & { contentDetails: { videoPublishedAt: string } };
 
-interface YouTubePlaylist {
-  id: string;
-  snippet: { title: string };
-}
-
-interface YouTubeListResponse<T> {
-  items: T[];
-  nextPageToken?: string;
-}
-
-function buildUrl(path: string, params: Record<string, string>) {
-  const url = new URL(path, API_HOST);
-  url.searchParams.set('maxResults', PER_PAGE);
-  url.searchParams.set('key', API_KEY);
-  for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, value);
-  }
-  return url.href;
-}
-
-function getPlaylistsUrl() {
-  return buildUrl(PLAYLISTS_PATH, { part: 'snippet', channelId: CHANNEL_ID });
-}
-
-function getPlaylistUrl(playlistId: string, pageToken?: string) {
-  const params: Record<string, string> = {
-    part: 'snippet,contentDetails',
-    playlistId,
-  };
-  if (pageToken) {
-    params.pageToken = pageToken;
-  }
-  return buildUrl(PLAYLIST_PATH, params);
-}
-
-async function fetchPlaylists(): Promise<YouTubeListResponse<YouTubePlaylist>> {
-  const response = await fetch(getPlaylistsUrl());
-  return response.json();
-}
-
-async function fetchPlaylistItems(playlistId: string): Promise<YouTubePlaylistItem[]> {
-  let items: YouTubePlaylistItem[] = [];
+/**
+ * Every item of one of the API's lists. An answer that isn't a page of the list is an error: part
+ * of a playlist would make the rest of its videos look removed.
+ */
+async function fetchAll<T>(
+  resource: string,
+  params: Record<string, string>,
+  itemSchema: z.ZodType<T>
+): Promise<T[]> {
+  const pageSchema = z.object({
+    items: z.array(itemSchema),
+    nextPageToken: z.string().optional(),
+  });
+  const items: T[] = [];
   let pageToken: string | undefined;
 
   do {
-    const playlistUrl = getPlaylistUrl(playlistId, pageToken);
-    try {
-      const response = await fetch(playlistUrl);
-      const result: YouTubeListResponse<YouTubePlaylistItem> = await response.json();
-      items = items.concat(result.items);
-      pageToken = result.nextPageToken;
-    } catch (e) {
-      if (items.length) {
-        return items;
-      }
-      throw e;
+    const url = new URL(`${API}/${resource}`);
+    url.search = new URLSearchParams({
+      ...params,
+      maxResults: PER_PAGE,
+      key: API_KEY,
+      ...(pageToken && { pageToken }),
+    }).toString();
+    const response = await fetch(url, { signal: AbortSignal.timeout(20_000) });
+    if (!response.ok) {
+      throw new Error(`YouTube returned HTTP ${response.status} for ${resource}.`);
     }
+    const page = pageSchema.parse(await response.json());
+    items.push(...page.items);
+    pageToken = page.nextPageToken;
   } while (pageToken);
 
   return items;
 }
 
-async function updateVideo(
-  { contentDetails, snippet }: YouTubePlaylistItem,
-  year: string,
+const isPublished = (item: PlaylistItem): item is PublishedItem =>
+  item.snippet.title !== 'Private video' && Boolean(item.contentDetails.videoPublishedAt);
+
+async function saveVideo(
+  { contentDetails, snippet }: PublishedItem,
+  year: number,
   playlistId: string
 ) {
-  const thumbnails = snippet.thumbnails
-    ? Object.values(snippet.thumbnails).map(({ url, width, height }) => ({
-        url,
-        width,
-        height,
-      }))
-    : [];
+  const thumbnails = Object.values(snippet.thumbnails ?? {}).flatMap(({ url, width, height }) =>
+    width && height ? [{ url, width, height }] : []
+  );
 
   const data = {
     dataId: contentDetails.videoId,
     dataType: 'youtube',
     dataPlaylistId: playlistId,
-    year: parseInt(year, 10),
+    year,
     publishedISO: contentDetails.videoPublishedAt,
     publishedAt: new Date(contentDetails.videoPublishedAt),
     title: snippet.title,
     position: snippet.position,
   };
 
-  // Titles can share a slug ("Night 1" and "Night 2" both lose their digits), so a new
-  // video gets a unique one; an existing video keeps its slug.
+  // Two videos can have the same title, so a new video gets a unique slug. An existing video
+  // keeps its slug, and with it its page's address.
   const existing = await prisma.video.findUnique({
     where: { dataId: data.dataId },
     select: { id: true },
@@ -134,79 +112,76 @@ async function updateVideo(
   await prisma.videoThumbnail.deleteMany({ where: { videoId: video.id } });
   if (thumbnails.length) {
     await prisma.videoThumbnail.createMany({
-      data: thumbnails.map((t) => ({ ...t, videoId: video.id })),
+      data: thumbnails.map((thumbnail) => ({ ...thumbnail, videoId: video.id })),
     });
   }
 
-  return data.dataId;
+  return Boolean(existing);
 }
 
-async function fetchPlaylist(year: string, playlistId: string): Promise<string[]> {
-  let items: YouTubePlaylistItem[];
+async function importPlaylist(year: number, playlistId: string) {
+  let items: PlaylistItem[];
   try {
-    items = await fetchPlaylistItems(playlistId);
-  } catch {
-    console.log('Fetch playlist', playlistId, 'failed :(');
-    return [];
+    items = await fetchAll(
+      'playlistItems',
+      { part: 'snippet,contentDetails', playlistId },
+      playlistItemSchema
+    );
+  } catch (error) {
+    // Nothing is saved or removed from a playlist that didn't load in full
+    logger.warn({ err: error, playlistId, year }, 'Could not load a YouTube playlist');
+    return;
   }
 
-  const validItems = items.filter(
-    (item) => item?.snippet.title !== 'Private video' && item?.contentDetails.videoPublishedAt
-  );
-  const invalidCount = items.length - validItems.length;
-  if (invalidCount > 0) {
-    console.log(playlistId, 'has', invalidCount, 'private/unpublished videos');
-  }
-
-  const newIds = new Set(items.filter(Boolean).map((item) => item.contentDetails.videoId));
   const existing = await prisma.video.findMany({
     where: { dataPlaylistId: playlistId },
     select: { dataId: true },
   });
-  const existingIds = existing.map(({ dataId }) => dataId);
 
   // One at a time, so two new videos with the same title can't claim the same slug
-  const updates: string[] = [];
-  for (const item of validItems) {
-    updates.push(await updateVideo(item, year, playlistId));
+  let added = 0;
+  for (const item of items.filter(isPublished)) {
+    if (!(await saveVideo(item, year, playlistId))) {
+      added += 1;
+    }
   }
 
-  if (existingIds.length) {
-    const orphans = existingIds.filter((id) => !newIds.has(id));
-    if (orphans.length) {
-      console.log('Orphans in:', playlistId, '-', orphans);
-      await prisma.video.deleteMany({
-        where: {
-          dataId: { in: orphans },
-          dataPlaylistId: playlistId,
-        },
-      });
-    } else if (updates.length > existingIds.length) {
-      console.log('Added', updates.length - existingIds.length, 'items to', playlistId);
-    }
-  } else {
-    console.log('Imported', updates.length, 'of', items.length, 'items from', playlistId);
+  // A video that has gone private is still in the playlist, so it isn't removed
+  const listed = new Set(items.map((item) => item.contentDetails.videoId));
+  const removed = existing.map(({ dataId }) => dataId).filter((dataId) => !listed.has(dataId));
+  if (removed.length) {
+    await prisma.video.deleteMany({
+      where: { dataId: { in: removed }, dataPlaylistId: playlistId },
+    });
   }
-  return updates;
+
+  if (added || removed.length) {
+    logger.info({ playlistId, year, added, removed }, 'Imported a YouTube playlist');
+  }
 }
 
+/** Imports the videos in the channel's playlists that are named for a year, like "2025". */
 export default async () => {
   if (!API_KEY) {
-    console.log('Skipping the YouTube import: YOUTUBE_API_KEY is not set.');
+    logger.info('Skipping the YouTube import: YOUTUBE_API_KEY is not set');
     return;
   }
 
-  let response: YouTubeListResponse<YouTubePlaylist>;
+  let playlists: z.infer<typeof playlistSchema>[];
   try {
-    response = await fetchPlaylists();
-  } catch {
-    console.log('Fetch playlists failed :(');
+    playlists = await fetchAll(
+      'playlists',
+      { part: 'snippet', channelId: CHANNEL_ID },
+      playlistSchema
+    );
+  } catch (error) {
+    logger.warn({ err: error }, "Could not list the YouTube channel's playlists");
     return;
   }
 
-  for (const playlist of response.items) {
+  for (const playlist of playlists) {
     if (/^\d{4}$/.test(playlist.snippet.title)) {
-      await fetchPlaylist(playlist.snippet.title, playlist.id);
+      await importPlaylist(Number(playlist.snippet.title), playlist.id);
     }
   }
 };
