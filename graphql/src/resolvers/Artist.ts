@@ -64,6 +64,7 @@ const resolvers = {
       return resolveJoin(artist.featuredMedia, 'media', () =>
         db.findMany(artistFeaturedMedia, {
           where: { artistId: artist.id },
+          orderBy: ['position', 'asc'],
           with: { media: artistFeaturedMediaUpload },
         })
       );
@@ -118,7 +119,7 @@ const resolvers = {
         if (featuredMedia?.length) {
           await tx.createMany(
             artistFeaturedMedia,
-            featuredMedia.map((mediaId) => ({ artistId: id, mediaId }))
+            featuredMedia.map((mediaId, position) => ({ artistId: id, mediaId, position }))
           );
         }
       });
@@ -133,7 +134,7 @@ const resolvers = {
         if (featuredMedia?.length) {
           await db.createMany(
             artistFeaturedMedia,
-            featuredMedia.map((mediaId) => ({ artistId: id, mediaId }))
+            featuredMedia.map((mediaId, position) => ({ artistId: id, mediaId, position }))
           );
         }
       }

@@ -42,13 +42,18 @@ const resolvers = {
       return resolveJoin(post.featuredMedia, 'media', () =>
         db.findMany(postFeaturedMedia, {
           where: { postId: post.id },
+          orderBy: ['position', 'asc'],
           with: { media: postFeaturedMediaUpload },
         })
       );
     },
     artists(post) {
       return resolveJoin(post.artists, 'artist', () =>
-        db.findMany(postArtists, { where: { postId: post.id }, with: { artist: postTagArtist } })
+        db.findMany(postArtists, {
+          where: { postId: post.id },
+          orderBy: ['position', 'asc'],
+          with: { artist: postTagArtist },
+        })
       );
     },
   },
@@ -131,13 +136,13 @@ const resolvers = {
         if (featuredMedia?.length) {
           await tx.createMany(
             postFeaturedMedia,
-            featuredMedia.map((mediaId) => ({ postId: id, mediaId }))
+            featuredMedia.map((mediaId, position) => ({ postId: id, mediaId, position }))
           );
         }
         if (artistIds.length) {
           await tx.createMany(
             postArtists,
-            artistIds.map((artistId) => ({ postId: id, artistId }))
+            artistIds.map((artistId, position) => ({ postId: id, artistId, position }))
           );
         }
       });
@@ -167,7 +172,7 @@ const resolvers = {
         if (featuredMedia?.length) {
           await db.createMany(
             postFeaturedMedia,
-            featuredMedia.map((mediaId) => ({ postId: id, mediaId }))
+            featuredMedia.map((mediaId, position) => ({ postId: id, mediaId, position }))
           );
         }
       }
@@ -180,7 +185,7 @@ const resolvers = {
       if (artistIds.length) {
         await db.createMany(
           postArtists,
-          artistIds.map((artistId) => ({ postId: id, artistId }))
+          artistIds.map((artistId, position) => ({ postId: id, artistId, position }))
         );
       }
 

@@ -41,6 +41,7 @@ const resolvers = {
       return resolveJoin(venue.featuredMedia, 'media', () =>
         db.findMany(venueFeaturedMedia, {
           where: { venueId: venue.id },
+          orderBy: ['position', 'asc'],
           with: { media: venueFeaturedMediaUpload },
         })
       );
@@ -99,7 +100,7 @@ const resolvers = {
         if (featuredMedia?.length) {
           await tx.createMany(
             venueFeaturedMedia,
-            featuredMedia.map((mediaId) => ({ venueId: id, mediaId }))
+            featuredMedia.map((mediaId, position) => ({ venueId: id, mediaId, position }))
           );
         }
       });
@@ -118,7 +119,7 @@ const resolvers = {
         if (featuredMedia?.length) {
           await db.createMany(
             venueFeaturedMedia,
-            featuredMedia.map((mediaId) => ({ venueId: id, mediaId }))
+            featuredMedia.map((mediaId, position) => ({ venueId: id, mediaId, position }))
           );
         }
       }

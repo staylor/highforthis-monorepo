@@ -206,7 +206,7 @@ describe('shows', () => {
     expect(showsQuery.with).not.toHaveBeenCalled();
     const [[lineups]] = db.exec.mock.calls;
     expect(lineups.text.replace(/\s+/g, ' ').trim()).toBe(
-      'select "showId", "artistId" from "ShowArtist" where "showId" in (select id from "Show" where id in (?, ?, ?))'
+      'select "showId", "artistId" from "ShowArtist" where "showId" in (select id from "Show" where id in (?, ?, ?)) order by "position"'
     );
     expect(lineups.values).toEqual(['show-1', 'show-2', 'show-3']);
     expect(db.findMany).toHaveBeenCalledWith(venuesTable, {

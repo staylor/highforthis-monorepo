@@ -119,7 +119,7 @@ const resolvers = {
           });
           await tx.createMany(
             showArtists,
-            [...ids].map((artistId) => ({ showId, artistId }))
+            [...ids].map((artistId, position) => ({ showId, artistId, position }))
           );
           showsCreated += 1;
         }
