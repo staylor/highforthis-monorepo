@@ -1,4 +1,5 @@
 import { expect, test } from '../support/test.ts';
+import { deleteRow } from '../support/ui.ts';
 
 test('says so when a delete fails', async ({ page, prefix, graphql }) => {
   // A venue can't be removed while a show is at it, so GraphQL refuses this delete
@@ -8,7 +9,7 @@ test('says so when a delete fails', async ({ page, prefix, graphql }) => {
 
   await page.goto(`/admin/venue?search=${encodeURIComponent(prefix)}`);
   const row = page.getByRole('row').filter({ hasText: venue.name });
-  await row.getByRole('button', { name: 'Delete' }).click();
+  await deleteRow(page, row);
 
   await expect(
     page.getByText(
@@ -26,7 +27,7 @@ test('refuses a delete once the session is gone', async ({ page, prefix, graphql
   const row = page.getByRole('row').filter({ hasText: venue.name });
   await expect(row).toBeVisible();
   await page.context().clearCookies();
-  await row.getByRole('button', { name: 'Delete' }).click();
+  await deleteRow(page, row);
 
   await expect(page).toHaveURL('/login/unauthorized');
   expect(await graphql.venue(venue.id)).not.toBeNull();

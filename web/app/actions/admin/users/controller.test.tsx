@@ -65,6 +65,11 @@ describe('admin users', () => {
     assert.match(html, /<a href="\/admin\/user\/u1">Ada<\/a>/);
     assert.match(html, /<a href="\/admin\/user\/u2">Grace<\/a>/);
     assert.match(html, /<input type="hidden" name="ids" value="u2"/);
+    // Each row's Delete asks before it posts
+    assert.match(
+      html,
+      /"exportName":"ConfirmButton"[^}]*"label":"Delete","confirm":"Delete this\? It can't be undone\."/
+    );
     assert.match(html, /<input type="checkbox" name="ids" value="u1" form="bulk-actions"/);
     assert.match(html, /<input type="search" name="search" value="a"/);
     assert.match(html, /Deleted 1 user/);

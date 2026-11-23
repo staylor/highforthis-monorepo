@@ -7,6 +7,7 @@ import { getAdmin } from './context.tsx';
 import { documentLoad } from './links.ts';
 import { Message } from './message.tsx';
 import { AutoSubmitSelect } from './public/auto-submit-select.tsx';
+import { ConfirmButton } from './public/confirm-button.tsx';
 import { SelectAll } from './public/select-all.tsx';
 import { button, table, tableScroller, toolbarSelect, wideInput } from './public/styles.ts';
 
@@ -68,8 +69,8 @@ export function RowTitle(
 }
 
 /**
- * Given the row's ID, a delete button that posts it with intent=delete. A column about
- * something else, such as a show's venue, leaves the ID out.
+ * Given the row's ID, a delete button that posts it with intent=delete, once the browser has
+ * asked whether to. A column about something else, such as a show's venue, leaves the ID out.
  */
 export function RowActions(handle: Handle<{ editHref: string; viewHref?: string; id?: string }>) {
   return () => {
@@ -92,16 +93,7 @@ export function RowActions(handle: Handle<{ editHref: string; viewHref?: string;
         <form method="post" mix={css({ display: 'inline' })}>
           <input type="hidden" name="intent" value="delete" />
           <input type="hidden" name="ids" value={id} />
-          <button
-            type="submit"
-            mix={css({
-              cursor: 'pointer',
-              color: 'var(--pink)',
-              '&:hover': { textDecoration: 'underline' },
-            })}
-          >
-            {t('table.delete')}
-          </button>
+          <ConfirmButton label={t('table.delete')} confirm={t('table.deleteConfirm')} inline />
         </form>
       );
     }

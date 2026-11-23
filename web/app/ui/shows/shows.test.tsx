@@ -20,7 +20,7 @@ const show = (id: string, date: string, artist: string, venue = 'Bowery Ballroom
     date: new Date(date).getTime(),
     title: null,
     url: null,
-    artists: [{ id: `a-${id}`, name: artist, slug: artist.toLowerCase() }],
+    artists: [{ id: `a-${id}`, name: artist, slug: artist.toLowerCase().replaceAll(' ', '-') }],
     venue: {
       id: 'v1',
       name: venue,
@@ -51,7 +51,47 @@ describe('ShowsGrid', () => {
       order,
       [...order].sort((a, b) => a - b)
     );
-    assert.match(html, /href="\/artist\/lucy dacus"/);
+    assert.match(html, /href="\/artist\/lucy-dacus"/);
+  });
+
+  it("links a show with a title, a website or several artists to the show's own page", async () => {
+    const titled = show('1', '2025-02-01T20:00:00', 'Wilco');
+    const listed = show('2', '2025-02-02T20:00:00', 'Spoon');
+    const shared = show('3', '2025-02-03T20:00:00', 'Low');
+    const html = await renderToString(
+      <ShowsGrid
+        shows={{
+          edges: [
+            { ...titled, node: { ...titled.node, title: 'Solid Sound' } },
+            { ...listed, node: { ...listed.node, url: 'https://tickets.example/spoon' } },
+            {
+              ...shared,
+              node: {
+                ...shared.node,
+                artists: [...shared.node.artists, { id: 'a-4', name: 'Bedhead', slug: 'bedhead' }],
+              },
+            },
+          ].map((edge) => ({ ...edge, cursor: edge.node.id })),
+          pageInfo: { hasNextPage: false },
+        }}
+      />
+    );
+    assert.match(html, /<a [^>]*href="\/shows\/1"[^>]*>Solid Sound<\/a>/);
+    assert.match(html, /<a [^>]*href="\/shows\/2"[^>]*>Spoon<\/a>/);
+    assert.match(html, /<a [^>]*href="\/shows\/3"[^>]*>Low \/ Bedhead<\/a>/);
+  });
+
+  it('lists shows whose artists have all been deleted by their venue', async () => {
+    // Two on one date, which the grid sorts by artist
+    const orphans = ['1', '2'].map((id) => {
+      const { node } = show(id, '2025-02-01T20:00:00', 'Deleted');
+      return { cursor: id, node: { ...node, artists: [] } };
+    });
+    const html = await renderToString(
+      <ShowsGrid shows={{ edges: orphans, pageInfo: { hasNextPage: false } }} />
+    );
+    assert.match(html, /<a [^>]*href="\/shows\/1"[^>]*>Bowery Ballroom<\/a>/);
+    assert.match(html, /<a [^>]*href="\/shows\/2"[^>]*>Bowery Ballroom<\/a>/);
   });
 });
 

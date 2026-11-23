@@ -18,6 +18,7 @@ import { EntitiesPicker } from '#/ui/admin/public/entities-picker.tsx';
 import { InlineToggle } from '#/ui/admin/public/inline-toggle.tsx';
 import { input, saveButton, select } from '#/ui/admin/public/styles.ts';
 import { dark, merge, text } from '#/ui/public/styles.ts';
+import { formatArtists, formatShowLink } from '#/ui/shows/utils.ts';
 
 import {
   createShow,
@@ -48,14 +49,6 @@ function showDate(timestamp: number) {
   const hours = d.getHours();
   const time = `${hours % 12 || 12}:${pad(d.getMinutes())}${hours < 12 ? 'am' : 'pm'}`;
   return `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${d.getFullYear()} at ${time}`;
-}
-
-/** Where a show is on the public site: its own page, or its one artist's page. */
-function publicShowHref(show: ShowRow) {
-  if (show.title || show.url || show.artists.length > 1) {
-    return routes.shows.show.href({ id: show.id });
-  }
-  return routes.artist.href({ slug: show.artists[0].slug });
 }
 
 interface Entity {
@@ -172,12 +165,16 @@ export const showsList = createController(shows.list, {
           label: t('shows.artists'),
           render: (show: ShowRow) => {
             const [first] = show.artists;
+            // A show's artists can all have been deleted
+            if (!first) {
+              return t('shows.noArtists');
+            }
             const href = routes.admin.artists.edit.index.href({ id: first.id });
             const more = show.artists.length > 1 ? ` + ${show.artists.length - 1}` : '';
             return (
               <>
                 <RowTitle href={href} title={`${first.name}${more}`} />
-                <RowActions editHref={href} viewHref={publicShowHref(show)} />
+                <RowActions editHref={href} viewHref={formatShowLink(show)} />
               </>
             );
           },
@@ -203,7 +200,7 @@ export const showsList = createController(shows.list, {
               name="attended"
               id={show.id}
               checked={Boolean(show.attended)}
-              label={`${t('shows.attended.label')}: ${show.title || show.artists[0].name}`}
+              label={`${t('shows.attended.label')}: ${formatArtists(show)}`}
             />
           ),
         },

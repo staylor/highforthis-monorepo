@@ -1,12 +1,14 @@
 import { clientEntry, css, on, type Handle } from 'remix/component';
 
-// A submit button that asks first, such as before removing a passkey. Without JavaScript it
-// submits straight away.
+// A submit button that asks first, such as before removing a passkey or deleting a list's row.
+// Without JavaScript it submits straight away.
 
 interface ConfirmButtonProps {
   label: string;
   /** The question the browser asks before the form submits. */
   confirm: string;
+  /** Looks like a link among a row's actions, instead of a button. */
+  inline?: boolean;
 }
 
 // Red, for removing things
@@ -19,6 +21,12 @@ const button = css({
   color: 'var(--red-700)',
 });
 
+const inlineButton = css({
+  cursor: 'pointer',
+  color: 'var(--pink)',
+  '&:hover': { textDecoration: 'underline' },
+});
+
 export const ConfirmButton = clientEntry(
   import.meta.url,
   function ConfirmButton(handle: Handle<ConfirmButtonProps>) {
@@ -26,7 +34,7 @@ export const ConfirmButton = clientEntry(
       <button
         type="submit"
         mix={[
-          button,
+          handle.props.inline ? inlineButton : button,
           on('click', (event) => {
             if (!window.confirm(handle.props.confirm)) {
               event.preventDefault();

@@ -1,5 +1,5 @@
 import { expect, test } from '../support/test.ts';
-import { addedId, field, hydrated } from '../support/ui.ts';
+import { addedId, deleteRow, field, hydrated } from '../support/ui.ts';
 
 test('adds an artist with featured media, edits them, toggles search and deletes them', async ({
   page,
@@ -58,7 +58,17 @@ test('adds an artist with featured media, edits them, toggles search and deletes
   await page.reload();
   await expect(toggle).not.toBeChecked();
 
+  // Delete asks first, once its button has hydrated, and Cancel leaves the artist alone
+  await hydrated(page);
+  page.once('dialog', (dialog) => {
+    expect(dialog.message()).toBe("Delete this? It can't be undone.");
+    void dialog.dismiss();
+  });
   await row.getByRole('button', { name: 'Delete' }).click();
+  await expect(row).toBeVisible();
+  expect(await graphql.artist(id)).not.toBeNull();
+
+  await deleteRow(page, row);
   await expect(page.getByText('Deleted 1 artist')).toBeVisible();
   await expect(row).toHaveCount(0);
   expect(await graphql.artist(id)).toBeNull();

@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 
 import { expect, test } from '../support/test.ts';
-import { addedId, field, hydrated } from '../support/ui.ts';
+import { addedId, deleteRow, field, hydrated } from '../support/ui.ts';
 
 /** Opens the picker with this button, picks its first upload and says which one it was. */
 async function pick(page: Page, button: string, input: string) {
@@ -55,7 +55,7 @@ test('adds a podcast with an image and audio, edits it and deletes it', async ({
   await page.goto(`/admin/podcast?search=${encodeURIComponent(prefix)}`);
   const row = page.getByRole('row').filter({ hasText: title });
   await expect(row.getByRole('link', { name: 'View' })).toHaveAttribute('href', `/podcast/${id}`);
-  await row.getByRole('button', { name: 'Delete' }).click();
+  await deleteRow(page, row);
   await expect(page.getByText('Deleted 1 podcast')).toBeVisible();
   await expect(row).toHaveCount(0);
   expect(await graphql.podcast(id)).toBeNull();
