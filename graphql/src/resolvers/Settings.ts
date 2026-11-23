@@ -1,82 +1,94 @@
-import type { PodcastSettings, Prisma } from '@prisma/client';
+import type { TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
-import prisma from '#/database';
+import db from '#/database/db';
+import type { Loaded } from '#/database/tables';
+import {
+  mediaCropSettings,
+  mediaSettings,
+  mediaUploads,
+  newId,
+  podcastSettings,
+  podcastSettingsImage,
+  siteSettings,
+} from '#/database/tables';
 
 import { parseInput } from './utils/helpers';
 import { siteSettingsSchema, mediaSettingsSchema, podcastSettingsSchema } from './validations';
 
+type PodcastSettings = TableRow<typeof podcastSettings>;
+
+/** The media settings, whose crops their resolver loads */
+export type MediaSettingsSource = TableRow<typeof mediaSettings>;
+
 /**
- * The podcast's settings, with their image when the query included it, or only the ID of
- * settings that were never saved
+ * The podcast's settings, with their image when the query loaded it, or only the ID of settings
+ * that were never saved
  */
 export type PodcastSettingsSource = Pick<PodcastSettings, 'id'> &
-  Partial<Prisma.PodcastSettingsGetPayload<{ include: { image: true } }>>;
+  Partial<PodcastSettings & { image: Loaded<typeof podcastSettingsImage> }>;
 
 const resolvers = {
   MediaSettings: {
     async crops(settings) {
-      return prisma.mediaCropSetting.findMany({ where: { mediaSettingsId: settings.id } });
+      return db.findMany(mediaCropSettings, { where: { mediaSettingsId: settings.id } });
     },
   },
   PodcastSettings: {
     async image(settings) {
-      // Query.podcastSettings includes it
+      // Query.podcastSettings loads it
       if (settings.image !== undefined) return settings.image;
       if (!settings.imageId) return null;
-      return prisma.mediaUpload.findUnique({ where: { id: settings.imageId } });
+      return db.find(mediaUploads, settings.imageId);
     },
   },
   Query: {
     async siteSettings() {
-      const settings = await prisma.siteSettings.findUnique({ where: { id: 'site' } });
+      const settings = await db.find(siteSettings, 'site');
       return settings || { id: 'site' };
     },
     async mediaSettings() {
-      const settings = await prisma.mediaSettings.findUnique({ where: { id: 'media' } });
+      const settings = await db.find(mediaSettings, 'media');
       return settings || { id: 'media' };
     },
     async podcastSettings() {
-      const settings = await prisma.podcastSettings.findUnique({
-        where: { id: 'podcast' },
-        include: { image: true },
+      const settings = await db.find(podcastSettings, 'podcast', {
+        with: { image: podcastSettingsImage },
       });
       return settings || { id: 'podcast' };
     },
   },
+  // Each saves its settings whether or not they were saved before. An upsert with nothing to
+  // update changes nothing and answers no row, so the row is read after.
   Mutation: {
     async updateSiteSettings(_, { id, input }) {
       const data = parseInput(siteSettingsSchema, input);
-      return prisma.siteSettings.upsert({
-        where: { id },
-        create: { id, ...data },
-        update: data,
-      });
+      await db
+        .query(siteSettings)
+        .upsert({ ...data, id }, { conflictTarget: ['id'], update: data });
+      return (await db.find(siteSettings, id))!;
     },
     async updateMediaSettings(_, { id, input }) {
-      const { crops, ...rest } = parseInput(mediaSettingsSchema, input);
-      const settings = await prisma.mediaSettings.upsert({
-        where: { id },
-        create: { id, ...rest },
-        update: rest,
-      });
+      const { crops } = parseInput(mediaSettingsSchema, input);
+      await db.query(mediaSettings).upsert({ id }, { conflictTarget: ['id'], update: {} });
       if (typeof crops !== 'undefined') {
-        await prisma.mediaCropSetting.deleteMany({ where: { mediaSettingsId: id } });
+        await db.deleteMany(mediaCropSettings, { where: { mediaSettingsId: id } });
         if (crops?.length) {
-          await prisma.mediaCropSetting.createMany({
-            data: crops.map((crop) => ({ ...crop, mediaSettingsId: id })),
-          });
+          await db.createMany(
+            mediaCropSettings,
+            crops.map((crop) => ({ ...crop, id: newId(), mediaSettingsId: id }))
+          );
         }
       }
-      return settings;
+      return (await db.find(mediaSettings, id))!;
     },
     async updatePodcastSettings(_, { id, input }) {
       const { image, ...data } = parseInput(podcastSettingsSchema, input);
-      return prisma.podcastSettings.upsert({
-        where: { id },
-        create: { id, ...data, imageId: image },
-        update: { ...data, imageId: image },
-      });
+      const values = { ...data, imageId: image };
+      await db
+        .query(podcastSettings)
+        .upsert({ ...values, id }, { conflictTarget: ['id'], update: values });
+      return (await db.find(podcastSettings, id))!;
     },
   },
 } satisfies Resolvers;

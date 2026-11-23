@@ -15,7 +15,7 @@ const connection = (node: string) => server('resolvers/utils/collection', `Conne
 const editorNode = server('resolvers/EditorState', 'EditorNodeData');
 const mediaUpload = server('resolvers/Media', 'MediaUploadSource');
 
-// What the resolvers answer for each GraphQL type, which its fields' resolvers then get: Prisma's
+// What the resolvers answer for each GraphQL type, which its fields' resolvers then get: the
 // records, with whichever relations their queries include. The rest answer the type itself.
 // The interfaces and unions are here with their members. The plugin spells out one it isn't given
 // as a union of its members' types, which names EditorNodeData once for each kind of node.
@@ -37,7 +37,7 @@ const resolverMappers = {
   LinebreakNode: editorNode,
   ListItemNode: editorNode,
   ListNode: editorNode,
-  MediaSettings: '@prisma/client#MediaSettings as MediaSettingsRecord',
+  MediaSettings: server('resolvers/Settings', 'MediaSettingsSource'),
   MediaUpload: mediaUpload,
   MediaUploadConnection: connection('MediaUploadSource'),
   Podcast: server('resolvers/Podcast', 'PodcastSource'),

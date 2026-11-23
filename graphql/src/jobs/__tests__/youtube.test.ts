@@ -1,21 +1,30 @@
+import { and, inList } from 'remix/data-table';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { videos, videoThumbnails } from '#/database/tables';
 
 import importVideos from '../youtube';
 
-const db = vi.hoisted(() => ({
-  video: {
+// The query for a playlist's videos, whose steps each answer the query
+const { db, playlistQuery } = vi.hoisted(() => ({
+  db: {
     count: vi.fn(),
     create: vi.fn(),
+    createMany: vi.fn(),
     deleteMany: vi.fn(),
-    findMany: vi.fn(),
-    findUnique: vi.fn(),
+    findOne: vi.fn(),
+    query: vi.fn(),
     update: vi.fn(),
   },
-  videoThumbnail: { createMany: vi.fn(), deleteMany: vi.fn() },
+  playlistQuery: { all: vi.fn(), select: vi.fn(), where: vi.fn() },
 }));
 const logger = vi.hoisted(() => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn() }));
 
-vi.mock('#/database', () => ({ default: db }));
+vi.mock('#/database/db', () => ({ default: db }));
+vi.mock('#/database/tables', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('#/database/tables')>()),
+  newId: () => 'video-new',
+}));
 vi.mock('@highforthis/shared/logger', () => ({ createLogger: () => logger }));
 
 const item = (videoId: string, title: string, position: number) => ({
@@ -54,13 +63,14 @@ describe('the YouTube import', () => {
   beforeEach(() => {
     vi.resetAllMocks();
     // The playlist's videos as they were last imported
-    db.video.findMany.mockResolvedValue([{ dataId: 'kept' }, { dataId: 'removed' }]);
-    db.video.findUnique.mockImplementation(async ({ where }) =>
+    db.query.mockReturnValue(playlistQuery);
+    playlistQuery.where.mockReturnValue(playlistQuery);
+    playlistQuery.select.mockReturnValue(playlistQuery);
+    playlistQuery.all.mockResolvedValue([{ dataId: 'kept' }, { dataId: 'removed' }]);
+    db.findOne.mockImplementation(async (_table, { where }) =>
       where.dataId === 'kept' ? { id: 'video-kept' } : null
     );
-    db.video.count.mockResolvedValue(0);
-    db.video.update.mockResolvedValue({ id: 'video-kept' });
-    db.video.create.mockResolvedValue({ id: 'video-new' });
+    db.count.mockResolvedValue(0);
   });
 
   it('adds new videos, updates the ones it has and removes the ones no longer listed', async () => {
@@ -78,22 +88,28 @@ describe('the YouTube import', () => {
       '/youtube/v3/playlists',
       '/youtube/v3/playlistItems',
     ]);
-    expect(db.video.update).toHaveBeenCalledWith({
-      where: { id: 'video-kept' },
-      data: expect.objectContaining({ dataId: 'kept', title: 'Kept (Night 1)', year: 2025 }),
-    });
-    expect(db.video.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
+    expect(db.update).toHaveBeenCalledWith(
+      videos,
+      'video-kept',
+      expect.objectContaining({ dataId: 'kept', title: 'Kept (Night 1)', year: 2025 })
+    );
+    expect(db.create).toHaveBeenCalledWith(
+      videos,
+      expect.objectContaining({
+        id: 'video-new',
         dataId: 'new',
         dataPlaylistId: 'playlist-2025',
         position: 1,
         publishedAt: new Date('2025-06-01T12:00:00Z'),
         slug: 'new-night-2',
-      }),
-    });
-    expect(db.videoThumbnail.createMany).toHaveBeenCalledTimes(2);
-    expect(db.video.deleteMany).toHaveBeenCalledWith({
-      where: { dataId: { in: ['removed'] }, dataPlaylistId: 'playlist-2025' },
+      })
+    );
+    expect(db.createMany).toHaveBeenCalledTimes(2);
+    expect(db.createMany).toHaveBeenCalledWith(videoThumbnails, [
+      expect.objectContaining({ videoId: 'video-new', width: 120, height: 90 }),
+    ]);
+    expect(db.deleteMany).toHaveBeenCalledWith(videos, {
+      where: and(inList('dataId', ['removed']), { dataPlaylistId: 'playlist-2025' }),
     });
   });
 
@@ -109,7 +125,7 @@ describe('the YouTube import', () => {
 
     await importVideos();
 
-    expect(db.video.deleteMany).not.toHaveBeenCalled();
+    expect(db.deleteMany).not.toHaveBeenCalledWith(videos, expect.anything());
   });
 
   it('keeps a video that has gone private, without updating it', async () => {
@@ -123,9 +139,9 @@ describe('the YouTube import', () => {
 
     await importVideos();
 
-    expect(db.video.update).toHaveBeenCalledTimes(1);
-    expect(db.video.create).not.toHaveBeenCalled();
-    expect(db.video.deleteMany).not.toHaveBeenCalled();
+    expect(db.update).toHaveBeenCalledTimes(1);
+    expect(db.create).not.toHaveBeenCalled();
+    expect(db.deleteMany).not.toHaveBeenCalledWith(videos, expect.anything());
   });
 
   // Each of these answers used to look like a playlist that had lost its videos, which deleted
@@ -142,9 +158,9 @@ describe('the YouTube import', () => {
 
     await importVideos();
 
-    expect(db.video.deleteMany).not.toHaveBeenCalled();
-    expect(db.video.update).not.toHaveBeenCalled();
-    expect(db.video.create).not.toHaveBeenCalled();
+    expect(db.deleteMany).not.toHaveBeenCalledWith(videos, expect.anything());
+    expect(db.update).not.toHaveBeenCalled();
+    expect(db.create).not.toHaveBeenCalled();
     expect(logger.warn).toHaveBeenCalledWith(
       expect.objectContaining({ playlistId: 'playlist-2025' }),
       expect.any(String)
@@ -161,8 +177,8 @@ describe('the YouTube import', () => {
 
     await importVideos();
 
-    expect(db.video.deleteMany).not.toHaveBeenCalled();
-    expect(db.video.update).not.toHaveBeenCalled();
+    expect(db.deleteMany).not.toHaveBeenCalledWith(videos, expect.anything());
+    expect(db.update).not.toHaveBeenCalled();
   });
 
   it('gives up quietly when the playlists cannot be listed', async () => {
@@ -171,6 +187,6 @@ describe('the YouTube import', () => {
     });
 
     await expect(importVideos()).resolves.toBeUndefined();
-    expect(db.video.findMany).not.toHaveBeenCalled();
+    expect(db.query).not.toHaveBeenCalled();
   });
 });
