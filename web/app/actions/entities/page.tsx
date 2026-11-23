@@ -54,6 +54,9 @@ export function ArtistPage(handle: Handle<{ data: ArtistQuery }>) {
 
 export const venueQuery = gql`
   query Venue($first: Int, $slug: String!) {
+    apiKeys {
+      googleMaps
+    }
     attended: shows(attended: true, first: $first, venue: { slug: $slug }) {
       ...Attended_shows
     }
@@ -96,17 +99,17 @@ function VenueMap(
   handle: Handle<{
     name: string;
     coordinates: NonNullable<Venue['coordinates']>;
+    /** Google Maps' key, without which there's no map. */
+    mapsKey?: string | null;
   }>
 ) {
-  const { root } = getApp(handle);
   const size = 300;
 
   return () => {
-    const key = root.apiKeys?.googleMaps;
+    const { name, coordinates, mapsKey: key } = handle.props;
     if (!key) {
       return null;
     }
-    const { name, coordinates } = handle.props;
     const center = `${coordinates.latitude},${coordinates.longitude}`;
     const params = new URLSearchParams([
       ['zoom', '15'],
@@ -145,7 +148,7 @@ export function VenuePage(handle: Handle<{ data: VenueQuery }>) {
   const { t } = getApp(handle);
 
   return () => {
-    const { venue, shows, attended } = handle.props.data;
+    const { venue, shows, attended, apiKeys } = handle.props.data;
     if (!venue) {
       return null;
     }
@@ -223,7 +226,13 @@ export function VenuePage(handle: Handle<{ data: VenueQuery }>) {
               </p>
             )}
           </div>
-          {venue.coordinates && <VenueMap name={venue.name} coordinates={venue.coordinates} />}
+          {venue.coordinates && (
+            <VenueMap
+              name={venue.name}
+              coordinates={venue.coordinates}
+              mapsKey={apiKeys?.googleMaps}
+            />
+          )}
         </div>
         {shows && <Shows shows={shows} />}
         {attended && <Attended shows={attended} relation="venue" />}

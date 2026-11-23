@@ -8,8 +8,6 @@ import { DarkMode } from './public/dark-mode.tsx';
 import { MobileMenu } from './public/mobile-menu.tsx';
 import { NavLink } from './public/nav-link.tsx';
 import { lg, md, text } from './public/styles.ts';
-import { AccentLine } from './section-header.tsx';
-import { Sidebar } from './sidebar.tsx';
 import { SocialIcons } from './social-icons.tsx';
 
 const centered = {
@@ -35,13 +33,12 @@ export function Wrapper(handle: Handle<{ children?: RemixNode }>) {
   );
 }
 
-/** The site frame: header, nav, homepage sidebar, footer. */
+/** The site frame: header, nav, footer. */
 export function Layout(handle: Handle<{ children?: RemixNode }>) {
   const { t, root, pathname } = getApp(handle);
 
   return () => {
-    const { siteSettings, shows } = root;
-    const isHome = pathname === '/';
+    const { siteSettings } = root;
     const siteTitle = siteSettings?.siteTitle || t('title');
 
     return (
@@ -145,12 +142,6 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
             paddingBlock: '3rem',
           })}
         >
-          {isHome && shows && (
-            <>
-              <Sidebar shows={shows} />
-              <AccentLine />
-            </>
-          )}
           {handle.props.children}
         </main>
 

@@ -998,7 +998,7 @@ export type VenueQueryVariables = Exact<{
 }>;
 
 
-export type VenueQuery = { attended: { edges: Array<{ node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }> } | null, shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null, venue: { id: string, address: string | null, capacity: string | null, name: string, permanentlyClosed: boolean | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
+export type VenueQuery = { apiKeys: { googleMaps: string | null } | null, attended: { edges: Array<{ node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }> } | null, shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null, venue: { id: string, address: string | null, capacity: string | null, name: string, permanentlyClosed: boolean | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
@@ -1022,7 +1022,7 @@ export type HomeQuery = { posts: { edges: Array<{ node: { id: string, slug: stri
           | { id: string, destination: string }
           | { id: string, destination: string, crops: Array<{ fileName: string, width: number }> }
           | { id: string, destination: string }
-        > | null } }> } | null, videos: { count: number, edges: Array<{ cursor: string, node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
+        > | null } }> } | null, shows: { edges: Array<{ node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }> } | null, videos: { count: number, edges: Array<{ cursor: string, node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
 
 export type PodcastsQueryVariables = Exact<{
   first?: number | null | undefined;
@@ -1106,7 +1106,7 @@ export type PostQuery = { post: { id: string, slug: string, summary: string | nu
 export type AppQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AppQuery = { apiKeys: { googleMaps: string | null } | null, podcastSettings: { id: string, description: string | null, feedLink: string | null, title: string | null, websiteLink: string | null, image: { id: string, destination: string, fileName: string } | null }, shows: { edges: Array<{ node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }> } | null, siteSettings: { id: string, copyrightText: string | null, language: string | null, siteTitle: string | null, siteUrl: string | null, tagline: string | null } };
+export type AppQuery = { podcastSettings: { id: string, description: string | null, feedLink: string | null, title: string | null, websiteLink: string | null, image: { id: string, destination: string, fileName: string } | null }, siteSettings: { id: string, copyrightText: string | null, language: string | null, siteTitle: string | null, siteUrl: string | null, tagline: string | null } };
 
 export type ShowsQueryVariables = Exact<{
   after?: string | null | undefined;
