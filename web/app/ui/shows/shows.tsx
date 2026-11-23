@@ -65,7 +65,6 @@ type GridProps = {
   shows: ShowsGrid_ShowsFragment;
   mix?: MixInput;
   showMonths?: boolean;
-  showYears?: boolean;
 };
 
 const table = css({ width: '100%', borderCollapse: 'collapse' });
@@ -112,7 +111,7 @@ const monthName = {
 /** Shows as a table on wider screens and a list on the narrowest. */
 export function Shows(handle: Handle<Omit<GridProps, 'mix'>>) {
   return () => {
-    const { shows, showMonths = true, showYears = true } = handle.props;
+    const { shows, showMonths = true } = handle.props;
     if (!shows?.edges?.length) {
       return null;
     }
@@ -121,7 +120,6 @@ export function Shows(handle: Handle<Omit<GridProps, 'mix'>>) {
         <ShowsGrid
           shows={shows}
           showMonths={showMonths}
-          showYears={showYears}
           mix={css({ display: 'none', [xs]: { display: 'block' } })}
         />
         <ShowsList shows={shows} mix={css({ display: 'block', [xs]: { display: 'none' } })} />
@@ -161,7 +159,7 @@ const yearCell = css({
 
 export function ShowsGrid(handle: Handle<GridProps>) {
   return () => {
-    const { shows, showMonths = true, showYears = true } = handle.props;
+    const { shows, showMonths = true } = handle.props;
     const years: Record<number, number> = {};
     const months: Record<string, number> = {};
     const sorted = [...shows.edges].sort(({ node: a }, { node: b }) => {
@@ -179,7 +177,7 @@ export function ShowsGrid(handle: Handle<GridProps>) {
     const rows: RemixNode[] = [];
     for (const { node } of sorted) {
       const d = formatDate(node.date);
-      if (showYears && !years[d.year]) {
+      if (!years[d.year]) {
         const firstYear = Object.keys(years).length === 0;
         years[d.year] = 1;
         months[`${d.year}${d.month}`] = 1;

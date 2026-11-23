@@ -116,7 +116,7 @@ const pageList = css({
         ...borderColor,
         backgroundColor: '#fff',
         padding: '0.5rem',
-        boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+        boxShadow: 'var(--shadow-xl)',
       },
     },
   },

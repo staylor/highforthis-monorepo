@@ -80,18 +80,15 @@
   },
   "entity": {
     "add": {
-      "artist": "Add Artist",
       "venue": "Add Venue"
     },
     "description": "Description",
     "edit": {
-      "artist": "Edit Artist",
       "venue": "Edit Venue"
     },
     "excludeFromSearch": "Exclude from search",
     "featuredMedia": "Featured Media",
     "name": "Name",
-    "noShows": "No associated shows.",
     "setFeaturedMedia": "Set Featured Media",
     "showMore": "Show More",
     "shows": "Shows",
@@ -114,7 +111,6 @@
     "passkeyUnsupported": "This browser does not support passkeys.",
     "passkeyWaiting": "Waiting for passkey…",
     "password": "Password",
-    "required": "All fields are required.",
     "throttled": "Too many sign-in attempts. Try again in a few minutes.",
     "unauthorized": "You must login to access this area."
   },
@@ -158,7 +154,6 @@
   },
   "nav": {
     "addNew": "Add New",
-    "closeMenu": "Close menu",
     "collapse": "Collapse menu",
     "expand": "Expand menu",
     "menu": "Menu"

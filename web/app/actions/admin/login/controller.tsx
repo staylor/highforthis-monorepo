@@ -54,8 +54,6 @@ function errorMessage(t: TFunction, error?: string) {
       return t('login.unauthorized');
     case 'failed':
       return t('login.failed');
-    case 'required':
-      return t('login.required');
     case 'throttled':
       return t('login.throttled');
     default:
