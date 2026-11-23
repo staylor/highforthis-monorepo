@@ -132,6 +132,9 @@ importers:
       music-metadata:
         specifier: 12.3.5
         version: 12.3.5
+      pg:
+        specifier: 8.23.1
+        version: 8.23.1
       remix:
         specifier: 3.3.0
         version: 3.3.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(mysql2@3.24.4(@types/node@26.6.6))(pg@8.23.1)(playwright@1.65.1)
@@ -148,6 +151,9 @@ importers:
       '@types/jsonwebtoken':
         specifier: 9.0.10
         version: 9.0.10
+      '@types/pg':
+        specifier: 8.23.1
+        version: 8.23.1
       esbuild:
         specifier: 0.28.2
         version: 0.28.2
@@ -9433,7 +9439,7 @@ snapshots:
 
   '@types/pg@8.23.1':
     dependencies:
-      '@types/node': 26.6.6
+      '@types/node': 25.9.9
       pg-protocol: 1.16.1
       pg-types: 2.2.0
 
