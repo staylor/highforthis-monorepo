@@ -2,7 +2,12 @@ import { gql } from 'graphql-tag';
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
-import { loadRootData, prefetchRootData, renderPage } from '#/actions/render-page.tsx';
+import {
+  loadRootData,
+  prefetchRootData,
+  renderNotFound,
+  renderPage,
+} from '#/actions/render-page.tsx';
 import { routes } from '#/routes.ts';
 import type { PodcastQuery, PodcastsQuery } from '#/types/graphql.ts';
 import { lines } from '#/ui/lines.tsx';
@@ -114,7 +119,7 @@ export default createController(routes.podcast, {
         loadRootData(context),
       ]);
       if (!podcast) {
-        return new Response('Not Found', { status: 404 });
+        return renderNotFound(context);
       }
       const { audio } = podcast;
       return renderPage(

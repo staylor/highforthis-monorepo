@@ -132,6 +132,29 @@ describe('root controller', () => {
     assert.equal(response.status, 404);
     assert.match(await response.text(), /Yikes! Not Found!/);
   });
+
+  it("renders the 404 page for a podcast, a show or stats that don't exist", async (t) => {
+    stubGraphQL(t, {
+      'graphql:App': () => ({ data: {} }),
+      'graphql:Podcast': () => ({ data: { podcast: null } }),
+      'graphql:Show': () => ({ data: { show: null } }),
+    });
+    for (const path of ['/podcast/nope', '/shows/nope', '/shows/stats/nope']) {
+      const response = await router.fetch(new URL(path, origin));
+      assert.equal(response.status, 404, path);
+      assert.match(await response.text(), /Yikes! Not Found!/, path);
+    }
+  });
+
+  it("renders the 404 page for a year that isn't one, without asking GraphQL for it", async (t) => {
+    // A query for the page would answer 500, since only the App query is stubbed
+    stubGraphQL(t, { 'graphql:App': () => ({ data: {} }) });
+    for (const path of ['/videos/abc', '/videos/2024abc', '/shows/history/20x4']) {
+      const response = await router.fetch(new URL(path, origin));
+      assert.equal(response.status, 404, path);
+      assert.match(await response.text(), /Yikes! Not Found!/, path);
+    }
+  });
 });
 
 describe('OpenObserve SDK bundles', () => {
