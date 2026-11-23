@@ -2,8 +2,12 @@ import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
 import { selectedMedia } from '#/actions/admin/media/data.ts';
-import { renderAdminPage } from '#/actions/admin/render-page.tsx';
-import type { RedirectResult } from '#/lib/admin/forms.ts';
+import {
+  renderAdminPage,
+  type AdminContext,
+  type AdminPageContext,
+} from '#/actions/admin/render-page.tsx';
+import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -44,7 +48,7 @@ function podcastFields(t: TFunction, podcast?: Podcast): Field[] {
     ),
   });
   return [
-    { label: t('podcasts.title'), prop: 'title' },
+    { label: t('podcasts.title'), prop: 'title', required: true },
     { label: t('podcasts.description'), prop: 'description', type: 'textarea' },
     media('image', t('podcasts.setImage')),
     media('audio', t('podcasts.setAudio')),
@@ -107,64 +111,71 @@ export const podcastsList = createController(podcasts.list, {
   },
 });
 
+function addPage(context: AdminPageContext, failure?: SaveFailure) {
+  const t = getAdminT();
+  const label = t('podcasts.add');
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <AdminForm fields={podcastFields(t)} failure={failure} buttonLabel={label} />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const podcastsAdd = createController(podcasts.add, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    index(context) {
-      const t = getAdminT();
-      const label = t('podcasts.add');
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <AdminForm fields={podcastFields(t)} buttonLabel={label} />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => addPage(context),
 
+    // Goes to the new podcast's page, or shows the form again with what was entered
     async action(context) {
       const formData = await context.request.formData();
-      return backTo(await createPodcast({ gql: context.admin.gql, formData, url: context.url }));
+      const result = await createPodcast({ gql: context.admin.gql, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : addPage(context, result);
     },
   },
 });
 
+async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+  const t = getAdminT();
+  const { podcast } = await loadPodcast({ gql: context.admin.gql, id });
+  if (!podcast) {
+    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+  }
+  const label = t('podcasts.edit');
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <Message text={t('podcasts.updated')} hidden={Boolean(failure)} />
+      <AdminForm
+        fields={podcastFields(t, podcast)}
+        data={podcast}
+        failure={failure}
+        buttonLabel={t('podcasts.update')}
+      />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const podcastsEdit = createController(podcasts.edit, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    async index(context) {
-      const t = getAdminT();
-      const { podcast } = await loadPodcast({ gql: context.admin.gql, id: context.params.id });
-      if (!podcast) {
-        return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
-      }
-      const label = t('podcasts.edit');
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <Message text={t('podcasts.updated')} />
-          <AdminForm
-            fields={podcastFields(t, podcast)}
-            data={podcast}
-            buttonLabel={t('podcasts.update')}
-          />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => editPage(context, context.params.id),
 
     async action(context) {
+      const { id } = context.params;
       const formData = await context.request.formData();
-      return backTo(
-        await updatePodcast({
-          gql: context.admin.gql,
-          id: context.params.id,
-          formData,
-          url: context.url,
-        })
-      );
+      const result = await updatePodcast({
+        gql: context.admin.gql,
+        id,
+        formData,
+        url: context.url,
+      });
+      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
     },
   },
 });

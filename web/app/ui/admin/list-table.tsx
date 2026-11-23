@@ -108,7 +108,7 @@ export function RowActions(handle: Handle<{ editHref: string; viewHref?: string;
 // What a list's GET forms leave out when they keep the page's other query parameters: the page
 // number, since a new search or filter starts again from the first page, and the messages a
 // redirect showed.
-const notKept = new Set(['page', 'deleted', 'deleteFailed', 'message', 'saveFailed']);
+const notKept = new Set(['page', 'deleted', 'deleteFailed', 'message']);
 
 /** Hidden inputs for the page's query parameters other than `name`, so a GET form keeps them. */
 function KeptParams(handle: Handle<{ name: string }>) {

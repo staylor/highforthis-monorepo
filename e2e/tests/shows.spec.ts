@@ -82,6 +82,8 @@ test("lists an artist once, and says so when a show can't be saved", async ({ pa
   await page.getByRole('button', { name: 'Add Show' }).click();
   await expect(page.getByText("Couldn't save. Check the form and try again.")).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Add Show' })).toBeVisible();
+  // What was entered is still there
+  await expect(field(page, 'Title')).toHaveValue(`${prefix} Show`);
 });
 
 test('imports shows from CSV, creating their artists and venue', async ({ page, prefix }) => {

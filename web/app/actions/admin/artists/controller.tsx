@@ -3,8 +3,12 @@ import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
 import { selectedMedia } from '#/actions/admin/media/data.ts';
-import { renderAdminPage } from '#/actions/admin/render-page.tsx';
-import type { RedirectResult } from '#/lib/admin/forms.ts';
+import {
+  renderAdminPage,
+  type AdminContext,
+  type AdminPageContext,
+} from '#/actions/admin/render-page.tsx';
+import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -61,9 +65,9 @@ function artistFields(t: TFunction, artist?: Artist): Field[] {
           },
         ]
       : []),
-    { label: t('entity.name'), prop: 'name' },
+    { label: t('entity.name'), prop: 'name', required: true },
     // The slug comes from the name when the artist is added
-    ...(artist?.slug ? [{ label: t('entity.slug'), prop: 'slug' }] : []),
+    ...(artist?.slug ? [{ label: t('entity.slug'), prop: 'slug', required: true }] : []),
     { label: t('entity.description'), prop: 'description', type: 'textarea' },
     { label: t('entity.website'), prop: 'website' },
     {
@@ -193,76 +197,75 @@ export const artistsList = createController(artists.list, {
   },
 });
 
+function addPage(context: AdminPageContext, failure?: SaveFailure) {
+  const t = getAdminT();
+  const label = t('artists.add');
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <HeaderAdd href={artists.list.index.href()} label={t('artists.all')} />
+      <AdminForm fields={artistFields(t)} failure={failure} buttonLabel={label} />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const artistsAdd = createController(artists.add, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    index(context) {
-      const t = getAdminT();
-      const label = t('artists.add');
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <HeaderAdd href={artists.list.index.href()} label={t('artists.all')} />
-          <AdminForm fields={artistFields(t)} buttonLabel={label} />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => addPage(context),
 
+    // Goes to the new artist's page, or shows the form again with what was entered
     async action(context) {
       const formData = await context.request.formData();
-      return backTo(await createArtist({ gql: context.admin.gql, formData, url: context.url }));
+      const result = await createArtist({ gql: context.admin.gql, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : addPage(context, result);
     },
   },
 });
 
+async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+  const t = getAdminT();
+  const { artist, shows } = await loadArtist({ gql: context.admin.gql, id });
+  if (!artist) {
+    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+  }
+  const label = t('artists.edit');
+  const artistShows = (shows?.edges ?? []).map(({ node }) => ({
+    id: node.id,
+    date: node.date,
+    name: node.venue?.name ?? '',
+  }));
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <HeaderAdd href={artists.list.index.href()} label={t('artists.all')} />
+      <PageLink href={routes.artist.href({ slug: artist.slug })}>{t('artists.view')}</PageLink>
+      <Message text={t('artists.updated')} hidden={Boolean(failure)} />
+      <AdminForm
+        fields={artistFields(t, artist)}
+        data={artist}
+        failure={failure}
+        buttonLabel={label}
+        meta={artistShows.length > 0 && <EntityShows shows={artistShows} />}
+      />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const artistsEdit = createController(artists.edit, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    async index(context) {
-      const t = getAdminT();
-      const { artist, shows } = await loadArtist({
-        gql: context.admin.gql,
-        id: context.params.id,
-      });
-      if (!artist) {
-        return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
-      }
-      const label = t('artists.edit');
-      const artistShows = (shows?.edges ?? []).map(({ node }) => ({
-        id: node.id,
-        date: node.date,
-        name: node.venue?.name ?? '',
-      }));
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <HeaderAdd href={artists.list.index.href()} label={t('artists.all')} />
-          <PageLink href={routes.artist.href({ slug: artist.slug })}>{t('artists.view')}</PageLink>
-          <Message text={t('artists.updated')} />
-          <AdminForm
-            fields={artistFields(t, artist)}
-            data={artist}
-            buttonLabel={label}
-            meta={artistShows.length > 0 && <EntityShows shows={artistShows} />}
-          />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => editPage(context, context.params.id),
 
     async action(context) {
+      const { id } = context.params;
       const formData = await context.request.formData();
-      return backTo(
-        await updateArtist({
-          gql: context.admin.gql,
-          id: context.params.id,
-          formData,
-          url: context.url,
-        })
-      );
+      const result = await updateArtist({ gql: context.admin.gql, id, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
     },
   },
 });

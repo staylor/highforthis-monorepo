@@ -1,8 +1,12 @@
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import { renderAdminPage } from '#/actions/admin/render-page.tsx';
-import type { RedirectResult } from '#/lib/admin/forms.ts';
+import {
+  renderAdminPage,
+  type AdminContext,
+  type AdminPageContext,
+} from '#/actions/admin/render-page.tsx';
+import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -25,7 +29,13 @@ function userFields(): Field[] {
   const t = getAdminT();
   return [
     { label: t('users.name'), prop: 'name' },
-    { label: t('users.email'), prop: 'email', inputType: 'email', autoComplete: false },
+    {
+      label: t('users.email'),
+      prop: 'email',
+      inputType: 'email',
+      required: true,
+      autoComplete: false,
+    },
     { label: t('users.password'), prop: 'password', inputType: 'password', autoComplete: false },
     { label: t('users.bio'), prop: 'bio', type: 'textarea' },
     {
@@ -91,59 +101,65 @@ export const usersList = createController(users.list, {
   },
 });
 
+function addPage(context: AdminPageContext, failure?: SaveFailure) {
+  const t = getAdminT();
+  const label = t('users.add');
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <AdminForm fields={userFields()} failure={failure} buttonLabel={label} />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const usersAdd = createController(users.add, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    index(context) {
-      const t = getAdminT();
-      const label = t('users.add');
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <AdminForm fields={userFields()} buttonLabel={label} />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => addPage(context),
 
+    // Goes to the new user's page, or shows the form again with what was entered
     async action(context) {
       const formData = await context.request.formData();
-      return backTo(await createUser({ gql: context.admin.gql, formData, url: context.url }));
+      const result = await createUser({ gql: context.admin.gql, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : addPage(context, result);
     },
   },
 });
 
+async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+  const t = getAdminT();
+  const { user } = await loadUser({ gql: context.admin.gql, id });
+  if (!user) {
+    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+  }
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{t('users.edit')}</Heading>
+      <Message text={t('users.updated')} hidden={Boolean(failure)} />
+      <AdminForm
+        fields={userFields()}
+        data={user}
+        failure={failure}
+        buttonLabel={t('users.update')}
+      />
+    </>,
+    { title: t('users.edit'), status: failure?.status }
+  );
+}
+
 export const usersEdit = createController(users.edit, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    async index(context) {
-      const t = getAdminT();
-      const { user } = await loadUser({ gql: context.admin.gql, id: context.params.id });
-      if (!user) {
-        return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
-      }
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{t('users.edit')}</Heading>
-          <Message text={t('users.updated')} />
-          <AdminForm fields={userFields()} data={user} buttonLabel={t('users.update')} />
-        </>,
-        { title: t('users.edit') }
-      );
-    },
+    index: (context) => editPage(context, context.params.id),
 
     async action(context) {
+      const { id } = context.params;
       const formData = await context.request.formData();
-      return backTo(
-        await updateUser({
-          gql: context.admin.gql,
-          id: context.params.id,
-          formData,
-          url: context.url,
-        })
-      );
+      const result = await updateUser({ gql: context.admin.gql, id, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
     },
   },
 });

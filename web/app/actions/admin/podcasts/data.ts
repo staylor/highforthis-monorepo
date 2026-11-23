@@ -79,12 +79,10 @@ const updatePodcastMutation = gql`
 const textFields = ['title', 'description'];
 
 /** A podcast always has a description, so one that was emptied is saved empty instead of null. */
-function emptiedDescription(formData: FormData) {
-  if (formData.get('description') !== '') {
-    return {};
+function emptyDescription(input: Record<string, any>) {
+  if (input.description === null) {
+    input.description = '';
   }
-  formData.delete('description');
-  return { description: '' };
 }
 
 export function loadPodcasts({
@@ -111,8 +109,8 @@ export function createPodcast(args: FormArgs) {
     ...args,
     mutation: createPodcastMutation,
     createMutation: 'createPodcast',
-    variables: { input: emptiedDescription(args.formData) },
     textFields,
+    prepare: emptyDescription,
   });
 }
 
@@ -120,7 +118,8 @@ export function updatePodcast({ id, ...args }: FormArgs & { id: string }) {
   return submitForm({
     ...args,
     mutation: updatePodcastMutation,
-    variables: { id, input: emptiedDescription(args.formData) },
+    variables: { id },
     textFields,
+    prepare: emptyDescription,
   });
 }

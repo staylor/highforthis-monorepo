@@ -21,10 +21,18 @@ function stubGraphQL(t: TestContext, answers: Record<string, unknown> = {}) {
     }
     const { operationName, variables } = JSON.parse(String(init?.body));
     operations.push({ operationName, variables });
-    return Response.json({ data: answers[operationName] ?? {} });
+    const answer = answers[operationName];
+    return answer instanceof Response ? answer.clone() : Response.json({ data: answer ?? {} });
   });
   return operations;
 }
+
+/** GraphQL's answer to input it turns down. */
+const invalid = (message: string) =>
+  Response.json(
+    { errors: [{ message, extensions: { code: 'BAD_USER_INPUT' } }], data: null },
+    { status: 400 }
+  );
 
 const get = (path: string) =>
   router.fetch(new Request(new URL(path, origin), { headers: { cookie: testSession } }));
@@ -226,6 +234,25 @@ describe('admin posts', () => {
       summary: null,
       artists: '311',
     });
+  });
+
+  it('shows a new post that failed to save with its title, summary, date and tags', async (t) => {
+    stubGraphQL(t, { CreatePost: invalid('Invalid input (title: Too small)') });
+    const response = await post(
+      '/admin/post/add',
+      `title=&summary=In+short&status=DRAFT&date=${postTime}&artists=Wilco&artists=311`
+    );
+    assert.equal(response.status, 422);
+    const html = await response.text();
+    assert.match(html, /role="alert"[^>]*><p>Couldn't save\./);
+    assert.match(html, /Invalid input \(title: Too small\)/);
+    assert.match(html, /<textarea name="summary"[^>]*>In short<\/textarea>/);
+    assert.match(html, /<option value="DRAFT" selected/);
+    assert.match(html, new RegExp(`<input type="hidden" name="date" value="${postTime}"`));
+    assert.match(html, /<input type="hidden" name="artists" value="Wilco"/);
+    assert.match(html, /<input type="hidden" name="artists" value="311"/);
+    // The browser doesn't send a post without a title
+    assert.match(html, /<textarea name="title"[^>]* required/);
   });
 
   it("answers 404 for a post that doesn't exist", async (t) => {

@@ -4,6 +4,7 @@ import { lg } from '#/ui/public/styles.ts';
 
 // One line of large text that wraps and grows instead of scrolling sideways, so a long title is
 // all visible. Enter doesn't start a new line. Without JavaScript it's a textarea a line tall.
+// It's required, since it's a post's title, which a post can't be saved without.
 
 interface HeadingFieldProps {
   name: string;
@@ -48,6 +49,7 @@ export const HeadingField = clientEntry(
           defaultValue={value}
           placeholder={placeholder}
           aria-label={placeholder}
+          required
           mix={[
             field,
             ref((node) => grow(node as HTMLTextAreaElement)),

@@ -2,8 +2,8 @@ import { css } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import { renderAdminPage } from '#/actions/admin/render-page.tsx';
-import type { RedirectResult } from '#/lib/admin/forms.ts';
+import { renderAdminPage, type AdminContext } from '#/actions/admin/render-page.tsx';
+import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -33,8 +33,8 @@ function publishedDate(publishedAt: number) {
 
 function videoFields(t: TFunction, video: Video): Field[] {
   return [
-    { label: t('videos.title'), prop: 'title' },
-    { label: t('videos.slug'), prop: 'slug' },
+    { label: t('videos.title'), prop: 'title', required: true },
+    { label: t('videos.slug'), prop: 'slug', required: true },
     { label: t('videos.type'), prop: 'dataType' },
     {
       label: t('videos.playlist'),
@@ -129,48 +129,50 @@ export const videosList = createController(videos.list, {
   },
 });
 
+async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+  const t = getAdminT();
+  const { video } = await loadVideo({ gql: context.admin.gql, id });
+  if (!video) {
+    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+  }
+  const label = t('videos.edit');
+  // A video added outside YouTube's import has no thumbnails yet
+  const thumbnail = video.thumbnails.find((thumb) => thumb.width === 480);
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <Message text={t('videos.updated')} hidden={Boolean(failure)} />
+      {thumbnail && (
+        <figure mix={css({ marginBottom: '1.5rem', maxWidth: '100%', overflow: 'hidden' })}>
+          <img
+            mix={css({ position: 'relative', zIndex: 10 })}
+            src={thumbnail.url}
+            alt={video.title}
+          />
+        </figure>
+      )}
+      <AdminForm
+        fields={videoFields(t, video)}
+        data={video}
+        failure={failure}
+        buttonLabel={t('videos.update')}
+      />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const videosEdit = createController(videos.edit, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    async index(context) {
-      const t = getAdminT();
-      const { video } = await loadVideo({ gql: context.admin.gql, id: context.params.id });
-      if (!video) {
-        return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
-      }
-      const label = t('videos.edit');
-      // A video added outside YouTube's import has no thumbnails yet
-      const thumbnail = video.thumbnails.find((thumb) => thumb.width === 480);
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <Message text={t('videos.updated')} />
-          {thumbnail && (
-            <figure mix={css({ marginBottom: '1.5rem', maxWidth: '100%', overflow: 'hidden' })}>
-              <img
-                mix={css({ position: 'relative', zIndex: 10 })}
-                src={thumbnail.url}
-                alt={video.title}
-              />
-            </figure>
-          )}
-          <AdminForm fields={videoFields(t, video)} data={video} buttonLabel={t('videos.update')} />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => editPage(context, context.params.id),
 
     async action(context) {
+      const { id } = context.params;
       const formData = await context.request.formData();
-      return backTo(
-        await updateVideo({
-          gql: context.admin.gql,
-          id: context.params.id,
-          formData,
-          url: context.url,
-        })
-      );
+      const result = await updateVideo({ gql: context.admin.gql, id, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
     },
   },
 });

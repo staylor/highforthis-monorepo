@@ -3,8 +3,12 @@ import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
 import { selectedMedia } from '#/actions/admin/media/data.ts';
-import { renderAdminPage } from '#/actions/admin/render-page.tsx';
-import type { RedirectResult } from '#/lib/admin/forms.ts';
+import {
+  renderAdminPage,
+  type AdminContext,
+  type AdminPageContext,
+} from '#/actions/admin/render-page.tsx';
+import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -59,14 +63,16 @@ function thumbnail(venue: VenueRow) {
   );
 }
 
-function venueFields(t: TFunction, venue?: Venue): Field[] {
+function venueFields(t: TFunction, venue?: Venue, values?: SaveFailure['values']): Field[] {
+  // What a save that failed submitted, or what's saved
+  const coordinates = values ? values.coordinates : venue?.coordinates;
   const coordinate = (axis: 'latitude' | 'longitude') => {
     const label = t(`venues.${axis}`);
     return (
       <input
         type="text"
         name={`coordinates[${axis}]`}
-        value={String(venue?.coordinates?.[axis] ?? '')}
+        value={String(coordinates?.[axis] ?? '')}
         placeholder={label}
         aria-label={label}
         mix={wideInput}
@@ -74,9 +80,9 @@ function venueFields(t: TFunction, venue?: Venue): Field[] {
     );
   };
   return [
-    { label: t('entity.name'), prop: 'name' },
+    { label: t('entity.name'), prop: 'name', required: true },
     // The slug comes from the name when the venue is added
-    ...(venue?.slug ? [{ label: t('entity.slug'), prop: 'slug' }] : []),
+    ...(venue?.slug ? [{ label: t('entity.slug'), prop: 'slug', required: true }] : []),
     { label: t('entity.description'), prop: 'description', type: 'textarea' },
     { label: t('entity.website'), prop: 'website' },
     {
@@ -208,81 +214,87 @@ export const venuesList = createController(venues.list, {
   },
 });
 
+function addPage(context: AdminPageContext, failure?: SaveFailure) {
+  const t = getAdminT();
+  const label = t('venues.add');
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <HeaderAdd href={venues.list.index.href()} label={t('venues.all')} />
+      <AdminForm
+        fields={venueFields(t, undefined, failure?.values)}
+        failure={failure}
+        buttonLabel={label}
+      />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const venuesAdd = createController(venues.add, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    index(context) {
-      const t = getAdminT();
-      const label = t('venues.add');
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <HeaderAdd href={venues.list.index.href()} label={t('venues.all')} />
-          <AdminForm fields={venueFields(t)} buttonLabel={label} />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => addPage(context),
 
+    // Goes to the new venue's page, or shows the form again with what was entered
     async action(context) {
       const formData = await context.request.formData();
-      return backTo(await createVenue({ gql: context.admin.gql, formData, url: context.url }));
+      const result = await createVenue({ gql: context.admin.gql, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : addPage(context, result);
     },
   },
 });
 
+async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+  const t = getAdminT();
+  const { venue, shows } = await loadVenue({ gql: context.admin.gql, id });
+  if (!venue) {
+    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+  }
+  const label = t('venues.edit');
+  const venueShows = (shows?.edges ?? []).map(({ node }) => ({
+    id: node.id,
+    date: node.date,
+    name: node.title || node.artists.map((artist) => artist.name).join(' / '),
+  }));
+  return renderAdminPage(
+    context,
+    <>
+      <Heading>{label}</Heading>
+      <HeaderAdd href={venues.list.index.href()} label={t('venues.all')} />
+      <PageLink href={routes.venue.href({ slug: venue.slug })}>{t('venues.view')}</PageLink>
+      {venue.listingsUrl && (
+        <a
+          href={routes.admin.shows.listings.index.href({ venueId: venue.id })}
+          mix={[pinkLink, css({ display: 'inline-block', ...text.sm })]}
+        >
+          {t('shows.listings.view')}
+        </a>
+      )}
+      <Message text={t('venues.updated')} hidden={Boolean(failure)} />
+      <AdminForm
+        fields={venueFields(t, venue, failure?.values)}
+        data={venue}
+        failure={failure}
+        buttonLabel={label}
+        meta={venueShows.length > 0 && <EntityShows shows={venueShows} />}
+      />
+    </>,
+    { title: label, status: failure?.status }
+  );
+}
+
 export const venuesEdit = createController(venues.edit, {
   middleware: [sameOrigin(), requireAdmin()],
   actions: {
-    async index(context) {
-      const t = getAdminT();
-      const { venue, shows } = await loadVenue({ gql: context.admin.gql, id: context.params.id });
-      if (!venue) {
-        return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
-      }
-      const label = t('venues.edit');
-      const venueShows = (shows?.edges ?? []).map(({ node }) => ({
-        id: node.id,
-        date: node.date,
-        name: node.title || node.artists.map((artist) => artist.name).join(' / '),
-      }));
-      return renderAdminPage(
-        context,
-        <>
-          <Heading>{label}</Heading>
-          <HeaderAdd href={venues.list.index.href()} label={t('venues.all')} />
-          <PageLink href={routes.venue.href({ slug: venue.slug })}>{t('venues.view')}</PageLink>
-          {venue.listingsUrl && (
-            <a
-              href={routes.admin.shows.listings.index.href({ venueId: venue.id })}
-              mix={[pinkLink, css({ display: 'inline-block', ...text.sm })]}
-            >
-              {t('shows.listings.view')}
-            </a>
-          )}
-          <Message text={t('venues.updated')} />
-          <AdminForm
-            fields={venueFields(t, venue)}
-            data={venue}
-            buttonLabel={label}
-            meta={venueShows.length > 0 && <EntityShows shows={venueShows} />}
-          />
-        </>,
-        { title: label }
-      );
-    },
+    index: (context) => editPage(context, context.params.id),
 
     async action(context) {
+      const { id } = context.params;
       const formData = await context.request.formData();
-      return backTo(
-        await updateVenue({
-          gql: context.admin.gql,
-          id: context.params.id,
-          formData,
-          url: context.url,
-        })
-      );
+      const result = await updateVenue({ gql: context.admin.gql, id, formData, url: context.url });
+      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
     },
   },
 });

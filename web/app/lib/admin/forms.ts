@@ -76,6 +76,19 @@ export interface RedirectResult {
 export const isRedirect = (result: unknown): result is RedirectResult =>
   typeof result === 'object' && result !== null && 'redirectTo' in result;
 
+/**
+ * What submitForm returns when a save failed. The route renders the form's page again with what
+ * was submitted, so nothing typed is lost.
+ */
+export interface SaveFailure {
+  /** The form's fields as they were submitted: nested as their names say, and still strings. */
+  values: Record<string, any>;
+  /** What GraphQL said was wrong with them, when that's why it failed. */
+  reason?: string;
+  /** The page's status: 422 for input GraphQL turned down, 502 when GraphQL itself failed. */
+  status: number;
+}
+
 interface ParseFormOptions {
   /**
    * The form's text fields. What's typed in one stays a string, so a name of "311" isn't sent as
@@ -173,10 +186,13 @@ interface SubmitFormArgs extends FormArgs, ParseFormOptions {
   // On an add page, the mutation field holding the new item's ID, so the redirect goes to its
   // edit page
   createMutation?: string;
+  // Changes the form's parsed fields before they're sent, for what a form means by them that
+  // parsing can't know, such as a venue's coordinates being a pair
+  prepare?: (input: Record<string, any>) => void;
 }
 
-// Saves an add or edit form, then comes back to the form's page with ?message=updated, or with
-// ?saveFailed=1 when the mutation didn't succeed
+// Saves an add or edit form, then comes back to the form's page with ?message=updated. When the
+// mutation doesn't succeed, it returns what the page needs to show the form again.
 export async function submitForm({
   gql,
   formData,
@@ -185,27 +201,29 @@ export async function submitForm({
   variables,
   createMutation,
   textFields,
-}: SubmitFormArgs): Promise<RedirectResult> {
+  prepare,
+}: SubmitFormArgs): Promise<RedirectResult | SaveFailure> {
   const input = parseForm(formData, { textFields });
   if (input.editorState) {
     input.editorState = JSON.parse(input.editorState);
     clearElementFormats(input.editorState.root);
   }
+  prepare?.(input);
 
   const mergedVariables = { ...variables, input: { ...variables?.input, ...input } };
   // A mutation fails when GraphQL turns its input down, or can't be reached
-  const { data } = await attempt(
+  const { data, error } = await attempt(
     gql.mutate<Record<string, { id: string } | null>>(mutation, mergedVariables)
   );
   const saved = data && (createMutation ? data[createMutation] : Object.values(data)[0]);
-  // The form posts to its own URL, which can still say how the last save went
-  const redirectUrl = new URL(url);
-  redirectUrl.searchParams.delete('message');
-  redirectUrl.searchParams.delete('saveFailed');
   if (!saved) {
-    redirectUrl.searchParams.set('saveFailed', '1');
-    return { redirectTo: redirectUrl.toString() };
+    return {
+      values: nestFields(formData),
+      reason: error?.invalid,
+      status: error && error.invalid === undefined ? 502 : 422,
+    };
   }
+  const redirectUrl = new URL(url);
   if (createMutation) {
     redirectUrl.pathname = redirectUrl.pathname.replace('/add', `/${saved.id}`);
   }
