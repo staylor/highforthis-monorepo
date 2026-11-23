@@ -24,7 +24,6 @@ const Podcast = `#graphql
     description: String
     image: String
     audio: String
-    date: Float
   }
 
   input UpdatePodcastInput {
@@ -32,7 +31,6 @@ const Podcast = `#graphql
     description: String
     image: String
     audio: String
-    date: Float
   }
 
   enum PodcastOrder {
@@ -49,7 +47,7 @@ const Podcast = `#graphql
       search: String
       order: PodcastOrder
     ): PodcastConnection
-    podcast(id: String, slug: String): Podcast
+    podcast(id: String): Podcast
   }
 
   extend type Mutation {

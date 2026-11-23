@@ -60,15 +60,6 @@ const EditorState = `#graphql
     version: Int
   }
 
-  input ElementNodeInput {
-    children: [EditorNodeInput]
-    direction: ElementDirection
-    format: Int
-    indent: Int
-    type: String
-    version: Int
-  }
-
   type HeadingNode implements LexicalNode & ElementNodeType {
     children: [EditorNode]
     direction: ElementDirection

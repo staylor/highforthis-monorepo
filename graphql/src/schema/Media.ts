@@ -17,13 +17,6 @@ const Media = `#graphql
     fileSize: Int!
   }
 
-  input ImageUploadCropInput {
-    fileName: String
-    width: Int
-    height: Int
-    fileSize: Int
-  }
-
   type ImageUpload implements MediaUpload {
     id: String!
     title: String

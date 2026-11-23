@@ -179,7 +179,6 @@ export type CreateArtistInput = {
 
 export type CreatePodcastInput = {
   audio?: InputMaybe<Scalars['String']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
@@ -303,15 +302,6 @@ export type ElementNode = ElementNodeType &
     version?: Maybe<Scalars['Int']['output']>;
   };
 
-export type ElementNodeInput = {
-  children?: InputMaybe<Array<InputMaybe<EditorNodeInput>>>;
-  direction?: InputMaybe<ElementDirection>;
-  format?: InputMaybe<Scalars['Int']['input']>;
-  indent?: InputMaybe<Scalars['Int']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
-  version?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type ElementNodeType = {
   children?: Maybe<Array<Maybe<EditorNode>>>;
   direction?: Maybe<ElementDirection>;
@@ -396,13 +386,6 @@ export type ImageUploadCrop = {
   fileSize: Scalars['Int']['output'];
   height: Scalars['Int']['output'];
   width: Scalars['Int']['output'];
-};
-
-export type ImageUploadCropInput = {
-  fileName?: InputMaybe<Scalars['String']['input']>;
-  fileSize?: InputMaybe<Scalars['Int']['input']>;
-  height?: InputMaybe<Scalars['Int']['input']>;
-  width?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ImportListingInput = {
@@ -836,7 +819,6 @@ export type QueryMediaArgs = {
 
 export type QueryPodcastArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
-  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryPodcastsArgs = {
@@ -860,13 +842,11 @@ export type QueryPostsArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<PostStatus>;
-  year?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryShowArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
   lastAdded?: InputMaybe<Scalars['Boolean']['input']>;
-  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryShowStatsArgs = {
@@ -878,7 +858,6 @@ export type QueryShowsArgs = {
   artist?: InputMaybe<EntityArg>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   latest?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1064,7 +1043,6 @@ export type UpdateMediaUploadInput = {
 
 export type UpdatePodcastInput = {
   audio?: InputMaybe<Scalars['String']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
@@ -1383,7 +1361,6 @@ export type ResolversTypes = {
   EditorStateInput: EditorStateInput;
   ElementDirection: ElementDirection;
   ElementNode: ResolverTypeWrapper<EditorNodeData>;
-  ElementNodeInput: ElementNodeInput;
   ElementNodeType: ResolverTypeWrapper<EditorNodeData>;
   EntityArg: EntityArg;
   FileUpload: ResolverTypeWrapper<MediaUploadSource>;
@@ -1393,7 +1370,6 @@ export type ResolversTypes = {
   ImageNode: ResolverTypeWrapper<EditorNodeData>;
   ImageUpload: ResolverTypeWrapper<MediaUploadSource>;
   ImageUploadCrop: ResolverTypeWrapper<ImageUploadCrop>;
-  ImageUploadCropInput: ImageUploadCropInput;
   ImportListingInput: ImportListingInput;
   ImportListingsResult: ResolverTypeWrapper<ImportListingsResult>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -1499,7 +1475,6 @@ export type ResolversParentTypes = {
   EditorState: Omit<EditorState, 'root'> & { root?: Maybe<ResolversParentTypes['ElementNode']> };
   EditorStateInput: EditorStateInput;
   ElementNode: EditorNodeData;
-  ElementNodeInput: ElementNodeInput;
   ElementNodeType: EditorNodeData;
   EntityArg: EntityArg;
   FileUpload: MediaUploadSource;
@@ -1508,7 +1483,6 @@ export type ResolversParentTypes = {
   ImageNode: EditorNodeData;
   ImageUpload: MediaUploadSource;
   ImageUploadCrop: ImageUploadCrop;
-  ImageUploadCropInput: ImageUploadCropInput;
   ImportListingInput: ImportListingInput;
   ImportListingsResult: ImportListingsResult;
   Int: Scalars['Int']['output'];

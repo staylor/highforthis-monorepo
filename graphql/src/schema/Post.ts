@@ -53,7 +53,6 @@ const Post = `#graphql
       after: String
       last: Int
       before: String
-      year: Int
       status: PostStatus
       search: String
     ): PostConnection
