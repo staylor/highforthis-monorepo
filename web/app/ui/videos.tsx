@@ -125,8 +125,11 @@ export function Videos(
 
   return () => {
     const { videos, paginate = true, search } = handle.props;
-    const hasPrevious = videos.pageInfo.hasPreviousPage || search?.get('after');
-    const hasNext = videos.pageInfo.hasNextPage || search?.get('before');
+    // The links page from the first and last videos here, so a page without any has neither
+    const first = videos.edges.at(0);
+    const last = videos.edges.at(-1);
+    const hasPrevious = first && (videos.pageInfo.hasPreviousPage || search?.get('after'));
+    const hasNext = last && (videos.pageInfo.hasNextPage || search?.get('before'));
 
     return (
       <>
@@ -154,7 +157,7 @@ export function Videos(
           >
             {hasPrevious && (
               <Link
-                href={`?before=${videos.edges[0].cursor}`}
+                href={`?before=${first.cursor}`}
                 mix={css(
                   merge(pageButton, {
                     border: '1px solid light-dark(var(--neutral-200), rgb(255 255 255 / 0.1))',
@@ -172,10 +175,7 @@ export function Videos(
               </Link>
             )}
             {hasNext && (
-              <Link
-                href={`?after=${videos.edges[videos.edges.length - 1].cursor}`}
-                mix={css(merge(pageButton, pinkButton))}
-              >
+              <Link href={`?after=${last.cursor}`} mix={css(merge(pageButton, pinkButton))}>
                 {t('videos.next')} →
               </Link>
             )}

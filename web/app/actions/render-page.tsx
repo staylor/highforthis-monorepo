@@ -121,3 +121,12 @@ export async function renderPage(context: AppContext, page: RemixNode, options: 
     { status, headers: status === 200 && !signedIn ? reusable : undefined }
   );
 }
+
+/** The 404 page, for a path no route matches and for a post, show or the like that isn't there. */
+export function renderNotFound(context: AppContext) {
+  return renderPage(context, <pre>{'Yikes! Not Found!'}</pre>, {
+    title: 'Not Found',
+    layout: 'bare',
+    status: 404,
+  });
+}

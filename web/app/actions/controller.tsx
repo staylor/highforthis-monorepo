@@ -3,6 +3,7 @@ import { createController } from 'remix/router';
 
 import { assets } from '#/assets.ts';
 import type { Variables } from '#/lib/graphql.ts';
+import { isYear } from '#/lib/year.ts';
 import { routes } from '#/routes.ts';
 import type {
   ArtistQuery,
@@ -22,7 +23,7 @@ import { ArtistPage, artistQuery, VenuePage, venueQuery } from './entities/page.
 import { HomePage, homeQuery } from './home/page.tsx';
 import { feedQuery, feedTemplate } from './podcast/feed.ts';
 import { PostPage, postQuery, PostsPage, postsQuery } from './posts/page.tsx';
-import { loadRootData, prefetchRootData, renderPage } from './render-page.tsx';
+import { loadRootData, prefetchRootData, renderNotFound, renderPage } from './render-page.tsx';
 import { Setlists, type Setlist, type Stats } from './sphere/public/setlists.tsx';
 import setlists from './sphere/setlists.json' with { type: 'json' };
 import { VideosPage, videoQuery, videosQuery } from './videos/page.tsx';
@@ -71,7 +72,7 @@ export default createController(routes, {
           slug: context.params.slug,
         });
         if (!post) {
-          return notFound(context);
+          return renderNotFound(context);
         }
         const { siteSettings } = await loadRootData(context);
         const media = post.featuredMedia?.[0];
@@ -106,7 +107,7 @@ export default createController(routes, {
           slug: context.params.slug,
         });
         if (!data.artist) {
-          return notFound(context);
+          return renderNotFound(context);
         }
         return renderPage(context, <ArtistPage data={data} />, {
           title: data.artist.name,
@@ -122,7 +123,7 @@ export default createController(routes, {
           slug: context.params.slug,
         });
         if (!data.venue) {
-          return notFound(context);
+          return renderNotFound(context);
         }
         return renderPage(context, <VenuePage data={data} />, {
           title: data.venue.name,
@@ -134,6 +135,9 @@ export default createController(routes, {
       middleware: prefetch,
       async handler(context) {
         const { year } = context.params;
+        if (year && !isYear(year)) {
+          return renderNotFound(context);
+        }
         const after = context.url.searchParams.get('after');
         const before = context.url.searchParams.get('before');
         const variables: Variables = {};
@@ -147,7 +151,7 @@ export default createController(routes, {
           }
         }
         if (year) {
-          variables.year = parseInt(year, 10);
+          variables.year = Number(year);
         }
         const { videos } = await context.gql.query<VideosQuery>(videosQuery, variables);
         const title = year ? `${year} » Videos` : 'Videos';
@@ -169,7 +173,7 @@ export default createController(routes, {
           slug: context.params.slug,
         });
         if (!video) {
-          return notFound(context);
+          return renderNotFound(context);
         }
         return renderPage(context, <Video single video={video} />, {
           title: video.title,
@@ -221,16 +225,7 @@ export default createController(routes, {
     },
 
     notFound(context) {
-      return notFound(context);
+      return renderNotFound(context);
     },
   },
 });
-
-/** The 404 page, for any path no route matches. */
-function notFound(context: Parameters<typeof renderPage>[0]) {
-  return renderPage(context, <pre>{'Yikes! Not Found!'}</pre>, {
-    title: 'Not Found',
-    layout: 'bare',
-    status: 404,
-  });
-}

@@ -2,7 +2,8 @@ import { gql } from 'graphql-tag';
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
-import { prefetchRootData, renderPage } from '#/actions/render-page.tsx';
+import { prefetchRootData, renderNotFound, renderPage } from '#/actions/render-page.tsx';
+import { isYear } from '#/lib/year.ts';
 import { routes } from '#/routes.ts';
 import type { ShowQuery, ShowsHistoryQuery, ShowsQuery, ShowStatsQuery } from '#/types/graphql.ts';
 import { Artwork } from '#/ui/artist.tsx';
@@ -137,9 +138,12 @@ export default createController(routes.shows, {
     async history(context) {
       const { t } = context;
       const { year } = context.params;
+      if (year && !isYear(year)) {
+        return renderNotFound(context);
+      }
       const { shows } = await context.gql.query<ShowsHistoryQuery>(showsHistoryQuery, {
         first: 1000,
-        year: year ? parseInt(year, 10) : undefined,
+        year: year ? Number(year) : undefined,
       });
       const count = shows?.edges.length ?? 0;
       return renderPage(
@@ -178,7 +182,7 @@ export default createController(routes.shows, {
       const { t } = context;
       const { entity } = context.params;
       if (entity !== 'artist' && entity !== 'venue') {
-        return new Response('Not Found', { status: 404 });
+        return renderNotFound(context);
       }
       const { showStats } = await context.gql.query<ShowStatsQuery>(showStatsQuery, {
         entity: entity.toUpperCase(),
@@ -237,7 +241,7 @@ export default createController(routes.shows, {
         id: context.params.id,
       });
       if (!show) {
-        return new Response('Not Found', { status: 404 });
+        return renderNotFound(context);
       }
       const lastIndex = show.artists.length - 1;
       const d = formatDate(show.date);
