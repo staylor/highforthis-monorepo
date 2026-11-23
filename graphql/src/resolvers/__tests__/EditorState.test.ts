@@ -184,9 +184,10 @@ describe('editor state', () => {
 });
 
 describe('media nodes', () => {
-  // the database mock has no models, so a lookup would throw
-  it('load no image or video for nodes saved without an id', async () => {
-    expect(await resolvers.ImageNode.image({ type: 'image' })).toBeNull();
-    expect(await resolvers.VideoNode.video({ type: 'video' })).toBeNull();
+  // the database mock has no models, so a lookup would throw. They answer null at once, with
+  // no promise to wait for.
+  it('load no image or video for nodes saved without an id', () => {
+    expect(resolvers.ImageNode.image({ type: 'image' })).toBeNull();
+    expect(resolvers.VideoNode.video({ type: 'video' })).toBeNull();
   });
 });
