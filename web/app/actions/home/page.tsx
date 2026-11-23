@@ -76,7 +76,11 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
         )}
         {data.videos && (
           <section>
-            <SectionHeader label="Videos" viewAllLink={routes.videos.href()} />
+            <SectionHeader
+              label={t('videos.heading')}
+              viewAllLink={routes.videos.href()}
+              viewAllText={t('videos.viewAll')}
+            />
             <Videos videos={data.videos} paginate={false} heading="h3" />
           </section>
         )}

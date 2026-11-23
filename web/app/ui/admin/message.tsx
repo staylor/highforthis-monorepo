@@ -21,7 +21,7 @@ interface MessageProps {
  */
 export function Message(handle: Handle<MessageProps>) {
   return () => {
-    const { url } = getAdmin(handle);
+    const { t, url } = getAdmin(handle);
     const param = handle.props.param ?? 'message';
     if (handle.props.hidden || !url.searchParams.has(param)) {
       return <div />;
@@ -54,7 +54,7 @@ export function Message(handle: Handle<MessageProps>) {
           </p>
           <a
             href={`${dismissed.pathname}${dismissed.search}`}
-            aria-label="Dismiss"
+            aria-label={t('admin.dismiss')}
             mix={css({
               position: 'absolute',
               top: 0,

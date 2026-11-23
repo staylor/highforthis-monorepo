@@ -30,12 +30,12 @@ export async function renderAdminPage(
   options: AdminPageOptions = {}
 ) {
   const { siteSettings } = await loadRootData(context);
-  const admin = {
-    t: getAdminT(),
-    url: context.url,
-    siteUrl: siteSettings?.siteUrl || '/',
-  };
-  const title = titleTemplate(options.title ? `${options.title} » Admin` : 'Admin', siteSettings);
+  const t = getAdminT();
+  const admin = { t, url: context.url, siteUrl: siteSettings?.siteUrl || '/' };
+  const title = titleTemplate(
+    options.title ? t('admin.titleOf', { title: options.title }) : t('admin.title'),
+    siteSettings
+  );
   return context.render(
     <AdminDocument admin={admin} title={title} bare={options.bare} nonce={context.nonce}>
       {page}

@@ -53,7 +53,7 @@ export function VideosPage(
             justifyContent: 'space-between',
           })}
         >
-          <Heading1>{year ? `${year} Videos` : 'Videos'}</Heading1>
+          <Heading1>{year ? t('videos.headingIn', { year }) : t('videos.heading')}</Heading1>
           <YearSelect
             value={year || ''}
             placeholder={t('nav.videosByYear')}
