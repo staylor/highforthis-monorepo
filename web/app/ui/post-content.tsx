@@ -42,7 +42,17 @@ export const textNodeFragment = gql`
   }
 `;
 
-const FORMATS = { BOLD: 1, ITALIC: 2, UNDERLINE: 8, CODE: 16 };
+// The bits of Lexical's text format that the editor's toolbar sets, each with the element that
+// shows it. Text with several is wrapped in each, the first innermost.
+const FORMATS: [bit: number, wrap: (children: RemixNode) => RemixNode][] = [
+  [16, (children) => <code>{children}</code>],
+  [32, (children) => <sub>{children}</sub>],
+  [64, (children) => <sup>{children}</sup>],
+  [4, (children) => <s>{children}</s>],
+  [8, (children) => <u>{children}</u>],
+  [2, (children) => <em>{children}</em>],
+  [1, (children) => <strong>{children}</strong>],
+];
 
 /** Text runs with their Lexical formatting. */
 function textNodes(nodes: TextNode[]): RemixNode[] {
@@ -50,44 +60,11 @@ function textNodes(nodes: TextNode[]): RemixNode[] {
     if (node.type === 'linebreak') {
       return <br />;
     }
-    const text = node.text;
-    switch (node.format) {
-      case FORMATS.BOLD:
-        return <strong>{text}</strong>;
-      case FORMATS.ITALIC:
-        return <em>{text}</em>;
-      case FORMATS.UNDERLINE:
-        return <u>{text}</u>;
-      case FORMATS.CODE:
-        return <code>{text}</code>;
-      case FORMATS.BOLD | FORMATS.ITALIC:
-        return (
-          <strong>
-            <em>{text}</em>
-          </strong>
-        );
-      case FORMATS.BOLD | FORMATS.UNDERLINE:
-        return (
-          <strong>
-            <u>{text}</u>
-          </strong>
-        );
-      case FORMATS.ITALIC | FORMATS.UNDERLINE:
-        return (
-          <em>
-            <u>{text}</u>
-          </em>
-        );
-      case FORMATS.BOLD | FORMATS.ITALIC | FORMATS.UNDERLINE:
-        return (
-          <strong>
-            <em>
-              <u>{text}</u>
-            </em>
-          </strong>
-        );
-    }
-    return text;
+    const format = node.format ?? 0;
+    return FORMATS.reduce<RemixNode>(
+      (children, [bit, wrap]) => (format & bit ? wrap(children) : children),
+      node.text
+    );
   });
 }
 
