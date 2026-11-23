@@ -1,24 +1,25 @@
-import type { Prisma, Venue } from '@prisma/client';
+import { ilike, inList, or, type TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
-import prisma from '#/database';
+import db from '#/database/db';
+import type { mediaUploads } from '#/database/tables';
+import { newId, venueFeaturedMedia, venueMedia, venues } from '#/database/tables';
 import { ADDRESS_FIELDS, geocodeVenue } from '#/geocode';
-import type { WithIncludes } from '#/models';
 import { getUniqueSlug } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeEntities, resolveJoin } from './utils/helpers';
+import { parseInput, removeEntities } from './utils/helpers';
 import { createVenueSchema, updateVenueSchema } from './validations';
 
-const venueIncludes = {
-  featuredMedia: { include: { media: true } },
-} satisfies Prisma.VenueInclude;
+type Venue = TableRow<typeof venues>;
 
-/** A venue, with its featured media when its query included them */
-export type VenueSource = WithIncludes<
-  Venue,
-  Prisma.VenueGetPayload<{ include: typeof venueIncludes }>
->;
+/** A venue, with its featured media when its query loaded them */
+export type VenueSource = Venue & { featuredMedia?: TableRow<typeof mediaUploads>[] };
+
+const withMedia = { with: { featuredMedia: venueMedia } };
+
+// Prisma's `contains` matches the text as written, so `%` and `_` aren't wildcards
+const containing = (text: string) => `%${text.replace(/[\\%_]/g, '\\$&')}%`;
 
 const resolvers = {
   Venue: {
@@ -32,44 +33,48 @@ const resolvers = {
       if (venue.latitude === null && venue.longitude === null) return null;
       return { latitude: venue.latitude, longitude: venue.longitude };
     },
-    featuredMedia(venue) {
-      return resolveJoin(venue.featuredMedia, 'media', () =>
-        prisma.venueFeaturedMedia.findMany({
-          where: { venueId: venue.id },
-          include: { media: true },
-        })
-      );
+    async featuredMedia(venue) {
+      if (venue.featuredMedia) {
+        return venue.featuredMedia;
+      }
+      const loaded = await db.find(venues, venue.id, withMedia);
+      return loaded?.featuredMedia ?? [];
     },
   },
   Query: {
     async venues(_, args) {
       const { search, filtered, ...connectionArgs } = args;
-      const where: Prisma.VenueWhereInput = {};
+      let query = db.query(venues);
       if (search) {
-        where.OR = [
-          { name: { contains: search, mode: 'insensitive' } },
-          { slug: { contains: search, mode: 'insensitive' } },
-          { city: { contains: search, mode: 'insensitive' } },
-          { state: { contains: search, mode: 'insensitive' } },
-        ];
+        const pattern = containing(search);
+        query = query.where(
+          or(
+            ilike('name', pattern),
+            ilike('slug', pattern),
+            ilike('city', pattern),
+            ilike('state', pattern)
+          )
+        );
       }
       if (filtered) {
-        where.excludeFromSearch = false;
-        where.permanentlyClosed = false;
+        query = query.where({ excludeFromSearch: false, permanentlyClosed: false });
       }
-      return parseConnection(prisma.venue, connectionArgs, {
-        where,
-        orderBy: { name: 'asc' },
-        include: venueIncludes,
-      });
+      return parseConnection(
+        {
+          count: () => query.count(),
+          findMany: ({ skip, take }) =>
+            query.with(withMedia.with).orderBy('name', 'asc').offset(skip).limit(take).all(),
+        },
+        connectionArgs
+      );
     },
 
     async venue(_, { id, slug }) {
       if (id) {
-        return prisma.venue.findUnique({ where: { id }, include: venueIncludes });
+        return db.find(venues, id, withMedia);
       }
       if (slug) {
-        return prisma.venue.findUnique({ where: { slug }, include: venueIncludes });
+        return db.findOne(venues, { where: { slug }, ...withMedia });
       }
       return null;
     },
@@ -77,45 +82,45 @@ const resolvers = {
   Mutation: {
     async createVenue(_, { input }) {
       const { featuredMedia, coordinates, ...data } = parseInput(createVenueSchema, input);
-      const slug = await getUniqueSlug(prisma.venue, data.name);
+      const slug = await getUniqueSlug(
+        { count: ({ where }) => db.count(venues, { where }) },
+        data.name
+      );
       // Look the venue up unless its coordinates were entered
       const location =
         typeof coordinates?.latitude === 'number' && typeof coordinates.longitude === 'number'
           ? { latitude: coordinates.latitude, longitude: coordinates.longitude }
           : await geocodeVenue(data);
-      return prisma.venue.create({
-        data: {
-          ...data,
-          ...location,
-          slug,
-          featuredMedia: featuredMedia?.length
-            ? { create: featuredMedia.map((mediaId) => ({ mediaId })) }
-            : undefined,
-        },
-        include: venueIncludes,
+      const id = newId();
+      await db.transaction(async (tx) => {
+        await tx.create(venues, { ...data, ...location, id, slug });
+        if (featuredMedia?.length) {
+          await tx.createMany(
+            venueFeaturedMedia,
+            featuredMedia.map((mediaId) => ({ venueId: id, mediaId }))
+          );
+        }
       });
+      return db.find(venues, id, withMedia);
     },
 
     async updateVenue(_, { id, input }) {
       const { featuredMedia, coordinates, ...data } = parseInput(updateVenueSchema, input);
-      const updateData: Prisma.VenueUpdateInput = { ...data };
+      const changes: Partial<Venue> = { ...data };
       if (coordinates) {
-        updateData.latitude = coordinates.latitude;
-        updateData.longitude = coordinates.longitude;
+        changes.latitude = coordinates.latitude;
+        changes.longitude = coordinates.longitude;
       }
       if (typeof featuredMedia !== 'undefined') {
-        await prisma.venueFeaturedMedia.deleteMany({ where: { venueId: id } });
+        await db.deleteMany(venueFeaturedMedia, { where: { venueId: id } });
         if (featuredMedia?.length) {
-          await prisma.venueFeaturedMedia.createMany({
-            data: featuredMedia.map((mediaId) => ({ venueId: id, mediaId })),
-          });
+          await db.createMany(
+            venueFeaturedMedia,
+            featuredMedia.map((mediaId) => ({ venueId: id, mediaId }))
+          );
         }
       }
-      const venue = await prisma.venue.update({
-        where: { id },
-        data: updateData,
-        include: venueIncludes,
-      });
+      const venue = await db.update(venues, id, changes, withMedia);
 
       // Saving an address for a venue without coordinates looks it up, which also fills in any
       // empty part of its address
@@ -124,13 +129,14 @@ const resolvers = {
         return venue;
       }
       const location = await geocodeVenue(venue);
-      return location
-        ? prisma.venue.update({ where: { id }, data: location, include: venueIncludes })
-        : venue;
+      return location ? db.update(venues, id, location, withMedia) : venue;
     },
 
     async removeVenue(_, { ids }) {
-      return removeEntities(prisma.venue, ids);
+      return removeEntities(
+        { deleteMany: ({ where }) => db.deleteMany(venues, { where: inList('id', where.id.in) }) },
+        ids
+      );
     },
   },
 } satisfies Resolvers;

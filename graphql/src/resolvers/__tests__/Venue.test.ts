@@ -1,14 +1,18 @@
-import type { Venue } from '@prisma/client';
+import type { TableRow } from 'remix/data-table';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { venues } from '#/database/tables';
+
 import resolvers from '../Venue';
+
+type Venue = TableRow<typeof venues>;
 
 const { update, geocodeVenue } = vi.hoisted(() => ({
   update: vi.fn(),
   geocodeVenue: vi.fn(),
 }));
 
-vi.mock('#/database', () => ({ default: { venue: { update } } }));
+vi.mock('#/database/db', () => ({ default: { update } }));
 vi.mock('#/geocode', async (importOriginal) => ({
   ...(await importOriginal<typeof import('#/geocode')>()),
   geocodeVenue,
@@ -65,7 +69,7 @@ describe('updateVenue', () => {
   });
 
   it('looks up coordinates when an address is saved without them', async () => {
-    update.mockImplementation(async ({ data }) => venue({ ...saved, ...data }));
+    update.mockImplementation(async (_table, _id, changes) => venue({ ...saved, ...changes }));
     geocodeVenue.mockResolvedValue({ latitude: 40.7193, longitude: -73.9389 });
 
     const result = await resolvers.Mutation.updateVenue({}, { id: 'venue-1', input: saved });
