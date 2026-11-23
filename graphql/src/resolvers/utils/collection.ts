@@ -1,3 +1,5 @@
+import { GraphQLError } from 'graphql';
+
 function base64(i: string) {
   return Buffer.from(i, 'utf8').toString('base64');
 }
@@ -7,9 +9,15 @@ function unbase64(i: string) {
 }
 
 const PREFIX = 'arrayconnection:';
+const CURSOR = /^arrayconnection:(\d{1,9})$/;
 
 function cursorToOffset(cursor: string) {
-  return parseInt(unbase64(cursor).substring(PREFIX.length), 10);
+  const [, offset] = CURSOR.exec(unbase64(cursor)) ?? [];
+  // Cursors come from a connection's edges, so any other is the request's mistake
+  if (offset === undefined) {
+    throw new GraphQLError('Invalid cursor', { extensions: { code: 'BAD_USER_INPUT' } });
+  }
+  return Number(offset);
 }
 
 function offsetToCursor(offset: number) {
@@ -66,7 +74,10 @@ export async function parseConnection<TNode>(
   if (after) {
     offset = cursorToOffset(after) + 1;
   } else if (before) {
-    offset = cursorToOffset(before) - limit;
+    // The records before the cursor, which near the start are fewer than a page
+    const end = cursorToOffset(before);
+    offset = Math.max(0, end - limit);
+    limit = end - offset;
   }
 
   const countArgs = findManyArgs.where ? { where: findManyArgs.where } : undefined;
