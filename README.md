@@ -4,14 +4,14 @@ A full-stack monorepo for [highforthis.com](https://highforthis.com) — a music
 
 ## Workspaces
 
-| Workspace                          | Description                                            |
-| ---------------------------------- | ------------------------------------------------------ |
-| [`graphql`](./graphql)             | GraphQL API server (Apollo Server, Prisma, PostgreSQL) |
-| [`web`](./web)                     | Public site and admin (Remix 3)                        |
-| [`shared`](./shared)               | Logging and OpenTelemetry for GraphQL and web          |
-| [`e2e`](./e2e)                     | Playwright end-to-end tests of the admin               |
-| [`observability`](./observability) | OpenObserve backend and GUI deployment                 |
-| [`apple`](./apple)                 | iOS, iPadOS, macOS and tvOS app (SwiftUI, Apollo iOS)  |
+| Workspace                          | Description                                                      |
+| ---------------------------------- | ---------------------------------------------------------------- |
+| [`graphql`](./graphql)             | GraphQL API server (Apollo Server, remix/data-table, PostgreSQL) |
+| [`web`](./web)                     | Public site and admin (Remix 3)                                  |
+| [`shared`](./shared)               | Logging and OpenTelemetry for GraphQL and web                    |
+| [`e2e`](./e2e)                     | Playwright end-to-end tests of the admin                         |
+| [`observability`](./observability) | OpenObserve backend and GUI deployment                           |
+| [`apple`](./apple)                 | iOS, iPadOS, macOS and tvOS app (SwiftUI, Apollo iOS)            |
 
 ## Requirements
 
@@ -104,7 +104,7 @@ PASSWORD_LOGIN_ENABLED=true
 
 Set the WebAuthn variables on `graphql` and `PASSWORD_LOGIN_ENABLED` on `graphql` and `web`. Keep password login enabled until at least two passkeys have been registered and tested, then set `PASSWORD_LOGIN_ENABLED=false` on both. For local registration, override the relying party values with `WEBAUTHN_RP_ID=localhost` and `WEBAUTHN_ORIGIN=http://localhost:3000`.
 
-The GraphQL Railway pre-deploy command runs `prisma db push` so the passkey tables exist before the new application starts.
+The GraphQL Railway pre-deploy command applies the database migrations (`pnpm db:migrate`) before the new application starts.
 
 ## Production
 

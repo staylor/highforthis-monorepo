@@ -1,7 +1,8 @@
 #!/bin/bash
 # Saves the local database's rows as the seed that db:setup and db:reset load. The seed is public,
-# so it leaves out users, their roles and passkeys, and sign-in challenges: sign in locally with
-# the test admin from `pnpm e2e:admin`.
+# so it leaves out users, their roles, sessions and passkeys, and sign-in challenges: sign in
+# locally with the test admin from `pnpm e2e:admin`. It leaves out the migrations' journal too, as
+# db:setup has written it by the time it loads the seed.
 set -euo pipefail
 
 source "$(dirname "$0")/common"
@@ -12,7 +13,8 @@ DUMP_FILE="dump/highforthis-seed.dump"
 echo "Dumping database $(database_name) to $DUMP_FILE..."
 pg_dump --no-owner --no-privileges --data-only --format=custom \
   --exclude-table-data='public."User"' --exclude-table-data='public."UserRole"' \
-  --exclude-table-data='public."Passkey"' --exclude-table-data='public."WebAuthnChallenge"' \
+  --exclude-table-data='public."Session"' --exclude-table-data='public."Passkey"' \
+  --exclude-table-data='public."WebAuthnChallenge"' --exclude-table-data='public.data_table_migrations' \
   --dbname="$DATABASE_URL" --file="$DUMP_FILE"
 
 echo "Done! Seed file updated: $DUMP_FILE"

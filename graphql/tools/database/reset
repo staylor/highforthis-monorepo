@@ -1,5 +1,5 @@
 #!/bin/bash
-# Drops the database and builds it again from the schema and seed data.
+# Drops the database and builds it again from the migrations and seed data.
 set -euo pipefail
 
 source "$(dirname "$0")/common"

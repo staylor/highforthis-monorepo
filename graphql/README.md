@@ -6,19 +6,31 @@ GraphQL API server for High For This, built with Apollo Server, Remix's Fetch AP
 
 - **[Apollo Server](https://www.apollographql.com/docs/apollo-server/)** — GraphQL server
 - **[Remix](https://remix.run/)** — HTTP server: `remix/node-fetch-server` and `remix/router`, with Remix's CORS and compression middleware, and `remix/form-data-parser` for uploads
-- **[`remix/data-table`](https://github.com/remix-run/remix/tree/main/packages/data-table)** — queries and writes, with `pg`
-- **[Prisma](https://www.prisma.io/)** — the schema, which `prisma db push` applies
+- **[`remix/data-table`](https://github.com/remix-run/remix/tree/main/packages/data-table)** — queries and writes, with `pg`, and the SQL migrations that make the tables
 - **JWT** — Sign-in with a password (`bcryptjs`) or a passkey (`@simplewebauthn/server`), and a session token signed with `jsonwebtoken`
 
 ## Setup
 
 From the monorepo root, `pnpm bootstrap` sets everything up, and `pnpm dev` starts GraphQL with the web app. See the [root README](../README.md#setup).
 
-Bootstrap installs PostgreSQL 18 from the `Brewfile`, creates `graphql/.env` from [`.env.example`](.env.example), and runs `pnpm db:setup`. That creates the database if it's missing, applies the Prisma schema, and loads `dump/highforthis-seed.dump` into an empty database. It's safe to run again; existing data is kept. The seed has no users: `pnpm e2e:admin` creates an admin to sign in with locally.
+Bootstrap installs PostgreSQL 18 from the `Brewfile`, creates `graphql/.env` from [`.env.example`](.env.example), and runs `pnpm db:setup`. That creates the database if it's missing, applies the [migrations](#migrations), and loads `dump/highforthis-seed.dump` into an empty database. It's safe to run again; existing data is kept. The seed has no users: `pnpm e2e:admin` creates an admin to sign in with locally.
 
 `DATABASE_URL` connects as your macOS user, which Homebrew's Postgres sets up as a superuser with no password. Loading the seed needs a superuser, because the restore disables foreign key triggers.
 
-The schema is applied with `prisma db push`; there are no migration files. Railway's pre-deploy command runs the same push against production.
+### Migrations
+
+The tables come from the SQL migrations in [`migrations/`](migrations). `pnpm db:migrate` applies the ones a database hasn't had, through [`remix db migrate`](https://github.com/remix-run/remix/tree/main/packages/data-table#migrations) and the settings in [`remix.json`](remix.json), and Railway's pre-deploy command runs it against production before a new version starts.
+
+Each migration is a directory named for when it was written and what it does, such as `20261123000000_baseline`, with an `up.sql` and, if it can be undone, a `down.sql`. It runs in a transaction, and the `data_table_migrations` table records it with a checksum of its `up.sql`. `db:migrate` stops if a migration that has run has changed since, so once one has reached production, a change to the tables is a new migration.
+
+To change the tables:
+
+1. Add `migrations/<UTC time>_<what it does>/up.sql`, named with a 14-digit time like the others so the migrations sort in order: `date -u +%Y%m%d%H%M%S` prints one. Add a `down.sql` that undoes it, too.
+2. Run `pnpm db:migrate`. To change a migration that hasn't reached production, `pnpm db:rollback` undoes it first.
+3. Describe the change in [`src/database/tables.ts`](src/database/tables.ts), which queries use, and run `pnpm db:check`. It compares `tables.ts` with the database's tables, columns, types, nullability and primary keys, and CI runs it on a database it has just migrated.
+4. If the change is to a table the seed fills, run `pnpm db:dump`, so `db:setup` and `db:reset` can load the seed into the new tables.
+
+The first migration, `20261123000000_baseline`, makes the tables as `prisma db push` left them. A database `prisma db push` built, such as production's, already has them, so there it only records itself.
 
 ### Environment Variables
 
@@ -55,8 +67,8 @@ pnpm db:refresh
 The command reads the public database URL from the Railway `Postgres` service in
 the `production` environment, writes an ignored snapshot to
 `graphql/dump/latest-production.dump`, replaces the local `public` schema, and
-applies the current Prisma schema. It refuses to reset a `DATABASE_URL` whose
-host is not loopback.
+applies the branch's migrations that production hasn't had. It refuses to reset a
+`DATABASE_URL` whose host is not loopback.
 
 If the Railway database service has a different name, set
 `RAILWAY_DATABASE_SERVICE`. You can bypass Railway discovery with an explicit
@@ -95,8 +107,10 @@ pnpm start
 | `pnpm dev`                   | Start in development with watch mode                |
 | `pnpm build`                 | Bundle for production                               |
 | `pnpm start`                 | Start the production server                         |
-| `pnpm db:push`               | Push schema to database                             |
-| `pnpm db:studio`             | Open Prisma Studio                                  |
+| `pnpm db:migrate`            | Apply the migrations the database hasn't had        |
+| `pnpm db:status`             | List the migrations and whether each has run        |
+| `pnpm db:rollback`           | Undo the newest migration                           |
+| `pnpm db:check`              | Compare `src/database/tables.ts` with the database  |
 | `pnpm db:dump`               | Dump database to seed file                          |
 | `pnpm db:refresh`            | Replace local data with a fresh production snapshot |
 | `pnpm db:setup`              | Create, update, and seed the database if it's empty |
@@ -123,7 +137,7 @@ src/
 ├── utils/            # Utility functions
 └── jobs/             # Scheduled tasks (cron)
 tools/
-├── database/         # Seed dump, reset, and production refresh scripts
+├── database/         # Seed dump, reset, production refresh, and the tables.ts check
 ├── apple-music.ts    # Looks up Apple Music's data for the artists that have none
 ├── websites/         # A browser snippet that reads setlists from setlist.fm
 ├── youtube.ts        # Runs the YouTube import
@@ -131,7 +145,6 @@ tools/
 └── listings-urls.ts  # Venue listing page URLs
 dump/
 └── highforthis-seed.dump  # pg_dump used by db:reset
-prisma/
-└── schema.prisma     # Database schema
-prisma.config.ts      # Prisma configuration
+migrations/           # The SQL migrations that make the tables
+remix.json            # Where `remix db` finds the database and the migrations
 ```

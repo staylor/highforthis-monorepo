@@ -99,7 +99,7 @@ pg_restore \
   --exit-on-error \
   "$DUMP_FILE"
 
-echo "Applying the current Prisma schema..."
-pnpm db:push --accept-data-loss
+echo "Applying this branch's migrations..."
+pnpm --silent db:migrate
 
 echo "Done. Local database ${local_database} now contains the latest production data."
