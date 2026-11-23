@@ -62,7 +62,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       # The same steps as `pnpm db:setup`. pg_restore runs in the Postgres container, so its
       # version matches the server's, whatever the runner has installed.
-      - run: pnpm --filter @highforthis/graphql db:push
+      - run: pnpm --filter @highforthis/graphql db:migrate
+      # Fails when src/database/tables.ts no longer describes the tables the migrations make
+      - run: pnpm --filter @highforthis/graphql db:check
       - name: Load the seed data
         env:
           POSTGRES_CONTAINER: ${{ job.services.postgres.id }}

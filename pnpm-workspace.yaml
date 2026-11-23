@@ -6,10 +6,8 @@ packages:
 
 onlyBuiltDependencies:
   - '@apollo/protobufjs'
-  - '@prisma/engines'
   - bcrypt
   - esbuild
-  - prisma
   - sharp
   - unrs-resolver
 

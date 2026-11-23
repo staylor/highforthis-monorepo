@@ -13,8 +13,9 @@ import {
   type TableRowWith,
 } from 'remix/data-table';
 
-// The tables `prisma db push` made, described for remix/data-table. These describe the database;
-// they don't create or change it.
+// The tables the migrations in graphql/migrations make, described for remix/data-table. These
+// describe the database; they don't create or change it. A migration that changes a table changes
+// it here too, and `pnpm db:check`, which CI runs on a migrated database, finds where they differ.
 
 /** What a relation loads: a list of rows, or a row or null */
 export type Loaded<TRelation> =
@@ -553,7 +554,7 @@ export const passkeys = table({
     // `bigint`, which the driver reads as text, keeping every digit
     counter: c.bigint() as ColumnBuilder<string>,
     // `text[]`, which has no column type here. The driver reads and writes it as an array.
-    transports: c.text() as ColumnBuilder<string[] | null>,
+    transports: c.text().nullable() as ColumnBuilder<string[] | null>,
     deviceType: c.text(),
     backedUp: c.boolean(),
     name: c.text().nullable(),

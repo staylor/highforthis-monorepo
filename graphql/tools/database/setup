@@ -1,6 +1,6 @@
 #!/bin/bash
-# Creates the database if it's missing, applies the Prisma schema, and loads the
-# seed data into an empty database. Safe to run again: existing data is kept.
+# Creates the database if it's missing, applies the migrations, and loads the seed data into an
+# empty database. Safe to run again: existing data is kept.
 set -euo pipefail
 
 source "$(dirname "$0")/common"
@@ -23,8 +23,8 @@ CREATE DATABASE :"database";
 SQL
 fi
 
-echo "Applying Prisma schema..."
-pnpm db:push
+echo "Applying migrations..."
+pnpm --silent db:migrate
 
 artists="$(psql --dbname="$DATABASE_URL" --no-psqlrc --tuples-only --no-align \
   --command='SELECT count(*) FROM "Artist"')"
