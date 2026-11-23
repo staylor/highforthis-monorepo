@@ -111,7 +111,6 @@ describe('root controller', () => {
       'graphql:App': () => ({ data: {} }),
       'graphql:PodcastFeed': () => ({ data: {} }),
     });
-    t.mock.method(console, 'error', () => {});
     const response = await router.fetch(new URL(routes.podcastFeed.href(), origin));
     assert.equal(response.status, 500);
     assert.match(response.headers.get('content-type') ?? '', /text\/html/);
@@ -144,6 +143,52 @@ describe('root controller', () => {
       assert.equal(response.status, 404, path);
       assert.match(await response.text(), /Yikes! Not Found!/, path);
     }
+  });
+
+  it('answers 500, not an empty page or a 404, while GraphQL is unreachable', async (t) => {
+    t.mock.method(globalThis, 'fetch', async () => {
+      throw new TypeError('fetch failed');
+    });
+    const paths = [
+      routes.home.href(),
+      routes.posts.href(),
+      routes.post.href({ slug: 'a-post' }),
+      routes.artist.href({ slug: 'wilco' }),
+      routes.venue.href({ slug: 'ryman' }),
+      routes.videos.href(),
+      routes.video.href({ slug: 'a-video' }),
+      routes.shows.index.href(),
+      routes.shows.history.href(),
+      routes.shows.stats.href({ entity: 'artist' }),
+      routes.shows.show.href({ id: 's1' }),
+      routes.podcast.index.href(),
+      routes.podcast.show.href({ id: 'p1' }),
+      routes.podcastFeed.href(),
+    ];
+    for (const path of paths) {
+      const response = await router.fetch(new URL(path, origin));
+      assert.equal(response.status, 500, path);
+      assert.match(await response.text(), /Something went wrong\. Try again in a moment\./, path);
+    }
+    // A page that asks GraphQL for nothing of its own renders without the site's settings
+    assert.equal((await router.fetch(new URL(routes.sphere.href(), origin))).status, 200);
+  });
+
+  it("renders the 404 page for a page of results GraphQL says can't exist", async (t) => {
+    stubGraphQL(t, {
+      'graphql:App': () => ({ data: {} }),
+      'graphql:Videos': () =>
+        Response.json(
+          {
+            errors: [{ message: 'Invalid cursor', extensions: { code: 'BAD_USER_INPUT' } }],
+            data: null,
+          },
+          { status: 400 }
+        ),
+    });
+    const response = await router.fetch(new URL('/videos?after=nonsense', origin));
+    assert.equal(response.status, 404);
+    assert.match(await response.text(), /Yikes! Not Found!/);
   });
 
   it("renders the 404 page for a year that isn't one, without asking GraphQL for it", async (t) => {

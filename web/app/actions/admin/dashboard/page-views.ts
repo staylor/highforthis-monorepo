@@ -1,3 +1,5 @@
+import { logger } from '#/lib/logger.ts';
+
 import { openObserveConfig, search } from './openobserve.ts';
 
 // Page views come from the public site's browser RUM, which records a "view" event per page.
@@ -105,7 +107,7 @@ export async function loadPageViews(now = new Date(), env = process.env): Promis
       },
     };
   } catch (error) {
-    console.error('Loading page views from OpenObserve failed', error);
+    logger.error({ err: error }, 'Loading page views from OpenObserve failed');
     return { status: 'error' };
   }
 }

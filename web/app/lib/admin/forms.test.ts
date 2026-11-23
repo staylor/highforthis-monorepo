@@ -3,7 +3,7 @@ import { gql } from 'graphql-tag';
 import * as assert from 'remix/assert';
 import { describe, it } from 'remix/test';
 
-import type { Variables } from '#/lib/graphql.ts';
+import { GraphQLRequestError, type Variables } from '#/lib/graphql.ts';
 
 import { deleteSelected, isRedirect, parseForm, submitForm, type GraphQLClient } from './forms.ts';
 import { addPageOffset, addSearchParam } from './list-variables.ts';
@@ -34,7 +34,10 @@ const deleteMutation = gql`
 
 type Call = { operation?: string; variables?: Variables };
 
-/** A GraphQL client whose mutations resolve to the given data, recording each one by name. */
+/**
+ * A GraphQL client whose mutations resolve to the given data, or reject with the given error,
+ * recording each one by name.
+ */
 function stubGraphQL(mutate: unknown = {}) {
   const calls: Call[] = [];
   const client: GraphQLClient = {
@@ -43,11 +46,17 @@ function stubGraphQL(mutate: unknown = {}) {
     },
     async mutate(document: DocumentNode, variables?: Variables) {
       calls.push({ operation: getOperationAST(document)?.name?.value, variables });
+      if (mutate instanceof Error) {
+        throw mutate;
+      }
       return mutate as never;
     },
   };
   return { client, calls };
 }
+
+// What the client rejects with when GraphQL turns a mutation down, or can't be reached
+const refused = new GraphQLRequestError('SaveThing failed: Admin access required');
 
 /** A submitted form; an array value is a field repeated, like checked boxes sharing a name. */
 function form(fields: Record<string, string | string[]>) {
@@ -155,9 +164,8 @@ describe('submitForm', () => {
   });
 
   it('says the save failed when GraphQL refuses it', async () => {
-    // The client logs a GraphQL error, such as a missing required field, and returns no data
     const result = await submitForm({
-      gql: stubGraphQL({}).client,
+      gql: stubGraphQL(refused).client,
       formData: form({ title: 'New title' }),
       url: new URL('http://localhost/admin/thing/1?tab=meta&message=updated'),
       mutation: saveMutation,
@@ -237,6 +245,21 @@ describe('submitForm', () => {
   });
 });
 
+describe('a mutation that breaks for another reason', () => {
+  it("isn't taken for a save or a delete that failed", async () => {
+    const bug = new TypeError('a bug');
+    const args = { formData: form({ ids: '1' }), url: new URL('http://localhost/admin/thing') };
+    await assert.rejects(
+      submitForm({ ...args, gql: stubGraphQL(bug).client, mutation: saveMutation }),
+      TypeError
+    );
+    await assert.rejects(
+      deleteSelected({ ...args, gql: stubGraphQL(bug).client, mutation: deleteMutation }),
+      TypeError
+    );
+  });
+});
+
 describe('deleteSelected', () => {
   it('deletes the checked rows and says how many', async () => {
     const { client, calls } = stubGraphQL({ removeThing: true });
@@ -252,9 +275,8 @@ describe('deleteSelected', () => {
   });
 
   it('says the delete failed when GraphQL refuses it', async () => {
-    // The client logs a GraphQL error, such as a missing admin session, and returns no data
     const result = await deleteSelected({
-      gql: stubGraphQL({}).client,
+      gql: stubGraphQL(refused).client,
       formData: form({ ids: ['1', '2'] }),
       url: new URL('http://localhost/admin/thing?page=2'),
       mutation: deleteMutation,

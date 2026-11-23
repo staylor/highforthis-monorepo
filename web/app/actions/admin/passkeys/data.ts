@@ -1,12 +1,9 @@
-import { graphqlHost } from '#/lib/graphql.ts';
+import { graphqlFetch } from '#/lib/graphql.ts';
 
 import type { PasskeyListResponse } from './types.ts';
 
-// Looked up per request rather than captured at startup, so tests can stub fetch.
-const fetchNow: typeof fetch = (input, init) => globalThis.fetch(input, init);
-
 export function passkeyApi(token: string, path: string, init?: RequestInit) {
-  return fetchNow(`${graphqlHost}/auth/passkeys${path}`, {
+  return graphqlFetch(`/auth/passkeys${path}`, {
     ...init,
     headers: {
       Authorization: `Bearer ${token}`,

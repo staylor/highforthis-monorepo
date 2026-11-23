@@ -1,3 +1,5 @@
+import { logger } from '#/lib/logger.ts';
+
 import { openObserveConfig, search } from './openobserve.ts';
 
 // How the site has performed lately. Core Web Vitals come from visitors' browsers through RUM,
@@ -151,7 +153,7 @@ export async function loadPerformance(
     ]);
     return { status: 'ok', performance: summarize(vitals, pages, errors, graphql) };
   } catch (error) {
-    console.error('Loading performance from OpenObserve failed', error);
+    logger.error({ err: error }, 'Loading performance from OpenObserve failed');
     return { status: 'error' };
   }
 }

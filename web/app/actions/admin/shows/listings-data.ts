@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
 
 import type { GraphQLClient, RedirectResult } from '#/lib/admin/forms.ts';
+import { attempt } from '#/lib/graphql.ts';
 import type { ImportListingsMutation, VenueListingsAdminQuery } from '#/types/graphql.ts';
 import { splitArtists } from '#/ui/admin/public/split-artists.ts';
 
@@ -77,11 +78,10 @@ export async function importListings({
     };
   });
 
-  const result = await client.mutate<Partial<ImportListingsMutation>>(importMutation, {
-    venueId,
-    input,
-  });
-  const imported = result.importListings;
+  const { data } = await attempt(
+    client.mutate<ImportListingsMutation>(importMutation, { venueId, input })
+  );
+  const imported = data?.importListings;
   if (!imported) {
     return { failed: true };
   }

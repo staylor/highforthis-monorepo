@@ -8,6 +8,7 @@ import {
   type RedirectResult,
 } from '#/lib/admin/forms.ts';
 import { addPageOffset } from '#/lib/admin/list-variables.ts';
+import { attempt } from '#/lib/graphql.ts';
 import type {
   AddAlbumCoversMutation,
   AlbumCoversAdminQuery,
@@ -212,10 +213,10 @@ export async function addAlbumCovers({
   formData: FormData;
 }): Promise<{ failed: true } | RedirectResult> {
   const ids = formData.getAll('selected').map(String);
-  const result = await client.mutate<Partial<AddAlbumCoversMutation>>(addAlbumCoversMutation, {
-    ids,
-  });
-  const added = result.addAlbumCovers;
+  const { data } = await attempt(
+    client.mutate<AddAlbumCoversMutation>(addAlbumCoversMutation, { ids })
+  );
+  const added = data?.addAlbumCovers;
   if (!added) {
     return { failed: true };
   }

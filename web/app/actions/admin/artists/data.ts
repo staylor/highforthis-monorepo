@@ -9,6 +9,7 @@ import {
   type GraphQLClient,
 } from '#/lib/admin/forms.ts';
 import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import { attempt } from '#/lib/graphql.ts';
 import type {
   ArtistEditQuery,
   ArtistsAdminQuery,
@@ -140,11 +141,13 @@ export async function setArtistExcludeFromSearch({
   formData: FormData;
 }) {
   const { id, excludeFromSearch } = parseForm(formData);
-  const result = await client.mutate<UpdateArtistExcludeMutation>(excludeArtistMutation, {
-    id,
-    input: { excludeFromSearch: excludeFromSearch === true },
-  });
-  return Boolean(result.updateArtist);
+  const { data } = await attempt(
+    client.mutate<UpdateArtistExcludeMutation>(excludeArtistMutation, {
+      id,
+      input: { excludeFromSearch: excludeFromSearch === true },
+    })
+  );
+  return Boolean(data?.updateArtist);
 }
 
 export function deleteArtists(args: FormArgs) {
