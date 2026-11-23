@@ -1,6 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { colorTransition, dark, lg, sm, text } from '#/ui/public/styles.ts';
+import { colorTransition, lg, sm, text } from '#/ui/public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { adminHref, adminNav, isSectionActive, type NavSection } from './nav.ts';
@@ -27,10 +27,7 @@ const srOnly = {
   whiteSpace: 'nowrap',
 } as const;
 
-const borderColor = {
-  borderColor: 'oklch(92.2% 0 none / 0.8)',
-  [dark]: { borderColor: 'rgb(255 255 255 / 0.1)' },
-};
+const borderColor = { borderColor: 'oklch(92.2% 0 none / 0.8)' };
 
 // A section's link, pink while it's the current section
 const sectionLink = css({
@@ -48,16 +45,10 @@ const sectionLink = css({
   color: 'var(--neutral-600)',
   '&:visited': { color: 'var(--neutral-600)' },
   '&:hover': { backgroundColor: 'var(--neutral-100)', color: 'var(--neutral-900)' },
-  [dark]: {
-    color: 'var(--neutral-400)',
-    '&:visited': { color: 'var(--neutral-400)' },
-    '&:hover': { backgroundColor: 'rgb(255 255 255 / 0.05)', color: '#fff' },
-  },
   '&[aria-current="page"]': {
     backgroundColor: 'rgb(229 0 130 / 0.1)',
     color: 'var(--pink)',
     '&:visited': { color: 'var(--pink)' },
-    [dark]: { backgroundColor: 'rgb(229 0 130 / 0.15)' },
   },
   [lg]: { [collapsed]: { justifyContent: 'center', paddingInline: 0 } },
 });
@@ -91,12 +82,7 @@ const pageLink = css({
   textDecoration: 'none',
   color: 'var(--neutral-500)',
   '&:hover': { color: 'var(--neutral-900)' },
-  [dark]: { color: 'var(--neutral-400)', '&:hover': { color: '#fff' } },
-  '&[aria-current="page"]': {
-    fontWeight: 600,
-    color: 'var(--neutral-900)',
-    [dark]: { color: '#fff' },
-  },
+  '&[aria-current="page"]': { fontWeight: 600, color: 'var(--neutral-900)' },
 });
 
 // A section and its pages (data-section marks it for the pages' flyout)
@@ -131,7 +117,6 @@ const pageList = css({
         backgroundColor: '#fff',
         padding: '0.5rem',
         boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-        [dark]: { backgroundColor: 'var(--surface-dark-card)' },
       },
     },
   },
@@ -146,7 +131,6 @@ const flyoutTitle = css({
   letterSpacing: '0.025em',
   textTransform: 'uppercase',
   color: 'var(--neutral-900)',
-  [dark]: { color: '#fff' },
   [lg]: { [collapsed]: { display: 'block' } },
 });
 
@@ -277,7 +261,6 @@ function Brand(handle: Handle) {
           textTransform: 'uppercase',
           textDecoration: 'none',
           '&:hover': { color: 'var(--pink)' },
-          [dark]: { color: '#fff' },
         })}
       >
         <span mix={css({ [lg]: { [collapsed]: { display: 'none' } } })}>{title}</span>
@@ -293,13 +276,7 @@ export function AdminShell(handle: Handle<{ children?: RemixNode }>) {
   return () => {
     const { t } = getAdmin(handle);
     return (
-      <div
-        mix={css({
-          minHeight: '100vh',
-          backgroundColor: '#fff',
-          [dark]: { backgroundColor: 'var(--surface-dark)' },
-        })}
-      >
+      <div mix={css({ minHeight: '100vh', backgroundColor: '#fff' })}>
         <aside
           mix={css({
             position: 'fixed',
@@ -315,7 +292,6 @@ export function AdminShell(handle: Handle<{ children?: RemixNode }>) {
             transitionProperty: 'width',
             ...widthTransition,
             [lg]: { display: 'flex', [collapsed]: { width: railWidth } },
-            [dark]: { ...borderColor[dark], backgroundColor: 'var(--surface-dark-elevated)' },
           })}
         >
           <div
@@ -356,7 +332,6 @@ export function AdminShell(handle: Handle<{ children?: RemixNode }>) {
               backgroundColor: 'rgb(255 255 255 / 0.9)',
               backdropFilter: 'blur(24px)',
               [lg]: { display: 'none' },
-              [dark]: { ...borderColor[dark], backgroundColor: 'rgb(10 10 10 / 0.9)' },
             })}
           >
             <details>
@@ -372,14 +347,7 @@ export function AdminShell(handle: Handle<{ children?: RemixNode }>) {
                   '&::-webkit-details-marker': { display: 'none' },
                 })}
               >
-                <Icon
-                  name="menu"
-                  size="1.5rem"
-                  mix={css({
-                    color: 'var(--neutral-700)',
-                    [dark]: { color: 'var(--neutral-200)' },
-                  })}
-                />
+                <Icon name="menu" size="1.5rem" mix={css({ color: 'var(--neutral-700)' })} />
                 <Brand />
               </summary>
               <div

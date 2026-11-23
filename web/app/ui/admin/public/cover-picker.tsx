@@ -1,6 +1,6 @@
 import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { dark, lg, merge, sm, text } from '#/ui/public/styles.ts';
+import { lg, merge, sm, text } from '#/ui/public/styles.ts';
 
 import { button, disabledFades } from './styles.ts';
 
@@ -88,7 +88,6 @@ export const CoverPicker = clientEntry(
                         width: '100%',
                         backgroundColor: 'var(--neutral-100)',
                         objectFit: 'cover',
-                        [dark]: { backgroundColor: 'var(--neutral-800)' },
                       })}
                     />
                     <input
@@ -123,7 +122,6 @@ export const CoverPicker = clientEntry(
                           display: 'block',
                           ...text.xs,
                           color: 'var(--neutral-500)',
-                          [dark]: { color: 'var(--neutral-400)' },
                         })}
                       >
                         {album.details}

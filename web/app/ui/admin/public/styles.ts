@@ -1,6 +1,6 @@
 import { css } from 'remix/component';
 
-import { colorTransition, dark, lg, merge, sm, text, type Styles } from '#/ui/public/styles.ts';
+import { colorTransition, lg, merge, sm, text, type Styles } from '#/ui/public/styles.ts';
 
 /** The admin's text fields and selects, on top of base.css's defaults for them. */
 export const input = {
@@ -58,7 +58,6 @@ export const label = css({
   ...text.sm,
   letterSpacing: '0.025em',
   color: 'var(--gray-700)',
-  [dark]: { color: 'var(--neutral-300)' },
 });
 
 /** A link in pink, underlined. */

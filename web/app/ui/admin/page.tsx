@@ -1,6 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { dark, merge, text } from '#/ui/public/styles.ts';
+import { merge, text } from '#/ui/public/styles.ts';
 
 import { button, heading1 } from './public/styles.ts';
 
@@ -13,7 +13,6 @@ export function Heading(handle: Handle<{ children?: RemixNode }>) {
         display: 'inline-block',
         verticalAlign: 'middle',
         ...heading1,
-        [dark]: { color: '#fff' },
       })}
     >
       {handle.props.children}
@@ -41,7 +40,6 @@ export function Alert(handle: Handle<{ children?: RemixNode }>) {
         padding: '0.75rem 1rem',
         ...text.sm,
         color: 'var(--red-900)',
-        [dark]: { backgroundColor: 'oklch(25.8% 0.092 26.042 / 0.3)', color: 'var(--red-200)' },
       })}
     >
       {handle.props.children}

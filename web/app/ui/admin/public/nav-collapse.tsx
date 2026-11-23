@@ -1,6 +1,6 @@
 import { clientEntry, css, on, type Handle } from 'remix/component';
 
-import { colorTransition, dark, text } from '#/ui/public/styles.ts';
+import { colorTransition, text } from '#/ui/public/styles.ts';
 
 import { Icon } from './icon.tsx';
 
@@ -44,10 +44,6 @@ const button = css({
   outline: 'none',
   '&:hover': { backgroundColor: 'var(--neutral-100)', color: 'var(--neutral-900)' },
   '&:focus-visible': { boxShadow: '0 0 0 2px rgb(229 0 130 / 0.5)' },
-  [dark]: {
-    color: 'var(--neutral-400)',
-    '&:hover': { backgroundColor: 'rgb(255 255 255 / 0.05)', color: '#fff' },
-  },
   '& svg': { flexShrink: 0, transitionProperty: 'transform', transitionDuration: '200ms' },
   '&[aria-expanded="false"] svg': { transform: 'rotate(180deg)' },
   '&[aria-expanded="false"]': { justifyContent: 'center', paddingInline: 0 },
