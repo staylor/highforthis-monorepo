@@ -1,14 +1,16 @@
 import { css } from 'remix/component';
-import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
 import { selectedMedia } from '#/actions/admin/media/data.ts';
 import {
+  backTo,
+  backToList,
+  renderAdminNotFound,
   renderAdminPage,
   type AdminContext,
   type AdminPageContext,
 } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
+import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -21,6 +23,7 @@ import { HeaderAdd, Heading } from '#/ui/admin/page.tsx';
 import { FeaturedMedia } from '#/ui/admin/public/featured-media.tsx';
 import { InlineToggle } from '#/ui/admin/public/inline-toggle.tsx';
 import { pinkLink } from '#/ui/admin/public/styles.ts';
+import { artworkUrl } from '#/ui/public/media.ts';
 
 import {
   createArtist,
@@ -40,11 +43,6 @@ const artists = routes.admin.artists;
 
 type ArtistRow = NonNullable<ArtistsAdminQuery['artists']>['edges'][number]['node'];
 type Artist = NonNullable<ArtistEditQuery['artist']>;
-
-const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
-
-/** Apple Music's artwork URL at a size: it has {w} and {h} placeholders. */
-const artworkUrl = (url: string, size: number) => url.replace(/\{[wh]\}/g, String(size));
 
 function artistFields(t: TFunction, artist?: Artist): Field[] {
   const artwork = artist?.appleMusic?.artwork?.url;
@@ -192,7 +190,7 @@ export const artistsList = createController(artists.list, {
         const saved = await setArtistExcludeFromSearch({ gql: context.admin.gql, formData });
         return new Response(null, { status: saved ? 204 : 500 });
       }
-      return createRedirectResponse(`${context.url.pathname}${context.url.search}`, 303);
+      return backToList(context.url);
     },
   },
 });
@@ -229,7 +227,7 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
   const t = getAdminT();
   const { artist, shows } = await loadArtist({ gql: context.admin.gql, id });
   if (!artist) {
-    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+    return renderAdminNotFound(context);
   }
   const label = t('artists.edit');
   const artistShows = (shows?.edges ?? []).map(({ node }) => ({

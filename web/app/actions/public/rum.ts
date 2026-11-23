@@ -75,8 +75,5 @@ export async function startRum(config: OpenObserveRumConfig) {
 
   const startView = () => rum.startView({ name: window.location.pathname });
   startView();
-  (window as Window & { navigation?: EventTarget }).navigation?.addEventListener(
-    'navigatesuccess',
-    startView
-  );
+  window.navigation?.addEventListener('navigatesuccess', startView);
 }

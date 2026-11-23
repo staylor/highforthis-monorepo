@@ -1,6 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import type { MetaTag } from '#/actions/document.tsx';
+import { sharingTags, type MetaTag } from '#/actions/document.tsx';
 
 import { Heading1 } from './heading.tsx';
 import { lines } from './lines.tsx';
@@ -18,18 +18,12 @@ export function podcastMetaTags({
   url?: string | null;
   image?: { destination: string; fileName: string } | null;
 }): MetaTag[] {
-  const featuredImage = image ? uploadUrl(image.destination, image.fileName) : undefined;
-  return [
-    { property: 'og:type', content: 'article' },
-    { property: 'og:title', content: title },
-    { property: 'og:description', content: description },
-    { property: 'og:url', content: url },
-    { property: 'og:image', content: featuredImage },
-    { property: 'twitter:title', content: title },
-    { property: 'twitter:description', content: description },
-    { property: 'twitter:url', content: url },
-    { property: 'twitter:image', content: featuredImage },
-  ];
+  return sharingTags({
+    title,
+    description,
+    url,
+    image: image ? uploadUrl(image.destination, image.fileName) : undefined,
+  });
 }
 
 const storeLink = css({

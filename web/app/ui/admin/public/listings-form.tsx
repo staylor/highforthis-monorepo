@@ -3,7 +3,15 @@ import { clientEntry, css, on, type Handle } from 'remix/component';
 import { merge, text } from '#/ui/public/styles.ts';
 
 import { splitArtists } from './split-artists.ts';
-import { button, disabledFades, table, tableScroller, wideInput } from './styles.ts';
+import {
+  button,
+  checkbox,
+  disabledFades,
+  pinkLink,
+  table,
+  tableScroller,
+  wideInput,
+} from './styles.ts';
 
 // A row per upcoming show, with a box to pick it and the artists to add it with. The page
 // translates and formats everything on the server, since the browser has no translations; the
@@ -70,16 +78,6 @@ const pill = css({
   '&[data-new]': { borderColor: 'var(--amber-600)', color: 'var(--amber-700)' },
 });
 
-const checkbox = {
-  borderRadius: '0.25rem',
-  borderColor: 'var(--gray-300)',
-  color: 'var(--pink)',
-  boxShadow: 'var(--shadow-sm)',
-  '&:focus': { boxShadow: '0 0 0 2px #fff, 0 0 0 4px var(--pink), var(--shadow-sm)' },
-};
-
-const pinkLink = css({ color: 'var(--pink)', textDecoration: 'underline' });
-
 export const ListingsForm = clientEntry(
   import.meta.url,
   function ListingsForm(handle: Handle<ListingsFormProps>) {
@@ -111,7 +109,7 @@ export const ListingsForm = clientEntry(
               disabled={!listing.canAdd}
               aria-label={listing.selectLabel}
               mix={[
-                css({ ...checkbox, '&:disabled': { opacity: 0.4 } }),
+                checkbox,
                 on('change', (event) => {
                   if (event.currentTarget.checked) {
                     selected.add(listing.sourceId);
@@ -239,7 +237,7 @@ export const ListingsForm = clientEntry(
                 type="checkbox"
                 checked={hideAdded}
                 mix={[
-                  css(checkbox),
+                  checkbox,
                   on('change', (event) => {
                     hideAdded = event.currentTarget.checked;
                     handle.update();

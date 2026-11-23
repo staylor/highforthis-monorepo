@@ -9,7 +9,14 @@ import { Message } from './message.tsx';
 import { AutoSubmitSelect } from './public/auto-submit-select.tsx';
 import { ConfirmButton } from './public/confirm-button.tsx';
 import { SelectAll } from './public/select-all.tsx';
-import { button, table, tableScroller, toolbarSelect, wideInput } from './public/styles.ts';
+import {
+  button,
+  checkbox,
+  table,
+  tableScroller,
+  toolbarSelect,
+  wideInput,
+} from './public/styles.ts';
 
 // Works as plain HTML: each row's checkbox belongs to the bulk actions form through the `form`
 // attribute, search is a GET form, and paging is links.
@@ -279,13 +286,6 @@ interface ListTableProps {
   perPage?: number;
 }
 
-const rowCheckbox = css({
-  borderRadius: '0.25rem',
-  borderColor: 'var(--gray-300)',
-  color: 'var(--pink)',
-  '&:focus': { boxShadow: '0 0 0 2px #fff, 0 0 0 4px var(--pink-200)' },
-});
-
 export function ListTable(handle: Handle<ListTableProps>) {
   return () => {
     const { t, url } = getAdmin(handle);
@@ -364,7 +364,7 @@ export function ListTable(handle: Handle<ListTableProps>) {
                         value={node.id}
                         form={BULK_FORM}
                         aria-label={t('table.select')}
-                        mix={rowCheckbox}
+                        mix={checkbox}
                       />
                     )}
                   </th>

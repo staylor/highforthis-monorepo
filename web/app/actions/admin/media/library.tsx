@@ -1,9 +1,14 @@
 import { css, unsafeHTML } from 'remix/component';
-import { createRedirectResponse } from 'remix/response/redirect';
 import { createAction, createController } from 'remix/router';
 
-import { renderAdminPage, type AdminContext } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
+import {
+  backTo,
+  backToList,
+  renderAdminNotFound,
+  renderAdminPage,
+  type AdminContext,
+} from '#/actions/admin/render-page.tsx';
+import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -44,8 +49,6 @@ interface Crop {
   height?: number | null;
   fileSize?: number;
 }
-
-const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
 
 function formatFileSize(bytes: number) {
   const units = ['B', 'kB', 'MB', 'GB', 'TB'];
@@ -155,7 +158,7 @@ export const mediaList = createController(media.list, {
     async action(context) {
       const formData = await context.request.formData();
       if (formData.get('intent') !== 'delete') {
-        return createRedirectResponse(`${context.url.pathname}${context.url.search}`, 303);
+        return backToList(context.url);
       }
       return backTo(await deleteMedia({ gql: context.admin.gql, formData, url: context.url }));
     },
@@ -420,7 +423,7 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
   const t = getAdminT();
   const { media: upload } = await loadMedia({ gql: context.admin.gql, id });
   if (!upload) {
-    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+    return renderAdminNotFound(context);
   }
   const label = t('media.edit');
   return renderAdminPage(

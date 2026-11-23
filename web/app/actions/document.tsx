@@ -1,15 +1,42 @@
 import { unsafeHTML, type Handle, type RemixNode } from 'remix/component';
-import { ImportMap } from 'remix/component/server';
 
-import { scriptEntry, stylesheetHrefs } from '#/assets.ts';
+import { stylesheetHrefs } from '#/assets.ts';
 import { rumConfig } from '#/lib/rum.ts';
 import { AppProvider, type AppValue } from '#/ui/app-context.tsx';
 import { Layout, Wrapper } from '#/ui/layout.tsx';
 import { TWITTER_USERNAME } from '#/ui/social-icons.tsx';
 
+import { Fonts, Scripts } from './document-parts.tsx';
+
 export interface MetaTag {
   property: string;
   content?: string | null;
+}
+
+interface Sharing {
+  title: string;
+  description?: string | null;
+  /** The page's own address. */
+  url?: string | null;
+  image?: string | null;
+  /** Shows the image large, as a post's is. */
+  largeImage?: boolean;
+}
+
+/** How a page looks when it's shared: its title, description, address and image. */
+export function sharingTags({ title, description, url, image, largeImage }: Sharing): MetaTag[] {
+  return [
+    { property: 'og:type', content: 'article' },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: description },
+    { property: 'og:url', content: url },
+    { property: 'og:image', content: image },
+    { property: 'twitter:title', content: title },
+    { property: 'twitter:description', content: description },
+    { property: 'twitter:url', content: url },
+    { property: 'twitter:image', content: image },
+    ...(largeImage ? [{ property: 'twitter:card', content: 'summary_large_image' }] : []),
+  ];
 }
 
 interface DocumentProps {
@@ -31,7 +58,6 @@ export function Document(handle: Handle<DocumentProps>) {
   return () => {
     const { app, title, meta = [], head, layout = 'app', nonce, children } = handle.props;
     const { podcastSettings, siteSettings } = app.root;
-    const { href, importMap, preloads } = scriptEntry;
 
     return (
       <html lang={siteSettings?.language || 'en'} data-rmx-preserve-attrs="class">
@@ -56,13 +82,7 @@ export function Document(handle: Handle<DocumentProps>) {
             />
           )}
           <link rel="preconnect" href="https://storage.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-          />
-          <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+          <Fonts />
           {stylesheetHrefs.site.map((stylesheetHref) => (
             <link key={stylesheetHref} rel="stylesheet" href={stylesheetHref} />
           ))}
@@ -75,11 +95,7 @@ export function Document(handle: Handle<DocumentProps>) {
             />
           )}
           {head}
-          <ImportMap value={importMap} />
-          {preloads.map((preloadHref) => (
-            <link key={preloadHref} rel="modulepreload" href={preloadHref} />
-          ))}
-          <script type="module" src={href} nonce={nonce}></script>
+          <Scripts nonce={nonce} />
         </head>
         <body>
           <AppProvider value={app}>

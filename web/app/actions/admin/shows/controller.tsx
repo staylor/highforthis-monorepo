@@ -1,9 +1,15 @@
 import { css } from 'remix/component';
-import { createRedirectResponse } from 'remix/response/redirect';
 import { createController } from 'remix/router';
 
-import { renderAdminPage, type AdminContext } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type RedirectResult, type SaveFailure } from '#/lib/admin/forms.ts';
+import {
+  backTo,
+  backToList,
+  renderAdminNotFound,
+  renderAdminPage,
+  type AdminContext,
+} from '#/actions/admin/render-page.tsx';
+import { dateTime } from '#/lib/admin/date-time.ts';
+import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -39,17 +45,6 @@ const shows = routes.admin.shows;
 
 type ShowRow = NonNullable<ShowsAdminQuery['shows']>['edges'][number]['node'];
 type ShowFormData = ShowEditQuery | ShowEntitiesQuery;
-
-const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
-
-const pad = (n: number) => String(n).padStart(2, '0');
-
-function showDate(timestamp: number) {
-  const d = new Date(timestamp);
-  const hours = d.getHours();
-  const time = `${hours % 12 || 12}:${pad(d.getMinutes())}${hours < 12 ? 'am' : 'pm'}`;
-  return `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${d.getFullYear()} at ${time}`;
-}
 
 interface Entity {
   id: string;
@@ -212,7 +207,7 @@ export const showsList = createController(shows.list, {
             />
           ),
         },
-        { label: t('shows.date'), render: (show: ShowRow) => showDate(show.date) },
+        { label: t('shows.date'), render: (show: ShowRow) => dateTime(show.date) },
       ];
 
       return renderAdminPage(
@@ -252,7 +247,7 @@ export const showsList = createController(shows.list, {
         const saved = await setShowAttended({ gql: context.admin.gql, formData });
         return new Response(null, { status: saved ? 204 : 500 });
       }
-      return createRedirectResponse(`${context.url.pathname}${context.url.search}`, 303);
+      return backToList(context.url);
     },
   },
 });
@@ -295,7 +290,7 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
   const t = getAdminT();
   const data = await loadShow({ gql: context.admin.gql, id });
   if (!data.show) {
-    return renderAdminPage(context, <Heading>{t('table.noItems')}</Heading>, { status: 404 });
+    return renderAdminNotFound(context);
   }
   const label = t('shows.edit');
   return renderAdminPage(

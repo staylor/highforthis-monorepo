@@ -1,7 +1,7 @@
 import { unsafeHTML, type Handle, type RemixNode } from 'remix/component';
-import { ImportMap } from 'remix/component/server';
 
-import { scriptEntry, stylesheetHrefs } from '#/assets.ts';
+import { Fonts, Scripts } from '#/actions/document-parts.tsx';
+import { stylesheetHrefs } from '#/assets.ts';
 import { AdminProvider, type AdminValue } from '#/ui/admin/context.tsx';
 import { AdminShell } from '#/ui/admin/shell.tsx';
 
@@ -23,7 +23,6 @@ const beforePaintScript = `try{if(localStorage.getItem('adminNavCollapsed'))docu
 export function AdminDocument(handle: Handle<AdminDocumentProps>) {
   return () => {
     const { admin, title, bare, nonce, children } = handle.props;
-    const { href, importMap, preloads } = scriptEntry;
 
     return (
       <html lang="en" data-rmx-preserve-attrs="data-nav">
@@ -33,21 +32,11 @@ export function AdminDocument(handle: Handle<AdminDocumentProps>) {
           <meta name="robots" content="noindex" />
           <title>{title}</title>
           <script nonce={nonce} innerHTML={unsafeHTML(beforePaintScript)} />
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-          />
-          <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+          <Fonts />
           {stylesheetHrefs.admin.map((stylesheetHref) => (
             <link key={stylesheetHref} rel="stylesheet" href={stylesheetHref} />
           ))}
-          <ImportMap value={importMap} />
-          {preloads.map((preloadHref) => (
-            <link key={preloadHref} rel="modulepreload" href={preloadHref} />
-          ))}
-          <script type="module" src={href} nonce={nonce}></script>
+          <Scripts nonce={nonce} />
         </head>
         <body>
           <AdminProvider value={admin}>

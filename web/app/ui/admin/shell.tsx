@@ -1,6 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
-import { colorTransition, lg, sm, text } from '#/ui/public/styles.ts';
+import { colorTransition, lg, sm, text, visuallyHidden } from '#/ui/public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { adminHref, adminNav, isSectionActive, type NavSection } from './nav.ts';
@@ -16,16 +16,6 @@ const collapsed = ':where(html[data-nav="collapsed"]) &';
 const railWidth = '4rem';
 const sidebarWidth = '16rem';
 const widthTransition = { transitionDuration: '200ms', transitionTimingFunction: 'var(--ease)' };
-
-// Hidden but still read out, as a collapsed rail's labels are
-const srOnly = {
-  position: 'absolute',
-  width: '1px',
-  height: '1px',
-  overflow: 'hidden',
-  clip: 'rect(0 0 0 0)',
-  whiteSpace: 'nowrap',
-} as const;
 
 const borderColor = { borderColor: 'oklch(92.2% 0 none / 0.8)' };
 
@@ -58,7 +48,8 @@ const label = css({
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
-  [lg]: { [collapsed]: srOnly },
+  // Still read out
+  [lg]: { [collapsed]: visuallyHidden },
 });
 
 // The sign-out button, looking like the links around it

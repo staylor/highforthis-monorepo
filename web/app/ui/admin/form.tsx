@@ -1,7 +1,7 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
 import type { SaveFailure } from '#/lib/admin/forms.ts';
-import { lg, merge, sm, text } from '#/ui/public/styles.ts';
+import { lg, sm, text } from '#/ui/public/styles.ts';
 
 import { getAdmin } from './context.tsx';
 import { Alert } from './page.tsx';
@@ -30,8 +30,6 @@ export interface Field {
   render?: () => RemixNode;
 }
 
-const checkboxStyle = css(merge(checkbox, { '&:focus': { borderColor: 'var(--pink)' } }));
-
 function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>) {
   return () => {
     const { field, value, id } = handle.props;
@@ -59,7 +57,7 @@ function FieldInput(handle: Handle<{ field: Field; value: unknown; id: string }>
           name={field.prop}
           value="true"
           checked={Boolean(value)}
-          mix={checkboxStyle}
+          mix={checkbox}
           id={id}
         />
       );
