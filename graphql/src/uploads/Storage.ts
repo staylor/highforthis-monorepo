@@ -5,10 +5,8 @@ import { mediaExtension, UploadError } from './mediaTypes';
 import Audio from './types/Audio';
 import Image from './types/Image';
 import type Upload from './types/Upload';
-import type { FileData, IncomingFile } from './types/Upload';
+import type { IncomingFile } from './types/Upload';
 import Video from './types/Video';
-
-export type Callback = (error: Error | null, info?: FileData) => void;
 
 export interface UploadOpts {
   uploadDir: string;
@@ -40,22 +38,18 @@ export async function storeFile(file: IncomingFile, uploadDir: string, adapter?:
   } else {
     upload = new Video(uploadOpts);
   }
-  const { promise, resolve, reject } = Promise.withResolvers<FileData>();
-  upload
-    .save(file, async (err, fileData) => {
-      if (err || !fileData) {
-        reject(err ?? new Error('The upload was saved without its details'));
-        return;
-      }
-      try {
-        if (adapter) {
-          await upload.process(adapter);
-        }
-        resolve(fileData);
-      } catch (error) {
-        reject(error);
-      }
-    })
-    .catch(reject);
-  return promise;
+
+  try {
+    const fileData = await upload.save(file);
+    if (adapter) {
+      await upload.process(adapter);
+    }
+    return fileData;
+  } finally {
+    // Uploads are served from the bucket, so the copies written here have done their job once
+    // it has them, or once the upload has failed
+    if (adapter) {
+      await upload.removeLocalFiles();
+    }
+  }
 }

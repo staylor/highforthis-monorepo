@@ -6,6 +6,7 @@ import sharp from 'sharp';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { storeFile } from '../Storage';
+import type { StorageAdapter } from '../adapter';
 import Image from '../types/Image';
 
 const { findUnique, findMany } = vi.hoisted(() => ({ findUnique: vi.fn(), findMany: vi.fn() }));
@@ -21,6 +22,27 @@ const jpeg = () =>
   sharp({ create: { width: 4, height: 4, channels: 3, background: '#000' } })
     .jpeg()
     .toBuffer();
+
+/** A bucket that takes the files it's given, or fails with `error`, and says which were there */
+function bucket(error?: Error) {
+  const copied: string[] = [];
+  const run = async (files: { destination: string; fileName: string }[]) => {
+    for (const { destination, fileName } of files) {
+      await fs.access(path.join(destination, fileName));
+      copied.push(fileName);
+    }
+    if (error) {
+      throw error;
+    }
+    return files.map(() => true);
+  };
+  return { copied, adapter: { run } as unknown as StorageAdapter };
+}
+
+const filesIn = async (dir: string) =>
+  (await fs.readdir(dir, { recursive: true, withFileTypes: true })).filter((entry) =>
+    entry.isFile()
+  );
 
 describe('storeFile', () => {
   let uploadDir: string;
@@ -63,4 +85,36 @@ describe('storeFile', () => {
 
     await expect(storeFile(imageFile(await jpeg()), uploadDir)).rejects.toThrow('crop failed');
   });
+
+  it('copies an image and its crops to the bucket, then removes them from the upload folder', async () => {
+    const { adapter, copied } = bucket();
+
+    const stored = await storeFile(imageFile(await jpeg()), uploadDir, adapter);
+
+    expect(copied).toEqual([stored.fileName, ...(stored.crops ?? []).map((crop) => crop.fileName)]);
+    expect(copied).toHaveLength(2);
+    await expect(filesIn(uploadDir)).resolves.toEqual([]);
+  });
+
+  it('removes them when the bucket cannot be reached, too', async () => {
+    const { adapter } = bucket(new Error('bucket unavailable'));
+
+    await expect(storeFile(imageFile(await jpeg()), uploadDir, adapter)).rejects.toThrow(
+      'bucket unavailable'
+    );
+    await expect(filesIn(uploadDir)).resolves.toEqual([]);
+  });
+
+  it.each(['image/jpeg', 'audio/mpeg', 'video/mp4'])(
+    'rejects when a %s file has nowhere to be written',
+    async (type) => {
+      // A folder can't be made inside a file
+      const blocked = path.join(uploadDir, 'blocked');
+      await fs.writeFile(blocked, '');
+
+      await expect(
+        storeFile(new File(['contents'], 'upload', { type }), blocked, bucket().adapter)
+      ).rejects.toThrow(/ENOTDIR|EEXIST/);
+    }
+  );
 });

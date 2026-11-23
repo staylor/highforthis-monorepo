@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pipeline } from 'node:stream/promises';
 
-import type { Callback, UploadOpts } from '../Storage';
+import type { UploadOpts } from '../Storage';
 import type { StorageAdapter } from '../adapter';
 import { mediaExtension } from '../mediaTypes';
 
@@ -35,7 +35,6 @@ export interface FileData {
   duration?: number;
   description?: string;
   images?: { fileName: string; fileSize: number; width: number; height: number }[];
-  image?: { fileName: string; fileSize: number; width: number; height: number }[];
 }
 
 export default class Upload {
@@ -43,13 +42,13 @@ export default class Upload {
   settings: {
     crops: CropSetting[];
   };
-  // the relative folder path without the file name
+  // the folder the file is written to, inside the upload folder
   destination: string = '';
   // the obfuscated filename, without an extension
   basename: string = '';
   // the extension for the file's MIME type, whatever its name says
   ext: string = '';
-  // the obfuscated fileName + it's extension
+  // the obfuscated filename with its extension
   fileName: string = '';
 
   constructor(opts: UploadOpts) {
@@ -68,46 +67,43 @@ export default class Upload {
   async setFileProps(file: IncomingFile): Promise<void> {
     await this.setDestination();
     this.ext = mediaExtension(file.type) ?? '';
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(8, (err, raw) => {
-        if (err) {
-          reject(err);
-        } else {
-          this.basename = raw.toString('hex');
-          this.fileName = `${this.basename}${this.ext}`;
-          resolve();
-        }
-      });
-    });
+    this.basename = crypto.randomBytes(8).toString('hex');
+    this.fileName = `${this.basename}${this.ext}`;
   }
 
-  async save(file: IncomingFile, cb: Callback) {
+  /** Writes the file to the upload folder, and answers what the media library records of it. */
+  async save(file: IncomingFile): Promise<FileData> {
     await this.setFileProps(file);
 
-    const finalPath = path.join(this.destination, this.fileName);
-    const outStream = fs.createWriteStream(finalPath);
-    try {
-      // Rejects if either stream fails, such as when the upload is cut off
-      await pipeline(file.stream(), outStream);
-    } catch (error) {
-      cb(error as Error);
-      return;
-    }
-    cb(null, {
+    const outStream = fs.createWriteStream(path.join(this.destination, this.fileName));
+    // Rejects if either stream fails, such as when the upload is cut off
+    await pipeline(file.stream(), outStream);
+    return {
       fileName: this.fileName,
       destination: this.destination.replace(`${this.uploadDir}/`, ''),
       mimeType: file.type,
       originalName: file.name,
       fileSize: outStream.bytesWritten,
-    });
+    };
   }
 
+  /** The file and whatever was made from it, such as an image's crops */
   toArray() {
     return [{ destination: this.destination, fileName: this.fileName }];
   }
 
   async process(adapter: StorageAdapter) {
-    const files = this.toArray();
-    return adapter.run(files);
+    return adapter.run(this.toArray());
+  }
+
+  /** Removes the files from the upload folder, which only holds them until the bucket does. */
+  async removeLocalFiles() {
+    await Promise.allSettled(
+      this.toArray()
+        .filter(({ fileName }) => fileName)
+        .map(({ destination, fileName }) =>
+          fs.promises.rm(path.join(destination, fileName), { force: true })
+        )
+    );
   }
 }

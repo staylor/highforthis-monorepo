@@ -3,8 +3,6 @@ import path from 'node:path';
 import ffprobe from 'ffprobe';
 import ffprobeStatic from 'ffprobe-static';
 
-import type { Callback } from '../Storage';
-
 import Upload, { type FileData, type IncomingFile } from './Upload';
 
 interface VideoMetadata {
@@ -22,40 +20,37 @@ interface FFProbeStream {
 }
 
 export default class Video extends Upload {
-  async save(file: IncomingFile, cb: Callback) {
-    const callback: Callback = async (err, data) => {
-      const finalPath = path.join(this.destination, this.fileName);
-      const meta: VideoMetadata = {
-        description: '',
-        type: 'video',
-      };
-
-      try {
-        const metadata = await ffprobe(finalPath, { path: ffprobeStatic.path });
-        if (metadata && metadata.streams) {
-          const [video] = metadata.streams as FFProbeStream[];
-
-          if (video.width) {
-            meta.width = video.width;
-          }
-
-          if (video.height) {
-            meta.height = video.height;
-          }
-
-          if (video.duration) {
-            meta.duration = parseFloat(String(video.duration));
-          }
-        }
-      } catch {
-        // silence is golden
-      }
-
-      cb(err, {
-        ...(data as FileData),
-        ...meta,
-      });
+  async save(file: IncomingFile): Promise<FileData> {
+    const data = await super.save(file);
+    const meta: VideoMetadata = {
+      description: '',
+      type: 'video',
     };
-    super.save(file, callback);
+
+    // A file ffprobe can't read is stored without its size and length
+    try {
+      const metadata = await ffprobe(path.join(this.destination, this.fileName), {
+        path: ffprobeStatic.path,
+      });
+      if (metadata && metadata.streams) {
+        const [video] = metadata.streams as FFProbeStream[];
+
+        if (video.width) {
+          meta.width = video.width;
+        }
+
+        if (video.height) {
+          meta.height = video.height;
+        }
+
+        if (video.duration) {
+          meta.duration = parseFloat(String(video.duration));
+        }
+      }
+    } catch {
+      // stored as it is
+    }
+
+    return { ...data, ...meta };
   }
 }
