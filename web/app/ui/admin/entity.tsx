@@ -1,5 +1,6 @@
 import { css, type Handle, type RemixNode } from 'remix/component';
 
+import { routes } from '#/routes.ts';
 import { text } from '#/ui/public/styles.ts';
 import { formatDate } from '#/ui/shows/utils.ts';
 
@@ -46,7 +47,7 @@ export function EntityShows(handle: Handle<{ shows: EntityShow[] }>) {
     const { shows } = handle.props;
     const item = (show: EntityShow) => {
       const date = formatDate(show.date ?? undefined);
-      const href = `/admin/show/${show.id}`;
+      const href = routes.admin.shows.edit.index.href({ id: show.id });
       return (
         <li mix={css({ marginBlock: '0.75rem' })}>
           <a href={href} data-rmx-document={documentLoad(href)} mix={pinkLink}>
@@ -55,7 +56,7 @@ export function EntityShows(handle: Handle<{ shows: EntityShow[] }>) {
         </li>
       );
     };
-    const addHref = '/admin/show/add';
+    const addHref = routes.admin.shows.add.index.href();
     return (
       <div mix={css({ marginBlock: '1.5rem', display: 'block' })}>
         <span mix={label}>{t('entity.shows')}</span>

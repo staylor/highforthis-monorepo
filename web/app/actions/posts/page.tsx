@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
+import { routes } from '#/routes.ts';
 import type { PostQuery, PostsQuery } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
 import { Heading1, PostTitle } from '#/ui/heading.tsx';
@@ -61,7 +62,7 @@ export function PostsPage(
         >
           {posts.edges.map(({ node }) => (
             <Link
-              href={`/post/${node.slug}`}
+              href={routes.post.href({ slug: node.slug })}
               mix={css(merge(card, { overflow: 'hidden', borderRadius: '0.75rem' }))}
             >
               <div

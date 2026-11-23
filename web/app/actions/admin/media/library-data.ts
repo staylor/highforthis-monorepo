@@ -9,6 +9,7 @@ import {
 } from '#/lib/admin/forms.ts';
 import { addPageOffset } from '#/lib/admin/list-variables.ts';
 import { attempt } from '#/lib/graphql.ts';
+import { routes } from '#/routes.ts';
 import type {
   AddAlbumCoversMutation,
   AlbumCoversAdminQuery,
@@ -219,5 +220,5 @@ export async function addAlbumCovers({
   if (!added) {
     return { failed: true };
   }
-  return { redirectTo: `/admin/media?added=${added.length}` };
+  return { redirectTo: `${routes.admin.media.list.index.href()}?added=${added.length}` };
 }

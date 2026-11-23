@@ -2,6 +2,7 @@ import { gql } from 'graphql-tag';
 
 import type { GraphQLClient, RedirectResult } from '#/lib/admin/forms.ts';
 import { attempt } from '#/lib/graphql.ts';
+import { routes } from '#/routes.ts';
 import type { ImportListingsMutation, VenueListingsAdminQuery } from '#/types/graphql.ts';
 import { splitArtists } from '#/ui/admin/public/split-artists.ts';
 
@@ -90,5 +91,5 @@ export async function importListings({
     added: imported.showsCreated.toString(),
     artistsCreated: imported.artistsCreated.toString(),
   });
-  return { redirectTo: `/admin/show/listings/${venueId}?${search.toString()}` };
+  return { redirectTo: `${routes.admin.shows.listings.index.href({ venueId })}?${search}` };
 }

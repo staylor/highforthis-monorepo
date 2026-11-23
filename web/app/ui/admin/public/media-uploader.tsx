@@ -8,6 +8,8 @@ import { input } from './styles.ts';
 // admin's token on the way to GraphQL, since the browser can't read the session cookie.
 
 interface MediaUploaderProps {
+  /** An upload's edit page, with {id} where its ID goes. */
+  editHref: string;
   labels: { dropFiles: string; chooseFiles: string; edit: string; failed: string };
 }
 
@@ -62,7 +64,7 @@ export const MediaUploader = clientEntry(
     }
 
     return () => {
-      const { labels } = handle.props;
+      const { labels, editHref } = handle.props;
       return (
         <>
           <div
@@ -143,7 +145,8 @@ export const MediaUploader = clientEntry(
               key={key}
             >
               <div mix={css({ position: 'relative', zIndex: 20 })}>
-                {item.name} {item.id && <a href={`/admin/media/${item.id}`}>{labels.edit}</a>}
+                {item.name}{' '}
+                {item.id && <a href={editHref.replace('{id}', item.id)}>{labels.edit}</a>}
                 {item.failed && <span mix={css({ color: 'var(--red-700)' })}>{labels.failed}</span>}
               </div>
               {/* The upload's progress */}

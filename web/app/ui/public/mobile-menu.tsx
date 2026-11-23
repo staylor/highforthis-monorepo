@@ -6,7 +6,9 @@ import { dark, lg } from './styles.ts';
 
 interface MobileMenuProps {
   pathname: string;
-  labels: Record<'menu' | 'home' | 'podcast' | 'shows' | 'videos' | 'darkMode', string>;
+  /** The site's pages, as the header lists them on wider screens. */
+  links: { href: string; label: string }[];
+  labels: Record<'menu' | 'darkMode', string>;
 }
 
 /**
@@ -20,7 +22,7 @@ export const MobileMenu = clientEntry(
     let lastPathname = handle.props.pathname;
 
     return () => {
-      const { pathname, labels } = handle.props;
+      const { pathname, links, labels } = handle.props;
       if (pathname !== lastPathname) {
         lastPathname = pathname;
         isOpen = false;
@@ -86,18 +88,11 @@ export const MobileMenu = clientEntry(
                   gap: '1rem',
                 })}
               >
-                <NavLink href="/" pathname={pathname}>
-                  {labels.home}
-                </NavLink>
-                <NavLink href="/podcast" pathname={pathname}>
-                  {labels.podcast}
-                </NavLink>
-                <NavLink href="/shows" pathname={pathname}>
-                  {labels.shows}
-                </NavLink>
-                <NavLink href="/videos" pathname={pathname}>
-                  {labels.videos}
-                </NavLink>
+                {links.map(({ href, label }) => (
+                  <NavLink href={href} pathname={pathname}>
+                    {label}
+                  </NavLink>
+                ))}
                 <div mix={css({ marginTop: '0.5rem' })}>
                   <DarkMode id="dark-mode-mobile" label={labels.darkMode} />
                 </div>

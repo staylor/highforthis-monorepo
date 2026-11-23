@@ -1,5 +1,6 @@
 import { css, type Handle } from 'remix/component';
 
+import { routes } from '#/routes.ts';
 import type { HomeQuery } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
@@ -77,7 +78,7 @@ export function Sidebar(handle: Handle<{ shows: Shows }>) {
       <section>
         <SectionHeader
           label={t('shows.upcoming')}
-          viewAllLink="/shows"
+          viewAllLink={routes.shows.index.href()}
           viewAllText="Full Calendar →"
         />
         {shows.edges.length === 0 && (

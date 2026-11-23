@@ -9,6 +9,7 @@ import {
 } from '#/lib/admin/forms.ts';
 import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
 import { attempt } from '#/lib/graphql.ts';
+import { routes } from '#/routes.ts';
 import type {
   BulkCreateShowsMutation,
   ShowEditQuery,
@@ -257,5 +258,5 @@ export async function importShows({
     imported: imported.showsCreated.toString(),
     venuesCreated: imported.venuesCreated.toString(),
   });
-  return { redirectTo: `/admin/show?${search.toString()}` };
+  return { redirectTo: `${routes.admin.shows.list.index.href()}?${search}` };
 }

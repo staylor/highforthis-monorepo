@@ -175,6 +175,7 @@ export const mediaUpload = createAction(media.upload, {
       <>
         <Heading>{label}</Heading>
         <MediaUploader
+          editHref={media.edit.index.href({ id: 'ID' }).replace(/ID$/, '{id}')}
           labels={{
             dropFiles: t('media.dropFiles'),
             chooseFiles: t('media.chooseFiles'),
