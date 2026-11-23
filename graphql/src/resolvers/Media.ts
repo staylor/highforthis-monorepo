@@ -1,26 +1,29 @@
-import type { Prisma, MediaUpload } from '@prisma/client';
+import { ilike, or, type TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
-import prisma from '#/database';
-import type { WithIncludes } from '#/models';
+import db from '#/database/db';
+import { containing } from '#/database/search';
+import type { Loaded } from '#/database/tables';
+import {
+  audioAlbumArtists,
+  audioArtists,
+  audioGenres,
+  audioImages,
+  imageUploadCrops,
+  mediaDetails,
+  mediaUploads,
+} from '#/database/tables';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeEntities, resolveJoin, resolveType } from './utils/helpers';
+import { parseInput, removeRows, resolveJoin, resolveType } from './utils/helpers';
 import { updateMediaUploadSchema } from './validations';
 
-const mediaIncludes = {
-  crops: true,
-  audioArtists: true,
-  audioAlbumArtists: true,
-  audioGenres: true,
-  audioImages: true,
-} satisfies Prisma.MediaUploadInclude;
+type MediaDetails = typeof mediaDetails;
 
-/** An upload, with the relations in `mediaIncludes` when its query included them */
-export type MediaUploadSource = WithIncludes<
-  MediaUpload,
-  Prisma.MediaUploadGetPayload<{ include: typeof mediaIncludes }>
->;
+/** An upload, with the relations in `mediaDetails` when its query loaded them */
+export type MediaUploadSource = TableRow<typeof mediaUploads> & {
+  [TName in keyof MediaDetails]?: Loaded<MediaDetails[TName]>;
+};
 
 const resolvers = {
   MediaUpload: {
@@ -36,79 +39,82 @@ const resolvers = {
   ImageUpload: {
     crops(media) {
       if (media.crops) return media.crops;
-      return prisma.imageUploadCrop.findMany({ where: { mediaId: media.id } });
+      return db.findMany(imageUploadCrops, { where: { mediaId: media.id } });
     },
   },
   AudioUpload: {
     artist(media) {
       return resolveJoin(media.audioArtists, 'name', () =>
-        prisma.audioArtist.findMany({ where: { mediaId: media.id } })
+        db.findMany(audioArtists, { where: { mediaId: media.id } })
       );
     },
     albumArtist(media) {
       return resolveJoin(media.audioAlbumArtists, 'name', () =>
-        prisma.audioAlbumArtist.findMany({ where: { mediaId: media.id } })
+        db.findMany(audioAlbumArtists, { where: { mediaId: media.id } })
       );
     },
     genre(media) {
       return resolveJoin(media.audioGenres, 'name', () =>
-        prisma.audioGenre.findMany({ where: { mediaId: media.id } })
+        db.findMany(audioGenres, { where: { mediaId: media.id } })
       );
     },
     images(media) {
       if (media.audioImages) return media.audioImages;
-      return prisma.audioImage.findMany({ where: { mediaId: media.id } });
+      return db.findMany(audioImages, { where: { mediaId: media.id } });
     },
   },
   MediaUploadConnection: {
     async types() {
-      const results = await prisma.mediaUpload.findMany({
-        distinct: ['type'],
-        select: { type: true },
-        orderBy: { type: 'asc' },
-      });
+      const results = await db
+        .query(mediaUploads)
+        .select('type')
+        .distinct()
+        .orderBy('type', 'asc')
+        .all();
       return results.map((r) => r.type);
     },
     async mimeTypes() {
-      const results = await prisma.mediaUpload.findMany({
-        distinct: ['mimeType'],
-        select: { mimeType: true },
-        orderBy: { mimeType: 'asc' },
-      });
+      const results = await db
+        .query(mediaUploads)
+        .select('mimeType')
+        .distinct()
+        .orderBy('mimeType', 'asc')
+        .all();
       return results.map((r) => r.mimeType);
     },
   },
   Query: {
     async uploads(_, args) {
       const { type, mimeType, search, ...connectionArgs } = args;
-      const where: Prisma.MediaUploadWhereInput = {};
-      if (type) where.type = type;
-      if (mimeType) where.mimeType = mimeType;
+      let query = db.query(mediaUploads);
+      if (type) query = query.where({ type });
+      if (mimeType) query = query.where({ mimeType });
       if (search) {
-        where.OR = [
-          { title: { contains: search, mode: 'insensitive' } },
-          { originalName: { contains: search, mode: 'insensitive' } },
-        ];
+        const pattern = containing(search);
+        query = query.where(or(ilike('title', pattern), ilike('originalName', pattern)));
       }
-      return parseConnection(prisma.mediaUpload, connectionArgs, {
-        where,
-        orderBy: { createdAt: 'desc' },
-        include: mediaIncludes,
-      });
+      return parseConnection(
+        {
+          count: () => query.count(),
+          findMany: ({ skip, take }) =>
+            query.with(mediaDetails).orderBy('createdAt', 'desc').offset(skip).limit(take).all(),
+        },
+        connectionArgs
+      );
     },
     media(_, { id }) {
       if (!id) return null;
-      return prisma.mediaUpload.findUnique({ where: { id }, include: mediaIncludes });
+      return db.find(mediaUploads, id, { with: mediaDetails });
     },
   },
   Mutation: {
     async updateMediaUpload(_, { id, input }) {
       const data = parseInput(updateMediaUploadSchema, input);
-      return prisma.mediaUpload.update({ where: { id }, data, include: mediaIncludes });
+      return db.update(mediaUploads, id, data, { with: mediaDetails });
     },
 
     async removeMediaUpload(_, { ids }) {
-      return removeEntities(prisma.mediaUpload, ids);
+      return removeRows(mediaUploads, ids);
     },
   },
 } satisfies Resolvers;

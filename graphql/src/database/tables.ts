@@ -82,7 +82,7 @@ export const venues = table({
   beforeWrite: skipUndefined,
 });
 
-const mediaUploads = table({
+export const mediaUploads = table({
   name: 'MediaUpload',
   columns: {
     id: c.text(),
@@ -216,4 +216,74 @@ export const artistFeaturedMediaUpload = belongsTo(artistFeaturedMedia, mediaUpl
 /** An artist's featured-media rows, each with its media */
 export const artistMedia = hasMany(artists, artistFeaturedMedia, { foreignKey: 'artistId' }).with({
   media: artistFeaturedMediaUpload,
+});
+
+// --- Media ---
+
+export const imageUploadCrops = table({
+  name: 'ImageUploadCrop',
+  columns: {
+    id: c.text(),
+    mediaId: c.text(),
+    fileName: c.text(),
+    width: c.integer(),
+    height: c.integer(),
+    fileSize: c.integer(),
+  },
+  beforeWrite: skipUndefined,
+});
+
+export const audioArtists = table({
+  name: 'AudioArtist',
+  columns: { id: c.text(), mediaId: c.text(), name: c.text() },
+  beforeWrite: skipUndefined,
+});
+
+export const audioAlbumArtists = table({
+  name: 'AudioAlbumArtist',
+  columns: { id: c.text(), mediaId: c.text(), name: c.text() },
+  beforeWrite: skipUndefined,
+});
+
+export const audioGenres = table({
+  name: 'AudioGenre',
+  columns: { id: c.text(), mediaId: c.text(), name: c.text() },
+  beforeWrite: skipUndefined,
+});
+
+export const audioImages = table({
+  name: 'AudioImage',
+  columns: {
+    id: c.text(),
+    mediaId: c.text(),
+    fileName: c.text(),
+    width: c.integer(),
+    height: c.integer(),
+    fileSize: c.integer(),
+  },
+  beforeWrite: skipUndefined,
+});
+
+/** An upload's crops, and an audio file's details */
+export const mediaDetails = {
+  crops: hasMany(mediaUploads, imageUploadCrops, { foreignKey: 'mediaId' }),
+  audioArtists: hasMany(mediaUploads, audioArtists, { foreignKey: 'mediaId' }),
+  audioAlbumArtists: hasMany(mediaUploads, audioAlbumArtists, { foreignKey: 'mediaId' }),
+  audioGenres: hasMany(mediaUploads, audioGenres, { foreignKey: 'mediaId' }),
+  audioImages: hasMany(mediaUploads, audioImages, { foreignKey: 'mediaId' }),
+};
+
+// --- Settings ---
+
+/** The sizes an uploaded image is cropped to, which belong to the one media settings row */
+export const mediaCropSettings = table({
+  name: 'MediaCropSetting',
+  columns: {
+    id: c.text(),
+    mediaSettingsId: c.text(),
+    name: c.text(),
+    width: c.integer().nullable(),
+    height: c.integer().nullable(),
+  },
+  beforeWrite: skipUndefined,
 });

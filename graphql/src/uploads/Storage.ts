@@ -1,4 +1,5 @@
-import prisma from '#/database';
+import db from '#/database/db';
+import { mediaCropSettings } from '#/database/tables';
 
 import type { StorageAdapter } from './adapter';
 import { mediaExtension, UploadError } from './mediaTypes';
@@ -22,14 +23,10 @@ export async function storeFile(file: IncomingFile, uploadDir: string, adapter?:
       `Uploads must be images, audio or video, not ${file.type || 'untyped files'}`
     );
   }
-  const mediaSettings = await prisma.mediaSettings.findUnique({
-    where: { id: 'media' },
-  });
+  // The crops belong to the one media settings row
+  const crops = await db.findMany(mediaCropSettings, { where: { mediaSettingsId: 'media' } });
 
   let upload: Upload;
-  const crops = mediaSettings
-    ? await prisma.mediaCropSetting.findMany({ where: { mediaSettingsId: mediaSettings.id } })
-    : [];
   const uploadOpts: UploadOpts = { uploadDir, settings: { crops } };
   if (file.type.startsWith('image/')) {
     upload = new Image(uploadOpts);
