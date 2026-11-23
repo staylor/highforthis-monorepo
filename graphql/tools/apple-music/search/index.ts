@@ -23,14 +23,19 @@ const search = (term: string) =>
       return artist;
     });
 
-const filename = (id: string) =>
-  path.join(process.cwd(), 'tools', 'apple-music', 'search', 'responses', `${id}.json`);
+// Saves Apple Music's data to the artists that have none, over two runs: the first writes what
+// Apple Music finds for each of them to `responses`, and the second saves those to the artists.
+// pnpm --filter @highforthis/graphql tools:script:dev tools/apple-music/search/index.ts
+const responses = path.join(process.cwd(), 'tools', 'apple-music', 'search', 'responses');
+
+const filename = (id: string) => path.join(responses, `${id}.json`);
 
 const fileExists = (id: string) => fs.existsSync(filename(id));
 
 async function main() {
+  fs.mkdirSync(responses, { recursive: true });
   const artists = await prisma.artist.findMany({
-    take: 1000,
+    where: { appleMusic: { is: null } },
     include: { appleMusic: true },
   });
 

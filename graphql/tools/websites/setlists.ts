@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 // Browser console snippet for extracting setlists from setlist.fm
 // Usage: paste into browser console on a setlist.fm setlist page
 

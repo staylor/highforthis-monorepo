@@ -124,12 +124,10 @@ src/
 └── jobs/             # Scheduled tasks (cron)
 tools/
 ├── database/         # Seed dump, reset, and production refresh scripts
-├── editor/           # Post editor content conversions
-├── apple-music/      # Apple Music lookups
-├── websites/         # Show listing scrapers
-├── youtube.ts        # YouTube data tools
-├── shows.ts          # Show data tools
-├── addresses.ts      # Venue address tools
+├── apple-music/      # Looks up the Apple Music data of artists that have none
+├── websites/         # A browser snippet that reads setlists from setlist.fm
+├── youtube.ts        # Runs the YouTube import
+├── shows.ts          # Runs the cleanup of old shows
 └── listings-urls.ts  # Venue listing page URLs
 dump/
 └── highforthis-seed.dump  # pg_dump used by db:reset
