@@ -31,7 +31,8 @@ const resolvers = {
       if (!podcast.imageId) return null;
       return prisma.mediaUpload.findUnique({ where: { id: podcast.imageId } });
     },
-    date: timestampResolver('updatedAt'),
+    // When the episode was added. Editing one doesn't publish it again.
+    date: timestampResolver('createdAt'),
   },
   Query: {
     async podcasts(_, args) {
@@ -57,9 +58,8 @@ const resolvers = {
   },
   Mutation: {
     async createPodcast(_, { input }) {
-      const { audio, image, date: _date, ...data } = createPodcastSchema.parse(input);
-      // Prisma's Without<> union can't resolve FK fields from a spread;
-      // use UncheckedCreateInput via assertion on validated data.
+      const { audio, image, ...data } = createPodcastSchema.parse(input);
+      // The unchecked input takes audioId and imageId as they are
       const podcastData: Prisma.PodcastUncheckedCreateInput = {
         ...data,
         audioId: audio ?? undefined,
@@ -72,7 +72,7 @@ const resolvers = {
     },
 
     async updatePodcast(_, { id, input }) {
-      const { audio, image, date: _date, ...data } = updatePodcastSchema.parse(input);
+      const { audio, image, ...data } = updatePodcastSchema.parse(input);
       const podcastData: Prisma.PodcastUncheckedUpdateInput = {
         ...data,
         audioId: audio ?? undefined,
