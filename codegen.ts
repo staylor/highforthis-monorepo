@@ -17,6 +17,8 @@ const mediaUpload = server('resolvers/Media', 'MediaUploadSource');
 
 // What the resolvers answer for each GraphQL type, which its fields' resolvers then get: Prisma's
 // records, with whichever relations their queries include. The rest answer the type itself.
+// The interfaces and unions are here with their members. The plugin spells out one it isn't given
+// as a union of its members' types, which names EditorNodeData once for each kind of node.
 const resolverMappers = {
   AppleMusicAlbum: server('appleMusic', 'Album'),
   AppleMusicData: server('resolvers/Artist', 'AppleMusicDataSource'),
@@ -24,15 +26,19 @@ const resolverMappers = {
   ArtistConnection: connection('ArtistSource'),
   AudioUpload: mediaUpload,
   CodeNode: editorNode,
+  EditorNode: editorNode,
   ElementNode: editorNode,
+  ElementNodeType: editorNode,
   FileUpload: mediaUpload,
   HeadingNode: editorNode,
   ImageNode: editorNode,
   ImageUpload: mediaUpload,
+  LexicalNode: editorNode,
   LinebreakNode: editorNode,
   ListItemNode: editorNode,
   ListNode: editorNode,
   MediaSettings: '@prisma/client#MediaSettings as MediaSettingsRecord',
+  MediaUpload: mediaUpload,
   MediaUploadConnection: connection('MediaUploadSource'),
   Podcast: server('resolvers/Podcast', 'PodcastSource'),
   PodcastConnection: connection('PodcastSource'),
