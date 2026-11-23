@@ -2,11 +2,9 @@ import { readFileSync } from 'node:fs';
 
 import { createInstance, type TFunction } from 'i18next';
 
-// react-i18next has no Remix equivalent. i18next itself runs on the server, and
-// translated strings reach hydrated components as props.
-const global = JSON.parse(
-  readFileSync(new URL('../../public/locales/en/global.json', import.meta.url), 'utf8')
-);
+// i18next runs on the server, and translated strings reach hydrated components as props. The
+// site's strings are beside this file, and the admin's in admin/.
+const global = JSON.parse(readFileSync(new URL('./strings.en.json', import.meta.url), 'utf8'));
 
 const i18n = createInstance();
 await i18n.init({

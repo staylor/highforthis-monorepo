@@ -107,11 +107,6 @@
     margin-block: 0.625rem;
   }
 
-  .editor-link {
-    color: rgb(33, 111, 219);
-    text-decoration: none;
-  }
-
   .editor-text-bold {
     font-weight: bold;
   }
