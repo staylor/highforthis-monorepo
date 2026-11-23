@@ -5,15 +5,23 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vites
 
 import { createApp } from '#/app';
 import { signToken } from '#/authentication';
+import { passkeys } from '#/database/tables';
 import type { AppContext, UserWithRoles } from '#/models';
 
-const db = vi.hoisted(() => ({
-  user: { findUnique: vi.fn() },
-  passkey: { findMany: vi.fn(), delete: vi.fn() },
-  session: { findUnique: vi.fn(), create: vi.fn(), deleteMany: vi.fn() },
+// The admin's passkeys, whose query's steps each answer the query
+const { db, passkeyQuery } = vi.hoisted(() => ({
+  db: {
+    create: vi.fn(),
+    delete: vi.fn(),
+    deleteMany: vi.fn(),
+    find: vi.fn(),
+    findOne: vi.fn(),
+    query: vi.fn(),
+  },
+  passkeyQuery: { all: vi.fn(), orderBy: vi.fn(), select: vi.fn(), where: vi.fn() },
 }));
 
-vi.mock('#/database', () => ({ default: db }));
+vi.mock('#/database/db', () => ({ default: db }));
 
 const admin = {
   id: 'admin-1',
@@ -55,17 +63,20 @@ describe('createApp', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
-    db.user.findUnique.mockImplementation(
-      async ({ where }: { where: { id?: string; email?: string } }) =>
-        [admin, editor].find((user) => user.id === where.id || user.email === where.email) ?? null
+    db.findOne.mockImplementation(
+      async (_table, { where }: { where: { email: string } }) =>
+        [admin, editor].find((user) => user.email === where.email) ?? null
     );
-    db.session.findUnique.mockImplementation(async ({ where }: { where: { id: string } }) => {
-      const user = [admin, editor].find(({ id }) => where.id === `session-${id}`);
+    db.find.mockImplementation(async (_table, sessionId: string) => {
+      const user = [admin, editor].find(({ id }) => sessionId === `session-${id}`);
       return user
-        ? { id: where.id, userId: user.id, expiresAt: new Date(Date.now() + 60_000), user }
+        ? { id: sessionId, userId: user.id, expiresAt: new Date(Date.now() + 60_000), user }
         : null;
     });
-    db.session.create.mockResolvedValue({ id: 'session-new' });
+    db.query.mockReturnValue(passkeyQuery);
+    for (const step of [passkeyQuery.orderBy, passkeyQuery.select, passkeyQuery.where]) {
+      step.mockReturnValue(passkeyQuery);
+    }
   });
 
   afterAll(() => server.stop());
@@ -215,16 +226,15 @@ describe('createApp', () => {
 
   describe('/auth/passkeys', () => {
     it('lists the admin’s passkeys', async () => {
-      db.passkey.findMany.mockResolvedValue([{ id: 'passkey-1', name: 'Laptop' }]);
+      passkeyQuery.all.mockResolvedValue([{ id: 'passkey-1', name: 'Laptop' }]);
 
       const response = await request('/auth/passkeys', { headers: signedIn(admin) });
 
       await expect(response.json()).resolves.toEqual({
         passkeys: [{ id: 'passkey-1', name: 'Laptop' }],
       });
-      expect(db.passkey.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({ where: { userId: admin.id } })
-      );
+      expect(db.query).toHaveBeenCalledWith(passkeys);
+      expect(passkeyQuery.where).toHaveBeenCalledWith({ userId: admin.id });
     });
 
     it('refuses a signed-out request', async () => {
@@ -232,7 +242,7 @@ describe('createApp', () => {
     });
 
     it('deletes the passkey named in the URL', async () => {
-      db.passkey.findMany.mockResolvedValue([{ id: 'a/b' }, { id: 'passkey-2' }]);
+      passkeyQuery.all.mockResolvedValue([{ id: 'a/b' }, { id: 'passkey-2' }]);
 
       const response = await request('/auth/passkeys/a%2Fb', {
         method: 'DELETE',
@@ -240,11 +250,11 @@ describe('createApp', () => {
       });
 
       expect(response.status).toBe(204);
-      expect(db.passkey.delete).toHaveBeenCalledWith({ where: { id: 'a/b' } });
+      expect(db.delete).toHaveBeenCalledWith(passkeys, 'a/b');
     });
 
     it('answers 404 for a passkey that is not the admin’s', async () => {
-      db.passkey.findMany.mockResolvedValue([{ id: 'passkey-2' }]);
+      passkeyQuery.all.mockResolvedValue([{ id: 'passkey-2' }]);
 
       const response = await request('/auth/passkeys/passkey-1', {
         method: 'DELETE',
@@ -252,7 +262,7 @@ describe('createApp', () => {
       });
 
       expect(response.status).toBe(404);
-      expect(db.passkey.delete).not.toHaveBeenCalled();
+      expect(db.delete).not.toHaveBeenCalled();
     });
 
     it('reads the verification body as JSON', async () => {

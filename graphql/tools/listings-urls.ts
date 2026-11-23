@@ -1,4 +1,8 @@
-import prisma from '#/database';
+import { ilike } from 'remix/data-table';
+
+import db from '#/database/db';
+import { matching } from '#/database/search';
+import { venues } from '#/database/tables';
 
 // Sets the listings page of the venues shows get recommended at, unless one is already set:
 // pnpm --filter @highforthis/graphql tools:script:dev tools/listings-urls.ts
@@ -58,15 +62,13 @@ const listingsUrls: Record<string, string> = {
 };
 
 for (const [name, listingsUrl] of Object.entries(listingsUrls)) {
-  const venue = await prisma.venue.findFirst({
-    where: { name: { equals: name, mode: 'insensitive' } },
-  });
+  const venue = await db.findOne(venues, { where: ilike('name', matching(name)) });
   if (!venue) {
     console.log('No venue named', name);
   } else if (venue.listingsUrl) {
     console.log('Already set:', name, venue.listingsUrl);
   } else {
-    await prisma.venue.update({ where: { id: venue.id }, data: { listingsUrl } });
+    await db.update(venues, venue.id, { listingsUrl });
     console.log('Set', name, listingsUrl);
   }
 }

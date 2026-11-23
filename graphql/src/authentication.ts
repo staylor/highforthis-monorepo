@@ -1,12 +1,14 @@
 import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
+import { lt } from 'remix/data-table';
 import type { Middleware } from 'remix/router';
 import { z } from 'zod';
 
 import { createRateLimiter } from '@highforthis/shared/rate-limit';
 
 import { isAdmin } from '#/authorization';
-import prisma from '#/database';
+import db from '#/database/db';
+import { newId, sessions, sessionUser, users } from '#/database/tables';
 import env from '#/env';
 import { AuthUser } from '#/http';
 import type { UserWithRoles } from '#/models';
@@ -33,11 +35,14 @@ export function signToken(userId: string, sessionId: string): string {
  */
 export async function issueToken(userId: string): Promise<string> {
   const now = new Date();
-  await prisma.session.deleteMany({ where: { expiresAt: { lt: now } } });
-  const session = await prisma.session.create({
-    data: { userId, expiresAt: new Date(now.getTime() + SESSION_HOURS * 60 * 60 * 1000) },
+  await db.deleteMany(sessions, { where: lt('expiresAt', now) });
+  const id = newId();
+  await db.create(sessions, {
+    id,
+    userId,
+    expiresAt: new Date(now.getTime() + SESSION_HOURS * 60 * 60 * 1000),
   });
-  return signToken(userId, session.id);
+  return signToken(userId, id);
 }
 
 function verifiedPayload(token: string): JWTPayload | null {
@@ -75,11 +80,8 @@ async function tokenUser(headers: Headers): Promise<UserWithRoles | null> {
   if (!payload?.userId || !payload.sid) {
     return null;
   }
-  const session = await prisma.session.findUnique({
-    where: { id: payload.sid },
-    include: { user: { include: { roles: true } } },
-  });
-  if (!session || session.userId !== payload.userId || session.expiresAt <= new Date()) {
+  const session = await db.find(sessions, payload.sid, { with: { user: sessionUser } });
+  if (!session?.user || session.userId !== payload.userId || session.expiresAt <= new Date()) {
     return null;
   }
   return session.user;
@@ -118,13 +120,13 @@ export async function signOutHandler({
   if (!authUser || !sessionId) {
     return Response.json({ error: 'Authentication required' }, { status: 401 });
   }
-  await prisma.session.deleteMany({ where: { id: sessionId, userId: authUser.id } });
+  await db.deleteMany(sessions, { where: { id: sessionId, userId: authUser.id } });
   return new Response(null, { status: 204 });
 }
 
 /** Ends all of the user's sessions, as a new password should. */
 export async function endSessions(userId: string): Promise<void> {
-  await prisma.session.deleteMany({ where: { userId } });
+  await db.deleteMany(sessions, { where: { userId } });
 }
 
 /**
@@ -150,7 +152,7 @@ export async function authHandler({ body }: { body: unknown }): Promise<Response
     );
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await db.findOne(users, { where: { email } });
   const matches = await bcrypt.compare(password, user?.hash ?? UNKNOWN_USER_HASH);
   if (!user || !matches) {
     failedSignIns.attempt(key);

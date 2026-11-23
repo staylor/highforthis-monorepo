@@ -7,9 +7,10 @@ import { stdout } from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { parseEnv } from 'node:util';
 
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+
+import { createDatabase } from '#/database/postgres';
+import { newId, userRoles, users } from '#/database/tables';
 
 const SALT_ROUNDS = 10;
 const envFile = fileURLToPath(new URL('../../../e2e/.env', import.meta.url));
@@ -47,21 +48,24 @@ for (const [key, value] of Object.entries({
 }
 writeFileSync(envFile, envText, { mode: 0o600 });
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
+const db = createDatabase(connectionString);
 
 try {
   const hash = await bcrypt.hash(password, SALT_ROUNDS);
-  const user = await prisma.user.upsert({
-    where: { email },
-    create: { email, hash, name: 'E2E Admin' },
-    update: { hash },
-  });
-  await prisma.userRole.upsert({
-    where: { userId_name: { userId: user.id, name: 'admin' } },
-    create: { userId: user.id, name: 'admin' },
-    update: {},
-  });
+  await db
+    .query(users)
+    .upsert(
+      { id: newId(), email, hash, name: 'E2E Admin' },
+      { conflictTarget: ['email'], update: { hash } }
+    );
+  const user = await db.findOne(users, { where: { email } });
+  await db
+    .query(userRoles)
+    .upsert(
+      { id: newId(), userId: user!.id, name: 'admin' },
+      { conflictTarget: ['userId', 'name'], update: {} }
+    );
   stdout.write(`Test admin ${email} is ready; its password is in e2e/.env.\n`);
 } finally {
-  await prisma.$disconnect();
+  await db.close();
 }

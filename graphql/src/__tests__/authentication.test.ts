@@ -4,15 +4,22 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vites
 
 import { createApp } from '#/app';
 import { signToken } from '#/authentication';
+import { sessions } from '#/database/tables';
 import type { AppContext, UserWithRoles } from '#/models';
 
 const db = vi.hoisted(() => ({
-  user: { findUnique: vi.fn() },
-  session: { findUnique: vi.fn(), create: vi.fn(), deleteMany: vi.fn() },
-  webAuthnChallenge: { count: vi.fn() },
+  count: vi.fn(),
+  create: vi.fn(),
+  deleteMany: vi.fn(),
+  find: vi.fn(),
+  findOne: vi.fn(),
 }));
 
-vi.mock('#/database', () => ({ default: db }));
+vi.mock('#/database/db', () => ({ default: db }));
+vi.mock('#/database/tables', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('#/database/tables')>()),
+  newId: () => 'session-2',
+}));
 
 const admin = {
   id: 'admin-1',
@@ -44,13 +51,12 @@ describe('authentication', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
-    db.user.findUnique.mockImplementation(
-      async ({ where }: { where: { id?: string; email?: string } }) =>
-        where.id === admin.id || where.email === admin.email ? admin : null
+    db.findOne.mockImplementation(async (_table, { where }: { where: { email: string } }) =>
+      where.email === admin.email ? admin : null
     );
     // The admin's one live session
-    db.session.findUnique.mockImplementation(async ({ where }: { where: { id: string } }) =>
-      where.id === 'session-1'
+    db.find.mockImplementation(async (_table, id: string) =>
+      id === 'session-1'
         ? {
             id: 'session-1',
             userId: admin.id,
@@ -59,7 +65,6 @@ describe('authentication', () => {
           }
         : null
     );
-    db.session.create.mockResolvedValue({ id: 'session-2' });
   });
 
   afterAll(() => server.stop());
@@ -77,7 +82,7 @@ describe('authentication', () => {
       expect(
         (await request('/auth/session', bearer(signToken('someone-else', 'session-1')))).status
       ).toBe(401);
-      db.session.findUnique.mockResolvedValue({
+      db.find.mockResolvedValue({
         id: 'session-1',
         userId: admin.id,
         expiresAt: new Date(Date.now() - 1),
@@ -104,14 +109,14 @@ describe('authentication', () => {
       });
 
       expect(response.status).toBe(204);
-      expect(db.session.deleteMany).toHaveBeenCalledWith({
+      expect(db.deleteMany).toHaveBeenCalledWith(sessions, {
         where: { id: 'session-1', userId: admin.id },
       });
     });
 
     it('refuses a signed-out request', async () => {
       expect((await request('/auth/signout', { method: 'POST' })).status).toBe(401);
-      expect(db.session.deleteMany).not.toHaveBeenCalled();
+      expect(db.deleteMany).not.toHaveBeenCalled();
     });
   });
 
@@ -120,11 +125,13 @@ describe('authentication', () => {
       const response = await signIn(admin.email, 'secret');
       const { token } = await response.json();
 
-      expect(db.session.create).toHaveBeenCalledWith({
-        data: { userId: admin.id, expiresAt: expect.any(Date) },
+      expect(db.create).toHaveBeenCalledWith(sessions, {
+        id: 'session-2',
+        userId: admin.id,
+        expiresAt: expect.any(Date),
       });
-      const { data } = db.session.create.mock.calls[0][0];
-      expect(data.expiresAt.getTime() - Date.now()).toBeGreaterThan(11.9 * 60 * 60 * 1000);
+      const [[, session]] = db.create.mock.calls;
+      expect(session.expiresAt.getTime() - Date.now()).toBeGreaterThan(11.9 * 60 * 60 * 1000);
       const { default: jsonwebtoken } = await import('jsonwebtoken');
       expect(jsonwebtoken.decode(token)).toEqual(
         expect.objectContaining({ userId: admin.id, sid: 'session-2' })
@@ -157,7 +164,7 @@ describe('authentication', () => {
 
     it('turns an email away after 5 failures, even with the right password', async () => {
       const email = 'locked@example.test';
-      db.user.findUnique.mockResolvedValue({ ...admin, email });
+      db.findOne.mockResolvedValue({ ...admin, email });
       for (let i = 0; i < 5; i++) {
         expect((await signIn(email, 'wrong')).status).toBe(401);
       }
@@ -179,7 +186,7 @@ describe('authentication', () => {
 
   describe('POST /auth/passkeys/authenticate/options', () => {
     it('turns sign-ins away while too many are in progress', async () => {
-      db.webAuthnChallenge.count.mockResolvedValue(5000);
+      db.count.mockResolvedValue(5000);
 
       const response = await request('/auth/passkeys/authenticate/options', { method: 'POST' });
 

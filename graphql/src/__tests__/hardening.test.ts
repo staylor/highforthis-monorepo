@@ -12,16 +12,11 @@ const typeDefs = `#graphql
   type Query {
     shows(first: Int, last: Int): ShowConnection
     show: Show
-    broken: String
     failedQuery: String
     unknownColumn: String
     refused: String
   }
 `;
-
-class PrismaClientKnownRequestError extends Error {
-  name = 'PrismaClientKnownRequestError';
-}
 
 const logger = { error: vi.fn() };
 let server: ApolloServer<AppContext>;
@@ -43,11 +38,6 @@ describe('hardening', () => {
         Query: {
           shows: () => ({ edges: [{ id: '1', artists: [] }] }),
           show: () => ({ id: '1', artists: [] }),
-          broken: () => {
-            throw new PrismaClientKnownRequestError(
-              'Invalid `prisma.show.findUnique()` at /app/x.ts'
-            );
-          },
           failedQuery: () => {
             throw new DataTableDatabaseError('Database execution failed', {
               cause: new Error('relation "Show" does not exist at /app/x.ts'),
@@ -135,21 +125,8 @@ describe('hardening', () => {
   });
 
   describe('errorOptions', () => {
-    it('answers a database error with a plain message, and logs it', async () => {
-      const result = await run('{ broken }');
-
-      expect(result.errors?.[0]).toEqual(
-        expect.objectContaining({
-          message: 'Internal server error',
-          extensions: { code: 'INTERNAL_SERVER_ERROR' },
-        })
-      );
-      expect(JSON.stringify(result)).not.toMatch(/prisma|\/app\//);
-      expect(logger.error).toHaveBeenCalled();
-    });
-
     it.each(['failedQuery', 'unknownColumn'])(
-      'answers a remix/data-table error (%s) the same way',
+      'answers a database error (%s) with a plain message, and logs it',
       async (field) => {
         const result = await run(`{ ${field} }`);
 
@@ -159,7 +136,7 @@ describe('hardening', () => {
             extensions: { code: 'INTERNAL_SERVER_ERROR' },
           })
         );
-        expect(JSON.stringify(result)).not.toMatch(/Show|User|secret|Database execution/);
+        expect(JSON.stringify(result)).not.toMatch(/Show|User|secret|Database execution|\/app\//);
         expect(logger.error).toHaveBeenCalledWith(
           expect.objectContaining({ path: [field] }),
           expect.any(String)

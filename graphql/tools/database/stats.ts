@@ -1,16 +1,25 @@
-import prisma from '#/database';
+import { sql, type SqlStatement } from 'remix/data-table';
+
+import db from '#/database/db';
+import { artists, venues } from '#/database/tables';
+
+/** The IDs and counts a query selects */
+async function counts(statement: SqlStatement) {
+  const { rows = [] } = await db.exec(statement);
+  return rows as { id: string; count: number }[];
+}
 
 async function logArtistStats() {
-  const results = await prisma.showArtist.groupBy({
-    by: ['artistId'],
-    where: { show: { attended: true } },
-    _count: { artistId: true },
-  });
+  const results = await counts(sql`
+    select "artistId" as id, count(*)::int as count from "ShowArtist"
+    where "showId" in (select id from "Show" where attended)
+    group by "artistId"
+  `);
 
   const stats = await Promise.all(
     results.map(async (r) => {
-      const artist = await prisma.artist.findUnique({ where: { id: r.artistId } });
-      return { entity: artist?.name, count: r._count.artistId };
+      const artist = await db.find(artists, r.id);
+      return { entity: artist?.name, count: r.count };
     })
   );
 
@@ -21,16 +30,16 @@ async function logArtistStats() {
 }
 
 async function logVenueStats() {
-  const results = await prisma.show.groupBy({
-    by: ['venueId'],
-    where: { attended: true },
-    _count: { venueId: true },
-  });
+  const results = await counts(sql`
+    select "venueId" as id, count(*)::int as count from "Show"
+    where attended
+    group by "venueId"
+  `);
 
   const stats = await Promise.all(
     results.map(async (r) => {
-      const venue = await prisma.venue.findUnique({ where: { id: r.venueId } });
-      return { entity: venue?.name, count: r._count.venueId };
+      const venue = await db.find(venues, r.id);
+      return { entity: venue?.name, count: r.count };
     })
   );
 

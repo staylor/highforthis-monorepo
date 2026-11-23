@@ -1,11 +1,18 @@
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server';
+import { and, gt, lt } from 'remix/data-table';
 import { z } from 'zod';
 
 import { createLogger } from '@highforthis/shared/logger';
 
 import { issueToken } from '#/authentication';
 import { isAdmin } from '#/authorization';
-import prisma from '#/database';
+import db from '#/database/db';
+import {
+  newId,
+  passkeys as passkeysTable,
+  passkeyUser,
+  webAuthnChallenges,
+} from '#/database/tables';
 import env from '#/env';
 import type { UserWithRoles } from '#/models';
 
@@ -52,18 +59,19 @@ async function saveChallenge({
   type: typeof AUTHENTICATION_CHALLENGE | typeof REGISTRATION_CHALLENGE;
   userId?: string;
 }) {
-  await prisma.webAuthnChallenge.deleteMany({
-    where: { expiresAt: { lt: new Date() } },
-  });
+  await db.deleteMany(webAuthnChallenges, { where: lt('expiresAt', new Date()) });
 
-  return prisma.webAuthnChallenge.create({
-    data: {
+  return db.create(
+    webAuthnChallenges,
+    {
+      id: newId(),
       challenge,
       type,
       userId,
       expiresAt: new Date(Date.now() + CHALLENGE_TTL_MS),
     },
-  });
+    { returnRow: true }
+  );
 }
 
 async function consumeChallenge({
@@ -75,7 +83,7 @@ async function consumeChallenge({
   type: typeof AUTHENTICATION_CHALLENGE | typeof REGISTRATION_CHALLENGE;
   userId?: string;
 }) {
-  const challenge = await prisma.webAuthnChallenge.findUnique({ where: { id } });
+  const challenge = await db.find(webAuthnChallenges, id);
 
   if (
     !challenge ||
@@ -84,12 +92,12 @@ async function consumeChallenge({
     (userId !== undefined && challenge.userId !== userId)
   ) {
     if (challenge) {
-      await prisma.webAuthnChallenge.delete({ where: { id: challenge.id } });
+      await db.delete(webAuthnChallenges, challenge.id);
     }
     throw new PasskeyError('The passkey request expired or is invalid');
   }
 
-  await prisma.webAuthnChallenge.delete({ where: { id: challenge.id } });
+  await db.delete(webAuthnChallenges, challenge.id);
   return challenge.challenge;
 }
 
@@ -106,8 +114,8 @@ function errorResponse(error: unknown, status = 400): Response {
 
 export async function authenticationOptionsHandler(): Promise<Response> {
   try {
-    const pending = await prisma.webAuthnChallenge.count({
-      where: { type: AUTHENTICATION_CHALLENGE, expiresAt: { gt: new Date() } },
+    const pending = await db.count(webAuthnChallenges, {
+      where: and({ type: AUTHENTICATION_CHALLENGE }, gt('expiresAt', new Date())),
     });
     if (pending >= MAX_PENDING_AUTHENTICATIONS) {
       return Response.json(
@@ -143,12 +151,9 @@ export async function authenticationVerificationHandler(
       id: body.challengeId,
       type: AUTHENTICATION_CHALLENGE,
     });
-    const passkey = await prisma.passkey.findUnique({
-      where: { id: response.id },
-      include: { user: { include: { roles: true } } },
-    });
+    const passkey = await db.find(passkeysTable, response.id, { with: { user: passkeyUser } });
 
-    if (!passkey || !isAdmin(passkey.user)) {
+    if (!passkey?.user || !isAdmin(passkey.user)) {
       throw new PasskeyError('Passkey authentication failed');
     }
 
@@ -162,7 +167,7 @@ export async function authenticationVerificationHandler(
         id: passkey.id,
         publicKey: passkey.publicKey,
         counter: Number(passkey.counter),
-        transports: passkey.transports,
+        transports: passkey.transports ?? [],
       },
       requireUserVerification: true,
     });
@@ -171,14 +176,11 @@ export async function authenticationVerificationHandler(
       throw new PasskeyError('Passkey authentication failed');
     }
 
-    await prisma.passkey.update({
-      where: { id: passkey.id },
-      data: {
-        counter: BigInt(verification.authenticationInfo.newCounter),
-        backedUp: verification.authenticationInfo.credentialBackedUp,
-        deviceType: verification.authenticationInfo.credentialDeviceType,
-        lastUsedAt: new Date(),
-      },
+    await db.update(passkeysTable, passkey.id, {
+      counter: String(verification.authenticationInfo.newCounter),
+      backedUp: verification.authenticationInfo.credentialBackedUp,
+      deviceType: verification.authenticationInfo.credentialDeviceType,
+      lastUsedAt: new Date(),
     });
 
     return Response.json({ token: await issueToken(passkey.userId) });
@@ -194,7 +196,7 @@ export async function registrationOptionsHandler(context: PasskeyContext): Promi
       return errorResponse(new PasskeyError('Authentication required'), 401);
     }
 
-    const passkeys = await prisma.passkey.findMany({ where: { userId: user.id } });
+    const passkeys = await db.findMany(passkeysTable, { where: { userId: user.id } });
     const { generateRegistrationOptions } = await import('@simplewebauthn/server');
     const options = await generateRegistrationOptions({
       rpName: env.WEBAUTHN_RP_NAME,
@@ -206,7 +208,7 @@ export async function registrationOptionsHandler(context: PasskeyContext): Promi
       attestationType: 'none',
       excludeCredentials: passkeys.map((passkey) => ({
         id: passkey.id,
-        transports: passkey.transports,
+        transports: passkey.transports ?? [],
       })),
       authenticatorSelection: {
         residentKey: 'required',
@@ -253,18 +255,20 @@ export async function registrationVerificationHandler(context: PasskeyContext): 
     }
 
     const { credential, credentialBackedUp, credentialDeviceType } = verification.registrationInfo;
-    const passkey = await prisma.passkey.create({
-      data: {
+    const passkey = await db.create(
+      passkeysTable,
+      {
         id: credential.id,
         userId: user.id,
         publicKey: Buffer.from(credential.publicKey),
-        counter: BigInt(credential.counter),
+        counter: String(credential.counter),
         transports: credential.transports ?? [],
         deviceType: credentialDeviceType,
         backedUp: credentialBackedUp,
         name: body.name || null,
       },
-    });
+      { returnRow: true }
+    );
 
     return Response.json(
       {
@@ -287,18 +291,12 @@ export async function listPasskeysHandler(context: PasskeyContext): Promise<Resp
     return errorResponse(new PasskeyError('Authentication required'), 401);
   }
 
-  const passkeys = await prisma.passkey.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      name: true,
-      backedUp: true,
-      deviceType: true,
-      createdAt: true,
-      lastUsedAt: true,
-    },
-  });
+  const passkeys = await db
+    .query(passkeysTable)
+    .where({ userId: user.id })
+    .orderBy('createdAt', 'desc')
+    .select('id', 'name', 'backedUp', 'deviceType', 'createdAt', 'lastUsedAt')
+    .all();
   return Response.json({ passkeys });
 }
 
@@ -312,10 +310,7 @@ export async function deletePasskeyHandler(
     }
 
     const credentialId = z.string().min(1).parse(context.params.credentialId);
-    const passkeys = await prisma.passkey.findMany({
-      where: { userId: user.id },
-      select: { id: true },
-    });
+    const passkeys = await db.query(passkeysTable).where({ userId: user.id }).select('id').all();
 
     if (!passkeys.some((passkey) => passkey.id === credentialId)) {
       return errorResponse(new PasskeyError('Passkey not found'), 404);
@@ -324,7 +319,7 @@ export async function deletePasskeyHandler(
       return errorResponse(new PasskeyError('The last passkey cannot be removed'), 409);
     }
 
-    await prisma.passkey.delete({ where: { id: credentialId } });
+    await db.delete(passkeysTable, credentialId);
     return new Response(null, { status: 204 });
   } catch (error) {
     return errorResponse(error);

@@ -69,7 +69,7 @@ export const updatePodcastSchema = z.object({
 
 // --- Post ---
 
-// EditorState is a complex recursive Lexical structure stored as Prisma Json.
+// EditorState is a complex recursive Lexical structure stored as JSON.
 // We validate the top-level shape; Lexical manages the internal structure.
 const editorStateInput = z
   .object({
