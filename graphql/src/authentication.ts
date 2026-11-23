@@ -22,6 +22,7 @@ const SESSION_HOURS = 12;
 /** Signs a token for a session that's already saved. */
 export function signToken(userId: string, sessionId: string): string {
   return jsonwebtoken.sign({ userId, sid: sessionId }, env.TOKEN_SECRET, {
+    algorithm: 'HS256',
     expiresIn: `${SESSION_HOURS}h`,
   });
 }
@@ -41,7 +42,7 @@ export async function issueToken(userId: string): Promise<string> {
 
 function verifiedPayload(token: string): JWTPayload | null {
   try {
-    return jsonwebtoken.verify(token, env.TOKEN_SECRET) as JWTPayload;
+    return jsonwebtoken.verify(token, env.TOKEN_SECRET, { algorithms: ['HS256'] }) as JWTPayload;
   } catch {
     // Invalid or expired
     return null;

@@ -45,7 +45,6 @@
     "build:service": "prisma generate && rm -rf dist && esbuild src/index.ts --packages=external --bundle --splitting --platform=node --target=node24 --format=esm --outdir=dist",
     "start": "node dist/index.js",
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
     "db:push": "node --env-file-if-exists=.env node_modules/prisma/build/index.js db push",
     "db:studio": "prisma studio",
     "db:dump": "bash tools/database/dump",

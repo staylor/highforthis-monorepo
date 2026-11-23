@@ -5,9 +5,9 @@ GraphQL API server for High For This, built with Apollo Server, Remix's Fetch AP
 ## Stack
 
 - **[Apollo Server](https://www.apollographql.com/docs/apollo-server/)** — GraphQL server
-- **[Remix](https://remix.run/)** — HTTP server: `remix/node-fetch-server` and `remix/router`, with Remix's CORS, compression and static middleware, and `remix/form-data-parser` for uploads
+- **[Remix](https://remix.run/)** — HTTP server: `remix/node-fetch-server` and `remix/router`, with Remix's CORS and compression middleware, and `remix/form-data-parser` for uploads
 - **[Prisma](https://www.prisma.io/)** — ORM with PostgreSQL adapter (`@prisma/adapter-pg`)
-- **JWT** — Authentication via `jsonwebtoken` and `bcryptjs`
+- **JWT** — Sign-in with a password (`bcryptjs`) or a passkey (`@simplewebauthn/server`), and a session token signed with `jsonwebtoken`
 
 ## Setup
 
@@ -95,13 +95,13 @@ pnpm start
 | `pnpm build`                 | Generate Prisma client and bundle for production    |
 | `pnpm start`                 | Start the production server                         |
 | `pnpm db:generate`           | Generate Prisma client                              |
-| `pnpm db:migrate`            | Run Prisma migrations                               |
 | `pnpm db:push`               | Push schema to database                             |
 | `pnpm db:studio`             | Open Prisma Studio                                  |
 | `pnpm db:dump`               | Dump database to seed file                          |
 | `pnpm db:refresh`            | Replace local data with a fresh production snapshot |
 | `pnpm db:setup`              | Create, update, and seed the database if it's empty |
 | `pnpm db:reset`              | Drop the database and set it up again from the seed |
+| `pnpm test`                  | Run the tests                                       |
 | `pnpm typecheck`             | Type-check with TypeScript                          |
 
 ## Project Structure
@@ -111,11 +111,14 @@ src/
 ├── index.ts          # Entry point: starts observability, then server.ts
 ├── server.ts         # Node HTTP server, Apollo Server and request logging
 ├── app.ts            # Routes and middleware (Remix router)
-├── authentication.ts # JWT authentication middleware
+├── authentication.ts # Password sign-in, sessions and the token middleware
+├── passkeys.ts       # Passkey sign-in and registration
+├── hardening.ts      # Query size limits and error masking
 ├── database/         # Prisma client
-├── models/           # Data access layer
+├── models/           # Shared types and unique slugs
 ├── resolvers/        # GraphQL resolvers
 ├── schema/           # GraphQL type definitions
+├── listings/         # Venue listings from Bowery Presents/AEG and Ticketmaster
 ├── uploads/          # Media upload handling
 ├── utils/            # Utility functions
 └── jobs/             # Scheduled tasks (cron)
