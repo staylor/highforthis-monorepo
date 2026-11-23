@@ -129,7 +129,7 @@ function VenueMap(
           [md]: { marginBottom: 0 },
         })}
         style={{ width: size, height: size }}
-        href={`http://maps.apple.com/?${new URLSearchParams({ q: name, ll: center, z: '18' })}`}
+        href={`https://maps.apple.com/?${new URLSearchParams({ q: name, ll: center, z: '18' })}`}
       >
         <img
           width={size}
