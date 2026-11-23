@@ -1041,7 +1041,7 @@ export type PodcastQuery = { podcast: { id: string, description: string, title: 
 export type PodcastFeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PodcastFeedQuery = { podcasts: { edges: Array<{ node: { id: string, date: number | null, description: string, title: string, audio: { id: string, destination: string, duration: number | null, fileName: string, fileSize: number } | null } }> } | null, podcastSettings: { id: string, category: string | null, copyrightText: string | null, description: string | null, explicit: string | null, feedLink: string | null, generator: string | null, itunesEmail: string | null, itunesName: string | null, language: string | null, managingEditor: string | null, title: string | null, websiteLink: string | null, image: { id: string, destination: string, fileName: string } | null } };
+export type PodcastFeedQuery = { podcasts: { edges: Array<{ node: { id: string, date: number | null, description: string, title: string, audio: { id: string, destination: string, duration: number | null, fileName: string, fileSize: number, mimeType: string } | null, image: { id: string, destination: string, fileName: string } | null } }> } | null, podcastSettings: { id: string, category: string | null, copyrightText: string | null, description: string | null, explicit: string | null, feedLink: string | null, generator: string | null, itunesEmail: string | null, itunesName: string | null, language: string | null, managingEditor: string | null, title: string | null, websiteLink: string | null, image: { id: string, destination: string, fileName: string } | null } };
 
 export type PostsQueryVariables = Exact<{
   first?: number | null | undefined;
