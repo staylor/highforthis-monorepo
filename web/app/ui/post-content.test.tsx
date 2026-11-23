@@ -21,6 +21,38 @@ const render = (...blocks: object[]) =>
   renderToString(<PostContent editorState={{ root: { children: blocks } } as EditorState} />);
 
 describe('PostContent', () => {
+  it('shows every format the editor can give text', async () => {
+    const html = await render(
+      block('paragraph', [
+        text('bold', 1),
+        text('italic', 2),
+        text('struck', 4),
+        text('underlined', 8),
+        text('code', 16),
+        text('sub', 32),
+        text('super', 64),
+        text('plain'),
+      ])
+    );
+    assert.match(
+      html,
+      /<strong>bold<\/strong><em>italic<\/em><s>struck<\/s><u>underlined<\/u><code>code<\/code><sub>sub<\/sub><sup>super<\/sup>plain/
+    );
+  });
+
+  it('nests the formats of text that has several', async () => {
+    const html = await render(
+      block('paragraph', [
+        text('bold code', 1 | 16),
+        text('everything', 1 | 2 | 8),
+        text('struck bold', 1 | 4),
+      ])
+    );
+    assert.match(html, /<strong><code>bold code<\/code><\/strong>/);
+    assert.match(html, /<strong><em><u>everything<\/u><\/em><\/strong>/);
+    assert.match(html, /<strong><s>struck bold<\/s><\/strong>/);
+  });
+
   it('numbers a list from where it starts', async () => {
     const html = await render(
       block('list', [block('listitem', [text('Third')]), block('listitem', [text('Fourth')])], {
