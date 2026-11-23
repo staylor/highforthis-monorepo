@@ -1,5 +1,8 @@
 import { GraphQLError } from 'graphql';
+import { inList, type AnyTable } from 'remix/data-table';
 import type { z } from 'zod';
+
+import db from '#/database/db';
 
 /** An error for something the request got wrong, which isn't the server's failure */
 export const badInput = (message: string) =>
@@ -33,6 +36,16 @@ export async function removeEntities(
 ): Promise<boolean> {
   try {
     await delegate.deleteMany({ where: { id: { in: ids.filter(Boolean) as string[] } } });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Deletes the rows of a remix/data-table table that have these IDs, answering whether it could */
+export async function removeRows(table: AnyTable, ids: (string | null)[]): Promise<boolean> {
+  try {
+    await db.deleteMany(table, { where: inList('id', ids.filter(Boolean)) });
     return true;
   } catch {
     return false;

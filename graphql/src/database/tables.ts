@@ -4,6 +4,7 @@ import {
   belongsTo,
   column as c,
   hasMany,
+  hasOne,
   table,
   type AnyTable,
   type ColumnBuilder,
@@ -128,4 +129,91 @@ export const venueFeaturedMediaUpload = belongsTo(venueFeaturedMedia, mediaUploa
 /** A venue's featured-media rows, each with its media */
 export const venueMedia = hasMany(venues, venueFeaturedMedia, { foreignKey: 'venueId' }).with({
   media: venueFeaturedMediaUpload,
+});
+
+// --- Artist ---
+
+export const artists = table({
+  name: 'Artist',
+  columns: {
+    id: c.text(),
+    name: c.text(),
+    slug: c.text(),
+    description: c.text().nullable(),
+    website: c.text().nullable(),
+    excludeFromSearch: c.boolean(),
+    createdAt: timestamp(),
+    updatedAt: timestamp(),
+  },
+  timestamps,
+  beforeWrite: skipUndefined,
+});
+
+export const appleMusicData = table({
+  name: 'AppleMusicData',
+  columns: {
+    id: c.text(),
+    artistId: c.text(),
+    appleId: c.text().nullable(),
+    url: c.text().nullable(),
+  },
+  beforeWrite: skipUndefined,
+});
+
+export const appleMusicGenres = table({
+  name: 'AppleMusicGenre',
+  columns: {
+    id: c.text(),
+    appleMusicDataId: c.text(),
+    name: c.text(),
+  },
+  beforeWrite: skipUndefined,
+});
+
+export const appleMusicArtworks = table({
+  name: 'AppleMusicArtwork',
+  columns: {
+    id: c.text(),
+    appleMusicDataId: c.text(),
+    width: c.integer().nullable(),
+    height: c.integer().nullable(),
+    url: c.text().nullable(),
+    bgColor: c.text().nullable(),
+    textColor1: c.text().nullable(),
+    textColor2: c.text().nullable(),
+    textColor3: c.text().nullable(),
+    textColor4: c.text().nullable(),
+  },
+  beforeWrite: skipUndefined,
+});
+
+export const artistFeaturedMedia = table({
+  name: 'ArtistFeaturedMedia',
+  columns: {
+    artistId: c.text(),
+    mediaId: c.text(),
+  },
+  primaryKey: ['artistId', 'mediaId'],
+  beforeWrite: skipUndefined,
+});
+
+/** Apple Music data's genres and artwork */
+export const appleMusicDetails = {
+  genreNames: hasMany(appleMusicData, appleMusicGenres, { foreignKey: 'appleMusicDataId' }),
+  artwork: hasOne(appleMusicData, appleMusicArtworks, { foreignKey: 'appleMusicDataId' }),
+};
+
+/** An artist's Apple Music data, with its genres and artwork */
+export const artistAppleMusic = hasOne(artists, appleMusicData, { foreignKey: 'artistId' }).with(
+  appleMusicDetails
+);
+
+/** The media an artist's featured-media row joins */
+export const artistFeaturedMediaUpload = belongsTo(artistFeaturedMedia, mediaUploads, {
+  foreignKey: 'mediaId',
+});
+
+/** An artist's featured-media rows, each with its media */
+export const artistMedia = hasMany(artists, artistFeaturedMedia, { foreignKey: 'artistId' }).with({
+  media: artistFeaturedMediaUpload,
 });

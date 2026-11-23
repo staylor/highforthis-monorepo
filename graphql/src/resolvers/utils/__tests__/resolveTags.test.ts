@@ -1,17 +1,24 @@
+import { ilike } from 'remix/data-table';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { artists as artistsTable } from '#/database/tables';
 
 import resolveTags from '../resolveTags';
 
-const artist = vi.hoisted(() => ({ count: vi.fn(), create: vi.fn(), findFirst: vi.fn() }));
+const db = vi.hoisted(() => ({ count: vi.fn(), create: vi.fn(), findOne: vi.fn() }));
 const fillAppleMusicLater = vi.hoisted(() => vi.fn());
 
-vi.mock('#/database', () => ({ default: { artist } }));
+vi.mock('#/database/db', () => ({ default: db }));
+vi.mock('#/database/tables', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('#/database/tables')>()),
+  newId: () => `new-${db.create.mock.calls.length + 1}`,
+}));
 vi.mock('../appleMusicData', () => ({ fillAppleMusicLater }));
 
 /** The artists there are, by name */
 function artists(names: Record<string, string>) {
-  artist.findFirst.mockImplementation(async ({ where }) => {
-    const id = names[where.name.equals.toLowerCase()];
+  db.findOne.mockImplementation(async (_table, { where }) => {
+    const id = names[where.value.toLowerCase()];
     return id ? { id } : null;
   });
 }
@@ -19,24 +26,25 @@ function artists(names: Record<string, string>) {
 describe('resolveTags', () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    artist.count.mockResolvedValue(0);
-    artist.create.mockImplementation(async ({ data }) => ({ id: `new-${data.slug}` }));
+    db.count.mockResolvedValue(0);
   });
 
   it('answers the artists the names belong to, in the order given', async () => {
     artists({ phish: 'artist-1', 'the national': 'artist-2' });
 
     await expect(resolveTags(['The National', 'Phish'])).resolves.toEqual(['artist-2', 'artist-1']);
-    expect(artist.create).not.toHaveBeenCalled();
+    expect(db.create).not.toHaveBeenCalled();
   });
 
   it('adds the artists that are new', async () => {
     artists({ phish: 'artist-1' });
 
-    await expect(resolveTags(['Phish', 'Sum 41'])).resolves.toEqual(['artist-1', 'new-sum-41']);
-    expect(artist.create).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({ data: { name: 'Sum 41', slug: 'sum-41' } })
-    );
+    await expect(resolveTags(['Phish', 'Sum 41'])).resolves.toEqual(['artist-1', 'new-1']);
+    expect(db.create).toHaveBeenCalledExactlyOnceWith(artistsTable, {
+      id: 'new-1',
+      name: 'Sum 41',
+      slug: 'sum-41',
+    });
   });
 
   it("looks up Apple Music's data for the artists it added, and only those", async () => {
@@ -44,23 +52,35 @@ describe('resolveTags', () => {
 
     await resolveTags(['Phish', 'Sum 41']);
 
-    expect(fillAppleMusicLater).toHaveBeenCalledExactlyOnceWith(['new-sum-41']);
+    expect(fillAppleMusicLater).toHaveBeenCalledExactlyOnceWith(['new-1']);
   });
 
   it('finds an artist however the name is capitalized or spaced', async () => {
     artists({ 'the national': 'artist-2' });
 
     await expect(resolveTags([' the national '])).resolves.toEqual(['artist-2']);
-    expect(artist.findFirst).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { name: { equals: 'the national', mode: 'insensitive' } } })
+    expect(db.findOne).toHaveBeenCalledWith(
+      artistsTable,
+      expect.objectContaining({ where: ilike('name', 'the national') })
     );
-    expect(artist.create).not.toHaveBeenCalled();
+    expect(db.create).not.toHaveBeenCalled();
+  });
+
+  it('matches a name with % or _ as those characters, not as wildcards', async () => {
+    artists({});
+
+    await resolveTags(['100%_Hits']);
+
+    expect(db.findOne).toHaveBeenCalledWith(
+      artistsTable,
+      expect.objectContaining({ where: ilike('name', '100\\%\\_Hits') })
+    );
   });
 
   it('adds a new artist once when the name is given twice', async () => {
     artists({});
 
-    await expect(resolveTags(['Wednesday', 'wednesday', ''])).resolves.toEqual(['new-wednesday']);
-    expect(artist.create).toHaveBeenCalledTimes(1);
+    await expect(resolveTags(['Wednesday', 'wednesday', ''])).resolves.toEqual(['new-1']);
+    expect(db.create).toHaveBeenCalledTimes(1);
   });
 });

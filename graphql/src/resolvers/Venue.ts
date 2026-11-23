@@ -1,7 +1,8 @@
-import { ilike, inList, or, type TableRow } from 'remix/data-table';
+import { ilike, or, type TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
 import db from '#/database/db';
+import { containing } from '#/database/search';
 import type { Loaded } from '#/database/tables';
 import {
   newId,
@@ -11,10 +12,10 @@ import {
   venues,
 } from '#/database/tables';
 import { ADDRESS_FIELDS, geocodeVenue } from '#/geocode';
-import { getUniqueSlug } from '#/models/utils';
+import { getUniqueSlug, slugsIn } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeEntities, resolveJoin } from './utils/helpers';
+import { parseInput, removeRows, resolveJoin } from './utils/helpers';
 import { createVenueSchema, updateVenueSchema } from './validations';
 
 type Venue = TableRow<typeof venues>;
@@ -23,9 +24,6 @@ type Venue = TableRow<typeof venues>;
 export type VenueSource = Venue & { featuredMedia?: Loaded<typeof venueMedia> };
 
 const withMedia = { with: { featuredMedia: venueMedia } };
-
-// Prisma's `contains` matches the text as written, so `%` and `_` aren't wildcards
-const containing = (text: string) => `%${text.replace(/[\\%_]/g, '\\$&')}%`;
 
 const resolvers = {
   Venue: {
@@ -89,10 +87,7 @@ const resolvers = {
   Mutation: {
     async createVenue(_, { input }) {
       const { featuredMedia, coordinates, ...data } = parseInput(createVenueSchema, input);
-      const slug = await getUniqueSlug(
-        { count: ({ where }) => db.count(venues, { where }) },
-        data.name
-      );
+      const slug = await getUniqueSlug(slugsIn(db, venues), data.name);
       // Look the venue up unless its coordinates were entered
       const location =
         typeof coordinates?.latitude === 'number' && typeof coordinates.longitude === 'number'
@@ -140,10 +135,7 @@ const resolvers = {
     },
 
     async removeVenue(_, { ids }) {
-      return removeEntities(
-        { deleteMany: ({ where }) => db.deleteMany(venues, { where: inList('id', where.id.in) }) },
-        ids
-      );
+      return removeRows(venues, ids);
     },
   },
 } satisfies Resolvers;

@@ -1,5 +1,9 @@
-import prisma from '#/database';
-import { getUniqueSlug } from '#/models/utils';
+import { ilike } from 'remix/data-table';
+
+import db from '#/database/db';
+import { matching } from '#/database/search';
+import { artists, newId } from '#/database/tables';
+import { getUniqueSlug, slugsIn } from '#/models/utils';
 
 import { fillAppleMusicLater } from './appleMusicData';
 
@@ -20,19 +24,18 @@ export default async function resolveTags(inputTerms: string[]): Promise<string[
   const newArtists: string[] = [];
   // One at a time, so two new names can't claim the same slug
   for (const name of names.values()) {
-    let artist = await prisma.artist.findFirst({
-      where: { name: { equals: name, mode: 'insensitive' } },
-      orderBy: { createdAt: 'asc' },
-      select: { id: true },
+    const artist = await db.findOne(artists, {
+      where: ilike('name', matching(name)),
+      orderBy: ['createdAt', 'asc'],
     });
-    if (!artist) {
-      artist = await prisma.artist.create({
-        data: { name, slug: await getUniqueSlug(prisma.artist, name) },
-        select: { id: true },
-      });
-      newArtists.push(artist.id);
+    if (artist) {
+      ids.push(artist.id);
+    } else {
+      const id = newId();
+      await db.create(artists, { id, name, slug: await getUniqueSlug(slugsIn(db, artists), name) });
+      newArtists.push(id);
+      ids.push(id);
     }
-    ids.push(artist.id);
   }
   fillAppleMusicLater(newArtists);
   return ids;
