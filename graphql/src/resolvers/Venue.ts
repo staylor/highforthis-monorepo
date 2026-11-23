@@ -98,7 +98,7 @@ const resolvers = {
 
     async updateVenue(_, { id, input }) {
       const { featuredMedia, coordinates, ...data } = updateVenueSchema.parse(input);
-      const updateData: Record<string, unknown> = { ...data };
+      const updateData: Prisma.VenueUpdateInput = { ...data };
       if (coordinates) {
         updateData.latitude = coordinates.latitude;
         updateData.longitude = coordinates.longitude;

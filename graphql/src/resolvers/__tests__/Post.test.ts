@@ -5,8 +5,11 @@ import type { AppContext } from '#/models';
 import resolvers from '#/resolvers';
 import typeDefs from '#/schema';
 
+import postResolvers from '../Post';
+
 const db = vi.hoisted(() => ({
-  post: { count: vi.fn(), findMany: vi.fn() },
+  post: { count: vi.fn(), findMany: vi.fn(), update: vi.fn() },
+  postArtist: { deleteMany: vi.fn() },
   mediaUpload: { findUnique: vi.fn() },
   imageUploadCrop: { findMany: vi.fn() },
 }));
@@ -128,5 +131,34 @@ describe('posts', () => {
       },
     });
     expect(db.imageUploadCrop.findMany).not.toHaveBeenCalled();
+  });
+});
+
+describe('updatePost', () => {
+  const { updatePost } = postResolvers.Mutation;
+
+  beforeEach(() => {
+    vi.resetAllMocks();
+    db.post.update.mockResolvedValue({ id: 'post-1' });
+  });
+
+  it('saves a new date', async () => {
+    await updatePost({}, { id: 'post-1', input: { date: Date.UTC(2026, 10, 21) } });
+
+    expect(db.post.update).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        where: { id: 'post-1' },
+        data: { date: new Date('2026-11-21T00:00:00Z') },
+      })
+    );
+  });
+
+  // Prisma turns away a null date, since every post has one
+  it('keeps the saved date when the date is sent as null', async () => {
+    await updatePost({}, { id: 'post-1', input: { date: null, title: 'Renamed' } });
+
+    expect(db.post.update).toHaveBeenLastCalledWith(
+      expect.objectContaining({ data: { title: 'Renamed' } })
+    );
   });
 });
