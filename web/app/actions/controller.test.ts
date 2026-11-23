@@ -97,6 +97,34 @@ describe('root controller', () => {
     assert.equal(fetch.mock.calls.length, 1);
   });
 
+  it("lets a page's scripts come only from this site, or carry the response's nonce", async (t) => {
+    stubGraphQL(t, { 'graphql:App': () => ({ data: {} }) });
+    const nonces: string[] = [];
+    // A public page, and one of the admin's
+    for (const path of [routes.sphere.href(), routes.login.index.href({})]) {
+      const response = await router.fetch(new URL(path, origin));
+      const policy = response.headers.get('content-security-policy') ?? '';
+      const nonce = /script-src 'self' 'nonce-([^']+)' blob:/.exec(policy)?.[1];
+      assert.ok(nonce, `${path}: ${policy}`);
+      assert.match(policy, /frame-ancestors 'self'; base-uri 'self'; object-src 'none'/);
+      assert.match(policy, /worker-src 'self' blob:/);
+      nonces.push(nonce);
+
+      // Every script the page runs has the nonce: its own inline ones, the import map and the
+      // entry module. The data for hydration isn't a script that runs.
+      const html = await response.text();
+      const scripts = Array.from(
+        html.matchAll(/<script\b([^>]*)>/g),
+        ([, attributes]) => attributes
+      ).filter((attributes) => !attributes.includes('application/json'));
+      assert.ok(scripts.length >= 3, `${path}: ${scripts.length} scripts`);
+      for (const attributes of scripts) {
+        assert.ok(attributes.includes(`nonce="${nonce}"`), `${path}: <script${attributes}>`);
+      }
+    }
+    assert.notEqual(nonces[0], nonces[1], 'each response has its own');
+  });
+
   it('no longer fetches whatever URL /oembed is given', async (t) => {
     stubGraphQL(t, { 'graphql:App': () => ({ data: {} }) });
     const response = await router.fetch(

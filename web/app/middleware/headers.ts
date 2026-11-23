@@ -1,8 +1,47 @@
-import type { Middleware } from 'remix/router';
+import { csp, getCspNonce } from 'remix/middleware/csp';
+import { createContextKey, type Middleware } from 'remix/router';
 
-// Sent with every response, unless it already sets its own. The policy doesn't limit scripts
-// yet, which would need a nonce for the inline ones; it stops other sites framing pages, a
-// <base> tag redirecting relative URLs, plugins, and forms posting anywhere but this site.
+// Every response's policy: it stops other sites framing pages, a <base> tag redirecting relative
+// URLs, plugins, and forms posting anywhere but this site.
+const directives = {
+  frameAncestors: ["'self'"],
+  baseUri: ["'self'"],
+  objectSrc: ["'none'"],
+  formAction: ["'self'"],
+};
+
+/**
+ * A page's policy, which also says where its scripts may come from: this site, and the inline
+ * ones that carry the response's nonce, which Document gives its own and Remix gives the import
+ * map. Markup that gets into a page some other way can't run a script. `blob:` is for scripts the
+ * page's own scripts make: Remix loads modules that way where a browser can't add to its import
+ * map, and the RUM SDK starts its session replay worker that way. It goes before render(), which
+ * gets the nonce from it.
+ */
+export function pagePolicy() {
+  return csp({
+    policy: ({ nonce }) => ({
+      ...directives,
+      scriptSrc: ["'self'", `'nonce-${nonce}'`, 'blob:'],
+      workerSrc: ["'self'", 'blob:'],
+    }),
+  });
+}
+
+const Nonce = createContextKey<string | undefined>();
+
+/** The page policy's nonce as `context.nonce`, for the inline scripts a page writes itself. */
+export function pageNonce(): Middleware<{
+  key: typeof Nonce;
+  value: string | undefined;
+  property: 'nonce';
+}> {
+  return (context, next) => {
+    context.set(Nonce, getCspNonce(context), { property: 'nonce' });
+    return next();
+  };
+}
+
 const contentSecurityPolicy = [
   "frame-ancestors 'self'",
   "base-uri 'self'",
@@ -10,6 +49,7 @@ const contentSecurityPolicy = [
   "form-action 'self'",
 ].join('; ');
 
+// Sent with every response, unless it already sets its own, as a page does its policy
 const always: Record<string, string> = {
   'Content-Security-Policy': contentSecurityPolicy,
   'X-Frame-Options': 'SAMEORIGIN',

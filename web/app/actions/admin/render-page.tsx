@@ -16,7 +16,7 @@ interface AdminPageOptions {
 
 // What rendering needs from a request's context. Admin controllers' contexts also carry
 // `context.admin`, which keeps them from being an `AppContext`.
-export type AdminPageContext = Pick<AppContext, 'gql' | 'request' | 'render' | 'url'>;
+export type AdminPageContext = Pick<AppContext, 'gql' | 'nonce' | 'request' | 'render' | 'url'>;
 
 /** The same, for a page that loads its data as the signed-in admin. */
 export type AdminContext = AdminPageContext & { admin: { gql: GraphQLClient } };
@@ -34,7 +34,7 @@ export async function renderAdminPage(
   };
   const title = titleTemplate(options.title ? `${options.title} » Admin` : 'Admin', siteSettings);
   return context.render(
-    <AdminDocument admin={admin} title={title} bare={options.bare}>
+    <AdminDocument admin={admin} title={title} bare={options.bare} nonce={context.nonce}>
       {page}
     </AdminDocument>,
     { status: options.status }

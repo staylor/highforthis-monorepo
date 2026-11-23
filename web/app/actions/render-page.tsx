@@ -106,6 +106,7 @@ export async function renderPage(context: AppContext, page: RemixNode, options: 
       meta={options.meta}
       head={options.head}
       layout={options.layout}
+      nonce={context.nonce}
     >
       {page}
     </Document>,
