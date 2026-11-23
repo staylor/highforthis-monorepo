@@ -179,7 +179,7 @@ export default createController(routes, {
 
     async podcastFeed(context) {
       const data = await context.gql.query<PodcastFeedQuery>(feedQuery);
-      return new Response(feedTemplate(data as any), {
+      return new Response(feedTemplate(data), {
         headers: { 'Content-Type': 'application/xml' },
       });
     },
