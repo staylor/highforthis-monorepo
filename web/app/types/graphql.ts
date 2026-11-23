@@ -41,7 +41,6 @@ export type CreateArtistInput = {
 
 export type CreatePodcastInput = {
   audio?: string | null | undefined;
-  date?: number | null | undefined;
   description?: string | null | undefined;
   image?: string | null | undefined;
   title: string;
@@ -236,7 +235,6 @@ export type UpdateMediaUploadInput = {
 
 export type UpdatePodcastInput = {
   audio?: string | null | undefined;
-  date?: number | null | undefined;
   description?: string | null | undefined;
   image?: string | null | undefined;
   title: string;

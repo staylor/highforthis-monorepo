@@ -85,14 +85,13 @@ const Show = `#graphql
       before: String
       latest: Boolean
       attended: Boolean
-      date: Float
       year: Int
       artist: EntityArg
       venue: EntityArg
       search: String
       order: ShowOrder
     ): ShowConnection
-    show(id: String, slug: String, lastAdded: Boolean): Show
+    show(id: String, lastAdded: Boolean): Show
     showStats(entity: ShowEntityType!): [ShowStat!]! 
   }
 

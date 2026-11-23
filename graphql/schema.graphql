@@ -133,7 +133,6 @@ input CreateArtistInput {
 
 input CreatePodcastInput {
   audio: String
-  date: Float
   description: String
   image: String
   title: String!
@@ -244,15 +243,6 @@ type ElementNode implements ElementNodeType & LexicalNode {
   version: Int
 }
 
-input ElementNodeInput {
-  children: [EditorNodeInput]
-  direction: ElementDirection
-  format: Int
-  indent: Int
-  type: String
-  version: Int
-}
-
 interface ElementNodeType implements LexicalNode {
   children: [EditorNode]
   direction: ElementDirection
@@ -330,13 +320,6 @@ type ImageUploadCrop {
   fileSize: Int!
   height: Int!
   width: Int!
-}
-
-input ImageUploadCropInput {
-  fileName: String
-  fileSize: Int
-  height: Int
-  width: Int
 }
 
 input ImportListingInput {
@@ -578,14 +561,14 @@ type Query {
   artists(after: String, before: String, filtered: Boolean, first: Int, last: Int, search: String): ArtistConnection
   media(id: String): MediaUpload
   mediaSettings: MediaSettings!
-  podcast(id: String, slug: String): Podcast
+  podcast(id: String): Podcast
   podcastSettings: PodcastSettings!
   podcasts(after: String, before: String, first: Int, last: Int, order: PodcastOrder, search: String): PodcastConnection
   post(id: String, slug: String): Post
-  posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus, year: Int): PostConnection
-  show(id: String, lastAdded: Boolean, slug: String): Show
+  posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus): PostConnection
+  show(id: String, lastAdded: Boolean): Show
   showStats(entity: ShowEntityType!): [ShowStat!]!
-  shows(after: String, artist: EntityArg, attended: Boolean, before: String, date: Float, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, venue: EntityArg, year: Int): ShowConnection
+  shows(after: String, artist: EntityArg, attended: Boolean, before: String, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, venue: EntityArg, year: Int): ShowConnection
   siteSettings: SiteSettings!
   uploads(after: String, before: String, first: Int, last: Int, mimeType: String, search: String, type: String): MediaUploadConnection
   user(id: String!): User
@@ -711,7 +694,6 @@ input UpdateMediaUploadInput {
 
 input UpdatePodcastInput {
   audio: String
-  date: Float
   description: String
   image: String
   title: String!

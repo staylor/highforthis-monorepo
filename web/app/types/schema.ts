@@ -155,7 +155,6 @@ export type CreateArtistInput = {
 
 export type CreatePodcastInput = {
   audio?: InputMaybe<Scalars['String']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
@@ -269,15 +268,6 @@ export type ElementNode = ElementNodeType & LexicalNode & {
   version?: Maybe<Scalars['Int']['output']>;
 };
 
-export type ElementNodeInput = {
-  children?: InputMaybe<Array<InputMaybe<EditorNodeInput>>>;
-  direction?: InputMaybe<ElementDirection>;
-  format?: InputMaybe<Scalars['Int']['input']>;
-  indent?: InputMaybe<Scalars['Int']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
-  version?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type ElementNodeType = {
   children?: Maybe<Array<Maybe<EditorNode>>>;
   direction?: Maybe<ElementDirection>;
@@ -361,13 +351,6 @@ export type ImageUploadCrop = {
   fileSize: Scalars['Int']['output'];
   height: Scalars['Int']['output'];
   width: Scalars['Int']['output'];
-};
-
-export type ImageUploadCropInput = {
-  fileName?: InputMaybe<Scalars['String']['input']>;
-  fileSize?: InputMaybe<Scalars['Int']['input']>;
-  height?: InputMaybe<Scalars['Int']['input']>;
-  width?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ImportListingInput = {
@@ -836,7 +819,6 @@ export type QueryMediaArgs = {
 
 export type QueryPodcastArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
-  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -863,14 +845,12 @@ export type QueryPostsArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<PostStatus>;
-  year?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryShowArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
   lastAdded?: InputMaybe<Scalars['Boolean']['input']>;
-  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -884,7 +864,6 @@ export type QueryShowsArgs = {
   artist?: InputMaybe<EntityArg>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   latest?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1080,7 +1059,6 @@ export type UpdateMediaUploadInput = {
 
 export type UpdatePodcastInput = {
   audio?: InputMaybe<Scalars['String']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
