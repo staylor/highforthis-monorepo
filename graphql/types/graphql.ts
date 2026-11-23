@@ -1349,47 +1349,6 @@ export type DirectiveResolverFn<
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-/** Mapping of union types */
-export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
-  EditorNode:
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData;
-  ShowEntity: ArtistSource | VenueSource;
-};
-
-/** Mapping of interface types */
-export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
-  ElementNodeType:
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData;
-  LexicalNode:
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData
-    | EditorNodeData;
-  MediaUpload: MediaUploadSource | MediaUploadSource | MediaUploadSource | MediaUploadSource;
-};
-
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   APIKeys: ResolverTypeWrapper<ApiKeys>;
@@ -1416,7 +1375,7 @@ export type ResolversTypes = {
   CreateUserInput: CreateUserInput;
   CreateVenueInput: CreateVenueInput;
   CreateVideoInput: CreateVideoInput;
-  EditorNode: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['EditorNode']>;
+  EditorNode: ResolverTypeWrapper<EditorNodeData>;
   EditorNodeInput: EditorNodeInput;
   EditorState: ResolverTypeWrapper<
     Omit<EditorState, 'root'> & { root?: Maybe<ResolversTypes['ElementNode']> }
@@ -1425,7 +1384,7 @@ export type ResolversTypes = {
   ElementDirection: ElementDirection;
   ElementNode: ResolverTypeWrapper<EditorNodeData>;
   ElementNodeInput: ElementNodeInput;
-  ElementNodeType: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['ElementNodeType']>;
+  ElementNodeType: ResolverTypeWrapper<EditorNodeData>;
   EntityArg: EntityArg;
   FileUpload: ResolverTypeWrapper<MediaUploadSource>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
@@ -1438,7 +1397,7 @@ export type ResolversTypes = {
   ImportListingInput: ImportListingInput;
   ImportListingsResult: ResolverTypeWrapper<ImportListingsResult>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
-  LexicalNode: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['LexicalNode']>;
+  LexicalNode: ResolverTypeWrapper<EditorNodeData>;
   LinebreakNode: ResolverTypeWrapper<EditorNodeData>;
   ListItemNode: ResolverTypeWrapper<EditorNodeData>;
   ListNode: ResolverTypeWrapper<EditorNodeData>;
@@ -1448,7 +1407,7 @@ export type ResolversTypes = {
   MediaCropSettingInput: MediaCropSettingInput;
   MediaSettings: ResolverTypeWrapper<MediaSettingsRecord>;
   MediaSettingsInput: MediaSettingsInput;
-  MediaUpload: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MediaUpload']>;
+  MediaUpload: ResolverTypeWrapper<MediaUploadSource>;
   MediaUploadConnection: ResolverTypeWrapper<Connection<MediaUploadSource>>;
   MediaUploadEdge: ResolverTypeWrapper<
     Omit<MediaUploadEdge, 'node'> & { node: ResolversTypes['MediaUpload'] }
@@ -1535,13 +1494,13 @@ export type ResolversParentTypes = {
   CreateUserInput: CreateUserInput;
   CreateVenueInput: CreateVenueInput;
   CreateVideoInput: CreateVideoInput;
-  EditorNode: ResolversUnionTypes<ResolversParentTypes>['EditorNode'];
+  EditorNode: EditorNodeData;
   EditorNodeInput: EditorNodeInput;
   EditorState: Omit<EditorState, 'root'> & { root?: Maybe<ResolversParentTypes['ElementNode']> };
   EditorStateInput: EditorStateInput;
   ElementNode: EditorNodeData;
   ElementNodeInput: ElementNodeInput;
-  ElementNodeType: ResolversInterfaceTypes<ResolversParentTypes>['ElementNodeType'];
+  ElementNodeType: EditorNodeData;
   EntityArg: EntityArg;
   FileUpload: MediaUploadSource;
   Float: Scalars['Float']['output'];
@@ -1553,7 +1512,7 @@ export type ResolversParentTypes = {
   ImportListingInput: ImportListingInput;
   ImportListingsResult: ImportListingsResult;
   Int: Scalars['Int']['output'];
-  LexicalNode: ResolversInterfaceTypes<ResolversParentTypes>['LexicalNode'];
+  LexicalNode: EditorNodeData;
   LinebreakNode: EditorNodeData;
   ListItemNode: EditorNodeData;
   ListNode: EditorNodeData;
@@ -1562,7 +1521,7 @@ export type ResolversParentTypes = {
   MediaCropSettingInput: MediaCropSettingInput;
   MediaSettings: MediaSettingsRecord;
   MediaSettingsInput: MediaSettingsInput;
-  MediaUpload: ResolversInterfaceTypes<ResolversParentTypes>['MediaUpload'];
+  MediaUpload: MediaUploadSource;
   MediaUploadConnection: Connection<MediaUploadSource>;
   MediaUploadEdge: Omit<MediaUploadEdge, 'node'> & { node: ResolversParentTypes['MediaUpload'] };
   Mutation: Record<PropertyKey, never>;
