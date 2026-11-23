@@ -23,9 +23,6 @@ CREATE DATABASE :"database";
 SQL
 fi
 
-echo "Generating Prisma client..."
-pnpm db:generate
-
 echo "Applying Prisma schema..."
 pnpm db:push
 

@@ -156,14 +156,6 @@ export function queryLimits(): ApolloServerPlugin<AppContext> {
   };
 }
 
-/** Whether an error came from the database or its client, either Prisma or remix/data-table */
-function isDatabaseError(error: unknown): error is Error {
-  return (
-    error instanceof DataTableError ||
-    (error instanceof Error && error.name.startsWith('PrismaClient'))
-  );
-}
-
 /**
  * Keeps server internals out of answers: stack traces only in development, and database errors,
  * whose messages and causes quote the query, the tables and the source, logged and answered with a
@@ -176,7 +168,7 @@ export function errorOptions(
     includeStacktraceInErrorResponses: process.env.NODE_ENV === 'development',
     formatError(formatted, error) {
       const original = unwrapResolverError(error);
-      if (isDatabaseError(original)) {
+      if (original instanceof DataTableError) {
         logger.error({ err: original, path: formatted.path }, 'Database error in a resolver');
         return {
           message: 'Internal server error',

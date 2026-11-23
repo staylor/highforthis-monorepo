@@ -2,9 +2,10 @@ import { stdin, stdout } from 'node:process';
 import { createInterface } from 'node:readline/promises';
 import { Writable } from 'node:stream';
 
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+
+import { createDatabase } from '#/database/postgres';
+import { sessions, userRoleRows, users } from '#/database/tables';
 
 const SALT_ROUNDS = 10;
 const MINIMUM_PASSWORD_LENGTH = 12;
@@ -34,8 +35,7 @@ async function readPassword(label: string): Promise<string> {
   return password;
 }
 
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
+const db = createDatabase(connectionString);
 
 try {
   const emailArgument = process.argv[2]?.trim();
@@ -44,10 +44,7 @@ try {
     throw new Error('Admin email is required.');
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email },
-    include: { roles: true },
-  });
+  const user = await db.findOne(users, { where: { email }, with: { roles: userRoleRows } });
   if (!user?.roles.some((role) => role.name === 'admin')) {
     throw new Error(`No local admin user was found for ${email}.`);
   }
@@ -63,16 +60,13 @@ try {
   }
 
   const hash = await bcrypt.hash(password, SALT_ROUNDS);
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { hash },
-  });
+  await db.update(users, user.id, { hash });
   // Signs them out everywhere
-  await prisma.session.deleteMany({ where: { userId: user.id } });
+  await db.deleteMany(sessions, { where: { userId: user.id } });
 
   stdout.write(`Password reset for ${user.email}.\n`);
 } finally {
   hideInput = false;
   prompt.close();
-  await prisma.$disconnect();
+  await db.close();
 }

@@ -1,104 +1,108 @@
-import type { Prisma, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { ilike, or, type TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
 import { endSessions } from '#/authentication';
-import prisma from '#/database';
-import type { WithIncludes } from '#/models';
+import db from '#/database/db';
+import { containing } from '#/database/search';
+import type { Loaded } from '#/database/tables';
+import { newId, userRoleRows, userRoles, users } from '#/database/tables';
 
 import { parseConnection } from './utils/collection';
-import { badInput, parseInput, removeEntities, resolveJoin } from './utils/helpers';
+import { badInput, parseInput, removeRows, resolveJoin } from './utils/helpers';
 import { createUserSchema, updateUserSchema } from './validations';
 
 const SALT_ROUNDS = 10;
 
-const userIncludes = { roles: true } satisfies Prisma.UserInclude;
+const userIncludes = { roles: userRoleRows };
 
-/** A user, with their roles when their query included them */
-export type UserSource = WithIncludes<
-  User,
-  Prisma.UserGetPayload<{ include: typeof userIncludes }>
->;
+/** A user, with their roles when their query loaded them */
+export type UserSource = TableRow<typeof users> & { roles?: Loaded<typeof userRoleRows> };
 
 const resolvers = {
   User: {
     roles(user) {
       return resolveJoin(user.roles, 'name', () =>
-        prisma.userRole.findMany({ where: { userId: user.id } })
+        db.findMany(userRoles, { where: { userId: user.id } })
       );
     },
   },
   Query: {
     async users(_, args) {
       const { search, ...connectionArgs } = args;
-      const where: Prisma.UserWhereInput = {};
+      let query = db.query(users);
       if (search) {
-        where.OR = [
-          { name: { contains: search, mode: 'insensitive' } },
-          { email: { contains: search, mode: 'insensitive' } },
-          { bio: { contains: search, mode: 'insensitive' } },
-        ];
+        const pattern = containing(search);
+        query = query.where(
+          or(ilike('name', pattern), ilike('email', pattern), ilike('bio', pattern))
+        );
       }
-      return parseConnection(prisma.user, connectionArgs, {
-        where,
-        orderBy: { name: 'asc' },
-        include: userIncludes,
-      });
+      return parseConnection(
+        {
+          count: () => query.count(),
+          findMany: ({ skip, take }) =>
+            query.with(userIncludes).orderBy('name', 'asc').offset(skip).limit(take).all(),
+        },
+        connectionArgs
+      );
     },
 
     user(_, { id }) {
-      return prisma.user.findUnique({ where: { id }, include: userIncludes });
+      return db.find(users, id, { with: userIncludes });
     },
   },
   Mutation: {
     async createUser(_, { input }) {
-      const { password, roles, ...fields } = parseInput(createUserSchema, input);
-      if (!fields.email || !password) {
+      const { password, roles, email, ...fields } = parseInput(createUserSchema, input);
+      if (!email || !password) {
         throw badInput('Email and Password are required.');
       }
-      const exists = await prisma.user.count({ where: { email: fields.email } });
+      const exists = await db.count(users, { where: { email } });
       if (exists) {
         throw badInput('Email already exists.');
       }
       const hash = await bcrypt.hash(password, SALT_ROUNDS);
-      return prisma.user.create({
-        data: {
-          ...fields,
-          email: fields.email,
-          hash,
-          roles: roles?.length ? { create: roles.map((name) => ({ name })) } : undefined,
-        },
-        include: userIncludes,
+      const id = newId();
+      await db.transaction(async (tx) => {
+        await tx.create(users, { ...fields, id, email, hash });
+        if (roles?.length) {
+          await tx.createMany(
+            userRoles,
+            roles.map((name) => ({ id: newId(), userId: id, name }))
+          );
+        }
       });
+      return db.find(users, id, { with: userIncludes });
     },
 
     async updateUser(_, { id, input }) {
       const { password, roles, ...fields } = parseInput(updateUserSchema, input);
-      const user = await prisma.user.findUnique({ where: { id } });
+      const user = await db.find(users, id);
       if (!user) throw badInput('User not found');
 
       if (fields.email && fields.email !== user.email) {
-        const exists = await prisma.user.count({ where: { email: fields.email } });
+        const exists = await db.count(users, { where: { email: fields.email } });
         if (exists) {
           throw badInput('Email already exists.');
         }
       }
 
-      const data: Prisma.UserUpdateInput = { ...fields };
+      const values: Partial<TableRow<typeof users>> = { ...fields };
       if (password) {
-        data.hash = await bcrypt.hash(password, SALT_ROUNDS);
+        values.hash = await bcrypt.hash(password, SALT_ROUNDS);
       }
 
       if (typeof roles !== 'undefined') {
-        await prisma.userRole.deleteMany({ where: { userId: id } });
+        await db.deleteMany(userRoles, { where: { userId: id } });
         if (roles?.length) {
-          await prisma.userRole.createMany({
-            data: roles.map((name) => ({ userId: id, name })),
-          });
+          await db.createMany(
+            userRoles,
+            roles.map((name) => ({ id: newId(), userId: id, name }))
+          );
         }
       }
 
-      const updated = await prisma.user.update({ where: { id }, data, include: userIncludes });
+      const updated = await db.update(users, id, values, { with: userIncludes });
       if (password) {
         // A new password signs the user out wherever they're signed in
         await endSessions(id);
@@ -107,7 +111,7 @@ const resolvers = {
     },
 
     async removeUser(_, { ids }) {
-      return removeEntities(prisma.user, ids);
+      return removeRows(users, ids);
     },
   },
 } satisfies Resolvers;

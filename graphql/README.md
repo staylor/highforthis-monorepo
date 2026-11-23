@@ -1,12 +1,13 @@
 # @highforthis/graphql
 
-GraphQL API server for High For This, built with Apollo Server, Remix's Fetch API server packages, and Prisma with PostgreSQL.
+GraphQL API server for High For This, built with Apollo Server, Remix's Fetch API server packages, and PostgreSQL through `remix/data-table`.
 
 ## Stack
 
 - **[Apollo Server](https://www.apollographql.com/docs/apollo-server/)** — GraphQL server
 - **[Remix](https://remix.run/)** — HTTP server: `remix/node-fetch-server` and `remix/router`, with Remix's CORS and compression middleware, and `remix/form-data-parser` for uploads
-- **[Prisma](https://www.prisma.io/)** — ORM with PostgreSQL adapter (`@prisma/adapter-pg`)
+- **[`remix/data-table`](https://github.com/remix-run/remix/tree/main/packages/data-table)** — queries and writes, with `pg`
+- **[Prisma](https://www.prisma.io/)** — the schema, which `prisma db push` applies
 - **JWT** — Sign-in with a password (`bcryptjs`) or a passkey (`@simplewebauthn/server`), and a session token signed with `jsonwebtoken`
 
 ## Setup
@@ -85,16 +86,15 @@ pnpm build
 pnpm start
 ```
 
-`build` generates the Prisma client and bundles with esbuild to `dist/index.js`. `start` runs the bundled server with Node.
+`build` bundles with esbuild to `dist/index.js`. `start` runs the bundled server with Node.
 
 ## Scripts
 
 | Script                       | Description                                         |
 | ---------------------------- | --------------------------------------------------- |
 | `pnpm dev`                   | Start in development with watch mode                |
-| `pnpm build`                 | Generate Prisma client and bundle for production    |
+| `pnpm build`                 | Bundle for production                               |
 | `pnpm start`                 | Start the production server                         |
-| `pnpm db:generate`           | Generate Prisma client                              |
 | `pnpm db:push`               | Push schema to database                             |
 | `pnpm db:studio`             | Open Prisma Studio                                  |
 | `pnpm db:dump`               | Dump database to seed file                          |
@@ -114,7 +114,7 @@ src/
 ├── authentication.ts # Password sign-in, sessions and the token middleware
 ├── passkeys.ts       # Passkey sign-in and registration
 ├── hardening.ts      # Query size limits and error masking
-├── database/         # Prisma client
+├── database/         # remix/data-table: the database and its tables
 ├── models/           # Shared types and unique slugs
 ├── resolvers/        # GraphQL resolvers
 ├── schema/           # GraphQL type definitions

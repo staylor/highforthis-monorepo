@@ -1,6 +1,5 @@
-generator client {
-  provider = "prisma-client-js"
-}
+// The database's tables, which `pnpm db:push` applies. The server reads and writes them with
+// remix/data-table, as src/database/tables.ts describes them.
 
 datasource db {
   provider = "postgresql"

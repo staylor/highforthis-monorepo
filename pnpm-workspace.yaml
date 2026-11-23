@@ -6,7 +6,6 @@ packages:
 
 onlyBuiltDependencies:
   - '@apollo/protobufjs'
-  - '@prisma/client'
   - '@prisma/engines'
   - bcrypt
   - esbuild

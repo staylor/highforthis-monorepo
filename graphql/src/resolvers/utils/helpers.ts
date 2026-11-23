@@ -26,23 +26,7 @@ export function parseInput<TSchema extends z.ZodType>(
   throw badInput(`Invalid input (${problems.join('; ')})`);
 }
 
-interface DeleteDelegate {
-  deleteMany: (args: { where: { id: { in: string[] } } }) => Promise<unknown>;
-}
-
-export async function removeEntities(
-  delegate: DeleteDelegate,
-  ids: (string | null)[]
-): Promise<boolean> {
-  try {
-    await delegate.deleteMany({ where: { id: { in: ids.filter(Boolean) as string[] } } });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/** Deletes the rows of a remix/data-table table that have these IDs, answering whether it could */
+/** Deletes the rows of a table that have these IDs, answering whether it could */
 export async function removeRows(table: AnyTable, ids: (string | null)[]): Promise<boolean> {
   try {
     await db.deleteMany(table, { where: inList('id', ids.filter(Boolean)) });

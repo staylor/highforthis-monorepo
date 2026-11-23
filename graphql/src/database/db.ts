@@ -6,7 +6,7 @@ import { createDatabase } from './postgres';
 
 const logger = createLogger({ serviceName: 'graphql' });
 
-// remix/data-table, beside the Prisma client while the resolvers move over one at a time
+// The server's database, through remix/data-table
 const db = createDatabase(env.DATABASE_URL, (error) =>
   logger.warn({ err: error }, 'An idle database connection failed')
 );

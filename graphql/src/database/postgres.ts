@@ -4,8 +4,9 @@ import { PostgresDatabase } from 'remix/data-table/postgres';
 
 const TIMESTAMP = pg.types.builtins.TIMESTAMP;
 
-// Prisma keeps `timestamp without time zone` columns in UTC, and pg reads and writes them in the
-// server's time zone, so a date would move by its offset. Read them as UTC on these pools…
+// The `timestamp without time zone` columns hold UTC, as Prisma wrote them, and pg reads and
+// writes them in the server's time zone, so a date would move by its offset. Read them as UTC on
+// these pools…
 const types = {
   getTypeParser: ((oid, format) =>
     oid === TIMESTAMP && format !== 'binary'
@@ -13,8 +14,7 @@ const types = {
       : pg.types.getTypeParser(oid, format)) as typeof pg.types.getTypeParser,
 };
 
-// …and write dates as UTC. pg has no per-pool setting for this. Prisma sends its dates as text,
-// so this doesn't change how it writes them.
+// …and write dates as UTC. pg has no per-pool setting for this.
 pg.defaults.parseInputDatesAsUTC = true;
 
 // Whoever is using a connection learns that it failed from their own query
@@ -80,8 +80,9 @@ class PooledDatabase extends PostgresDatabase {
 }
 
 /**
- * A remix/data-table database for the connection string, which reads and writes dates as Prisma
- * did, and tells `onIdleError` when a connection that nothing was using has failed
+ * A remix/data-table database for the connection string, which reads and writes dates in UTC, and
+ * tells `onIdleError` when a connection that nothing was using has failed. The tools that
+ * shouldn't need the server's settings make their own.
  */
 export function createDatabase(connectionString: string, onIdleError?: (error: Error) => void) {
   return new PooledDatabase(createPool(connectionString, onIdleError));

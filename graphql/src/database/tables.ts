@@ -498,3 +498,96 @@ export const videoThumbnails = table({
 
 /** A video's thumbnails */
 export const videoThumbnailRows = hasMany(videos, videoThumbnails, { foreignKey: 'videoId' });
+
+// --- User ---
+
+export const users = table({
+  name: 'User',
+  columns: {
+    id: c.text(),
+    name: c.text().nullable(),
+    email: c.text(),
+    bio: c.text().nullable(),
+    hash: c.text(),
+    createdAt: timestamp(),
+    updatedAt: timestamp(),
+  },
+  timestamps,
+  beforeWrite: skipUndefined,
+});
+
+export const userRoles = table({
+  name: 'UserRole',
+  columns: {
+    id: c.text(),
+    userId: c.text(),
+    name: c.text(),
+  },
+  beforeWrite: skipUndefined,
+});
+
+// The tables below have only a creation time. Prisma's `@default(now())` set it in UTC, where
+// the column's default would take the database's time zone, so it's set here as for the others.
+const createdOnly = { createdAt: 'createdAt' };
+
+/** A signed-in user's session, which their token names */
+export const sessions = table({
+  name: 'Session',
+  columns: {
+    id: c.text(),
+    userId: c.text(),
+    expiresAt: timestamp(),
+    createdAt: timestamp(),
+  },
+  timestamps: createdOnly,
+  beforeWrite: skipUndefined,
+});
+
+export const passkeys = table({
+  name: 'Passkey',
+  columns: {
+    id: c.text(),
+    userId: c.text(),
+    // `bytea`, which the driver reads as a Buffer
+    publicKey: c.binary() as ColumnBuilder<Uint8Array<ArrayBuffer>>,
+    // `bigint`, which the driver reads as text, keeping every digit
+    counter: c.bigint() as ColumnBuilder<string>,
+    // `text[]`, which has no column type here. The driver reads and writes it as an array.
+    transports: c.text() as ColumnBuilder<string[] | null>,
+    deviceType: c.text(),
+    backedUp: c.boolean(),
+    name: c.text().nullable(),
+    createdAt: timestamp(),
+    lastUsedAt: timestamp().nullable(),
+  },
+  timestamps: createdOnly,
+  beforeWrite: skipUndefined,
+});
+
+/** A passkey sign-in or registration in progress, and the challenge it has to answer */
+export const webAuthnChallenges = table({
+  name: 'WebAuthnChallenge',
+  columns: {
+    id: c.text(),
+    challenge: c.text(),
+    type: c.text(),
+    userId: c.text().nullable(),
+    expiresAt: timestamp(),
+    createdAt: timestamp(),
+  },
+  timestamps: createdOnly,
+  beforeWrite: skipUndefined,
+});
+
+/** A user's roles */
+export const userRoleRows = hasMany(users, userRoles, { foreignKey: 'userId' });
+
+/** The user a session belongs to, with their roles */
+export const sessionUser = belongsTo(sessions, users, { foreignKey: 'userId' }).with({
+  roles: userRoleRows,
+});
+
+/** The user a passkey belongs to, with their roles */
+export const passkeyUser = belongsTo(passkeys, users, { foreignKey: 'userId' }).with({
+  roles: userRoleRows,
+});

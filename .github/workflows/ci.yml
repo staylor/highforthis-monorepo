@@ -26,7 +26,6 @@ jobs:
             echo "::error::The generated GraphQL types are out of date. Run pnpm codegen and commit the result."
             exit 1
           fi
-      - run: pnpm --filter @highforthis/graphql db:generate
       # the root knip and typecheck scripts build @highforthis/shared first, so
       # packages importing its subpath exports (logger, observability) resolve
       - run: pnpm knip
@@ -63,7 +62,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       # The same steps as `pnpm db:setup`. pg_restore runs in the Postgres container, so its
       # version matches the server's, whatever the runner has installed.
-      - run: pnpm --filter @highforthis/graphql db:generate
       - run: pnpm --filter @highforthis/graphql db:push
       - name: Load the seed data
         env:
