@@ -23,6 +23,10 @@ const jpeg = () =>
     .jpeg()
     .toBuffer();
 
+// Made with ffmpeg: a second of a sine tone with tags, and of its test pattern at 64x48
+const fixture = async (name: string, type: string) =>
+  new File([await fs.readFile(new URL(`./fixtures/${name}`, import.meta.url))], name, { type });
+
 /** A bucket that takes the files it's given, or fails with `error`, and says which were there */
 function bucket(error?: Error) {
   const copied: string[] = [];
@@ -84,6 +88,65 @@ describe('storeFile', () => {
     vi.spyOn(Image.prototype, 'handleCrop').mockRejectedValue(new Error('crop failed'));
 
     await expect(storeFile(imageFile(await jpeg()), uploadDir)).rejects.toThrow('crop failed');
+  });
+
+  it("reads an audio file's tags and length, and stores its cover", async () => {
+    const stored = await storeFile(await fixture('tone.mp3', 'audio/mpeg'), uploadDir);
+
+    expect(stored).toMatchObject({
+      type: 'audio',
+      title: 'Test Tone',
+      artist: ['The Testers'],
+      albumArtist: ['Various'],
+      album: 'Fixtures',
+      genre: ['Electronic'],
+      year: 2024,
+      images: [
+        { fileName: expect.stringMatching(/^[0-9a-f]{16}-cover-0\.jpg$/), width: 64, height: 64 },
+      ],
+    });
+    expect(stored.duration).toBeCloseTo(1.04, 1);
+    await expect(
+      fs.access(path.join(uploadDir, stored.destination, stored.images?.[0].fileName ?? ''))
+    ).resolves.toBeUndefined();
+  });
+
+  it('reads the tags of an Ogg file', async () => {
+    const stored = await storeFile(await fixture('tone.ogg', 'audio/ogg'), uploadDir);
+
+    expect(stored).toMatchObject({
+      type: 'audio',
+      title: 'Test Tone',
+      artist: ['The Testers'],
+      album: 'Fixtures',
+      year: 2024,
+      duration: 1,
+    });
+  });
+
+  it.each([
+    ['clip.mp4', 'video/mp4'],
+    ['clip.webm', 'video/webm'],
+  ])("reads a video's size and length from %s", async (name, type) => {
+    const stored = await storeFile(await fixture(name, type), uploadDir);
+
+    expect(stored).toMatchObject({ type: 'video', width: 64, height: 48, duration: 1 });
+  });
+
+  it('stores audio and video whose details cannot be read, without them', async () => {
+    const audio = await storeFile(
+      new File(['not audio'], 'song.mp3', { type: 'audio/mpeg' }),
+      uploadDir
+    );
+    const video = await storeFile(
+      new File(['not video'], 'clip.mp4', { type: 'video/mp4' }),
+      uploadDir
+    );
+
+    expect(audio).toMatchObject({ type: 'audio', title: '', artist: [], fileSize: 9 });
+    expect(audio.duration).toBeUndefined();
+    expect(video).toMatchObject({ type: 'video', fileSize: 9 });
+    expect(video.width).toBeUndefined();
   });
 
   it('copies an image and its crops to the bucket, then removes them from the upload folder', async () => {

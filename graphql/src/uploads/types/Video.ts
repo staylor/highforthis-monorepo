@@ -1,8 +1,5 @@
 import path from 'node:path';
 
-import ffprobe from 'ffprobe';
-import ffprobeStatic from 'ffprobe-static';
-
 import Upload, { type FileData, type IncomingFile } from './Upload';
 
 interface VideoMetadata {
@@ -13,12 +10,6 @@ interface VideoMetadata {
   duration?: number;
 }
 
-interface FFProbeStream {
-  width?: number;
-  height?: number;
-  duration?: string | number;
-}
-
 export default class Video extends Upload {
   async save(file: IncomingFile): Promise<FileData> {
     const data = await super.save(file);
@@ -27,25 +18,23 @@ export default class Video extends Upload {
       type: 'video',
     };
 
-    // A file ffprobe can't read is stored without its size and length
+    // A file whose details can't be read is stored without its size and length
     try {
-      const metadata = await ffprobe(path.join(this.destination, this.fileName), {
-        path: ffprobeStatic.path,
-      });
-      if (metadata && metadata.streams) {
-        const [video] = metadata.streams as FFProbeStream[];
+      // Imported on first use, like the other libraries only uploads need
+      const { parseFile } = await import('music-metadata');
+      const { format } = await parseFile(path.join(this.destination, this.fileName));
+      const video = format.trackInfo?.find((track) => track.video)?.video;
 
-        if (video.width) {
-          meta.width = video.width;
-        }
+      if (video?.pixelWidth) {
+        meta.width = video.pixelWidth;
+      }
 
-        if (video.height) {
-          meta.height = video.height;
-        }
+      if (video?.pixelHeight) {
+        meta.height = video.pixelHeight;
+      }
 
-        if (video.duration) {
-          meta.duration = parseFloat(String(video.duration));
-        }
+      if (format.duration) {
+        meta.duration = format.duration;
       }
     } catch {
       // stored as it is
