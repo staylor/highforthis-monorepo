@@ -1,24 +1,14 @@
-import pg from 'pg';
-import { createPostgresDatabase } from 'remix/data-table/postgres';
+import { createLogger } from '@highforthis/shared/logger';
 
 import env from '#/env';
 
-const TIMESTAMP = pg.types.builtins.TIMESTAMP;
+import { createDatabase } from './postgres';
 
-// Prisma keeps `timestamp without time zone` columns in UTC, and pg reads and writes them in the
-// server's time zone, so a date would move by its offset. Read them as UTC on this pool…
-const types = {
-  getTypeParser: ((oid, format) =>
-    oid === TIMESTAMP && format !== 'binary'
-      ? (value: string) => new Date(`${value.replace(' ', 'T')}Z`)
-      : pg.types.getTypeParser(oid, format)) as typeof pg.types.getTypeParser,
-};
-
-// …and write dates as UTC. pg has no per-pool setting for this. Prisma sends its dates as text,
-// so this doesn't change how it writes them.
-pg.defaults.parseInputDatesAsUTC = true;
+const logger = createLogger({ serviceName: 'graphql' });
 
 // remix/data-table, beside the Prisma client while the resolvers move over one at a time
-const db = createPostgresDatabase({ connectionString: env.DATABASE_URL, types });
+const db = createDatabase(env.DATABASE_URL, (error) =>
+  logger.warn({ err: error }, 'An idle database connection failed')
+);
 
 export default db;
