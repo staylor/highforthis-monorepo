@@ -1,6 +1,10 @@
+import { inList } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
 import prisma from '#/database';
+import { batchBy } from '#/database/batch';
+import db from '#/database/db';
+import { mediaDetails, mediaUploads } from '#/database/tables';
 
 import { resolveType } from './utils/helpers';
 
@@ -10,6 +14,12 @@ export interface EditorNodeData {
   imageId?: string;
   videoId?: string;
 }
+
+// The images of a post load in one query, with their crops, instead of a query each and a query
+// per image from ImageUpload.crops
+const loadImage = batchBy('id', (ids: string[]) =>
+  db.findMany(mediaUploads, { where: inList('id', ids), with: { crops: mediaDetails.crops } })
+);
 
 // Some older posts have media nodes saved without an id (videos that had gone, kept as an error
 // message). Those load as no media: Prisma rejects an undefined id, and panics when the lookups
@@ -34,16 +44,11 @@ const resolvers = {
     ),
   },
   ImageNode: {
-    // Prisma batches the findUnique calls of one tick into one query, and the crops come with
-    // it, instead of a query per image from ImageUpload.crops
     image(data) {
       if (!data.imageId) {
         return null;
       }
-      return prisma.mediaUpload.findUnique({
-        where: { id: data.imageId },
-        include: { crops: true },
-      });
+      return loadImage(data.imageId);
     },
   },
   VideoNode: {
