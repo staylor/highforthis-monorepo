@@ -23,6 +23,7 @@ jobs:
     runs-on: ubuntu-26.04
     outputs:
       apple: ${{ steps.diff.outputs.apple }}
+      schema: ${{ steps.diff.outputs.schema }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -38,18 +39,27 @@ jobs:
             # A push can add several commits, and the checkout has only the last two.
             git fetch --quiet --depth=1 origin "$base" || true
           fi
+          # Whether the diff changes a file the pattern matches, other than documentation.
+          changed() {
+            git diff --name-only "$base" HEAD | grep -v '\.md$' | grep -qE "$1"
+          }
+          apple=false
+          schema=false
           # Documentation and this workflow don't change the app, so changing only them skips the Apple jobs.
           # To test a workflow change, run the workflow manually on its branch.
           if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
-            echo "apple=true" >> "$GITHUB_OUTPUT"
-          elif git diff --name-only "$base" HEAD |
-            grep -E '^(apple/|apollo-codegen-config\.json$|graphql/schema\.graphql$)' | grep -qv '\.md$'; then
-            echo "apple=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "apple=false" >> "$GITHUB_OUTPUT"
+            apple=true
+          elif changed '^(apple/|apollo-codegen-config\.json$)'; then
+            apple=true
+          elif changed '^graphql/schema\.graphql$'; then
+            # Apollo iOS generates HighForThisAPI from the schema, so the generated code check runs, failing if
+            # HighForThisAPI needs regenerating. The app itself is unchanged, so the other Apple jobs don't run.
+            schema=true
           fi
+          echo "apple=$apple" >> "$GITHUB_OUTPUT"
+          echo "schema=$schema" >> "$GITHUB_OUTPUT"
 
-  # The check for branch rules to require. Jobs skipped because nothing the app uses changed count as passing, so
+  # The check for branch rules to require. Jobs skipped because the app didn't change count as passing, so
   # this has to run, and fail, when a job it needs fails or the run is cancelled. The step needs always() too,
   # because a step's condition implicitly includes success(), which is false once the run is cancelled.
   ci:
@@ -212,10 +222,11 @@ jobs:
           device: iPhone 17 Pro
           only-testing: HighForThisUITests/NavigationTests/testPlayerStaysAvailableAcrossTabsAndCanBeStopped
 
+  # Unlike the other jobs, this also runs when the schema changed and the app didn't.
   generated-code:
     name: Generated code
     needs: changes
-    if: needs.changes.outputs.apple == 'true'
+    if: needs.changes.outputs.apple == 'true' || needs.changes.outputs.schema == 'true'
     runs-on: xcode-27
     timeout-minutes: 10
     steps:
