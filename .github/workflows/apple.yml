@@ -21,7 +21,7 @@ jobs:
   changes:
     name: Changes
     runs-on: ubuntu-26.04
-    # Listing this workflow's runs needs actions: read, and a job's permissions replace the workflow's.
+    # Reading this workflow's runs and their jobs needs actions: read, and a job's permissions replace the workflow's.
     permissions:
       actions: read
       contents: read
@@ -40,13 +40,25 @@ jobs:
           base=HEAD^1
           if [ "$GITHUB_EVENT_NAME" = push ]; then
             # Diffing a push from main's previous head would miss an earlier push's app changes when that push's run
-            # didn't succeed: it was cancelled, failed, or was replaced by a newer push while it waited. So a push is
-            # diffed from the head of the last successful run on main, whose app has been built, tested and uploaded,
-            # by that run's Apple jobs or, when they were skipped, by an earlier run's. A pull request from a fork's
-            # branch named main is listed under main too, so only pushes and manual runs count.
-            base=$(gh run list --workflow apple.yml --branch main --status success --limit 20 --json event,headSha \
-              --jq 'map(select(.event == "push" or .event == "workflow_dispatch"))[0].headSha // empty') || true
-            # The checkout has only the last two commits. Without a successful run's head to diff from, everything runs.
+            # didn't build, test and upload them: it was cancelled, failed, or was replaced by a newer push while it
+            # waited. So a push is diffed from the head of the last push or manual run on main that passed, or whose CI
+            # and TestFlight jobs passed although a job outside CI's needs didn't. That head's app has been built,
+            # tested and uploaded, by that run's Apple jobs or, when they were skipped, by an earlier run's. A pull
+            # request from a fork's branch named main is listed under main too, so only pushes and manual runs count.
+            base=''
+            # Whether a run that didn't pass still uploaded the app: its CI job and all its TestFlight jobs passed.
+            uploaded='.jobs | any(.name == "CI" and .conclusion == "success")
+              and (map(select(.name | startswith("TestFlight")) | .conclusion) | length > 0 and all(. == "success"))'
+            while read -r run conclusion sha; do
+              if [ "$conclusion" = success ] || [ "$(gh run view "$run" --json jobs --jq "$uploaded")" = true ]; then
+                base=$sha
+                break
+              fi
+            done < <(gh run list --workflow apple.yml --branch main --status completed --limit 20 \
+              --json databaseId,conclusion,event,headSha \
+              --jq '.[] | select(.event == "push" or .event == "workflow_dispatch")
+                | "\(.databaseId) \(.conclusion) \(.headSha)"')
+            # The checkout has only the last two commits. Without a good run's head to diff from, everything runs.
             git fetch --quiet --depth=1 origin "$base" || true
           fi
           # Whether the diff changes a file the pattern matches, other than documentation.
