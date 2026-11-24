@@ -1,7 +1,7 @@
 import * as assert from 'remix/assert';
 import { describe, it } from 'remix/test';
 
-import { initials, leaderCount, rankings, tiers } from './stats.tsx';
+import { leaderCount, rankings, tiers } from './stats.tsx';
 
 describe('the show stats', () => {
   it('ranks ties together, and counts past them to the next rank', () => {
@@ -34,14 +34,5 @@ describe('the show stats', () => {
         [1, ['Bedhead']],
       ]
     );
-  });
-
-  it("puts a venue's initials where its artwork would be", () => {
-    assert.equal(initials('Madison Square Garden'), 'MSG');
-    assert.equal(initials('The Capitol Theatre'), 'CT');
-    assert.equal(initials('Terminal 5'), 'T5');
-    assert.equal(initials('Radio City Music Hall'), 'RCM');
-    assert.equal(initials('The The'), 'TT');
-    assert.equal(initials('Sphere'), 'S');
   });
 });

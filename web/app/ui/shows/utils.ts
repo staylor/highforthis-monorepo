@@ -56,6 +56,19 @@ export const formatArtists = (show: ShowLike) => {
   return show.artists.map(({ name }) => name).join(' / ') || (show.venue?.name ?? '');
 };
 
+const smallWords = new Set(['a', 'and', 'at', 'of', 'the', '&']);
+
+/** A name's initials, for an artist or place without artwork: Madison Square Garden is MSG */
+export function initials(name: string) {
+  const words = name.split(/\s+/).filter(Boolean);
+  const kept = words.filter((word) => !smallWords.has(word.toLowerCase()));
+  return (kept.length > 0 ? kept : words)
+    .slice(0, 3)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+}
+
 /** A show's page, or its artist's when the show is one artist and nothing more. */
 export const formatShowLink = (show: ShowLike) => {
   const [artist, ...others] = show.artists;

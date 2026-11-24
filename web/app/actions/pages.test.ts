@@ -144,8 +144,22 @@ const posts = {
 };
 
 describe('the home page', () => {
-  it('shows upcoming shows by month, the latest videos and posts', async (t) => {
-    const operations = stubGraphQL(t, { App, Home: { videos, posts, shows } });
+  it('shows recommended shows by month, the latest videos and posts', async (t) => {
+    // Apple Music has artwork for Wilco, and none for Spoon
+    const wilcoArtwork = 'https://is1-ssl.mzstatic.com/image/thumb/wilco/{w}x{h}bb.jpg';
+    const withArtwork = { ...wilco, appleMusic: { id: 'am1', artwork: { url: wilcoArtwork } } };
+    const withoutArtwork = { ...spoon, appleMusic: null };
+    const recommended = {
+      edges: [
+        show('s1', june14, [withArtwork]),
+        show('s2', july4, [withArtwork, withoutArtwork]),
+        show('s3', july4, [withoutArtwork], {
+          title: 'Fourth of July Jam',
+          url: 'https://tickets.example/jam',
+        }),
+      ],
+    };
+    const operations = stubGraphQL(t, { App, Home: { videos, posts, shows: recommended } });
     const { status, html, headers } = await page(routes.home.href());
     assert.equal(status, 200);
     assert.match(headers.get('content-type') ?? '', /text\/html/);
@@ -153,12 +167,21 @@ describe('the home page', () => {
     assert.match(html, /<html lang="en-US"/);
 
     const body = textOf(html);
-    assert.match(body, /Upcoming Shows .*June 2030 .*14 .*Wilco .*Bowery Ballroom/);
+    assert.match(body, /Recommended Shows .*June 2030 .*14 .*Wilco .*Bowery Ballroom/);
+    assert.doesNotMatch(body, /Upcoming/);
     assert.match(body, /July 2030 .*Wilco \/ Spoon .*Fourth of July Jam/);
     // One artist and nothing more is on the artist's page; anything else has a page of its own
     assert.match(link(html, '/artist/wilco') ?? '', /Wilco/);
     assert.match(link(html, '/shows/s2') ?? '', /Wilco \/ Spoon/);
     assert.match(link(html, '/shows/s3') ?? '', /Fourth of July Jam/);
+
+    // Each show has its main artist's picture, the first artist's, or their initials without one
+    const picture =
+      /<img [^>]*src="https:\/\/is1-ssl\.mzstatic\.com\/image\/thumb\/wilco\/96x96bb\.jpg"/;
+    assert.match(link(html, '/artist/wilco') ?? '', picture);
+    assert.match(link(html, '/shows/s2') ?? '', picture);
+    assert.match(link(html, '/shows/s3') ?? '', /<span [^>]*aria-hidden="true"[^>]*>S<\/span>/);
+    assert.doesNotMatch(link(html, '/shows/s3') ?? '', /<img /);
 
     // Each video's title is under the section's heading
     assert.match(html, /<h3[^>]*><a [^>]*href="\/video\/video-1"[^>]*>Video 1<\/a><\/h3>/);

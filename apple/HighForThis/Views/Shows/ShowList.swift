@@ -27,7 +27,7 @@ struct ShowList: View {
                 Section {
                     ForEach(day.shows, id: \.id) { show in
                         NavigationLink(value: Route.show(id: show.id, title: show.headline)) {
-                            ShowRow(title: show.headline, subtitle: show.venue.name)
+                            ShowListRow(show: show)
                         }
                         .accessibilityIdentifier("show-\(show.id)")
                     }

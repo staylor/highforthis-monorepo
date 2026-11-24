@@ -44,6 +44,12 @@ export const homeQuery = gql`
             id
             name
             slug
+            appleMusic {
+              id
+              artwork {
+                url
+              }
+            }
           }
           venue {
             id
