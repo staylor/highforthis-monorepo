@@ -6,7 +6,7 @@
 
 nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
   public static var fragmentDefinition: StaticString {
-    #"fragment ShowList_show on Show { __typename id date title artists { __typename id name slug } venue { __typename id address name slug } }"#
+    #"fragment ShowList_show on Show { __typename id date title artists { __typename id name slug appleMusic { __typename id artwork { __typename height url width } } } venue { __typename id address name slug } }"#
   }
 
   @_spi(Unsafe) public let __data: DataDict
@@ -44,6 +44,7 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
       .field("id", String.self),
       .field("name", String.self),
       .field("slug", String.self),
+      .field("appleMusic", AppleMusic?.self),
     ] }
     @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
       ShowList_show.Artist.self
@@ -52,6 +53,51 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
     public var id: String { __data["id"] }
     public var name: String { __data["name"] }
     public var slug: String { __data["slug"] }
+    public var appleMusic: AppleMusic? { __data["appleMusic"] }
+
+    /// Artist.AppleMusic
+    ///
+    /// Parent Type: `AppleMusicData`
+    nonisolated public struct AppleMusic: HighForThisAPI.SelectionSet {
+      @_spi(Unsafe) public let __data: DataDict
+      @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+      @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.AppleMusicData }
+      @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
+        .field("id", String?.self),
+        .field("artwork", Artwork?.self),
+      ] }
+      @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        ShowList_show.Artist.AppleMusic.self
+      ] }
+
+      public var id: String? { __data["id"] }
+      public var artwork: Artwork? { __data["artwork"] }
+
+      /// Artist.AppleMusic.Artwork
+      ///
+      /// Parent Type: `AppleMusicArtwork`
+      nonisolated public struct Artwork: HighForThisAPI.SelectionSet {
+        @_spi(Unsafe) public let __data: DataDict
+        @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+        @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.AppleMusicArtwork }
+        @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("height", Int?.self),
+          .field("url", String?.self),
+          .field("width", Int?.self),
+        ] }
+        @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+          ShowList_show.Artist.AppleMusic.Artwork.self
+        ] }
+
+        public var height: Int? { __data["height"] }
+        public var url: String? { __data["url"] }
+        public var width: Int? { __data["width"] }
+      }
+    }
   }
 
   /// Venue

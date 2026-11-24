@@ -6,6 +6,14 @@ fragment ShowList_show on Show {
     id
     name
     slug
+    appleMusic {
+      id
+      artwork {
+        height
+        url
+        width
+      }
+    }
   }
   venue {
     id

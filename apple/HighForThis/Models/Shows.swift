@@ -23,6 +23,13 @@ nonisolated extension ShowSummary {
 
 nonisolated extension ShowList_show: ShowSummary {
     var artistNames: [String] { artists.map(\.name) }
+
+    /// The main artist's Apple Music artwork, at most `maximumWidth` pixels wide. The main artist is the first, as on
+    /// the website, so a show whose main artist has none has none, rather than another artist's.
+    func headlinerArtwork(maximumWidth: Int) -> Artwork? {
+        guard let artwork = artists.first?.appleMusic?.artwork else { return nil }
+        return Artwork(template: artwork.url, width: artwork.width, height: artwork.height, maximumWidth: maximumWidth)
+    }
 }
 
 nonisolated extension ShowQuery.Data.Show: ShowSummary {

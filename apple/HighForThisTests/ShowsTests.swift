@@ -26,6 +26,39 @@ struct ShowsTests {
         #expect(show.headline == "Bob Weir / Wolf Bros")
     }
 
+    private nonisolated static func artist(_ name: String, artwork: String? = nil) -> Mock<Artist> {
+        Mock<Artist>(
+            appleMusic: artwork.map { url in Mock<AppleMusicData>(artwork: Mock<AppleMusicArtwork>(height: 2400, url: url, width: 2400)) },
+            name: name)
+    }
+
+    @Test func headlinerArtworkIsTheMainArtists() async throws {
+        let show = await ShowList_show.from(
+            Mock<Show>(artists: [
+                Self.artist("Wilco", artwork: "https://example.com/wilco/{w}x{h}bb.jpg"),
+                Self.artist("Spoon", artwork: "https://example.com/spoon/{w}x{h}bb.jpg"),
+            ])
+        )
+
+        let artwork = try #require(show.headlinerArtwork(maximumWidth: 132))
+
+        #expect(artwork.url.absoluteString == "https://example.com/wilco/132x132bb.jpg")
+    }
+
+    @Test func anotherArtistsArtworkDoesNotStandInForTheMainArtists() async {
+        let show = await ShowList_show.from(
+            Mock<Show>(artists: [Self.artist("Wilco"), Self.artist("Spoon", artwork: "https://example.com/spoon/{w}x{h}bb.jpg")])
+        )
+
+        #expect(show.headlinerArtwork(maximumWidth: 132) == nil)
+    }
+
+    @Test func aShowWithoutArtistsHasNoHeadlinerArtwork() async {
+        let show = await ShowList_show.from(Mock<Show>(artists: [], title: "Open Mic"))
+
+        #expect(show.headlinerArtwork(maximumWidth: 132) == nil)
+    }
+
     @Test func startDateReadsMilliseconds() async {
         let show = await ShowList_show.from(Mock<Show>(date: 1_793_840_400_000))
         #expect(show.startDate == Date(timeIntervalSince1970: 1_793_840_400))
