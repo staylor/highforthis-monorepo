@@ -21,6 +21,10 @@ jobs:
   changes:
     name: Changes
     runs-on: ubuntu-26.04
+    # Listing this workflow's runs needs actions: read, and a job's permissions replace the workflow's.
+    permissions:
+      actions: read
+      contents: read
     outputs:
       apple: ${{ steps.diff.outputs.apple }}
       schema: ${{ steps.diff.outputs.schema }}
@@ -30,13 +34,19 @@ jobs:
           fetch-depth: 2
       - id: diff
         env:
-          BEFORE: ${{ github.event.before }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           # A pull request is checked out as its merge commit, whose first parent is the base branch.
           base=HEAD^1
           if [ "$GITHUB_EVENT_NAME" = push ]; then
-            base=$BEFORE
-            # A push can add several commits, and the checkout has only the last two.
+            # Diffing a push from main's previous head would miss an earlier push's app changes when that push's run
+            # didn't succeed: it was cancelled, failed, or was replaced by a newer push while it waited. So a push is
+            # diffed from the head of the last successful run on main, whose app has been built, tested and uploaded,
+            # by that run's Apple jobs or, when they were skipped, by an earlier run's. A pull request from a fork's
+            # branch named main is listed under main too, so only pushes and manual runs count.
+            base=$(gh run list --workflow apple.yml --branch main --status success --limit 20 --json event,headSha \
+              --jq 'map(select(.event == "push" or .event == "workflow_dispatch"))[0].headSha // empty') || true
+            # The checkout has only the last two commits. Without a successful run's head to diff from, everything runs.
             git fetch --quiet --depth=1 origin "$base" || true
           fi
           # Whether the diff changes a file the pattern matches, other than documentation.
