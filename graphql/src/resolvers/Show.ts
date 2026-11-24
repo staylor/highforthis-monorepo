@@ -120,30 +120,50 @@ async function newestYear(filter: ShowFilter) {
   return newest ? yearOf(newest.date) : undefined;
 }
 
-/** How many attended shows each artist or venue has, as the IDs and counts a query selects */
+/** An artist's or a venue's attended shows: how many, and when the first and the latest were */
+type AttendedCount = {
+  id: string;
+  count: number;
+  firstDate: Date;
+  lastDate: Date;
+};
+
+/** How many attended shows each artist or venue has, as the rows a query selects */
 async function countAttended(statement: SqlStatement) {
   const { rows = [] } = await db.exec(statement);
-  return rows as { id: string; count: number }[];
+  return rows as AttendedCount[];
 }
 
 async function getEntityStats<
   TEntity extends Artist | Venue,
   TType extends ShowEntitySource['type'],
 >(
-  counts: { id: string; count: number }[],
+  counts: AttendedCount[],
   lookup: (ids: string[]) => Promise<TEntity[]>,
-  type: TType
+  type: TType,
+  first?: number | null
 ) {
   const ids = counts.map((c) => c.id);
   const entities = await lookup(ids);
   const entityMap = new Map(entities.map((e) => [e.id, e]));
-  return counts
-    .flatMap(({ id, count }) => {
+  const stats = counts
+    .flatMap(({ id, count, firstDate, lastDate }) => {
       const entity = entityMap.get(id);
       // An artist or venue deleted since the count has nothing to show
-      return entity ? [{ count, entity: { ...entity, type } }] : [];
+      return entity
+        ? [
+            {
+              count,
+              firstDate: new Date(firstDate).getTime(),
+              lastDate: new Date(lastDate).getTime(),
+              entity: { ...entity, type },
+            },
+          ]
+        : [];
     })
     .sort((a, b) => b.count - a.count || a.entity.name.localeCompare(b.entity.name));
+  // The most seen first, so the first so many are the leaders
+  return typeof first === 'number' ? stats.slice(0, Math.max(0, first)) : stats;
 }
 
 const resolvers = {
@@ -295,30 +315,62 @@ const resolvers = {
       return null;
     },
 
-    async showStats(_, { entity }) {
+    async showStats(_, { entity, first }) {
       if (entity.toLowerCase() === 'artist') {
         const counts = await countAttended(sql`
-          select "artistId" as id, count(*)::int as count from "ShowArtist"
-          where "showId" in (select id from "Show" where attended)
-          group by "artistId"
+          select sa."artistId" as id, count(*)::int as count,
+            min(s.date) as "firstDate", max(s.date) as "lastDate"
+          from "ShowArtist" sa join "Show" s on s.id = sa."showId"
+          where s.attended
+          group by sa."artistId"
         `);
         return getEntityStats(
           counts,
           (ids) => db.findMany(artists, { where: inList('id', ids) }),
-          'artist'
+          'artist',
+          first
         );
       }
 
       const counts = await countAttended(sql`
-        select "venueId" as id, count(*)::int as count from "Show"
+        select "venueId" as id, count(*)::int as count,
+          min(date) as "firstDate", max(date) as "lastDate"
+        from "Show"
         where attended
         group by "venueId"
       `);
       return getEntityStats(
         counts,
         (ids) => db.findMany(venues, { where: inList('id', ids) }),
-        'venue'
+        'venue',
+        first
       );
+    },
+
+    async showTotals() {
+      const [{ rows: [shows] = [] }, { rows: [lineups] = [] }] = await Promise.all([
+        db.exec(sql`
+          select count(*)::int as shows, count(distinct "venueId")::int as venues,
+            min(date) as "firstDate", max(date) as "lastDate"
+          from "Show"
+          where attended
+        `),
+        db.exec(sql`
+          select count(distinct "artistId")::int as artists from "ShowArtist"
+          where "showId" in (select id from "Show" where attended)
+        `),
+      ]);
+      const totals = shows as
+        | { shows: number; venues: number; firstDate: Date | null; lastDate: Date | null }
+        | undefined;
+      const timestamp = (date?: Date | null) => (date ? new Date(date).getTime() : null);
+      return {
+        shows: totals?.shows ?? 0,
+        artists: (lineups as { artists: number } | undefined)?.artists ?? 0,
+        venues: totals?.venues ?? 0,
+        firstDate: timestamp(totals?.firstDate),
+        lastDate: timestamp(totals?.lastDate),
+      };
     },
   },
   Mutation: {

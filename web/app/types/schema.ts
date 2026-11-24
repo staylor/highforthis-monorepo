@@ -778,6 +778,7 @@ export type Query = {
   posts?: Maybe<PostConnection>;
   show?: Maybe<Show>;
   showStats: Array<ShowStat>;
+  showTotals: ShowTotals;
   shows?: Maybe<ShowConnection>;
   siteSettings: SiteSettings;
   uploads?: Maybe<MediaUploadConnection>;
@@ -856,6 +857,7 @@ export type QueryShowArgs = {
 
 export type QueryShowStatsArgs = {
   entity: ShowEntityType;
+  first?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -999,6 +1001,17 @@ export type ShowStat = {
   __typename?: 'ShowStat';
   count: Scalars['Int']['output'];
   entity: ShowEntity;
+  firstDate: Scalars['Float']['output'];
+  lastDate: Scalars['Float']['output'];
+};
+
+export type ShowTotals = {
+  __typename?: 'ShowTotals';
+  artists: Scalars['Int']['output'];
+  firstDate?: Maybe<Scalars['Float']['output']>;
+  lastDate?: Maybe<Scalars['Float']['output']>;
+  shows: Scalars['Int']['output'];
+  venues: Scalars['Int']['output'];
 };
 
 export type SiteSettings = {

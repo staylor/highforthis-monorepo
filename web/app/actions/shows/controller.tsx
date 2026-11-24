@@ -15,7 +15,7 @@ import type {
 import { Artwork } from '#/ui/artist.tsx';
 import { Heading1, Heading2 } from '#/ui/heading.tsx';
 import { Link } from '#/ui/link.tsx';
-import { md, text, type Styles } from '#/ui/public/styles.ts';
+import { md, text } from '#/ui/public/styles.ts';
 import { Shows, ShowsList, showsGridFragment } from '#/ui/shows/shows.tsx';
 import { formatArtists, formatDate } from '#/ui/shows/utils.ts';
 
@@ -26,6 +26,7 @@ import {
   showsHistoryPageQuery,
   showsHistoryQuery,
 } from './history.tsx';
+import { LEADERS, StatsPage, showStatsQuery } from './stats.tsx';
 
 const showsQuery = gql`
   query Shows($after: String, $first: Int) {
@@ -34,26 +35,6 @@ const showsQuery = gql`
     }
   }
   ${showsGridFragment}
-`;
-
-const showStatsQuery = gql`
-  query ShowStats($entity: ShowEntityType!) {
-    showStats(entity: $entity) {
-      count
-      entity {
-        ... on Artist {
-          id
-          name
-          slug
-        }
-        ... on Venue {
-          id
-          name
-          slug
-        }
-      }
-    }
-  }
 `;
 
 const showQuery = gql`
@@ -82,24 +63,6 @@ const showQuery = gql`
     }
   }
 `;
-
-// Font sizes for names in the stats, larger the more shows they had. The second keeps the
-// page's size.
-const sizes: Styles[] = [text.sm, {}, text.lg, text.xl, text['2xl'], text['3xl']];
-
-function sizeFor(total: number, size: number) {
-  const edge = sizes.length - 1;
-  if (total >= edge * size) {
-    return sizes[edge];
-  }
-  return total < size ? sizes[0] : sizes[Math.floor(total / size)];
-}
-
-const statsLink = css({
-  ...text.lg,
-  color: 'var(--pink)',
-  textDecoration: 'underline',
-});
 
 // The pages start the App query before running their own, so the two run together. The history's
 // later pages are only rows, for a frame in the page, so they skip it.
@@ -199,60 +162,17 @@ export default createController(routes.shows, {
     stats: {
       middleware: prefetch,
       async handler(context) {
-        const { t } = context;
         const { entity } = context.params;
         if (entity !== 'artist' && entity !== 'venue') {
           return renderNotFound(context);
         }
-        const { showStats } = await context.gql.query<ShowStatsQuery>(showStatsQuery, {
+        const data = await context.gql.query<ShowStatsQuery>(showStatsQuery, {
           entity: entity.toUpperCase(),
+          leaders: LEADERS,
         });
-        const buckets: Record<string, ShowStatsQuery['showStats']> = {};
-        for (const stat of showStats ?? []) {
-          (buckets[`bucket_${stat.count}`] ||= []).push(stat);
-        }
-        const other = entity === 'artist' ? 'venue' : 'artist';
-        const total = showStats?.[0]?.count ?? 0;
-        const size = (total - (total % sizes.length)) / sizes.length;
-
-        return renderPage(
-          context,
-          <article mix={css({ width: '40rem', maxWidth: '100%' })}>
-            <Heading1>{t(`entity.stats.${entity}`)}</Heading1>
-            <p mix={css({ marginBottom: '2rem' })}>
-              <Link
-                href={routes.shows.stats.href({ entity: other })}
-                mix={[statsLink, css({ marginRight: '0.5rem' })]}
-              >
-                {t(`entity.stats.see.${other}`)}
-              </Link>
-              {' • '}
-              <Link
-                href={routes.shows.history.href()}
-                mix={[statsLink, css({ marginLeft: '0.5rem' })]}
-              >
-                {t('entity.stats.see.all')}
-              </Link>
-            </p>
-            {Object.entries(buckets).map(([key, stats]) => (
-              <ul key={key} mix={css({ marginBottom: '1rem' })}>
-                {stats.map((stat) => (
-                  <li key={stat.entity.id} mix={css(sizeFor(stat.count, size))}>
-                    <Link
-                      href={routes[entity].href({ slug: stat.entity.slug })}
-                      mix={css({ '&:hover': { textDecoration: 'underline' } })}
-                    >
-                      {stat.entity.name}
-                    </Link>
-                    {' - '}
-                    {stat.count}
-                  </li>
-                ))}
-              </ul>
-            ))}
-          </article>,
-          { title: t(`entity.stats.${entity}`) }
-        );
+        return renderPage(context, <StatsPage entity={entity} data={data} />, {
+          title: context.t(`entity.stats.${entity}`),
+        });
       },
     },
 

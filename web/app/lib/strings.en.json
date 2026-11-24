@@ -7,11 +7,36 @@
     "stats": {
       "artist": "Show Stats: Artists",
       "venue": "Show Stats: Venues",
+      "eyebrow": "We were there",
+      "heading": "Show Stats",
+      "leaders": {
+        "artist": "Most seen",
+        "venue": "Most visited"
+      },
+      "once": "Once",
+      "rank": "Number {{rank}}",
+      "rest": {
+        "artist": "Also on the bill",
+        "venue": "And everywhere else"
+      },
       "see": {
-        "all": "See all shows I have attended",
-        "artist": "See artist stats",
-        "venue": "See venue stats"
-      }
+        "all": "See all shows I have attended"
+      },
+      "showsUnit_one": "show",
+      "showsUnit_other": "shows",
+      "tabs": {
+        "artist": "Artists",
+        "label": "Show stats for",
+        "venue": "Venues"
+      },
+      "times": "{{count}} times",
+      "totals": {
+        "artists": "Artists",
+        "shows": "Shows",
+        "since": "Since",
+        "venues": "Venues"
+      },
+      "twice": "Twice"
     }
   },
   "error": {
