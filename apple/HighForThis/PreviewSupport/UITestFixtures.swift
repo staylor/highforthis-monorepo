@@ -144,10 +144,12 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
 
     private static func data(operation: String, variables: [String: Any], scenario: String) throws -> [String: Any] {
         let after = variables["after"] as? String
+        // Without a year, the most recent: 2025, the first of the years
         let year = variables["year"] as? Int ?? 2025
-        let emptyYear = scenario == "emptyYearMetadata" && variables["year"] is Int
-        let shows = scenario == "empty" || year == 2027 || emptyYear ? [] : (0..<5).map { show($0, year: year) }
-        let showConnection = connection("Show", items: shows, after: after, years: emptyYear ? [] : [2027, 2025, 2019])
+        // A year chosen from the menu that has no shows, as one could after they're deleted
+        let emptyYear = scenario == "emptyYear" && variables["year"] is Int
+        let shows = scenario == "empty" || emptyYear ? [] : (0..<5).map { show($0, year: year) }
+        let showConnection = connection("Show", items: shows, after: after, years: [2025, 2019])
         var result: [String: Any] = ["__typename": "Query"]
         switch operation {
         case "Shows": result["shows"] = showConnection

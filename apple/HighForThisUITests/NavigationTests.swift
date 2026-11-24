@@ -31,15 +31,18 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
-    func testEmptyYearKeepsTheFilterAndCanReturnToAllYears() {
-        let app = launch(scenario: "emptyYearMetadata")
+    func testEmptyYearKeepsTheFilterAndCanReturnToTheMostRecentYear() {
+        let app = launch(scenario: "emptyYear")
         select("History", in: app)
+        XCTAssertTrue(element("show-show-2025-0", in: app).waitForExistence(timeout: 10))
         tap(app.buttons["year-filter"])
-        tap(app.buttons["2027"])
+        // The history goes a year at a time, so it never loads every show at once.
+        XCTAssertFalse(app.buttons["All Years"].exists)
+        tap(app.buttons["2019"])
         XCTAssertTrue(app.staticTexts["No shows."].waitForExistence(timeout: 10))
         XCTAssertTrue(app.buttons["year-filter"].exists)
         tap(app.buttons["year-filter"])
-        tap(app.buttons["All Years"])
+        tap(app.buttons["2025"])
         XCTAssertTrue(element("show-show-2025-0", in: app).waitForExistence(timeout: 10))
     }
 

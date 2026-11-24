@@ -20,6 +20,7 @@ function chain() {
   const query = {
     all: vi.fn(),
     count: vi.fn(),
+    first: vi.fn(),
     join: vi.fn(),
     limit: vi.fn(),
     offset: vi.fn(),
@@ -224,6 +225,84 @@ describe('shows', () => {
     await expect(shows()).resolves.toEqual([]);
     expect(db.exec).not.toHaveBeenCalled();
     expect(db.findMany).not.toHaveBeenCalled();
+  });
+
+  // Ten of the history's shows start at the same time as another, and the history comes a page at
+  // a time, so each page has to put them in the same order
+  it('orders shows that start at the same time by ID', async () => {
+    await shows();
+
+    expect(showsQuery.orderBy.mock.calls).toEqual([
+      ['date', 'desc'],
+      ['id', 'desc'],
+    ]);
+
+    showsQuery.orderBy.mockClear();
+    await resolvers.Query.shows({}, { latest: true, first: 50 });
+
+    expect(showsQuery.orderBy.mock.calls).toEqual([
+      ['date', 'asc'],
+      ['id', 'asc'],
+    ]);
+  });
+});
+
+describe('shows from the most recent year', () => {
+  beforeEach(() => {
+    resetMocks();
+    showsQuery.count.mockResolvedValue(0);
+    showsQuery.all.mockResolvedValue([]);
+  });
+
+  const in2024 = and(
+    gte('date', new Date('2024-01-01T00:00:00Z')),
+    lt('date', new Date('2025-01-01T00:00:00Z'))
+  );
+
+  // The app's history starts with the latest year, without first asking which years there are
+  it('keeps to the year of the newest show, which `years` lists first', async () => {
+    showsQuery.first.mockResolvedValue({ date: new Date('2024-03-01T20:00:00Z') });
+
+    const connection = await resolvers.Query.shows(
+      {},
+      { attended: true, first: 100, mostRecentYear: true }
+    );
+
+    const [[newest], [page]] = showsQuery.where.mock.calls;
+    expect(newest).toEqual(and(eq('attended', true)));
+    expect(showsQuery.orderBy).toHaveBeenNthCalledWith(1, 'date', 'desc');
+    expect(showsQuery.select).toHaveBeenCalledWith('date');
+    expect(page).toEqual(and(and(eq('attended', true)), in2024));
+
+    showsQuery.all.mockResolvedValueOnce([
+      { date: new Date('2019-05-01T20:00:00Z') },
+      { date: new Date('2024-03-01T20:00:00Z') },
+    ]);
+    await expect(resolvers.ShowConnection.years(connection)).resolves.toEqual([2024, 2019]);
+  });
+
+  it('keeps to the year it is given', async () => {
+    await resolvers.Query.shows(
+      {},
+      { attended: true, first: 100, mostRecentYear: true, year: 2024 }
+    );
+
+    expect(showsQuery.first).not.toHaveBeenCalled();
+    expect(showsQuery.where).toHaveBeenCalledExactlyOnceWith(
+      and(and(eq('attended', true)), in2024)
+    );
+  });
+
+  it('has an empty page when there are no shows at all', async () => {
+    showsQuery.first.mockResolvedValue(null);
+
+    const connection = await resolvers.Query.shows(
+      {},
+      { attended: true, first: 100, mostRecentYear: true }
+    );
+
+    expect(showsQuery.where).toHaveBeenLastCalledWith(and(eq('attended', true)));
+    expect(connection.edges).toEqual([]);
   });
 });
 

@@ -86,6 +86,8 @@ const Show = `#graphql
       latest: Boolean
       attended: Boolean
       year: Int
+      # With no year, only the shows in the newest one's year, the first of the connection's years
+      mostRecentYear: Boolean
       artist: EntityArg
       venue: EntityArg
       search: String

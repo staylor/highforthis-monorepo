@@ -5,15 +5,15 @@ import { colorTransition, dark, text } from '#/ui/public/styles.ts';
 interface YearSelectProps {
   value: string;
   placeholder: string;
-  /** Every year's page of videos. */
+  /** Each year's page, of videos or of the shows we've been to. */
   years: { year: number; href: string }[];
-  /** The page of videos from every year. */
+  /** The page for every year. */
   allHref: string;
 }
 
 /**
- * The year picker needs JavaScript because the year is a path segment (/videos/:year),
- * not a query a GET form could submit.
+ * The year picker needs JavaScript because the year is a path segment (/videos/:year,
+ * /shows/history/:year), not a query a GET form could submit.
  */
 export const YearSelect = clientEntry(
   import.meta.url,

@@ -62,11 +62,56 @@ export const attendedFragment = gql`
   }
 `;
 
-type GridProps = {
+type ShowEdge = ShowsGrid_ShowsFragment['edges'][number];
+
+/** The two ways shows are laid out: a table, or a list on the narrowest screens */
+export type ShowsView = 'grid' | 'list';
+
+interface ListProps {
   shows: ShowsGrid_ShowsFragment;
+  /**
+   * When the show before these was, for a page of the history that goes on from the one before
+   * it, so it doesn't head a year or month again
+   */
+  previous?: number;
+  /** What follows the shows: the history's lazy frame for its next page */
+  more?: RemixNode;
   mix?: MixInput;
+}
+
+interface GridProps extends ListProps {
   showMonths?: boolean;
-};
+  /** Most recent first, as the history goes, rather than soonest first */
+  newestFirst?: boolean;
+}
+
+/** The years and months that have their heading already: the previous show's, if there is one */
+function headed(previous?: number) {
+  const years: Record<number, number> = {};
+  const months: Record<string, number> = {};
+  if (previous !== undefined) {
+    const d = formatDate(previous);
+    years[d.year] = 1;
+    months[`${d.year}${d.month}`] = 1;
+  }
+  return { years, months };
+}
+
+/** By date, and shows on the same date by their first artist */
+const byDate =
+  (newestFirst: boolean) =>
+  ({ node: a }: ShowEdge, { node: b }: ShowEdge) => {
+    if (a.date === b.date) {
+      const artistA = a.artists[0]?.name ?? '';
+      const artistB = b.artists[0]?.name ?? '';
+      if (artistA === artistB) {
+        return 0;
+      }
+      return artistA < artistB ? -1 : 1;
+    }
+    const soonestFirst = a.date < b.date ? -1 : 1;
+    return newestFirst ? -soonestFirst : soonestFirst;
+  };
 
 const table = css({ width: '100%', borderCollapse: 'collapse' });
 const rowStyle = css(row);
@@ -78,13 +123,15 @@ const dateCell = css({
   fontVariantNumeric: 'tabular-nums',
   [md]: { width: '6rem' },
 });
-// The venue gets its own column from the sm breakpoint, and goes under the show below it
+// The venue gets its own column from the sm breakpoint, and goes under the show below it. The
+// column is always the same share of the width, so each page of the history's table lines up
+// with the one before it.
 const venueCell = css({
   ...cell,
   color: 'var(--muted)',
   display: 'none',
   textTransform: 'uppercase',
-  [sm]: { display: 'table-cell' },
+  [sm]: { display: 'table-cell', width: '40%' },
 });
 const venueBelow = css({
   display: 'block',
@@ -109,10 +156,17 @@ const monthName = {
   textTransform: 'uppercase',
 };
 
-/** Shows as a table on wider screens and a list on the narrowest. */
-export function Shows(handle: Handle<Omit<GridProps, 'mix'>>) {
+/**
+ * Shows as a table on wider screens and a list on the narrowest. Each layout has its own `more`,
+ * and only the one on screen gets near enough to the viewport to load a lazy frame.
+ */
+export function Shows(
+  handle: Handle<
+    Omit<GridProps, 'mix' | 'more'> & { more?: (view: ShowsView) => RemixNode | undefined }
+  >
+) {
   return () => {
-    const { shows, showMonths = true } = handle.props;
+    const { shows, showMonths = true, newestFirst, previous, more } = handle.props;
     if (!shows?.edges?.length) {
       return null;
     }
@@ -121,9 +175,17 @@ export function Shows(handle: Handle<Omit<GridProps, 'mix'>>) {
         <ShowsGrid
           shows={shows}
           showMonths={showMonths}
+          newestFirst={newestFirst}
+          previous={previous}
+          more={more?.('grid')}
           mix={css({ display: 'none', [xs]: { display: 'block' } })}
         />
-        <ShowsList shows={shows} mix={css({ display: 'block', [xs]: { display: 'none' } })} />
+        <ShowsList
+          shows={shows}
+          previous={previous}
+          more={more?.('list')}
+          mix={css({ display: 'block', [xs]: { display: 'none' } })}
+        />
       </>
     );
   };
@@ -160,20 +222,26 @@ const yearCell = css({
 
 export function ShowsGrid(handle: Handle<GridProps>) {
   return () => {
-    const { shows, showMonths = true } = handle.props;
-    const years: Record<number, number> = {};
-    const months: Record<string, number> = {};
-    const sorted = [...shows.edges].sort(({ node: a }, { node: b }) => {
-      if (a.date === b.date) {
-        const artistA = a.artists[0]?.name ?? '';
-        const artistB = b.artists[0]?.name ?? '';
-        if (artistA === artistB) {
-          return 0;
-        }
-        return artistA < artistB ? -1 : 1;
-      }
-      return a.date < b.date ? -1 : 1;
-    });
+    const { mix, more, ...shows } = handle.props;
+    return (
+      <div mix={mix}>
+        <ShowsTable {...shows} />
+        {more}
+      </div>
+    );
+  };
+}
+
+/**
+ * The table, which a page of the history adds after the page before it. A frame can't add rows to
+ * that page's table instead: Remix parses a frame's HTML in a template, and the head that brings
+ * the rows' styles takes the parser out of the table, so it drops the rows' tags.
+ */
+export function ShowsTable(handle: Handle<Omit<GridProps, 'mix' | 'more'>>) {
+  return () => {
+    const { shows, showMonths = true, newestFirst = false, previous } = handle.props;
+    const { years, months } = headed(previous);
+    const sorted = [...shows.edges].sort(byDate(newestFirst));
 
     const rows: RemixNode[] = [];
     for (const { node } of sorted) {
@@ -224,22 +292,32 @@ export function ShowsGrid(handle: Handle<GridProps>) {
     }
 
     return (
-      <div mix={handle.props.mix}>
-        <table mix={table}>
-          <tbody>{rows}</tbody>
-        </table>
-      </div>
+      <table mix={table}>
+        <tbody>{rows}</tbody>
+      </table>
     );
   };
 }
 
-export function ShowsList(handle: Handle<{ shows: ShowsGrid_ShowsFragment; mix?: MixInput }>) {
+export function ShowsList(handle: Handle<ListProps>) {
   return () => {
-    const years: Record<number, number> = {};
-    const months: Record<string, number> = {};
+    const { mix, ...items } = handle.props;
     return (
-      <article mix={handle.props.mix}>
-        {handle.props.shows.edges.map(({ node }) => {
+      <article mix={mix}>
+        <ShowsListItems {...items} />
+      </article>
+    );
+  };
+}
+
+/** The list's shows, which a page of the history adds to the list it goes on from */
+export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
+  return () => {
+    const { shows, previous, more } = handle.props;
+    const { years, months } = headed(previous);
+    return (
+      <>
+        {shows.edges.map(({ node }) => {
           const d = formatDate(node.date);
           const showRow = (
             <p mix={css({ marginBottom: '0.5rem', ...text.sm })}>
@@ -277,7 +355,8 @@ export function ShowsList(handle: Handle<{ shows: ShowsGrid_ShowsFragment; mix?:
           }
           return <div key={node.id}>{showRow}</div>;
         })}
-      </article>
+        {more}
+      </>
     );
   };
 }

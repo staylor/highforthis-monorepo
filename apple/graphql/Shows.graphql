@@ -5,6 +5,7 @@ query Shows(
   $first: Int!
   $includeYears: Boolean!
   $latest: Boolean
+  $mostRecentYear: Boolean
   $venue: EntityArg
   $year: Int
 ) {
@@ -14,6 +15,7 @@ query Shows(
     attended: $attended
     first: $first
     latest: $latest
+    mostRecentYear: $mostRecentYear
     venue: $venue
     year: $year
   ) {

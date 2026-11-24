@@ -5,7 +5,13 @@ import { createController } from 'remix/router';
 import { prefetchRootData, renderNotFound, renderPage } from '#/actions/render-page.tsx';
 import { isYear } from '#/lib/year.ts';
 import { routes } from '#/routes.ts';
-import type { ShowQuery, ShowsHistoryQuery, ShowsQuery, ShowStatsQuery } from '#/types/graphql.ts';
+import type {
+  ShowQuery,
+  ShowsHistoryPageQuery,
+  ShowsHistoryQuery,
+  ShowsQuery,
+  ShowStatsQuery,
+} from '#/types/graphql.ts';
 import { Artwork } from '#/ui/artist.tsx';
 import { Heading1, Heading2 } from '#/ui/heading.tsx';
 import { Link } from '#/ui/link.tsx';
@@ -13,18 +19,17 @@ import { md, text, type Styles } from '#/ui/public/styles.ts';
 import { Shows, ShowsList, showsGridFragment } from '#/ui/shows/shows.tsx';
 import { formatArtists, formatDate } from '#/ui/shows/utils.ts';
 
+import {
+  HISTORY_PAGE_SIZE,
+  HistoryPage,
+  HistoryRows,
+  showsHistoryPageQuery,
+  showsHistoryQuery,
+} from './history.tsx';
+
 const showsQuery = gql`
   query Shows($after: String, $first: Int) {
     shows(after: $after, first: $first, latest: true) {
-      ...ShowsGrid_shows
-    }
-  }
-  ${showsGridFragment}
-`;
-
-const showsHistoryQuery = gql`
-  query ShowsHistory($after: String, $first: Int, $year: Int) {
-    shows(after: $after, attended: true, first: $first, year: $year) {
       ...ShowsGrid_shows
     }
   }
@@ -96,238 +101,257 @@ const statsLink = css({
   textDecoration: 'underline',
 });
 
+// The pages start the App query before running their own, so the two run together. The history's
+// later pages are only rows, for a frame in the page, so they skip it.
+const prefetch = [prefetchRootData()];
+
 export default createController(routes.shows, {
-  middleware: [prefetchRootData()],
   actions: {
-    async index(context) {
-      const { t } = context;
-      const { shows } = await context.gql.query<ShowsQuery>(showsQuery, {
-        first: 200,
-      });
-      return renderPage(
-        context,
-        <article>
-          <Heading1>{t('shows.recommended')}</Heading1>
-          <p
-            mix={css({
-              marginBottom: '2rem',
-              ...text.base,
-              color: 'var(--muted)',
-            })}
-          >
-            {t('shows.todaysDate')}:{' '}
-            <strong mix={css({ color: 'light-dark(var(--neutral-900), #fff)' })}>
-              {formatDate().formatted}
-            </strong>
-          </p>
-          {shows && <Shows shows={shows} />}
-        </article>,
-        { title: t('shows.heading') }
-      );
+    index: {
+      middleware: prefetch,
+      async handler(context) {
+        const { t } = context;
+        const { shows } = await context.gql.query<ShowsQuery>(showsQuery, {
+          first: 200,
+        });
+        return renderPage(
+          context,
+          <article>
+            <Heading1>{t('shows.recommended')}</Heading1>
+            <p
+              mix={css({
+                marginBottom: '2rem',
+                ...text.base,
+                color: 'var(--muted)',
+              })}
+            >
+              {t('shows.todaysDate')}:{' '}
+              <strong mix={css({ color: 'light-dark(var(--neutral-900), #fff)' })}>
+                {formatDate().formatted}
+              </strong>
+            </p>
+            {shows && <Shows shows={shows} />}
+          </article>,
+          { title: t('shows.heading') }
+        );
+      },
     },
 
-    async list(context) {
-      const { shows } = await context.gql.query<ShowsQuery>(showsQuery, {
-        first: 200,
-      });
-      return renderPage(context, shows ? <ShowsList shows={shows} /> : null, {
-        title: context.t('shows.heading'),
-      });
+    list: {
+      middleware: prefetch,
+      async handler(context) {
+        const { shows } = await context.gql.query<ShowsQuery>(showsQuery, {
+          first: 200,
+        });
+        return renderPage(context, shows ? <ShowsList shows={shows} /> : null, {
+          title: context.t('shows.heading'),
+        });
+      },
     },
 
-    async history(context) {
-      const { t } = context;
-      const { year } = context.params;
-      if (year && !isYear(year)) {
-        return renderNotFound(context);
+    // The shows we've been to, newest first, a page at a time. Each page ends with a lazy frame
+    // that adds the next as it scrolls into view, or without JavaScript, a link to it (?after=).
+    history: {
+      middleware: prefetch,
+      async handler(context) {
+        const { t } = context;
+        const { year } = context.params;
+        if (year && !isYear(year)) {
+          return renderNotFound(context);
+        }
+        const { shows } = await context.gql.query<ShowsHistoryQuery>(showsHistoryQuery, {
+          after: context.url.searchParams.get('after') ?? undefined,
+          first: HISTORY_PAGE_SIZE,
+          year: year ? Number(year) : undefined,
+        });
+        return renderPage(context, shows ? <HistoryPage shows={shows} year={year} /> : null, {
+          title: year ? t('shows.historyIn', { year }) : t('shows.history'),
+        });
+      },
+    },
+
+    // A page of the history after the first: only its rows, for the frame that loads it
+    async historyPage(context) {
+      const { year, view } = context.params;
+      const after = context.url.searchParams.get('after');
+      const previous = Number(context.url.searchParams.get('previous') || Number.NaN);
+      if ((year && !isYear(year)) || (view !== 'grid' && view !== 'list') || !after) {
+        return new Response('Not Found', { status: 404 });
       }
-      const { shows } = await context.gql.query<ShowsHistoryQuery>(showsHistoryQuery, {
-        first: 1000,
+      const { shows } = await context.gql.query<ShowsHistoryPageQuery>(showsHistoryPageQuery, {
+        after,
+        first: HISTORY_PAGE_SIZE,
         year: year ? Number(year) : undefined,
       });
-      const count = shows?.edges.length ?? 0;
-      return renderPage(
-        context,
-        <article>
-          {year ? (
-            <>
-              <Heading2>
-                <span mix={css({ color: 'var(--pink)' })}>{count}</span>{' '}
-                {t('shows.attendedIn', { count, year })}
-              </Heading2>
-              <p mix={css({ marginBlock: '1.25rem' })}>
-                <Link
-                  mix={css({
-                    ...text.xl,
-                    color: 'var(--pink)',
-                    textTransform: 'uppercase',
-                    textDecoration: 'underline',
-                  })}
-                  href={routes.shows.history.href()}
-                >
-                  {t('shows.viewFullHistory')}
-                </Link>
-              </p>
-            </>
-          ) : (
-            <Heading2>{t('shows.attended.heading')}</Heading2>
-          )}
-          {shows && <Shows shows={shows} showMonths={false} />}
-        </article>,
-        { title: year ? t('shows.historyIn', { year }) : t('shows.history') }
+      return context.render(
+        shows ? (
+          <HistoryRows
+            shows={shows}
+            view={view}
+            year={year}
+            previous={Number.isFinite(previous) ? previous : undefined}
+            label={context.t('shows.more')}
+          />
+        ) : null
       );
     },
 
-    async stats(context) {
-      const { t } = context;
-      const { entity } = context.params;
-      if (entity !== 'artist' && entity !== 'venue') {
-        return renderNotFound(context);
-      }
-      const { showStats } = await context.gql.query<ShowStatsQuery>(showStatsQuery, {
-        entity: entity.toUpperCase(),
-      });
-      const buckets: Record<string, ShowStatsQuery['showStats']> = {};
-      for (const stat of showStats ?? []) {
-        (buckets[`bucket_${stat.count}`] ||= []).push(stat);
-      }
-      const other = entity === 'artist' ? 'venue' : 'artist';
-      const total = showStats?.[0]?.count ?? 0;
-      const size = (total - (total % sizes.length)) / sizes.length;
+    stats: {
+      middleware: prefetch,
+      async handler(context) {
+        const { t } = context;
+        const { entity } = context.params;
+        if (entity !== 'artist' && entity !== 'venue') {
+          return renderNotFound(context);
+        }
+        const { showStats } = await context.gql.query<ShowStatsQuery>(showStatsQuery, {
+          entity: entity.toUpperCase(),
+        });
+        const buckets: Record<string, ShowStatsQuery['showStats']> = {};
+        for (const stat of showStats ?? []) {
+          (buckets[`bucket_${stat.count}`] ||= []).push(stat);
+        }
+        const other = entity === 'artist' ? 'venue' : 'artist';
+        const total = showStats?.[0]?.count ?? 0;
+        const size = (total - (total % sizes.length)) / sizes.length;
 
-      return renderPage(
-        context,
-        <article mix={css({ width: '40rem', maxWidth: '100%' })}>
-          <Heading1>{t(`entity.stats.${entity}`)}</Heading1>
-          <p mix={css({ marginBottom: '2rem' })}>
-            <Link
-              href={routes.shows.stats.href({ entity: other })}
-              mix={[statsLink, css({ marginRight: '0.5rem' })]}
-            >
-              {t(`entity.stats.see.${other}`)}
-            </Link>
-            {' • '}
-            <Link
-              href={routes.shows.history.href()}
-              mix={[statsLink, css({ marginLeft: '0.5rem' })]}
-            >
-              {t('entity.stats.see.all')}
-            </Link>
-          </p>
-          {Object.entries(buckets).map(([key, stats]) => (
-            <ul key={key} mix={css({ marginBottom: '1rem' })}>
-              {stats.map((stat) => (
-                <li key={stat.entity.id} mix={css(sizeFor(stat.count, size))}>
-                  <Link
-                    href={routes[entity].href({ slug: stat.entity.slug })}
-                    mix={css({ '&:hover': { textDecoration: 'underline' } })}
-                  >
-                    {stat.entity.name}
-                  </Link>
-                  {' - '}
-                  {stat.count}
-                </li>
-              ))}
-            </ul>
-          ))}
-        </article>,
-        { title: t(`entity.stats.${entity}`) }
-      );
+        return renderPage(
+          context,
+          <article mix={css({ width: '40rem', maxWidth: '100%' })}>
+            <Heading1>{t(`entity.stats.${entity}`)}</Heading1>
+            <p mix={css({ marginBottom: '2rem' })}>
+              <Link
+                href={routes.shows.stats.href({ entity: other })}
+                mix={[statsLink, css({ marginRight: '0.5rem' })]}
+              >
+                {t(`entity.stats.see.${other}`)}
+              </Link>
+              {' • '}
+              <Link
+                href={routes.shows.history.href()}
+                mix={[statsLink, css({ marginLeft: '0.5rem' })]}
+              >
+                {t('entity.stats.see.all')}
+              </Link>
+            </p>
+            {Object.entries(buckets).map(([key, stats]) => (
+              <ul key={key} mix={css({ marginBottom: '1rem' })}>
+                {stats.map((stat) => (
+                  <li key={stat.entity.id} mix={css(sizeFor(stat.count, size))}>
+                    <Link
+                      href={routes[entity].href({ slug: stat.entity.slug })}
+                      mix={css({ '&:hover': { textDecoration: 'underline' } })}
+                    >
+                      {stat.entity.name}
+                    </Link>
+                    {' - '}
+                    {stat.count}
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </article>,
+          { title: t(`entity.stats.${entity}`) }
+        );
+      },
     },
 
-    async show(context) {
-      const { t } = context;
-      const { show } = await context.gql.query<ShowQuery>(showQuery, {
-        id: context.params.id,
-      });
-      if (!show) {
-        return renderNotFound(context);
-      }
-      const lastIndex = show.artists.length - 1;
-      const d = formatDate(show.date);
-      const ArtistHeading = show.title ? Heading2 : Heading1;
-      const [artist] = show.artists;
+    show: {
+      middleware: prefetch,
+      async handler(context) {
+        const { t } = context;
+        const { show } = await context.gql.query<ShowQuery>(showQuery, {
+          id: context.params.id,
+        });
+        if (!show) {
+          return renderNotFound(context);
+        }
+        const lastIndex = show.artists.length - 1;
+        const d = formatDate(show.date);
+        const ArtistHeading = show.title ? Heading2 : Heading1;
+        const [artist] = show.artists;
 
-      return renderPage(
-        context,
-        <article
-          mix={css({
-            marginInline: 'auto',
-            textAlign: 'center',
-            [md]: { display: 'flex', textAlign: 'left' },
-          })}
-        >
-          <div
+        return renderPage(
+          context,
+          <article
             mix={css({
-              marginBlock: '0.75rem 2rem',
-              [md]: { marginRight: '2rem' },
+              marginInline: 'auto',
+              textAlign: 'center',
+              [md]: { display: 'flex', textAlign: 'left' },
             })}
           >
-            {artist && (
-              <Artwork
-                name={artist.name}
-                data={artist.appleMusic || {}}
-                styles={{
-                  marginInline: 'auto',
-                  borderRadius: '0.5rem',
-                  [md]: { marginLeft: 0 },
-                }}
-              />
-            )}
-          </div>
-          <div mix={css({ [md]: { marginTop: '1rem' } })}>
-            <p mix={css({ marginBottom: '0.75rem', ...text.lg })}>
-              {d.monthName} {d.day}, {d.year} - {d.time}
-            </p>
-            {show.title && <Heading1>{show.title}</Heading1>}
-            {artist && (
-              <ArtistHeading styles={{ fontFamily: 'var(--font-sans)' }}>
-                {show.artists.map((artist, i) => (
-                  <Link
-                    href={routes.artist.href({ slug: artist.slug })}
-                    mix={css({
-                      display: 'block',
-                      marginBottom: i < lastIndex ? '0.25rem' : undefined,
-                    })}
-                  >
-                    {artist.name} →
-                  </Link>
-                ))}
-              </ArtistHeading>
-            )}
-            <Heading2 styles={{ marginTop: '1rem' }}>
-              <Link
-                href={routes.venue.href({ slug: show.venue.slug })}
-                mix={css({ color: 'var(--gray-400)' })}
-              >
-                {show.venue.name}
-              </Link>
-            </Heading2>
-            {show.url && (
-              <a
-                href={show.url}
-                target="_blank"
-                mix={css({
-                  marginBlock: '0.5rem',
-                  display: 'inline-block',
-                  borderRadius: '0.375rem',
-                  border: '1px solid var(--pink)',
-                  padding: '0.5rem 0.75rem',
-                  fontFamily: 'var(--font-sans)',
-                  ...text.xl,
-                  color: 'var(--pink)',
-                })}
-                rel="noreferrer"
-              >
-                {t('shows.website')}
-              </a>
-            )}
-          </div>
-        </article>,
-        {
-          title: formatArtists(show),
-        }
-      );
+            <div
+              mix={css({
+                marginBlock: '0.75rem 2rem',
+                [md]: { marginRight: '2rem' },
+              })}
+            >
+              {artist && (
+                <Artwork
+                  name={artist.name}
+                  data={artist.appleMusic || {}}
+                  styles={{
+                    marginInline: 'auto',
+                    borderRadius: '0.5rem',
+                    [md]: { marginLeft: 0 },
+                  }}
+                />
+              )}
+            </div>
+            <div mix={css({ [md]: { marginTop: '1rem' } })}>
+              <p mix={css({ marginBottom: '0.75rem', ...text.lg })}>
+                {d.monthName} {d.day}, {d.year} - {d.time}
+              </p>
+              {show.title && <Heading1>{show.title}</Heading1>}
+              {artist && (
+                <ArtistHeading styles={{ fontFamily: 'var(--font-sans)' }}>
+                  {show.artists.map((artist, i) => (
+                    <Link
+                      href={routes.artist.href({ slug: artist.slug })}
+                      mix={css({
+                        display: 'block',
+                        marginBottom: i < lastIndex ? '0.25rem' : undefined,
+                      })}
+                    >
+                      {artist.name} →
+                    </Link>
+                  ))}
+                </ArtistHeading>
+              )}
+              <Heading2 styles={{ marginTop: '1rem' }}>
+                <Link
+                  href={routes.venue.href({ slug: show.venue.slug })}
+                  mix={css({ color: 'var(--gray-400)' })}
+                >
+                  {show.venue.name}
+                </Link>
+              </Heading2>
+              {show.url && (
+                <a
+                  href={show.url}
+                  target="_blank"
+                  mix={css({
+                    marginBlock: '0.5rem',
+                    display: 'inline-block',
+                    borderRadius: '0.375rem',
+                    border: '1px solid var(--pink)',
+                    padding: '0.5rem 0.75rem',
+                    fontFamily: 'var(--font-sans)',
+                    ...text.xl,
+                    color: 'var(--pink)',
+                  })}
+                  rel="noreferrer"
+                >
+                  {t('shows.website')}
+                </a>
+              )}
+            </div>
+          </article>,
+          {
+            title: formatArtists(show),
+          }
+        );
+      },
     },
   },
 });

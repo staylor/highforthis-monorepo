@@ -6,7 +6,7 @@ import { getT } from '#/lib/i18n.ts';
 import { AppProvider, type AppValue } from '#/ui/app-context.tsx';
 import { trans } from '#/ui/trans.tsx';
 
-import { Attended, ShowsGrid } from './shows.tsx';
+import { Attended, ShowsGrid, ShowsList } from './shows.tsx';
 
 const app: AppValue = {
   t: getT(),
@@ -81,6 +81,38 @@ describe('ShowsGrid', () => {
     assert.match(html, /<a [^>]*href="\/shows\/3"[^>]*>Low \/ Bedhead<\/a>/);
   });
 
+  // The history: a page that goes on from one that ended in March 2025, with a frame for the next
+  it('lists the newest first, without heading the year the page before already did', async () => {
+    const html = await renderToString(
+      <ShowsGrid
+        newestFirst
+        showMonths={false}
+        previous={new Date('2025-03-01T20:00:00').getTime()}
+        more={<p>More to come</p>}
+        shows={{
+          edges: [
+            show('1', '2024-12-31T20:00:00', 'Lucy Dacus'),
+            show('3', '2025-02-01T20:00:00', 'Yo La Tengo'),
+            show('2', '2025-02-01T20:00:00', 'Wilco'),
+          ].map((edge) => ({ ...edge, cursor: edge.node.id })),
+          pageInfo: { hasNextPage: true },
+        }}
+      />
+    );
+    assert.doesNotMatch(html, />2025</);
+    assert.doesNotMatch(html, /February/);
+    // The next page's frame goes after the table, not in it
+    assert.match(html, /<\/table><p>More to come<\/p>/);
+    const order = ['Wilco', 'Yo La Tengo', '>2024<', 'Lucy Dacus', 'More to come'].map((text) =>
+      html.indexOf(text)
+    );
+    assert.ok(order.every((index) => index >= 0));
+    assert.deepEqual(
+      order,
+      [...order].sort((a, b) => a - b)
+    );
+  });
+
   it('lists shows whose artists have all been deleted by their venue', async () => {
     // Two on one date, which the grid sorts by artist
     const orphans = ['1', '2'].map((id) => {
@@ -92,6 +124,31 @@ describe('ShowsGrid', () => {
     );
     assert.match(html, /<a [^>]*href="\/shows\/1"[^>]*>Bowery Ballroom<\/a>/);
     assert.match(html, /<a [^>]*href="\/shows\/2"[^>]*>Bowery Ballroom<\/a>/);
+  });
+});
+
+describe('ShowsList', () => {
+  it('heads a new month, but not the year the page before already did', async () => {
+    const html = await renderToString(
+      <ShowsList
+        previous={new Date('2025-03-01T20:00:00').getTime()}
+        more={<p>More to come</p>}
+        shows={{
+          edges: [show('2', '2025-02-01T20:00:00', 'Yo La Tengo')].map((edge) => ({
+            ...edge,
+            cursor: edge.node.id,
+          })),
+          pageInfo: { hasNextPage: true },
+        }}
+      />
+    );
+    assert.doesNotMatch(html, />2025</);
+    const order = ['February', 'Yo La Tengo', 'More to come'].map((text) => html.indexOf(text));
+    assert.ok(order.every((index) => index >= 0));
+    assert.deepEqual(
+      order,
+      [...order].sort((a, b) => a - b)
+    );
   });
 });
 

@@ -860,6 +860,7 @@ export type QueryShowsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   latest?: InputMaybe<Scalars['Boolean']['input']>;
+  mostRecentYear?: InputMaybe<Scalars['Boolean']['input']>;
   order?: InputMaybe<ShowOrder>;
   search?: InputMaybe<Scalars['String']['input']>;
   venue?: InputMaybe<EntityArg>;

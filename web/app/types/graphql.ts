@@ -1116,15 +1116,6 @@ export type ShowsQueryVariables = Exact<{
 
 export type ShowsQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
-export type ShowsHistoryQueryVariables = Exact<{
-  after?: string | null | undefined;
-  first?: number | null | undefined;
-  year?: number | null | undefined;
-}>;
-
-
-export type ShowsHistoryQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
-
 export type ShowStatsQueryVariables = Exact<{
   entity: Types.ShowEntityType;
 }>;
@@ -1141,6 +1132,24 @@ export type ShowQueryVariables = Exact<{
 
 
 export type ShowQuery = { show: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } | null };
+
+export type ShowsHistoryQueryVariables = Exact<{
+  after?: string | null | undefined;
+  first?: number | null | undefined;
+  year?: number | null | undefined;
+}>;
+
+
+export type ShowsHistoryQuery = { shows: { count: number | null, years: Array<number> | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+
+export type ShowsHistoryPageQueryVariables = Exact<{
+  after?: string | null | undefined;
+  first?: number | null | undefined;
+  year?: number | null | undefined;
+}>;
+
+
+export type ShowsHistoryPageQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type VideosQueryVariables = Exact<{
   after?: string | null | undefined;

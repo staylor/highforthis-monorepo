@@ -7,7 +7,9 @@ import Testing
 
 struct APIClientTests {
     private var query: ShowsQuery {
-        ShowsQuery(after: .none, artist: .none, attended: .none, first: 50, includeYears: true, latest: true, venue: .none, year: .none)
+        ShowsQuery(
+            after: .none, artist: .none, attended: .none, first: 50, includeYears: true, latest: true, mostRecentYear: .none,
+            venue: .none, year: .none)
     }
 
     @Test func graphQLErrorsAreNotCachedAsEmptySuccesses() async throws {
@@ -23,6 +25,49 @@ struct APIClientTests {
         #expect(data.shows?.edges.count == 2)
         let cached = try await client.fetch(query: query, cachePolicy: .cacheOnly)
         #expect(cached?.data == data)
+    }
+
+    @Test func theHistoryAsksForOneYearAtATimeStartingWithTheMostRecent() {
+        let history = ShowsQuery(ShowFilter(kind: .history), after: nil)
+        #expect(history.attended == true)
+        #expect(history.mostRecentYear == true)
+        #expect(history.year == .none)
+        #expect(history.first == 100)
+        #expect(history.includeYears)
+
+        let nextPage = ShowsQuery(ShowFilter(kind: .history), after: "100")
+        #expect(nextPage.mostRecentYear == true)
+        #expect(nextPage.after == "100")
+        #expect(!nextPage.includeYears)
+
+        // The years are the same for any year, so the menu keeps the ones it has.
+        let chosen = ShowsQuery(ShowFilter(kind: .history, year: 2019), after: nil)
+        #expect(chosen.mostRecentYear == .none)
+        #expect(chosen.year == 2019)
+        #expect(!chosen.includeYears)
+
+        // An artist's or a venue's shows come whole, from every year, until one is chosen.
+        let artist = ShowsQuery(ShowFilter(kind: .history, artist: "sample-artist"), after: nil)
+        #expect(artist.mostRecentYear == .none)
+        #expect(artist.year == .none)
+        #expect(artist.first == 50)
+        #expect(artist.includeYears)
+
+        let upcoming = ShowsQuery(ShowFilter(kind: .upcoming), after: nil)
+        #expect(upcoming.latest == true)
+        #expect(upcoming.mostRecentYear == .none)
+        #expect(!upcoming.includeYears)
+    }
+
+    @Test func theHistoryListsTheMostRecentYearAndKeepsItsYearsForTheOthers() async {
+        let shows = Feeds.shows(client: UITestFixtures.client(scenario: "emptyYear"))
+        await shows.load(ShowFilter(kind: .history))
+        #expect(shows.years == [2025, 2019])
+        #expect(shows.items.map(\.id).first == "show-2025-0")
+        await shows.load(ShowFilter(kind: .history, year: 2019))
+        #expect(shows.error == nil)
+        #expect(shows.items.isEmpty)
+        #expect(shows.years == [2025, 2019])
     }
 
     @Test func anActualEmptyConnectionIsASuccess() async {

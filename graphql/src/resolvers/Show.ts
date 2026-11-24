@@ -104,6 +104,22 @@ async function showsOf(artistId: string) {
   );
 }
 
+/** The year a show is in, as `years` lists it */
+const yearOf = (date: Date | string) => new Date(date).getFullYear();
+
+/** The shows in a year */
+function inYear(year: number): ShowFilter {
+  const startDate = new Date(`${year}-01-01T00:00:00Z`);
+  const endDate = new Date(`${year + 1}-01-01T00:00:00Z`);
+  return and(gte('date', startDate), lt('date', endDate));
+}
+
+/** The year of the newest show the filter matches, the first that `years` lists */
+async function newestYear(filter: ShowFilter) {
+  const newest = await db.query(shows).where(filter).orderBy('date', 'desc').select('date').first();
+  return newest ? yearOf(newest.date) : undefined;
+}
+
 /** How many attended shows each artist or venue has, as the IDs and counts a query selects */
 async function countAttended(statement: SqlStatement) {
   const { rows = [] } = await db.exec(statement);
@@ -166,13 +182,23 @@ const resolvers = {
       if (filter === null) return [];
       const query = db.query(shows);
       const results = await (filter ? query.where(filter) : query).select('date').all();
-      const yearSet = new Set(results.map((r) => new Date(r.date).getFullYear()));
+      const yearSet = new Set(results.map((r) => yearOf(r.date)));
       return Array.from(yearSet).sort((a, b) => b - a);
     },
   },
   Query: {
     async shows(_, args) {
-      const { artist, venue, latest, attended, year, search, order, ...connectionArgs } = args;
+      const {
+        artist,
+        venue,
+        latest,
+        attended,
+        year,
+        mostRecentYear,
+        search,
+        order,
+        ...connectionArgs
+      } = args;
       // Everything but the dates, which `years` leaves out
       const conditions: ShowFilter[] = [];
       let dates: ShowFilter | undefined;
@@ -181,12 +207,6 @@ const resolvers = {
         conditions.push(eq('attended', true));
       } else if (latest) {
         dates = gte('date', new Date());
-      }
-
-      if (year) {
-        const startDate = new Date(`${year}-01-01T00:00:00Z`);
-        const endDate = new Date(`${year + 1}-01-01T00:00:00Z`);
-        dates = and(gte('date', startDate), lt('date', endDate));
       }
 
       if (artist?.id) {
@@ -239,13 +259,25 @@ const resolvers = {
       }
 
       const filter = and(...conditions);
+      const showYear = year || (mostRecentYear ? await newestYear(filter) : undefined);
+      if (showYear) {
+        dates = inYear(showYear);
+      }
+
       const query = db.query(shows).where(dates ? and(filter, dates) : filter);
       const direction = order === 'ASC' || (!order && latest) ? 'asc' : 'desc';
       const connection = await parseConnection<ShowSource>(
         {
           count: () => query.count(),
+          // Shows can start at the same time, so the ID keeps their order the same from one page
+          // to the next, without which a page can repeat a show and leave one out
           findMany: ({ skip, take }) =>
-            query.orderBy('date', direction).offset(skip).limit(take).all(),
+            query
+              .orderBy('date', direction)
+              .orderBy('id', direction)
+              .offset(skip)
+              .limit(take)
+              .all(),
         },
         connectionArgs
       );
