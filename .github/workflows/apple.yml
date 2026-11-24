@@ -40,11 +40,12 @@ jobs:
           base=HEAD^1
           if [ "$GITHUB_EVENT_NAME" = push ]; then
             # Diffing a push from main's previous head would miss an earlier push's app changes when that push's run
-            # didn't build, test and upload them: it was cancelled, failed, or was replaced by a newer push while it
-            # waited. So a push is diffed from the head of the last push or manual run on main that passed, or whose CI
-            # and TestFlight jobs passed although a job outside CI's needs didn't. That head's app has been built,
-            # tested and uploaded, by that run's Apple jobs or, when they were skipped, by an earlier run's. A pull
-            # request from a fork's branch named main is listed under main too, so only pushes and manual runs count.
+            # didn't build and upload them: it was cancelled, failed, or was replaced by a newer push while it waited.
+            # So a push is diffed from the head of the last push or manual run on main that passed, or whose CI and
+            # TestFlight jobs passed although a job outside CI's needs, such as a manual run's older-runtime tests,
+            # didn't. That head's app has been built and uploaded, by that run's Apple jobs or, when they were skipped,
+            # by an earlier run's. A pull request from a fork's branch named main is listed under main too, so only
+            # pushes and manual runs count.
             base=''
             # Whether a run that didn't pass still uploaded the app: its CI job and all its TestFlight jobs passed.
             uploaded='.jobs | any(.name == "CI" and .conclusion == "success")
@@ -81,9 +82,10 @@ jobs:
           echo "apple=$apple" >> "$GITHUB_OUTPUT"
           echo "schema=$schema" >> "$GITHUB_OUTPUT"
 
-  # The check for branch rules to require. Jobs skipped because the app didn't change count as passing, so
-  # this has to run, and fail, when a job it needs fails or the run is cancelled. The step needs always() too,
-  # because a step's condition implicitly includes success(), which is false once the run is cancelled.
+  # The check for branch rules to require. Jobs skipped because the app didn't change, or because a push doesn't
+  # test, count as passing, so this has to run, and fail, when a job it needs fails or the run is cancelled. The step
+  # needs always() too, because a step's condition implicitly includes success(), which is false once the run is
+  # cancelled.
   ci:
     name: CI
     if: always()
@@ -148,10 +150,12 @@ jobs:
             exit 1
           fi
 
+  # A push to main is a merged pull request, whose run tested its changes, so the tests run only on pull requests and
+  # manual runs. A push still builds, checks the generated code and formatting, and uploads to TestFlight.
   test:
     name: Test (${{ matrix.name }})
     needs: changes
-    if: needs.changes.outputs.apple == 'true'
+    if: github.event_name != 'push' && needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     # The longest runs take about 30 minutes, which leaves room to run the tests again after a failure that isn't the
     # app's.
@@ -197,7 +201,7 @@ jobs:
   test-older-runtimes:
     name: Test (${{ matrix.name }})
     needs: changes
-    if: needs.changes.outputs.apple == 'true'
+    if: github.event_name != 'push' && needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     timeout-minutes: 60
     strategy:
@@ -226,12 +230,12 @@ jobs:
           device: ${{ matrix.device }}
 
   # iOS 26.0 lacks the tab accessory API, so this checks the player's fallback. Its simulator often hangs while booting,
-  # so it runs after a merge and on manual runs, not on pull requests. It isn't one of CI's needs: a failure marks the
-  # run on main without holding up TestFlight.
+  # so it runs only on manual runs: not on pull requests, and like the other tests, not on a push. It isn't one of CI's
+  # needs: a failure marks the run without holding up TestFlight.
   test-ios-26-0:
     name: Test (iPhone, iOS 26.0 player)
     needs: changes
-    if: github.event_name != 'pull_request' && needs.changes.outputs.apple == 'true'
+    if: github.event_name == 'workflow_dispatch' && needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     timeout-minutes: 60
     steps:
