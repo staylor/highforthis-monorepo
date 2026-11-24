@@ -475,20 +475,115 @@ describe('shows', () => {
     }
   });
 
-  it('ranks artists by the shows attended, with a link to the venues', async (t) => {
-    const showStats = [
-      { count: 12, entity: wilco },
-      { count: 3, entity: spoon },
+  // The stats: the leaders with their artwork and dates, everyone's counts, and the totals
+  const showTotals = { artists: 249, firstDate: Date.UTC(2005, 9, 7, 20), shows: 458, venues: 65 };
+  const seen = { firstDate: Date.UTC(2009, 6, 4, 20), lastDate: Date.UTC(2025, 5, 21, 20) };
+  const artist = (name: string) => ({
+    id: name,
+    name,
+    slug: name.toLowerCase().replace(/\W+/g, '-'),
+  });
+  const stat = (count: number, entity: { name: string }) => ({ count, entity });
+  const artwork = {
+    id: 'am-1',
+    artwork: {
+      bgColor: '1c160c',
+      textColor1: 'eae9ed',
+      textColor2: 'cdcdcf',
+      url: 'https://is1-ssl.mzstatic.com/image/thumb/{w}x{h}bb.jpg',
+    },
+  };
+  // The leaders, as ShowStats asks for them, from everyone's counts
+  const leadersOf = (stats: ReturnType<typeof stat>[]) =>
+    stats.map(({ count, entity }, index) => ({
+      count,
+      ...seen,
+      entity: { ...entity, appleMusic: index === 0 ? artwork : null },
+    }));
+
+  it('puts the artists we have seen most on a podium, then ranks the rest of the leaders', async (t) => {
+    // In GraphQL's order: most first, and a tie by name
+    const everyone = [
+      stat(12, wilco),
+      stat(9, artist('Low')),
+      stat(9, spoon),
+      stat(7, artist('Bedhead')),
+      stat(7, artist('Yo La Tengo')),
+      stat(2, artist('Spiritualized')),
     ];
-    const operations = stubGraphQL(t, { App, ShowStats: { showStats } });
+    const operations = stubGraphQL(t, {
+      App,
+      ShowStats: { leaders: leadersOf(everyone), showStats: everyone, showTotals },
+    });
     const { status, html } = await page(routes.shows.stats.href({ entity: 'artist' }));
     assert.equal(status, 200);
-    assert.match(textOf(html), /Show Stats: Artists .*Wilco - 12 .*Spoon - 3/);
-    assert.match(link(html, '/shows/stats/venue') ?? '', /See venue stats/);
+    assert.match(html, /<title>Show Stats: Artists » High for This<\/title>/);
+    const body = textOf(html);
+    assert.match(body, /Show Stats .*Shows 458 Artists 249 Venues 65 Since 2005/);
+    // The winner wears its artwork's colors, in front of its rank
+    assert.match(html, /style="--bg: #1c160c; --fg: #eae9ed; --fg2: #cdcdcf;/);
+    assert.ok(html.includes('src="https://is1-ssl.mzstatic.com/image/thumb/440x440bb.jpg"'));
+    assert.match(body, /Number 1 Wilco 12 shows 2009–2025 .*Number 2 Low 9 shows/);
+    // Spoon ties Low, and the leaderboard's ties share a rank too. Without artwork, a place has
+    // initials.
+    assert.match(
+      body,
+      /Number 2 Spoon 9 shows .*Most seen .*Number 4 4 B Bedhead .*Number 4 4 YLT Yo La Tengo/
+    );
+    assert.match(body, /Number 6 6 S Spiritualized 2009–2025 2 shows/);
+    assert.doesNotMatch(body, /Also on the bill/);
     assert.ok(link(html, '/artist/wilco') !== undefined);
+    assert.match(html, /<a href="\/shows\/stats\/artist" aria-current="page"[^>]*>Artists<\/a>/);
+    assert.match(link(html, '/shows/stats/venue') ?? '', /Venues/);
     assert.deepEqual(operations.find((op) => op.operationName === 'ShowStats')?.variables, {
       entity: 'ARTIST',
+      leaders: 20,
     });
+  });
+
+  it('bills the artists past the leaderboard like a festival poster, by count', async (t) => {
+    // Eighteen bands seen four times would run past the leaderboard's twenty places
+    const bands = Array.from({ length: 18 }, (_, index) => stat(4, artist(`Band ${index + 1}`)));
+    const everyone = [
+      stat(12, wilco),
+      stat(9, spoon),
+      stat(9, artist('Low')),
+      ...bands,
+      stat(2, artist('Bedhead')),
+      stat(1, artist('Yo La Tengo')),
+    ];
+    stubGraphQL(t, {
+      App,
+      ShowStats: { leaders: leadersOf(everyone.slice(0, 20)), showStats: everyone, showTotals },
+    });
+    const body = textOf((await page(routes.shows.stats.href({ entity: 'artist' }))).html);
+    assert.doesNotMatch(body, /Most seen/);
+    assert.match(
+      body,
+      /Also on the bill 4 times Band 1 ★ Band 2 .*Band 18 Twice Bedhead Once Yo La Tengo/
+    );
+  });
+
+  it("gives a venue's place its initials and where it is", async (t) => {
+    const garden = {
+      id: 'v2',
+      city: 'New York',
+      name: 'Madison Square Garden',
+      slug: 'msg',
+      state: 'NY',
+    };
+    stubGraphQL(t, {
+      App,
+      ShowStats: {
+        leaders: [{ count: 42, ...seen, entity: garden }],
+        showStats: [{ count: 42, entity: garden }],
+        showTotals,
+      },
+    });
+    const { html } = await page(routes.shows.stats.href({ entity: 'venue' }));
+    assert.match(textOf(html), /MSG Number 1 Madison Square Garden New York, NY 42 shows/);
+    assert.match(html, /<a href="\/shows\/stats\/venue" aria-current="page"[^>]*>Venues<\/a>/);
+    assert.ok(link(html, '/venue/msg') !== undefined);
   });
 
   it('shows a show with its artists, its venue and where to get tickets', async (t) => {

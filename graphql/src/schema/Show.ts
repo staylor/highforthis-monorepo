@@ -69,7 +69,19 @@ const Show = `#graphql
 
   type ShowStat {
     count: Int!
+    # When the first and the latest of those shows were
+    firstDate: Float!
+    lastDate: Float!
     entity: ShowEntity!
+  }
+
+  # The shows we've been to, all told
+  type ShowTotals {
+    shows: Int!
+    artists: Int!
+    venues: Int!
+    firstDate: Float
+    lastDate: Float
   }
 
   input EntityArg {
@@ -94,7 +106,9 @@ const Show = `#graphql
       order: ShowOrder
     ): ShowConnection
     show(id: String, lastAdded: Boolean): Show
-    showStats(entity: ShowEntityType!): [ShowStat!]! 
+    # The artists or venues we've seen the most, most first, and only the first so many if asked
+    showStats(entity: ShowEntityType!, first: Int): [ShowStat!]!
+    showTotals: ShowTotals!
   }
 
   extend type Mutation {

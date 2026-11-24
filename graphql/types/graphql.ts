@@ -782,6 +782,7 @@ export type Query = {
   posts?: Maybe<PostConnection>;
   show?: Maybe<Show>;
   showStats: Array<ShowStat>;
+  showTotals: ShowTotals;
   shows?: Maybe<ShowConnection>;
   siteSettings: SiteSettings;
   uploads?: Maybe<MediaUploadConnection>;
@@ -850,6 +851,7 @@ export type QueryShowArgs = {
 
 export type QueryShowStatsArgs = {
   entity: ShowEntityType;
+  first?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryShowsArgs = {
@@ -983,6 +985,17 @@ export type ShowStat = {
   __typename?: 'ShowStat';
   count: Scalars['Int']['output'];
   entity: ShowEntity;
+  firstDate: Scalars['Float']['output'];
+  lastDate: Scalars['Float']['output'];
+};
+
+export type ShowTotals = {
+  __typename?: 'ShowTotals';
+  artists: Scalars['Int']['output'];
+  firstDate?: Maybe<Scalars['Float']['output']>;
+  lastDate?: Maybe<Scalars['Float']['output']>;
+  shows: Scalars['Int']['output'];
+  venues: Scalars['Int']['output'];
 };
 
 export type SiteSettings = {
@@ -1412,6 +1425,7 @@ export type ResolversTypes = {
   ShowStat: ResolverTypeWrapper<
     Omit<ShowStat, 'entity'> & { entity: ResolversTypes['ShowEntity'] }
   >;
+  ShowTotals: ResolverTypeWrapper<ShowTotals>;
   SiteSettings: ResolverTypeWrapper<SiteSettings>;
   SiteSettingsInput: SiteSettingsInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -1516,6 +1530,7 @@ export type ResolversParentTypes = {
   ShowEdge: Omit<ShowEdge, 'node'> & { node: ResolversParentTypes['Show'] };
   ShowEntity: ShowEntitySource;
   ShowStat: Omit<ShowStat, 'entity'> & { entity: ResolversParentTypes['ShowEntity'] };
+  ShowTotals: ShowTotals;
   SiteSettings: SiteSettings;
   SiteSettingsInput: SiteSettingsInput;
   String: Scalars['String']['output'];
@@ -2293,6 +2308,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryShowStatsArgs, 'entity'>
   >;
+  showTotals?: Resolver<ResolversTypes['ShowTotals'], ParentType, ContextType>;
   shows?: Resolver<
     Maybe<ResolversTypes['ShowConnection']>,
     ParentType,
@@ -2409,6 +2425,19 @@ export type ShowStatResolvers<
 > = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   entity?: Resolver<ResolversTypes['ShowEntity'], ParentType, ContextType>;
+  firstDate?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  lastDate?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+};
+
+export type ShowTotalsResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes['ShowTotals'] = ResolversParentTypes['ShowTotals'],
+> = {
+  artists?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  firstDate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  lastDate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  shows?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  venues?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
 };
 
 export type SiteSettingsResolvers<
@@ -2657,6 +2686,7 @@ export type Resolvers<ContextType = AppContext> = {
   ShowEdge?: ShowEdgeResolvers<ContextType>;
   ShowEntity?: ShowEntityResolvers<ContextType>;
   ShowStat?: ShowStatResolvers<ContextType>;
+  ShowTotals?: ShowTotalsResolvers<ContextType>;
   SiteSettings?: SiteSettingsResolvers<ContextType>;
   TextNode?: TextNodeResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

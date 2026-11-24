@@ -1116,16 +1116,6 @@ export type ShowsQueryVariables = Exact<{
 
 export type ShowsQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
-export type ShowStatsQueryVariables = Exact<{
-  entity: Types.ShowEntityType;
-}>;
-
-
-export type ShowStatsQuery = { showStats: Array<{ count: number, entity:
-      | { id: string, name: string, slug: string }
-      | { id: string, name: string, slug: string }
-     }> };
-
 export type ShowQueryVariables = Exact<{
   id?: string | null | undefined;
 }>;
@@ -1150,6 +1140,20 @@ export type ShowsHistoryPageQueryVariables = Exact<{
 
 
 export type ShowsHistoryPageQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+
+export type ShowStatsQueryVariables = Exact<{
+  entity: Types.ShowEntityType;
+  leaders: number;
+}>;
+
+
+export type ShowStatsQuery = { leaders: Array<{ count: number, firstDate: number, lastDate: number, entity:
+      | { id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { bgColor: string | null, textColor1: string | null, textColor2: string | null, url: string | null } | null } | null }
+      | { id: string, city: string | null, name: string, slug: string, state: string | null }
+     }>, showStats: Array<{ count: number, entity:
+      | { id: string, name: string, slug: string }
+      | { id: string, name: string, slug: string }
+     }>, showTotals: { artists: number, firstDate: number | null, shows: number, venues: number } };
 
 export type VideosQueryVariables = Exact<{
   after?: string | null | undefined;

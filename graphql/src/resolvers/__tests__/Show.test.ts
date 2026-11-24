@@ -371,27 +371,28 @@ describe('showStats', () => {
   const artist = (id: string, name: string) => ({ id, name }) as Artist;
   const venue = (id: string, name: string) => ({ id, name }) as Venue;
   // The schema's enum, which tests can't import: the server only imports its types
-  const showStats = (entity: `${ShowEntityType}`) =>
-    resolvers.Query.showStats({}, { entity: entity as ShowEntityType });
+  const showStats = (entity: `${ShowEntityType}`, first?: number) =>
+    resolvers.Query.showStats({}, { entity: entity as ShowEntityType, first });
+
+  // The first and the latest of a count's shows, as Postgres answers them
+  const firstDate = new Date('2009-07-04T20:00:00Z');
+  const lastDate = new Date('2025-06-21T20:00:00Z');
+  const counted = (id: string, count: number) => ({ id, count, firstDate, lastDate });
+  const dates = { firstDate: firstDate.getTime(), lastDate: lastDate.getTime() };
 
   beforeEach(() => {
     resetMocks();
   });
 
-  it('counts the shows seen of each artist, most first', async () => {
-    db.exec.mockResolvedValue({
-      rows: [
-        { id: 'artist-1', count: 2 },
-        { id: 'artist-2', count: 5 },
-      ],
-    });
+  it('counts the shows seen of each artist, most first, with the first and the latest', async () => {
+    db.exec.mockResolvedValue({ rows: [counted('artist-1', 2), counted('artist-2', 5)] });
     db.findMany.mockResolvedValue([artist('artist-1', 'Wilco'), artist('artist-2', 'Spoon')]);
 
     const stats = await showStats('ARTIST');
 
     expect(stats).toEqual([
-      { count: 5, entity: { id: 'artist-2', name: 'Spoon', type: 'artist' } },
-      { count: 2, entity: { id: 'artist-1', name: 'Wilco', type: 'artist' } },
+      { count: 5, ...dates, entity: { id: 'artist-2', name: 'Spoon', type: 'artist' } },
+      { count: 2, ...dates, entity: { id: 'artist-1', name: 'Wilco', type: 'artist' } },
     ]);
     expect(stats.map(({ entity }) => resolvers.ShowEntity.__resolveType(entity))).toEqual([
       'Artist',
@@ -399,19 +400,74 @@ describe('showStats', () => {
     ]);
   });
 
+  // The stats page asks for the leaders' artwork, not every artist's
+  it('keeps to the most seen when asked for the first so many, ties by name', async () => {
+    db.exec.mockResolvedValue({
+      rows: [counted('artist-1', 2), counted('artist-2', 5), counted('artist-3', 5)],
+    });
+    db.findMany.mockResolvedValue([
+      artist('artist-1', 'Wilco'),
+      artist('artist-2', 'Spoon'),
+      artist('artist-3', 'Low'),
+    ]);
+
+    const names = async (first?: number) =>
+      (await showStats('ARTIST', first)).map(({ entity }) => entity.name);
+
+    await expect(names(2)).resolves.toEqual(['Low', 'Spoon']);
+    await expect(names(10)).resolves.toEqual(['Low', 'Spoon', 'Wilco']);
+    await expect(names(0)).resolves.toEqual([]);
+    await expect(names()).resolves.toEqual(['Low', 'Spoon', 'Wilco']);
+  });
+
   // It was answered as just { type: 'venue' }, and Venue.name can't be null, so the whole
   // query failed
   it('leaves out a venue deleted after its shows were counted', async () => {
-    db.exec.mockResolvedValue({
-      rows: [
-        { id: 'venue-1', count: 3 },
-        { id: 'venue-gone', count: 4 },
-      ],
-    });
+    db.exec.mockResolvedValue({ rows: [counted('venue-1', 3), counted('venue-gone', 4)] });
     db.findMany.mockResolvedValue([venue('venue-1', 'Brooklyn Steel')]);
 
     await expect(showStats('VENUE')).resolves.toEqual([
-      { count: 3, entity: { id: 'venue-1', name: 'Brooklyn Steel', type: 'venue' } },
+      { count: 3, ...dates, entity: { id: 'venue-1', name: 'Brooklyn Steel', type: 'venue' } },
     ]);
+  });
+});
+
+describe('showTotals', () => {
+  beforeEach(() => {
+    resetMocks();
+  });
+
+  it('counts the shows, artists and venues, and when the first and the latest were', async () => {
+    const firstDate = new Date('1989-08-01T20:00:00Z');
+    const lastDate = new Date('2025-06-21T20:00:00Z');
+    db.exec.mockImplementation(async (statement) =>
+      statement.text.includes('"artistId"')
+        ? { rows: [{ artists: 249 }] }
+        : { rows: [{ shows: 458, venues: 65, firstDate, lastDate }] }
+    );
+
+    await expect(resolvers.Query.showTotals()).resolves.toEqual({
+      shows: 458,
+      artists: 249,
+      venues: 65,
+      firstDate: firstDate.getTime(),
+      lastDate: lastDate.getTime(),
+    });
+  });
+
+  it('has no dates before the first show', async () => {
+    db.exec.mockImplementation(async (statement) =>
+      statement.text.includes('"artistId"')
+        ? { rows: [{ artists: 0 }] }
+        : { rows: [{ shows: 0, venues: 0, firstDate: null, lastDate: null }] }
+    );
+
+    await expect(resolvers.Query.showTotals()).resolves.toEqual({
+      shows: 0,
+      artists: 0,
+      venues: 0,
+      firstDate: null,
+      lastDate: null,
+    });
   });
 });
