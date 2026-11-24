@@ -21,6 +21,17 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     private let client = ApolloClient.highForThis
     private let shows = CPListTemplate(title: String(localized: .recommendedShows), sections: [])
     private let episodes = CPListTemplate(title: String(localized: .podcastEpisodes), sections: [])
+    /// The shows list's rows, kept from one update of the list to the next while CarPlay is connected, so an update
+    /// gives CarPlay the rows it already has, with the pictures they've been given, rather than new ones.
+    private var showRows: [ShowRowKey: CPListItem] = [:]
+    /// The shows' main artists' pictures, kept while CarPlay is connected.
+    private var artwork: ImageCache<UIImage>?
+    private var artworkPlaceholder: UIImage?
+    /// How many of the car screen's pixels wide a row's picture is.
+    private var artworkWidth = 0
+    /// The rows in the shows list that are waiting for each picture.
+    private var rowsAwaitingArtwork: [URL: [CPListItem]] = [:]
+    private var artworkResend: Task<Void, Never>?
 
     func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,
@@ -35,6 +46,13 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         episodes.tabImage = UIImage(systemName: "mic.circle")
         // Only failures from here on are news to the driver.
         playbackFailed = player.error != nil
+        // CarPlay asks for list images at its rows' image size and the car screen's scale, not the phone's.
+        let imageSize = CPListItem.maximumImageSize
+        let traits = interfaceController.carTraitCollection
+        let scale = traits.displayScale
+        artworkWidth = Int((max(imageSize.width, imageSize.height) * scale).rounded(.up))
+        artwork = ImageCache { url in await CarPlayArtwork.circle(from: url, size: imageSize, scale: scale) }
+        artworkPlaceholder = CarPlayArtwork.placeholder(size: imageSize, traits: traits)
         observe { $0.updateShows() }
         observe { $0.updateEpisodes() }
         observe { $0.alertPlaybackFailure() }
@@ -59,6 +77,13 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         connection += 1
         playback?.cancel()
         playback = nil
+        artwork?.removeAll()
+        artwork = nil
+        rowsAwaitingArtwork = [:]
+        artworkResend?.cancel()
+        artworkResend = nil
+        // The next car's screen may have another scale, so its rows start again with pictures drawn for it.
+        showRows = [:]
     }
 
     /// Runs `update` now and again whenever what it read changes, until this connection ends. Each list has its own
@@ -79,36 +104,100 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     // MARK: - Shows
 
     private func updateShows() {
+        rowsAwaitingArtwork = [:]
+        let previousRows = showRows
+        showRows = [:]
         let days = ShowDay.days(from: showFeed.items)
         let footer = footer(for: showFeed).map { [CPListSection(items: [$0])] } ?? []
         let sections: [CPListSection]
         if days.count + footer.count <= CPListTemplate.maximumSectionCount {
             sections = days.map { day in
                 CPListSection(
-                    items: day.shows.map { makeItem(for: $0, dated: false) },
+                    items: day.shows.map { row(for: $0, dated: false, reusing: previousRows) },
                     header: day.date.formatted(.showDay),
                     sectionIndexTitle: nil
                 )
             }
         } else {
             // Too many days for sections: each row carries its date instead.
-            sections = [CPListSection(items: days.flatMap(\.shows).map { makeItem(for: $0, dated: true) })]
+            sections = [CPListSection(items: days.flatMap(\.shows).map { row(for: $0, dated: true, reusing: previousRows) })]
         }
         shows.updateSections(sections + footer)
         shows.emptyViewTitleVariants = [String(localized: showFeed.hasLoaded ? .noRecommendedShows : .loading)]
+        fetchArtwork()
     }
 
-    private func makeItem(for show: ShowList_show, dated: Bool) -> CPListItem {
+    /// The show's row: the one the list already had for it, brought up to date, or a new one.
+    private func row(for show: ShowList_show, dated: Bool, reusing previousRows: [ShowRowKey: CPListItem]) -> CPListItem {
+        let key = ShowRowKey(id: show.id, dated: dated)
         let venue = show.venue.name
         let detail = dated ? String(localized: .dateAndVenue(show.startDate.formatted(.showDay), venue)) : venue
-        let item = CPListItem(text: show.headline, detailText: detail)
+        let item: CPListItem
+        if let previous = previousRows[key] {
+            item = previous
+            if item.text != show.headline {
+                item.setText(show.headline)
+            }
+            if item.detailText != detail {
+                item.setDetailText(detail)
+            }
+        } else {
+            item = CPListItem(text: show.headline, detailText: detail)
+        }
+        showRows[key] = item
+        setArtwork(for: show, on: item)
         if let directions = show.venue.address.flatMap(URL.directions) {
             item.handler = { [weak self] _, completion in
                 guard let self else { return completion() }
                 open(directions, completion: completion)
             }
+        } else {
+            item.handler = nil
         }
         return item
+    }
+
+    /// Gives a row its main artist's picture if it has loaded, or the placeholder while it loads or when there's
+    /// none. A row that already has the right image is left alone, so CarPlay doesn't reload it.
+    private func setArtwork(for show: ShowList_show, on item: CPListItem) {
+        let url = show.headlinerArtwork(maximumWidth: artworkWidth)?.url
+        let picture = url.flatMap { artwork?[$0] }
+        let image = picture ?? artworkPlaceholder
+        if item.image !== image {
+            item.setImage(image)
+        }
+        if let url, picture == nil {
+            rowsAwaitingArtwork[url, default: []].append(item)
+        }
+    }
+
+    /// Fetches the pictures the rows are waiting for. Each goes to the rows waiting for it when it arrives; one that
+    /// fails is fetched again the next time the list changes.
+    private func fetchArtwork() {
+        guard let artwork else { return }
+        let connection = connection
+        for url in rowsAwaitingArtwork.keys {
+            Task { [weak self] in
+                guard let image = await artwork.image(for: url), let self, connection == self.connection else { return }
+                for item in rowsAwaitingArtwork.removeValue(forKey: url) ?? [] {
+                    item.setImage(image)
+                }
+                resendShowsWhenArtworkSettles()
+            }
+        }
+    }
+
+    /// Gives the list its rows again once pictures stop arriving. When pictures arrive while CarPlay is still setting
+    /// the list up, it can miss `setImage(_:)` on rows it hasn't drawn yet, which keep the placeholder until the list
+    /// is given its rows again.
+    private func resendShowsWhenArtworkSettles() {
+        artworkResend?.cancel()
+        let connection = connection
+        artworkResend = Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(500))
+            guard let self, !Task.isCancelled, connection == self.connection else { return }
+            shows.updateSections(shows.sections)
+        }
     }
 
     /// Opens Maps on the car's screen, as CarPlay shows apps that the scene opens there.
@@ -231,5 +320,11 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             completion: nil
         )
     }
+}
+
+/// Which of a show's rows: one under its day, or one with the date in it, for a list with too many days for sections.
+private nonisolated struct ShowRowKey: Hashable {
+    let id: String
+    let dated: Bool
 }
 #endif
