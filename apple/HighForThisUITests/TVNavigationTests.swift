@@ -31,20 +31,22 @@ final class TVNavigationTests: XCTestCase {
     }
 
     @MainActor
-    func testEmptyYearKeepsTheFilterAndCanReturnToAllYears() {
-        let app = launch(scenario: "emptyYearMetadata")
+    func testEmptyYearKeepsTheFilterAndCanReturnToTheMostRecentYear() {
+        let app = launch(scenario: "emptyYear")
         select("History", in: app)
         press(.down, untilFocusIsOn: row("show-show-2025-0", in: app))
         let filter = app.buttons["year-filter"]
         press(.up, untilFocusIsOn: filter)
         remote.press(.select)
-        press(.down, untilFocusIsOn: menuItem("2027", in: app), times: 4)
+        press(.down, untilFocusIsOn: menuItem("2019", in: app), times: 4)
+        // The history goes a year at a time, so it never loads every show at once.
+        XCTAssertFalse(menuItem("All Years", in: app).exists)
         remote.press(.select)
         XCTAssertTrue(app.staticTexts["No shows."].waitForExistence(timeout: 10))
         waitForFocus(on: filter)
         screenshot("Empty Year", app)
         remote.press(.select)
-        press(.up, untilFocusIsOn: menuItem("All Years", in: app), times: 4)
+        press(.up, untilFocusIsOn: menuItem("2025", in: app), times: 4)
         remote.press(.select)
         XCTAssertTrue(element("show-show-2025-0", in: app).waitForExistence(timeout: 10))
     }

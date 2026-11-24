@@ -380,18 +380,99 @@ describe('shows', () => {
   });
 
   it("counts a year's attended shows, with a link to all of them", async (t) => {
-    const operations = stubGraphQL(t, { App, ShowsHistory: { shows } });
+    const history = { ...shows, count: 3, years: [2030, 2029] };
+    const operations = stubGraphQL(t, { App, ShowsHistory: { shows: history } });
     const { status, html } = await page(routes.shows.history.href({ year: '2030' }));
     assert.equal(status, 200);
     assert.match(textOf(html), /3 Shows attended in 2030 .*View Full History/);
     assert.ok(link(html, '/shows/history') !== undefined);
+    assert.match(html, /<option value="2030" selected>2030<\/option>/);
+    assert.match(html, /<option value="2029">2029<\/option>/);
     assert.deepEqual(operations.find((op) => op.operationName === 'ShowsHistory')?.variables, {
-      first: 1000,
+      first: 50,
       year: 2030,
     });
 
     const all = await page(routes.shows.history.href());
     assert.match(textOf(all.html), /Shows I have attended/);
+    assert.match(all.html, /<option value="">-- Shows By Year --<\/option>/);
+    assert.doesNotMatch(all.html, /<option[^>]* selected/);
+  });
+
+  // The history comes newest first, as GraphQL answers it, and the next page follows the last show
+  const history = {
+    edges: [shows.edges[2], shows.edges[1], shows.edges[0]],
+    pageInfo: { hasNextPage: true },
+  };
+  const historyOperation = (operations: Operation[], name: string) =>
+    operations.filter((op) => op.operationName === name).at(-1);
+
+  // 50 at a time, so the page doesn't load every show we've been to at once
+  it('lists the shows we have been to newest first, and loads more as they scroll', async (t) => {
+    const operations = stubGraphQL(t, {
+      App,
+      ShowsHistory: { shows: { ...history, count: 120, years: [2030] } },
+    });
+    const { html } = await page(routes.shows.history.href());
+    assert.match(
+      textOf(html),
+      /2030 .*07\/04 .*Fourth of July Jam .*07\/04 .*Wilco \/ Spoon .*06\/14 .*Wilco/
+    );
+    // Without JavaScript, a link to the next page. With it, a frame for each layout, which loads
+    // that page when it nears the screen.
+    assert.match(link(html, '/shows/history?after=cursor-s1') ?? '', /More Shows/);
+    assert.ok(html.includes(`"/shows/history/page/grid?after=cursor-s1&previous=${june14}"`));
+    assert.ok(html.includes(`"/shows/history/page/list?after=cursor-s1&previous=${june14}"`));
+    assert.match(html, /"status":"lazy"/);
+
+    await page(`${routes.shows.history.href()}?after=cursor-s1`);
+    assert.deepEqual(historyOperation(operations, 'ShowsHistory')?.variables, {
+      after: 'cursor-s1',
+      first: 50,
+    });
+  });
+
+  it("answers a frame's next page with only its shows, which go on from the page before", async (t) => {
+    const operations = stubGraphQL(t, { App, ShowsHistoryPage: { shows: history } });
+    const grid = await page(
+      `${routes.shows.historyPage.href({ view: 'grid' })}?after=cursor-s0&previous=${july4}`
+    );
+    assert.equal(grid.status, 200);
+    assert.match(grid.html, /<!--\s*rmx:flush fragment\s*-->/);
+    // A table of its own, under the page before's: the rows' styles come in a head, after which
+    // the template Remix parses a frame in wouldn't keep rows that weren't in a table
+    assert.match(grid.html, /<\/head><table[^>]*><tbody><tr/);
+    assert.doesNotMatch(grid.html, /<html|<body|<title/);
+    // The page before ended in 2030, so these rows go on under that year's heading
+    assert.doesNotMatch(textOf(`<body>${grid.html}`), /2030/);
+    assert.match(textOf(`<body>${grid.html}`), /Fourth of July Jam .*Wilco \/ Spoon .*Wilco/);
+    assert.ok(grid.html.includes(`"/shows/history/page/grid?after=cursor-s1&previous=${june14}"`));
+    // Rows for a frame in a page that has the site's settings already
+    assert.deepEqual(
+      operations.map((op) => op.operationName),
+      ['ShowsHistoryPage']
+    );
+    assert.deepEqual(operations[0].variables, { after: 'cursor-s0', first: 50 });
+
+    const list = await page(
+      `${routes.shows.historyPage.href({ year: '2030', view: 'list' })}?after=cursor-s0`
+    );
+    assert.equal(list.status, 200);
+    assert.match(textOf(`<body>${list.html}`), /2030 July .*Fourth of July Jam .*June .*Wilco/);
+    assert.ok(list.html.includes(`"/shows/history/2030/page/list?after=cursor-s1&previous=`));
+    assert.deepEqual(historyOperation(operations, 'ShowsHistoryPage')?.variables, {
+      after: 'cursor-s0',
+      first: 50,
+      year: 2030,
+    });
+
+    for (const path of [
+      '/shows/history/page/table?after=cursor-s0',
+      '/shows/history/20x4/page/grid?after=cursor-s0',
+      '/shows/history/page/grid',
+    ]) {
+      assert.equal((await page(path)).status, 404, path);
+    }
   });
 
   it('ranks artists by the shows attended, with a link to the venues', async (t) => {

@@ -568,7 +568,7 @@ type Query {
   posts(after: String, before: String, first: Int, last: Int, search: String, status: PostStatus): PostConnection
   show(id: String, lastAdded: Boolean): Show
   showStats(entity: ShowEntityType!): [ShowStat!]!
-  shows(after: String, artist: EntityArg, attended: Boolean, before: String, first: Int, last: Int, latest: Boolean, order: ShowOrder, search: String, venue: EntityArg, year: Int): ShowConnection
+  shows(after: String, artist: EntityArg, attended: Boolean, before: String, first: Int, last: Int, latest: Boolean, mostRecentYear: Boolean, order: ShowOrder, search: String, venue: EntityArg, year: Int): ShowConnection
   siteSettings: SiteSettings!
   uploads(after: String, before: String, first: Int, last: Int, mimeType: String, search: String, type: String): MediaUploadConnection
   user(id: String!): User

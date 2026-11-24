@@ -8,7 +8,7 @@ The iPhone, iPad, Mac and Apple TV app for [highforthis.com](https://highforthis
 | Podcast | Episodes, which keep playing in the background and from the Lock Screen                                        |
 | Videos  | Live videos, newest first or by year, which play on YouTube                                                    |
 | Posts   | Posts, laid out like the website                                                                               |
-| History | The shows we've been to, newest first or by year                                                               |
+| History | The shows we've been to, a year at a time, starting with the most recent                                       |
 
 Apple TV has no web browser and can't open YouTube, so it leaves out the Videos tab and links to websites. While an episode is loaded, a Now Playing tab holds the player, and the remote's Play/Pause button controls it.
 

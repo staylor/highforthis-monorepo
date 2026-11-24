@@ -5,9 +5,8 @@ import { routes } from '#/routes.ts';
 import type { VideosQuery } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
 import { Heading1 } from '#/ui/heading.tsx';
+import { YearSelect } from '#/ui/public/year-select.tsx';
 import { Videos, videoFragment, videosFragment } from '#/ui/videos.tsx';
-
-import { YearSelect } from './public/year-select.tsx';
 
 export const videosQuery = gql`
   query Videos($after: String, $before: String, $first: Int, $last: Int, $year: Int) {

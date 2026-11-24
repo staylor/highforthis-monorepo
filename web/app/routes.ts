@@ -21,6 +21,9 @@ export const routes = route({
   shows: route('/shows', {
     index: get('/'),
     history: get('/history(/:year)'),
+    // The history's next page, which a lazy frame at the end of each page loads as it nears the
+    // screen: rows for the table (grid), or for the list the narrowest screens have instead
+    historyPage: get('/history(/:year)/page/:view'),
     list: get('/list'),
     stats: get('/stats/:entity'),
     show: get('/:id'),

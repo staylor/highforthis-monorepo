@@ -3,6 +3,8 @@ import SwiftUI
 struct YearFilter: View {
     let years: [Int]
     @Binding var selection: Int?
+    /// Without All Years, a year is always chosen, and the filter isn't drawn as one that narrows the list.
+    var includesAllYears = true
 
     private var availableYears: [Int] {
         var values = Set(years)
@@ -13,7 +15,9 @@ struct YearFilter: View {
     var body: some View {
         Menu {
             Picker(.filterByYear, selection: $selection) {
-                Text(.allYears).tag(Int?.none)
+                if includesAllYears {
+                    Text(.allYears).tag(Int?.none)
+                }
                 ForEach(availableYears, id: \.self) { year in
                     Text(verbatim: String(year)).tag(Int?.some(year))
                 }
@@ -28,7 +32,9 @@ struct YearFilter: View {
             #else
             HStack(spacing: 6) {
                 if let selection { Text(verbatim: String(selection)).monospacedDigit() }
-                Image(systemName: selection == nil ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill")
+                Image(
+                    systemName: selection == nil || !includesAllYears
+                        ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill")
             }
             #endif
         }
