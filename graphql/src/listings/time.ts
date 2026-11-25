@@ -10,7 +10,11 @@ export function dayKey(instant: Date, timeZone: string) {
 
 // The instant a venue-local wall time (YYYY-MM-DD, HH:MM) happens
 export function zonedTime(date: string, time: string, timeZone: string) {
-  const wall = new Date(`${date}T${time}:00Z`);
+  return zonedInstant(new Date(`${date}T${time}:00Z`), timeZone);
+}
+
+// The instant a wall time happens in a time zone, given as the instant it happens in UTC
+export function zonedInstant(wall: Date, timeZone: string) {
   return new Date(wall.getTime() - offsetMinutes(wall, timeZone) * 60_000);
 }
 

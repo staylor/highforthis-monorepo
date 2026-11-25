@@ -254,9 +254,10 @@ describe('shows from the most recent year', () => {
     showsQuery.all.mockResolvedValue([]);
   });
 
+  // New Year's Day to New Year's Day in New York, where the site dates its shows
   const in2024 = and(
-    gte('date', new Date('2024-01-01T00:00:00Z')),
-    lt('date', new Date('2025-01-01T00:00:00Z'))
+    gte('date', new Date('2024-01-01T05:00:00Z')),
+    lt('date', new Date('2025-01-01T05:00:00Z'))
   );
 
   // The app's history starts with the latest year, without first asking which years there are
@@ -290,6 +291,44 @@ describe('shows from the most recent year', () => {
     expect(showsQuery.first).not.toHaveBeenCalled();
     expect(showsQuery.where).toHaveBeenCalledExactlyOnceWith(
       and(and(eq('attended', true)), in2024)
+    );
+  });
+
+  // 8 PM on New Year's Eve in New York is 1 AM on New Year's Day in UTC, and the site dates it
+  // December 31st
+  it("puts a show on New Year's Eve in the year that's ending", async () => {
+    const newYearsEve = new Date('2025-01-01T01:00:00Z');
+    showsQuery.first.mockResolvedValue({ date: newYearsEve });
+
+    const connection = await resolvers.Query.shows(
+      {},
+      { attended: true, first: 100, mostRecentYear: true }
+    );
+
+    expect(showsQuery.where).toHaveBeenLastCalledWith(and(and(eq('attended', true)), in2024));
+    showsQuery.all.mockResolvedValueOnce([{ date: newYearsEve }]);
+    await expect(resolvers.ShowConnection.years(connection)).resolves.toEqual([2024]);
+  });
+
+  it('turns away a year without four digits', async () => {
+    await expect(
+      resolvers.Query.shows({}, { attended: true, first: 100, year: 99999 })
+    ).rejects.toMatchObject({ extensions: { code: 'BAD_USER_INPUT' } });
+    expect(showsQuery.all).not.toHaveBeenCalled();
+  });
+
+  // It has four digits, and ends when 10000 starts
+  it('answers the shows of 9999', async () => {
+    await resolvers.Query.shows({}, { attended: true, first: 100, year: 9999 });
+
+    expect(showsQuery.where).toHaveBeenLastCalledWith(
+      and(
+        and(eq('attended', true)),
+        and(
+          gte('date', new Date('9999-01-01T05:00:00Z')),
+          lt('date', new Date('+010000-01-01T05:00:00Z'))
+        )
+      )
     );
   });
 
@@ -339,8 +378,8 @@ describe('ShowConnection.years', () => {
       and(
         and(eq('attended', true)),
         and(
-          gte('date', new Date('2019-01-01T00:00:00Z')),
-          lt('date', new Date('2020-01-01T00:00:00Z'))
+          gte('date', new Date('2019-01-01T05:00:00Z')),
+          lt('date', new Date('2020-01-01T05:00:00Z'))
         )
       )
     );
