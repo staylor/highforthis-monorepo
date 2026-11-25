@@ -21,9 +21,10 @@ import {
 import { videoFragment } from '#/ui/videos.tsx';
 
 export const postsQuery = gql`
-  query Posts($first: Int) {
-    posts(first: $first, status: PUBLISH) {
+  query Posts($after: String, $first: Int) {
+    posts(after: $after, first: $first, status: PUBLISH) {
       edges {
+        cursor
         node {
           ...PostArtwork_post
           id
@@ -31,6 +32,9 @@ export const postsQuery = gql`
           summary
           title
         }
+      }
+      pageInfo {
+        hasNextPage
       }
     }
   }

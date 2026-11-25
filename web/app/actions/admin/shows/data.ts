@@ -9,11 +9,14 @@ import {
 } from '#/lib/admin/forms.ts';
 import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
 import { attempt } from '#/lib/graphql.ts';
+import { withEveryPage } from '#/lib/paging.ts';
 import { routes } from '#/routes.ts';
 import type {
   BulkCreateShowsMutation,
   ShowEditQuery,
   ShowEntitiesQuery,
+  ShowFormArtistsQuery,
+  ShowFormVenuesQuery,
   ShowsAdminQuery,
   UpdateShowAttendedMutation,
 } from '#/types/graphql.ts';
@@ -39,25 +42,66 @@ const showFormFragment = gql`
   }
 `;
 
+// The artists and venues to pick from, a page at a time
+const showFormArtistsFragment = gql`
+  fragment ShowForm_artists on ArtistConnection {
+    edges {
+      cursor
+      node {
+        id
+        name
+      }
+    }
+    pageInfo {
+      hasNextPage
+    }
+  }
+`;
+
+const showFormVenuesFragment = gql`
+  fragment ShowForm_venues on VenueConnection {
+    edges {
+      cursor
+      node {
+        id
+        name
+      }
+    }
+    pageInfo {
+      hasNextPage
+    }
+  }
+`;
+
 const showFormEntitiesFragment = gql`
   fragment ShowForm_entities on Query {
     artists(filtered: true, first: 500) {
-      edges {
-        node {
-          id
-          name
-        }
-      }
+      ...ShowForm_artists
     }
     venues(filtered: true, first: 500) {
-      edges {
-        node {
-          id
-          name
-        }
-      }
+      ...ShowForm_venues
     }
   }
+  ${showFormArtistsFragment}
+  ${showFormVenuesFragment}
+`;
+
+const showFormArtistsQuery = gql`
+  query ShowFormArtists($after: String) {
+    artists(after: $after, filtered: true, first: 500) {
+      ...ShowForm_artists
+    }
+  }
+  ${showFormArtistsFragment}
+`;
+
+const showFormVenuesQuery = gql`
+  query ShowFormVenues($after: String) {
+    venues(after: $after, filtered: true, first: 500) {
+      ...ShowForm_venues
+    }
+  }
+  ${showFormVenuesFragment}
 `;
 
 const showsQuery = gql`
@@ -187,9 +231,34 @@ export function deleteShows(args: FormArgs) {
   return deleteSelected({ ...args, mutation: deleteShowMutation });
 }
 
+type Choices = Pick<ShowEntitiesQuery, 'artists' | 'venues'>;
+
+/**
+ * Every artist and venue to pick from. The form's query has the first page of each, and a picker
+ * missing the rest would leave out whatever comes after it alphabetically.
+ */
+async function everyChoice(client: GraphQLClient, { artists, venues }: Choices): Promise<Choices> {
+  const [allArtists, allVenues] = await Promise.all([
+    artists &&
+      withEveryPage(
+        artists,
+        async (after) =>
+          (await client.query<ShowFormArtistsQuery>(showFormArtistsQuery, { after })).artists
+      ),
+    venues &&
+      withEveryPage(
+        venues,
+        async (after) =>
+          (await client.query<ShowFormVenuesQuery>(showFormVenuesQuery, { after })).venues
+      ),
+  ]);
+  return { artists: allArtists, venues: allVenues };
+}
+
 /** The add form starts from the last show added, with the artists and venues to pick from. */
-export function loadNewShow({ gql: client }: { gql: GraphQLClient }) {
-  return client.query<ShowEntitiesQuery>(newShowQuery);
+export async function loadNewShow({ gql: client }: { gql: GraphQLClient }) {
+  const data = await client.query<ShowEntitiesQuery>(newShowQuery);
+  return { ...data, ...(await everyChoice(client, data)) };
 }
 
 export function createShow(args: FormArgs) {
@@ -204,8 +273,9 @@ export function createShow(args: FormArgs) {
   });
 }
 
-export function loadShow({ gql: client, id }: { gql: GraphQLClient; id: string }) {
-  return client.query<ShowEditQuery>(showQuery, { id });
+export async function loadShow({ gql: client, id }: { gql: GraphQLClient; id: string }) {
+  const data = await client.query<ShowEditQuery>(showQuery, { id });
+  return data.show ? { ...data, ...(await everyChoice(client, data)) } : data;
 }
 
 export function updateShow({ id, ...args }: FormArgs & { id: string }) {

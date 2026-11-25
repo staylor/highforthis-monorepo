@@ -9,8 +9,10 @@ import {
 } from '#/lib/admin/forms.ts';
 import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
 import { attempt } from '#/lib/graphql.ts';
+import { withEveryPage } from '#/lib/paging.ts';
 import type {
   ArtistEditQuery,
+  ArtistShowsAdminQuery,
   ArtistsAdminQuery,
   UpdateArtistExcludeMutation,
 } from '#/types/graphql.ts';
@@ -77,26 +79,47 @@ const deleteArtistMutation = gql`
   }
 `;
 
+// The artist's shows, beside the form, a page at a time
+const artistShowsFragment = gql`
+  fragment ArtistForm_shows on ShowConnection {
+    edges {
+      cursor
+      node {
+        id
+        attended
+        date
+        venue {
+          id
+          name
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+    }
+  }
+`;
+
+const artistShowsQuery = gql`
+  query ArtistShowsAdmin($id: String, $after: String) {
+    shows(after: $after, artist: { id: $id }, first: 200) {
+      ...ArtistForm_shows
+    }
+  }
+  ${artistShowsFragment}
+`;
+
 const artistQuery = gql`
   query ArtistEdit($id: String) {
     artist(id: $id) {
       ...ArtistForm_artist
     }
     shows(artist: { id: $id }, first: 200) {
-      edges {
-        node {
-          id
-          attended
-          date
-          venue {
-            id
-            name
-          }
-        }
-      }
+      ...ArtistForm_shows
     }
   }
   ${artistFormFragment}
+  ${artistShowsFragment}
 `;
 
 const createArtistMutation = gql`
@@ -151,8 +174,18 @@ export function deleteArtists(args: FormArgs) {
   return deleteSelected({ ...args, mutation: deleteArtistMutation });
 }
 
-export function loadArtist({ gql: client, id }: { gql: GraphQLClient; id: string }) {
-  return client.query<ArtistEditQuery>(artistQuery, { id });
+export async function loadArtist({ gql: client, id }: { gql: GraphQLClient; id: string }) {
+  const data = await client.query<ArtistEditQuery>(artistQuery, { id });
+  // Every show, so the list beside the form doesn't stop at the first page
+  const shows =
+    data.artist && data.shows
+      ? await withEveryPage(
+          data.shows,
+          async (after) =>
+            (await client.query<ArtistShowsAdminQuery>(artistShowsQuery, { after, id })).shows
+        )
+      : data.shows;
+  return { ...data, shows };
 }
 
 export function createArtist(args: FormArgs) {

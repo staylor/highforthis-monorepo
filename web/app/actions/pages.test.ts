@@ -14,13 +14,17 @@ interface Operation {
   variables: Record<string, unknown>;
 }
 
-/** Stands in for GraphQL: answers each operation by name with its data, and records them. */
+/**
+ * Stands in for GraphQL: answers each operation by name with its data, or with what a function
+ * makes of its variables, and records them.
+ */
 function stubGraphQL(t: TestContext, answers: Record<string, unknown>) {
   const operations: Operation[] = [];
   t.mock.method(globalThis, 'fetch', async (_input: RequestInfo | URL, init?: RequestInit) => {
     const operation: Operation = JSON.parse(String(init?.body));
     operations.push(operation);
-    const data = answers[operation.operationName];
+    const answer = answers[operation.operationName];
+    const data = typeof answer === 'function' ? answer(operation.variables) : answer;
     return data === undefined
       ? Response.json({ errors: [{ message: `unstubbed ${operation.operationName}` }] })
       : Response.json({ data });
@@ -308,6 +312,37 @@ describe('artists and venues', () => {
     });
   });
 
+  it('counts and lists every show attended, past the first page', async (t) => {
+    const [first] = attended.edges;
+    const later = {
+      cursor: 'cursor-s10',
+      node: { ...first.node, id: 's10', date: new Date(2021, 5, 1, 20, 0).getTime() },
+    };
+    const operations = stubGraphQL(t, {
+      App,
+      Artist: {
+        artist: { ...wilco, website: null, appleMusic: null },
+        shows,
+        attended: {
+          count: 2,
+          edges: [{ ...first, cursor: 'cursor-s9' }],
+          pageInfo: { hasNextPage: true },
+        },
+      },
+      AttendedShows: { shows: { count: 2, edges: [later], pageInfo: { hasNextPage: false } } },
+    });
+    const { html } = await page(routes.artist.href({ slug: 'wilco' }));
+    assert.match(
+      textOf(html),
+      /2 Shows we have attended by this artist .*03\/01\/2019 .*06\/01\/2021/
+    );
+    assert.deepEqual(operations.find((op) => op.operationName === 'AttendedShows')?.variables, {
+      after: 'cursor-s9',
+      artist: { slug: 'wilco' },
+      first: 200,
+    });
+  });
+
   it('shows a venue with its address, its map and that it has closed', async (t) => {
     const venue = {
       ...bowery,
@@ -413,6 +448,25 @@ describe('shows', () => {
       first: 200,
     });
     assert.equal((await page(routes.shows.list.href())).status, 200);
+  });
+
+  // The list stopped at its first page, without a word about the rest
+  it('lists every show coming up, a page at a time', async (t) => {
+    const later = show('s4', new Date(2030, 7, 1, 20, 0).getTime(), [spoon]);
+    const operations = stubGraphQL(t, {
+      App,
+      Shows: ({ after }: { after?: string }) => ({
+        shows: after
+          ? { edges: [later], pageInfo: { hasNextPage: false } }
+          : { ...shows, pageInfo: { hasNextPage: true } },
+      }),
+    });
+    const { html } = await page(routes.shows.index.href());
+    assert.match(textOf(html), /July .*07\/04 .*August .*08\/01 .*Spoon/);
+    assert.deepEqual(
+      operations.filter((op) => op.operationName === 'Shows').map((op) => op.variables),
+      [{ first: 200 }, { after: 'cursor-s3', first: 200 }]
+    );
   });
 
   it("counts a year's attended shows, with a link to all of them", async (t) => {

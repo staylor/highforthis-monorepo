@@ -9,14 +9,13 @@ import type {
   ShowQuery,
   ShowsHistoryPageQuery,
   ShowsHistoryQuery,
-  ShowsQuery,
   ShowStatsQuery,
 } from '#/types/graphql.ts';
 import { Artwork } from '#/ui/artist.tsx';
 import { Heading1, Heading2 } from '#/ui/heading.tsx';
 import { Link } from '#/ui/link.tsx';
 import { md, text } from '#/ui/public/styles.ts';
-import { Shows, ShowsList, showsGridFragment } from '#/ui/shows/shows.tsx';
+import { Shows, ShowsList } from '#/ui/shows/shows.tsx';
 import { formatArtists, formatDate } from '#/ui/shows/utils.ts';
 
 import {
@@ -26,16 +25,8 @@ import {
   showsHistoryPageQuery,
   showsHistoryQuery,
 } from './history.tsx';
+import { everyUpcomingShow } from './lists.ts';
 import { LEADERS, StatsPage, showStatsQuery } from './stats.tsx';
-
-const showsQuery = gql`
-  query Shows($after: String, $first: Int) {
-    shows(after: $after, first: $first, latest: true) {
-      ...ShowsGrid_shows
-    }
-  }
-  ${showsGridFragment}
-`;
 
 const showQuery = gql`
   query Show($id: String) {
@@ -74,9 +65,7 @@ export default createController(routes.shows, {
       middleware: prefetch,
       async handler(context) {
         const { t } = context;
-        const { shows } = await context.gql.query<ShowsQuery>(showsQuery, {
-          first: 200,
-        });
+        const shows = await everyUpcomingShow(context.gql);
         return renderPage(
           context,
           <article>
@@ -103,9 +92,7 @@ export default createController(routes.shows, {
     list: {
       middleware: prefetch,
       async handler(context) {
-        const { shows } = await context.gql.query<ShowsQuery>(showsQuery, {
-          first: 200,
-        });
+        const shows = await everyUpcomingShow(context.gql);
         return renderPage(context, shows ? <ShowsList shows={shows} /> : null, {
           title: context.t('shows.heading'),
         });

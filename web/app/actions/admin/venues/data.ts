@@ -9,7 +9,13 @@ import {
 } from '#/lib/admin/forms.ts';
 import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
 import { attempt } from '#/lib/graphql.ts';
-import type { UpdateVenueFlagMutation, VenueEditQuery, VenuesAdminQuery } from '#/types/graphql.ts';
+import { withEveryPage } from '#/lib/paging.ts';
+import type {
+  UpdateVenueFlagMutation,
+  VenueEditQuery,
+  VenueShowsAdminQuery,
+  VenuesAdminQuery,
+} from '#/types/graphql.ts';
 
 const venueFormFragment = gql`
   fragment VenueForm_venue on Venue {
@@ -85,26 +91,47 @@ const deleteVenueMutation = gql`
   }
 `;
 
+// The venue's shows, beside the form, a page at a time
+const venueShowsFragment = gql`
+  fragment VenueForm_shows on ShowConnection {
+    edges {
+      cursor
+      node {
+        id
+        date
+        title
+        artists {
+          id
+          name
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+    }
+  }
+`;
+
+const venueShowsQuery = gql`
+  query VenueShowsAdmin($id: String, $after: String) {
+    shows(after: $after, first: 200, venue: { id: $id }) {
+      ...VenueForm_shows
+    }
+  }
+  ${venueShowsFragment}
+`;
+
 const venueQuery = gql`
   query VenueEdit($id: String) {
     shows(first: 200, venue: { id: $id }) {
-      edges {
-        node {
-          id
-          date
-          title
-          artists {
-            id
-            name
-          }
-        }
-      }
+      ...VenueForm_shows
     }
     venue(id: $id) {
       ...VenueForm_venue
     }
   }
   ${venueFormFragment}
+  ${venueShowsFragment}
 `;
 
 const createVenueMutation = gql`
@@ -186,8 +213,18 @@ export function deleteVenues(args: FormArgs) {
   return deleteSelected({ ...args, mutation: deleteVenueMutation });
 }
 
-export function loadVenue({ gql: client, id }: { gql: GraphQLClient; id: string }) {
-  return client.query<VenueEditQuery>(venueQuery, { id });
+export async function loadVenue({ gql: client, id }: { gql: GraphQLClient; id: string }) {
+  const data = await client.query<VenueEditQuery>(venueQuery, { id });
+  // Every show, so the list beside the form doesn't stop at the first page
+  const shows =
+    data.venue && data.shows
+      ? await withEveryPage(
+          data.shows,
+          async (after) =>
+            (await client.query<VenueShowsAdminQuery>(venueShowsQuery, { after, id })).shows
+        )
+      : data.shows;
+  return { ...data, shows };
 }
 
 export function createVenue(args: FormArgs) {
