@@ -19,7 +19,7 @@ import { getUniqueSlug, slugsIn } from '#/models/utils';
 
 import { fillAppleMusic, saveAppleMusic } from './utils/appleMusicData';
 import { parseConnection } from './utils/collection';
-import { parseInput, removeRows, resolveJoin } from './utils/helpers';
+import { parseInput, removeRows, resolveJoin, unique } from './utils/helpers';
 import { createArtistSchema, updateArtistSchema } from './validations';
 
 type Artist = TableRow<typeof artists>;
@@ -112,14 +112,15 @@ const resolvers = {
   Mutation: {
     async createArtist(_, { input }) {
       const { featuredMedia, ...data } = parseInput(createArtistSchema, input);
+      const media = unique(featuredMedia ?? []);
       const slug = await getUniqueSlug(slugsIn(db, artists), data.name);
       const id = newId();
       await db.transaction(async (tx) => {
         await tx.create(artists, { ...data, id, slug });
-        if (featuredMedia?.length) {
+        if (media.length) {
           await tx.createMany(
             artistFeaturedMedia,
-            featuredMedia.map((mediaId, position) => ({ artistId: id, mediaId, position }))
+            media.map((mediaId, position) => ({ artistId: id, mediaId, position }))
           );
         }
       });
@@ -129,19 +130,23 @@ const resolvers = {
 
     async updateArtist(_, { id, input }) {
       const { featuredMedia, appleMusic, ...data } = parseInput(updateArtistSchema, input);
-      if (typeof featuredMedia !== 'undefined') {
-        await db.deleteMany(artistFeaturedMedia, { where: { artistId: id } });
-        if (featuredMedia?.length) {
-          await db.createMany(
-            artistFeaturedMedia,
-            featuredMedia.map((mediaId, position) => ({ artistId: id, mediaId, position }))
-          );
+      // All of it is saved, or none of it, so a list that can't be saved isn't left emptied
+      const artist = await db.transaction(async (tx) => {
+        if (featuredMedia !== undefined) {
+          const media = unique(featuredMedia ?? []);
+          await tx.deleteMany(artistFeaturedMedia, { where: { artistId: id } });
+          if (media.length) {
+            await tx.createMany(
+              artistFeaturedMedia,
+              media.map((mediaId, position) => ({ artistId: id, mediaId, position }))
+            );
+          }
         }
-      }
-      if (appleMusic) {
-        await saveAppleMusic(id, appleMusic);
-      }
-      const artist = await db.update(artists, id, data, { with: artistIncludes });
+        if (appleMusic) {
+          await saveAppleMusic(id, appleMusic, tx);
+        }
+        return tx.update(artists, id, data, { with: artistIncludes });
+      });
       return withAppleMusic(artist);
     },
 

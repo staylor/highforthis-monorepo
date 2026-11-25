@@ -166,6 +166,26 @@ describe('a list', () => {
       await expect(artistsOf(show!.id)).resolves.toEqual([newLineup, newLineup, newLineup]);
     });
 
+    it("stays as it was when the show can't be saved", async () => {
+      const show = await showResolvers.Mutation.createShow(
+        {},
+        { input: { artists: lineup, date: Date.UTC(2027, 6, 31), venue: 'venue-1' } }
+      );
+      // Turns down a show saved with this title, after its new lineup has been saved
+      await db.exec(
+        `create trigger refuse_show before update on "Show" when new."title" = 'Refused' begin select raise(abort, 'refused'); end`
+      );
+
+      await expect(
+        showResolvers.Mutation.updateShow(
+          {},
+          { id: show!.id, input: { artists: newLineup, title: 'Refused' } }
+        )
+      ).rejects.toThrow('Database execution failed');
+
+      await expect(artistsOf(show!.id)).resolves.toEqual([lineup, lineup, lineup]);
+    });
+
     it('keeps the order of a show added with others', async () => {
       await showResolvers.Mutation.bulkCreateShows(
         {},

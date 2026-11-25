@@ -213,7 +213,8 @@ describe('admin posts', () => {
     assert.deepEqual(entryProps(html, 'TagsInput')?.tags, ['Wilco']);
   });
 
-  it('saves an edit', async (t) => {
+  // A post without tags submits none, and GraphQL keeps the tags an edit leaves out
+  it('saves an edit, clearing the tags when none are left', async (t) => {
     const operations = stubGraphQL(t, { UpdatePost: { updatePost: savedPost } });
     const response = await post('/admin/post/p1', 'title=Best+of+2024&status=PUBLISH');
     assert.equal(
@@ -222,7 +223,7 @@ describe('admin posts', () => {
     );
     assert.deepEqual(operations.at(-1), {
       operationName: 'UpdatePost',
-      variables: { id: 'p1', input: { title: 'Best of 2024', status: 'PUBLISH' } },
+      variables: { id: 'p1', input: { artists: [], title: 'Best of 2024', status: 'PUBLISH' } },
     });
   });
 

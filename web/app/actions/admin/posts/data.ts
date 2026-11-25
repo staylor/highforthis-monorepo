@@ -200,5 +200,12 @@ export function createPost(args: FormArgs) {
 }
 
 export function updatePost({ id, ...args }: FormArgs & { id: string }) {
-  return submitForm({ ...args, mutation: updatePostMutation, variables: { id }, textFields });
+  return submitForm({
+    ...args,
+    mutation: updatePostMutation,
+    // A post whose tags were all removed submits none, and tags left out are kept, so this
+    // default clears them
+    variables: { id, input: { artists: [] } },
+    textFields,
+  });
 }

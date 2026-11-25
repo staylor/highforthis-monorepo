@@ -15,7 +15,7 @@ import { ADDRESS_FIELDS, geocodeVenue } from '#/geocode';
 import { getUniqueSlug, slugsIn } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeRows, resolveJoin } from './utils/helpers';
+import { parseInput, removeRows, resolveJoin, unique } from './utils/helpers';
 import { createVenueSchema, updateVenueSchema } from './validations';
 
 type Venue = TableRow<typeof venues>;
@@ -88,6 +88,7 @@ const resolvers = {
   Mutation: {
     async createVenue(_, { input }) {
       const { featuredMedia, coordinates, ...data } = parseInput(createVenueSchema, input);
+      const media = unique(featuredMedia ?? []);
       const slug = await getUniqueSlug(slugsIn(db, venues), data.name);
       // Look the venue up unless its coordinates were entered
       const location =
@@ -97,10 +98,10 @@ const resolvers = {
       const id = newId();
       await db.transaction(async (tx) => {
         await tx.create(venues, { ...data, ...location, id, slug });
-        if (featuredMedia?.length) {
+        if (media.length) {
           await tx.createMany(
             venueFeaturedMedia,
-            featuredMedia.map((mediaId, position) => ({ venueId: id, mediaId, position }))
+            media.map((mediaId, position) => ({ venueId: id, mediaId, position }))
           );
         }
       });
@@ -114,16 +115,20 @@ const resolvers = {
         changes.latitude = coordinates.latitude;
         changes.longitude = coordinates.longitude;
       }
-      if (typeof featuredMedia !== 'undefined') {
-        await db.deleteMany(venueFeaturedMedia, { where: { venueId: id } });
-        if (featuredMedia?.length) {
-          await db.createMany(
-            venueFeaturedMedia,
-            featuredMedia.map((mediaId, position) => ({ venueId: id, mediaId, position }))
-          );
+      // The media and the rest are saved together, so media that can't be saved aren't lost
+      const venue = await db.transaction(async (tx) => {
+        if (featuredMedia !== undefined) {
+          const media = unique(featuredMedia ?? []);
+          await tx.deleteMany(venueFeaturedMedia, { where: { venueId: id } });
+          if (media.length) {
+            await tx.createMany(
+              venueFeaturedMedia,
+              media.map((mediaId, position) => ({ venueId: id, mediaId, position }))
+            );
+          }
         }
-      }
-      const venue = await db.update(venues, id, changes, withMedia);
+        return tx.update(venues, id, changes, withMedia);
+      });
 
       // Saving an address for a venue without coordinates looks it up, which also fills in any
       // empty part of its address

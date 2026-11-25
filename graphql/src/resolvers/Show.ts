@@ -32,7 +32,14 @@ import { siteYear, startOfSiteYear } from '#/time';
 
 import { fillAppleMusicLater } from './utils/appleMusicData';
 import { type Connection, parseConnection, emptyConnection } from './utils/collection';
-import { badInput, parseInput, removeRows, resolveJoin, timestampResolver } from './utils/helpers';
+import {
+  badInput,
+  parseInput,
+  removeRows,
+  resolveJoin,
+  timestampResolver,
+  unique,
+} from './utils/helpers';
 import { bulkCreateShowsSchema, createShowSchema, updateShowSchema } from './validations';
 
 type Show = TableRow<typeof shows>;
@@ -461,15 +468,14 @@ const resolvers = {
 
     async createShow(_, { input }) {
       const { artists: artistIds, venue, date, ...data } = parseInput(createShowSchema, input);
+      const lineup = unique(artistIds);
       const id = newId();
       await db.transaction(async (tx) => {
         await tx.create(shows, { ...data, id, date: new Date(date), venueId: venue });
-        if (artistIds.length) {
-          await tx.createMany(
-            showArtists,
-            artistIds.map((artistId, position) => ({ showId: id, artistId, position }))
-          );
-        }
+        await tx.createMany(
+          showArtists,
+          lineup.map((artistId, position) => ({ showId: id, artistId, position }))
+        );
       });
       return db.find(shows, id, { with: showIncludes });
     },
@@ -482,17 +488,18 @@ const resolvers = {
       if (date) values.date = new Date(date);
       if (venue) values.venueId = venue;
 
-      if (typeof artistIds !== 'undefined') {
-        await db.deleteMany(showArtists, { where: { showId: id } });
-        if (artistIds?.length) {
-          await db.createMany(
+      // A lineup that can't be saved, such as one with an artist deleted since, leaves the show
+      // as it was rather than without its artists
+      return db.transaction(async (tx) => {
+        if (artistIds !== undefined) {
+          await tx.deleteMany(showArtists, { where: { showId: id } });
+          await tx.createMany(
             showArtists,
-            artistIds.map((artistId, position) => ({ showId: id, artistId, position }))
+            unique(artistIds).map((artistId, position) => ({ showId: id, artistId, position }))
           );
         }
-      }
-
-      return db.update(shows, id, values, { with: showIncludes });
+        return tx.update(shows, id, values, { with: showIncludes });
+      });
     },
 
     async removeShow(_, { ids }) {

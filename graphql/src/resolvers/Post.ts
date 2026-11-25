@@ -19,7 +19,7 @@ import { getUniqueSlug, slugsIn } from '#/models/utils';
 import { extractText } from '#/utils/lexical';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeRows, resolveJoin } from './utils/helpers';
+import { parseInput, removeRows, resolveJoin, unique } from './utils/helpers';
 import resolveTags from './utils/resolveTags';
 import { createPostSchema, updatePostSchema } from './validations';
 
@@ -117,10 +117,11 @@ const resolvers = {
       } = parseInput(createPostSchema, input);
       const slug = await getUniqueSlug(slugsIn(db, posts), rest.title);
       const contentBody = editorState ? extractText(editorState) : null;
+      const media = unique(featuredMedia ?? []);
 
       let artistIds: string[] = [];
       if (inputArtists?.length) {
-        artistIds = await resolveTags(inputArtists);
+        artistIds = unique(await resolveTags(inputArtists));
       }
 
       const id = newId();
@@ -133,10 +134,10 @@ const resolvers = {
           editorState: editorState ?? undefined,
           date: date ? new Date(date) : new Date(),
         });
-        if (featuredMedia?.length) {
+        if (media.length) {
           await tx.createMany(
             postFeaturedMedia,
-            featuredMedia.map((mediaId, position) => ({ postId: id, mediaId, position }))
+            media.map((mediaId, position) => ({ postId: id, mediaId, position }))
           );
         }
         if (artistIds.length) {
@@ -167,29 +168,36 @@ const resolvers = {
         values.contentBody = extractText(editorState);
       }
 
-      if (typeof featuredMedia !== 'undefined') {
-        await db.deleteMany(postFeaturedMedia, { where: { postId: id } });
-        if (featuredMedia?.length) {
-          await db.createMany(
-            postFeaturedMedia,
-            featuredMedia.map((mediaId, position) => ({ postId: id, mediaId, position }))
-          );
+      // Tags left out keep the ones the post has, as featured media left out do. The admin's form
+      // sends an empty list once every tag is removed.
+      let artistIds: string[] | undefined;
+      if (inputArtists !== undefined) {
+        artistIds = inputArtists?.length ? unique(await resolveTags(inputArtists)) : [];
+      }
+
+      // The lists and the rest are saved together, so a list that can't be saved isn't lost
+      return db.transaction(async (tx) => {
+        if (featuredMedia !== undefined) {
+          const media = unique(featuredMedia ?? []);
+          await tx.deleteMany(postFeaturedMedia, { where: { postId: id } });
+          if (media.length) {
+            await tx.createMany(
+              postFeaturedMedia,
+              media.map((mediaId, position) => ({ postId: id, mediaId, position }))
+            );
+          }
         }
-      }
-
-      let artistIds: string[] = [];
-      if (inputArtists?.length) {
-        artistIds = await resolveTags(inputArtists);
-      }
-      await db.deleteMany(postArtists, { where: { postId: id } });
-      if (artistIds.length) {
-        await db.createMany(
-          postArtists,
-          artistIds.map((artistId, position) => ({ postId: id, artistId, position }))
-        );
-      }
-
-      return db.update(posts, id, values, { with: postIncludes });
+        if (artistIds !== undefined) {
+          await tx.deleteMany(postArtists, { where: { postId: id } });
+          if (artistIds.length) {
+            await tx.createMany(
+              postArtists,
+              artistIds.map((artistId, position) => ({ postId: id, artistId, position }))
+            );
+          }
+        }
+        return tx.update(posts, id, values, { with: postIncludes });
+      });
     },
 
     async removePost(_, { ids }) {

@@ -2,7 +2,14 @@ import { ApolloServer } from '@apollo/server';
 import { inList } from 'remix/data-table';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { mediaDetails, mediaUploads, postMedia, posts, postTags } from '#/database/tables';
+import {
+  mediaDetails,
+  mediaUploads,
+  postArtists,
+  postMedia,
+  posts,
+  postTags,
+} from '#/database/tables';
 import type { AppContext } from '#/models';
 import resolvers from '#/resolvers';
 import typeDefs from '#/schema';
@@ -15,6 +22,7 @@ const { db, postsQuery } = vi.hoisted(() => ({
     deleteMany: vi.fn(),
     findMany: vi.fn(),
     query: vi.fn(),
+    transaction: vi.fn(),
     update: vi.fn(),
   },
   postsQuery: {
@@ -163,6 +171,7 @@ describe('updatePost', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
+    db.transaction.mockImplementation(async (save) => save(db));
     db.update.mockResolvedValue({ id: 'post-1' });
   });
 
@@ -187,5 +196,21 @@ describe('updatePost', () => {
       { title: 'Renamed' },
       expect.anything()
     );
+  });
+
+  // Leaving them out deleted them, so saving only a post's status took its artists away
+  it('keeps the artists when the update leaves them out', async () => {
+    await updatePost({}, { id: 'post-1', input: { status: 'DRAFT' as never } });
+
+    expect(db.deleteMany).not.toHaveBeenCalled();
+  });
+
+  it('clears the artists when sent none', async () => {
+    await updatePost({}, { id: 'post-1', input: { artists: [] } });
+
+    expect(db.deleteMany).toHaveBeenCalledExactlyOnceWith(postArtists, {
+      where: { postId: 'post-1' },
+    });
+    expect(db.createMany).not.toHaveBeenCalled();
   });
 });

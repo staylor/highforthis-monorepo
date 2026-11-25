@@ -12,7 +12,11 @@ const { update, geocodeVenue } = vi.hoisted(() => ({
   geocodeVenue: vi.fn(),
 }));
 
-vi.mock('#/database/db', () => ({ default: { update } }));
+vi.mock('#/database/db', () => {
+  // The featured media and the venue are saved in a transaction
+  const db = { update, transaction: (save: (tx: unknown) => unknown) => save(db) };
+  return { default: db };
+});
 vi.mock('#/geocode', async (importOriginal) => ({
   ...(await importOriginal<typeof import('#/geocode')>()),
   geocodeVenue,
