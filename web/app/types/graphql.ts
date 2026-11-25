@@ -1038,7 +1038,9 @@ export type PodcastQueryVariables = Exact<{
 
 export type PodcastQuery = { podcast: { id: string, description: string, title: string, audio: { id: string, destination: string, duration: number | null, fileName: string } | null } | null };
 
-export type PodcastFeedQueryVariables = Exact<{ [key: string]: never; }>;
+export type PodcastFeedQueryVariables = Exact<{
+  first?: number | null | undefined;
+}>;
 
 
 export type PodcastFeedQuery = { podcasts: { edges: Array<{ node: { id: string, date: number | null, description: string, title: string, audio: { id: string, destination: string, duration: number | null, fileName: string, fileSize: number, mimeType: string } | null, image: { id: string, destination: string, fileName: string } | null } }> } | null, podcastSettings: { id: string, category: string | null, copyrightText: string | null, description: string | null, explicit: string | null, feedLink: string | null, generator: string | null, itunesEmail: string | null, itunesName: string | null, language: string | null, managingEditor: string | null, title: string | null, websiteLink: string | null, image: { id: string, destination: string, fileName: string } | null } };
@@ -1164,7 +1166,7 @@ export type VideosQueryVariables = Exact<{
 }>;
 
 
-export type VideosQuery = { videos: { count: number, edges: Array<{ cursor: string, node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
+export type VideosQuery = { videos: { years: Array<number> | null, count: number, edges: Array<{ cursor: string, node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
 
 export type VideoQueryVariables = Exact<{
   slug?: string | null | undefined;

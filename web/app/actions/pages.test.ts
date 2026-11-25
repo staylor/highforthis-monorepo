@@ -375,6 +375,19 @@ describe('videos', () => {
     });
   });
 
+  // The menu listed every year since the first video, and most of those years have none
+  it('offers the years there are videos from, and the one asked for', async (t) => {
+    stubGraphQL(t, { App, Videos: { videos: { ...videos, years: [2024, 2019] } } });
+    const { html } = await page('/videos/2016');
+    const years = [...html.matchAll(/<option value="(\d{4})"/g)].map(([, year]) => year);
+    assert.deepEqual(years, ['2024', '2019', '2016']);
+    assert.match(html, /<option value="2016" selected>/);
+
+    // A year the menu couldn't have written isn't added: 999 has no page
+    const odd = await page('/videos/0999');
+    assert.doesNotMatch(odd.html, /<option value="999"/);
+  });
+
   it('shows one video, or the 404 page when there is none', async (t) => {
     stubGraphQL(t, { App, Video: { video: video('1') } });
     const found = await page(routes.video.href({ slug: 'video-1' }));
@@ -648,8 +661,11 @@ describe('the podcast', () => {
     image: null,
   };
 
-  it('lists the episodes under what the podcast is about', async (t) => {
-    stubGraphQL(t, { App, Podcasts: { podcasts: { edges: [{ node: episode }] } } });
+  it('lists every episode under what the podcast is about', async (t) => {
+    const operations = stubGraphQL(t, {
+      App,
+      Podcasts: { podcasts: { edges: [{ node: episode }] } },
+    });
     const { status, html } = await page(routes.podcast.index.href());
     assert.equal(status, 200);
     assert.match(html, /<title>Podcast: The Podcast » High for This<\/title>/);
@@ -657,6 +673,10 @@ describe('the podcast', () => {
     assert.match(link(html, '/podcast/e1') ?? '', /First line<br \/>Second line/);
     assert.equal(meta(html, 'og:image'), `${storage}/2024/01/podcast.jpg`);
     assert.equal(meta(html, 'og:url'), 'https://highforthis.com/podcast');
+    // Asking for no page size answered 10, which left out the first episode
+    assert.deepEqual(operations.find((op) => op.operationName === 'Podcasts')?.variables, {
+      first: 1000,
+    });
   });
 
   it('plays an episode', async (t) => {
@@ -680,12 +700,16 @@ describe('the podcast', () => {
       language: 'en-us',
       managingEditor: 'podcast@highforthis.test',
     };
-    stubGraphQL(t, { PodcastFeed: { podcasts: { edges: [{ node: episode }] }, podcastSettings } });
+    const operations = stubGraphQL(t, {
+      PodcastFeed: { podcasts: { edges: [{ node: episode }] }, podcastSettings },
+    });
     const { status, html: xml, headers } = await page(routes.podcastFeed.href());
     assert.equal(status, 200);
     assert.equal(headers.get('content-type'), 'application/xml');
     assert.match(xml, /^<\?xml version="1\.0" encoding="utf-8"\?>\s*<rss /);
     assert.match(xml, /<item>\s*<title>Episode One<\/title>/);
     assert.ok(xml.includes(`<enclosure url="${storage}/2024/01/one.mp3" type="audio/mpeg"`));
+    // Every episode, where asking for no page size answered only the latest 10
+    assert.deepEqual(operations[0].variables, { first: 1000 });
   });
 });

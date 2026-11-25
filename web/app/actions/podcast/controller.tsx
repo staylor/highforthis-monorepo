@@ -17,6 +17,8 @@ import { Podcast, podcastMetaTags } from '#/ui/podcast.tsx';
 import { uploadUrl } from '#/ui/public/media.ts';
 import { colorTransition, lineClamp, linkHover, text } from '#/ui/public/styles.ts';
 
+import { ALL_EPISODES } from './feed.ts';
+
 const podcastsQuery = gql`
   query Podcasts($first: Int) {
     podcasts(first: $first) {
@@ -65,7 +67,8 @@ export default createController(routes.podcast, {
   actions: {
     async index(context) {
       const [{ podcasts }, { podcastSettings }] = await Promise.all([
-        context.gql.query<PodcastsQuery>(podcastsQuery, { first: 10 }),
+        // Every episode: the page has no next page to reach older ones on
+        context.gql.query<PodcastsQuery>(podcastsQuery, { first: ALL_EPISODES }),
         loadRootData(context),
       ]);
       const title = podcastSettings?.title

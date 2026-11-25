@@ -4,9 +4,15 @@ import { html } from 'remix/html-template';
 import type { PodcastFeedQuery } from '#/types/graphql.ts';
 import { uploadUrl } from '#/ui/public/media.ts';
 
+/**
+ * The episodes the feed and the podcast's page list: all of them. GraphQL answers at most this many
+ * at a time, many times the episodes there are, where leaving the page size out answers only 10.
+ */
+export const ALL_EPISODES = 1000;
+
 export const feedQuery = gql`
-  query PodcastFeed {
-    podcasts {
+  query PodcastFeed($first: Int) {
+    podcasts(first: $first) {
       edges {
         node {
           id
