@@ -81,6 +81,57 @@ describe('parseConnection', () => {
     expect(connection).toMatchObject({ count: 3, edges: [], pageInfo: { hasNextPage: true } });
   });
 
+  // It answered the first so many instead
+  it('answers the last so many, counted back from the end, without a cursor', async () => {
+    const records = delegate(
+      30,
+      Array.from({ length: 10 }, (_, i) => ({ id: `show-${20 + i}` }))
+    );
+
+    const connection = await parseConnection(records, { last: 10 });
+
+    expect(records.findMany).toHaveBeenCalledWith({ skip: 20, take: 10 });
+    expect(Buffer.from(connection.edges[0].cursor, 'base64').toString()).toBe('arrayconnection:20');
+    expect(connection.pageInfo).toMatchObject({ hasPreviousPage: true, hasNextPage: false });
+  });
+
+  it('answers every record when there are fewer than the last so many', async () => {
+    const records = delegate(3, [{ id: 'a' }, { id: 'b' }, { id: 'c' }]);
+
+    const connection = await parseConnection(records, { last: 10 });
+
+    expect(records.findMany).toHaveBeenCalledWith({ skip: 0, take: 3 });
+    expect(connection.pageInfo.hasPreviousPage).toBe(false);
+  });
+
+  // It answered all of the first, numbered as if they were the last
+  it('answers the last so many of the first so many, when asked for both', async () => {
+    const rows = Array.from({ length: 10 }, (_, i) => ({ id: `show-${i}` }));
+    const records = {
+      count: vi.fn(async () => rows.length),
+      findMany: vi.fn(async ({ skip, take }: { skip: number; take: number }) =>
+        rows.slice(skip, skip + take)
+      ),
+    };
+    const offsets = ({ edges }: Awaited<ReturnType<typeof parseConnection>>) =>
+      edges.map(({ cursor }) => Buffer.from(cursor, 'base64').toString().split(':')[1]);
+
+    const both = await parseConnection(records, { first: 5, last: 2 });
+
+    expect(both.edges.map(({ node }) => node)).toEqual([{ id: 'show-3' }, { id: 'show-4' }]);
+    expect(offsets(both)).toEqual(['3', '4']);
+    expect(both.pageInfo).toMatchObject({ hasPreviousPage: true, hasNextPage: true });
+
+    const after = await parseConnection(records, {
+      first: 5,
+      last: 2,
+      after: Buffer.from('arrayconnection:2').toString('base64'),
+    });
+
+    expect(after.edges.map(({ node }) => node)).toEqual([{ id: 'show-6' }, { id: 'show-7' }]);
+    expect(offsets(after)).toEqual(['6', '7']);
+  });
+
   it.each([
     'nonsense',
     Buffer.from('arrayconnection:-5').toString('base64'),

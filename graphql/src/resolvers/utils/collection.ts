@@ -79,21 +79,25 @@ export async function parseConnection<TNode>(
   }
 
   const countArgs = findManyArgs.where ? { where: findManyArgs.where } : undefined;
-  // Neither needs the other, so they share a round trip to the database
-  const [count, items] = await Promise.all([
-    delegate.count(countArgs),
-    limit > 0
-      ? delegate.findMany({
-          ...findManyArgs,
-          skip: offset,
-          take: limit,
-        })
-      : [],
-  ]);
+  const records = (skip: number, take: number) =>
+    take > 0 ? delegate.findMany({ ...findManyArgs, skip, take }) : Promise.resolve([]);
+
+  let count: number;
+  let items: TNode[];
+  if (first === null && !before) {
+    // The last so many, with no cursor to count back from, are that many from the end, so they
+    // wait for the count
+    count = await delegate.count(countArgs);
+    offset = Math.max(offset, count - limit);
+    items = await records(offset, Math.min(limit, count - offset));
+  } else {
+    // Neither needs the other, so they share a round trip to the database
+    [count, items] = await Promise.all([delegate.count(countArgs), records(offset, limit)]);
+  }
 
   const arrayLength = count;
   const sliceEnd = offset + items.length;
-  const beforeOffset = before ? cursorToOffset(before) : items.length;
+  const beforeOffset = before ? cursorToOffset(before) : arrayLength;
   const afterOffset = after ? cursorToOffset(after) : -1;
   let startOffset = Math.max(offset - 1, afterOffset, -1) + 1;
   let endOffset = Math.min(sliceEnd, beforeOffset, arrayLength);
@@ -104,7 +108,9 @@ export async function parseConnection<TNode>(
     endOffset = startOffset + first!;
   }
 
-  const edges = items.map((value, index) => ({
+  // The records between the two ends: all that were read, unless the request asked for the first
+  // so many and the last of those
+  const edges = items.slice(startOffset - offset, endOffset - offset).map((value, index) => ({
     cursor: offsetToCursor(startOffset + index),
     node: value,
   }));
