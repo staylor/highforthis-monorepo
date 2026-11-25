@@ -15,8 +15,21 @@ nonisolated extension Calendar {
 }
 
 nonisolated extension FormatStyle where Self == Date.FormatStyle {
-    /// A day of shows, as the show lists head it, in New York.
+    /// A show's day with its weekday, in New York, as CarPlay heads a day of shows and as a show's row says it at the
+    /// text sizes that leave no room for its date badge.
     static var showDay: Self { inNewYork(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()) }
+
+    /// A month of shows, as the show lists head it, in New York.
+    static var showMonth: Self { inNewYork(.dateTime.month(.wide).year()) }
+
+    /// The day of the month in a show's date badge, in New York: two digits, as the website's are.
+    static var showDayNumber: Self { inNewYork(.dateTime.day(.twoDigits)) }
+
+    /// The weekday in a show's date badge, in New York.
+    static var showWeekday: Self { inNewYork(.dateTime.weekday(.abbreviated)) }
+
+    /// A show's day as VoiceOver reads its date badge, which only has room for "30 Mon", in New York.
+    static var showSpokenDay: Self { inNewYork(.dateTime.weekday(.wide).month(.wide).day()) }
 
     /// A show's date, as an artist's or a venue's shows list it, in New York.
     static var showDate: Self { inNewYork(.dateTime.month(.abbreviated).day().year()) }
@@ -29,8 +42,11 @@ nonisolated extension FormatStyle where Self == Date.FormatStyle {
         return sameClocks ? style : style.timeZone(.specificName(.short))
     }
 
-    /// The day an episode was posted, as the episode list shows it.
-    static var episodeDate: Self { .dateTime.month(.abbreviated).day().year() }
+    /// The day an episode or a post was posted, as their lists show it.
+    static var postedDate: Self { .dateTime.month(.abbreviated).day().year() }
+
+    /// The day an episode or a post was posted, as its own page shows it.
+    static var postedDay: Self { .dateTime.month(.wide).day().year() }
 }
 
 /// The style, showing New York's clocks rather than the device's.

@@ -9,27 +9,13 @@ struct PodcastDetail: View {
         QueryView(PodcastQuery(id: id)) { data in
             if let podcast = data.podcast {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text(podcast.title)
-                            .font(.title.bold())
-                            .accessibilityAddTraits(.isHeader)
-                        VStack(alignment: .leading) {
-                            if let date = podcast.date {
-                                Text(.posted(Date(apiTimestamp: date).formatted(date: .long, time: .omitted)))
-                            }
-                            if let duration = podcast.audio?.duration, duration.isFinite, duration > 0 {
-                                Text(Duration.seconds(duration), format: .units(allowed: [.hours, .minutes], width: .wide))
-                            }
-                        }
-                        .foregroundStyle(.secondary)
-                        #if os(tvOS)
-                        // The remote can only reach controls, so on tvOS Play comes first and takes focus.
+                    VStack(alignment: .leading, spacing: 20) {
+                        DetailHeader(eyebrow: eyebrow(of: podcast), title: podcast.title)
+                        // Play comes before the notes, which can run past the bottom of the screen. On tvOS the
+                        // remote can only reach controls, so it's also what takes focus.
                         playback(podcast)
-                        notes(podcast)
-                        #else
-                        notes(podcast)
-                        playback(podcast)
-                        #endif
+                        Text(podcast.description)
+                            .selectableText()
                     }
                     .frame(maxWidth: .readable(640), alignment: .leading)
                     .padding()
@@ -42,16 +28,22 @@ struct PodcastDetail: View {
         .detailTitle(title)
     }
 
-    private func notes(_ podcast: PodcastQuery.Data.Podcast) -> some View {
-        Text(podcast.description)
-            .selectableText()
+    /// When the episode was posted and how long it is, as much of that as the API has.
+    private func eyebrow(of podcast: PodcastQuery.Data.Podcast) -> Text? {
+        let date = podcast.date.map { Date(apiTimestamp: $0).formatted(.postedDay) }
+        let length = EpisodeText.length(seconds: podcast.audio?.duration, width: .wide)
+        return switch (date, length) {
+        case (let date?, let length?): Text(.dateAndDuration(date, length))
+        case (let text?, nil), (nil, let text?): Text(text)
+        case (nil, nil): nil
+        }
     }
 
     @ViewBuilder private func playback(_ podcast: PodcastQuery.Data.Podcast) -> some View {
         if let episode = PodcastPlayer.Episode(podcast) {
             PlaybackControls(episode: episode)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical)
+                .padding(.vertical, 4)
         } else {
             Label(.audioUnavailable, systemImage: "speaker.slash")
                 .foregroundStyle(.secondary)

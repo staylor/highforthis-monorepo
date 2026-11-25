@@ -10,6 +10,7 @@ nonisolated public final class Post: MockObject {
   public typealias MockValueCollectionType = Array<Mock<Post>>
 
   public struct MockFields: Sendable {
+    @Field<Double>("date") public var date
     @Field<EditorState>("editorState") public var editorState
     @Field<[MediaUpload]>("featuredMedia") public var featuredMedia
     @Field<String>("id") public var id
@@ -20,6 +21,7 @@ nonisolated public final class Post: MockObject {
 
 public extension Mock where O == Post {
   convenience init(
+    date: Double? = nil,
     editorState: Mock<EditorState>? = nil,
     featuredMedia: [(any AnyMock)]? = nil,
     id: String = "",
@@ -27,6 +29,7 @@ public extension Mock where O == Post {
     title: String = ""
   ) {
     self.init()
+    _setScalar(date, for: \.date)
     _setEntity(editorState, for: \.editorState)
     _setList(featuredMedia, for: \.featuredMedia)
     _setScalar(id, for: \.id)

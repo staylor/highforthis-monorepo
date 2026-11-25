@@ -1,6 +1,7 @@
 query Post($slug: String!) {
   post(slug: $slug) {
     id
+    date
     title
     editorState {
       root {

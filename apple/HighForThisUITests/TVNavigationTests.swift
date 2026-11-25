@@ -17,6 +17,8 @@ final class TVNavigationTests: XCTestCase {
         remote.press(.select)
         let artist = row("artist-sample-artist", in: app)
         waitForFocus(on: artist)
+        // tvOS has no web browser to open where the show is sold.
+        XCTAssertFalse(element("event-website", in: app).exists)
         screenshot("Show", app)
         remote.press(.select)
         XCTAssertTrue(app.staticTexts["Recommended Shows"].waitForExistence(timeout: 10))

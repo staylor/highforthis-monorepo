@@ -220,29 +220,6 @@
         }
       }
     },
-    "artistWeWereThere %lld" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld show we have attended by this artist:"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld shows we have attended by this artist:"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "capacity %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -419,17 +396,6 @@
         }
       }
     },
-    "posted %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Posted: %@"
-          }
-        }
-      }
-    },
     "posts" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -496,7 +462,66 @@
         }
       }
     },
-    "venueWeWereThere %lld" : {
+    "videos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Videos"
+          }
+        }
+      }
+    },
+    "artist" : {
+      "comment" : "The line over an artist's name on their page.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artist"
+          }
+        }
+      }
+    },
+    "attended" : {
+      "comment" : "The heading over the shows we've been to by an artist or at a venue.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attended"
+          }
+        }
+      }
+    },
+    "dateAndDuration %@ %@" : {
+      "comment" : "When an episode was posted and how long it is, in one line.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "eventWebsite" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event Website"
+          }
+        }
+      }
+    },
+    "showCount %lld" : {
+      "comment" : "How many shows a heading is over.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -505,13 +530,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld show we have attended at this venue:"
+                  "value" : "%lld show"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld shows we have attended at this venue:"
+                  "value" : "%lld shows"
                 }
               }
             }
@@ -519,13 +544,26 @@
         }
       }
     },
-    "videos" : {
+    "showHistoryTitle" : {
+      "comment" : "The History tab's title.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Videos"
+            "value" : "Show History"
+          }
+        }
+      }
+    },
+    "venue" : {
+      "comment" : "The line over a venue's name on its page.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venue"
           }
         }
       }

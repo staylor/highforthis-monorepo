@@ -125,7 +125,7 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
         [
             "__typename": "Show", "id": "show-\(year)-\(index)", "title": "Evening Set \(index + 1)",
             "date": year == 2019 ? 1_573_049_600_000.0 : 1_762_300_800_000.0,
-            "artists": [artist], "venue": venue,
+            "url": "https://example.com/tickets", "artists": [artist], "venue": venue,
         ]
     }
 
@@ -206,7 +206,7 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
         }
         return [
             "__typename": "Post", "id": "post-\(index)", "slug": "post-\(index)", "title": "Records Worth Hearing \(index + 1)",
-            "summary": "Notes from the listening room.", "featuredMedia": [],
+            "date": 1_762_300_800_000.0, "summary": "Notes from the listening room.", "featuredMedia": [],
             "editorState": [
                 "__typename": "EditorState",
                 "root": element(

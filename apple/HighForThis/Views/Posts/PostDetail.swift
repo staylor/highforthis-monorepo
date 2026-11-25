@@ -24,14 +24,7 @@ private struct PostReader: View {
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 20) {
-                Text(post.title)
-                    .font(.title.weight(.black))
-                    .textCase(.uppercase)
-                    .padding(.leading, 16)
-                    .overlay(alignment: .leading) {
-                        Rectangle().fill(.tint).frame(width: 6)
-                    }
-                    .accessibilityAddTraits(.isHeader)
+                DetailHeader(eyebrow: post.date.map { Text(Date(apiTimestamp: $0), format: .postedDay) }, title: post.title)
                 ForEach(Array(blocks.enumerated()), id: \.offset) { index, block in
                     PostBlockView(block: block)
                         .focusableForReading()
@@ -99,6 +92,7 @@ private struct PostBlockView: View {
             #endif
         case .image(let url, let aspectRatio, let altText):
             RemoteImage(url: url, aspectRatio: aspectRatio)
+                .clipShape(.rect(cornerRadius: 8))
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(altText)
                 .accessibilityHidden(altText.isEmpty)

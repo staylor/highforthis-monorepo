@@ -17,6 +17,15 @@ extension View {
         #endif
     }
 
+    /// tvOS sets a row's icon right against its title, so there the rows' labels put some room between them.
+    func rowLabelSpacing() -> some View {
+        #if os(tvOS)
+        labelStyle(SpacedLabelStyle())
+        #else
+        self
+        #endif
+    }
+
     /// The Siri Remote scrolls only by moving focus, so on tvOS each block of text a reader scrolls through takes focus.
     func focusableForReading() -> some View {
         #if os(tvOS)
@@ -28,6 +37,16 @@ extension View {
 }
 
 #if os(tvOS)
+private struct SpacedLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 20) {
+            configuration.icon
+                .foregroundStyle(.tint)
+            configuration.title
+        }
+    }
+}
+
 /// The highlight extends past the text, so focusable blocks stay aligned with their neighbors.
 private struct ReadingFocus: ViewModifier {
     @FocusState private var isFocused: Bool
