@@ -28,10 +28,11 @@ import {
   venues,
 } from '#/database/tables';
 import { getUniqueSlug, slugsIn } from '#/models/utils';
+import { siteYear, startOfSiteYear } from '#/time';
 
 import { fillAppleMusicLater } from './utils/appleMusicData';
 import { type Connection, parseConnection, emptyConnection } from './utils/collection';
-import { parseInput, removeRows, resolveJoin, timestampResolver } from './utils/helpers';
+import { badInput, parseInput, removeRows, resolveJoin, timestampResolver } from './utils/helpers';
 import { bulkCreateShowsSchema, createShowSchema, updateShowSchema } from './validations';
 
 type Show = TableRow<typeof shows>;
@@ -104,14 +105,15 @@ async function showsOf(artistId: string) {
   );
 }
 
-/** The year a show is in, as `years` lists it */
-const yearOf = (date: Date | string) => new Date(date).getFullYear();
+/** The year a show is in, as `years` lists it: the year it's in where the site is */
+const yearOf = (date: Date | string) => siteYear(new Date(date));
 
-/** The shows in a year */
+/**
+ * The shows in a year, from New Year's Day where the site is. A year in UTC would put a show on
+ * New Year's Eve, which starts after midnight UTC, in the year after the one the site dates it in.
+ */
 function inYear(year: number): ShowFilter {
-  const startDate = new Date(`${year}-01-01T00:00:00Z`);
-  const endDate = new Date(`${year + 1}-01-01T00:00:00Z`);
-  return and(gte('date', startDate), lt('date', endDate));
+  return and(gte('date', startOfSiteYear(year)), lt('date', startOfSiteYear(year + 1)));
 }
 
 /** The year of the newest show the filter matches, the first that `years` lists */
@@ -219,6 +221,9 @@ const resolvers = {
         order,
         ...connectionArgs
       } = args;
+      if (year && (year < 1000 || year > 9999)) {
+        throw badInput('`year` must have four digits');
+      }
       // Everything but the dates, which `years` leaves out
       const conditions: ShowFilter[] = [];
       let dates: ShowFilter | undefined;

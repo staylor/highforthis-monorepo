@@ -2,6 +2,8 @@ import { CronJob } from 'cron';
 
 import { createLogger } from '@highforthis/shared/logger';
 
+import { SITE_TIME_ZONE } from '#/time';
+
 import showsData from './shows';
 import youtubeData from './youtube';
 
@@ -13,7 +15,7 @@ function schedule(name: string, cronTime: string, run: () => Promise<void>) {
     onTick: run,
     // A run that fails is logged, and the next one still happens
     errorHandler: (error) => logger.error({ err: error, job: name }, 'Scheduled job failed'),
-    timeZone: 'America/New_York',
+    timeZone: SITE_TIME_ZONE,
     start: true,
   });
 }
