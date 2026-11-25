@@ -150,7 +150,8 @@ export const importListingsSchema = z
 
 export const createUserSchema = z.object({
   bio: z.string().nullish(),
-  email: z.string().nullish(),
+  // Signing in trims what's typed, so a saved email has no spaces around it either
+  email: z.string().trim().nullish(),
   name: z.string().nullish(),
   password: z.string().nullish(),
   roles: z.array(z.string()).nullish(),
@@ -158,7 +159,7 @@ export const createUserSchema = z.object({
 
 export const updateUserSchema = z.object({
   bio: z.string().nullish(),
-  email: z.string().optional(),
+  email: z.string().trim().min(1).optional(),
   name: z.string().nullish(),
   password: z.string().nullish(),
   roles: z.array(z.string()).nullish(),

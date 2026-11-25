@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import bcrypt from 'bcryptjs';
+import { ilike } from 'remix/data-table';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createApp } from '#/app';
@@ -12,7 +13,7 @@ const db = vi.hoisted(() => ({
   create: vi.fn(),
   deleteMany: vi.fn(),
   find: vi.fn(),
-  findOne: vi.fn(),
+  findMany: vi.fn(),
 }));
 
 vi.mock('#/database/db', () => ({ default: db }));
@@ -51,8 +52,10 @@ describe('authentication', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
-    db.findOne.mockImplementation(async (_table, { where }: { where: { email: string } }) =>
-      where.email === admin.email ? admin : null
+    // The users the sign-in's ILIKE pattern finds: Postgres matches an email whatever its case,
+    // and takes İ for i
+    db.findMany.mockImplementation(async (_table, { where }: { where: { value: string } }) =>
+      where.value.replaceAll('İ', 'i').toLowerCase() === admin.email ? [admin] : []
     );
     // The admin's one live session
     db.find.mockImplementation(async (_table, id: string) =>
@@ -151,6 +154,25 @@ describe('authentication', () => {
       compare.mockRestore();
     });
 
+    it('finds the email whatever its case, without the spaces around it', async () => {
+      const response = await signIn('  Admin@Example.TEST ', 'secret');
+
+      expect(response.status).toBe(200);
+      expect(db.findMany).toHaveBeenCalledWith(expect.anything(), {
+        where: ilike('email', 'Admin@Example.TEST'),
+        orderBy: ['createdAt', 'asc'],
+      });
+    });
+
+    // Postgres finds the admin by it, but failures are counted by the email in lowercase here,
+    // where İ isn't i: taking it would give the admin's email five more tries
+    it("doesn't take an email Postgres matches by a letter that isn't the same here", async () => {
+      const response = await signIn('admİn@example.test', 'secret');
+
+      expect(response.status).toBe(401);
+      expect(db.create).not.toHaveBeenCalled();
+    });
+
     it('answers 400 without an email and password', async () => {
       const response = await request('/auth', {
         method: 'POST',
@@ -164,7 +186,7 @@ describe('authentication', () => {
 
     it('turns an email away after 5 failures, even with the right password', async () => {
       const email = 'locked@example.test';
-      db.findOne.mockResolvedValue({ ...admin, email });
+      db.findMany.mockResolvedValue([{ ...admin, email }]);
       for (let i = 0; i < 5; i++) {
         expect((await signIn(email, 'wrong')).status).toBe(401);
       }

@@ -1,3 +1,4 @@
+import { and, ilike, ne } from 'remix/data-table';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { userRoles, users } from '#/database/tables';
@@ -63,5 +64,51 @@ describe("a user's roles", () => {
     expect(tx.createMany).toHaveBeenCalledExactlyOnceWith(userRoles, [
       { id: expect.any(String), userId: created.id, name: 'admin' },
     ]);
+  });
+});
+
+// Signing in matches an email whatever its case, so two users' emails mustn't differ only in case
+describe("users' emails", () => {
+  beforeEach(resetMocks);
+
+  it("turns away a new user with another user's email in another case", async () => {
+    db.count.mockResolvedValue(1);
+
+    await expect(
+      resolvers.Mutation.createUser(
+        {},
+        { input: { email: ' Scott@Example.test ', password: 'secret' } }
+      )
+    ).rejects.toMatchObject({ message: 'Email already exists.' });
+    expect(db.count).toHaveBeenCalledWith(users, {
+      where: ilike('email', 'Scott@Example.test'),
+    });
+    expect(tx.create).not.toHaveBeenCalled();
+  });
+
+  it("checks other users' emails, so a user can change the case of their own", async () => {
+    await resolvers.Mutation.updateUser(
+      {},
+      { id: 'user-1', input: { email: 'Scott@example.test' } }
+    );
+
+    expect(db.count).toHaveBeenCalledWith(users, {
+      where: and(ilike('email', 'Scott@example.test'), ne('id', 'user-1')),
+    });
+    expect(tx.update).toHaveBeenCalledWith(
+      users,
+      'user-1',
+      { email: 'Scott@example.test' },
+      expect.anything()
+    );
+  });
+
+  it("turns away a change to another user's email", async () => {
+    db.count.mockResolvedValue(1);
+
+    await expect(
+      resolvers.Mutation.updateUser({}, { id: 'user-1', input: { email: 'other@example.test' } })
+    ).rejects.toMatchObject({ message: 'Email already exists.' });
+    expect(tx.update).not.toHaveBeenCalled();
   });
 });

@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
-import { ilike, or, type TableRow } from 'remix/data-table';
+import { and, ilike, ne, or, type TableRow } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
 import { endSessions } from '#/authentication';
 import db from '#/database/db';
-import { containing } from '#/database/search';
+import { containing, matching } from '#/database/search';
 import type { Loaded } from '#/database/tables';
 import { newId, userRoleRows, userRoles, users } from '#/database/tables';
 
@@ -13,6 +13,12 @@ import { badInput, parseInput, removeRows, resolveJoin, unique } from './utils/h
 import { createUserSchema, updateUserSchema } from './validations';
 
 const SALT_ROUNDS = 10;
+
+/**
+ * Users with this email, whatever its case. Signing in matches an email whatever its case, so two
+ * users' emails mustn't differ only in case.
+ */
+const withEmail = (email: string) => ilike('email', matching(email));
 
 const userIncludes = { roles: userRoleRows };
 
@@ -57,7 +63,7 @@ const resolvers = {
       if (!email || !password) {
         throw badInput('Email and Password are required.');
       }
-      const exists = await db.count(users, { where: { email } });
+      const exists = await db.count(users, { where: withEmail(email) });
       if (exists) {
         throw badInput('Email already exists.');
       }
@@ -81,8 +87,11 @@ const resolvers = {
       const user = await db.find(users, id);
       if (!user) throw badInput('User not found');
 
-      if (fields.email && fields.email !== user.email) {
-        const exists = await db.count(users, { where: { email: fields.email } });
+      // Another user's, that is: changing the case of one's own email is fine
+      if (fields.email) {
+        const exists = await db.count(users, {
+          where: and(withEmail(fields.email), ne('id', id)),
+        });
         if (exists) {
           throw badInput('Email already exists.');
         }

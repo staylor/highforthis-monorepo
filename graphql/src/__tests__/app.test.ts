@@ -15,7 +15,7 @@ const { db, passkeyQuery } = vi.hoisted(() => ({
     delete: vi.fn(),
     deleteMany: vi.fn(),
     find: vi.fn(),
-    findOne: vi.fn(),
+    findMany: vi.fn(),
     query: vi.fn(),
   },
   passkeyQuery: { all: vi.fn(), orderBy: vi.fn(), select: vi.fn(), where: vi.fn() },
@@ -63,9 +63,9 @@ describe('createApp', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
-    db.findOne.mockImplementation(
-      async (_table, { where }: { where: { email: string } }) =>
-        [admin, editor].find((user) => user.email === where.email) ?? null
+    // The users the sign-in's ILIKE pattern finds, which matches an email whatever its case
+    db.findMany.mockImplementation(async (_table, { where }: { where: { value: string } }) =>
+      [admin, editor].filter((user) => user.email === where.value.toLowerCase())
     );
     db.find.mockImplementation(async (_table, sessionId: string) => {
       const user = [admin, editor].find(({ id }) => sessionId === `session-${id}`);
