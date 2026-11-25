@@ -7,6 +7,7 @@ import {
   type OperationDefinitionNode,
   type SelectionSetNode,
   type ValueNode,
+  valueFromASTUntyped,
 } from 'graphql';
 import { DataTableError } from 'remix/data-table';
 
@@ -34,12 +35,15 @@ interface Measure {
   paged: number;
 }
 
-function pageSize(value: ValueNode, variables: Record<string, unknown>): unknown {
+/** An operation's variables by name, as it will run with them */
+type Variables = ReadonlyMap<string, unknown>;
+
+function pageSize(value: ValueNode, variables: Variables): unknown {
   if (value.kind === Kind.INT) {
     return Number(value.value);
   }
   if (value.kind === Kind.VARIABLE) {
-    return variables[value.name.value];
+    return variables.get(value.name.value);
   }
   return undefined;
 }
@@ -48,7 +52,7 @@ function walk(
   selectionSet: SelectionSetNode,
   depth: number,
   fragments: Map<string, FragmentDefinitionNode>,
-  variables: Record<string, unknown>,
+  variables: Variables,
   measure: Measure
 ) {
   if (depth > QUERY_LIMITS.depth) {
@@ -108,11 +112,32 @@ function rootFields(
   return count;
 }
 
+/**
+ * The operation's variables as it will run with them: those the request sent, and the defaults
+ * the operation gives the rest. A default like `$first: Int = 100000` is as much a page size as a
+ * variable sent with that value. They're kept in a Map because a variable can be named for
+ * something every object has, such as `$toString`, which read from an object would stand in for
+ * a value that wasn't sent and hide its default.
+ */
+function withDefaults(
+  operation: OperationDefinitionNode,
+  sent?: Record<string, unknown> | null
+): Variables {
+  const variables = new Map(Object.entries(sent ?? {}));
+  for (const { variable, defaultValue } of operation.variableDefinitions ?? []) {
+    const name = variable.name.value;
+    if (variables.get(name) === undefined && defaultValue) {
+      variables.set(name, valueFromASTUntyped(defaultValue));
+    }
+  }
+  return variables;
+}
+
 /** Why an operation is too large to run, or null when it's within the limits. */
 function tooLarge(
   operation: OperationDefinitionNode,
   fragments: Map<string, FragmentDefinitionNode>,
-  variables: Record<string, unknown> = {}
+  variables: Variables
 ): string | null {
   try {
     if (rootFields(operation.selectionSet, fragments) > QUERY_LIMITS.rootFields) {
@@ -144,7 +169,7 @@ export function queryLimits(): ApolloServerPlugin<AppContext> {
               fragments.set(definition.name.value, definition);
             }
           }
-          const reason = tooLarge(operation, fragments, request.variables);
+          const reason = tooLarge(operation, fragments, withDefaults(operation, request.variables));
           if (reason) {
             throw new GraphQLError(reason, {
               extensions: { code: 'QUERY_TOO_LARGE', http: { status: 400 } },
