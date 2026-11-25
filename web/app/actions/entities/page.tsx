@@ -1,13 +1,15 @@
 import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
-import type { ArtistQuery, VenueQuery } from '#/types/graphql.ts';
+import { routes } from '#/routes.ts';
+import type { ArtistQuery, ShowsGrid_ShowsFragment, VenueQuery } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
-import { Metadata } from '#/ui/artist.tsx';
-import { Heading1 } from '#/ui/heading.tsx';
+import { ArtistLinks, Billing } from '#/ui/artist.tsx';
 import { lines } from '#/ui/lines.tsx';
+import { PageHeader } from '#/ui/page-header.tsx';
 import { uploadUrl } from '#/ui/public/media.ts';
-import { md, text } from '#/ui/public/styles.ts';
+import { md, pinkButton, text } from '#/ui/public/styles.ts';
+import { SectionHeader } from '#/ui/section-header.tsx';
 import { Attended, attendedFragment, Shows, showsGridFragment } from '#/ui/shows/shows.tsx';
 
 export const artistQuery = gql`
@@ -35,7 +37,34 @@ export const artistQuery = gql`
   ${showsGridFragment}
 `;
 
+/**
+ * The shows coming up for an artist or at a venue, under the heading the home page gives its own.
+ * Nothing when there are none.
+ */
+function Upcoming(handle: Handle<{ shows?: ShowsGrid_ShowsFragment | null; hideVenue?: boolean }>) {
+  const { t } = getApp(handle);
+
+  return () => {
+    const { shows, hideVenue } = handle.props;
+    if (!shows?.edges.length) {
+      return null;
+    }
+    return (
+      <section mix={css({ marginTop: '3rem' })}>
+        <SectionHeader
+          label={t('shows.recommended')}
+          viewAllLink={routes.shows.index.href()}
+          viewAllText={t('shows.fullCalendar')}
+        />
+        <Shows shows={shows} hideVenue={hideVenue} />
+      </section>
+    );
+  };
+}
+
 export function ArtistPage(handle: Handle<{ data: ArtistQuery }>) {
+  const { t } = getApp(handle);
+
   return () => {
     const { artist, shows, attended } = handle.props.data;
     if (!artist) {
@@ -43,9 +72,15 @@ export function ArtistPage(handle: Handle<{ data: ArtistQuery }>) {
     }
     return (
       <>
-        <Heading1>{artist.name}</Heading1>
-        <Metadata name={artist.name} website={artist.website} data={artist.appleMusic || {}} />
-        {shows && <Shows shows={shows} />}
+        <Billing name={artist.name} data={artist.appleMusic}>
+          <PageHeader
+            eyebrow={t('artists.label')}
+            title={artist.name}
+            styles={{ marginBottom: '1.25rem' }}
+          />
+          <ArtistLinks website={artist.website} data={artist.appleMusic || {}} />
+        </Billing>
+        <Upcoming shows={shows} />
         {attended && <Attended shows={attended} relation="artist" />}
       </>
     );
@@ -124,21 +159,17 @@ function VenueMap(
     return (
       <a
         mix={css({
-          marginBottom: '3rem',
           display: 'block',
-          [md]: { marginBottom: 0 },
+          flexShrink: 0,
+          overflow: 'hidden',
+          width: size,
+          maxWidth: '100%',
+          borderRadius: '0.75rem',
+          boxShadow: 'var(--shadow-lg)',
         })}
-        style={{ width: size, height: size }}
         href={`https://maps.apple.com/?${new URLSearchParams({ q: name, ll: center, z: '18' })}`}
       >
-        <img
-          width={size}
-          height={size}
-          mix={css({ display: 'block', borderRadius: '0.375rem' })}
-          src={src}
-          loading="lazy"
-          alt=""
-        />
+        <img width={size} height={size} src={src} loading="lazy" alt="" />
       </a>
     );
   };
@@ -158,27 +189,43 @@ export function VenuePage(handle: Handle<{ data: VenueQuery }>) {
           const crop = 'crops' in media ? media.crops.find((c) => c.width === 640) : undefined;
           return crop ? (
             <img
-              mix={css({ marginBottom: '1rem' })}
+              mix={css({ marginBottom: '1.5rem', borderRadius: '0.75rem' })}
               alt=""
               loading="lazy"
               src={uploadUrl(media.destination, crop.fileName)}
             />
           ) : null;
         })}
-        <Heading1>{venue.name}</Heading1>
         <div
           mix={css({
-            marginBottom: '1.5rem',
-            justifyContent: 'space-between',
-            [md]: { marginBlock: '2rem', display: 'flex' },
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+            [md]: { flexDirection: 'row', justifyContent: 'space-between' },
           })}
         >
-          <div
-            mix={css({
-              marginBlock: '1rem',
-              [md]: { marginBlock: 0, marginRight: '1rem' },
-            })}
-          >
+          <div>
+            <PageHeader
+              eyebrow={t('venues.label')}
+              title={venue.name}
+              styles={{ marginBottom: '1.25rem' }}
+            />
+            {venue.permanentlyClosed && (
+              <p
+                mix={css({
+                  marginBottom: '1rem',
+                  display: 'inline-block',
+                  borderRadius: '0.5rem',
+                  backgroundColor: 'var(--pink)',
+                  padding: '0.25rem 0.75rem',
+                  ...text.sm,
+                  fontWeight: 700,
+                  color: '#fff',
+                })}
+              >
+                {t('venues.permanentlyClosed')}.
+              </p>
+            )}
             {venue.address && (
               <p
                 mix={css({
@@ -191,39 +238,15 @@ export function VenuePage(handle: Handle<{ data: VenueQuery }>) {
               </p>
             )}
             {venue.capacity && (
-              <p mix={css({ marginBottom: '1rem', ...text.sm })}>
+              <p mix={css({ marginBottom: '1.25rem', ...text.sm })}>
                 <strong>{t('venues.capacity')}:</strong>{' '}
                 <span mix={css({ color: 'var(--muted)' })}>{venue.capacity}</span>
               </p>
             )}
             {venue.website && (
-              <a
-                href={venue.website}
-                target="_blank"
-                rel="noreferrer"
-                mix={css({
-                  ...text.sm,
-                  color: 'var(--pink)',
-                  textDecoration: 'underline',
-                })}
-              >
+              <a href={venue.website} target="_blank" rel="noreferrer" mix={css(pinkButton)}>
                 {t('venues.website')} →
               </a>
-            )}
-            {venue.permanentlyClosed && (
-              <p
-                mix={css({
-                  marginTop: '1rem',
-                  borderRadius: '0.5rem',
-                  backgroundColor: 'var(--pink)',
-                  padding: '0.5rem',
-                  ...text.sm,
-                  fontWeight: 700,
-                  color: '#fff',
-                })}
-              >
-                {t('venues.permanentlyClosed')}.
-              </p>
             )}
           </div>
           {venue.coordinates && (
@@ -234,7 +257,7 @@ export function VenuePage(handle: Handle<{ data: VenueQuery }>) {
             />
           )}
         </div>
-        {shows && <Shows shows={shows} />}
+        <Upcoming shows={shows} hideVenue />
         {attended && <Attended shows={attended} relation="venue" />}
       </>
     );

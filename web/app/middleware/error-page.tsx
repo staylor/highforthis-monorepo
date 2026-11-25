@@ -1,6 +1,6 @@
 import type { Middleware } from 'remix/router';
 
-import { renderNotFound, renderPage } from '#/actions/render-page.tsx';
+import { renderError, renderNotFound } from '#/actions/render-page.tsx';
 import { GraphQLRequestError } from '#/lib/graphql.ts';
 import { logger } from '#/lib/logger.ts';
 import type { AppContext } from '#/router.ts';
@@ -29,11 +29,7 @@ export function errorPage(): Middleware {
           return await renderNotFound(app);
         }
         logger.error({ err: error, path: context.url.pathname }, 'Request failed');
-        return await renderPage(app, <pre>{app.t('error.message')}</pre>, {
-          title: app.t('error.title'),
-          layout: 'bare',
-          status: 500,
-        });
+        return await renderError(app);
       } catch {
         throw error;
       }

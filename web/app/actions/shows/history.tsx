@@ -4,10 +4,11 @@ import { css, Frame, type Handle } from 'remix/component';
 import { routes } from '#/routes.ts';
 import type { ShowsGrid_ShowsFragment, ShowsHistoryQuery } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
-import { Heading2 } from '#/ui/heading.tsx';
 import { Link } from '#/ui/link.tsx';
-import { text } from '#/ui/public/styles.ts';
+import { PageHeader } from '#/ui/page-header.tsx';
+import { pinkButton, pinkLink, text } from '#/ui/public/styles.ts';
 import { YearSelect } from '#/ui/public/year-select.tsx';
+import { ShowsNav } from '#/ui/shows/nav.tsx';
 import {
   Shows,
   ShowsListItems,
@@ -58,12 +59,7 @@ function nextPage(shows: ShowsGrid_ShowsFragment, year?: string): NextPage | und
 }
 
 const moreStyle = css({ paddingBlock: '1.5rem', textAlign: 'center' });
-const moreLink = css({
-  ...text.sm,
-  color: 'var(--pink)',
-  textTransform: 'uppercase',
-  textDecoration: 'underline',
-});
+const moreLink = css(pinkButton);
 
 /**
  * The next page, in a frame that loads as it nears the screen and adds the page after that the
@@ -106,51 +102,32 @@ export function HistoryPage(
       year: choice,
       href: routes.shows.history.href({ year: String(choice) }),
     }));
+    const allYears = routes.shows.history.href();
     return (
       <article>
-        <div
-          mix={css({
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            columnGap: '1rem',
-          })}
+        <PageHeader
+          display
+          eyebrow={`${count} ${year ? t('shows.attendedIn', { count, year }) : t('shows.attended.heading')}`}
+          title={t('shows.historyHeading')}
+          lede={
+            year && (
+              <Link mix={css({ ...text.sm, fontWeight: 600, ...pinkLink })} href={allYears}>
+                ← {t('shows.viewFullHistory')}
+              </Link>
+            )
+          }
+          nav={<ShowsNav />}
         >
-          <Heading2>
-            {year ? (
-              <>
-                <span mix={css({ color: 'var(--pink)' })}>{count}</span>{' '}
-                {t('shows.attendedIn', { count, year })}
-              </>
-            ) : (
-              t('shows.attended.heading')
-            )}
-          </Heading2>
           {years.length > 0 && (
             <YearSelect
               value={year ?? ''}
-              placeholder={t('shows.byYear')}
+              label={t('shows.byYear')}
+              placeholder={t('nav.years')}
               years={years}
-              allHref={routes.shows.history.href()}
+              allHref={allYears}
             />
           )}
-        </div>
-        {year && (
-          <p mix={css({ marginBlock: '1.25rem' })}>
-            <Link
-              mix={css({
-                ...text.xl,
-                color: 'var(--pink)',
-                textTransform: 'uppercase',
-                textDecoration: 'underline',
-              })}
-              href={routes.shows.history.href()}
-            >
-              {t('shows.viewFullHistory')}
-            </Link>
-          </p>
-        )}
+        </PageHeader>
         <Shows
           shows={shows}
           showMonths={false}

@@ -13,6 +13,7 @@ import {
   lineClamp,
   linkHover,
   merge,
+  srOnly,
   text,
 } from '#/ui/public/styles.ts';
 import { RecommendedShows } from '#/ui/recommended-shows.tsx';
@@ -65,15 +66,18 @@ export const homeQuery = gql`
 `;
 
 export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }>) {
-  const { t } = getApp(handle);
+  const { t, root } = getApp(handle);
 
   return () => {
     const { data, artworkSeed } = handle.props;
     const posts = data.posts?.edges ?? [];
     const [featured, ...rest] = posts;
+    const { siteTitle, tagline } = root.siteSettings ?? {};
 
     return (
       <>
+        {/* The page's title is the logo over it, so its heading is for a screen reader */}
+        <h1 mix={srOnly}>{[siteTitle || t('title'), tagline].filter(Boolean).join(': ')}</h1>
         {data.shows && (
           <>
             <RecommendedShows shows={data.shows} />
@@ -117,10 +121,16 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
                   })
                 )}
               >
+                {/*
+                  The card is at least as tall as this, and as tall as the posts beside it when
+                  they're taller. The artwork fills the card either way, under a shade for the
+                  words.
+                */}
+                <div mix={css({ aspectRatio: '4 / 3' })} />
                 <div
                   mix={css({
-                    aspectRatio: '4 / 3',
-                    overflow: 'hidden',
+                    position: 'absolute',
+                    inset: 0,
                     backgroundColor: 'var(--neutral-950)',
                   })}
                 >
@@ -129,15 +139,15 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
                     seed={`${artworkSeed}:${featured.node.id}`}
                     variant="collage"
                   />
-                  <div
-                    mix={css({
-                      position: 'absolute',
-                      inset: 0,
-                      background:
-                        'linear-gradient(to top in oklab, rgb(0 0 0 / 0.8), rgb(0 0 0 / 0.2), transparent)',
-                    })}
-                  />
                 </div>
+                <div
+                  mix={css({
+                    position: 'absolute',
+                    inset: 0,
+                    background:
+                      'linear-gradient(to top in oklab, rgb(0 0 0 / 0.8), rgb(0 0 0 / 0.2), transparent)',
+                  })}
+                />
                 <div
                   mix={css({
                     position: 'absolute',
@@ -150,7 +160,7 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
                     mix={css({
                       marginBottom: '1rem',
                       display: 'inline-block',
-                      borderRadius: '0.25rem',
+                      borderRadius: '0.375rem',
                       backgroundColor: 'rgb(229 0 130 / 0.9)',
                       padding: '0.25rem 0.75rem',
                       ...text.xs,
@@ -162,7 +172,7 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
                   >
                     {t('posts.featured')}
                   </span>
-                  <h2
+                  <h3
                     mix={css({
                       marginBottom: '0.75rem',
                       fontSize: '1.875rem',
@@ -173,7 +183,7 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
                     })}
                   >
                     {featured.node.title}
-                  </h2>
+                  </h3>
                   {featured.node.summary && (
                     <p
                       mix={css({

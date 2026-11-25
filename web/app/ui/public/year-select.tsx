@@ -1,9 +1,12 @@
 import { clientEntry, css, navigate, on, type Handle } from 'remix/component';
 
-import { colorTransition, dark, text } from '#/ui/public/styles.ts';
+import { colorTransition, text } from '#/ui/public/styles.ts';
 
 interface YearSelectProps {
   value: string;
+  /** What the menu is of, for a screen reader: its choices are only years */
+  label: string;
+  /** The choice that's every year */
   placeholder: string;
   /** Each year's page, of videos or of the shows we've been to. */
   years: { year: number; href: string }[];
@@ -20,9 +23,9 @@ export const YearSelect = clientEntry(
   function YearSelect(handle: Handle<YearSelectProps>) {
     return () => (
       <select
+        aria-label={handle.props.label}
         mix={[
           css({
-            marginBlock: '0.25rem',
             height: '2.25rem',
             borderRadius: '0.5rem',
             borderColor: 'light-dark(var(--neutral-300), rgb(255 255 255 / 0.1))',
@@ -31,12 +34,14 @@ export const YearSelect = clientEntry(
             paddingRight: '2.25rem',
             ...text.sm,
             boxShadow: 'var(--shadow-xs)',
+            cursor: 'pointer',
             ...colorTransition,
-            [dark]: { color: 'var(--dark)' },
-            '&:hover': { borderColor: 'var(--neutral-400)' },
+            '&:hover': {
+              borderColor: 'light-dark(var(--neutral-400), rgb(255 255 255 / 0.25))',
+            },
             '&:focus': {
               borderColor: 'var(--pink)',
-              boxShadow: '0 0 0 3px var(--pink-200), var(--shadow-xs)',
+              boxShadow: '0 0 0 3px rgb(229 0 130 / 0.25), var(--shadow-xs)',
             },
           }),
           on('change', (event) => {

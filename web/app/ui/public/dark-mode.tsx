@@ -12,6 +12,22 @@ function storage(action: (store: Storage) => string | null | void) {
   }
 }
 
+// What the switch turns on: the moon shows beside the knob in the light, and the sun in the dark,
+// since the knob covers the other
+const icons = {
+  sun: 'M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0-15v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
+  moon: 'M20.4 14.5A8.5 8.5 0 0 1 9.5 3.6a8.5 8.5 0 1 0 10.9 10.9Z',
+};
+
+const icon = css({
+  position: 'absolute',
+  top: '50%',
+  width: '0.75rem',
+  height: '0.75rem',
+  translate: '0 -50%',
+  color: 'var(--muted)',
+});
+
 /**
  * The <html> class is set before paint by the inline script in Document, and
  * data-rmx-preserve-attrs="class" keeps client navigation from resetting it. The checkbox is
@@ -72,6 +88,7 @@ export const DarkMode = clientEntry(
               '&::before': {
                 content: '""',
                 position: 'absolute',
+                zIndex: 1,
                 bottom: '0.125rem',
                 left: '0.125rem',
                 width: '1.25rem',
@@ -87,7 +104,23 @@ export const DarkMode = clientEntry(
               },
               ':focus-visible + &': { outline: '2px solid var(--pink)', outlineOffset: '2px' },
             })}
-          />
+          >
+            {(['sun', 'moon'] as const).map((name) => (
+              <svg
+                key={name}
+                mix={icon}
+                style={name === 'sun' ? { left: '0.3125rem' } : { right: '0.3125rem' }}
+                viewBox="0 0 24 24"
+                fill={name === 'moon' ? 'currentColor' : 'none'}
+                stroke="currentColor"
+                stroke-width={2}
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d={icons[name]} />
+              </svg>
+            ))}
+          </div>
         </label>
       </div>
     );

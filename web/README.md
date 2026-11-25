@@ -59,7 +59,9 @@ Signing in is at `/login`, and the admin's pages are under `/admin`.
 
 ### Styles
 
-Components style themselves with `css()` from `remix/component`, in their `mix` prop. During server rendering Remix collects the rules into `<style>` tags in the page's `<head>`, in the `rmx` cascade layer, so a page is styled before any JavaScript loads. Shared pieces are in `app/ui/public/styles.ts`: breakpoints, font sizes, `merge()` for combining style objects, and the site's card and button styles. The admin's are in `app/ui/admin/public/styles.ts`.
+Components style themselves with `css()` from `remix/component`, in their `mix` prop. During server rendering Remix collects the rules into `<style>` tags in the page's `<head>`, in the `rmx` cascade layer, so a page is styled before any JavaScript loads. Shared pieces are in `app/ui/public/styles.ts`: breakpoints, font sizes, `merge()` for combining style objects, and the site's card, button, label and link styles. The admin's are in `app/ui/admin/public/styles.ts`.
+
+Every public page opens with `PageHeader` (`app/ui/page-header.tsx`), which holds the page's one `<h1>`: in the logo's type on the pages a section opens with (`display`), and in the body's on a page about one thing, such as an artist or a post. A section within a page starts with `SectionHeader`, and the shows' pages share `ShowsNav` (`app/ui/shows/nav.tsx`).
 
 The plain stylesheets in `app/styles/public/`, served by the asset server, put their rules in the `base` layer, which `rmx` wins over:
 

@@ -4,8 +4,8 @@ import { css, type Handle } from 'remix/component';
 import { routes } from '#/routes.ts';
 import type { PostQuery, PostsQuery } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
-import { Heading1, PostTitle } from '#/ui/heading.tsx';
 import { Link } from '#/ui/link.tsx';
+import { PageHeader } from '#/ui/page-header.tsx';
 import { PostArtwork, postArtworkFragment } from '#/ui/post-artwork.tsx';
 import { PostContent, linebreakNodeFragment, textNodeFragment } from '#/ui/post-content.tsx';
 import {
@@ -53,9 +53,11 @@ export function PostsPage(
     const { posts, artworkSeed } = handle.props;
     return (
       <article>
-        <Heading1 styles={{ marginBottom: '2rem', [lg]: { marginBottom: '2rem' } }}>
-          {t('posts.heading')}
-        </Heading1>
+        <PageHeader
+          display
+          eyebrow={t('posts.count', { count: posts.edges.length })}
+          title={t('posts.heading')}
+        />
         <div
           mix={css({
             display: 'grid',
@@ -205,11 +207,13 @@ export const postQuery = gql`
 `;
 
 export function PostPage(handle: Handle<{ post: NonNullable<PostQuery['post']> }>) {
+  const { t } = getApp(handle);
+
   return () => {
     const { post } = handle.props;
     return (
       <article mix={css({ width: '40rem', maxWidth: '100%' })}>
-        <PostTitle>{post.title}</PostTitle>
+        <PageHeader eyebrow={t('posts.heading')} back={routes.posts.href()} title={post.title} />
         <PostContent editorState={post.editorState as any} />
       </article>
     );

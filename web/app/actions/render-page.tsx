@@ -1,10 +1,14 @@
 import { gql } from 'graphql-tag';
-import type { RemixNode } from 'remix/component';
+import { css, type RemixNode } from 'remix/component';
 import type { Middleware } from 'remix/router';
 
 import { adminToken } from '#/lib/adminSession.ts';
 import type { AppContext } from '#/router.ts';
+import { routes } from '#/routes.ts';
 import type { AppQuery, SiteSettings } from '#/types/graphql.ts';
+import { ErrorScreen } from '#/ui/error-screen.tsx';
+import { Link } from '#/ui/link.tsx';
+import { pinkButton, quietButton } from '#/ui/public/styles.ts';
 
 import { Document, type MetaTag } from './document.tsx';
 
@@ -114,11 +118,42 @@ export async function renderPage(context: AppContext, page: RemixNode, options: 
   );
 }
 
-/** The 404 page, for a path no route matches and for a post, show or the like that isn't there. */
+const primary = css(pinkButton);
+const secondary = css(quietButton);
+
+/**
+ * The 404 page, for a path no route matches and for a post, show or the like that isn't there. It
+ * keeps the site's header and footer, so there's somewhere to go from it.
+ */
 export function renderNotFound(context: AppContext) {
-  return renderPage(context, <pre>{context.t('notFound.message')}</pre>, {
-    title: context.t('notFound.title'),
-    layout: 'bare',
-    status: 404,
-  });
+  const { t } = context;
+  return renderPage(
+    context,
+    <ErrorScreen status={404} message={t('notFound.message')}>
+      <Link href={routes.home.href()} mix={primary}>
+        {t('notFound.home')}
+      </Link>
+      <Link href={routes.shows.index.href()} mix={secondary}>
+        {t('shows.fullCalendar')}
+      </Link>
+    </ErrorScreen>,
+    { title: t('notFound.title'), status: 404 }
+  );
+}
+
+/** The 500 page, in the bare frame: what to say, and links to try the page again or leave it. */
+export function renderError(context: AppContext) {
+  const { t } = context;
+  return renderPage(
+    context,
+    <ErrorScreen status={500} message={t('error.message')}>
+      <a href={context.url.pathname + context.url.search} mix={primary}>
+        {t('error.retry')}
+      </a>
+      <Link href={routes.home.href()} mix={secondary}>
+        {t('error.home')}
+      </Link>
+    </ErrorScreen>,
+    { title: t('error.title'), layout: 'bare', status: 500 }
+  );
 }

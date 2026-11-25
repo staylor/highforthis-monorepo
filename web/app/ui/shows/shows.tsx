@@ -5,7 +5,8 @@ import { routes } from '#/routes.ts';
 import type { Attended_ShowsFragment, ShowsGrid_ShowsFragment } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
 import { Link } from '#/ui/link.tsx';
-import { colorTransition, md, sm, text, xs } from '#/ui/public/styles.ts';
+import { colorTransition, label, md, pinkLink, sm, text, xs } from '#/ui/public/styles.ts';
+import { SectionHeader } from '#/ui/section-header.tsx';
 import { trans } from '#/ui/trans.tsx';
 
 import { Headliner } from './headliner.tsx';
@@ -88,6 +89,8 @@ interface ListProps {
   previous?: number;
   /** What follows the shows: the history's lazy frame for its next page */
   more?: RemixNode;
+  /** Without each show's venue: on the venue's own page, every show's is the same */
+  hideVenue?: boolean;
   mix?: MixInput;
 }
 
@@ -154,21 +157,12 @@ const venueBelow = css({
 // The main artist's picture, then the show and, on narrow screens, its venue under it
 const showCell = css({ display: 'flex', alignItems: 'center', gap: '0.75rem' });
 const spacer = css({ height: '0.5rem' });
-const pinkLink = css({
-  color: 'var(--pink)',
-  '&:hover': { textDecoration: 'underline' },
-});
+// A row's show is its link in pink, and anything else it links to takes pink when hovered
+const showLink = css(pinkLink);
 const plainLink = css({
   ...colorTransition,
   '&:hover': { color: 'var(--pink)' },
 });
-const monthName = {
-  ...text.xs,
-  fontWeight: 600,
-  letterSpacing: '0.05em',
-  color: 'var(--muted)',
-  textTransform: 'uppercase',
-};
 
 /**
  * Shows as a table on wider screens and a list on the narrowest. Each layout has its own `more`,
@@ -180,7 +174,7 @@ export function Shows(
   >
 ) {
   return () => {
-    const { shows, showMonths = true, newestFirst, previous, more } = handle.props;
+    const { shows, showMonths = true, newestFirst, previous, more, hideVenue } = handle.props;
     if (!shows?.edges?.length) {
       return null;
     }
@@ -192,12 +186,14 @@ export function Shows(
           newestFirst={newestFirst}
           previous={previous}
           more={more?.('grid')}
+          hideVenue={hideVenue}
           mix={css({ display: 'none', [xs]: { display: 'block' } })}
         />
         <ShowsList
           shows={shows}
           previous={previous}
           more={more?.('list')}
+          hideVenue={hideVenue}
           mix={css({ display: 'block', [xs]: { display: 'none' } })}
         />
       </>
@@ -205,24 +201,24 @@ export function Shows(
   };
 }
 
-const monthCell = css({ ...cell, ...monthName, paddingBlock: '0.5rem' });
+const monthCell = css({ ...cell, ...label, paddingBlock: '0.5rem' });
 
-function monthHeader(name: string) {
+function monthHeader(name: string, columns: number) {
   return [
     <tr>
-      <td colSpan={3} mix={spacer} />
+      <td colSpan={columns} mix={spacer} />
     </tr>,
     <tr
       mix={css({
         backgroundColor: 'light-dark(var(--neutral-100), var(--surface-dark-card))',
       })}
     >
-      <td colSpan={3} mix={monthCell}>
+      <td colSpan={columns} mix={monthCell}>
         {name}
       </td>
     </tr>,
     <tr>
-      <td colSpan={3} mix={spacer} />
+      <td colSpan={columns} mix={spacer} />
     </tr>,
   ];
 }
@@ -253,9 +249,11 @@ export function ShowsGrid(handle: Handle<GridProps>) {
  */
 export function ShowsTable(handle: Handle<Omit<GridProps, 'mix' | 'more'>>) {
   return () => {
-    const { shows, showMonths = true, newestFirst = false, previous } = handle.props;
+    const { shows, showMonths = true, newestFirst = false, previous, hideVenue } = handle.props;
     const { years, months } = headed(previous);
     const sorted = [...shows.edges].sort(byDate(newestFirst));
+    // The date, the show and, unless it's left out, the venue
+    const columns = hideVenue ? 2 : 3;
 
     const rows: RemixNode[] = [];
     for (const { node } of sorted) {
@@ -267,7 +265,7 @@ export function ShowsTable(handle: Handle<Omit<GridProps, 'mix' | 'more'>>) {
         if (!firstYear) {
           rows.push(
             <tr>
-              <td colSpan={3}>
+              <td colSpan={columns}>
                 <div mix={css({ marginTop: '1rem', height: '0.5rem' })} />
               </td>
             </tr>
@@ -275,17 +273,17 @@ export function ShowsTable(handle: Handle<Omit<GridProps, 'mix' | 'more'>>) {
         }
         rows.push(
           <tr>
-            <td colSpan={3} mix={yearCell}>
+            <td colSpan={columns} mix={yearCell}>
               {d.year}
             </td>
           </tr>
         );
         if (showMonths) {
-          rows.push(...monthHeader(d.monthName));
+          rows.push(...monthHeader(d.monthName, columns));
         }
       } else if (showMonths && !months[`${d.year}${d.month}`]) {
         months[`${d.year}${d.month}`] = 1;
-        rows.push(...monthHeader(d.monthName));
+        rows.push(...monthHeader(d.monthName, columns));
       }
       rows.push(
         <tr key={node.id} mix={rowStyle}>
@@ -294,18 +292,20 @@ export function ShowsTable(handle: Handle<Omit<GridProps, 'mix' | 'more'>>) {
             <div mix={showCell}>
               <Headliner show={node} size="sm" />
               <div>
-                <Link mix={pinkLink} href={formatShowLink(node)}>
+                <Link mix={showLink} href={formatShowLink(node)}>
                   {formatArtists(node)}
                 </Link>
-                <span mix={venueBelow}>{node.venue.name}</span>
+                {!hideVenue && <span mix={venueBelow}>{node.venue.name}</span>}
               </div>
             </div>
           </td>
-          <td mix={venueCell}>
-            <Link mix={plainLink} href={routes.venue.href({ slug: node.venue.slug })}>
-              {node.venue.name}
-            </Link>
-          </td>
+          {!hideVenue && (
+            <td mix={venueCell}>
+              <Link mix={plainLink} href={routes.venue.href({ slug: node.venue.slug })}>
+                {node.venue.name}
+              </Link>
+            </td>
+          )}
         </tr>
       );
     }
@@ -340,7 +340,7 @@ const listRow = css({
 /** The list's shows, which a page of the history adds to the list it goes on from */
 export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
   return () => {
-    const { shows, previous, more } = handle.props;
+    const { shows, previous, more, hideVenue } = handle.props;
     const { years, months } = headed(previous);
     return (
       <>
@@ -352,11 +352,15 @@ export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
               <p mix={css(text.sm)}>
                 <strong mix={css({ fontVariantNumeric: 'tabular-nums' })}>{d.formatted}</strong>
                 <br />
-                <Link mix={css({ color: 'var(--pink)' })} href={formatShowLink(node)}>
+                <Link mix={showLink} href={formatShowLink(node)}>
                   {formatArtists(node)}
                 </Link>
-                <br />
-                <span mix={css({ color: 'var(--muted)' })}>{node.venue.name}</span>
+                {!hideVenue && (
+                  <>
+                    <br />
+                    <span mix={css({ color: 'var(--muted)' })}>{node.venue.name}</span>
+                  </>
+                )}
               </p>
             </div>
           );
@@ -369,7 +373,7 @@ export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
                 <p mix={css({ marginBottom: '0.25rem' })}>
                   <strong mix={css(text.lg)}>{d.year}</strong>
                 </p>
-                <p mix={css({ marginBottom: '0.25rem', ...monthName })}>{d.monthName}</p>
+                <p mix={css({ marginBottom: '0.25rem', ...label })}>{d.monthName}</p>
                 {showRow}
               </div>
             );
@@ -378,7 +382,7 @@ export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
             months[`${d.year}${d.month}`] = 1;
             return (
               <div key={node.id}>
-                <p mix={css({ marginBlock: '0.75rem 0.25rem', ...monthName })}>{d.monthName}</p>
+                <p mix={css({ marginBlock: '0.75rem 0.25rem', ...label })}>{d.monthName}</p>
                 {showRow}
               </div>
             );
@@ -391,17 +395,15 @@ export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
   };
 }
 
-const underline = css({ textDecoration: 'underline' });
+// How many shows, in the sentence that says whose they are
+const counted = css({ fontWeight: 700, color: 'light-dark(var(--neutral-900), #fff)' });
 const borderedRow = css({
   ...row,
   borderBottom: '1px solid var(--card-border)',
   '&:last-child': { borderBottom: 0 },
 });
-const underlinedLink = css({
-  ...colorTransition,
-  '&:hover': { color: 'var(--pink)', textDecoration: 'underline' },
-});
 
+/** The shows we've been to by an artist or at a venue, under a link to the stats for all of them. */
 export function Attended(
   handle: Handle<{
     shows: Attended_ShowsFragment;
@@ -416,18 +418,18 @@ export function Attended(
       return null;
     }
     return (
-      <article mix={css({ marginTop: '3rem' })}>
-        <p mix={css({ marginBottom: '0.75rem', ...text.sm })}>
-          <Link href={routes.shows.stats.href({ entity: relation })} mix={pinkLink}>
-            {trans(
-              t,
-              `shows.attended.${relation}`,
-              { count: shows.count ?? shows.edges.length },
-              { Bold: (children) => <span mix={underline}>{children}</span> }
-            )}
-          </Link>
-          :
-        </p>
+      <section mix={css({ marginTop: '3rem' })}>
+        <SectionHeader
+          label={t('shows.attended.label')}
+          viewAllLink={routes.shows.stats.href({ entity: relation })}
+          viewAllText={t('entity.stats.view')}
+          note={trans(
+            t,
+            `shows.attended.${relation}`,
+            { count: shows.count ?? shows.edges.length },
+            { Bold: (children) => <span mix={counted}>{children}</span> }
+          )}
+        />
         <table mix={table}>
           <tbody>
             {shows.edges.map(({ node }) => {
@@ -440,7 +442,7 @@ export function Attended(
                   </td>
                   <td mix={cellStyle}>
                     <Link
-                      mix={underlinedLink}
+                      mix={showLink}
                       href={
                         relation === 'artist'
                           ? routes.venue.href({ slug: node.venue.slug })
@@ -457,7 +459,7 @@ export function Attended(
             })}
           </tbody>
         </table>
-      </article>
+      </section>
     );
   };
 }

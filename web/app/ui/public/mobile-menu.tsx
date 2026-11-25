@@ -2,7 +2,7 @@ import { clientEntry, css, on, type Handle } from 'remix/component';
 
 import { DarkMode } from './dark-mode.tsx';
 import { NavLink } from './nav-link.tsx';
-import { dark, lg } from './styles.ts';
+import { lg } from './styles.ts';
 
 interface MobileMenuProps {
   pathname: string;
@@ -50,8 +50,7 @@ export const MobileMenu = clientEntry(
               mix={css({
                 width: '1.5rem',
                 height: '1.5rem',
-                color: 'var(--neutral-700)',
-                [dark]: { color: '#fff' },
+                color: 'light-dark(var(--neutral-700), #fff)',
               })}
               fill="none"
               stroke="currentColor"

@@ -33,12 +33,18 @@ export const formatDate = (date?: number) => {
   return {
     month,
     day,
+    weekday: weekdayNames[d.getDay()],
     monthName: monthNames[d.getMonth()],
     year,
-    time: `${hours % 12 || 12}:${String(minutes).padStart(2, '0')}${hours < 12 ? 'AM' : 'PM'}`,
+    time: `${hours % 12 || 12}:${String(minutes).padStart(2, '0')} ${hours < 12 ? 'AM' : 'PM'}`,
     formatted: `${month < 10 ? `0${month}` : month}/${day < 10 ? `0${day}` : day}`,
   };
 };
+
+const today = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+/** Today, as the calendar says it over its shows: Wednesday, November 25 */
+export const formatToday = () => today.format(new Date());
 
 type ShowLike = Pick<Show, 'id' | 'title' | 'url'> & {
   artists: Array<Pick<Show['artists'][number], 'name' | 'slug'>>;

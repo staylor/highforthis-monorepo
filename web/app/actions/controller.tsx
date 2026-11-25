@@ -1,4 +1,3 @@
-import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
 import { assets } from '#/assets.ts';
@@ -16,9 +15,8 @@ import type {
   VideoQuery,
   VideosQuery,
 } from '#/types/graphql.ts';
-import { Heading1 } from '#/ui/heading.tsx';
+import { PageHeader } from '#/ui/page-header.tsx';
 import { uploadUrl } from '#/ui/public/media.ts';
-import { Video } from '#/ui/videos.tsx';
 
 import { sharingTags } from './document.tsx';
 import { ArtistPage, artistQuery, VenuePage, venueQuery } from './entities/page.tsx';
@@ -35,7 +33,7 @@ import {
 import { withEveryAttendedShow, withEveryUpcomingShow } from './shows/lists.ts';
 import { Setlists, type Setlist, type Stats } from './sphere/public/setlists.tsx';
 import setlists from './sphere/setlists.json' with { type: 'json' };
-import { VideosPage, videoQuery, videosQuery } from './videos/page.tsx';
+import { VideoPage, VideosPage, videoQuery, videosQuery } from './videos/page.tsx';
 
 // How many times each song was played at the Sphere, most played first
 const songCounts: Stats = {};
@@ -197,7 +195,7 @@ export default createController(routes, {
         if (!video) {
           return renderNotFound(context);
         }
-        return renderPage(context, <Video single video={video} />, {
+        return renderPage(context, <VideoPage video={video} />, {
           title: video.title,
         });
       },
@@ -212,10 +210,11 @@ export default createController(routes, {
 
     sphere(context) {
       const { t } = context;
+      const totals = { songCount: Object.keys(songCounts).length, setlistCount: setlists.length };
       return renderPage(
         context,
-        <article mix={css({ marginTop: '2rem' })}>
-          <Heading1>{t('sphere.heading')}</Heading1>
+        <article>
+          <PageHeader eyebrow={t('sphere.eyebrow', totals)} title={t('sphere.heading')} />
           <Setlists
             setlists={setlists as Setlist[]}
             stats={sortedStats}
@@ -229,12 +228,10 @@ export default createController(routes, {
               everyShow: t('sphere.stats.everyShow'),
               share: t('sphere.stats.share'),
               clear: t('sphere.stats.clear'),
+              hint: t('sphere.stats.hint'),
               songOne: t('sphere.stats.song_one'),
               songOther: t('sphere.stats.song_other'),
-              songsSummary: t('sphere.stats.songs', {
-                songCount: Object.keys(songCounts).length,
-                setlistCount: setlists.length,
-              }),
+              songsSummary: t('sphere.stats.songs', totals),
             }}
           />
         </article>,

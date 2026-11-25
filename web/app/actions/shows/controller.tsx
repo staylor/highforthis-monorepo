@@ -11,12 +11,13 @@ import type {
   ShowsHistoryQuery,
   ShowStatsQuery,
 } from '#/types/graphql.ts';
-import { Artwork } from '#/ui/artist.tsx';
-import { Heading1, Heading2 } from '#/ui/heading.tsx';
+import { Billing } from '#/ui/artist.tsx';
 import { Link } from '#/ui/link.tsx';
-import { md, text } from '#/ui/public/styles.ts';
+import { PageHeader } from '#/ui/page-header.tsx';
+import { colorTransition, pinkButton, text } from '#/ui/public/styles.ts';
+import { ShowsNav } from '#/ui/shows/nav.tsx';
 import { Shows, ShowsList } from '#/ui/shows/shows.tsx';
-import { formatArtists, formatDate } from '#/ui/shows/utils.ts';
+import { formatArtists, formatDate, formatToday } from '#/ui/shows/utils.ts';
 
 import {
   HISTORY_PAGE_SIZE,
@@ -69,20 +70,17 @@ export default createController(routes.shows, {
         return renderPage(
           context,
           <article>
-            <Heading1>{t('shows.recommended')}</Heading1>
-            <p
-              mix={css({
-                marginBottom: '2rem',
-                ...text.base,
-                color: 'var(--muted)',
-              })}
-            >
-              {t('shows.todaysDate')}:{' '}
-              <strong mix={css({ color: 'light-dark(var(--neutral-900), #fff)' })}>
-                {formatDate().formatted}
-              </strong>
-            </p>
-            {shows && <Shows shows={shows} />}
+            <PageHeader
+              display
+              eyebrow={t('shows.today', { date: formatToday() })}
+              title={t('shows.recommended')}
+              nav={<ShowsNav />}
+            />
+            {shows?.edges.length ? (
+              <Shows shows={shows} />
+            ) : (
+              <p mix={css({ ...text.sm, color: 'var(--muted)' })}>{t('shows.noRecommended')}</p>
+            )}
           </article>,
           { title: t('shows.heading') }
         );
@@ -173,86 +171,54 @@ export default createController(routes.shows, {
         if (!show) {
           return renderNotFound(context);
         }
-        const lastIndex = show.artists.length - 1;
         const d = formatDate(show.date);
-        const ArtistHeading = show.title ? Heading2 : Heading1;
         const [artist] = show.artists;
+        // Each artist on a line, linking to their page
+        const artists = show.artists.map((each) => (
+          <Link
+            href={routes.artist.href({ slug: each.slug })}
+            mix={css({ display: 'block', color: 'inherit', '&:hover': { color: 'var(--pink)' } })}
+          >
+            {each.name} →
+          </Link>
+        ));
+        // Where it is, which is also what a show without a title or artists goes by
+        const venue = (
+          <Link
+            href={routes.venue.href({ slug: show.venue.slug })}
+            mix={css({ color: 'inherit', ...colorTransition, '&:hover': { color: 'var(--pink)' } })}
+          >
+            {show.venue.name}
+          </Link>
+        );
+        const named = Boolean(show.title) || artists.length > 0;
 
         return renderPage(
           context,
-          <article
-            mix={css({
-              marginInline: 'auto',
-              textAlign: 'center',
-              [md]: { display: 'flex', textAlign: 'left' },
-            })}
-          >
-            <div
-              mix={css({
-                marginBlock: '0.75rem 2rem',
-                [md]: { marginRight: '2rem' },
-              })}
-            >
-              {artist && (
-                <Artwork
-                  name={artist.name}
-                  data={artist.appleMusic || {}}
-                  styles={{
-                    marginInline: 'auto',
-                    borderRadius: '0.5rem',
-                    [md]: { marginLeft: 0 },
-                  }}
-                />
+          <article>
+            <Billing name={artist?.name} data={artist?.appleMusic}>
+              <PageHeader
+                eyebrow={`${d.weekday}, ${d.monthName} ${d.day}, ${d.year} · ${d.time}`}
+                title={show.title || (artists.length > 0 ? artists : venue)}
+                styles={{ marginBottom: '1rem' }}
+              />
+              {show.title && artists.length > 0 && (
+                <h2 mix={css({ marginBottom: '1rem', ...text.xl, fontWeight: 700 })}>{artists}</h2>
               )}
-            </div>
-            <div mix={css({ [md]: { marginTop: '1rem' } })}>
-              <p mix={css({ marginBottom: '0.75rem', ...text.lg })}>
-                {d.monthName} {d.day}, {d.year} - {d.time}
-              </p>
-              {show.title && <Heading1>{show.title}</Heading1>}
-              {artist && (
-                <ArtistHeading styles={{ fontFamily: 'var(--font-sans)' }}>
-                  {show.artists.map((artist, i) => (
-                    <Link
-                      href={routes.artist.href({ slug: artist.slug })}
-                      mix={css({
-                        display: 'block',
-                        marginBottom: i < lastIndex ? '0.25rem' : undefined,
-                      })}
-                    >
-                      {artist.name} →
-                    </Link>
-                  ))}
-                </ArtistHeading>
+              {named && (
+                <p mix={css({ ...text.xl, fontWeight: 600, color: 'var(--muted)' })}>{venue}</p>
               )}
-              <Heading2 styles={{ marginTop: '1rem' }}>
-                <Link
-                  href={routes.venue.href({ slug: show.venue.slug })}
-                  mix={css({ color: 'var(--gray-400)' })}
-                >
-                  {show.venue.name}
-                </Link>
-              </Heading2>
               {show.url && (
                 <a
                   href={show.url}
                   target="_blank"
-                  mix={css({
-                    marginBlock: '0.5rem',
-                    display: 'inline-block',
-                    borderRadius: '0.375rem',
-                    border: '1px solid var(--pink)',
-                    padding: '0.5rem 0.75rem',
-                    fontFamily: 'var(--font-sans)',
-                    ...text.xl,
-                    color: 'var(--pink)',
-                  })}
                   rel="noreferrer"
+                  mix={css({ ...pinkButton, marginTop: '1.5rem' })}
                 >
-                  {t('shows.website')}
+                  {t('shows.website')} →
                 </a>
               )}
-            </div>
+            </Billing>
           </article>,
           {
             title: formatArtists(show),
