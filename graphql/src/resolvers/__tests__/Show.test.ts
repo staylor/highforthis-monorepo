@@ -45,7 +45,14 @@ const { db, showsQuery, searchQuery, tx } = vi.hoisted(() => ({
   showsQuery: {} as ReturnType<typeof chain>,
   searchQuery: {} as ReturnType<typeof chain>,
   // The shows, and the artists and venues they add, are saved together or not at all
-  tx: { count: vi.fn(), create: vi.fn(), createMany: vi.fn(), findOne: vi.fn() },
+  tx: {
+    count: vi.fn(),
+    create: vi.fn(),
+    createMany: vi.fn(),
+    deleteMany: vi.fn(),
+    findOne: vi.fn(),
+    update: vi.fn(),
+  },
 }));
 const fillAppleMusicLater = vi.hoisted(() => vi.fn());
 
@@ -112,18 +119,20 @@ describe('bulkCreateShows', () => {
 describe('updateShow', () => {
   beforeEach(() => {
     resetMocks();
-    db.update.mockImplementation(async (_table, id, values) => ({ id, ...values }));
+    db.transaction.mockImplementation(async (save) => save(tx));
+    tx.update.mockImplementation(async (_table, id, values) => ({ id, ...values }));
   });
 
   it('keeps the title, notes and URL when only Attended changes', async () => {
     await resolvers.Mutation.updateShow({}, { id: 'show-1', input: { attended: true } });
 
-    expect(db.update).toHaveBeenLastCalledWith(
+    expect(tx.update).toHaveBeenLastCalledWith(
       showsTable,
       'show-1',
       { attended: true },
       expect.anything()
     );
+    expect(tx.deleteMany).not.toHaveBeenCalled();
   });
 
   it('clears the fields the edit form sends as null', async () => {
@@ -132,12 +141,57 @@ describe('updateShow', () => {
       { id: 'show-1', input: { attended: false, notes: null, title: null, url: null } }
     );
 
-    expect(db.update).toHaveBeenLastCalledWith(
+    expect(tx.update).toHaveBeenLastCalledWith(
       showsTable,
       'show-1',
       { attended: false, notes: null, title: null, url: null },
       expect.anything()
     );
+  });
+
+  // The lineup was deleted, then saved again, and a save that failed in between left the show
+  // without its artists
+  it('replaces the lineup in the same transaction as the show, each artist once', async () => {
+    await resolvers.Mutation.updateShow(
+      {},
+      { id: 'show-1', input: { artists: ['artist-2', 'artist-1', 'artist-2'] } }
+    );
+
+    expect(tx.deleteMany).toHaveBeenCalledWith(showArtistsTable, { where: { showId: 'show-1' } });
+    expect(tx.createMany).toHaveBeenCalledWith(showArtistsTable, [
+      { showId: 'show-1', artistId: 'artist-2', position: 0 },
+      { showId: 'show-1', artistId: 'artist-1', position: 1 },
+    ]);
+  });
+});
+
+// Shows added from a CSV or a venue's listings needed an artist, and these didn't: the edit form's
+// save with every artist removed left them out, kept the lineup, and said the show was updated
+describe('a show without an artist', () => {
+  beforeEach(() => {
+    resetMocks();
+  });
+
+  const refused = {
+    message: 'Invalid input (artists: A show needs an artist)',
+    extensions: { code: 'BAD_USER_INPUT' },
+  };
+
+  it.each([[[]], [null]])('is turned away when a lineup of %j is saved', async (artists) => {
+    await expect(
+      resolvers.Mutation.updateShow({}, { id: 'show-1', input: { artists } })
+    ).rejects.toMatchObject(refused);
+    expect(db.transaction).not.toHaveBeenCalled();
+  });
+
+  it('is turned away when it is added', async () => {
+    await expect(
+      resolvers.Mutation.createShow(
+        {},
+        { input: { artists: [], date: Date.UTC(2027, 6, 30), venue: 'venue-1' } }
+      )
+    ).rejects.toMatchObject(refused);
+    expect(db.transaction).not.toHaveBeenCalled();
   });
 });
 

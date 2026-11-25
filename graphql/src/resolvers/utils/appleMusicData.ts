@@ -1,4 +1,4 @@
-import { eq, inList, isNull } from 'remix/data-table';
+import { eq, inList, isNull, type Database } from 'remix/data-table';
 
 import { createLogger } from '@highforthis/shared/logger';
 
@@ -36,10 +36,14 @@ interface AppleMusicDetails {
 
 /**
  * Saves an artist's Apple Music data: its ID and URL, its genres in place of any it had, and its
- * artwork when there is some
+ * artwork when there is some. Given a transaction, it saves as part of it.
  */
-export async function saveAppleMusic(artistId: string, details: AppleMusicDetails) {
-  await db.transaction(async (tx) => {
+export async function saveAppleMusic(
+  artistId: string,
+  details: AppleMusicDetails,
+  database: Database = db
+) {
+  await database.transaction(async (tx) => {
     const values = { appleId: details.id, url: details.url };
     const existing = await tx.findOne(appleMusicData, { where: { artistId } });
     const id = existing?.id ?? newId();

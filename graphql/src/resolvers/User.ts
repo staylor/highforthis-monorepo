@@ -9,7 +9,7 @@ import type { Loaded } from '#/database/tables';
 import { newId, userRoleRows, userRoles, users } from '#/database/tables';
 
 import { parseConnection } from './utils/collection';
-import { badInput, parseInput, removeRows, resolveJoin } from './utils/helpers';
+import { badInput, parseInput, removeRows, resolveJoin, unique } from './utils/helpers';
 import { createUserSchema, updateUserSchema } from './validations';
 
 const SALT_ROUNDS = 10;
@@ -63,12 +63,13 @@ const resolvers = {
       }
       const hash = await bcrypt.hash(password, SALT_ROUNDS);
       const id = newId();
+      const names = unique(roles ?? []);
       await db.transaction(async (tx) => {
         await tx.create(users, { ...fields, id, email, hash });
-        if (roles?.length) {
+        if (names.length) {
           await tx.createMany(
             userRoles,
-            roles.map((name) => ({ id: newId(), userId: id, name }))
+            names.map((name) => ({ id: newId(), userId: id, name }))
           );
         }
       });
@@ -92,17 +93,21 @@ const resolvers = {
         values.hash = await bcrypt.hash(password, SALT_ROUNDS);
       }
 
-      if (typeof roles !== 'undefined') {
-        await db.deleteMany(userRoles, { where: { userId: id } });
-        if (roles?.length) {
-          await db.createMany(
-            userRoles,
-            roles.map((name) => ({ id: newId(), userId: id, name }))
-          );
+      // The roles and the rest are saved together: roles that can't be saved, such as a list with
+      // one twice, would otherwise leave the user with none, and an admin out of the admin
+      const updated = await db.transaction(async (tx) => {
+        if (roles !== undefined) {
+          const names = unique(roles ?? []);
+          await tx.deleteMany(userRoles, { where: { userId: id } });
+          if (names.length) {
+            await tx.createMany(
+              userRoles,
+              names.map((name) => ({ id: newId(), userId: id, name }))
+            );
+          }
         }
-      }
-
-      const updated = await db.update(users, id, values, { with: userIncludes });
+        return tx.update(users, id, values, { with: userIncludes });
+      });
       if (password) {
         // A new password signs the user out wherever they're signed in
         await endSessions(id);

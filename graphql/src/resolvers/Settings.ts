@@ -70,16 +70,19 @@ const resolvers = {
     },
     async updateMediaSettings(_, { id, input }) {
       const { crops } = parseInput(mediaSettingsSchema, input);
-      await db.query(mediaSettings).upsert({ id }, { conflictTarget: ['id'], update: {} });
-      if (typeof crops !== 'undefined') {
-        await db.deleteMany(mediaCropSettings, { where: { mediaSettingsId: id } });
-        if (crops?.length) {
-          await db.createMany(
-            mediaCropSettings,
-            crops.map((crop) => ({ ...crop, id: newId(), mediaSettingsId: id }))
-          );
+      // The sizes are replaced together, so a save that fails leaves uploads the ones they had
+      await db.transaction(async (tx) => {
+        await tx.query(mediaSettings).upsert({ id }, { conflictTarget: ['id'], update: {} });
+        if (crops !== undefined) {
+          await tx.deleteMany(mediaCropSettings, { where: { mediaSettingsId: id } });
+          if (crops?.length) {
+            await tx.createMany(
+              mediaCropSettings,
+              crops.map((crop) => ({ ...crop, id: newId(), mediaSettingsId: id }))
+            );
+          }
         }
-      }
+      });
       return (await db.find(mediaSettings, id))!;
     },
     async updatePodcastSettings(_, { id, input }) {

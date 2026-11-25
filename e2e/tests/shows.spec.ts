@@ -86,6 +86,34 @@ test("lists an artist once, and says so when a show can't be saved", async ({ pa
   await expect(field(page, 'Title')).toHaveValue(`${prefix} Show`);
 });
 
+test("doesn't save a show once its artists are all removed, and says why", async ({
+  page,
+  prefix,
+  graphql,
+}) => {
+  const venue = await graphql.createVenue(`${prefix} Venue`);
+  const artist = await graphql.firstArtist();
+  const show = await graphql.createShow({
+    title: `${prefix} Show`,
+    artists: [artist.id],
+    venue: venue.id,
+  });
+  const removeButtons = page.getByRole('main').getByRole('button', { name: /^Remove / });
+
+  await page.goto(`/admin/show/${show.id}`);
+  await hydrated(page);
+  await expect(removeButtons).toHaveCount(1);
+  await removeArtists(page);
+  await page.getByRole('button', { name: 'Update Show' }).click();
+
+  // It said the show was updated, and kept the artists
+  await expect(page.getByText("Couldn't save. Check the form and try again.")).toBeVisible();
+  await expect(page.getByText('A show needs an artist')).toBeVisible();
+  await page.goto(`/admin/show/${show.id}`);
+  await hydrated(page);
+  await expect(removeButtons).toHaveCount(1);
+});
+
 test('imports shows from CSV, creating their artists and venue', async ({ page, prefix }) => {
   const venue = `${prefix} Venue`;
   await page.goto('/admin/show/bulk');

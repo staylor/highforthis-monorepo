@@ -99,8 +99,14 @@ export const updatePostSchema = z.object({
 
 // --- Show ---
 
+const SHOW_NEEDS_ARTIST = 'A show needs an artist';
+
+// A show's lineup as it's saved: at least one artist, as shows added from a CSV or a venue's
+// listings have
+const lineup = z.array(z.string(), SHOW_NEEDS_ARTIST).min(1, SHOW_NEEDS_ARTIST);
+
 export const createShowSchema = z.object({
-  artists: z.array(z.string()),
+  artists: lineup,
   attended: z.boolean().optional(),
   date: z.number(),
   notes: z.string().nullish(),
@@ -121,7 +127,8 @@ export const bulkCreateShowsSchema = z
   .min(1);
 
 export const updateShowSchema = z.object({
-  artists: z.array(z.string()).nullish(),
+  // Left out, the lineup stays as it is
+  artists: lineup.optional(),
   attended: z.boolean().optional(),
   date: z.number().optional(),
   notes: z.string().nullish(),

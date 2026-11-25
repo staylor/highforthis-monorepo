@@ -197,8 +197,9 @@ export function createShow(args: FormArgs) {
     ...args,
     mutation: createShowMutation,
     createMutation: 'createShow',
-    // An unchecked box isn't submitted
-    variables: { input: { attended: false } },
+    // An unchecked box isn't submitted, and neither are the artists when none are picked, which
+    // GraphQL turns down: a show needs an artist
+    variables: { input: { attended: false, artists: [] } },
     textFields,
   });
 }
@@ -211,8 +212,9 @@ export function updateShow({ id, ...args }: FormArgs & { id: string }) {
   return submitForm({
     ...args,
     mutation: updateShowMutation,
-    // An unchecked box isn't submitted
-    variables: { id, input: { attended: false } },
+    // An unchecked box isn't submitted, and neither are the artists once every one is removed.
+    // Leaving them out would keep the lineup and say the show was saved.
+    variables: { id, input: { attended: false, artists: [] } },
     textFields,
   });
 }

@@ -26,6 +26,12 @@ export function parseInput<TSchema extends z.ZodType>(
   throw badInput(`Invalid input (${problems.join('; ')})`);
 }
 
+/**
+ * Each value once, in the order given. A join table's key is the two records it joins, and a user
+ * has each role once, so saving a list that has a value twice would fail.
+ */
+export const unique = (values: readonly string[]) => [...new Set(values)];
+
 /** Deletes the rows of a table that have these IDs, answering whether it could */
 export async function removeRows(table: AnyTable, ids: (string | null)[]): Promise<boolean> {
   try {

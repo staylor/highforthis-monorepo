@@ -21,10 +21,18 @@ function stubGraphQL(t: TestContext, answers: Record<string, unknown> = {}) {
     }
     const { operationName, variables } = JSON.parse(String(init?.body));
     operations.push({ operationName, variables });
-    return Response.json({ data: answers[operationName] ?? {} });
+    const answer = answers[operationName];
+    return answer instanceof Response ? answer.clone() : Response.json({ data: answer ?? {} });
   });
   return operations;
 }
+
+/** GraphQL's answer to input it turns down. */
+const invalid = (message: string) =>
+  Response.json(
+    { errors: [{ message, extensions: { code: 'BAD_USER_INPUT' } }], data: null },
+    { status: 400 }
+  );
 
 const get = (path: string, cookie = testSession) =>
   router.fetch(new Request(new URL(path, origin), { headers: cookie ? { cookie } : {} }));
@@ -246,11 +254,31 @@ describe('admin shows', () => {
     await post('/admin/show/s1', `title=1999&notes=true&url=&date=${showTime}`);
     assert.deepEqual(operations.at(-1)?.variables.input, {
       attended: false,
+      artists: [],
       title: '1999',
       notes: 'true',
       url: null,
       date: showTime,
     });
+  });
+
+  // It left the artists out, which GraphQL keeps, and said the show was updated
+  it("says a show needs an artist when every one was removed, and doesn't save", async (t) => {
+    const operations = stubGraphQL(t, {
+      ShowEdit: { show, ...entities },
+      UpdateShow: invalid('Invalid input (artists: A show needs an artist)'),
+    });
+    const response = await post('/admin/show/s1', `title=&date=${showTime}&venue=v1&url=&notes=`);
+    assert.equal(response.status, 422);
+    assert.deepEqual(
+      operations.find((op) => op.operationName === 'UpdateShow')?.variables.input.artists,
+      []
+    );
+    const html = await response.text();
+    assert.match(html, /role="alert"[^>]*><p>Couldn't save\./);
+    assert.match(html, /A show needs an artist/);
+    // The form comes back as it was submitted, without artists
+    assert.doesNotMatch(html, /name="artists\[0\]"/);
   });
 
   it("answers 404 for a show that doesn't exist", async (t) => {
