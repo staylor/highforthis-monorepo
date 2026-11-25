@@ -13,7 +13,7 @@ struct ShowDetail: View {
                         ArtworkHeader(artwork: artwork)
                     }
                     Label {
-                        Text(show.startDate, format: .dateTime.weekday(.wide).month(.wide).day().year().hour().minute())
+                        Text(show.startDate, format: .showTime(show.startDate))
                     } icon: {
                         Image(systemName: "calendar")
                     }

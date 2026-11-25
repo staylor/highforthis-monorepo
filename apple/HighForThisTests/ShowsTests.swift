@@ -77,6 +77,33 @@ struct ShowsTests {
         #expect(day.shows.map(\.id) == ["late", "early"])
     }
 
+    // 8 PM on New Year's Eve in New York is 1 AM on New Year's Day in UTC, and later still to the east
+    @Test func aShowIsOnItsDayInNewYorkWhereverTheDeviceIs() async throws {
+        let newYearsEve = await ShowList_show.from(Mock<Show>(date: 1_735_693_200_000, id: "new-years-eve"))
+
+        let day = try #require(ShowDay.days(from: [newYearsEve]).first)
+
+        #expect(Calendar.newYork.component(.year, from: day.date) == 2024)
+        #expect(Calendar.newYork.component(.month, from: day.date) == 12)
+        #expect(Calendar.newYork.component(.day, from: day.date) == 31)
+        #expect(day.date.formatted(Date.FormatStyle.showDay.locale(Self.english)).contains("Dec 31, 2024"))
+        #expect(newYearsEve.startDate.formatted(Date.FormatStyle.showDate.locale(Self.english)) == "Dec 31, 2024")
+    }
+
+    @Test func aShowsTimeIsNewYorksAndSaysSoOnADeviceThatKeepsAnother() {
+        let start = Date(timeIntervalSince1970: 1_735_693_200)
+        let london = TimeZone(identifier: "Europe/London")!
+
+        let atHome = start.formatted(Date.FormatStyle.showTime(start, on: .newYork).locale(Self.english))
+        let away = start.formatted(Date.FormatStyle.showTime(start, on: london).locale(Self.english))
+
+        #expect(atHome.contains("December 31, 2024") && atHome.contains("8:00"))
+        #expect(!atHome.contains("EST"))
+        #expect(away.contains("December 31, 2024") && away.contains("8:00") && away.contains("EST"))
+    }
+
+    private static let english = Locale(identifier: "en_US")
+
     @Test func daysKeepTheAPIOrder() async {
         let shows = await [1_793_926_800_000, 1_793_754_000_000, 1_793_833_200_000].asyncMap { date in
             await ShowList_show.from(Mock<Show>(date: date, id: String(date)))

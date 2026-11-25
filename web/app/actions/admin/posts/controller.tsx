@@ -82,7 +82,9 @@ function info(t: TFunction, post?: Post, values?: Values) {
       label: t('posts.publishDate'),
       prop: 'date',
       type: 'custom',
-      render: () => <DateTimeInput name="date" value={date} id="field-date" />,
+      render: () => (
+        <DateTimeInput name="date" value={date} id="field-date" hint={t('admin.newYorkTime')} />
+      ),
     },
     {
       label: t('posts.status.label'),

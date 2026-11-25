@@ -59,7 +59,7 @@ struct DatedShowLink: View {
 
     var body: some View {
         NavigationLink(value: Route.show(id: show.id, title: show.headline)) {
-            ShowRow(caption: show.startDate.formatted(date: .abbreviated, time: .omitted), title: title)
+            ShowRow(caption: show.startDate.formatted(.showDate), title: title)
         }
         .accessibilityIdentifier("show-\(show.id)")
     }

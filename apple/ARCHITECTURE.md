@@ -18,6 +18,8 @@ A playing or paused episode has a persistent player accessory. iOS 26.1+ uses `t
 
 On Apple TV, the tabs run across the top and the remote moves focus. tvOS has no web browser, Maps app or YouTube, so it leaves out the Videos tab, website links and opening a venue in Maps (`WebLink`, `VenueMap`). While an episode is loaded, Now Playing is a tab of its own; it comes last, because a tab inserted before the others resets their navigation. The remote's Play/Pause button toggles playback from any screen. History's year filter is the list's first row, because a tvOS toolbar button shows neither the selected year nor the filter's accessibility label.
 
+Shows are dated where they are, in New York, as the website dates them, wherever the device is: the show lists and CarPlay's sections group them by New York's calendar (`Calendar.newYork`), and a show's page gives its time on New York's clocks, naming the time zone on a device that keeps another time.
+
 Video and post rows stack vertically at accessibility text sizes. Maps are real buttons, usable with VoiceOver and the keyboard, and external URLs must be HTTP or HTTPS. Accent colors have dark and increased-contrast variants.
 
 ## Posts and images

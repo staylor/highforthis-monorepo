@@ -6,8 +6,11 @@ import { describe, it, type TestContext } from 'remix/test';
 
 import { DateTimeInput } from './date-time-input.tsx';
 
-// 8:00 PM on May 10, 2024 in this browser's time zone
-const showTime = new Date(2024, 4, 10, 20, 0).getTime();
+// 8:00 PM on May 10, 2024 in New York, which is midnight in UTC, whatever this browser's time zone
+const showTime = Date.UTC(2024, 4, 11, 0, 0);
+// 9:30 PM on June 20th and 21st in New York
+const june20 = Date.UTC(2024, 5, 21, 1, 30);
+const june21 = Date.UTC(2024, 5, 22, 1, 30);
 
 function renderInput(t: TestContext, value: number | null) {
   const result = render(<DateTimeInput name="date" value={value} id="date" />);
@@ -30,7 +33,7 @@ async function edit({ act, date }: ReturnType<typeof renderInput>, value: string
 }
 
 describe('DateTimeInput', () => {
-  it("shows the time in the browser's time zone, and submits its timestamp", (t) => {
+  it("shows the time on New York's clocks, and submits its timestamp", (t) => {
     const field = renderInput(t, showTime);
     assert.equal(field.date.value, '2024-05-10T20:00');
     assert.equal(field.submitted(), String(showTime));
@@ -40,10 +43,10 @@ describe('DateTimeInput', () => {
     const field = renderInput(t, showTime);
     await edit(field, '2024-06-20T21:30');
     assert.equal(field.date.value, '2024-06-20T21:30');
-    assert.equal(field.submitted(), String(new Date(2024, 5, 20, 21, 30).getTime()));
+    assert.equal(field.submitted(), String(june20));
 
     await edit(field, '2024-06-21T21:30');
-    assert.equal(field.submitted(), String(new Date(2024, 5, 21, 21, 30).getTime()));
+    assert.equal(field.submitted(), String(june21));
   });
 
   it('submits the last whole date while one is half typed', async (t) => {
@@ -51,7 +54,7 @@ describe('DateTimeInput', () => {
     await edit(field, '2024-06-20T21:30');
     // A datetime-local input's value is empty until every part is filled in
     await edit(field, '');
-    assert.equal(field.submitted(), String(new Date(2024, 5, 20, 21, 30).getTime()));
+    assert.equal(field.submitted(), String(june20));
   });
 
   it('starts empty without a date, and submits nothing until one is set', async (t) => {
@@ -59,6 +62,6 @@ describe('DateTimeInput', () => {
     assert.equal(field.date.value, '');
     assert.equal(field.submitted(), '');
     await edit(field, '2024-06-20T21:30');
-    assert.equal(field.submitted(), String(new Date(2024, 5, 20, 21, 30).getTime()));
+    assert.equal(field.submitted(), String(june20));
   });
 });

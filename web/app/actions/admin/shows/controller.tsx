@@ -93,7 +93,9 @@ function showFields(t: TFunction, data: ShowFormData, values?: SaveFailure['valu
       label: t('shows.date'),
       prop: 'date',
       type: 'custom',
-      render: () => <DateTimeInput name="date" value={date} id="field-date" />,
+      render: () => (
+        <DateTimeInput name="date" value={date} id="field-date" hint={t('admin.newYorkTime')} />
+      ),
     },
     {
       label: t('shows.artists'),
