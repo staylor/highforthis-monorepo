@@ -76,6 +76,16 @@ describe('requireAdmin', () => {
     assert.equal(response.status, 503);
     assert.equal(response.headers.get('set-cookie'), null);
   });
+
+  // It threw, and the error page answered 500
+  it("answers 503 when GraphQL can't be reached, and keeps the session", async (t) => {
+    t.mock.method(globalThis, 'fetch', async () => {
+      throw new TypeError('fetch failed');
+    });
+    const response = await check(testSession);
+    assert.equal(response.status, 503);
+    assert.equal(response.headers.get('set-cookie'), null);
+  });
 });
 
 describe('sameOrigin', () => {
