@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
-import { lt } from 'remix/data-table';
+import { ilike, lt } from 'remix/data-table';
 import type { Middleware } from 'remix/router';
 import { z } from 'zod';
 
@@ -8,6 +8,7 @@ import { createRateLimiter } from '@highforthis/shared/rate-limit';
 
 import { isAdmin } from '#/authorization';
 import db from '#/database/db';
+import { matching } from '#/database/search';
 import { newId, sessions, sessionUser, users } from '#/database/tables';
 import env from '#/env';
 import { AuthUser } from '#/http';
@@ -55,7 +56,8 @@ function verifiedPayload(token: string): JWTPayload | null {
 }
 
 const authBodySchema = z.object({
-  email: z.string().min(1),
+  // Without the spaces a keyboard's autocomplete can leave around it
+  email: z.string().trim().min(1),
   password: z.string().min(1),
 });
 
@@ -144,7 +146,8 @@ export async function authHandler({ body }: { body: unknown }): Promise<Response
   }
   const { email, password } = parsed.data;
 
-  const key = email.trim().toLowerCase();
+  // Failed sign-ins are counted by the email in lowercase
+  const key = email.toLowerCase();
   if (failedSignIns.isLimited(key)) {
     return Response.json(
       { error: 'Too many failed sign-ins. Try again later.' },
@@ -152,7 +155,16 @@ export async function authHandler({ body }: { body: unknown }): Promise<Response
     );
   }
 
-  const user = await db.findOne(users, { where: { email } });
+  // An email is a user's whatever its case, as mail is delivered. Postgres finds those, and also
+  // takes a few letters for others, such as İ for i, where lowercase here keeps them apart. So the
+  // email has to be the same in lowercase here too, which is what failures are counted by:
+  // otherwise typing İ for i would get an email five more tries. No two users' emails differ only
+  // in case (see User.ts), and the oldest account would win if they did.
+  const found = await db.findMany(users, {
+    where: ilike('email', matching(email)),
+    orderBy: ['createdAt', 'asc'],
+  });
+  const user = found.find((candidate) => candidate.email.toLowerCase() === key);
   const matches = await bcrypt.compare(password, user?.hash ?? UNKNOWN_USER_HASH);
   if (!user || !matches) {
     failedSignIns.attempt(key);
