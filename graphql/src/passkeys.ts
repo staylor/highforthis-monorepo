@@ -84,20 +84,20 @@ async function consumeChallenge({
   userId?: string;
 }) {
   const challenge = await db.find(webAuthnChallenges, id);
+  // A challenge is answered once, valid or not. Deleting it is what uses it up, so of two requests
+  // that answer the same one at once, only the one whose delete removed it goes on.
+  const consumed = challenge !== null && (await db.delete(webAuthnChallenges, challenge.id));
 
   if (
     !challenge ||
+    !consumed ||
     challenge.type !== type ||
     challenge.expiresAt.getTime() < Date.now() ||
     (userId !== undefined && challenge.userId !== userId)
   ) {
-    if (challenge) {
-      await db.delete(webAuthnChallenges, challenge.id);
-    }
     throw new PasskeyError('The passkey request expired or is invalid');
   }
 
-  await db.delete(webAuthnChallenges, challenge.id);
   return challenge.challenge;
 }
 

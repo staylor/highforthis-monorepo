@@ -5,7 +5,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vites
 
 import { createApp } from '#/app';
 import { signToken } from '#/authentication';
-import { passkeys } from '#/database/tables';
+import { passkeys, webAuthnChallenges } from '#/database/tables';
 import type { AppContext, UserWithRoles } from '#/models';
 
 // The admin's passkeys, whose query's steps each answer the query
@@ -263,6 +263,50 @@ describe('createApp', () => {
 
       expect(response.status).toBe(404);
       expect(db.delete).not.toHaveBeenCalled();
+    });
+
+    describe('answering a challenge', () => {
+      const challenge = {
+        id: 'challenge-1',
+        challenge: 'abc',
+        type: 'authentication',
+        userId: null,
+        expiresAt: new Date(Date.now() + 60_000),
+      };
+      const verify = () =>
+        request(
+          '/auth/passkeys/authenticate/verify',
+          json({ challengeId: 'challenge-1', response: { id: 'passkey-1' } })
+        );
+
+      beforeEach(() => {
+        db.find.mockImplementation(async (table) =>
+          table === webAuthnChallenges ? challenge : null
+        );
+      });
+
+      it('goes on to the passkey once it has used the challenge up', async () => {
+        db.delete.mockResolvedValue(true);
+
+        const response = await verify();
+
+        expect(db.delete).toHaveBeenCalledWith(webAuthnChallenges, 'challenge-1');
+        expect(db.find).toHaveBeenCalledWith(passkeys, 'passkey-1', expect.anything());
+        await expect(response.json()).resolves.toEqual({ error: 'Passkey authentication failed' });
+      });
+
+      // Two answers read the challenge before either deleted it, and only one may sign in
+      it('turns away an answer to a challenge another request used up first', async () => {
+        db.delete.mockResolvedValue(false);
+
+        const response = await verify();
+
+        expect(response.status).toBe(401);
+        await expect(response.json()).resolves.toEqual({
+          error: 'The passkey request expired or is invalid',
+        });
+        expect(db.find).not.toHaveBeenCalledWith(passkeys, expect.anything(), expect.anything());
+      });
     });
 
     it('reads the verification body as JSON', async () => {
