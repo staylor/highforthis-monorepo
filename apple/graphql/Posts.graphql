@@ -3,6 +3,7 @@ query Posts($after: String, $first: Int!) {
     edges {
       node {
         id
+        date
         slug
         title
         editorState {

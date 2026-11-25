@@ -8,7 +8,7 @@ nonisolated public struct PostsQuery: GraphQLQuery {
   public static let operationName: String = "Posts"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Posts($after: String, $first: Int!) { posts(after: $after, first: $first, status: PUBLISH) { __typename edges { __typename node { __typename id slug title editorState { __typename root { __typename children { __typename ... on ImageNode { image { __typename id destination crops { __typename fileName width } } } } } } featuredMedia { __typename id destination ... on ImageUpload { crops { __typename fileName width } } } } } pageInfo { __typename endCursor hasNextPage } } }"#
+      #"query Posts($after: String, $first: Int!) { posts(after: $after, first: $first, status: PUBLISH) { __typename edges { __typename node { __typename id date slug title editorState { __typename root { __typename children { __typename ... on ImageNode { image { __typename id destination crops { __typename fileName width } } } } } } featuredMedia { __typename id destination ... on ImageUpload { crops { __typename fileName width } } } } } pageInfo { __typename endCursor hasNextPage } } }"#
     ))
 
   public var after: GraphQLNullable<String>
@@ -94,6 +94,7 @@ nonisolated public struct PostsQuery: GraphQLQuery {
           @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .field("id", String.self),
+            .field("date", Double?.self),
             .field("slug", String.self),
             .field("title", String.self),
             .field("editorState", EditorState?.self),
@@ -104,6 +105,7 @@ nonisolated public struct PostsQuery: GraphQLQuery {
           ] }
 
           public var id: String { __data["id"] }
+          public var date: Double? { __data["date"] }
           public var slug: String { __data["slug"] }
           public var title: String { __data["title"] }
           public var editorState: EditorState? { __data["editorState"] }

@@ -8,44 +8,36 @@ struct ArtistDetail: View {
     var body: some View {
         QueryView(ArtistQuery(slug: slug)) { data in
             if let artist = data.artist {
-                let upcoming = data.shows?.edges.map(\.node.fragments.showList_show) ?? []
+                let artwork = artist.appleMusic?.artwork.flatMap { Artwork(template: $0.url, width: $0.width, height: $0.height) }
+                let website = artist.website.flatMap(URL.webURL)
+                let appleMusic = artist.appleMusic?.url.flatMap(URL.webURL)
                 let attended = data.attended?.edges.map(\.node.fragments.showList_show) ?? []
                 List {
-                    if let artwork = artist.appleMusic?.artwork.flatMap({ Artwork(template: $0.url, width: $0.width, height: $0.height) }) {
-                        ArtworkHeader(artwork: artwork)
-                    }
-                    if let website = artist.website.flatMap(URL.webURL) {
-                        WebLink(destination: website) {
-                            Label(.artistWebsite, systemImage: "safari")
-                        }
-                    }
-                    if let appleMusic = artist.appleMusic?.url.flatMap(URL.webURL) {
-                        WebLink(destination: appleMusic) {
-                            Label(.listenOnAppleMusic, systemImage: "music.note")
-                        }
-                    }
-                    Section(.recommendedShows) {
-                        if upcoming.isEmpty {
-                            Text(.noRecommendedShows)
-                                .foregroundStyle(.secondary)
-                        }
-                        ForEach(upcoming, id: \.id) { show in
-                            DatedShowLink(show: show, title: show.venue.name)
-                        }
-                        if data.shows?.pageInfo.hasNextPage == true {
-                            NavigationLink(.viewAllShows, value: Route.shows(ShowFilter(kind: .upcoming, artist: slug)))
-                        }
-                    }
-                    if !attended.isEmpty {
-                        Section(.artistWeWereThere(data.attended?.count ?? attended.count)) {
-                            ForEach(attended, id: \.id) { show in
-                                DatedShowLink(show: show, title: show.venue.name)
-                            }
-                            if data.attended?.pageInfo.hasNextPage == true {
-                                NavigationLink(.viewAllShows, value: Route.shows(ShowFilter(kind: .history, artist: slug)))
+                    DetailIntro(hero: artwork.map(DetailHero.artwork)) {
+                        DetailHeader(eyebrow: Text(.artist), title: artist.name) {
+                            if website != nil || appleMusic != nil {
+                                DetailLinks {
+                                    if let website {
+                                        WebsiteButton(title: .artistWebsite, destination: website)
+                                    }
+                                    if let appleMusic {
+                                        WebsiteButton(title: .listenOnAppleMusic, destination: appleMusic)
+                                    }
+                                }
                             }
                         }
                     }
+                    DatedShowsSection(
+                        title: .recommendedShows,
+                        shows: data.shows?.edges.map(\.node.fragments.showList_show) ?? [],
+                        all: data.shows?.pageInfo.hasNextPage == true ? ShowFilter(kind: .upcoming, artist: slug) : nil
+                    ) { $0.venue.name }
+                    DatedShowsSection(
+                        title: .attended,
+                        count: data.attended?.count ?? attended.count,
+                        shows: attended,
+                        all: data.attended?.pageInfo.hasNextPage == true ? ShowFilter(kind: .history, artist: slug) : nil
+                    ) { $0.venue.name }
                 }
                 .listStyle(.plain)
             } else {

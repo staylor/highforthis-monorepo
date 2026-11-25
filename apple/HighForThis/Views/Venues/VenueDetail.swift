@@ -9,51 +9,40 @@ struct VenueDetail: View {
     var body: some View {
         QueryView(VenueQuery(slug: slug)) { data in
             if let venue = data.venue {
-                let upcoming = data.shows?.edges.map(\.node.fragments.showList_show) ?? []
+                let website = venue.website.flatMap(URL.webURL)
                 let attended = data.attended?.edges.map(\.node.fragments.showList_show) ?? []
                 List {
-                    if let latitude = venue.coordinates?.latitude, let longitude = venue.coordinates?.longitude,
-                        CLLocationCoordinate2DIsValid(CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
-                    {
-                        VenueMap(name: venue.name, coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
-                            .listRowInsets(EdgeInsets())
-                            .listRowSeparatorHidden()
-                    }
-                    if let address = venue.address, !address.isEmpty {
-                        Label(address, systemImage: "mappin.and.ellipse")
-                    }
-                    if let capacity = venue.capacity, !capacity.isEmpty {
-                        Label {
-                            Text(.capacity(capacity))
-                        } icon: {
-                            Image(systemName: Self.capacitySymbol)
-                        }
-                    }
-                    if let website = venue.website.flatMap(URL.webURL) {
-                        WebLink(destination: website) {
-                            Label(.venueWebsite, systemImage: "safari")
-                        }
-                    }
-                    if !upcoming.isEmpty {
-                        Section(.recommendedShows) {
-                            ForEach(upcoming, id: \.id) { show in
-                                DatedShowLink(show: show, title: show.headline)
+                    DetailIntro(hero: venue.coordinate.map { .map(name: venue.name, coordinate: $0) }) {
+                        DetailHeader(eyebrow: Text(.venue), title: venue.name) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                if let address = venue.address, !address.isEmpty {
+                                    Text(address)
+                                        .selectableText()
+                                }
+                                if let capacity = venue.capacity, !capacity.isEmpty {
+                                    Text(.capacity(capacity))
+                                }
                             }
-                            if data.shows?.pageInfo.hasNextPage == true {
-                                NavigationLink(.viewAllShows, value: Route.shows(ShowFilter(kind: .upcoming, venue: slug)))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            if let website {
+                                DetailLinks {
+                                    WebsiteButton(title: .venueWebsite, destination: website)
+                                }
                             }
                         }
                     }
-                    if !attended.isEmpty {
-                        Section(.venueWeWereThere(data.attended?.count ?? attended.count)) {
-                            ForEach(attended, id: \.id) { show in
-                                DatedShowLink(show: show, title: show.headline)
-                            }
-                            if data.attended?.pageInfo.hasNextPage == true {
-                                NavigationLink(.viewAllShows, value: Route.shows(ShowFilter(kind: .history, venue: slug)))
-                            }
-                        }
-                    }
+                    DatedShowsSection(
+                        title: .recommendedShows,
+                        shows: data.shows?.edges.map(\.node.fragments.showList_show) ?? [],
+                        all: data.shows?.pageInfo.hasNextPage == true ? ShowFilter(kind: .upcoming, venue: slug) : nil
+                    ) { $0.headline }
+                    DatedShowsSection(
+                        title: .attended,
+                        count: data.attended?.count ?? attended.count,
+                        shows: attended,
+                        all: data.attended?.pageInfo.hasNextPage == true ? ShowFilter(kind: .history, venue: slug) : nil
+                    ) { $0.headline }
                 }
                 .listStyle(.plain)
             } else {
@@ -62,13 +51,15 @@ struct VenueDetail: View {
         }
         .detailTitle(name)
     }
+}
 
-    #if os(tvOS)
-    // person.3 is wider than the column tvOS lists give a label's icon.
-    private static let capacitySymbol = "person.2"
-    #else
-    private static let capacitySymbol = "person.3"
-    #endif
+extension VenueQuery.Data.Venue {
+    /// Where the venue is on a map, when the API has a place for it that there is.
+    fileprivate var coordinate: CLLocationCoordinate2D? {
+        guard let latitude = coordinates?.latitude, let longitude = coordinates?.longitude else { return nil }
+        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        return CLLocationCoordinate2DIsValid(coordinate) ? coordinate : nil
+    }
 }
 
 #Preview {

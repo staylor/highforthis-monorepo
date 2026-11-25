@@ -23,20 +23,20 @@ struct ShowList: View {
                 yearFilter
             }
             #endif
-            ForEach(ShowDay.days(from: shows)) { day in
+            ForEach(ShowMonth.months(from: shows)) { month in
                 Section {
-                    ForEach(day.shows, id: \.id) { show in
-                        NavigationLink(value: Route.show(id: show.id, title: show.headline)) {
+                    ForEach(month.shows, id: \.id) { show in
+                        RouteLink(.show(id: show.id, title: show.headline)) {
                             ShowListRow(show: show)
                         }
                         .accessibilityIdentifier("show-\(show.id)")
                     }
                 } header: {
-                    Text(day.date, format: .showDay)
+                    Text(month.date, format: .showMonth)
                 }
             }
         }
-        .navigationTitle(kind == .upcoming ? .recommendedShows : .showHistory)
+        .navigationTitle(kind == .upcoming ? .recommendedShows : .showHistoryTitle)
         #if !os(tvOS)
         .toolbar {
             if showsYearFilter {

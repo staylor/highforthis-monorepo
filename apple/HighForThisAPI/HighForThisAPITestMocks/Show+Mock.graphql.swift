@@ -14,6 +14,7 @@ nonisolated public final class Show: MockObject {
     @Field<Double>("date") public var date
     @Field<String>("id") public var id
     @Field<String>("title") public var title
+    @Field<String>("url") public var url
     @Field<Venue>("venue") public var venue
   }
 }
@@ -24,6 +25,7 @@ public extension Mock where O == Show {
     date: Double = 0.0,
     id: String = "",
     title: String? = nil,
+    url: String? = nil,
     venue: Mock<Venue> = Mock<Venue>()
   ) {
     self.init()
@@ -31,6 +33,7 @@ public extension Mock where O == Show {
     _setScalar(date, for: \.date)
     _setScalar(id, for: \.id)
     _setScalar(title, for: \.title)
+    _setScalar(url, for: \.url)
     _setEntity(venue, for: \.venue)
   }
 }

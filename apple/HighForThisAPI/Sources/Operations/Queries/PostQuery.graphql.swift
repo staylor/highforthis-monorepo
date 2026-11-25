@@ -8,7 +8,7 @@ nonisolated public struct PostQuery: GraphQLQuery {
   public static let operationName: String = "Post"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Post($slug: String!) { post(slug: $slug) { __typename id title editorState { __typename root { __typename children { __typename ... on HeadingNode { tag children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on ImageNode { image { __typename id altText destination crops { __typename fileName height width } } } ... on VideoNode { video { __typename ...Video_video } } ... on ElementNode { type children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on QuoteNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on CodeNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } } } } } }"#,
+      #"query Post($slug: String!) { post(slug: $slug) { __typename id date title editorState { __typename root { __typename children { __typename ... on HeadingNode { tag children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on ImageNode { image { __typename id altText destination crops { __typename fileName height width } } } ... on VideoNode { video { __typename ...Video_video } } ... on ElementNode { type children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on QuoteNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on CodeNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } } } } } }"#,
       fragments: [TextNodes_linebreakNode.self, TextNodes_textNode.self, Video_video.self]
     ))
 
@@ -45,6 +45,7 @@ nonisolated public struct PostQuery: GraphQLQuery {
       @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("id", String.self),
+        .field("date", Double?.self),
         .field("title", String.self),
         .field("editorState", EditorState?.self),
       ] }
@@ -53,6 +54,7 @@ nonisolated public struct PostQuery: GraphQLQuery {
       ] }
 
       public var id: String { __data["id"] }
+      public var date: Double? { __data["date"] }
       public var title: String { __data["title"] }
       public var editorState: EditorState? { __data["editorState"] }
 

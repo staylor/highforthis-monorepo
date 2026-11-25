@@ -2,13 +2,13 @@
 
 The iPhone, iPad, Mac and Apple TV app for [highforthis.com](https://highforthis.com). Everything in it comes from the site's GraphQL API.
 
-| Tab     | What it shows                                                                                                  |
-| ------- | -------------------------------------------------------------------------------------------------------------- |
-| Shows   | Upcoming shows we recommend, by day. A show opens to its artists and venue, and they open to their other shows |
-| Podcast | Episodes, which keep playing in the background and from the Lock Screen                                        |
-| Videos  | Live videos, newest first or by year, which play on YouTube                                                    |
-| Posts   | Posts, laid out like the website                                                                               |
-| History | The shows we've been to, a year at a time, starting with the most recent                                       |
+| Tab     | What it shows                                                                                                                         |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Shows   | Upcoming shows we recommend, by month. A show opens to its artists, its venue and where it's sold, and they open to their other shows |
+| Podcast | Episodes, which keep playing in the background and from the Lock Screen                                                               |
+| Videos  | Live videos, newest first or by year, which play on YouTube                                                                           |
+| Posts   | Posts, laid out like the website                                                                                                      |
+| History | The shows we've been to, a year at a time, starting with the most recent                                                              |
 
 Apple TV has no web browser and can't open YouTube, so it leaves out the Videos tab and links to websites. While an episode is loaded, a Now Playing tab holds the player, and the remote's Play/Pause button controls it.
 

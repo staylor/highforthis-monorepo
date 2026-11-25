@@ -36,7 +36,31 @@ nonisolated extension ShowQuery.Data.Show: ShowSummary {
     var artistNames: [String] { artists.map(\.name) }
 }
 
-/// The shows on one calendar day.
+/// The shows in one calendar month, which the show lists head them with. Each show's row has its own day.
+nonisolated struct ShowMonth: Identifiable {
+    /// The month's first day in New York.
+    let date: Date
+    let shows: [ShowList_show]
+
+    var id: Date { date }
+
+    /// Groups shows by the month they start in, in New York, as the website's calendar does. The months, the days in
+    /// them and the shows on a day stay in the order `ShowDay` puts them in.
+    static func months(from shows: [ShowList_show], calendar: Calendar = .newYork) -> [ShowMonth] {
+        var order: [Date] = []
+        var showsByMonth: [Date: [ShowList_show]] = [:]
+        for day in ShowDay.days(from: shows, calendar: calendar) {
+            let month = calendar.dateInterval(of: .month, for: day.date)?.start ?? day.date
+            if showsByMonth[month] == nil {
+                order.append(month)
+            }
+            showsByMonth[month, default: []].append(contentsOf: day.shows)
+        }
+        return order.map { ShowMonth(date: $0, shows: showsByMonth[$0, default: []]) }
+    }
+}
+
+/// The shows on one calendar day, which CarPlay heads them with.
 nonisolated struct ShowDay: Identifiable {
     let date: Date
     let shows: [ShowList_show]

@@ -8,7 +8,7 @@ nonisolated public struct PodcastsQuery: GraphQLQuery {
   public static let operationName: String = "Podcasts"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Podcasts($after: String, $first: Int!) { podcasts(after: $after, first: $first) { __typename edges { __typename node { __typename id date title } } pageInfo { __typename endCursor hasNextPage } } }"#
+      #"query Podcasts($after: String, $first: Int!) { podcasts(after: $after, first: $first) { __typename edges { __typename node { __typename id date description title audio { __typename id duration } } } pageInfo { __typename endCursor hasNextPage } } }"#
     ))
 
   public var after: GraphQLNullable<String>
@@ -94,7 +94,9 @@ nonisolated public struct PodcastsQuery: GraphQLQuery {
             .field("__typename", String.self),
             .field("id", String.self),
             .field("date", Double?.self),
+            .field("description", String.self),
             .field("title", String.self),
+            .field("audio", Audio?.self),
           ] }
           @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
             PodcastsQuery.Data.Podcasts.Edge.Node.self
@@ -102,7 +104,30 @@ nonisolated public struct PodcastsQuery: GraphQLQuery {
 
           public var id: String { __data["id"] }
           public var date: Double? { __data["date"] }
+          public var description: String { __data["description"] }
           public var title: String { __data["title"] }
+          public var audio: Audio? { __data["audio"] }
+
+          /// Podcasts.Edge.Node.Audio
+          ///
+          /// Parent Type: `AudioUpload`
+          nonisolated public struct Audio: HighForThisAPI.SelectionSet {
+            @_spi(Unsafe) public let __data: DataDict
+            @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+            @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.AudioUpload }
+            @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
+              .field("id", String.self),
+              .field("duration", Double?.self),
+            ] }
+            @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+              PodcastsQuery.Data.Podcasts.Edge.Node.Audio.self
+            ] }
+
+            public var id: String { __data["id"] }
+            public var duration: Double? { __data["duration"] }
+          }
         }
       }
 

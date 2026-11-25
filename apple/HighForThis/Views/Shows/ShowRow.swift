@@ -1,30 +1,32 @@
 import HighForThisAPI
 import SwiftUI
 
-struct ShowRow: View {
-    var caption: String?
-    let title: String
-    var subtitle: String?
+/// A show's day in the lists that head their shows by month, as the website's home page has it: the day of the month
+/// in the accent color, over the day of the week.
+struct DateBadge: View {
+    let date: Date
+    @ScaledMetric(relativeTo: .title3) private var width: CGFloat = .readable(34)
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            if let caption {
-                Text(caption)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            Text(title)
+        VStack(spacing: 0) {
+            Text(date, format: .showDayNumber)
+                .font(.title3.weight(.bold))
+                .monospacedDigit()
                 .foregroundStyle(.tint)
-            if let subtitle {
-                Text(subtitle)
-                    .foregroundStyle(.secondary)
-            }
+            Text(date, format: .showWeekday)
+                .font(.caption2.weight(.semibold))
+                .textCase(.uppercase)
+                .foregroundStyle(.secondary)
         }
+        // As wide as the widest day, so the pictures and names beside the badges line up.
+        .frame(minWidth: width)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(date, format: .showSpokenDay))
     }
 }
 
-/// A show in a list of shows: its main artist's picture, then its headline and venue. At accessibility text sizes the
-/// picture goes above the text, which then has the row's width.
+/// A show in a list of shows: its day, its main artist's picture, then its headline and venue. At accessibility text
+/// sizes the picture goes above the text, which then has the row's width, and the day is spelled out over the headline.
 struct ShowListRow: View {
     let show: ShowList_show
     @ScaledMetric(relativeTo: .body) private var scaledImageSize: CGFloat = .readable(44)
@@ -35,20 +37,29 @@ struct ShowListRow: View {
     private var imageSize: CGFloat { min(scaledImageSize, .readable(72)) }
 
     var body: some View {
-        let layout =
-            dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8)) : AnyLayout(HStackLayout(spacing: 12))
-        layout {
-            RemoteImage(
-                url: show.headlinerArtwork(maximumWidth: Int((imageSize * displayScale).rounded(.up)))?.url,
-                contentMode: .fill,
-                placeholder: "music.mic"
-            )
-            .frame(width: imageSize, height: imageSize)
-            .clipShape(.circle)
-            .accessibilityHidden(true)
-            ShowRow(title: show.headline, subtitle: show.venue.name)
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 8) {
+                picture
+                RowLabel(eyebrow: Text(show.startDate, format: .showDay), title: show.headline, detail: show.venue.name)
+            }
+        } else {
+            HStack(spacing: .readable(12)) {
+                DateBadge(date: show.startDate)
+                picture
+                RowLabel(title: show.headline, detail: show.venue.name)
+            }
         }
+    }
+
+    private var picture: some View {
+        RemoteImage(
+            url: show.headlinerArtwork(maximumWidth: Int((imageSize * displayScale).rounded(.up)))?.url,
+            contentMode: .fill,
+            placeholder: "music.mic"
+        )
+        .frame(width: imageSize, height: imageSize)
+        .clipShape(.circle)
+        .accessibilityHidden(true)
     }
 }
 
@@ -58,9 +69,43 @@ struct DatedShowLink: View {
     let title: String
 
     var body: some View {
-        NavigationLink(value: Route.show(id: show.id, title: show.headline)) {
-            ShowRow(caption: show.startDate.formatted(.showDate), title: title)
+        RouteLink(.show(id: show.id, title: show.headline)) {
+            RowLabel(eyebrow: Text(show.startDate, format: .showDate), title: title)
         }
         .accessibilityIdentifier("show-\(show.id)")
+    }
+}
+
+/// A few of an artist's or a venue's shows under a heading, with a link to the rest of them. Without any, there's no
+/// heading either, as on the website.
+struct DatedShowsSection: View {
+    let title: LocalizedStringResource
+    /// How many there are in all, for a heading that says so.
+    var count: Int?
+    let shows: [ShowList_show]
+    /// The list of all of them, when there are more than these.
+    var all: ShowFilter?
+    /// What a row calls its show: where it is on an artist's page, and who's playing on a venue's.
+    let name: (ShowList_show) -> String
+
+    var body: some View {
+        if !shows.isEmpty {
+            Section {
+                ForEach(shows, id: \.id) { show in
+                    DatedShowLink(show: show, title: name(show))
+                }
+                if let all {
+                    RouteLink(.viewAllShows, route: .shows(all))
+                }
+            } header: {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(title)
+                    Spacer()
+                    if let count {
+                        Text(.showCount(count))
+                    }
+                }
+            }
+        }
     }
 }

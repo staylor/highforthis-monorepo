@@ -4,7 +4,12 @@ query Podcasts($after: String, $first: Int!) {
       node {
         id
         date
+        description
         title
+        audio {
+          id
+          duration
+        }
       }
     }
     pageInfo {

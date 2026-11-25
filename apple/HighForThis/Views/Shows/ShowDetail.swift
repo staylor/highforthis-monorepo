@@ -9,26 +9,29 @@ struct ShowDetail: View {
         QueryView(ShowQuery(id: id)) { data in
             if let show = data.show {
                 List {
-                    if let artwork = show.artwork {
-                        ArtworkHeader(artwork: artwork)
-                    }
-                    Label {
-                        Text(show.startDate, format: .showTime(show.startDate))
-                    } icon: {
-                        Image(systemName: "calendar")
+                    DetailIntro(hero: show.artwork.map(DetailHero.artwork)) {
+                        DetailHeader(eyebrow: Text(show.startDate, format: .showTime(show.startDate)), title: show.headline) {
+                            if let website = show.url.flatMap(URL.webURL) {
+                                DetailLinks {
+                                    WebsiteButton(title: .eventWebsite, destination: website)
+                                        .accessibilityIdentifier("event-website")
+                                }
+                            }
+                        }
                     }
                     ForEach(show.artists, id: \.id) { artist in
-                        NavigationLink(value: Route.artist(slug: artist.slug, name: artist.name)) {
+                        RouteLink(.artist(slug: artist.slug, name: artist.name)) {
                             Label(artist.name, systemImage: "music.mic")
                         }
                         .accessibilityIdentifier("artist-\(artist.slug)")
                     }
-                    NavigationLink(value: Route.venue(slug: show.venue.slug, name: show.venue.name)) {
+                    RouteLink(.venue(slug: show.venue.slug, name: show.venue.name)) {
                         Label(show.venue.name, systemImage: "mappin.and.ellipse")
                     }
                     .accessibilityIdentifier("venue-\(show.venue.slug)")
                 }
                 .listStyle(.plain)
+                .rowLabelSpacing()
             } else {
                 NotFoundView()
             }

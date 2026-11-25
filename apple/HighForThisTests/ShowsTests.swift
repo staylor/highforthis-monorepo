@@ -104,6 +104,48 @@ struct ShowsTests {
 
     private static let english = Locale(identifier: "en_US")
 
+    // 8 PM on November 30 in New York is 1 AM on December 1 in UTC
+    @Test func showsAreHeadedByTheirMonthInNewYork() async {
+        let november = await ShowList_show.from(Mock<Show>(date: 1_796_086_800_000, id: "november"))
+        let december = await ShowList_show.from(Mock<Show>(date: 1_796_173_200_000, id: "december"))
+
+        let months = ShowMonth.months(from: [november, december])
+
+        #expect(months.map { $0.shows.map(\.id) } == [["november"], ["december"]])
+        #expect(
+            months.map { $0.date.formatted(Date.FormatStyle.showMonth.locale(Self.english)) } == ["November 2026", "December 2026"]
+        )
+    }
+
+    // The history comes most recent first, and two shows on one day by their headlines
+    @Test func monthsKeepTheAPIOrderAndTheirDays() async {
+        let shows = await [
+            (1_796_518_800_000, "the-fifth", "Wilco"),
+            (1_796_346_000_000, "the-third-late", "Spoon"),
+            (1_796_342_400_000, "the-third-early", "Low"),
+            (1_795_222_800_000, "november", "Bedhead"),
+        ].asyncMap { date, id, name in
+            await ShowList_show.from(Mock<Show>(artists: [Mock<Artist>(name: name)], date: date, id: id))
+        }
+
+        let months = ShowMonth.months(from: shows)
+
+        #expect(months.map { Calendar.newYork.component(.month, from: $0.date) } == [12, 11])
+        #expect(months.map { $0.shows.map(\.id) } == [["the-fifth", "the-third-early", "the-third-late"], ["november"]])
+    }
+
+    @Test func aShowsBadgeHasItsDayInNewYork() {
+        // 8 PM on New Year's Eve in New York, and on December 3
+        let newYearsEve = Date(timeIntervalSince1970: 1_735_693_200)
+        let third = Date(timeIntervalSince1970: 1_796_346_000)
+
+        #expect(newYearsEve.formatted(Date.FormatStyle.showDayNumber.locale(Self.english)) == "31")
+        #expect(newYearsEve.formatted(Date.FormatStyle.showWeekday.locale(Self.english)) == "Tue")
+        #expect(newYearsEve.formatted(Date.FormatStyle.showSpokenDay.locale(Self.english)) == "Tuesday, December 31")
+        // Two digits, as the website's badges have, so the days line up
+        #expect(third.formatted(Date.FormatStyle.showDayNumber.locale(Self.english)) == "03")
+    }
+
     @Test func daysKeepTheAPIOrder() async {
         let shows = await [1_793_926_800_000, 1_793_754_000_000, 1_793_833_200_000].asyncMap { date in
             await ShowList_show.from(Mock<Show>(date: date, id: String(date)))

@@ -45,6 +45,12 @@ struct QueryView<Query: GraphQLQuery, Content: View>: View where Query.ResponseF
     }
 }
 
+struct NotFoundView: View {
+    var body: some View {
+        ContentUnavailableView(.notFound, systemImage: "questionmark.circle")
+    }
+}
+
 struct LoadFailedView: View {
     let error: any Error
     var isLoading = false

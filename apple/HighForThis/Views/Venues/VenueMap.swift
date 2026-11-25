@@ -4,6 +4,8 @@ import SwiftUI
 struct VenueMap: View {
     let name: String
     let coordinate: CLLocationCoordinate2D
+    /// How tall the map is, or nil for one that fills the frame it's given.
+    var height: CGFloat? = 240
 
     var body: some View {
         #if os(tvOS)
@@ -29,7 +31,7 @@ struct VenueMap: View {
                 .tint(Color.accentColor)
         }
         .mapStyle(.standard(pointsOfInterest: .excludingAll))
-        .frame(height: 240)
+        .frame(height: height)
         .allowsHitTesting(false)
         .accessibilityHidden(true)
     }

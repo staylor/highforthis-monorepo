@@ -10,9 +10,19 @@ final class NavigationTests: XCTestCase {
     func testShowArtistAndVenueNavigation() {
         let app = launch()
         select("History", in: app)
+        // The shows are headed by their month in New York.
+        XCTAssertTrue(app.staticTexts["November 2025"].waitForExistence(timeout: 10))
         tap(element("show-show-2025-0", in: app))
+        // A show's page links to where it's sold.
+        XCTAssertTrue(element("event-website", in: app).waitForExistence(timeout: 10))
+        screenshot("Show", app)
         tap(element("artist-sample-artist", in: app))
         XCTAssertTrue(app.staticTexts["Recommended Shows"].waitForExistence(timeout: 10))
+        // The show this came from is among the artist's shows, and isn't drawn as the selected one, which on iPad
+        // was a pink row with its words in the same pink.
+        let cameFrom = app.cells.containing(.any, identifier: "show-show-2025-0").firstMatch
+        XCTAssertTrue(cameFrom.waitForExistence(timeout: 10))
+        XCTAssertFalse(cameFrom.isSelected)
         screenshot("Artist", app)
         back(app)
         tap(element("venue-sample-hall", in: app))
@@ -118,8 +128,11 @@ final class NavigationTests: XCTestCase {
         screenshot("Large Text Videos", app)
         select("Podcast", in: app)
         tap(element("podcast-podcast-0", in: app))
-        app.swipeUp()
-        tap(app.buttons["episode-play-pause"])
+        // Play is over the episode's notes, so it's on screen without scrolling, at this text size too.
+        let play = app.buttons["episode-play-pause"]
+        XCTAssertTrue(play.waitForExistence(timeout: 10))
+        XCTAssertTrue(play.isHittable)
+        play.tap()
         XCTAssertTrue(app.buttons["open-player"].waitForExistence(timeout: 10))
         app.swipeUp()
         screenshot("Large Text Episode", app)

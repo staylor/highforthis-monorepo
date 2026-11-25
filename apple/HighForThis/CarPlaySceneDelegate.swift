@@ -223,7 +223,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
 
     private func makeItem(for episode: PodcastsQuery.Data.Podcasts.Edge.Node) -> CPListItem {
-        let date = episode.date.map { Date(apiTimestamp: $0).formatted(.episodeDate) }
+        let date = episode.date.map { Date(apiTimestamp: $0).formatted(.postedDate) }
         let item = CPListItem(text: episode.title, detailText: date)
         item.isPlaying = player.isPlaying(id: episode.id)
         item.playingIndicatorLocation = .trailing
