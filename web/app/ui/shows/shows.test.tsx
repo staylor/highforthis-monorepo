@@ -14,13 +14,27 @@ const app: AppValue = {
   pathname: '/',
 };
 
-const show = (id: string, date: string, artist: string, venue = 'Bowery Ballroom') => ({
+/** An artist, with Apple Music's artwork when there's a URL for it */
+const artist = (id: string, name: string, artwork?: string) => ({
+  id,
+  name,
+  slug: name.toLowerCase().replaceAll(' ', '-'),
+  appleMusic: artwork ? { id: `am-${id}`, artwork: { url: artwork } } : null,
+});
+
+const show = (
+  id: string,
+  date: string,
+  name: string,
+  venue = 'Bowery Ballroom',
+  artwork?: string
+) => ({
   node: {
     id,
     date: new Date(date).getTime(),
     title: null,
     url: null,
-    artists: [{ id: `a-${id}`, name: artist, slug: artist.toLowerCase().replaceAll(' ', '-') }],
+    artists: [artist(`a-${id}`, name, artwork)],
     venue: {
       id: 'v1',
       name: venue,
@@ -68,7 +82,7 @@ describe('ShowsGrid', () => {
               ...shared,
               node: {
                 ...shared.node,
-                artists: [...shared.node.artists, { id: 'a-4', name: 'Bedhead', slug: 'bedhead' }],
+                artists: [...shared.node.artists, artist('a-4', 'Bedhead')],
               },
             },
           ].map((edge) => ({ ...edge, cursor: edge.node.id })),
@@ -79,6 +93,28 @@ describe('ShowsGrid', () => {
     assert.match(html, /<a [^>]*href="\/shows\/1"[^>]*>Solid Sound<\/a>/);
     assert.match(html, /<a [^>]*href="\/shows\/2"[^>]*>Spoon<\/a>/);
     assert.match(html, /<a [^>]*href="\/shows\/3"[^>]*>Low \/ Bedhead<\/a>/);
+  });
+
+  it("puts each show's main artist's picture beside it, or their initials without one", async () => {
+    const wilco = 'https://is1-ssl.mzstatic.com/image/thumb/wilco/{w}x{h}bb.jpg';
+    const shows = {
+      edges: [
+        show('1', '2025-02-01T20:00:00', 'Wilco', undefined, wilco),
+        show('2', '2025-02-02T20:00:00', 'The Hold Steady'),
+      ].map((edge) => ({ ...edge, cursor: edge.node.id })),
+      pageInfo: { hasNextPage: false },
+    };
+
+    // A small picture beside a row of the table, and a larger one beside the list's three lines
+    const grid = await renderToString(<ShowsGrid shows={shows} />);
+    assert.match(
+      grid,
+      /<img [^>]*src="https:\/\/is1-ssl\.mzstatic\.com\/image\/thumb\/wilco\/64x64bb\.jpg"/
+    );
+    assert.match(grid, /<span [^>]*aria-hidden="true"[^>]*>HS<\/span>/);
+    const list = await renderToString(<ShowsList shows={shows} />);
+    assert.match(list, /<img [^>]*src="[^"]*\/wilco\/96x96bb\.jpg"/);
+    assert.match(list, /<span [^>]*aria-hidden="true"[^>]*>HS<\/span>/);
   });
 
   // The history: a page that goes on from one that ended in March 2025, with a frame for the next

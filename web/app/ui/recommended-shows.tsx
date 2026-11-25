@@ -5,16 +5,10 @@ import type { HomeQuery } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';
-import { artworkUrl } from './public/media.ts';
 import { card, colorTransition, lg, linkHover, merge, sm, text } from './public/styles.ts';
 import { SectionHeader } from './section-header.tsx';
-import {
-  formatArtists,
-  formatShowLink,
-  initials,
-  monthNames,
-  weekdayNames,
-} from './shows/utils.ts';
+import { Headliner } from './shows/headliner.tsx';
+import { formatArtists, formatShowLink, monthNames, weekdayNames } from './shows/utils.ts';
 
 type Shows = NonNullable<HomeQuery['shows']>;
 type Edges = Shows['edges'];
@@ -73,62 +67,8 @@ const showCard = css(
   })
 );
 
-const pinkTint = 'light-dark(rgb(229 0 130 / 0.08), rgb(229 0 130 / 0.16))';
-
-// The main artist's picture, round like an artist's on Apple Music, between the date and the
-// names. It's tinted until it loads.
-const headlinerArt = css({
-  flexShrink: 0,
-  width: '3rem',
-  height: '3rem',
-  borderRadius: '9999px',
-  objectFit: 'cover',
-  backgroundColor: pinkTint,
-  boxShadow: 'var(--shadow-sm)',
-});
-
-// For a main artist without artwork: their initials, as the show stats have for theirs
-const headlinerMonogram = css({
-  flexShrink: 0,
-  display: 'grid',
-  placeItems: 'center',
-  width: '3rem',
-  height: '3rem',
-  borderRadius: '9999px',
-  backgroundColor: pinkTint,
-  ...text.xs,
-  fontWeight: 800,
-  color: 'var(--pink)',
-});
-
-/** The first artist's Apple Music artwork, or their initials where Apple Music has none. */
-function Headliner(handle: Handle<{ show: Edges[number]['node'] }>) {
-  return () => {
-    const { show } = handle.props;
-    const [headliner] = show.artists;
-    const artwork = headliner?.appleMusic?.artwork?.url;
-    if (artwork) {
-      return (
-        <img
-          mix={headlinerArt}
-          src={artworkUrl(artwork, 96)}
-          alt=""
-          width={96}
-          height={96}
-          loading="lazy"
-        />
-      );
-    }
-    return (
-      <span mix={headlinerMonogram} aria-hidden="true">
-        {initials(headliner?.name ?? formatArtists(show))}
-      </span>
-    );
-  };
-}
-
 /** The home page's recommended shows, by month. */
-export function Sidebar(handle: Handle<{ shows: Shows }>) {
+export function RecommendedShows(handle: Handle<{ shows: Shows }>) {
   const { t } = getApp(handle);
 
   return () => {

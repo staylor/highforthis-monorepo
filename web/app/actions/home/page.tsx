@@ -15,8 +15,8 @@ import {
   merge,
   text,
 } from '#/ui/public/styles.ts';
+import { RecommendedShows } from '#/ui/recommended-shows.tsx';
 import { AccentLine, SectionHeader } from '#/ui/section-header.tsx';
-import { Sidebar } from '#/ui/sidebar.tsx';
 import { Videos, videosFragment } from '#/ui/videos.tsx';
 
 export const homeQuery = gql`
@@ -76,7 +76,7 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
       <>
         {data.shows && (
           <>
-            <Sidebar shows={data.shows} />
+            <RecommendedShows shows={data.shows} />
             <AccentLine />
           </>
         )}
