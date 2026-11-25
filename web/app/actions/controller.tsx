@@ -22,7 +22,7 @@ import { Video } from '#/ui/videos.tsx';
 import { sharingTags } from './document.tsx';
 import { ArtistPage, artistQuery, VenuePage, venueQuery } from './entities/page.tsx';
 import { HomePage, homeQuery } from './home/page.tsx';
-import { feedQuery, feedTemplate } from './podcast/feed.ts';
+import { ALL_EPISODES, feedQuery, feedTemplate } from './podcast/feed.ts';
 import { PostPage, postQuery, PostsPage, postsQuery } from './posts/page.tsx';
 import {
   loadRootData,
@@ -193,7 +193,7 @@ export default createController(routes, {
     },
 
     async podcastFeed(context) {
-      const data = await context.gql.query<PodcastFeedQuery>(feedQuery);
+      const data = await context.gql.query<PodcastFeedQuery>(feedQuery, { first: ALL_EPISODES });
       return new Response(feedTemplate(data), {
         headers: { 'Content-Type': 'application/xml' },
       });
