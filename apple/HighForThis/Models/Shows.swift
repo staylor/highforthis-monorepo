@@ -43,9 +43,10 @@ nonisolated struct ShowDay: Identifiable {
 
     var id: Date { date }
 
-    /// Groups shows by the day they start, keeping the days in the order the API returns them: upcoming shows
-    /// soonest first, and history most recent first. Shows on the same day are sorted by headline.
-    static func days(from shows: [ShowList_show], calendar: Calendar = .current) -> [ShowDay] {
+    /// Groups shows by the day they start in New York, as the website does, keeping the days in the order the API
+    /// returns them: upcoming shows soonest first, and history most recent first. Shows on the same day are sorted by
+    /// headline.
+    static func days(from shows: [ShowList_show], calendar: Calendar = .newYork) -> [ShowDay] {
         var order: [Date] = []
         var showsByDay: [Date: [ShowList_show]] = [:]
         for show in shows {
