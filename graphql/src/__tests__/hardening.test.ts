@@ -76,6 +76,18 @@ describe('hardening', () => {
         [`{ shows(first: ${QUERY_LIMITS.pageSize + 1}) { edges { id } } }`, undefined],
         ['query ($n: Int) { shows(last: $n) { edges { id } } }', { n: 100000 }],
         ['{ shows(first: -5) { edges { id } } }', undefined],
+        // A default is the page size when the request sends no value
+        ['query ($n: Int = 100000) { shows(first: $n) { edges { id } } }', undefined],
+        // A variable can be named for something every object has, which isn't its value
+        ['query ($toString: Int = 100000) { shows(first: $toString) { edges { id } } }', undefined],
+        [
+          'query ($__proto__: Int = 100000) { shows(first: $__proto__) { edges { id } } }',
+          undefined,
+        ],
+        [
+          'query ($__proto__: Int) { shows(first: $__proto__) { edges { id } } }',
+          JSON.parse('{ "__proto__": 100000 }'),
+        ],
       ] as const) {
         const result = await run(query, variables);
 

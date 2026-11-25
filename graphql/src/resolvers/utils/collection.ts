@@ -60,16 +60,14 @@ export async function parseConnection<TNode>(
   connectionArgs: ConnectionArgs,
   findManyArgs: FindManyArgs = {}
 ): Promise<Connection<TNode>> {
-  const { first = 10, after = null, last = 10, before = null, ..._rest } = connectionArgs;
+  const { after = null, before = null } = connectionArgs;
+  // A request that asks for neither the first nor the last so many gets the first 10, and is told
+  // whether there are more. A page of 0 is no records, with the count.
+  const last = connectionArgs.last ?? null;
+  const first = connectionArgs.first ?? (last === null ? 10 : null);
 
-  let limit = 10;
+  let limit = first ?? last ?? 10;
   let offset = 0;
-
-  if (connectionArgs.first) {
-    limit = first!;
-  } else if (connectionArgs.last) {
-    limit = last!;
-  }
 
   if (after) {
     offset = cursorToOffset(after) + 1;
@@ -84,11 +82,13 @@ export async function parseConnection<TNode>(
   // Neither needs the other, so they share a round trip to the database
   const [count, items] = await Promise.all([
     delegate.count(countArgs),
-    delegate.findMany({
-      ...findManyArgs,
-      skip: offset,
-      take: limit,
-    }),
+    limit > 0
+      ? delegate.findMany({
+          ...findManyArgs,
+          skip: offset,
+          take: limit,
+        })
+      : [],
   ]);
 
   const arrayLength = count;
@@ -98,8 +98,8 @@ export async function parseConnection<TNode>(
   let startOffset = Math.max(offset - 1, afterOffset, -1) + 1;
   let endOffset = Math.min(sliceEnd, beforeOffset, arrayLength);
 
-  if (connectionArgs.last) {
-    startOffset = Math.max(startOffset, endOffset - last!);
+  if (last !== null) {
+    startOffset = Math.max(startOffset, endOffset - last);
   } else {
     endOffset = startOffset + first!;
   }
@@ -120,8 +120,8 @@ export async function parseConnection<TNode>(
     pageInfo: {
       startCursor: firstEdge ? firstEdge.cursor : null,
       endCursor: lastEdge ? lastEdge.cursor : null,
-      hasPreviousPage: connectionArgs.last ? startOffset > lowerBound : false,
-      hasNextPage: connectionArgs.first ? endOffset < upperBound : false,
+      hasPreviousPage: last !== null ? startOffset > lowerBound : false,
+      hasNextPage: first !== null ? endOffset < upperBound : false,
     },
   };
 }

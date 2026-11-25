@@ -58,6 +58,29 @@ describe('parseConnection', () => {
     expect(records.findMany).toHaveBeenLastCalledWith({ skip: 10, take: 10 });
   });
 
+  // The podcast's feed asked without a page size, got 10 of its 11 episodes, and was told that
+  // was all of them
+  it('says there are more after the first 10, when asked for no page size', async () => {
+    const records = delegate(
+      11,
+      Array.from({ length: 10 }, (_, i) => ({ id: `podcast-${i}` }))
+    );
+
+    const connection = await parseConnection(records, {});
+
+    expect(records.findMany).toHaveBeenCalledWith({ skip: 0, take: 10 });
+    expect(connection.pageInfo.hasNextPage).toBeTruthy();
+  });
+
+  it('answers no records for a page of 0, with how many there are', async () => {
+    const records = delegate(3, [{ id: 'a' }]);
+
+    const connection = await parseConnection(records, { first: 0 });
+
+    expect(records.findMany).not.toHaveBeenCalled();
+    expect(connection).toMatchObject({ count: 3, edges: [], pageInfo: { hasNextPage: true } });
+  });
+
   it.each([
     'nonsense',
     Buffer.from('arrayconnection:-5').toString('base64'),
