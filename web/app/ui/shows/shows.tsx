@@ -8,6 +8,7 @@ import { Link } from '#/ui/link.tsx';
 import { colorTransition, md, sm, text, xs } from '#/ui/public/styles.ts';
 import { trans } from '#/ui/trans.tsx';
 
+import { Headliner } from './headliner.tsx';
 import { cell, formatArtists, formatDate, formatShowLink, row } from './utils.ts';
 
 export const showsGridFragment = gql`
@@ -23,6 +24,12 @@ export const showsGridFragment = gql`
           id
           name
           slug
+          appleMusic {
+            id
+            artwork {
+              url
+            }
+          }
         }
         venue {
           id
@@ -139,6 +146,8 @@ const venueBelow = css({
   color: 'var(--muted)',
   [sm]: { display: 'none' },
 });
+// The main artist's picture, then the show and, on narrow screens, its venue under it
+const showCell = css({ display: 'flex', alignItems: 'center', gap: '0.75rem' });
 const spacer = css({ height: '0.5rem' });
 const pinkLink = css({
   color: 'var(--pink)',
@@ -277,10 +286,15 @@ export function ShowsTable(handle: Handle<Omit<GridProps, 'mix' | 'more'>>) {
         <tr key={node.id} mix={rowStyle}>
           <td mix={dateCell}>{d.formatted}</td>
           <td mix={cellStyle}>
-            <Link mix={pinkLink} href={formatShowLink(node)}>
-              {formatArtists(node)}
-            </Link>
-            <span mix={venueBelow}>{node.venue.name}</span>
+            <div mix={showCell}>
+              <Headliner show={node} size="sm" />
+              <div>
+                <Link mix={pinkLink} href={formatShowLink(node)}>
+                  {formatArtists(node)}
+                </Link>
+                <span mix={venueBelow}>{node.venue.name}</span>
+              </div>
+            </div>
           </td>
           <td mix={venueCell}>
             <Link mix={plainLink} href={routes.venue.href({ slug: node.venue.slug })}>
@@ -310,6 +324,14 @@ export function ShowsList(handle: Handle<ListProps>) {
   };
 }
 
+// The main artist's picture beside the show's date, name and venue
+const listRow = css({
+  marginBottom: '0.5rem',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.75rem',
+});
+
 /** The list's shows, which a page of the history adds to the list it goes on from */
 export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
   return () => {
@@ -320,15 +342,18 @@ export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
         {shows.edges.map(({ node }) => {
           const d = formatDate(node.date);
           const showRow = (
-            <p mix={css({ marginBottom: '0.5rem', ...text.sm })}>
-              <strong mix={css({ fontVariantNumeric: 'tabular-nums' })}>{d.formatted}</strong>
-              <br />
-              <Link mix={css({ color: 'var(--pink)' })} href={formatShowLink(node)}>
-                {formatArtists(node)}
-              </Link>
-              <br />
-              <span mix={css({ color: 'var(--muted)' })}>{node.venue.name}</span>
-            </p>
+            <div mix={listRow}>
+              <Headliner show={node} />
+              <p mix={css(text.sm)}>
+                <strong mix={css({ fontVariantNumeric: 'tabular-nums' })}>{d.formatted}</strong>
+                <br />
+                <Link mix={css({ color: 'var(--pink)' })} href={formatShowLink(node)}>
+                  {formatArtists(node)}
+                </Link>
+                <br />
+                <span mix={css({ color: 'var(--muted)' })}>{node.venue.name}</span>
+              </p>
+            </div>
           );
 
           if (!years[d.year]) {
