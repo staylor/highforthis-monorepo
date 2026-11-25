@@ -5,9 +5,10 @@ import type { TFunction } from '#/lib/i18n.ts';
 import { routes } from '#/routes.ts';
 import type { ShowStatsQuery } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
-import { Link } from '#/ui/link.tsx';
+import { PageHeader } from '#/ui/page-header.tsx';
 import { artworkUrl } from '#/ui/public/media.ts';
-import { colorTransition, md, srOnly, text } from '#/ui/public/styles.ts';
+import { colorTransition, displayType, md, srOnly, text } from '#/ui/public/styles.ts';
+import { ShowsNav } from '#/ui/shows/nav.tsx';
 import { formatDate, initials } from '#/ui/shows/utils.ts';
 
 export type StatsEntity = 'artist' | 'venue';
@@ -143,31 +144,6 @@ const motion = (animation: string) => ({
 
 // --- The header
 
-const eyebrow = css({
-  marginBottom: '0.5rem',
-  ...text.xs,
-  fontWeight: 700,
-  letterSpacing: '0.25em',
-  textTransform: 'uppercase',
-  color: 'var(--pink)',
-});
-
-const title = css({
-  marginBottom: '0.75rem',
-  fontFamily: 'var(--font-title)',
-  fontSize: '2.5rem',
-  lineHeight: 1,
-  textTransform: 'uppercase',
-  [md]: { fontSize: '4rem' },
-});
-
-const historyLink = css({
-  ...text.sm,
-  fontWeight: 600,
-  color: 'var(--pink)',
-  '&:hover': { textDecoration: 'underline' },
-});
-
 const tabs = css({
   display: 'inline-flex',
   gap: '0.25rem',
@@ -198,23 +174,12 @@ function Header(handle: Handle<{ entity: StatsEntity }>) {
   return () => {
     const { entity } = handle.props;
     return (
-      <header
-        mix={css({
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'flex-end',
-          justifyContent: 'space-between',
-          gap: '1.5rem 2rem',
-          marginBottom: '2rem',
-        })}
+      <PageHeader
+        display
+        eyebrow={t('entity.stats.eyebrow')}
+        title={t('entity.stats.heading')}
+        nav={<ShowsNav />}
       >
-        <div>
-          <p mix={eyebrow}>{t('entity.stats.eyebrow')}</p>
-          <h1 mix={title}>{t('entity.stats.heading')}</h1>
-          <Link href={routes.shows.history.href()} mix={historyLink}>
-            {t('entity.stats.see.all')} →
-          </Link>
-        </div>
         <nav aria-label={t('entity.stats.tabs.label')} mix={tabs}>
           {(['artist', 'venue'] as const).map((type) => (
             <a
@@ -227,7 +192,7 @@ function Header(handle: Handle<{ entity: StatsEntity }>) {
             </a>
           ))}
         </nav>
-      </header>
+      </PageHeader>
     );
   };
 }
@@ -353,9 +318,8 @@ const rankNumeral = css({
   zIndex: -1,
   top: '-1rem',
   right: '0.5rem',
-  fontFamily: 'var(--font-title)',
+  ...displayType,
   fontSize: '7rem',
-  lineHeight: 1,
   color: 'var(--fg, var(--pink))',
   opacity: 0.18,
   [md]: { fontSize: '10rem' },
@@ -667,10 +631,9 @@ const lineup = css({
 });
 
 const lineupHeading = css({
-  fontFamily: 'var(--font-title)',
+  ...displayType,
   fontSize: '1.75rem',
   lineHeight: 1.1,
-  textTransform: 'uppercase',
   [md]: { fontSize: '2.75rem' },
 });
 

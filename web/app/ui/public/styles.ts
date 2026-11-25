@@ -10,9 +10,6 @@ export const md = '@media (width >= 48rem)';
 export const lg = '@media (width >= 64rem)';
 export const xl = '@media (width >= 80rem)';
 
-/** Dark mode, for what light-dark() can't express: the `dark` class on <html>. */
-export const dark = ':where(.dark) &';
-
 /** While a link around the element is hovered, as in cards that are links. */
 export const linkHover = ':where(a:hover) &';
 
@@ -65,11 +62,48 @@ export function lineClamp(lines: number) {
   } satisfies Styles;
 }
 
-/** A card that rises and glows pink when hovered. */
-export const card = {
+/** The pink of a small label over a page's title, widely spaced. */
+export const eyebrow = {
+  ...text.xs,
+  fontWeight: 700,
+  letterSpacing: '0.25em',
+  textTransform: 'uppercase',
+  color: 'var(--pink)',
+} satisfies Styles;
+
+/** A small gray label, such as the month over its shows. */
+export const label = {
+  ...text.xs,
+  fontWeight: 600,
+  letterSpacing: '0.05em',
+  color: 'var(--muted)',
+  textTransform: 'uppercase',
+} satisfies Styles;
+
+/** The site's title type, as the logo is set in. */
+export const displayType = {
+  fontFamily: 'var(--font-title)',
+  fontWeight: 400,
+  lineHeight: 1,
+  textTransform: 'uppercase',
+} satisfies Styles;
+
+/** A link in the text: pink, and underlined when hovered. */
+export const pinkLink = {
+  color: 'var(--pink)',
+  '&:hover': { textDecoration: 'underline' },
+} satisfies Styles;
+
+/** A surface that sits on the page: a card's border, background and shadow. */
+export const panel = {
   border: '1px solid var(--card-border)',
   backgroundColor: 'var(--card)',
   boxShadow: 'var(--shadow-sm)',
+} satisfies Styles;
+
+/** A card that rises and glows pink when hovered. */
+export const card = {
+  ...panel,
   transition: 'all 300ms var(--ease)',
   '&:hover': {
     translate: '0 -0.125rem',
@@ -77,15 +111,42 @@ export const card = {
   },
 } satisfies Styles;
 
-/** The colors of a pink outlined button. */
-export const pinkButton = {
+// The shape every button has, whatever its colors
+const button = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.375rem',
+  borderRadius: '0.5rem',
+  padding: '0.5rem 1rem',
+  ...text.sm,
+  fontWeight: 500,
+  cursor: 'pointer',
+  transition: 'all 150ms var(--ease)',
+  '&:active': { translate: '0 1px' },
+} satisfies Styles;
+
+/** The button for what a page most wants pressed: outlined and tinted in pink. */
+export const pinkButton = merge(button, {
   border: '1px solid light-dark(rgb(229 0 130 / 0.2), rgb(229 0 130 / 0.3))',
   backgroundColor: 'light-dark(rgb(229 0 130 / 0.05), rgb(229 0 130 / 0.1))',
   color: 'var(--pink)',
   '&:hover': {
     backgroundColor: 'light-dark(rgb(229 0 130 / 0.1), rgb(229 0 130 / 0.2))',
   },
-} satisfies Styles;
+});
+
+/** The button for everything else: a card's colors, with a pink edge when hovered. */
+export const quietButton = merge(button, {
+  border: '1px solid light-dark(var(--neutral-200), rgb(255 255 255 / 0.1))',
+  backgroundColor: 'var(--card)',
+  color: 'var(--muted)',
+  boxShadow: 'var(--shadow-xs)',
+  '&:hover': {
+    borderColor: 'rgb(229 0 130 / 0.3)',
+    color: 'light-dark(var(--neutral-900), #fff)',
+  },
+});
 
 /** Hidden, except from screen readers: the styles, to use under a breakpoint or a selector. */
 export const visuallyHidden = {

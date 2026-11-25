@@ -5,7 +5,7 @@ import type { HomeQuery } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';
-import { card, colorTransition, lg, linkHover, merge, sm, text } from './public/styles.ts';
+import { card, colorTransition, label, lg, linkHover, merge, sm, text } from './public/styles.ts';
 import { SectionHeader } from './section-header.tsx';
 import { Headliner } from './shows/headliner.tsx';
 import { formatArtists, formatShowLink, monthNames, weekdayNames } from './shows/utils.ts';
@@ -33,14 +33,7 @@ function groupShowsByMonth(edges: Edges) {
   return groups;
 }
 
-const monthHeading = css({
-  marginBottom: '0.75rem',
-  ...text.xs,
-  fontWeight: 600,
-  letterSpacing: '0.05em',
-  color: 'var(--muted)',
-  textTransform: 'uppercase',
-});
+const monthHeading = css({ marginBottom: '0.75rem', ...label });
 
 // Each month's shows fill columns top to bottom, with the row counts set per month
 const monthGrid = css({
@@ -112,16 +105,7 @@ export function RecommendedShows(handle: Handle<{ shows: Shows }>) {
                         >
                           {String(date.getDate()).padStart(2, '0')}
                         </div>
-                        <div
-                          mix={css({
-                            ...text.xs,
-                            fontWeight: 500,
-                            letterSpacing: '0.05em',
-                            color: 'var(--muted)',
-                            textTransform: 'uppercase',
-                            fontVariantNumeric: 'tabular-nums',
-                          })}
-                        >
+                        <div mix={css({ ...label, fontWeight: 500 })}>
                           {weekdayNames[date.getDay()]}
                         </div>
                       </div>

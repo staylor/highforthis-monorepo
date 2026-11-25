@@ -2,8 +2,9 @@ import { css, type Handle, type RemixNode } from 'remix/component';
 
 import { lg, merge, text, type Styles } from './public/styles.ts';
 
-/** `styles` add to or override the heading's own. */
-type HeadingProps = { styles?: Styles; children?: RemixNode };
+// The headings inside a post, as its editor sets them. A page's own title is its PageHeader.
+
+type HeadingProps = { children?: RemixNode };
 
 const heading = {
   display: 'block',
@@ -11,7 +12,11 @@ const heading = {
   [lg]: { marginBottom: '0.75rem' },
 } satisfies Styles;
 
+// The largest has a pink bar down its left
 const heading1 = merge(heading, {
+  borderLeft: '8px solid var(--pink)',
+  paddingBlock: '0.5rem',
+  paddingLeft: '0.625rem',
   fontWeight: 900,
   textTransform: 'uppercase',
   ...text['2xl'],
@@ -32,37 +37,17 @@ const heading3 = merge(heading, {
 const heading4 = merge(heading, { fontWeight: 700, ...text.lg });
 
 export function Heading1(handle: Handle<HeadingProps>) {
-  return () => <h1 mix={css(merge(heading1, handle.props.styles))}>{handle.props.children}</h1>;
+  return () => <h1 mix={css(heading1)}>{handle.props.children}</h1>;
 }
 
 export function Heading2(handle: Handle<HeadingProps>) {
-  return () => <h2 mix={css(merge(heading2, handle.props.styles))}>{handle.props.children}</h2>;
+  return () => <h2 mix={css(heading2)}>{handle.props.children}</h2>;
 }
 
 export function Heading3(handle: Handle<HeadingProps>) {
-  return () => <h3 mix={css(merge(heading3, handle.props.styles))}>{handle.props.children}</h3>;
+  return () => <h3 mix={css(heading3)}>{handle.props.children}</h3>;
 }
 
 export function Heading4(handle: Handle<HeadingProps>) {
-  return () => <h4 mix={css(merge(heading4, handle.props.styles))}>{handle.props.children}</h4>;
-}
-
-export function PostTitle(handle: Handle<{ children?: RemixNode }>) {
-  return () => (
-    <Heading1
-      styles={{
-        borderLeft: '8px solid var(--pink)',
-        paddingBlock: '0.5rem',
-        paddingLeft: '0.625rem',
-      }}
-    >
-      {handle.props.children}
-    </Heading1>
-  );
-}
-
-export function TextTitle(handle: Handle<{ children?: RemixNode }>) {
-  return () => (
-    <h2 mix={css(merge(heading, { ...text['3xl'], fontWeight: 600 }))}>{handle.props.children}</h2>
-  );
+  return () => <h4 mix={css(heading4)}>{handle.props.children}</h4>;
 }

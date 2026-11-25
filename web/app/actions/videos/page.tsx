@@ -2,11 +2,11 @@ import { gql } from 'graphql-tag';
 import { css, type Handle } from 'remix/component';
 
 import { routes } from '#/routes.ts';
-import type { VideosQuery } from '#/types/graphql.ts';
+import type { VideoQuery, VideosQuery } from '#/types/graphql.ts';
 import { getApp } from '#/ui/app-context.tsx';
-import { Heading1 } from '#/ui/heading.tsx';
+import { PageHeader } from '#/ui/page-header.tsx';
 import { YearSelect } from '#/ui/public/year-select.tsx';
-import { Videos, videoFragment, videosFragment } from '#/ui/videos.tsx';
+import { Video, Videos, videoFragment, videosFragment } from '#/ui/videos.tsx';
 
 // The page's videos, and the years there are videos from for its menu, which the home page's
 // videos don't need
@@ -57,24 +57,36 @@ export function VideosPage(
     const { videos, year, search } = handle.props;
     return (
       <>
-        <div
-          mix={css({
-            marginBottom: '1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          })}
+        <PageHeader
+          display
+          eyebrow={t('videos.count', { count: videos.count })}
+          title={year ? t('videos.headingIn', { year }) : t('videos.heading')}
         >
-          <Heading1>{year ? t('videos.headingIn', { year }) : t('videos.heading')}</Heading1>
           <YearSelect
             value={year || ''}
-            placeholder={t('nav.videosByYear')}
+            label={t('nav.videosByYear')}
+            placeholder={t('nav.years')}
             years={yearChoices(videos.years ?? [], year)}
             allHref={routes.videos.href()}
           />
-        </div>
+        </PageHeader>
         <Videos videos={videos} search={search} />
       </>
+    );
+  };
+}
+
+/** One video, under its title and a link back to the rest. It's no wider than its picture is sharp. */
+export function VideoPage(handle: Handle<{ video: NonNullable<VideoQuery['video']> }>) {
+  const { t } = getApp(handle);
+
+  return () => {
+    const { video } = handle.props;
+    return (
+      <article mix={css({ maxWidth: '60rem' })}>
+        <PageHeader eyebrow={t('videos.heading')} back={routes.videos.href()} title={video.title} />
+        <Video single video={video} />
+      </article>
     );
   };
 }

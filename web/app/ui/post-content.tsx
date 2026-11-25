@@ -17,7 +17,7 @@ import type {
   VideoNode,
 } from '#/types/graphql.ts';
 
-import { Heading2, Heading3, Heading4, PostTitle } from './heading.tsx';
+import { Heading1, Heading2, Heading3, Heading4 } from './heading.tsx';
 import { uploadUrl } from './public/media.ts';
 import { Video } from './videos.tsx';
 
@@ -72,7 +72,7 @@ function isEmptyText(nodes: TextNode[]) {
   return nodes.length === 0 || nodes.filter(({ text }) => text?.trim()).length === 0;
 }
 
-const contentImage = css({ marginBlock: '0.625rem' });
+const contentImage = css({ marginBlock: '0.625rem', borderRadius: '0.5rem' });
 const orderedList = css({
   marginBlock: '1.25rem',
   marginLeft: '2rem',
@@ -86,15 +86,26 @@ const unorderedList = css({
 const paragraph = css({ marginBottom: '1.5rem' });
 const quote = css({
   marginBlock: '1rem',
-  borderLeft: '4px solid var(--detail)',
+  borderLeft: '4px solid var(--pink)',
   padding: '0.625rem 1.25rem',
   fontFamily: 'var(--font-georgia)',
-  color: '#666',
+  color: 'var(--muted)',
   fontStyle: 'italic',
+});
+// Code keeps its line breaks, and scrolls sideways rather than widen the post
+const code = css({
+  marginBlock: '1rem',
+  overflowX: 'auto',
+  borderRadius: '0.5rem',
+  border: '1px solid var(--card-border)',
+  backgroundColor: 'var(--card)',
+  padding: '0.75rem 1rem',
+  fontSize: '0.875rem',
+  lineHeight: 1.625,
 });
 
 const headings = {
-  h1: PostTitle,
+  h1: Heading1,
   h2: Heading2,
   h3: Heading3,
   h4: Heading4,
@@ -107,7 +118,11 @@ export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }
       switch (elem?.type) {
         case 'code': {
           const children = (elem as CodeNode).children as TextNode[];
-          return isEmptyText(children) ? null : <pre key={`pre-${idx}`}>{textNodes(children)}</pre>;
+          return isEmptyText(children) ? null : (
+            <pre key={`pre-${idx}`} mix={code}>
+              {textNodes(children)}
+            </pre>
+          );
         }
         case 'heading': {
           const heading = elem as HeadingNode;

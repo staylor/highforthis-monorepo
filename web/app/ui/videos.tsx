@@ -5,10 +5,9 @@ import { routes } from '#/routes.ts';
 import type { Video_VideoFragment, Videos_VideosFragment } from '#/types/graphql.ts';
 
 import { getApp } from './app-context.tsx';
-import { TextTitle } from './heading.tsx';
 import { Link } from './link.tsx';
 import { findThumbnail } from './public/media.ts';
-import { lg, merge, pinkButton, sm, text } from './public/styles.ts';
+import { lg, pinkButton, quietButton, sm, text } from './public/styles.ts';
 import { VideoThumbnail } from './public/video-thumbnail.tsx';
 
 export const videoFragment = gql`
@@ -47,6 +46,10 @@ export const videosFragment = gql`
 /** The heading a video's title is in a grid of them: one level below the heading over the grid. */
 type TitleHeading = 'h2' | 'h3';
 
+/**
+ * A video to play: in a grid, with its title under it; in a post (`embed`), with a smaller title;
+ * or on its own page (`single`), which has the title already, so only the player.
+ */
 export function Video(
   handle: Handle<{
     video: Video_VideoFragment;
@@ -66,17 +69,21 @@ export function Video(
         href={href}
         dataId={video.dataId}
         title={video.title}
-        thumbUrl={findThumbnail(video.thumbnails)?.url}
-        embedded={embed}
+        thumbUrl={findThumbnail(video.thumbnails, single)?.url}
+        embedded={embed || single}
       />
     );
+
+    if (single) {
+      return thumbnail;
+    }
 
     if (embed) {
       return (
         <>
           {thumbnail}
           <h3 mix={css({ marginBottom: '1.5rem', ...text.base })}>
-            {single ? video.title : <Link href={href}>{video.title}</Link>}
+            <Link href={href}>{video.title}</Link>
           </h3>
         </>
       );
@@ -85,26 +92,16 @@ export function Video(
     return (
       <article>
         {thumbnail}
-        {single ? (
-          <TextTitle>{video.title}</TextTitle>
-        ) : (
-          <Title mix={css({ fontSize: '1rem', lineHeight: 1.375, fontWeight: 600 })}>
-            <Link href={href}>{video.title}</Link>
-          </Title>
-        )}
+        <Title mix={css({ fontSize: '1rem', lineHeight: 1.375, fontWeight: 600 })}>
+          <Link href={href}>{video.title}</Link>
+        </Title>
       </article>
     );
   };
 }
 
-const pageButton = {
-  borderRadius: '0.5rem',
-  padding: '0.625rem 1.25rem',
-  ...text.sm,
-  fontWeight: 500,
-  transition: 'all 150ms var(--ease)',
-  cursor: 'pointer',
-};
+const previousPage = css(quietButton);
+const nextPage = css(pinkButton);
 
 /**
  * A grid of videos. Previous/next are plain links, which work without JavaScript and are
@@ -154,26 +151,12 @@ export function Videos(
             })}
           >
             {hasPrevious && (
-              <Link
-                href={`?before=${first.cursor}`}
-                mix={css(
-                  merge(pageButton, {
-                    border: '1px solid light-dark(var(--neutral-200), rgb(255 255 255 / 0.1))',
-                    backgroundColor: 'var(--card)',
-                    color: 'var(--muted)',
-                    boxShadow: 'var(--shadow-sm)',
-                    '&:hover': {
-                      borderColor: 'rgb(229 0 130 / 0.3)',
-                      color: 'light-dark(var(--neutral-900), #fff)',
-                    },
-                  })
-                )}
-              >
+              <Link href={`?before=${first.cursor}`} mix={previousPage}>
                 ← {t('videos.previous')}
               </Link>
             )}
             {hasNext && (
-              <Link href={`?after=${last.cursor}`} mix={css(merge(pageButton, pinkButton))}>
+              <Link href={`?after=${last.cursor}`} mix={nextPage}>
                 {t('videos.next')} →
               </Link>
             )}

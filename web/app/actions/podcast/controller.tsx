@@ -15,7 +15,7 @@ import { lines } from '#/ui/lines.tsx';
 import { Link } from '#/ui/link.tsx';
 import { Podcast, podcastMetaTags } from '#/ui/podcast.tsx';
 import { uploadUrl } from '#/ui/public/media.ts';
-import { colorTransition, lineClamp, linkHover, text } from '#/ui/public/styles.ts';
+import { card, colorTransition, lineClamp, linkHover, merge, text } from '#/ui/public/styles.ts';
 
 import { ALL_EPISODES } from './feed.ts';
 
@@ -49,18 +49,14 @@ const podcastQuery = gql`
   }
 `;
 
-const episodeLink = css({
-  marginInline: '-1rem',
-  display: 'block',
-  borderRadius: '0.5rem',
-  padding: '1.25rem 1rem',
-  borderBottom: '1px solid var(--card-border)',
-  ...colorTransition,
-  '&:hover': {
-    backgroundColor: 'light-dark(var(--neutral-50), rgb(20 20 20 / 0.5))',
-  },
-  '&:last-child': { borderBottom: 0 },
-});
+// A card, as the home page's posts are
+const episodeLink = css(
+  merge(card, {
+    display: 'block',
+    borderRadius: '0.75rem',
+    padding: '1.25rem',
+  })
+);
 
 export default createController(routes.podcast, {
   middleware: [prefetchRootData()],
@@ -71,39 +67,51 @@ export default createController(routes.podcast, {
         context.gql.query<PodcastsQuery>(podcastsQuery, { first: ALL_EPISODES }),
         loadRootData(context),
       ]);
+      const { t } = context;
       const title = podcastSettings?.title
-        ? context.t('podcast.title', { title: podcastSettings.title })
-        : context.t('nav.podcast');
+        ? t('podcast.title', { title: podcastSettings.title })
+        : t('nav.podcast');
+      const episodes = podcasts?.edges ?? [];
+      // The podcast's own name, and how many episodes there are
+      const eyebrow = [podcastSettings?.title, t('podcast.episodes', { count: episodes.length })]
+        .filter(Boolean)
+        .join(' · ');
       return renderPage(
         context,
-        <Podcast title={title} description={podcastSettings?.description ?? ''}>
-          {podcasts?.edges.map(({ node }) => (
-            <Link href={routes.podcast.show.href({ id: node.id })} mix={episodeLink}>
-              <h3
-                mix={css({
-                  marginBottom: '0.5rem',
-                  ...text.lg,
-                  fontWeight: 600,
-                  ...colorTransition,
-                  [linkHover]: { color: 'var(--pink)' },
-                })}
-              >
-                {node.title}
-              </h3>
-              {node.description && (
-                <p
+        <Podcast
+          display
+          eyebrow={eyebrow}
+          title={t('nav.podcast')}
+          description={podcastSettings?.description ?? ''}
+        >
+          <div mix={css({ display: 'grid', gap: '0.75rem' })}>
+            {episodes.map(({ node }) => (
+              <Link href={routes.podcast.show.href({ id: node.id })} mix={episodeLink}>
+                <h2
                   mix={css({
-                    ...lineClamp(3),
-                    fontSize: '0.875rem',
-                    lineHeight: 1.625,
-                    color: 'var(--muted)',
+                    marginBottom: '0.375rem',
+                    ...text.lg,
+                    fontWeight: 600,
+                    ...colorTransition,
+                    [linkHover]: { color: 'var(--pink)' },
                   })}
                 >
-                  {lines(node.description)}
-                </p>
-              )}
-            </Link>
-          ))}
+                  {node.title}
+                </h2>
+                {node.description && (
+                  <p
+                    mix={css({
+                      ...lineClamp(3),
+                      ...text.sm,
+                      color: 'var(--muted)',
+                    })}
+                  >
+                    {lines(node.description)}
+                  </p>
+                )}
+              </Link>
+            ))}
+          </div>
         </Podcast>,
         {
           title,
@@ -130,9 +138,14 @@ export default createController(routes.podcast, {
       const { audio } = podcast;
       return renderPage(
         context,
-        <Podcast title={podcast.title} description={podcast.description}>
+        <Podcast
+          eyebrow={context.t('nav.podcast')}
+          back={routes.podcast.index.href()}
+          title={podcast.title}
+          description={podcast.description}
+        >
           {audio && (
-            <figure mix={css({ marginBottom: '1.5rem' })}>
+            <figure mix={css({ '& audio': { width: '100%' } })}>
               <audio src={uploadUrl(audio.destination, audio.fileName)} controls />
             </figure>
           )}

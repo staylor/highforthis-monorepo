@@ -1,5 +1,6 @@
 {
   "artists": {
+    "label": "Artist",
     "listen": "Listen on Apple Music",
     "website": "Artist Website"
   },
@@ -19,9 +20,6 @@
         "artist": "Also on the bill",
         "venue": "And everywhere else"
       },
-      "see": {
-        "all": "See all shows I have attended"
-      },
       "showsUnit_one": "show",
       "showsUnit_other": "shows",
       "tabs": {
@@ -36,14 +34,18 @@
         "since": "Since",
         "venues": "Venues"
       },
-      "twice": "Twice"
+      "twice": "Twice",
+      "view": "Show Stats →"
     }
   },
   "error": {
+    "home": "Go Home →",
     "message": "Something went wrong. Try again in a moment.",
+    "retry": "Try Again",
     "title": "Error"
   },
   "notFound": {
+    "home": "Go Home →",
     "message": "Yikes! Not Found!",
     "title": "Not Found"
   },
@@ -54,12 +56,19 @@
     "podcast": "Podcast",
     "shows": "Shows",
     "videos": "Videos",
-    "videosByYear": "-- Videos By Year --"
+    "videosByYear": "Videos by year",
+    "years": "All Years"
   },
   "podcast": {
+    "apple": "Listen on Apple Podcasts",
+    "episodes_one": "{{count}} episode",
+    "episodes_other": "{{count}} episodes",
+    "spotify": "Listen on Spotify",
     "title": "Podcast: {{title}}"
   },
   "posts": {
+    "count_one": "{{count}} post",
+    "count_other": "{{count}} posts",
     "heading": "Posts",
     "viewAll": "All Posts →",
     "featured": "Featured",
@@ -69,27 +78,35 @@
     "attended": {
       "artist_one": "<Bold>{{count}} Show</Bold> we have attended by this artist",
       "artist_other": "<Bold>{{count}} Shows</Bold> we have attended by this artist",
-      "heading": "Shows I have attended",
+      "heading": "Shows we have attended",
       "label": "Attended",
       "venue_one": "<Bold>{{count}} Show</Bold> we have attended at this venue",
       "venue_other": "<Bold>{{count}} Shows</Bold> we have attended at this venue"
     },
     "attendedIn_one": "Show attended in {{year}}",
     "attendedIn_other": "Shows attended in {{year}}",
-    "byYear": "-- Shows By Year --",
+    "byYear": "Shows by year",
     "fullCalendar": "Full Calendar →",
     "heading": "Shows",
     "history": "Shows > History",
+    "historyHeading": "Show History",
     "historyIn": "{{year}} Shows > History",
     "more": "More Shows →",
+    "nav": {
+      "calendar": "Calendar",
+      "history": "History",
+      "label": "Shows",
+      "stats": "Stats"
+    },
     "noRecommended": "No recommended shows at this time. Please check back soon.",
     "recommended": "Recommended Shows",
-    "todaysDate": "Today's date is",
+    "today": "Today is {{date}}",
     "viewFullHistory": "View Full History",
     "website": "Event Website"
   },
   "sphere": {
     "encore": "Encore",
+    "eyebrow": "{{setlistCount}} shows · {{songCount}} songs",
     "heading": "Dead & Company at the Sphere, Las Vegas, NV",
     "set1": "Set 1",
     "set2": "Set 2",
@@ -97,6 +114,7 @@
       "clear": "x",
       "everyShow": "played at every show",
       "hide": "Hide stats",
+      "hint": "Pick a song to see how often it was played. Shaded songs were played once.",
       "share": "{{percentage}}% of {{shows}} shows across {{weekends}} weekends",
       "show": "Show stats",
       "song_one": "{{song}} was played <strong>{{count}}</strong> time",
@@ -108,15 +126,18 @@
   "title": "High for This",
   "venues": {
     "capacity": "Capacity",
+    "label": "Venue",
     "permanentlyClosed": "Permanently Closed",
     "website": "Venue Website"
   },
   "videos": {
+    "count_one": "{{count}} video",
+    "count_other": "{{count}} videos",
     "heading": "Videos",
     "headingIn": "{{year}} Videos",
-    "next": "NEXT",
+    "next": "Next",
     "noFound": "No videos found.",
-    "previous": "PREVIOUS",
+    "previous": "Previous",
     "titleIn": "{{year}} » Videos",
     "viewAll": "View All →"
   }

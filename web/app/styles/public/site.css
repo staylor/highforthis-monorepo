@@ -16,6 +16,11 @@
     color-scheme: dark;
   }
 
+  /* The header stays at the top, so what's scrolled to stops under it */
+  html {
+    scroll-padding-top: 5rem;
+  }
+
   body {
     color: light-dark(#000, #fff);
     background-color: var(--page);
@@ -43,5 +48,16 @@
 
   blockquote {
     margin-inline: 1.5rem;
+  }
+
+  /* Where the keyboard is: the same pink ring on every link and button */
+  :focus-visible {
+    outline: 2px solid var(--pink);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--pink);
+    color: #fff;
   }
 }

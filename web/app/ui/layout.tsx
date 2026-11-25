@@ -17,19 +17,38 @@ const centered = {
   paddingInline: '1.5rem',
 };
 
-/** The bare page frame, used for error pages. */
+// The site's name in its title type. It's its full size from 30rem up, and below that as much of
+// the width as leaves room for the menu's button, so a phone doesn't wrap it out of the header.
+const logo = css({
+  fontFamily: 'var(--font-title)',
+  fontSize: 'clamp(1.25rem, 7.5vw, 2.25rem)',
+  lineHeight: 'calc(2.5 / 2.25)',
+  fontWeight: 900,
+  letterSpacing: '-0.025em',
+  textTransform: 'uppercase',
+  whiteSpace: 'nowrap',
+});
+
+/** The bare page frame, for the error page: the site's name over what went wrong. */
 export function Wrapper(handle: Handle<{ children?: RemixNode }>) {
+  const { t, root } = getApp(handle);
+
   return () => (
     <div
       mix={css({
-        marginInline: 'auto',
-        maxWidth: '80rem',
-        padding: '1.5rem',
-        backgroundColor: 'light-dark(#fff, #000)',
-        transition: 'color 300ms linear, background-color 300ms linear',
+        display: 'flex',
+        minHeight: '100%',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '1rem 1.5rem 2rem',
       })}
     >
-      {handle.props.children}
+      <Link href={routes.home.href()} mix={logo}>
+        {root.siteSettings?.siteTitle || t('title')}
+      </Link>
+      <main mix={css({ display: 'grid', flexGrow: 1, width: '100%', placeItems: 'center' })}>
+        {handle.props.children}
+      </main>
     </div>
   );
 }
@@ -76,16 +95,7 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
               justifyContent: 'space-between',
             })}
           >
-            <Link
-              href={routes.home.href()}
-              mix={css({
-                fontFamily: 'var(--font-title)',
-                ...text['4xl'],
-                fontWeight: 900,
-                letterSpacing: '-0.025em',
-                textTransform: 'uppercase',
-              })}
-            >
+            <Link href={routes.home.href()} mix={logo}>
               {siteTitle}
             </Link>
 
@@ -159,10 +169,13 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
           >
             <div
               mix={css({
+                // On one line, as the header's is: the copyright beside it wraps instead
+                flexShrink: 0,
                 fontFamily: 'var(--font-title)',
                 ...text['2xl'],
                 fontWeight: 700,
                 letterSpacing: '-0.025em',
+                whiteSpace: 'nowrap',
                 color: 'light-dark(var(--neutral-300), rgb(255 255 255 / 0.3))',
               })}
             >
@@ -171,6 +184,7 @@ export function Layout(handle: Handle<{ children?: RemixNode }>) {
             <div
               mix={css({
                 display: 'flex',
+                flexShrink: 0,
                 alignItems: 'center',
                 gap: '1.5rem',
                 color: 'var(--muted)',

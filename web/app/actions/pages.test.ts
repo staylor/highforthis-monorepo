@@ -54,6 +54,15 @@ const textOf = (html: string) =>
 const meta = (html: string, property: string) =>
   html.match(new RegExp(`<meta property="${property}" content="([^"]*)"`))?.[1];
 
+/** What a page's h1s say, without their markup. A page has one: its title. */
+const titles = (html: string) =>
+  Array.from(html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g), ([, title]) =>
+    title
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
+
 // --- What GraphQL answers
 
 const App = {
@@ -187,9 +196,11 @@ describe('the home page', () => {
     assert.match(link(html, '/shows/s3') ?? '', /<span [^>]*aria-hidden="true"[^>]*>S<\/span>/);
     assert.doesNotMatch(link(html, '/shows/s3') ?? '', /<img /);
 
-    // Each video's title is under the section's heading
+    // Each video's title is under the section's heading, and so is the featured post's. The
+    // page's title is the logo over it, so its h1 says the same for a screen reader.
     assert.match(html, /<h3[^>]*><a [^>]*href="\/video\/video-1"[^>]*>Video 1<\/a><\/h3>/);
-    assert.doesNotMatch(html, /<h1[ >]/);
+    assert.match(html, /<h3[^>]*>Best of 2024<\/h3>/);
+    assert.deepEqual(titles(html), ['High for This: Music as it happens.']);
     assert.match(
       body,
       /Latest Posts .*Featured .*Best of 2024 .*The year in records .*Second Post/
@@ -225,6 +236,50 @@ describe('the frame around every page', () => {
     assert.ok(html.includes('&copy; 2026 <a href="https://example.com/us">Us</a>alert(1)'));
     assert.doesNotMatch(html, /<script>alert/);
   });
+
+  // The history's and a video's titles were h2s, and the home page had no heading of its own
+  it('titles every page with one h1', async (t) => {
+    const nobody = { leaders: [], showStats: [], showTotals: { artists: 0, shows: 0, venues: 0 } };
+    stubGraphQL(t, {
+      App,
+      Posts: { posts },
+      Videos: { videos },
+      Shows: { shows },
+      ShowsHistory: { shows: { ...shows, count: 3, years: [2030] } },
+      ShowStats: nobody,
+      Venue: { apiKeys: null, venue: bowery, shows: null, attended: null },
+      Podcasts: { podcasts: { edges: [] } },
+    });
+    const pages = {
+      [routes.posts.href()]: 'Posts',
+      [routes.videos.href()]: 'Videos',
+      [routes.videos.href({ year: '2024' })]: '2024 Videos',
+      [routes.shows.index.href()]: 'Recommended Shows',
+      [routes.shows.history.href()]: 'Show History',
+      [routes.shows.history.href({ year: '2030' })]: 'Show History',
+      [routes.shows.stats.href({ entity: 'venue' })]: 'Show Stats',
+      [routes.venue.href({ slug: bowery.slug })]: 'Bowery Ballroom',
+      [routes.podcast.index.href()]: 'Podcast',
+      [routes.sphere.href()]: 'Dead &amp; Company at the Sphere, Las Vegas, NV',
+      '/no/such/page': 'Yikes! Not Found!',
+    };
+    for (const [path, title] of Object.entries(pages)) {
+      assert.deepEqual(titles((await page(path)).html), [title], path);
+    }
+  });
+});
+
+describe('the Sphere setlists', () => {
+  it('says how many shows and songs there were, and what picking a song does', async (t) => {
+    stubGraphQL(t, { App });
+    const { status, html } = await page(routes.sphere.href());
+    assert.equal(status, 200);
+    const body = textOf(html);
+    assert.match(body, /\d+ shows · \d+ songs Dead &amp; Company at the Sphere/);
+    assert.match(body, /Show stats Pick a song to see how often it was played\./);
+    // A night's sets, each under its name
+    assert.match(body, /5\/16\/24 Set 1 Feel Like a Stranger .*Set 2 .*Encore Not Fade Away/);
+  });
 });
 
 describe('posts', () => {
@@ -233,6 +288,7 @@ describe('posts', () => {
     const { status, html } = await page(routes.posts.href());
     assert.equal(status, 200);
     assert.match(html, /<title>Posts » High for This<\/title>/);
+    assert.match(textOf(html), /2 posts Posts /);
     assert.match(link(html, '/post/best-of-2024') ?? '', /Best of 2024/);
     assert.match(link(html, '/post/second-post') ?? '', /Second Post/);
     assert.deepEqual(operations.find((op) => op.operationName === 'Posts')?.variables, {
@@ -246,6 +302,8 @@ describe('posts', () => {
     assert.equal(status, 200);
     assert.match(html, /<title>Best of 2024 » High for This<\/title>/);
     assert.match(html, /<h1[^>]*>Best of 2024<\/h1>/);
+    // Over its title, the way back to the rest
+    assert.match(link(html, '/posts') ?? '', /← Posts/);
     assert.match(html, /<h2[^>]*>Records<\/h2>/);
     assert.match(html, /<p[^>]*>Start with <strong>this one<\/strong>\.<\/p>/);
     assert.match(html, /<li>One more<\/li>/);
@@ -302,10 +360,22 @@ describe('artists and venues', () => {
     assert.equal(status, 200);
     assert.match(html, /<title>Wilco » High for This<\/title>/);
     assert.match(link(html, 'https://wilcoworld.net') ?? '', /Artist Website/);
-    assert.ok(html.includes('src="https://art.example/300x300.jpg"'));
+    assert.match(
+      html,
+      /<a href="https:\/\/music\.apple\.com\/wilco"[^>]*>Listen on Apple Music →</
+    );
+    // Twice the picture's size, for a screen with two pixels to a point
+    assert.ok(html.includes('src="https://art.example/600x600.jpg"'));
+    assert.deepEqual(titles(html), ['Wilco']);
+    // The shows coming up and the shows attended, each under a heading with a link to the rest
     const body = textOf(html);
-    assert.match(body, /06\/14 .*Wilco .*Bowery Ballroom/);
-    assert.match(body, /1 Show we have attended by this artist .*03\/01\/2019 .*New York, NY/);
+    assert.match(body, /Artist Wilco .*Recommended Shows .*06\/14 .*Wilco .*Bowery Ballroom/);
+    assert.match(
+      body,
+      /Attended .*1 Show we have attended by this artist .*03\/01\/2019 .*New York, NY/
+    );
+    assert.match(link(html, '/shows') ?? '', /Shows/);
+    assert.match(link(html, '/shows/stats/artist') ?? '', /Show Stats/);
     assert.deepEqual(operations.find((op) => op.operationName === 'Artist')?.variables, {
       first: 100,
       slug: 'wilco',
@@ -366,7 +436,15 @@ describe('artists and venues', () => {
       /src="https:\/\/maps\.googleapis\.com\/maps\/api\/staticmap\?[^"]*key=maps-key/
     );
     assert.match(html, /href="https:\/\/maps\.apple\.com\/\?q=Bowery\+Ballroom/);
+    assert.match(link(html, 'https://boweryballroom.com') ?? '', /Venue Website/);
     assert.match(body, /1 Show we have attended at this venue/);
+    assert.match(link(html, '/shows/stats/venue') ?? '', /Show Stats/);
+    // Its shows are all here, so they don't each say where, or link to the page they're on
+    assert.match(
+      body,
+      /Recommended Shows .*June 06\/14 W Wilco July 07\/04 S Fourth of July Jam 07\/04 W/
+    );
+    assert.equal(link(html, '/venue/bowery-ballroom'), undefined);
   });
 
   it('leaves the map out without a key for it', async (t) => {
@@ -391,7 +469,9 @@ describe('videos', () => {
     assert.equal(status, 200);
     assert.match(html, /<title>Videos » High for This<\/title>/);
     assert.match(html, /<h2[^>]*><a [^>]*href="\/video\/video-2"[^>]*>Video 2<\/a><\/h2>/);
-    assert.match(link(html, '?after=cursor-2') ?? '', /NEXT/);
+    assert.match(textOf(html), /2 videos Videos /);
+    assert.match(html, /<select aria-label="Videos by year"[^>]*><option value="">All Years</);
+    assert.match(link(html, '?after=cursor-2') ?? '', /Next/);
     assert.equal(link(html, '?before=cursor-1'), undefined);
     assert.deepEqual(operations.find((op) => op.operationName === 'Videos')?.variables, {
       first: 9,
@@ -429,6 +509,23 @@ describe('videos', () => {
     assert.equal(found.status, 200);
     assert.match(found.html, /<title>Video 1 » High for This<\/title>/);
     assert.ok(found.html.includes('src="https://i.ytimg.com/vi/1/hq.jpg"'));
+    assert.deepEqual(titles(found.html), ['Video 1']);
+    assert.match(link(found.html, '/videos') ?? '', /Videos/);
+
+    // On its own page it has the widest picture there is, which a grid has no room for
+    const wide = { height: 720, url: 'https://i.ytimg.com/vi/1/maxres.jpg', width: 1280 };
+    const sharp = { ...video('1'), thumbnails: [...video('1').thumbnails, wide] };
+    stubGraphQL(t, {
+      App,
+      Video: { video: sharp },
+      Videos: { videos: { ...videos, edges: [{ cursor: 'cursor-1', node: sharp }] } },
+    });
+    assert.ok(
+      (await page(routes.video.href({ slug: 'video-1' }))).html.includes(`src="${wide.url}"`)
+    );
+    assert.ok(
+      (await page(routes.videos.href())).html.includes('src="https://i.ytimg.com/vi/1/hq.jpg"')
+    );
 
     stubGraphQL(t, { App, Video: { video: null } });
     assert.equal((await page(routes.video.href({ slug: 'nope' }))).status, 404);
@@ -442,12 +539,24 @@ describe('shows', () => {
     assert.equal(status, 200);
     assert.match(html, /<title>Shows » High for This<\/title>/);
     const body = textOf(html);
-    assert.match(body, /Recommended Shows .*Today's date is/);
+    assert.match(body, /Today is \w+, \w+ \d+ Recommended Shows /);
     assert.match(body, /2030 .*June .*06\/14 .*Wilco .*July .*07\/04/);
+    // The shows' other pages are a tab away: the history, and the stats
+    assert.match(html, /<a href="\/shows" aria-current="page"[^>]*>Calendar<\/a>/);
+    assert.match(link(html, '/shows/history') ?? '', /History/);
+    assert.match(link(html, '/shows/stats/artist') ?? '', /Stats/);
     assert.deepEqual(operations.find((op) => op.operationName === 'Shows')?.variables, {
       first: 200,
     });
     assert.equal((await page(routes.shows.list.href())).status, 200);
+  });
+
+  // The page was its heading and nothing under it
+  it('says so when there are no shows coming up', async (t) => {
+    stubGraphQL(t, { App, Shows: { shows: { edges: [], pageInfo: { hasNextPage: false } } } });
+    const { status, html } = await page(routes.shows.index.href());
+    assert.equal(status, 200);
+    assert.match(textOf(html), /No recommended shows at this time\./);
   });
 
   // The list stopped at its first page, without a word about the rest
@@ -474,8 +583,9 @@ describe('shows', () => {
     const operations = stubGraphQL(t, { App, ShowsHistory: { shows: history } });
     const { status, html } = await page(routes.shows.history.href({ year: '2030' }));
     assert.equal(status, 200);
-    assert.match(textOf(html), /3 Shows attended in 2030 .*View Full History/);
+    assert.match(textOf(html), /3 Shows attended in 2030 Show History ← View Full History/);
     assert.ok(link(html, '/shows/history') !== undefined);
+    assert.match(html, /<a href="\/shows\/history" aria-current="page"[^>]*>History<\/a>/);
     assert.match(html, /<option value="2030" selected>2030<\/option>/);
     assert.match(html, /<option value="2029">2029<\/option>/);
     assert.deepEqual(operations.find((op) => op.operationName === 'ShowsHistory')?.variables, {
@@ -484,8 +594,10 @@ describe('shows', () => {
     });
 
     const all = await page(routes.shows.history.href());
-    assert.match(textOf(all.html), /Shows I have attended/);
-    assert.match(all.html, /<option value="">-- Shows By Year --<\/option>/);
+    assert.match(textOf(all.html), /3 Shows we have attended Show History /);
+    assert.doesNotMatch(textOf(all.html), /View Full History/);
+    // The menu is of years, so it says what of for a screen reader
+    assert.match(all.html, /<select aria-label="Shows by year"[^>]*><option value="">All Years</);
     assert.doesNotMatch(all.html, /<option[^>]* selected/);
   });
 
@@ -625,6 +737,9 @@ describe('shows', () => {
     assert.ok(link(html, '/artist/wilco') !== undefined);
     assert.match(html, /<a href="\/shows\/stats\/artist" aria-current="page"[^>]*>Artists<\/a>/);
     assert.match(link(html, '/shows/stats/venue') ?? '', /Venues/);
+    // Among the shows' pages, with the history a tab away
+    assert.match(html, /<a href="\/shows\/stats\/artist" aria-current="page"[^>]*>Stats<\/a>/);
+    assert.match(link(html, '/shows/history') ?? '', /History/);
     assert.deepEqual(operations.find((op) => op.operationName === 'ShowStats')?.variables, {
       entity: 'ARTIST',
       leaders: 20,
@@ -682,8 +797,12 @@ describe('shows', () => {
     const { status, html } = await page(routes.shows.show.href({ id: 's3' }));
     assert.equal(status, 200);
     assert.match(html, /<title>Fourth of July Jam » High for This<\/title>/);
-    assert.match(textOf(html), /July 4, 2030 - 7:30PM .*Fourth of July Jam .*Spoon/);
-    assert.match(link(html, '/artist/spoon') ?? '', /Spoon/);
+    assert.match(
+      textOf(html),
+      /Thu, July 4, 2030 · 7:30 PM Fourth of July Jam Spoon → Bowery Ballroom Event Website/
+    );
+    assert.deepEqual(titles(html), ['Fourth of July Jam']);
+    assert.match(link(html, '/artist/spoon') ?? '', /Spoon →/);
     assert.match(link(html, '/venue/bowery-ballroom') ?? '', /Bowery Ballroom/);
     assert.match(link(html, 'https://tickets.example/jam') ?? '', /Event Website/);
   });
@@ -694,7 +813,10 @@ describe('shows', () => {
     const { status, html } = await page(routes.shows.show.href({ id: 's1' }));
     assert.equal(status, 200);
     assert.match(html, /<title>Bowery Ballroom » High for This<\/title>/);
-    assert.match(textOf(html), /June 14, 2030 - 8:00PM/);
+    // It goes by where it is, which it says once
+    assert.match(textOf(html), /Fri, June 14, 2030 · 8:00 PM Bowery Ballroom High for This/);
+    assert.deepEqual(titles(html), ['Bowery Ballroom']);
+    assert.match(link(html, '/venue/bowery-ballroom') ?? '', /Bowery Ballroom/);
   });
 });
 
@@ -723,8 +845,11 @@ describe('the podcast', () => {
     const { status, html } = await page(routes.podcast.index.href());
     assert.equal(status, 200);
     assert.match(html, /<title>Podcast: The Podcast » High for This<\/title>/);
-    assert.match(textOf(html), /Podcast: The Podcast .*Talking about shows .*Episode One/);
+    assert.match(textOf(html), /The Podcast · 1 episode Podcast Talking about shows .*Episode One/);
     assert.match(link(html, '/podcast/e1') ?? '', /First line<br \/>Second line/);
+    // Where else to listen: links that are pictures, named for a screen reader
+    assert.match(html, /<a [^>]*aria-label="Listen on Apple Podcasts"/);
+    assert.match(html, /<a [^>]*aria-label="Listen on Spotify"/);
     assert.equal(meta(html, 'og:image'), `${storage}/2024/01/podcast.jpg`);
     assert.equal(meta(html, 'og:url'), 'https://highforthis.com/podcast');
     // Asking for no page size answered 10, which left out the first episode
@@ -738,6 +863,8 @@ describe('the podcast', () => {
     const { status, html } = await page(routes.podcast.show.href({ id: 'e1' }));
     assert.equal(status, 200);
     assert.match(html, /<title>Episode One » High for This<\/title>/);
+    assert.deepEqual(titles(html), ['Episode One']);
+    assert.match(link(html, '/podcast') ?? '', /Podcast/);
     assert.ok(html.includes(`<audio src="${storage}/2024/01/one.mp3" controls`));
     assert.equal(meta(html, 'og:url'), 'https://highforthis.com/podcast/e1');
   });

@@ -146,6 +146,10 @@ describe('root controller', () => {
     assert.match(html, /Something went wrong\. Try again in a moment\./);
     assert.match(html, /<title>Error »/);
     assert.doesNotMatch(html, /TypeError|Cannot read/);
+    // Under the site's name, with links to try the page again and to leave it
+    assert.match(html, /<a [^>]*href="\/podcast\.xml"[^>]*>Try Again<\/a>/);
+    assert.match(html, /<a [^>]*href="\/"[^>]*>Go Home →<\/a>/);
+    assert.doesNotMatch(html, /<footer/);
   });
 
   it('rejects WordPress probes before routing', async () => {
@@ -157,7 +161,13 @@ describe('root controller', () => {
     stubGraphQL(t, { 'graphql:App': () => ({ data: {} }) });
     const response = await router.fetch(new URL('/no/such/page', origin));
     assert.equal(response.status, 404);
-    assert.match(await response.text(), /Yikes! Not Found!/);
+    const html = await response.text();
+    assert.match(html, /Yikes! Not Found!/);
+    // In the site's frame, so there's somewhere to go from it: the navigation, home, the shows
+    assert.match(html, /<nav[^>]*>.*<a [^>]*href="\/videos"[^>]*>Videos<\/a>/s);
+    assert.match(html, /<a [^>]*href="\/"[^>]*>Go Home →<\/a>/);
+    assert.match(html, /<a [^>]*href="\/shows"[^>]*>Full Calendar →<\/a>/);
+    assert.match(html, /<footer/);
   });
 
   it("renders the 404 page for a podcast, a show or stats that don't exist", async (t) => {

@@ -5,7 +5,7 @@ interface VideoThumbnailProps {
   dataId: string;
   title: string;
   thumbUrl?: string;
-  /** In a post: no space below. */
+  /** In a post, or on the video's own page: no space below. */
   embedded?: boolean;
 }
 
@@ -52,12 +52,16 @@ export const VideoThumbnail = clientEntry(
             }),
           ]}
         >
-          {/* Hovering zooms the thumbnail and shows the play button */}
+          {/*
+            Hovering zooms the thumbnail and shows the play button. So does reaching the link with
+            the keyboard, and a screen with nothing to hover with shows the button all along.
+          */}
           <figure
             mix={css({
               position: 'relative',
               overflow: 'hidden',
               borderRadius: '0.75rem',
+              backgroundColor: 'var(--neutral-950)',
               '& img': {
                 aspectRatio: '16 / 9',
                 width: '100%',
@@ -74,7 +78,8 @@ export const VideoThumbnail = clientEntry(
                 opacity: 0,
                 transition: 'opacity 150ms var(--ease)',
               },
-              '&:hover .play': { opacity: 1 },
+              '&:hover .play, :focus-visible > & .play': { opacity: 1 },
+              '@media (hover: none)': { '& .play': { opacity: 1 } },
             })}
           >
             {thumbUrl && <img src={thumbUrl} alt={title} />}
