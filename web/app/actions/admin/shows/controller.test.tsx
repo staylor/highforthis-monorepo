@@ -194,6 +194,31 @@ describe('admin shows', () => {
     assert.match(html, /<input type="checkbox" name="attended" value="true" checked/);
   });
 
+  // The pickers had the first 500, so artists after them alphabetically couldn't be picked
+  it('offers every artist to pick from, past the first page', async (t) => {
+    const operations = stubGraphQL(t, {
+      ShowEntities: {
+        show,
+        artists: {
+          edges: entities.artists.edges.map(({ node }) => ({ cursor: `cursor-${node.id}`, node })),
+          pageInfo: { hasNextPage: true },
+        },
+        venues: entities.venues,
+      },
+      ShowFormArtists: {
+        artists: {
+          edges: [{ cursor: 'cursor-a3', node: { id: 'a3', name: 'Yo La Tengo' } }],
+          pageInfo: { hasNextPage: false },
+        },
+      },
+    });
+    const html = await (await get('/admin/show/add')).text();
+    assert.match(html, /<option value="a3">Yo La Tengo<\/option>/);
+    assert.deepEqual(operations.find((op) => op.operationName === 'ShowFormArtists')?.variables, {
+      after: 'cursor-a1',
+    });
+  });
+
   it('adds a show with its artists, venue and date, unattended unless checked', async (t) => {
     const operations = stubGraphQL(t, { CreateShow: { createShow: { id: 's9' } } });
     const response = await post(

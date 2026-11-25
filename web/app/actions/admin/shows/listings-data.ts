@@ -2,9 +2,40 @@ import { gql } from 'graphql-tag';
 
 import type { GraphQLClient, RedirectResult } from '#/lib/admin/forms.ts';
 import { attempt } from '#/lib/graphql.ts';
+import { withEveryPage } from '#/lib/paging.ts';
 import { routes } from '#/routes.ts';
-import type { ImportListingsMutation, VenueListingsAdminQuery } from '#/types/graphql.ts';
+import type {
+  ImportListingsMutation,
+  ListingsVenuesQuery,
+  VenueListingsAdminQuery,
+} from '#/types/graphql.ts';
 import { splitArtists } from '#/ui/admin/public/split-artists.ts';
+
+// The venues to choose from, a page at a time
+const listingsVenuesFragment = gql`
+  fragment Listings_venues on VenueConnection {
+    edges {
+      cursor
+      node {
+        id
+        listingsUrl
+        name
+      }
+    }
+    pageInfo {
+      hasNextPage
+    }
+  }
+`;
+
+const listingsVenuesQuery = gql`
+  query ListingsVenues($after: String) {
+    venues(after: $after, first: 500) {
+      ...Listings_venues
+    }
+  }
+  ${listingsVenuesFragment}
+`;
 
 const listingsQuery = gql`
   query VenueListingsAdmin($venueId: String!, $withListings: Boolean!) {
@@ -28,15 +59,10 @@ const listingsQuery = gql`
       }
     }
     venues(first: 500) {
-      edges {
-        node {
-          id
-          listingsUrl
-          name
-        }
-      }
+      ...Listings_venues
     }
   }
+  ${listingsVenuesFragment}
 `;
 
 const importMutation = gql`
@@ -48,17 +74,26 @@ const importMutation = gql`
   }
 `;
 
-export function loadVenueListings({
+export async function loadVenueListings({
   gql: client,
   venueId,
 }: {
   gql: GraphQLClient;
   venueId?: string;
 }) {
-  return client.query<VenueListingsAdminQuery>(listingsQuery, {
+  const data = await client.query<VenueListingsAdminQuery>(listingsQuery, {
     venueId: venueId ?? '',
     withListings: Boolean(venueId),
   });
+  // Every venue, so the menu doesn't stop at the first page
+  const venues =
+    data.venues &&
+    (await withEveryPage(
+      data.venues,
+      async (after) =>
+        (await client.query<ListingsVenuesQuery>(listingsVenuesQuery, { after })).venues
+    ));
+  return { ...data, venues };
 }
 
 /** Adds the checked listings as shows, each with the artists entered for it. */

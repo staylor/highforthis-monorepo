@@ -46,7 +46,9 @@ export const showsGridFragment = gql`
 
 export const attendedFragment = gql`
   fragment Attended_shows on ShowConnection {
+    count
     edges {
+      cursor
       node {
         id
         date
@@ -65,6 +67,9 @@ export const attendedFragment = gql`
           state
         }
       }
+    }
+    pageInfo {
+      hasNextPage
     }
   }
 `;
@@ -417,7 +422,7 @@ export function Attended(
             {trans(
               t,
               `shows.attended.${relation}`,
-              { count: shows.edges.length },
+              { count: shows.count ?? shows.edges.length },
               { Bold: (children) => <span mix={underline}>{children}</span> }
             )}
           </Link>

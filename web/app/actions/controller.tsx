@@ -3,6 +3,7 @@ import { createController } from 'remix/router';
 
 import { assets } from '#/assets.ts';
 import type { Variables } from '#/lib/graphql.ts';
+import { everyPage } from '#/lib/paging.ts';
 import { isYear } from '#/lib/year.ts';
 import { routes } from '#/routes.ts';
 import type {
@@ -31,6 +32,7 @@ import {
   renderPage,
   siteUrl,
 } from './render-page.tsx';
+import { withEveryAttendedShow, withEveryUpcomingShow } from './shows/lists.ts';
 import { Setlists, type Setlist, type Stats } from './sphere/public/setlists.tsx';
 import setlists from './sphere/setlists.json' with { type: 'json' };
 import { VideosPage, videoQuery, videosQuery } from './videos/page.tsx';
@@ -69,9 +71,11 @@ export default createController(routes, {
     posts: {
       middleware: prefetch,
       async handler(context) {
-        const { posts } = await context.gql.query<PostsQuery>(postsQuery, {
-          first: 50,
-        });
+        // Every post: the page has no next page to reach older ones on
+        const posts = await everyPage(
+          async (after) =>
+            (await context.gql.query<PostsQuery>(postsQuery, { after, first: 50 })).posts
+        );
         const title = context.t('posts.heading');
         if (!posts) {
           return renderPage(context, null, { title });
@@ -113,14 +117,18 @@ export default createController(routes, {
     artist: {
       middleware: prefetch,
       async handler(context) {
-        const data = await context.gql.query<ArtistQuery>(artistQuery, {
-          first: 100,
-          slug: context.params.slug,
-        });
+        const { slug } = context.params;
+        const data = await context.gql.query<ArtistQuery>(artistQuery, { first: 100, slug });
         if (!data.artist) {
           return renderNotFound(context);
         }
-        return renderPage(context, <ArtistPage data={data} />, {
+        // The page lists every show, with no next page, so it loads the rest of a long list
+        const of = { artist: { slug } };
+        const [shows, attended] = await Promise.all([
+          data.shows && withEveryUpcomingShow(context.gql, data.shows, of),
+          data.attended && withEveryAttendedShow(context.gql, data.attended, of),
+        ]);
+        return renderPage(context, <ArtistPage data={{ ...data, shows, attended }} />, {
           title: data.artist.name,
         });
       },
@@ -129,14 +137,17 @@ export default createController(routes, {
     venue: {
       middleware: prefetch,
       async handler(context) {
-        const data = await context.gql.query<VenueQuery>(venueQuery, {
-          first: 100,
-          slug: context.params.slug,
-        });
+        const { slug } = context.params;
+        const data = await context.gql.query<VenueQuery>(venueQuery, { first: 100, slug });
         if (!data.venue) {
           return renderNotFound(context);
         }
-        return renderPage(context, <VenuePage data={data} />, {
+        const of = { venue: { slug } };
+        const [shows, attended] = await Promise.all([
+          data.shows && withEveryUpcomingShow(context.gql, data.shows, of),
+          data.attended && withEveryAttendedShow(context.gql, data.attended, of),
+        ]);
+        return renderPage(context, <VenuePage data={{ ...data, shows, attended }} />, {
           title: data.venue.name,
         });
       },

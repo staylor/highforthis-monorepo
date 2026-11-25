@@ -29,6 +29,7 @@ const show = (
   venue = 'Bowery Ballroom',
   artwork?: string
 ) => ({
+  cursor: `cursor-${id}`,
   node: {
     id,
     date: new Date(date).getTime(),
@@ -189,18 +190,29 @@ describe('ShowsList', () => {
 });
 
 describe('Attended', () => {
+  const attended = (count: number | null) => ({
+    count,
+    edges: [show('1', '2024-01-01', 'Sting'), show('2', '2024-02-01', 'Sting')],
+    pageInfo: { hasNextPage: false },
+  });
+
   it('pluralizes the heading and wraps the count in the Bold component', async () => {
     const html = await renderToString(
       <AppProvider value={app}>
-        <Attended
-          relation="venue"
-          shows={{
-            edges: [show('1', '2024-01-01', 'Sting'), show('2', '2024-02-01', 'Sting')],
-          }}
-        />
+        <Attended relation="venue" shows={attended(null)} />
       </AppProvider>
     );
     assert.match(html, /<span class="[^"]+">2 Shows<\/span> we have attended at this venue/);
+  });
+
+  // It counted the shows listed, which stopped at the first page
+  it('counts every show the connection has', async () => {
+    const html = await renderToString(
+      <AppProvider value={app}>
+        <Attended relation="venue" shows={attended(120)} />
+      </AppProvider>
+    );
+    assert.match(html, /<span class="[^"]+">120 Shows<\/span> we have attended at this venue/);
   });
 });
 
