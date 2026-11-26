@@ -140,14 +140,11 @@ final class NavigationTests: XCTestCase {
 
     @MainActor
     private func launch(scenario: String = "normal", largeText: Bool = false, dark: Bool = false) -> XCUIApplication {
-        let app = XCUIApplication()
-        app.launchArguments = ["-ui-testing", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
-        if largeText { app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"] }
-        app.launchEnvironment["UI_TEST_DARK"] = dark ? "1" : "0"
-        app.launchEnvironment["UI_TEST_SCENARIO"] = scenario
-        app.launchEnvironment["TZ"] = "America/New_York"
-        app.launch()
-        return app
+        launchApp(
+            scenario: scenario,
+            arguments: largeText ? ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXL"] : [],
+            environment: ["UI_TEST_DARK": dark ? "1" : "0"]
+        )
     }
 
     @MainActor
@@ -161,11 +158,6 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
-    private func element(_ identifier: String, in app: XCUIApplication) -> XCUIElement {
-        app.descendants(matching: .any).matching(identifier: identifier).firstMatch
-    }
-
-    @MainActor
     private func tap(_ element: XCUIElement) {
         XCTAssertTrue(element.waitForExistence(timeout: 10))
         element.tap()
@@ -175,14 +167,6 @@ final class NavigationTests: XCTestCase {
     @MainActor
     private func back(_ app: XCUIApplication) {
         tap(app.buttons["BackButton"].firstMatch)
-    }
-
-    @MainActor
-    private func screenshot(_ name: String, _ app: XCUIApplication) {
-        let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.name = name
-        attachment.lifetime = .keepAlways
-        add(attachment)
     }
 }
 #endif

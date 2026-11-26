@@ -63,38 +63,29 @@ struct ShowListRow: View {
     }
 }
 
-/// A show on an artist's or venue's page, which already says who or where, so the row leads with the date.
-struct DatedShowLink: View {
-    let show: ShowList_show
-    let title: String
-
-    var body: some View {
-        RouteLink(.show(id: show.id, title: show.headline)) {
-            RowLabel(eyebrow: Text(show.startDate, format: .showDate), title: title)
-        }
-        .accessibilityIdentifier("show-\(show.id)")
-    }
-}
-
 /// A few of an artist's or a venue's shows under a heading, with a link to the rest of them. Without any, there's no
-/// heading either, as on the website.
+/// heading either, as on the website. The page already says who or where, so each row leads with the date.
 struct DatedShowsSection: View {
     let title: LocalizedStringResource
     /// How many there are in all, for a heading that says so.
     var count: Int?
-    let shows: [ShowList_show]
-    /// The list of all of them, when there are more than these.
-    var all: ShowFilter?
+    let shows: DatedShowsSection_shows?
+    /// The list of all of them, which the section links to when it has only some.
+    let all: ShowFilter
     /// What a row calls its show: where it is on an artist's page, and who's playing on a venue's.
     let name: (ShowList_show) -> String
 
     var body: some View {
-        if !shows.isEmpty {
+        let rows = shows?.edges.map(\.node.fragments.showList_show) ?? []
+        if !rows.isEmpty {
             Section {
-                ForEach(shows, id: \.id) { show in
-                    DatedShowLink(show: show, title: name(show))
+                ForEach(rows, id: \.id) { show in
+                    RouteLink(.show(id: show.id, title: show.headline)) {
+                        RowLabel(eyebrow: Text(show.startDate, format: .showDate), title: name(show))
+                    }
+                    .accessibilityIdentifier("show-\(show.id)")
                 }
-                if let all {
+                if shows?.pageInfo.hasNextPage == true {
                     RouteLink(.viewAllShows, route: .shows(all))
                 }
             } header: {

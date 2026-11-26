@@ -10,15 +10,21 @@ nonisolated public final class VideoNode: MockObject {
   public typealias MockValueCollectionType = Array<Mock<VideoNode>>
 
   public struct MockFields: Sendable {
+    @Field<[EditorNode?]>("children") public var children
+    @Field<String>("type") public var type
     @Field<Video>("video") public var video
   }
 }
 
 public extension Mock where O == VideoNode {
   convenience init(
+    children: [(any AnyMock)?]? = nil,
+    type: String? = nil,
     video: Mock<Video>? = nil
   ) {
     self.init()
+    _setList(children, for: \.children)
+    _setScalar(type, for: \.type)
     _setEntity(video, for: \.video)
   }
 }

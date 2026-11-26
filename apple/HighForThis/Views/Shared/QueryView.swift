@@ -32,16 +32,23 @@ struct QueryView<Query: GraphQLQuery, Content: View>: View where Query.ResponseF
             }
         }
         .task(id: query) { await state.load(query) }
-        .refreshable { await state.load(query, refresh: true) }
-        #if os(macOS)
+        .refreshable(isLoading: state.isLoading) { await state.load(query, refresh: true) }
+    }
+}
+
+extension View {
+    /// Pull to refresh, and on a Mac, a Refresh button with ⌘R, disabled while it's loading.
+    func refreshable(isLoading: Bool, action: @escaping @MainActor @Sendable () async -> Void) -> some View {
+        refreshable(action: action)
+            #if os(macOS)
         .toolbar {
             ToolbarItem {
-                Button(.refresh, systemImage: "arrow.clockwise") { Task { await state.load(query, refresh: true) } }
+                Button(.refresh, systemImage: "arrow.clockwise") { Task { await action() } }
                 .keyboardShortcut("r", modifiers: .command)
-                .disabled(state.isLoading)
+                .disabled(isLoading)
             }
         }
-        #endif
+            #endif
     }
 }
 

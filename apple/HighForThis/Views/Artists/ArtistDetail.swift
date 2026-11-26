@@ -11,7 +11,6 @@ struct ArtistDetail: View {
                 let artwork = artist.appleMusic?.artwork.flatMap { Artwork(template: $0.url, width: $0.width, height: $0.height) }
                 let website = artist.website.flatMap(URL.webURL)
                 let appleMusic = artist.appleMusic?.url.flatMap(URL.webURL)
-                let attended = data.attended?.edges.map(\.node.fragments.showList_show) ?? []
                 List {
                     DetailIntro(hero: artwork.map(DetailHero.artwork)) {
                         DetailHeader(eyebrow: Text(.artist), title: artist.name) {
@@ -29,14 +28,14 @@ struct ArtistDetail: View {
                     }
                     DatedShowsSection(
                         title: .recommendedShows,
-                        shows: data.shows?.edges.map(\.node.fragments.showList_show) ?? [],
-                        all: data.shows?.pageInfo.hasNextPage == true ? ShowFilter(kind: .upcoming, artist: slug) : nil
+                        shows: data.shows?.fragments.datedShowsSection_shows,
+                        all: ShowFilter(kind: .upcoming, artist: slug)
                     ) { $0.venue.name }
                     DatedShowsSection(
                         title: .attended,
-                        count: data.attended?.count ?? attended.count,
-                        shows: attended,
-                        all: data.attended?.pageInfo.hasNextPage == true ? ShowFilter(kind: .history, artist: slug) : nil
+                        count: data.attended?.count,
+                        shows: data.attended?.fragments.datedShowsSection_shows,
+                        all: ShowFilter(kind: .history, artist: slug)
                     ) { $0.venue.name }
                 }
                 .listStyle(.plain)

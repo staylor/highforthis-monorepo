@@ -15,24 +15,10 @@ query Artist($slug: String!) {
     }
   }
   attended: shows(artist: { slug: $slug }, attended: true, first: 5) {
+    ...DatedShowsSection_shows
     count
-    edges {
-      node {
-        ...ShowList_show
-      }
-    }
-    pageInfo {
-      hasNextPage
-    }
   }
   shows(artist: { slug: $slug }, first: 5, latest: true) {
-    edges {
-      node {
-        ...ShowList_show
-      }
-    }
-    pageInfo {
-      hasNextPage
-    }
+    ...DatedShowsSection_shows
   }
 }

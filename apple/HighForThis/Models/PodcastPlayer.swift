@@ -32,6 +32,7 @@ final class PodcastPlayer {
     @ObservationIgnored private var timeObserver: Any?
     #if os(iOS) || os(tvOS)
     @ObservationIgnored private var nowPlayingSession: MPNowPlayingSession?
+    @ObservationIgnored private var remoteCommands: [MPRemoteCommand] = []
     @ObservationIgnored private var resumeAfterInterruption = false
     #endif
 
@@ -61,13 +62,7 @@ final class PodcastPlayer {
         if let timeObserver { player.removeTimeObserver(timeObserver) }
         for observer in observers { NotificationCenter.default.removeObserver(observer) }
         #if os(iOS) || os(tvOS)
-        let commands = nowPlayingSession?.remoteCommandCenter
-        commands?.playCommand.removeTarget(nil)
-        commands?.pauseCommand.removeTarget(nil)
-        commands?.togglePlayPauseCommand.removeTarget(nil)
-        commands?.skipBackwardCommand.removeTarget(nil)
-        commands?.skipForwardCommand.removeTarget(nil)
-        commands?.changePlaybackPositionCommand.removeTarget(nil)
+        for command in remoteCommands { command.removeTarget(nil) }
         #endif
     }
 
@@ -240,34 +235,31 @@ final class PodcastPlayer {
         session.automaticallyPublishesNowPlayingInfo = true
         nowPlayingSession = session
         let commands = session.remoteCommandCenter
-        commands.playCommand.addTarget { @Sendable [weak self] _ in
-            Task { @MainActor in self?.play() }
-            return .success
-        }
-        commands.pauseCommand.addTarget { @Sendable [weak self] _ in
-            Task { @MainActor in self?.pause() }
-            return .success
-        }
-        commands.togglePlayPauseCommand.addTarget { @Sendable [weak self] _ in
-            Task { @MainActor in self?.togglePlayback() }
-            return .success
-        }
         commands.skipBackwardCommand.preferredIntervals = [15]
         commands.skipForwardCommand.preferredIntervals = [15]
-        commands.skipBackwardCommand.addTarget { @Sendable [weak self] _ in
-            Task { @MainActor in self?.skip(by: -15) }
-            return .success
-        }
-        commands.skipForwardCommand.addTarget { @Sendable [weak self] _ in
-            Task { @MainActor in self?.skip(by: 15) }
-            return .success
-        }
+        handle(commands.playCommand) { $0.play() }
+        handle(commands.pauseCommand) { $0.pause() }
+        handle(commands.togglePlayPauseCommand) { $0.togglePlayback() }
+        handle(commands.skipBackwardCommand) { $0.skip(by: -15) }
+        handle(commands.skipForwardCommand) { $0.skip(by: 15) }
         commands.changePlaybackPositionCommand.addTarget { @Sendable [weak self] event in
             guard let event = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
             let position = event.positionTime
             Task { @MainActor in self?.seek(to: position) }
             return .success
         }
+        remoteCommands.append(commands.changePlaybackPositionCommand)
+    }
+
+    /// Handles a remote command on the main actor until the player is released.
+    private func handle(_ command: MPRemoteCommand, _ action: @escaping @MainActor @Sendable (PodcastPlayer) -> Void) {
+        command.addTarget { @Sendable [weak self] _ in
+            Task { @MainActor in
+                if let self { action(self) }
+            }
+            return .success
+        }
+        remoteCommands.append(command)
     }
 
     private func observeAudioSession() {

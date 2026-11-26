@@ -23,14 +23,21 @@ struct PodcastList: View {
         .navigationTitle(.podcastEpisodes)
     }
 
-    /// When the episode was posted and how long it is, as much of that as the API has.
     private func eyebrow(of episode: PodcastsQuery.Data.Podcasts.Edge.Node) -> Text? {
-        let date = episode.date.map { Date(apiTimestamp: $0).formatted(.postedDate) }
-        let length = EpisodeText.length(seconds: episode.audio?.duration, width: .abbreviated)
-        return switch (date, length) {
-        case (let date?, let length?): Text(.dateAndDuration(date, length))
-        case (let text?, nil), (nil, let text?): Text(text)
-        case (nil, nil): nil
+        Text(
+            posted: episode.date.map { Date(apiTimestamp: $0).formatted(.postedDate) },
+            length: EpisodeText.length(seconds: episode.audio?.duration, width: .abbreviated)
+        )
+    }
+}
+
+extension Text {
+    /// The line over an episode's title: when it was posted and how long it is, as much of that as the API has.
+    init?(posted date: String?, length: String?) {
+        switch (date, length) {
+        case (let date?, let length?): self.init(.dateAndDuration(date, length))
+        case (let text?, nil), (nil, let text?): self.init(text)
+        case (nil, nil): return nil
         }
     }
 }

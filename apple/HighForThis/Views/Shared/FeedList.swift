@@ -46,15 +46,6 @@ struct FeedList<Filter: Hashable, Item: FeedItem, Rows: View>: View {
             }
         }
         .task(id: filter) { await feed.load(filter) }
-        .refreshable { await feed.load(filter, refresh: true) }
-        #if os(macOS)
-        .toolbar {
-            ToolbarItem {
-                Button(.refresh, systemImage: "arrow.clockwise") { Task { await feed.load(filter, refresh: true) } }
-                .keyboardShortcut("r", modifiers: .command)
-                .disabled(feed.isLoading)
-            }
-        }
-        #endif
+        .refreshable(isLoading: feed.isLoading) { await feed.load(filter, refresh: true) }
     }
 }

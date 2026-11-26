@@ -21,50 +21,34 @@ struct VideoList: View {
 /// A video, which opens on YouTube. tvOS can't open it, so there it's only the thumbnail and title.
 struct VideoLink: View {
     let video: Video_video
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
+        link
+            .accessibilityLabel(video.title)
+            .accessibilityIdentifier("video-\(video.id)")
+    }
+
+    @ViewBuilder private var link: some View {
         #if os(tvOS)
         label
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(video.title)
-            .accessibilityIdentifier("video-\(video.id)")
         #else
         Link(destination: video.youTubeURL) { label }
             #if os(macOS)
         // A Mac draws a link's label in the color of a link in text: its title, and the frame its picture loads in.
         .buttonStyle(.plain)
             #endif
-            .accessibilityLabel(video.title)
             .accessibilityHint(.opensYouTube)
-            .accessibilityIdentifier("video-\(video.id)")
         #endif
     }
 
-    /// The thumbnail leads the row, as the pictures in the other lists do, and goes above the title at accessibility
-    /// text sizes.
     private var label: some View {
-        let layout =
-            dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12)) : AnyLayout(HStackLayout(spacing: .readable(12)))
-        return layout {
-            RemoteImage(
-                url: video.thumbnails.best(forWidth: 480).flatMap { URL.webURL($0.url) }, aspectRatio: 16 / 9, contentMode: .fill
-            )
-            .overlay { PlayBadge() }
-            .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : thumbnailWidth)
-            .clipShape(.rect(cornerRadius: 8))
-            .accessibilityHidden(true)
+        PictureRow(pictureWidth: 120, regularPictureWidth: 160) {
+            RemoteImage(url: video.thumbnails.best(forWidth: 480).flatMap { URL.webURL($0.url) }, aspectRatio: 16 / 9, contentMode: .fill)
+                .overlay { PlayBadge() }
+        } words: {
             RowLabel(title: video.title)
-                .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.vertical, 4)
-    }
-
-    /// Wider where the row is, on iPad, Mac and Apple TV.
-    private var thumbnailWidth: CGFloat {
-        horizontalSizeClass == .regular ? .readable(160) : 120
     }
 }
 

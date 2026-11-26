@@ -27,3 +27,30 @@ struct RowLabel: View {
         }
     }
 }
+
+/// A row that leads with its picture, as a video's or a post's does. At accessibility text sizes the picture goes
+/// above the words, which then have the row's width, and the picture fills it.
+struct PictureRow<Picture: View, Words: View>: View {
+    /// How wide the picture is beside the words on a phone.
+    let pictureWidth: CGFloat
+    /// How wide it is where the row is wider, on iPad, Mac and Apple TV.
+    let regularPictureWidth: CGFloat
+    @ViewBuilder let picture: Picture
+    @ViewBuilder let words: Words
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    var body: some View {
+        let stacked = dynamicTypeSize.isAccessibilitySize
+        let layout = stacked ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12)) : AnyLayout(HStackLayout(spacing: .readable(12)))
+        layout {
+            picture
+                .frame(width: stacked ? nil : horizontalSizeClass == .regular ? .readable(regularPictureWidth) : pictureWidth)
+                .clipShape(.rect(cornerRadius: 8))
+                .accessibilityHidden(true)
+            words
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.vertical, 4)
+    }
+}

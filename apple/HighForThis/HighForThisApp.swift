@@ -9,17 +9,15 @@ struct HighForThisApp: App {
     #if os(iOS)
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #endif
-    @State private var player: PodcastPlayer
 
     init() {
         URLCache.shared = URLCache(memoryCapacity: 32 * 1024 * 1024, diskCapacity: 256 * 1024 * 1024)
-        _player = State(initialValue: .shared)
     }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(player)
+                .environment(PodcastPlayer.shared)
                 #if DEBUG
             .preferredColorScheme(UITestFixtures.isEnabled && ProcessInfo.processInfo.environment["UI_TEST_DARK"] == "1" ? .dark : nil)
                 #endif

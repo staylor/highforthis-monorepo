@@ -8,7 +8,7 @@ nonisolated public struct PostQuery: GraphQLQuery {
   public static let operationName: String = "Post"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Post($slug: String!) { post(slug: $slug) { __typename id date title editorState { __typename root { __typename children { __typename ... on HeadingNode { tag children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on ImageNode { image { __typename id altText destination crops { __typename fileName height width } } } ... on VideoNode { video { __typename ...Video_video } } ... on ElementNode { type children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on QuoteNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on CodeNode { children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } } } } } }"#,
+      #"query Post($slug: String!) { post(slug: $slug) { __typename id date title editorState { __typename root { __typename children { __typename ... on ElementNodeType { type children { __typename ...TextNodes_linebreakNode ...TextNodes_textNode } } ... on HeadingNode { tag } ... on ImageNode { image { __typename id altText destination crops { __typename fileName height width } } } ... on VideoNode { video { __typename ...Video_video } } } } } } }"#,
       fragments: [TextNodes_linebreakNode.self, TextNodes_textNode.self, Video_video.self]
     ))
 
@@ -104,46 +104,42 @@ nonisolated public struct PostQuery: GraphQLQuery {
             @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Unions.EditorNode }
             @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
               .field("__typename", String.self),
+              .inlineFragment(AsElementNodeType.self),
               .inlineFragment(AsHeadingNode.self),
               .inlineFragment(AsImageNode.self),
               .inlineFragment(AsVideoNode.self),
-              .inlineFragment(AsElementNode.self),
-              .inlineFragment(AsQuoteNode.self),
-              .inlineFragment(AsCodeNode.self),
             ] }
             @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
               PostQuery.Data.Post.EditorState.Root.Child.self
             ] }
 
+            public var asElementNodeType: AsElementNodeType? { _asInlineFragment() }
             public var asHeadingNode: AsHeadingNode? { _asInlineFragment() }
             public var asImageNode: AsImageNode? { _asInlineFragment() }
             public var asVideoNode: AsVideoNode? { _asInlineFragment() }
-            public var asElementNode: AsElementNode? { _asInlineFragment() }
-            public var asQuoteNode: AsQuoteNode? { _asInlineFragment() }
-            public var asCodeNode: AsCodeNode? { _asInlineFragment() }
 
-            /// Post.EditorState.Root.Child.AsHeadingNode
+            /// Post.EditorState.Root.Child.AsElementNodeType
             ///
-            /// Parent Type: `HeadingNode`
-            nonisolated public struct AsHeadingNode: HighForThisAPI.InlineFragment {
+            /// Parent Type: `ElementNodeType`
+            nonisolated public struct AsElementNodeType: HighForThisAPI.InlineFragment {
               @_spi(Unsafe) public let __data: DataDict
               @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
               public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child
-              @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.HeadingNode }
+              @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Interfaces.ElementNodeType }
               @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                .field("tag", GraphQLEnum<HighForThisAPI.HeadingTag>?.self),
+                .field("type", String?.self),
                 .field("children", [Child?]?.self),
               ] }
               @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
                 PostQuery.Data.Post.EditorState.Root.Child.self,
-                PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.self
+                PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.self
               ] }
 
-              public var tag: GraphQLEnum<HighForThisAPI.HeadingTag>? { __data["tag"] }
+              public var type: String? { __data["type"] }
               public var children: [Child?]? { __data["children"] }
 
-              /// Post.EditorState.Root.Child.AsHeadingNode.Child
+              /// Post.EditorState.Root.Child.AsElementNodeType.Child
               ///
               /// Parent Type: `EditorNode`
               nonisolated public struct Child: HighForThisAPI.SelectionSet {
@@ -157,27 +153,27 @@ nonisolated public struct PostQuery: GraphQLQuery {
                   .inlineFragment(AsTextNode.self),
                 ] }
                 @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                  PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.Child.self
+                  PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.Child.self
                 ] }
 
                 public var asLinebreakNode: AsLinebreakNode? { _asInlineFragment() }
                 public var asTextNode: AsTextNode? { _asInlineFragment() }
 
-                /// Post.EditorState.Root.Child.AsHeadingNode.Child.AsLinebreakNode
+                /// Post.EditorState.Root.Child.AsElementNodeType.Child.AsLinebreakNode
                 ///
                 /// Parent Type: `LinebreakNode`
                 nonisolated public struct AsLinebreakNode: HighForThisAPI.InlineFragment {
                   @_spi(Unsafe) public let __data: DataDict
                   @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.Child
+                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.Child
                   @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.LinebreakNode }
                   @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
                     .fragment(TextNodes_linebreakNode.self),
                   ] }
                   @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                    PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.Child.self,
-                    PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.Child.AsLinebreakNode.self,
+                    PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.Child.self,
+                    PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.Child.AsLinebreakNode.self,
                     TextNodes_linebreakNode.self
                   ] }
 
@@ -191,21 +187,21 @@ nonisolated public struct PostQuery: GraphQLQuery {
                   }
                 }
 
-                /// Post.EditorState.Root.Child.AsHeadingNode.Child.AsTextNode
+                /// Post.EditorState.Root.Child.AsElementNodeType.Child.AsTextNode
                 ///
                 /// Parent Type: `TextNode`
                 nonisolated public struct AsTextNode: HighForThisAPI.InlineFragment {
                   @_spi(Unsafe) public let __data: DataDict
                   @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
-                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.Child
+                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.Child
                   @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.TextNode }
                   @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
                     .fragment(TextNodes_textNode.self),
                   ] }
                   @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                    PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.Child.self,
-                    PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.Child.AsTextNode.self,
+                    PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.Child.self,
+                    PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.Child.AsTextNode.self,
                     TextNodes_textNode.self
                   ] }
 
@@ -222,6 +218,31 @@ nonisolated public struct PostQuery: GraphQLQuery {
               }
             }
 
+            /// Post.EditorState.Root.Child.AsHeadingNode
+            ///
+            /// Parent Type: `HeadingNode`
+            nonisolated public struct AsHeadingNode: HighForThisAPI.InlineFragment {
+              @_spi(Unsafe) public let __data: DataDict
+              @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+              public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child
+              @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.HeadingNode }
+              @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+                .field("tag", GraphQLEnum<HighForThisAPI.HeadingTag>?.self),
+              ] }
+              @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+                PostQuery.Data.Post.EditorState.Root.Child.self,
+                PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.self,
+                PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.self
+              ] }
+
+              public var tag: GraphQLEnum<HighForThisAPI.HeadingTag>? { __data["tag"] }
+              public var type: String? { __data["type"] }
+              public var children: [Child?]? { __data["children"] }
+
+              public typealias Child = AsElementNodeType.Child
+            }
+
             /// Post.EditorState.Root.Child.AsImageNode
             ///
             /// Parent Type: `ImageNode`
@@ -236,10 +257,13 @@ nonisolated public struct PostQuery: GraphQLQuery {
               ] }
               @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
                 PostQuery.Data.Post.EditorState.Root.Child.self,
-                PostQuery.Data.Post.EditorState.Root.Child.AsImageNode.self
+                PostQuery.Data.Post.EditorState.Root.Child.AsImageNode.self,
+                PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.self
               ] }
 
               public var image: Image? { __data["image"] }
+              public var type: String? { __data["type"] }
+              public var children: [Child?]? { __data["children"] }
 
               /// Post.EditorState.Root.Child.AsImageNode.Image
               ///
@@ -288,6 +312,8 @@ nonisolated public struct PostQuery: GraphQLQuery {
                   public var width: Int { __data["width"] }
                 }
               }
+
+              public typealias Child = AsElementNodeType.Child
             }
 
             /// Post.EditorState.Root.Child.AsVideoNode
@@ -304,10 +330,13 @@ nonisolated public struct PostQuery: GraphQLQuery {
               ] }
               @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
                 PostQuery.Data.Post.EditorState.Root.Child.self,
-                PostQuery.Data.Post.EditorState.Root.Child.AsVideoNode.self
+                PostQuery.Data.Post.EditorState.Root.Child.AsVideoNode.self,
+                PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.self
               ] }
 
               public var video: Video? { __data["video"] }
+              public var type: String? { __data["type"] }
+              public var children: [Child?]? { __data["children"] }
 
               /// Post.EditorState.Root.Child.AsVideoNode.Video
               ///
@@ -341,302 +370,8 @@ nonisolated public struct PostQuery: GraphQLQuery {
 
                 public typealias Thumbnail = Video_video.Thumbnail
               }
-            }
 
-            /// Post.EditorState.Root.Child.AsElementNode
-            ///
-            /// Parent Type: `ElementNode`
-            nonisolated public struct AsElementNode: HighForThisAPI.InlineFragment {
-              @_spi(Unsafe) public let __data: DataDict
-              @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-              public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child
-              @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ElementNode }
-              @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                .field("type", String?.self),
-                .field("children", [Child?]?.self),
-              ] }
-              @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                PostQuery.Data.Post.EditorState.Root.Child.self,
-                PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.self
-              ] }
-
-              public var type: String? { __data["type"] }
-              public var children: [Child?]? { __data["children"] }
-
-              /// Post.EditorState.Root.Child.AsElementNode.Child
-              ///
-              /// Parent Type: `EditorNode`
-              nonisolated public struct Child: HighForThisAPI.SelectionSet {
-                @_spi(Unsafe) public let __data: DataDict
-                @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Unions.EditorNode }
-                @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                  .field("__typename", String.self),
-                  .inlineFragment(AsLinebreakNode.self),
-                  .inlineFragment(AsTextNode.self),
-                ] }
-                @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                  PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.Child.self
-                ] }
-
-                public var asLinebreakNode: AsLinebreakNode? { _asInlineFragment() }
-                public var asTextNode: AsTextNode? { _asInlineFragment() }
-
-                /// Post.EditorState.Root.Child.AsElementNode.Child.AsLinebreakNode
-                ///
-                /// Parent Type: `LinebreakNode`
-                nonisolated public struct AsLinebreakNode: HighForThisAPI.InlineFragment {
-                  @_spi(Unsafe) public let __data: DataDict
-                  @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.Child
-                  @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.LinebreakNode }
-                  @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                    .fragment(TextNodes_linebreakNode.self),
-                  ] }
-                  @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                    PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.Child.self,
-                    PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.Child.AsLinebreakNode.self,
-                    TextNodes_linebreakNode.self
-                  ] }
-
-                  public var type: String? { __data["type"] }
-
-                  public struct Fragments: FragmentContainer {
-                    @_spi(Unsafe) public let __data: DataDict
-                    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                    public var textNodes_linebreakNode: TextNodes_linebreakNode { _toFragment() }
-                  }
-                }
-
-                /// Post.EditorState.Root.Child.AsElementNode.Child.AsTextNode
-                ///
-                /// Parent Type: `TextNode`
-                nonisolated public struct AsTextNode: HighForThisAPI.InlineFragment {
-                  @_spi(Unsafe) public let __data: DataDict
-                  @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.Child
-                  @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.TextNode }
-                  @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                    .fragment(TextNodes_textNode.self),
-                  ] }
-                  @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                    PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.Child.self,
-                    PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.Child.AsTextNode.self,
-                    TextNodes_textNode.self
-                  ] }
-
-                  public var format: Int? { __data["format"] }
-                  public var text: String? { __data["text"] }
-
-                  public struct Fragments: FragmentContainer {
-                    @_spi(Unsafe) public let __data: DataDict
-                    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                    public var textNodes_textNode: TextNodes_textNode { _toFragment() }
-                  }
-                }
-              }
-            }
-
-            /// Post.EditorState.Root.Child.AsQuoteNode
-            ///
-            /// Parent Type: `QuoteNode`
-            nonisolated public struct AsQuoteNode: HighForThisAPI.InlineFragment {
-              @_spi(Unsafe) public let __data: DataDict
-              @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-              public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child
-              @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.QuoteNode }
-              @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                .field("children", [Child?]?.self),
-              ] }
-              @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                PostQuery.Data.Post.EditorState.Root.Child.self,
-                PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.self
-              ] }
-
-              public var children: [Child?]? { __data["children"] }
-
-              /// Post.EditorState.Root.Child.AsQuoteNode.Child
-              ///
-              /// Parent Type: `EditorNode`
-              nonisolated public struct Child: HighForThisAPI.SelectionSet {
-                @_spi(Unsafe) public let __data: DataDict
-                @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Unions.EditorNode }
-                @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                  .field("__typename", String.self),
-                  .inlineFragment(AsLinebreakNode.self),
-                  .inlineFragment(AsTextNode.self),
-                ] }
-                @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                  PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.Child.self
-                ] }
-
-                public var asLinebreakNode: AsLinebreakNode? { _asInlineFragment() }
-                public var asTextNode: AsTextNode? { _asInlineFragment() }
-
-                /// Post.EditorState.Root.Child.AsQuoteNode.Child.AsLinebreakNode
-                ///
-                /// Parent Type: `LinebreakNode`
-                nonisolated public struct AsLinebreakNode: HighForThisAPI.InlineFragment {
-                  @_spi(Unsafe) public let __data: DataDict
-                  @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.Child
-                  @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.LinebreakNode }
-                  @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                    .fragment(TextNodes_linebreakNode.self),
-                  ] }
-                  @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                    PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.Child.self,
-                    PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.Child.AsLinebreakNode.self,
-                    TextNodes_linebreakNode.self
-                  ] }
-
-                  public var type: String? { __data["type"] }
-
-                  public struct Fragments: FragmentContainer {
-                    @_spi(Unsafe) public let __data: DataDict
-                    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                    public var textNodes_linebreakNode: TextNodes_linebreakNode { _toFragment() }
-                  }
-                }
-
-                /// Post.EditorState.Root.Child.AsQuoteNode.Child.AsTextNode
-                ///
-                /// Parent Type: `TextNode`
-                nonisolated public struct AsTextNode: HighForThisAPI.InlineFragment {
-                  @_spi(Unsafe) public let __data: DataDict
-                  @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.Child
-                  @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.TextNode }
-                  @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                    .fragment(TextNodes_textNode.self),
-                  ] }
-                  @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                    PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.Child.self,
-                    PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.Child.AsTextNode.self,
-                    TextNodes_textNode.self
-                  ] }
-
-                  public var format: Int? { __data["format"] }
-                  public var text: String? { __data["text"] }
-
-                  public struct Fragments: FragmentContainer {
-                    @_spi(Unsafe) public let __data: DataDict
-                    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                    public var textNodes_textNode: TextNodes_textNode { _toFragment() }
-                  }
-                }
-              }
-            }
-
-            /// Post.EditorState.Root.Child.AsCodeNode
-            ///
-            /// Parent Type: `CodeNode`
-            nonisolated public struct AsCodeNode: HighForThisAPI.InlineFragment {
-              @_spi(Unsafe) public let __data: DataDict
-              @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-              public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child
-              @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.CodeNode }
-              @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                .field("children", [Child?]?.self),
-              ] }
-              @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                PostQuery.Data.Post.EditorState.Root.Child.self,
-                PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.self
-              ] }
-
-              public var children: [Child?]? { __data["children"] }
-
-              /// Post.EditorState.Root.Child.AsCodeNode.Child
-              ///
-              /// Parent Type: `EditorNode`
-              nonisolated public struct Child: HighForThisAPI.SelectionSet {
-                @_spi(Unsafe) public let __data: DataDict
-                @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Unions.EditorNode }
-                @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                  .field("__typename", String.self),
-                  .inlineFragment(AsLinebreakNode.self),
-                  .inlineFragment(AsTextNode.self),
-                ] }
-                @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                  PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.Child.self
-                ] }
-
-                public var asLinebreakNode: AsLinebreakNode? { _asInlineFragment() }
-                public var asTextNode: AsTextNode? { _asInlineFragment() }
-
-                /// Post.EditorState.Root.Child.AsCodeNode.Child.AsLinebreakNode
-                ///
-                /// Parent Type: `LinebreakNode`
-                nonisolated public struct AsLinebreakNode: HighForThisAPI.InlineFragment {
-                  @_spi(Unsafe) public let __data: DataDict
-                  @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.Child
-                  @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.LinebreakNode }
-                  @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                    .fragment(TextNodes_linebreakNode.self),
-                  ] }
-                  @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                    PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.Child.self,
-                    PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.Child.AsLinebreakNode.self,
-                    TextNodes_linebreakNode.self
-                  ] }
-
-                  public var type: String? { __data["type"] }
-
-                  public struct Fragments: FragmentContainer {
-                    @_spi(Unsafe) public let __data: DataDict
-                    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                    public var textNodes_linebreakNode: TextNodes_linebreakNode { _toFragment() }
-                  }
-                }
-
-                /// Post.EditorState.Root.Child.AsCodeNode.Child.AsTextNode
-                ///
-                /// Parent Type: `TextNode`
-                nonisolated public struct AsTextNode: HighForThisAPI.InlineFragment {
-                  @_spi(Unsafe) public let __data: DataDict
-                  @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                  public typealias RootEntityType = PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.Child
-                  @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.TextNode }
-                  @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-                    .fragment(TextNodes_textNode.self),
-                  ] }
-                  @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-                    PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.Child.self,
-                    PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.Child.AsTextNode.self,
-                    TextNodes_textNode.self
-                  ] }
-
-                  public var format: Int? { __data["format"] }
-                  public var text: String? { __data["text"] }
-
-                  public struct Fragments: FragmentContainer {
-                    @_spi(Unsafe) public let __data: DataDict
-                    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
-
-                    public var textNodes_textNode: TextNodes_textNode { _toFragment() }
-                  }
-                }
-              }
+              public typealias Child = AsElementNodeType.Child
             }
           }
         }

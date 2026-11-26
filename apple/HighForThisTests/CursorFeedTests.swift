@@ -168,20 +168,3 @@ struct CursorFeedTests {
         #expect(feed.hasLoaded)
     }
 }
-
-final class Suspended<Value: Sendable> {
-    private var continuation: CheckedContinuation<Value, any Error>?
-
-    func value() async throws -> Value {
-        try await withCheckedThrowingContinuation { continuation = $0 }
-    }
-
-    func waitUntilStarted() async {
-        while continuation == nil { await Task.yield() }
-    }
-
-    func finish(_ result: Result<Value, any Error>) {
-        continuation?.resume(with: result)
-        continuation = nil
-    }
-}
