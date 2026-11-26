@@ -2,12 +2,14 @@ import { gql } from 'graphql-tag';
 
 import {
   deleteSelected,
+  saveFlag,
   submitForm,
+  type FlagArgs,
   type FormArgs,
   type GraphQLClient,
   type RedirectResult,
 } from '#/lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import { listVariables, type ListArgs } from '#/lib/admin/list-variables.ts';
 import { attempt } from '#/lib/graphql.ts';
 import { withEveryPage } from '#/lib/paging.ts';
 import { routes } from '#/routes.ts';
@@ -18,7 +20,6 @@ import type {
   ShowFormArtistsQuery,
   ShowFormVenuesQuery,
   ShowsAdminQuery,
-  UpdateShowAttendedMutation,
 } from '#/types/graphql.ts';
 
 import { parseBulkShowsCsv } from './bulk-csv.ts';
@@ -199,32 +200,13 @@ const bulkCreateShowsMutation = gql`
 
 const textFields = ['title', 'notes', 'url'];
 
-export function loadShows({
-  gql: client,
-  searchParams,
-}: {
-  gql: GraphQLClient;
-  searchParams: URLSearchParams;
-}) {
-  const variables = addSearchParam(searchParams, addPageOffset(searchParams, { order: 'DESC' }));
-  return client.query<ShowsAdminQuery>(showsQuery, variables);
+export function loadShows({ gql: client, searchParams }: ListArgs) {
+  return client.query<ShowsAdminQuery>(showsQuery, listVariables(searchParams, { order: 'DESC' }));
 }
 
 /** The list's "attended" box. Resolves to whether it saved. */
-export async function setShowAttended({
-  gql: client,
-  formData,
-}: {
-  gql: GraphQLClient;
-  formData: FormData;
-}) {
-  const { data } = await attempt(
-    client.mutate<UpdateShowAttendedMutation>(attendedMutation, {
-      id: formData.get('id'),
-      input: { attended: formData.get('attended') === 'true' },
-    })
-  );
-  return Boolean(data?.updateShow);
+export function saveShowFlag(args: FlagArgs) {
+  return saveFlag({ ...args, mutation: attendedMutation });
 }
 
 export function deleteShows(args: FormArgs) {

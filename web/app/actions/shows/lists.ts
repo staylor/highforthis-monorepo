@@ -48,11 +48,7 @@ export function everyUpcomingShow(gql: GraphQLClient) {
 }
 
 /** A page of an artist's or a venue's shows coming up, with every page after it */
-export function withEveryUpcomingShow(
-  gql: GraphQLClient,
-  page: ShowsGrid_ShowsFragment,
-  of: ShowsOf
-) {
+function withEveryUpcomingShow(gql: GraphQLClient, page: ShowsGrid_ShowsFragment, of: ShowsOf) {
   return withEveryPage(
     page,
     async (after) =>
@@ -61,15 +57,32 @@ export function withEveryUpcomingShow(
 }
 
 /** A page of the shows we've been to of an artist or at a venue, with every page after it */
-export function withEveryAttendedShow(
-  gql: GraphQLClient,
-  page: Attended_ShowsFragment,
-  of: ShowsOf
-) {
+function withEveryAttendedShow(gql: GraphQLClient, page: Attended_ShowsFragment, of: ShowsOf) {
   return withEveryPage(
     page,
     async (after) =>
       (await gql.query<AttendedShowsQuery>(attendedShowsQuery, { ...of, after, first: PAGE_SIZE }))
         .shows
   );
+}
+
+interface ShowLists {
+  shows?: ShowsGrid_ShowsFragment | null;
+  attended?: Attended_ShowsFragment | null;
+}
+
+/**
+ * An artist's or a venue's page's data, with every show coming up and every show we've been to,
+ * where it has only the first page of each
+ */
+export async function withEveryShow<Data extends ShowLists>(
+  gql: GraphQLClient,
+  data: Data,
+  of: ShowsOf
+) {
+  const [shows, attended] = await Promise.all([
+    data.shows && withEveryUpcomingShow(gql, data.shows, of),
+    data.attended && withEveryAttendedShow(gql, data.attended, of),
+  ]);
+  return { ...data, shows, attended };
 }

@@ -7,7 +7,7 @@ import {
   type GraphQLClient,
   type RedirectResult,
 } from '#/lib/admin/forms.ts';
-import { addPageOffset } from '#/lib/admin/list-variables.ts';
+import { listVariables, type ListArgs } from '#/lib/admin/list-variables.ts';
 import { attempt } from '#/lib/graphql.ts';
 import { routes } from '#/routes.ts';
 import type {
@@ -155,15 +155,9 @@ const addAlbumCoversMutation = gql`
   }
 `;
 
-export function loadMediaList({
-  gql: client,
-  searchParams,
-}: {
-  gql: GraphQLClient;
-  searchParams: URLSearchParams;
-}) {
-  const variables = addPageOffset(searchParams);
-  for (const key of ['type', 'mimeType', 'search']) {
+export function loadMediaList({ gql: client, searchParams }: ListArgs) {
+  const variables = listVariables(searchParams);
+  for (const key of ['type', 'mimeType']) {
     const value = searchParams.get(key);
     if (value) {
       variables[key] = value;
@@ -193,10 +187,7 @@ export function updateMedia({ id, ...args }: FormArgs & { id: string }) {
 export async function searchAlbumCovers({
   gql: client,
   searchParams,
-}: {
-  gql: GraphQLClient;
-  searchParams: URLSearchParams;
-}): Promise<{ appleMusicAlbums?: AlbumCoversAdminQuery['appleMusicAlbums'] | null }> {
+}: ListArgs): Promise<{ appleMusicAlbums?: AlbumCoversAdminQuery['appleMusicAlbums'] | null }> {
   const term = searchParams.get('search')?.trim();
   if (!term) {
     return { appleMusicAlbums: null };

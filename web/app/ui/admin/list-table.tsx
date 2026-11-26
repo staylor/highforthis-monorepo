@@ -8,6 +8,7 @@ import { documentLoad } from './links.ts';
 import { Message } from './message.tsx';
 import { AutoSubmitSelect } from './public/auto-submit-select.tsx';
 import { ConfirmButton } from './public/confirm-button.tsx';
+import { InlineToggle } from './public/inline-toggle.tsx';
 import { SelectAll } from './public/select-all.tsx';
 import {
   button,
@@ -47,44 +48,35 @@ const toolbar = {
 } satisfies Styles;
 const row = css({ display: 'flex', alignItems: 'center', gap: '0.5rem' });
 
-export function RowTitle(
-  handle: Handle<{ href: string; title?: string | null; subtitle?: string | null }>
-) {
-  return () => {
-    const { t } = getAdmin(handle);
-    const { href, title, subtitle } = handle.props;
-    return (
-      <strong
-        mix={css({
-          marginBottom: '0.25rem',
-          display: 'block',
-          ...text.sm,
-          fontWeight: 700,
-          overflowWrap: 'break-word',
-        })}
-      >
-        <a href={href}>{title || t('table.noTitle')}</a>
-        {subtitle && (
-          <>
-            <br />
-            <span mix={css({ ...text.xs, fontWeight: 400 })}>{subtitle}</span>
-          </>
-        )}
-      </strong>
-    );
-  };
+const rowTitle = css({
+  marginBottom: '0.25rem',
+  display: 'block',
+  ...text.sm,
+  fontWeight: 700,
+  overflowWrap: 'break-word',
+});
+
+interface TitleCellProps {
+  /** The row's edit page, which its title and Edit link go to. */
+  href: string;
+  title?: string | null;
+  subtitle?: string | null;
+  /** Its page on the site. */
+  viewHref?: string;
+  /**
+   * Given the row's ID, a delete button that posts it with intent=delete, once the browser has
+   * asked whether to. A column about something else, such as a show's venue, leaves the ID out.
+   */
+  id?: string;
 }
 
-/**
- * Given the row's ID, a delete button that posts it with intent=delete, once the browser has
- * asked whether to. A column about something else, such as a show's venue, leaves the ID out.
- */
-export function RowActions(handle: Handle<{ editHref: string; viewHref?: string; id?: string }>) {
+/** A row's title, over links to edit and view it, and a delete button. */
+export function TitleCell(handle: Handle<TitleCellProps>) {
   return () => {
     const { t } = getAdmin(handle);
-    const { editHref, viewHref, id } = handle.props;
+    const { href, title, subtitle, viewHref, id } = handle.props;
     const actions: RemixNode[] = [
-      <a mix={underlineOnHover} href={editHref} data-rmx-document={documentLoad(editHref)}>
+      <a mix={underlineOnHover} href={href} data-rmx-document={documentLoad(href)}>
         {t('table.edit')}
       </a>,
     ];
@@ -105,10 +97,44 @@ export function RowActions(handle: Handle<{ editHref: string; viewHref?: string;
       );
     }
     return (
-      <nav mix={css(text.sm)}>
-        {actions.flatMap((action, i) => (i === 0 ? [action] : [' | ', action]))}
-      </nav>
+      <>
+        <strong mix={rowTitle}>
+          <a href={href}>{title || t('table.noTitle')}</a>
+          {subtitle && (
+            <>
+              <br />
+              <span mix={css({ ...text.xs, fontWeight: 400 })}>{subtitle}</span>
+            </>
+          )}
+        </strong>
+        <nav mix={css(text.sm)}>
+          {actions.flatMap((action, i) => (i === 0 ? [action] : [' | ', action]))}
+        </nav>
+      </>
     );
+  };
+}
+
+/**
+ * A column of boxes that each save a field of their row as soon as they change, which the list's
+ * action does with `listAction`'s flags. `rowName` says which row a box is for.
+ */
+export function toggleColumn<Row extends { id: string }>(
+  field: keyof Row & string,
+  label: string,
+  rowName: (row: Row) => string
+): Column {
+  return {
+    label,
+    styles: { textAlign: 'center' },
+    render: (row: Row) => (
+      <InlineToggle
+        name={field}
+        id={row.id}
+        checked={Boolean(row[field])}
+        label={`${label}: ${rowName(row)}`}
+      />
+    ),
   };
 }
 
@@ -288,13 +314,11 @@ interface ListTableProps {
 
 export function ListTable(handle: Handle<ListTableProps>) {
   return () => {
-    const { t, url } = getAdmin(handle);
+    const { t } = getAdmin(handle);
     const { connection, columns, deletable = true, filters, perPage = PER_PAGE } = handle.props;
-    const deleteFailed = Number(url.searchParams.get('deleteFailed') || 0);
-    const failedMessage =
-      deleteFailed > 0 ? (
-        <Message param="deleteFailed" text={t('table.deleteFailed', { count: deleteFailed })} />
-      ) : null;
+    const failedMessage = (
+      <Message param="deleteFailed" text={(count) => t('table.deleteFailed', { count })} />
+    );
 
     if (!connection?.edges.length) {
       // The filters stay, so a filter that matches nothing can be changed

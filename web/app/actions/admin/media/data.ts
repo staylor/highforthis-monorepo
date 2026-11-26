@@ -100,7 +100,7 @@ const cropUrl = (
 };
 
 export function selectedMedia(
-  media: ReadonlyArray<FeaturedMedia_MediaFragment | null> | null | undefined
+  media: ReadonlyArray<FeaturedMedia_MediaFragment | null | undefined>
 ): SelectedMedia[] {
   return (media ?? []).filter(Boolean).map((upload) => ({
     id: upload!.id,

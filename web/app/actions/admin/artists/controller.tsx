@@ -1,27 +1,25 @@
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
-import { selectedMedia } from '#/actions/admin/media/data.ts';
+import { mediaField } from '#/actions/admin/media/field.tsx';
 import {
-  backTo,
-  backToList,
+  formActions,
+  listAction,
   renderAdminNotFound,
   renderAdminPage,
-  type AdminContext,
+  type AdminEditContext,
   type AdminPageContext,
 } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
+import type { SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
 import type { ArtistEditQuery, ArtistsAdminQuery } from '#/types/graphql.ts';
 import { EntityShows, PageLink } from '#/ui/admin/entity.tsx';
 import { AdminForm, type Field } from '#/ui/admin/form.tsx';
-import { ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { ListTable, Search, TitleCell, toggleColumn } from '#/ui/admin/list-table.tsx';
 import { Message } from '#/ui/admin/message.tsx';
 import { HeaderAdd, Heading } from '#/ui/admin/page.tsx';
-import { FeaturedMedia } from '#/ui/admin/public/featured-media.tsx';
-import { InlineToggle } from '#/ui/admin/public/inline-toggle.tsx';
 import { pinkLink } from '#/ui/admin/public/styles.ts';
 import { artworkUrl } from '#/ui/public/media.ts';
 
@@ -30,7 +28,7 @@ import {
   deleteArtists,
   loadArtist,
   loadArtists,
-  setArtistExcludeFromSearch,
+  saveArtistFlag,
   updateArtist,
 } from './data.ts';
 
@@ -68,22 +66,12 @@ function artistFields(t: TFunction, artist?: Artist): Field[] {
     ...(artist?.slug ? [{ label: t('entity.slug'), prop: 'slug', required: true }] : []),
     { label: t('entity.description'), prop: 'description', type: 'textarea' },
     { label: t('entity.website'), prop: 'website' },
-    {
+    mediaField({
       label: t('entity.featuredMedia'),
       prop: 'featuredMedia',
-      type: 'custom',
-      render: () => (
-        <FeaturedMedia
-          name="featuredMedia"
-          type="image"
-          media={selectedMedia(artist?.featuredMedia)}
-          buttonText={t('entity.setFeaturedMedia')}
-          heading={t('media.heading')}
-          closeLabel={t('admin.close')}
-          loadingText={t('admin.loading')}
-        />
-      ),
-    },
+      media: artist?.featuredMedia,
+      buttonText: t('entity.setFeaturedMedia'),
+    }),
     { label: t('entity.excludeFromSearch'), prop: 'excludeFromSearch', type: 'checkbox' },
   ];
 }
@@ -97,7 +85,6 @@ export const artistsList = createController(artists.list, {
         gql: context.admin.gql,
         searchParams: context.url.searchParams,
       });
-      const deleted = Number(context.url.searchParams.get('deleted') || 0);
       const columns = [
         {
           styles: { width: '4rem' },
@@ -127,30 +114,20 @@ export const artistsList = createController(artists.list, {
         },
         {
           label: t('entity.name'),
-          render: (artist: ArtistRow) => {
-            const href = artists.edit.index.href({ id: artist.id });
-            return (
-              <>
-                <RowTitle href={href} title={artist.name} />
-                <RowActions editHref={href} id={artist.id} />
-              </>
-            );
-          },
-        },
-        { label: t('entity.slug'), render: (artist: ArtistRow) => artist.slug },
-        {
-          label: t('entity.excludeFromSearch'),
-          styles: { textAlign: 'center' },
           render: (artist: ArtistRow) => (
-            <InlineToggle
-              intent="excludeFromSearch"
-              name="excludeFromSearch"
+            <TitleCell
+              href={artists.edit.index.href({ id: artist.id })}
+              title={artist.name}
               id={artist.id}
-              checked={Boolean(artist.excludeFromSearch)}
-              label={`${t('entity.excludeFromSearch')}: ${artist.name}`}
             />
           ),
         },
+        { label: t('entity.slug'), render: (artist: ArtistRow) => artist.slug },
+        toggleColumn(
+          'excludeFromSearch',
+          t('entity.excludeFromSearch'),
+          (artist: ArtistRow) => artist.name
+        ),
         {
           label: t('entity.website'),
           render: (artist: ArtistRow) =>
@@ -167,9 +144,7 @@ export const artistsList = createController(artists.list, {
         <>
           <Heading>{t('artists.heading')}</Heading>
           <HeaderAdd href={artists.add.index.href()} label={t('artists.add')} />
-          {deleted > 0 && (
-            <Message param="deleted" text={t('artists.deleted', { count: deleted })} />
-          )}
+          <Message param="deleted" text={(count) => t('artists.deleted', { count })} />
           <Search placeholder={t('artists.search')} />
           <ListTable connection={connection} columns={columns} />
         </>,
@@ -177,21 +152,7 @@ export const artistsList = createController(artists.list, {
       );
     },
 
-    // The row and bulk delete forms post intent=delete, and a row's "exclude from search" box
-    // posts intent=excludeFromSearch with fetch, which only needs to hear whether it saved.
-    // Apply with no action chosen posts an empty intent and just comes back to the list.
-    async action(context) {
-      const formData = await context.request.formData();
-      const intent = formData.get('intent');
-      if (intent === 'delete') {
-        return backTo(await deleteArtists({ gql: context.admin.gql, formData, url: context.url }));
-      }
-      if (intent === 'excludeFromSearch') {
-        const saved = await setArtistExcludeFromSearch({ gql: context.admin.gql, formData });
-        return new Response(null, { status: saved ? 204 : 500 });
-      }
-      return backToList(context.url);
-    },
+    action: listAction(deleteArtists, { flags: ['excludeFromSearch'], save: saveArtistFlag }),
   },
 });
 
@@ -211,21 +172,12 @@ function addPage(context: AdminPageContext, failure?: SaveFailure) {
 
 export const artistsAdd = createController(artists.add, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => addPage(context),
-
-    // Goes to the new artist's page, or shows the form again with what was entered
-    async action(context) {
-      const formData = await context.request.formData();
-      const result = await createArtist({ gql: context.admin.gql, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : addPage(context, result);
-    },
-  },
+  actions: formActions(addPage, createArtist),
 });
 
-async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+async function editPage(context: AdminEditContext, failure?: SaveFailure) {
   const t = getAdminT();
-  const { artist, shows } = await loadArtist({ gql: context.admin.gql, id });
+  const { artist, shows } = await loadArtist({ gql: context.admin.gql, id: context.params.id });
   if (!artist) {
     return renderAdminNotFound(context);
   }
@@ -256,14 +208,5 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
 
 export const artistsEdit = createController(artists.edit, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => editPage(context, context.params.id),
-
-    async action(context) {
-      const { id } = context.params;
-      const formData = await context.request.formData();
-      const result = await updateArtist({ gql: context.admin.gql, id, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
-    },
-  },
+  actions: formActions(editPage, updateArtist),
 });

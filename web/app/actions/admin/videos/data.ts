@@ -6,7 +6,7 @@ import {
   type FormArgs,
   type GraphQLClient,
 } from '#/lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import { listVariables, type ListArgs } from '#/lib/admin/list-variables.ts';
 import type { VideoEditQuery, VideosAdminQuery } from '#/types/graphql.ts';
 
 const videoFormFragment = gql`
@@ -72,14 +72,8 @@ const updateVideoMutation = gql`
 
 const textFields = ['title', 'slug', 'dataType'];
 
-export function loadVideos({
-  gql: client,
-  searchParams,
-}: {
-  gql: GraphQLClient;
-  searchParams: URLSearchParams;
-}) {
-  const variables = addSearchParam(searchParams, addPageOffset(searchParams));
+export function loadVideos({ gql: client, searchParams }: ListArgs) {
+  const variables = listVariables(searchParams);
   const year = Number(searchParams.get('year'));
   if (year) {
     variables.year = year;

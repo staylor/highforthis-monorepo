@@ -1,27 +1,25 @@
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
-import { selectedMedia } from '#/actions/admin/media/data.ts';
+import { mediaField } from '#/actions/admin/media/field.tsx';
 import {
-  backTo,
-  backToList,
+  formActions,
+  listAction,
   renderAdminNotFound,
   renderAdminPage,
-  type AdminContext,
+  type AdminEditContext,
   type AdminPageContext,
 } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
+import type { SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
 import type { VenueEditQuery, VenuesAdminQuery } from '#/types/graphql.ts';
 import { EntityShows, PageLink } from '#/ui/admin/entity.tsx';
 import { AdminForm, type Field } from '#/ui/admin/form.tsx';
-import { ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { ListTable, Search, TitleCell, toggleColumn } from '#/ui/admin/list-table.tsx';
 import { Message } from '#/ui/admin/message.tsx';
 import { HeaderAdd, Heading } from '#/ui/admin/page.tsx';
-import { FeaturedMedia } from '#/ui/admin/public/featured-media.tsx';
-import { InlineToggle } from '#/ui/admin/public/inline-toggle.tsx';
 import { pinkLink, wideInput } from '#/ui/admin/public/styles.ts';
 import { uploadUrl } from '#/ui/public/media.ts';
 import { text } from '#/ui/public/styles.ts';
@@ -31,9 +29,8 @@ import {
   deleteVenues,
   loadVenue,
   loadVenues,
-  setVenueFlag,
+  saveVenueFlag,
   updateVenue,
-  type VenueFlag,
 } from './data.ts';
 
 // Each form route has its own controller, since controller middleware doesn't apply to nested
@@ -43,9 +40,6 @@ const venues = routes.admin.venues;
 
 type VenueRow = NonNullable<VenuesAdminQuery['venues']>['edges'][number]['node'];
 type Venue = NonNullable<VenueEditQuery['venue']>;
-
-const flags = new Set<unknown>(['excludeFromSearch', 'permanentlyClosed'] satisfies VenueFlag[]);
-const isFlag = (intent: unknown): intent is VenueFlag => flags.has(intent);
 
 function thumbnail(venue: VenueRow) {
   const [media] = venue.featuredMedia ?? [];
@@ -107,22 +101,12 @@ function venueFields(t: TFunction, venue?: Venue, values?: SaveFailure['values']
         </>
       ),
     },
-    {
+    mediaField({
       label: t('entity.featuredMedia'),
       prop: 'featuredMedia',
-      type: 'custom',
-      render: () => (
-        <FeaturedMedia
-          name="featuredMedia"
-          type="image"
-          media={selectedMedia(venue?.featuredMedia)}
-          buttonText={t('entity.setFeaturedMedia')}
-          heading={t('media.heading')}
-          closeLabel={t('admin.close')}
-          loadingText={t('admin.loading')}
-        />
-      ),
-    },
+      media: venue?.featuredMedia,
+      buttonText: t('entity.setFeaturedMedia'),
+    }),
     { label: t('entity.excludeFromSearch'), prop: 'excludeFromSearch', type: 'checkbox' },
     { label: t('venues.permanentlyClosed'), prop: 'permanentlyClosed', type: 'checkbox' },
   ];
@@ -137,33 +121,18 @@ export const venuesList = createController(venues.list, {
         gql: context.admin.gql,
         searchParams: context.url.searchParams,
       });
-      const deleted = Number(context.url.searchParams.get('deleted') || 0);
-      const toggle = (flag: VenueFlag, label: string) => ({
-        label,
-        styles: { textAlign: 'center' },
-        render: (venue: VenueRow) => (
-          <InlineToggle
-            intent={flag}
-            name={flag}
-            id={venue.id}
-            checked={Boolean(venue[flag])}
-            label={`${label}: ${venue.name}`}
-          />
-        ),
-      });
+      const venueName = (venue: VenueRow) => venue.name;
       const columns = [
         { styles: { width: '4rem' }, render: thumbnail },
         {
           label: t('entity.name'),
-          render: (venue: VenueRow) => {
-            const href = venues.edit.index.href({ id: venue.id });
-            return (
-              <>
-                <RowTitle href={href} title={venue.name} />
-                <RowActions editHref={href} id={venue.id} />
-              </>
-            );
-          },
+          render: (venue: VenueRow) => (
+            <TitleCell
+              href={venues.edit.index.href({ id: venue.id })}
+              title={venue.name}
+              id={venue.id}
+            />
+          ),
         },
         { label: t('entity.slug'), render: (venue: VenueRow) => venue.slug },
         {
@@ -177,8 +146,8 @@ export const venuesList = createController(venues.list, {
         },
         { label: t('venues.capacity'), render: (venue: VenueRow) => venue.capacity },
         { label: t('venues.address'), render: (venue: VenueRow) => venue.address },
-        toggle('excludeFromSearch', t('entity.excludeFromSearch')),
-        toggle('permanentlyClosed', t('venues.permanentlyClosed')),
+        toggleColumn('excludeFromSearch', t('entity.excludeFromSearch'), venueName),
+        toggleColumn('permanentlyClosed', t('venues.permanentlyClosed'), venueName),
       ];
 
       return renderAdminPage(
@@ -186,9 +155,7 @@ export const venuesList = createController(venues.list, {
         <>
           <Heading>{t('venues.heading')}</Heading>
           <HeaderAdd href={venues.add.index.href()} label={t('venues.add')} />
-          {deleted > 0 && (
-            <Message param="deleted" text={t('venues.deleted', { count: deleted })} />
-          )}
+          <Message param="deleted" text={(count) => t('venues.deleted', { count })} />
           <Search placeholder={t('venues.search')} />
           <ListTable connection={connection} columns={columns} />
         </>,
@@ -196,21 +163,10 @@ export const venuesList = createController(venues.list, {
       );
     },
 
-    // The row and bulk delete forms post intent=delete, and a row's boxes post their flag as the
-    // intent with fetch, which only needs to hear whether it saved. Apply with no action chosen
-    // posts an empty intent and just comes back to the list.
-    async action(context) {
-      const formData = await context.request.formData();
-      const intent = formData.get('intent');
-      if (intent === 'delete') {
-        return backTo(await deleteVenues({ gql: context.admin.gql, formData, url: context.url }));
-      }
-      if (isFlag(intent)) {
-        const saved = await setVenueFlag({ gql: context.admin.gql, flag: intent, formData });
-        return new Response(null, { status: saved ? 204 : 500 });
-      }
-      return backToList(context.url);
-    },
+    action: listAction(deleteVenues, {
+      flags: ['excludeFromSearch', 'permanentlyClosed'],
+      save: saveVenueFlag,
+    }),
   },
 });
 
@@ -234,21 +190,12 @@ function addPage(context: AdminPageContext, failure?: SaveFailure) {
 
 export const venuesAdd = createController(venues.add, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => addPage(context),
-
-    // Goes to the new venue's page, or shows the form again with what was entered
-    async action(context) {
-      const formData = await context.request.formData();
-      const result = await createVenue({ gql: context.admin.gql, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : addPage(context, result);
-    },
-  },
+  actions: formActions(addPage, createVenue),
 });
 
-async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+async function editPage(context: AdminEditContext, failure?: SaveFailure) {
   const t = getAdminT();
-  const { venue, shows } = await loadVenue({ gql: context.admin.gql, id });
+  const { venue, shows } = await loadVenue({ gql: context.admin.gql, id: context.params.id });
   if (!venue) {
     return renderAdminNotFound(context);
   }
@@ -287,14 +234,5 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
 
 export const venuesEdit = createController(venues.edit, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => editPage(context, context.params.id),
-
-    async action(context) {
-      const { id } = context.params;
-      const formData = await context.request.formData();
-      const result = await updateVenue({ gql: context.admin.gql, id, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
-    },
-  },
+  actions: formActions(editPage, updateVenue),
 });

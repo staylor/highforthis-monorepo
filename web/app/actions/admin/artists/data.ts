@@ -3,19 +3,15 @@ import { gql } from 'graphql-tag';
 import { featuredMediaFragment } from '#/actions/admin/media/data.ts';
 import {
   deleteSelected,
+  saveFlag,
   submitForm,
+  type FlagArgs,
   type FormArgs,
   type GraphQLClient,
 } from '#/lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
-import { attempt } from '#/lib/graphql.ts';
+import { listVariables, type ListArgs } from '#/lib/admin/list-variables.ts';
 import { withEveryPage } from '#/lib/paging.ts';
-import type {
-  ArtistEditQuery,
-  ArtistShowsAdminQuery,
-  ArtistsAdminQuery,
-  UpdateArtistExcludeMutation,
-} from '#/types/graphql.ts';
+import type { ArtistEditQuery, ArtistShowsAdminQuery, ArtistsAdminQuery } from '#/types/graphql.ts';
 
 const artistFormFragment = gql`
   fragment ArtistForm_artist on Artist {
@@ -142,32 +138,13 @@ const updateArtistMutation = gql`
 
 const textFields = ['name', 'slug', 'description', 'website'];
 
-export function loadArtists({
-  gql: client,
-  searchParams,
-}: {
-  gql: GraphQLClient;
-  searchParams: URLSearchParams;
-}) {
-  const variables = addSearchParam(searchParams, addPageOffset(searchParams));
-  return client.query<ArtistsAdminQuery>(artistsQuery, variables);
+export function loadArtists({ gql: client, searchParams }: ListArgs) {
+  return client.query<ArtistsAdminQuery>(artistsQuery, listVariables(searchParams));
 }
 
 /** The list's "exclude from search" box. Resolves to whether it saved. */
-export async function setArtistExcludeFromSearch({
-  gql: client,
-  formData,
-}: {
-  gql: GraphQLClient;
-  formData: FormData;
-}) {
-  const { data } = await attempt(
-    client.mutate<UpdateArtistExcludeMutation>(excludeArtistMutation, {
-      id: formData.get('id'),
-      input: { excludeFromSearch: formData.get('excludeFromSearch') === 'true' },
-    })
-  );
-  return Boolean(data?.updateArtist);
+export function saveArtistFlag(args: FlagArgs) {
+  return saveFlag({ ...args, mutation: excludeArtistMutation });
 }
 
 export function deleteArtists(args: FormArgs) {

@@ -111,6 +111,27 @@ export const card = {
   },
 } satisfies Styles;
 
+/** Cards in rows: one to a row, then two on small screens and three on large ones. */
+export const cardGrid = {
+  display: 'grid',
+  gap: '1.5rem',
+  [sm]: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' },
+  [lg]: { gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' },
+} satisfies Styles;
+
+/** The title on a card that's a link, which turns pink while it's hovered. Add its size. */
+export const cardTitle = {
+  marginBottom: '0.375rem',
+  fontWeight: 600,
+  ...colorTransition,
+  [linkHover]: { color: 'var(--pink)' },
+} satisfies Styles;
+
+/** The words under a card's title, cut off after a number of lines. */
+export function cardSummary(lines: number) {
+  return { ...lineClamp(lines), ...text.sm, color: 'var(--muted)' } satisfies Styles;
+}
+
 // The shape every button has, whatever its colors
 const button = {
   display: 'inline-flex',

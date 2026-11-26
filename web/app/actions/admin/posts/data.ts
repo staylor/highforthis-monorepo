@@ -7,7 +7,7 @@ import {
   type FormArgs,
   type GraphQLClient,
 } from '#/lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import { listVariables, type ListArgs } from '#/lib/admin/list-variables.ts';
 import type { PostEditQuery, PostsAdminQuery } from '#/types/graphql.ts';
 import { linebreakNodeFragment, textNodeFragment } from '#/ui/post-content.tsx';
 import { videoFragment } from '#/ui/videos.tsx';
@@ -40,13 +40,13 @@ const postFormFragment = gql`
             indent
             type
             version
-          }
-          ... on HeadingNode {
-            tag
             children {
               ...TextNodes_linebreakNode
               ...TextNodes_textNode
             }
+          }
+          ... on HeadingNode {
+            tag
           }
           ... on ImageNode {
             size
@@ -64,24 +64,8 @@ const postFormFragment = gql`
               ...Video_video
             }
           }
-          ... on ElementNode {
-            children {
-              ...TextNodes_linebreakNode
-              ...TextNodes_textNode
-            }
-          }
-          ... on QuoteNode {
-            children {
-              ...TextNodes_linebreakNode
-              ...TextNodes_textNode
-            }
-          }
           ... on CodeNode {
             language
-            children {
-              ...TextNodes_linebreakNode
-              ...TextNodes_textNode
-            }
           }
           ... on ListNode {
             listType
@@ -171,15 +155,8 @@ const updatePostMutation = gql`
 // The artists are tags, each an artist's name
 const textFields = ['title', 'summary', 'artists'];
 
-export function loadPosts({
-  gql: client,
-  searchParams,
-}: {
-  gql: GraphQLClient;
-  searchParams: URLSearchParams;
-}) {
-  const variables = addSearchParam(searchParams, addPageOffset(searchParams));
-  return client.query<PostsAdminQuery>(postsQuery, variables);
+export function loadPosts({ gql: client, searchParams }: ListArgs) {
+  return client.query<PostsAdminQuery>(postsQuery, listVariables(searchParams));
 }
 
 export function deletePosts(args: FormArgs) {

@@ -15,7 +15,7 @@ import { lines } from '#/ui/lines.tsx';
 import { Link } from '#/ui/link.tsx';
 import { Podcast, podcastMetaTags } from '#/ui/podcast.tsx';
 import { uploadUrl } from '#/ui/public/media.ts';
-import { card, colorTransition, lineClamp, linkHover, merge, text } from '#/ui/public/styles.ts';
+import { card, cardSummary, cardTitle, merge, text } from '#/ui/public/styles.ts';
 
 import { ALL_EPISODES } from './feed.ts';
 
@@ -87,28 +87,8 @@ export default createController(routes.podcast, {
           <div mix={css({ display: 'grid', gap: '0.75rem' })}>
             {episodes.map(({ node }) => (
               <Link href={routes.podcast.show.href({ id: node.id })} mix={episodeLink}>
-                <h2
-                  mix={css({
-                    marginBottom: '0.375rem',
-                    ...text.lg,
-                    fontWeight: 600,
-                    ...colorTransition,
-                    [linkHover]: { color: 'var(--pink)' },
-                  })}
-                >
-                  {node.title}
-                </h2>
-                {node.description && (
-                  <p
-                    mix={css({
-                      ...lineClamp(3),
-                      ...text.sm,
-                      color: 'var(--muted)',
-                    })}
-                  >
-                    {lines(node.description)}
-                  </p>
-                )}
+                <h2 mix={css({ ...cardTitle, ...text.lg })}>{node.title}</h2>
+                {node.description && <p mix={css(cardSummary(3))}>{lines(node.description)}</p>}
               </Link>
             ))}
           </div>

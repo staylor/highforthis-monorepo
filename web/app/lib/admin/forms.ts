@@ -232,6 +232,33 @@ export async function submitForm({
   return { redirectTo: redirectUrl.toString() };
 }
 
+// A list row's box, which saves one of the row's fields as soon as it changes
+export interface FlagArgs {
+  gql: GraphQLClient;
+  formData: FormData;
+  /** The field it saves, which it posted as the intent, such as `excludeFromSearch`. */
+  flag: string;
+}
+
+/**
+ * Saves a list row's box with `mutation`, an update that takes the row's ID and an input.
+ * Resolves to whether it saved.
+ */
+export async function saveFlag({
+  gql,
+  formData,
+  flag,
+  mutation,
+}: FlagArgs & { mutation: DocumentNode }) {
+  const { data } = await attempt(
+    gql.mutate<Record<string, unknown>>(mutation, {
+      id: formData.get('id'),
+      input: { [flag]: formData.get(flag) === 'true' },
+    })
+  );
+  return Boolean(data && Object.values(data)[0]);
+}
+
 interface DeleteSelectedArgs extends FormArgs {
   mutation: DocumentNode;
 }

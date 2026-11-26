@@ -1,8 +1,14 @@
-import type { Variables } from '#/lib/graphql.ts';
+import type { GraphQLClient, Variables } from '#/lib/graphql.ts';
 
 // Builds a list query's variables from the admin list pages' ?page= and ?search= params.
 
 export const PER_PAGE = 20;
+
+/** What a list page's data function needs: the client, and the page's query parameters. */
+export interface ListArgs {
+  gql: GraphQLClient;
+  searchParams: URLSearchParams;
+}
 
 interface ListVariables extends Variables {
   first?: number;
@@ -13,23 +19,19 @@ interface ListVariables extends Variables {
 /** The cursor GraphQL's connections use for an offset: base64 of 'arrayconnection:<offset>'. */
 const offsetToCursor = (offset: number) => btoa(`arrayconnection:${offset}`);
 
-export const addPageOffset = (searchParams: URLSearchParams, variables: ListVariables = {}) => {
-  if (!variables.first) {
-    variables.first = PER_PAGE;
+/**
+ * A list page's variables, added to `variables`, such as the list's order: a page of PER_PAGE
+ * rows, unless `variables` says how many, after the pages before ?page=, matching ?search=.
+ */
+export function listVariables(searchParams: URLSearchParams, variables: ListVariables = {}) {
+  variables.first ||= PER_PAGE;
+  const pageOffset = Number(searchParams.get('page')) - 1;
+  if (pageOffset > 0) {
+    variables.after = offsetToCursor(pageOffset * variables.first - 1);
   }
-  if (searchParams.has('page')) {
-    const pageOffset = Number(searchParams.get('page')) - 1;
-    if (pageOffset > 0) {
-      variables.after = offsetToCursor(pageOffset * variables.first - 1);
-    }
-  }
-  return variables;
-};
-
-export const addSearchParam = (searchParams: URLSearchParams, variables: ListVariables = {}) => {
-  const value = searchParams.get('search');
-  if (value) {
-    variables.search = value;
+  const search = searchParams.get('search');
+  if (search) {
+    variables.search = search;
   }
   return variables;
-};
+}
