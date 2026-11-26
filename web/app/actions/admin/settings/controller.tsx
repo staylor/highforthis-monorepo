@@ -1,13 +1,13 @@
 import { createController } from 'remix/router';
 
-import { selectedMedia } from '#/actions/admin/media/data.ts';
+import { mediaField } from '#/actions/admin/media/field.tsx';
 import {
-  backTo,
+  formActions,
   renderAdminPage,
   type AdminContext,
   type AdminPageContext,
 } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
+import type { SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
@@ -15,7 +15,6 @@ import { AdminForm, type Field } from '#/ui/admin/form.tsx';
 import { Message } from '#/ui/admin/message.tsx';
 import { Heading } from '#/ui/admin/page.tsx';
 import { CropsEditor } from '#/ui/admin/public/crops-editor.tsx';
-import { FeaturedMedia } from '#/ui/admin/public/featured-media.tsx';
 
 import {
   loadMediaSettings,
@@ -82,19 +81,7 @@ async function sitePage(context: AdminContext, failure?: SaveFailure) {
 
 export const settingsSite = createController(settings.site, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => sitePage(context),
-
-    async action(context) {
-      const formData = await context.request.formData();
-      const result = await updateSiteSettings({
-        gql: context.admin.gql,
-        formData,
-        url: context.url,
-      });
-      return isRedirect(result) ? backTo(result) : sitePage(context, result);
-    },
-  },
+  actions: formActions(sitePage, updateSiteSettings),
 });
 
 async function mediaPage(context: AdminContext, failure?: SaveFailure) {
@@ -130,19 +117,7 @@ async function mediaPage(context: AdminContext, failure?: SaveFailure) {
 
 export const settingsMedia = createController(settings.media, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => mediaPage(context),
-
-    async action(context) {
-      const formData = await context.request.formData();
-      const result = await updateMediaSettings({
-        gql: context.admin.gql,
-        formData,
-        url: context.url,
-      });
-      return isRedirect(result) ? backTo(result) : mediaPage(context, result);
-    },
-  },
+  actions: formActions(mediaPage, updateMediaSettings),
 });
 
 async function podcastPage(context: AdminContext, failure?: SaveFailure) {
@@ -152,22 +127,12 @@ async function podcastPage(context: AdminContext, failure?: SaveFailure) {
     { label: t('settings.podcast.title'), prop: 'title' },
     { label: t('settings.podcast.description'), prop: 'description', type: 'textarea' },
     ...podcastTextKeys.map((prop) => ({ label: t(`settings.podcast.${prop}`), prop })),
-    {
+    mediaField({
       label: t('settings.podcast.image'),
       prop: 'image',
-      type: 'custom',
-      render: () => (
-        <FeaturedMedia
-          name="image"
-          type="image"
-          media={selectedMedia(podcastSettings?.image ? [podcastSettings.image] : [])}
-          buttonText={t('settings.podcast.setImage')}
-          heading={t('media.heading')}
-          closeLabel={t('admin.close')}
-          loadingText={t('admin.loading')}
-        />
-      ),
-    },
+      media: podcastSettings?.image,
+      buttonText: t('settings.podcast.setImage'),
+    }),
   ];
   return renderSettingsPage(context, {
     heading: t('settings.podcast.heading'),
@@ -179,17 +144,5 @@ async function podcastPage(context: AdminContext, failure?: SaveFailure) {
 
 export const settingsPodcast = createController(settings.podcast, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => podcastPage(context),
-
-    async action(context) {
-      const formData = await context.request.formData();
-      const result = await updatePodcastSettings({
-        gql: context.admin.gql,
-        formData,
-        url: context.url,
-      });
-      return isRedirect(result) ? backTo(result) : podcastPage(context, result);
-    },
-  },
+  actions: formActions(podcastPage, updatePodcastSettings),
 });

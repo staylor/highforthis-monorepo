@@ -6,7 +6,8 @@ import { getAdmin } from './context.tsx';
 import { Icon } from './public/icon.tsx';
 
 interface MessageProps {
-  text: string;
+  /** What it says, or for a count, such as `?deleted=2`, what it says for the count. */
+  text: string | ((count: number) => string);
   /** The query parameter that shows the message, such as `deleted` for `?deleted=2`. */
   param?: string;
   /** Keeps it from showing, as when the save after the one it reports has failed. */
@@ -16,14 +17,17 @@ interface MessageProps {
 /**
  * A notice for the query parameter a save or delete redirected with, such as `?message=updated`.
  * Its close button links to the same page without the parameter, so it works without JavaScript.
- * It renders an empty element when it has nothing to say, so what follows it on the page, such as
- * a form, is the same element with or without the notice, and keeps what was typed into it.
+ * It renders an empty element when it has nothing to say, as for a count of 0, so what follows it
+ * on the page, such as a form, is the same element with or without the notice, and keeps what was
+ * typed into it.
  */
 export function Message(handle: Handle<MessageProps>) {
   return () => {
     const { t, url } = getAdmin(handle);
+    const { text: says, hidden } = handle.props;
     const param = handle.props.param ?? 'message';
-    if (handle.props.hidden || !url.searchParams.has(param)) {
+    const count = Number(url.searchParams.get(param) || 0);
+    if (hidden || !url.searchParams.has(param) || (typeof says === 'function' && !(count > 0))) {
       return <div />;
     }
     const dismissed = new URL(url);
@@ -50,7 +54,7 @@ export function Message(handle: Handle<MessageProps>) {
               color: 'var(--dark)',
             })}
           >
-            {handle.props.text}
+            {typeof says === 'function' ? says(count) : says}
           </p>
           <a
             href={`${dismissed.pathname}${dismissed.search}`}

@@ -8,10 +8,10 @@ import { Link } from '#/ui/link.tsx';
 import { PostArtwork, postArtworkFragment } from '#/ui/post-artwork.tsx';
 import {
   card,
-  colorTransition,
+  cardSummary,
+  cardTitle,
   lg,
   lineClamp,
-  linkHover,
   merge,
   srOnly,
   text,
@@ -227,28 +227,8 @@ export function HomePage(handle: Handle<{ data: HomeQuery; artworkSeed: string }
                         justifyContent: 'center',
                       })}
                     >
-                      <h3
-                        mix={css({
-                          marginBottom: '0.375rem',
-                          ...text.lg,
-                          fontWeight: 600,
-                          ...colorTransition,
-                          [linkHover]: { color: 'var(--pink)' },
-                        })}
-                      >
-                        {node.title}
-                      </h3>
-                      {node.summary && (
-                        <p
-                          mix={css({
-                            ...lineClamp(2),
-                            ...text.sm,
-                            color: 'var(--muted)',
-                          })}
-                        >
-                          {node.summary}
-                        </p>
-                      )}
+                      <h3 mix={css({ ...cardTitle, ...text.lg })}>{node.title}</h3>
+                      {node.summary && <p mix={css(cardSummary(2))}>{node.summary}</p>}
                     </div>
                   </Link>
                 ))}

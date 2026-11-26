@@ -6,7 +6,7 @@ import {
   type FormArgs,
   type GraphQLClient,
 } from '#/lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import { listVariables, type ListArgs } from '#/lib/admin/list-variables.ts';
 import type { UserEditQuery, UsersAdminQuery } from '#/types/graphql.ts';
 
 const userFormFragment = gql`
@@ -71,15 +71,8 @@ const updateUserMutation = gql`
 // A password left empty is sent as null, which keeps the one the user has
 const textFields = ['name', 'email', 'password', 'bio'];
 
-export function loadUsers({
-  gql,
-  searchParams,
-}: {
-  gql: GraphQLClient;
-  searchParams: URLSearchParams;
-}) {
-  const variables = addSearchParam(searchParams, addPageOffset(searchParams));
-  return gql.query<UsersAdminQuery>(usersQuery, variables);
+export function loadUsers({ gql, searchParams }: ListArgs) {
+  return gql.query<UsersAdminQuery>(usersQuery, listVariables(searchParams));
 }
 
 export function deleteUsers(args: FormArgs) {

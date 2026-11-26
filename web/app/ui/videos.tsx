@@ -7,7 +7,7 @@ import type { Video_VideoFragment, Videos_VideosFragment } from '#/types/graphql
 import { getApp } from './app-context.tsx';
 import { Link } from './link.tsx';
 import { findThumbnail } from './public/media.ts';
-import { lg, pinkButton, quietButton, sm, text } from './public/styles.ts';
+import { cardGrid, pinkButton, quietButton, text } from './public/styles.ts';
 import { VideoThumbnail } from './public/video-thumbnail.tsx';
 
 export const videoFragment = gql`
@@ -128,14 +128,7 @@ export function Videos(
 
     return (
       <>
-        <div
-          mix={css({
-            display: 'grid',
-            gap: '1.5rem',
-            [sm]: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' },
-            [lg]: { gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' },
-          })}
-        >
+        <div mix={css(cardGrid)}>
           {videos.edges.length === 0 && <p>{t('videos.noFound')}</p>}
           {videos.edges.map((edge) => (
             <Video key={edge.node.id} video={edge.node} heading={heading} />

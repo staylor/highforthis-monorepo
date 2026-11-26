@@ -1,20 +1,20 @@
 import { createController } from 'remix/router';
 
 import {
-  backTo,
-  backToList,
+  formActions,
+  listAction,
   renderAdminNotFound,
   renderAdminPage,
-  type AdminContext,
+  type AdminEditContext,
   type AdminPageContext,
 } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
+import type { SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
 import type { User } from '#/types/graphql.ts';
 import { AdminForm, type Field } from '#/ui/admin/form.tsx';
-import { ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { ListTable, Search, TitleCell } from '#/ui/admin/list-table.tsx';
 import { Message } from '#/ui/admin/message.tsx';
 import { HeaderAdd, Heading } from '#/ui/admin/page.tsx';
 
@@ -60,19 +60,16 @@ export const usersList = createController(users.list, {
         gql: context.admin.gql,
         searchParams: context.url.searchParams,
       });
-      const deleted = Number(context.url.searchParams.get('deleted') || 0);
       const columns = [
         {
           label: t('users.name'),
-          render: (user: User) => {
-            const href = users.edit.index.href({ id: user.id });
-            return (
-              <>
-                <RowTitle href={href} title={user.name} />
-                <RowActions editHref={href} id={user.id} />
-              </>
-            );
-          },
+          render: (user: User) => (
+            <TitleCell
+              href={users.edit.index.href({ id: user.id })}
+              title={user.name}
+              id={user.id}
+            />
+          ),
         },
       ];
 
@@ -81,7 +78,7 @@ export const usersList = createController(users.list, {
         <>
           <Heading>{t('users.heading')}</Heading>
           <HeaderAdd href={users.add.index.href()} label={t('users.add')} />
-          {deleted > 0 && <Message param="deleted" text={t('users.deleted', { count: deleted })} />}
+          <Message param="deleted" text={(count) => t('users.deleted', { count })} />
           <Search placeholder={t('users.search')} />
           <ListTable connection={connection} columns={columns} />
         </>,
@@ -89,15 +86,7 @@ export const usersList = createController(users.list, {
       );
     },
 
-    // The row and bulk delete forms post intent=delete; Apply with no action chosen posts an
-    // empty intent and just comes back to the list
-    async action(context) {
-      const formData = await context.request.formData();
-      if (formData.get('intent') !== 'delete') {
-        return backToList(context.url);
-      }
-      return backTo(await deleteUsers({ gql: context.admin.gql, formData, url: context.url }));
-    },
+    action: listAction(deleteUsers),
   },
 });
 
@@ -116,21 +105,12 @@ function addPage(context: AdminPageContext, failure?: SaveFailure) {
 
 export const usersAdd = createController(users.add, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => addPage(context),
-
-    // Goes to the new user's page, or shows the form again with what was entered
-    async action(context) {
-      const formData = await context.request.formData();
-      const result = await createUser({ gql: context.admin.gql, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : addPage(context, result);
-    },
-  },
+  actions: formActions(addPage, createUser),
 });
 
-async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+async function editPage(context: AdminEditContext, failure?: SaveFailure) {
   const t = getAdminT();
-  const { user } = await loadUser({ gql: context.admin.gql, id });
+  const { user } = await loadUser({ gql: context.admin.gql, id: context.params.id });
   if (!user) {
     return renderAdminNotFound(context);
   }
@@ -152,14 +132,5 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
 
 export const usersEdit = createController(users.edit, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => editPage(context, context.params.id),
-
-    async action(context) {
-      const { id } = context.params;
-      const formData = await context.request.formData();
-      const result = await updateUser({ gql: context.admin.gql, id, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
-    },
-  },
+  actions: formActions(editPage, updateUser),
 });

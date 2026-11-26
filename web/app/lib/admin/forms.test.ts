@@ -6,7 +6,7 @@ import { describe, it } from 'remix/test';
 import { GraphQLRequestError, type Variables } from '#/lib/graphql.ts';
 
 import { deleteSelected, isRedirect, parseForm, submitForm, type GraphQLClient } from './forms.ts';
-import { addPageOffset, addSearchParam } from './list-variables.ts';
+import { listVariables } from './list-variables.ts';
 
 // The admin's shared form and list helpers, which every section's data functions use.
 
@@ -346,20 +346,30 @@ describe('deleteSelected', () => {
 
 describe('listVariables', () => {
   it('asks for a page of rows, after the cursor of the last row on the previous page', () => {
-    assert.deepEqual(addPageOffset(new URLSearchParams()), { first: 20 });
+    assert.deepEqual(listVariables(new URLSearchParams()), { first: 20 });
     // Page 2 starts after row 19: base64 of 'arrayconnection:19', as GraphQL's connections encode it
-    assert.deepEqual(addPageOffset(new URLSearchParams('page=2')), {
+    assert.deepEqual(listVariables(new URLSearchParams('page=2')), {
       first: 20,
       after: 'YXJyYXljb25uZWN0aW9uOjE5',
     });
     assert.equal(
-      addPageOffset(new URLSearchParams('page=2'), { first: 8 }).after,
+      listVariables(new URLSearchParams('page=2'), { first: 8 }).after,
       btoa('arrayconnection:7')
     );
   });
 
   it('adds the search term when there is one', () => {
-    assert.deepEqual(addSearchParam(new URLSearchParams('search=wilco')), { search: 'wilco' });
-    assert.deepEqual(addSearchParam(new URLSearchParams('search=')), {});
+    assert.deepEqual(listVariables(new URLSearchParams('search=wilco')), {
+      first: 20,
+      search: 'wilco',
+    });
+    assert.deepEqual(listVariables(new URLSearchParams('search=')), { first: 20 });
+  });
+
+  it('keeps the variables it starts from', () => {
+    assert.deepEqual(listVariables(new URLSearchParams(), { order: 'DESC' }), {
+      order: 'DESC',
+      first: 20,
+    });
   });
 });

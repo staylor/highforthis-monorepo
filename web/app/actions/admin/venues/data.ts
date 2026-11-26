@@ -3,19 +3,15 @@ import { gql } from 'graphql-tag';
 import { featuredMediaFragment } from '#/actions/admin/media/data.ts';
 import {
   deleteSelected,
+  saveFlag,
   submitForm,
+  type FlagArgs,
   type FormArgs,
   type GraphQLClient,
 } from '#/lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
-import { attempt } from '#/lib/graphql.ts';
+import { listVariables, type ListArgs } from '#/lib/admin/list-variables.ts';
 import { withEveryPage } from '#/lib/paging.ts';
-import type {
-  UpdateVenueFlagMutation,
-  VenueEditQuery,
-  VenueShowsAdminQuery,
-  VenuesAdminQuery,
-} from '#/types/graphql.ts';
+import type { VenueEditQuery, VenueShowsAdminQuery, VenuesAdminQuery } from '#/types/graphql.ts';
 
 const venueFormFragment = gql`
   fragment VenueForm_venue on Venue {
@@ -176,37 +172,13 @@ function pairCoordinates(input: Record<string, any>) {
   }
 }
 
-export function loadVenues({
-  gql: client,
-  searchParams,
-}: {
-  gql: GraphQLClient;
-  searchParams: URLSearchParams;
-}) {
-  const variables = addSearchParam(searchParams, addPageOffset(searchParams));
-  return client.query<VenuesAdminQuery>(venuesQuery, variables);
+export function loadVenues({ gql: client, searchParams }: ListArgs) {
+  return client.query<VenuesAdminQuery>(venuesQuery, listVariables(searchParams));
 }
 
-/** The flags the list's boxes save, each posted as the intent and the field. */
-export type VenueFlag = 'excludeFromSearch' | 'permanentlyClosed';
-
 /** One of the list's boxes. Resolves to whether it saved. */
-export async function setVenueFlag({
-  gql: client,
-  flag,
-  formData,
-}: {
-  gql: GraphQLClient;
-  flag: VenueFlag;
-  formData: FormData;
-}) {
-  const { data } = await attempt(
-    client.mutate<UpdateVenueFlagMutation>(updateVenueFlagMutation, {
-      id: formData.get('id'),
-      input: { [flag]: formData.get(flag) === 'true' },
-    })
-  );
-  return Boolean(data?.updateVenue);
+export function saveVenueFlag(args: FlagArgs) {
+  return saveFlag({ ...args, mutation: updateVenueFlagMutation });
 }
 
 export function deleteVenues(args: FormArgs) {

@@ -1,42 +1,7 @@
 import * as assert from 'remix/assert';
-import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
+import { describe, it } from 'remix/test';
 
-import { testSecret, testSession } from '#/lib/adminSession.fixtures.ts';
-import { router } from '#/router.ts';
-
-const origin = 'http://localhost';
-
-type Operation = { operationName: string; variables: Record<string, any> };
-
-/**
- * Stands in for GraphQL: accepts the session, answers each operation by name, and records the
- * operations it was sent.
- */
-function stubGraphQL(t: TestContext, answers: Record<string, unknown> = {}) {
-  const operations: Operation[] = [];
-  t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url = new URL(input instanceof Request ? input.url : input);
-    if (url.pathname === '/auth/session') {
-      return new Response(null, { status: 200 });
-    }
-    const { operationName, variables } = JSON.parse(String(init?.body));
-    operations.push({ operationName, variables });
-    return Response.json({ data: answers[operationName] ?? {} });
-  });
-  return operations;
-}
-
-const get = (path: string) =>
-  router.fetch(new Request(new URL(path, origin), { headers: { cookie: testSession } }));
-
-const post = (path: string, body: string) =>
-  router.fetch(
-    new Request(new URL(path, origin), {
-      method: 'POST',
-      body: new URLSearchParams(body),
-      headers: { cookie: testSession, origin },
-    })
-  );
+import { acceptTestSession, get, post, stubGraphQL } from '#/actions/admin/test-support.ts';
 
 const venues = {
   edges: [
@@ -81,12 +46,7 @@ const venueListings = {
 };
 
 describe('admin venue listings', () => {
-  beforeEach(() => {
-    process.env.TOKEN_SECRET = testSecret;
-  });
-  afterEach(() => {
-    delete process.env.TOKEN_SECRET;
-  });
+  acceptTestSession();
 
   it('lists the venues with a listings page to choose from', async (t) => {
     const operations = stubGraphQL(t, { VenueListingsAdmin: { venues } });

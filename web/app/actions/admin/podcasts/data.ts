@@ -7,7 +7,7 @@ import {
   type FormArgs,
   type GraphQLClient,
 } from '#/lib/admin/forms.ts';
-import { addPageOffset, addSearchParam } from '#/lib/admin/list-variables.ts';
+import { listVariables, type ListArgs } from '#/lib/admin/list-variables.ts';
 import type { PodcastEditQuery, PodcastsAdminQuery } from '#/types/graphql.ts';
 
 const podcastFormFragment = gql`
@@ -85,15 +85,8 @@ function emptyDescription(input: Record<string, any>) {
   }
 }
 
-export function loadPodcasts({
-  gql: client,
-  searchParams,
-}: {
-  gql: GraphQLClient;
-  searchParams: URLSearchParams;
-}) {
-  const variables = addSearchParam(searchParams, addPageOffset(searchParams));
-  return client.query<PodcastsAdminQuery>(podcastsQuery, variables);
+export function loadPodcasts({ gql: client, searchParams }: ListArgs) {
+  return client.query<PodcastsAdminQuery>(podcastsQuery, listVariables(searchParams));
 }
 
 export function deletePodcasts(args: FormArgs) {

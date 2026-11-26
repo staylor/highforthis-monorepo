@@ -3,10 +3,12 @@ import { createController } from 'remix/router';
 
 import {
   backTo,
-  backToList,
+  formActions,
+  listAction,
   renderAdminNotFound,
   renderAdminPage,
   type AdminContext,
+  type AdminEditContext,
 } from '#/actions/admin/render-page.tsx';
 import { dateTime } from '#/lib/admin/date-time.ts';
 import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
@@ -16,12 +18,11 @@ import { routes } from '#/routes.ts';
 import type { ShowEditQuery, ShowEntitiesQuery, ShowsAdminQuery } from '#/types/graphql.ts';
 import { AdminForm, type Field } from '#/ui/admin/form.tsx';
 import { documentLoad } from '#/ui/admin/links.ts';
-import { ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { ListTable, Search, TitleCell, toggleColumn } from '#/ui/admin/list-table.tsx';
 import { Message } from '#/ui/admin/message.tsx';
 import { Alert, HeaderAdd, Heading } from '#/ui/admin/page.tsx';
 import { DateTimeInput } from '#/ui/admin/public/date-time-input.tsx';
 import { EntitiesPicker } from '#/ui/admin/public/entities-picker.tsx';
-import { InlineToggle } from '#/ui/admin/public/inline-toggle.tsx';
 import { input, saveButton, select } from '#/ui/admin/public/styles.ts';
 import { merge, text } from '#/ui/public/styles.ts';
 import { formatArtists, formatShowLink } from '#/ui/shows/utils.ts';
@@ -33,7 +34,7 @@ import {
   loadNewShow,
   loadShow,
   loadShows,
-  setShowAttended,
+  saveShowFlag,
   updateShow,
   type BulkImportErrors,
 } from './data.ts';
@@ -151,20 +152,16 @@ export const showsList = createController(shows.list, {
       const t = getAdminT();
       const { searchParams } = context.url;
       const { shows: connection } = await loadShows({ gql: context.admin.gql, searchParams });
-      const deleted = Number(searchParams.get('deleted') || 0);
-      const imported = Number(searchParams.get('imported') || 0);
       const columns = [
         {
           label: t('shows.title'),
-          render: (show: ShowRow) => {
-            const href = shows.edit.index.href({ id: show.id });
-            return (
-              <>
-                <RowTitle href={href} title={show.title} />
-                <RowActions editHref={href} id={show.id} />
-              </>
-            );
-          },
+          render: (show: ShowRow) => (
+            <TitleCell
+              href={shows.edit.index.href({ id: show.id })}
+              title={show.title}
+              id={show.id}
+            />
+          ),
         },
         {
           label: t('shows.artists'),
@@ -174,41 +171,27 @@ export const showsList = createController(shows.list, {
             if (!first) {
               return t('shows.noArtists');
             }
-            const href = routes.admin.artists.edit.index.href({ id: first.id });
             const more = show.artists.length > 1 ? ` + ${show.artists.length - 1}` : '';
             return (
-              <>
-                <RowTitle href={href} title={`${first.name}${more}`} />
-                <RowActions editHref={href} viewHref={formatShowLink(show)} />
-              </>
+              <TitleCell
+                href={routes.admin.artists.edit.index.href({ id: first.id })}
+                title={`${first.name}${more}`}
+                viewHref={formatShowLink(show)}
+              />
             );
           },
         },
         {
           label: t('shows.venue'),
-          render: ({ venue }: ShowRow) => {
-            const href = routes.admin.venues.edit.index.href({ id: venue.id });
-            return (
-              <>
-                <RowTitle href={href} title={venue.name} />
-                <RowActions editHref={href} viewHref={routes.venue.href({ slug: venue.slug })} />
-              </>
-            );
-          },
-        },
-        {
-          label: t('shows.attended.label'),
-          styles: { textAlign: 'center' },
-          render: (show: ShowRow) => (
-            <InlineToggle
-              intent="attended"
-              name="attended"
-              id={show.id}
-              checked={Boolean(show.attended)}
-              label={`${t('shows.attended.label')}: ${formatArtists(show)}`}
+          render: ({ venue }: ShowRow) => (
+            <TitleCell
+              href={routes.admin.venues.edit.index.href({ id: venue.id })}
+              title={venue.name}
+              viewHref={routes.venue.href({ slug: venue.slug })}
             />
           ),
         },
+        toggleColumn('attended', t('shows.attended.label'), (show: ShowRow) => formatArtists(show)),
         { label: t('shows.date'), render: (show: ShowRow) => dateTime(show.date) },
       ];
 
@@ -218,17 +201,17 @@ export const showsList = createController(shows.list, {
           <Heading>{t('shows.heading')}</Heading>
           <HeaderAdd href={shows.add.index.href()} label={t('shows.add')} />{' '}
           <HeaderAdd href={shows.bulk.index.href()} label={t('shows.bulk.nav')} />
-          {deleted > 0 && <Message param="deleted" text={t('shows.deleted', { count: deleted })} />}
-          {imported > 0 && (
-            <Message
-              param="imported"
-              text={t('shows.bulk.success', {
-                count: imported,
+          <Message param="deleted" text={(count) => t('shows.deleted', { count })} />
+          <Message
+            param="imported"
+            text={(count) =>
+              t('shows.bulk.success', {
+                count,
                 artistsCreated: Number(searchParams.get('artistsCreated') || 0),
                 venuesCreated: Number(searchParams.get('venuesCreated') || 0),
-              })}
-            />
-          )}
+              })
+            }
+          />
           <Search placeholder={t('shows.search')} />
           <ListTable connection={connection} columns={columns} />
         </>,
@@ -236,21 +219,7 @@ export const showsList = createController(shows.list, {
       );
     },
 
-    // The row and bulk delete forms post intent=delete, and a row's "attended" box posts
-    // intent=attended with fetch, which only needs to hear whether it saved. Apply with no
-    // action chosen posts an empty intent and just comes back to the list.
-    async action(context) {
-      const formData = await context.request.formData();
-      const intent = formData.get('intent');
-      if (intent === 'delete') {
-        return backTo(await deleteShows({ gql: context.admin.gql, formData, url: context.url }));
-      }
-      if (intent === 'attended') {
-        const saved = await setShowAttended({ gql: context.admin.gql, formData });
-        return new Response(null, { status: saved ? 204 : 500 });
-      }
-      return backToList(context.url);
-    },
+    action: listAction(deleteShows, { flags: ['attended'], save: saveShowFlag }),
   },
 });
 
@@ -276,21 +245,12 @@ async function addPage(context: AdminContext, failure?: SaveFailure) {
 
 export const showsAdd = createController(shows.add, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => addPage(context),
-
-    // Goes to the new show's page, or shows the form again with what was entered
-    async action(context) {
-      const formData = await context.request.formData();
-      const result = await createShow({ gql: context.admin.gql, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : addPage(context, result);
-    },
-  },
+  actions: formActions(addPage, createShow),
 });
 
-async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+async function editPage(context: AdminEditContext, failure?: SaveFailure) {
   const t = getAdminT();
-  const data = await loadShow({ gql: context.admin.gql, id });
+  const data = await loadShow({ gql: context.admin.gql, id: context.params.id });
   if (!data.show) {
     return renderAdminNotFound(context);
   }
@@ -314,16 +274,7 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
 
 export const showsEdit = createController(shows.edit, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => editPage(context, context.params.id),
-
-    async action(context) {
-      const { id } = context.params;
-      const formData = await context.request.formData();
-      const result = await updateShow({ gql: context.admin.gql, id, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
-    },
-  },
+  actions: formActions(editPage, updateShow),
 });
 
 const exampleCsv =

@@ -2,19 +2,19 @@ import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
 import {
-  backTo,
-  backToList,
+  formActions,
+  listAction,
   renderAdminNotFound,
   renderAdminPage,
-  type AdminContext,
+  type AdminEditContext,
 } from '#/actions/admin/render-page.tsx';
-import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
+import type { SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
 import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
 import type { VideoEditQuery, VideosAdminQuery } from '#/types/graphql.ts';
 import { AdminForm, type Field } from '#/ui/admin/form.tsx';
-import { ListFilter, ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { ListFilter, ListTable, Search, TitleCell } from '#/ui/admin/list-table.tsx';
 import { Message } from '#/ui/admin/message.tsx';
 import { Heading } from '#/ui/admin/page.tsx';
 
@@ -64,23 +64,17 @@ export const videosList = createController(videos.list, {
         gql: context.admin.gql,
         searchParams: context.url.searchParams,
       });
-      const deleted = Number(context.url.searchParams.get('deleted') || 0);
       const columns = [
         {
           label: t('videos.title'),
-          render: (video: VideoRow) => {
-            const href = videos.edit.index.href({ id: video.id });
-            return (
-              <>
-                <RowTitle href={href} title={video.title} />
-                <RowActions
-                  editHref={href}
-                  viewHref={routes.video.href({ slug: video.slug })}
-                  id={video.id}
-                />
-              </>
-            );
-          },
+          render: (video: VideoRow) => (
+            <TitleCell
+              href={videos.edit.index.href({ id: video.id })}
+              title={video.title}
+              viewHref={routes.video.href({ slug: video.slug })}
+              id={video.id}
+            />
+          ),
         },
         { label: t('videos.slug'), render: (video: VideoRow) => video.slug },
         { label: t('videos.year'), render: (video: VideoRow) => video.year },
@@ -104,9 +98,7 @@ export const videosList = createController(videos.list, {
         context,
         <>
           <Heading>{t('videos.heading')}</Heading>
-          {deleted > 0 && (
-            <Message param="deleted" text={t('videos.deleted', { count: deleted })} />
-          )}
+          <Message param="deleted" text={(count) => t('videos.deleted', { count })} />
           <Search placeholder={t('videos.search')} />
           <ListTable
             connection={connection}
@@ -120,21 +112,13 @@ export const videosList = createController(videos.list, {
       );
     },
 
-    // The row and bulk delete forms post intent=delete. Apply with no action chosen posts an
-    // empty intent and just comes back to the list.
-    async action(context) {
-      const formData = await context.request.formData();
-      if (formData.get('intent') !== 'delete') {
-        return backToList(context.url);
-      }
-      return backTo(await deleteVideos({ gql: context.admin.gql, formData, url: context.url }));
-    },
+    action: listAction(deleteVideos),
   },
 });
 
-async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+async function editPage(context: AdminEditContext, failure?: SaveFailure) {
   const t = getAdminT();
-  const { video } = await loadVideo({ gql: context.admin.gql, id });
+  const { video } = await loadVideo({ gql: context.admin.gql, id: context.params.id });
   if (!video) {
     return renderAdminNotFound(context);
   }
@@ -168,14 +152,5 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
 
 export const videosEdit = createController(videos.edit, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => editPage(context, context.params.id),
-
-    async action(context) {
-      const { id } = context.params;
-      const formData = await context.request.formData();
-      const result = await updateVideo({ gql: context.admin.gql, id, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
-    },
-  },
+  actions: formActions(editPage, updateVideo),
 });

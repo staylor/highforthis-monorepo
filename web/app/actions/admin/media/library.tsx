@@ -3,10 +3,12 @@ import { createAction, createController } from 'remix/router';
 
 import {
   backTo,
-  backToList,
+  formActions,
+  listAction,
   renderAdminNotFound,
   renderAdminPage,
   type AdminContext,
+  type AdminEditContext,
 } from '#/actions/admin/render-page.tsx';
 import { isRedirect, type SaveFailure } from '#/lib/admin/forms.ts';
 import { getAdminT, type TFunction } from '#/lib/i18n.ts';
@@ -14,7 +16,7 @@ import { requireAdmin, sameOrigin } from '#/middleware/admin.ts';
 import { routes } from '#/routes.ts';
 import type { MediaAdminQuery, UploadsAdminQuery } from '#/types/graphql.ts';
 import { AdminForm, type Field } from '#/ui/admin/form.tsx';
-import { ListFilter, ListTable, RowActions, RowTitle, Search } from '#/ui/admin/list-table.tsx';
+import { ListFilter, ListTable, Search, TitleCell } from '#/ui/admin/list-table.tsx';
 import { Message } from '#/ui/admin/message.tsx';
 import { Alert, HeaderAdd, Heading } from '#/ui/admin/page.tsx';
 import { CoverPicker } from '#/ui/admin/public/cover-picker.tsx';
@@ -87,8 +89,6 @@ export const mediaList = createController(media.list, {
       const t = getAdminT();
       const { searchParams } = context.url;
       const { uploads } = await loadMediaList({ gql: context.admin.gql, searchParams });
-      const deleted = Number(searchParams.get('deleted') || 0);
-      const added = Number(searchParams.get('added') || 0);
       const filterHref = (key: string, value: string) =>
         `${media.list.index.href()}?${new URLSearchParams({ [key]: value })}`;
       const columns = [
@@ -96,15 +96,14 @@ export const mediaList = createController(media.list, {
         {
           label: t('media.title'),
           styles: { width: '60%' },
-          render: (upload: UploadRow) => {
-            const href = media.edit.index.href({ id: upload.id });
-            return (
-              <>
-                <RowTitle href={href} title={upload.title} subtitle={upload.originalName} />
-                <RowActions editHref={href} id={upload.id} />
-              </>
-            );
-          },
+          render: (upload: UploadRow) => (
+            <TitleCell
+              href={media.edit.index.href({ id: upload.id })}
+              title={upload.title}
+              subtitle={upload.originalName}
+              id={upload.id}
+            />
+          ),
         },
         {
           label: t('media.type'),
@@ -142,10 +141,8 @@ export const mediaList = createController(media.list, {
         <>
           <Heading>{t('media.heading')}</Heading>
           <HeaderAdd href={media.upload.href()} label={t('media.add')} />
-          {deleted > 0 && <Message param="deleted" text={t('media.deleted', { count: deleted })} />}
-          {added > 0 && (
-            <Message param="added" text={t('media.albumCovers.added', { count: added })} />
-          )}
+          <Message param="deleted" text={(count) => t('media.deleted', { count })} />
+          <Message param="added" text={(count) => t('media.albumCovers.added', { count })} />
           <Search placeholder={t('media.search')} />
           <ListTable connection={uploads} columns={columns} filters={filters} />
         </>,
@@ -153,15 +150,7 @@ export const mediaList = createController(media.list, {
       );
     },
 
-    // The row and bulk delete forms post intent=delete. Apply with no action chosen posts an
-    // empty intent and just comes back to the list.
-    async action(context) {
-      const formData = await context.request.formData();
-      if (formData.get('intent') !== 'delete') {
-        return backToList(context.url);
-      }
-      return backTo(await deleteMedia({ gql: context.admin.gql, formData, url: context.url }));
-    },
+    action: listAction(deleteMedia),
   },
 });
 
@@ -420,9 +409,9 @@ function mediaFields(t: TFunction, upload: Media, values?: SaveFailure['values']
   ];
 }
 
-async function editPage(context: AdminContext, id: string, failure?: SaveFailure) {
+async function editPage(context: AdminEditContext, failure?: SaveFailure) {
   const t = getAdminT();
-  const { media: upload } = await loadMedia({ gql: context.admin.gql, id });
+  const { media: upload } = await loadMedia({ gql: context.admin.gql, id: context.params.id });
   if (!upload) {
     return renderAdminNotFound(context);
   }
@@ -453,14 +442,5 @@ async function editPage(context: AdminContext, id: string, failure?: SaveFailure
 
 export const mediaEdit = createController(media.edit, {
   middleware: [sameOrigin(), requireAdmin()],
-  actions: {
-    index: (context) => editPage(context, context.params.id),
-
-    async action(context) {
-      const { id } = context.params;
-      const formData = await context.request.formData();
-      const result = await updateMedia({ gql: context.admin.gql, id, formData, url: context.url });
-      return isRedirect(result) ? backTo(result) : editPage(context, id, result);
-    },
-  },
+  actions: formActions(editPage, updateMedia),
 });

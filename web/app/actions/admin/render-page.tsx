@@ -2,7 +2,13 @@ import type { RemixNode } from 'remix/component';
 import { createRedirectResponse } from 'remix/response/redirect';
 
 import { loadRootData, titleTemplate } from '#/actions/render-page.tsx';
-import type { RedirectResult } from '#/lib/admin/forms.ts';
+import {
+  isRedirect,
+  type FlagArgs,
+  type FormArgs,
+  type RedirectResult,
+  type SaveFailure,
+} from '#/lib/admin/forms.ts';
 import type { GraphQLClient } from '#/lib/graphql.ts';
 import { getAdminT } from '#/lib/i18n.ts';
 import type { AppContext } from '#/router.ts';
@@ -23,6 +29,9 @@ export type AdminPageContext = Pick<AppContext, 'gql' | 'nonce' | 'request' | 'r
 
 /** The same, for a page that loads its data as the signed-in admin. */
 export type AdminContext = AdminPageContext & { admin: { gql: GraphQLClient } };
+
+/** The same, for an edit page, whose route has the ID of what it edits. */
+export type AdminEditContext = AdminContext & { params: { id: string } };
 
 export async function renderAdminPage(
   context: AdminPageContext,
@@ -55,4 +64,53 @@ export function renderAdminNotFound(context: AdminPageContext) {
 export const backTo = ({ redirectTo }: RedirectResult) => createRedirectResponse(redirectTo, 303);
 
 /** Back to the list a form was posted from, as it was: its page, search and filters. */
-export const backToList = (url: URL) => createRedirectResponse(`${url.pathname}${url.search}`, 303);
+const backToList = (url: URL) => createRedirectResponse(`${url.pathname}${url.search}`, 303);
+
+/**
+ * An add or edit page's actions: the form, and its post, which goes where the save says or shows
+ * the form again with what was entered. The save gets the form with the route's params, such as
+ * an edit page's `id`.
+ */
+export function formActions<Context extends AdminContext & { params: object }>(
+  page: (context: Context, failure?: SaveFailure) => Promise<Response>,
+  save: (args: FormArgs & Context['params']) => Promise<RedirectResult | SaveFailure>
+) {
+  return {
+    index: (context: Context) => page(context),
+    async action(context: Context) {
+      const formData = await context.request.formData();
+      const result = await save({
+        ...context.params,
+        gql: context.admin.gql,
+        formData,
+        url: context.url,
+      });
+      return isRedirect(result) ? backTo(result) : page(context, result);
+    },
+  };
+}
+
+/**
+ * A list page's post. The row and bulk delete forms post intent=delete, and a row's boxes post the
+ * field they save as the intent, with fetch, which only needs to hear whether it saved. Apply with
+ * no action chosen posts an empty intent and just comes back to the list.
+ */
+export function listAction(
+  remove: (args: FormArgs) => Promise<RedirectResult>,
+  toggles?: { flags: readonly string[]; save: (args: FlagArgs) => Promise<boolean> }
+) {
+  return async (context: AdminContext) => {
+    const formData = await context.request.formData();
+    const intent = formData.get('intent');
+    const { gql } = context.admin;
+    if (intent === 'delete') {
+      return backTo(await remove({ gql, formData, url: context.url }));
+    }
+    const flag = toggles?.flags.find((name) => name === intent);
+    if (toggles && flag) {
+      const saved = await toggles.save({ gql, formData, flag });
+      return new Response(null, { status: saved ? 204 : 500 });
+    }
+    return backToList(context.url);
+  };
+}

@@ -53,6 +53,7 @@ Signing in is at `/login`, and the admin's pages are under `/admin`.
 
 - Admin controllers list `sameOrigin()` and `requireAdmin()` (`app/middleware/admin.ts`). They reject cross-site form posts and require an admin session GraphQL accepts, which then sits on `context.admin` with a GraphQL client that sends the token.
 - `renderAdminPage()` (`app/actions/admin/render-page.tsx`) renders a page in the admin's document and layout, from `app/ui/admin/`.
+- Each section's controllers share their actions from the same module: `listAction()` handles a list's deletes and its rows' boxes, and `formActions()` an add or edit page and its form's post. Lists show their rows with `ListTable`, `TitleCell` and `toggleColumn()` (`app/ui/admin/list-table.tsx`), and forms pick uploads with `mediaField()` (`app/actions/admin/media/field.tsx`).
 - Forms save through `submitForm()` (`app/lib/admin/forms.ts`). Each form's data module lists its text fields, which stay strings and are sent as null when emptied. A save that fails renders the form's page again with what was submitted and, when GraphQL turned the input down, why. The form stays the same element on the page, so its client entries, such as the post editor, keep what was typed.
 - Admin pages use `admin.css` (see [Styles](#styles)) and their own strings, `app/lib/admin/strings.en.json`, loaded the first time an admin page asks for them.
 - Their client entries, such as the featured media picker and the list's inline toggle, live in `app/ui/admin/public/`. Links out of the admin, such as a list's "View" links to the public site, set `data-rmx-document={documentLoad(href)}` (`app/ui/admin/links.ts`), so they load in full instead of through client navigation.
@@ -96,6 +97,8 @@ On Railway (detected by `RAILWAY_ENVIRONMENT_NAME`), the server trusts the `X-Fo
 | `pnpm start`     | Start the production server                   |
 | `pnpm test`      | Run tests with Remix's test runner            |
 | `pnpm typecheck` | Type-check                                    |
+
+The admin's controller tests share a stand-in for GraphQL and requests from a signed-in admin, from `app/actions/admin/test-support.ts`.
 
 ## Project Structure
 

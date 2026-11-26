@@ -30,7 +30,7 @@ import {
   renderPage,
   siteUrl,
 } from './render-page.tsx';
-import { withEveryAttendedShow, withEveryUpcomingShow } from './shows/lists.ts';
+import { withEveryShow } from './shows/lists.ts';
 import { Setlists, type Setlist, type Stats } from './sphere/public/setlists.tsx';
 import setlists from './sphere/setlists.json' with { type: 'json' };
 import { VideoPage, VideosPage, videoQuery, videosQuery } from './videos/page.tsx';
@@ -121,14 +121,8 @@ export default createController(routes, {
           return renderNotFound(context);
         }
         // The page lists every show, with no next page, so it loads the rest of a long list
-        const of = { artist: { slug } };
-        const [shows, attended] = await Promise.all([
-          data.shows && withEveryUpcomingShow(context.gql, data.shows, of),
-          data.attended && withEveryAttendedShow(context.gql, data.attended, of),
-        ]);
-        return renderPage(context, <ArtistPage data={{ ...data, shows, attended }} />, {
-          title: data.artist.name,
-        });
+        const every = await withEveryShow(context.gql, data, { artist: { slug } });
+        return renderPage(context, <ArtistPage data={every} />, { title: data.artist.name });
       },
     },
 
@@ -140,14 +134,8 @@ export default createController(routes, {
         if (!data.venue) {
           return renderNotFound(context);
         }
-        const of = { venue: { slug } };
-        const [shows, attended] = await Promise.all([
-          data.shows && withEveryUpcomingShow(context.gql, data.shows, of),
-          data.attended && withEveryAttendedShow(context.gql, data.attended, of),
-        ]);
-        return renderPage(context, <VenuePage data={{ ...data, shows, attended }} />, {
-          title: data.venue.name,
-        });
+        const every = await withEveryShow(context.gql, data, { venue: { slug } });
+        return renderPage(context, <VenuePage data={every} />, { title: data.venue.name });
       },
     },
 
