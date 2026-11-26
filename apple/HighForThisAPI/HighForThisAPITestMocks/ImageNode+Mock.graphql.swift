@@ -10,15 +10,21 @@ nonisolated public final class ImageNode: MockObject {
   public typealias MockValueCollectionType = Array<Mock<ImageNode>>
 
   public struct MockFields: Sendable {
+    @Field<[EditorNode?]>("children") public var children
     @Field<ImageUpload>("image") public var image
+    @Field<String>("type") public var type
   }
 }
 
 public extension Mock where O == ImageNode {
   convenience init(
-    image: Mock<ImageUpload>? = nil
+    children: [(any AnyMock)?]? = nil,
+    image: Mock<ImageUpload>? = nil,
+    type: String? = nil
   ) {
     self.init()
+    _setList(children, for: \.children)
     _setEntity(image, for: \.image)
+    _setScalar(type, for: \.type)
   }
 }

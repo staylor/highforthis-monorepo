@@ -28,15 +28,11 @@ struct PodcastDetail: View {
         .detailTitle(title)
     }
 
-    /// When the episode was posted and how long it is, as much of that as the API has.
     private func eyebrow(of podcast: PodcastQuery.Data.Podcast) -> Text? {
-        let date = podcast.date.map { Date(apiTimestamp: $0).formatted(.postedDay) }
-        let length = EpisodeText.length(seconds: podcast.audio?.duration, width: .wide)
-        return switch (date, length) {
-        case (let date?, let length?): Text(.dateAndDuration(date, length))
-        case (let text?, nil), (nil, let text?): Text(text)
-        case (nil, nil): nil
-        }
+        Text(
+            posted: podcast.date.map { Date(apiTimestamp: $0).formatted(.postedDay) },
+            length: EpisodeText.length(seconds: podcast.audio?.duration, width: .wide)
+        )
     }
 
     @ViewBuilder private func playback(_ podcast: PodcastQuery.Data.Podcast) -> some View {

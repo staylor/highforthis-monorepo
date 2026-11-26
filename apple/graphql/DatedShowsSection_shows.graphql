@@ -1,0 +1,10 @@
+fragment DatedShowsSection_shows on ShowConnection {
+  edges {
+    node {
+      ...ShowList_show
+    }
+  }
+  pageInfo {
+    hasNextPage
+  }
+}

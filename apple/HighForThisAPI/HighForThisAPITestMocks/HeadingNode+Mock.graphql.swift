@@ -12,16 +12,19 @@ nonisolated public final class HeadingNode: MockObject {
   public struct MockFields: Sendable {
     @Field<[EditorNode?]>("children") public var children
     @Field<GraphQLEnum<HighForThisAPI.HeadingTag>>("tag") public var tag
+    @Field<String>("type") public var type
   }
 }
 
 public extension Mock where O == HeadingNode {
   convenience init(
     children: [(any AnyMock)?]? = nil,
-    tag: GraphQLEnum<HighForThisAPI.HeadingTag>? = nil
+    tag: GraphQLEnum<HighForThisAPI.HeadingTag>? = nil,
+    type: String? = nil
   ) {
     self.init()
     _setList(children, for: \.children)
     _setScalar(tag, for: \.tag)
+    _setScalar(type, for: \.type)
   }
 }

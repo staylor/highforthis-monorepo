@@ -7,7 +7,7 @@ struct ContentView: View {
 
     var body: some View {
         #if os(tvOS)
-        tabs
+        tabs()
             .onPlayPauseCommand { player.togglePlayback() }
             .onChange(of: player.episode == nil) { _, stopped in
                 if stopped, selection == .nowPlaying { selection = .podcast }
@@ -25,56 +25,50 @@ struct ContentView: View {
         #endif
     }
 
+    /// The tabs, with the player in the tab bar's accessory where there's one for it, and otherwise at the bottom of
+    /// each screen.
     @ViewBuilder private var playbackContainer: some View {
         #if os(iOS) && compiler(>=6.2.3)
         if #available(iOS 26.1, *) {
-            tabs.tabViewBottomAccessory(isEnabled: player.episode != nil) {
-                PlayerAccessory { showingPlayer = true }
+            tabs().tabViewBottomAccessory(isEnabled: player.episode != nil) {
+                PlayerAccessory(openPlayer: openPlayer)
             }
         } else {
-            tabs
+            tabs(showPlayer: openPlayer)
         }
         #elseif os(macOS)
-        tabs.frame(minWidth: 560, minHeight: 440)
+        tabs(showPlayer: openPlayer)
+            .frame(minWidth: 560, minHeight: 440)
         #else
-        tabs
+        tabs(showPlayer: openPlayer)
         #endif
     }
 
-    private var usesInsetPlayer: Bool {
-        #if os(tvOS)
-        return false
-        #elseif os(iOS) && compiler(>=6.2.3)
-        if #available(iOS 26.1, *) { return false }
-        return true
-        #else
-        return true
-        #endif
+    private var openPlayer: () -> Void {
+        { showingPlayer = true }
     }
 
-    private func stack<Content: View>(@ViewBuilder content: () -> Content) -> some View {
-        BrowseStack(showPlayer: usesInsetPlayer ? { showingPlayer = true } : nil, root: content)
-    }
-
-    private var tabs: some View {
+    /// The tabs, each with its own stack. `showPlayer` puts the player at the bottom of each screen, and opens Now
+    /// Playing from it.
+    private func tabs(showPlayer: (() -> Void)? = nil) -> some View {
         TabView(selection: $selection) {
             Tab(.shows, systemImage: "calendar", value: .shows) {
-                stack { ShowList(kind: .upcoming) }
+                BrowseStack(showPlayer: showPlayer) { ShowList(kind: .upcoming) }
             }
             Tab(.podcast, systemImage: "mic.circle", value: .podcast) {
-                stack { PodcastList() }
+                BrowseStack(showPlayer: showPlayer) { PodcastList() }
             }
             #if !os(tvOS)
             // tvOS can't open YouTube.
             Tab(.videos, systemImage: "video", value: .videos) {
-                stack { VideoList() }
+                BrowseStack(showPlayer: showPlayer) { VideoList() }
             }
             #endif
             Tab(.posts, systemImage: "note.text", value: .posts) {
-                stack { PostList() }
+                BrowseStack(showPlayer: showPlayer) { PostList() }
             }
             Tab(.showHistory, systemImage: "clock.arrow.circlepath", value: .history) {
-                stack { ShowList(kind: .history) }
+                BrowseStack(showPlayer: showPlayer) { ShowList(kind: .history) }
             }
             #if os(tvOS)
             // While an episode is loaded, the player is a tab of its own. It comes last, because adding a tab

@@ -50,36 +50,39 @@ nonisolated enum PostBlock: Equatable {
     case image(url: URL, aspectRatio: Double, altText: String)
     case video(Video_video)
 
+    private typealias Node = PostQuery.Data.Post.EditorState.Root.Child
+
     static func blocks(in editorState: PostQuery.Data.Post.EditorState?) -> [PostBlock] {
         (editorState?.root?.children ?? []).compactMap { child in
             child.flatMap(block)
         }
     }
 
-    private static func block(_ node: PostQuery.Data.Post.EditorState.Root.Child) -> PostBlock? {
-        if let heading = node.asHeadingNode {
-            return text(heading.children).map { .heading(level: heading.tag?.value?.level ?? 3, text: $0) }
-        }
-        if let quote = node.asQuoteNode {
-            return text(quote.children).map(PostBlock.quote)
-        }
-        if let element = node.asElementNode, element.type == "paragraph" {
-            return text(element.children).map(PostBlock.paragraph)
-        }
-        if let code = node.asCodeNode {
-            return text(code.children).map(PostBlock.code)
-        }
-        if let image = node.asImageNode?.image, let crop = image.crops.filter({ $0.height > 0 }).best(forWidth: 640) {
+    private static func block(_ node: Node) -> PostBlock? {
+        // Images and videos are element nodes too, without text, so they come first.
+        if let image = node.asImageNode?.image {
+            guard let crop = image.crops.filter({ $0.height > 0 }).best(forWidth: 640) else { return nil }
             let url = AppConfiguration.uploadURL(destination: image.destination, fileName: crop.fileName)
             return .image(url: url, aspectRatio: Double(crop.width) / Double(crop.height), altText: image.altText ?? "")
         }
         if let video = node.asVideoNode?.video {
             return .video(video.fragments.video_video)
         }
-        return nil
+        guard let element = node.asElementNodeType, let text = text(element.children) else { return nil }
+        if let heading = node.asHeadingNode {
+            return .heading(level: heading.tag?.value?.level ?? 3, text: text)
+        }
+        // Lexical's names for the nodes, from which the API types them.
+        return switch element.type {
+        case "paragraph": .paragraph(text)
+        case "quote": .quote(text)
+        case "code": .code(text)
+        default: nil
+        }
     }
 
-    private static func text(_ children: [(some LexicalTextNode)?]?) -> AttributedString? {
+    /// The text and line breaks in a block, or nil when it has no text.
+    private static func text(_ children: [Node.AsElementNodeType.Child?]?) -> AttributedString? {
         let runs = (children ?? []).compactMap { $0?.run }
         let hasText = runs.contains { run in
             if case .text(let text, _) = run { !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } else { false }
@@ -101,33 +104,8 @@ nonisolated extension HeadingTag {
     }
 }
 
-/// The text and line breaks inside headings, paragraphs and quotes, which the generated code gives distinct types.
-nonisolated protocol LexicalTextNode {
-    var run: LexicalRun? { get }
-}
-
-nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsHeadingNode.Child: LexicalTextNode {
-    var run: LexicalRun? {
-        if asLinebreakNode != nil { return .lineBreak }
-        return asTextNode.map { .text($0.text ?? "", LexicalFormat(rawValue: $0.format ?? 0)) }
-    }
-}
-
-nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsElementNode.Child: LexicalTextNode {
-    var run: LexicalRun? {
-        if asLinebreakNode != nil { return .lineBreak }
-        return asTextNode.map { .text($0.text ?? "", LexicalFormat(rawValue: $0.format ?? 0)) }
-    }
-}
-
-nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsQuoteNode.Child: LexicalTextNode {
-    var run: LexicalRun? {
-        if asLinebreakNode != nil { return .lineBreak }
-        return asTextNode.map { .text($0.text ?? "", LexicalFormat(rawValue: $0.format ?? 0)) }
-    }
-}
-
-nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsCodeNode.Child: LexicalTextNode {
+nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.Child {
+    /// The text or the line break this is, or nil for another kind of node.
     var run: LexicalRun? {
         if asLinebreakNode != nil { return .lineBreak }
         return asTextNode.map { .text($0.text ?? "", LexicalFormat(rawValue: $0.format ?? 0)) }

@@ -124,11 +124,7 @@ final class TVNavigationTests: XCTestCase {
 
     @MainActor
     private func launch(scenario: String = "normal") -> XCUIApplication {
-        let app = XCUIApplication()
-        app.launchArguments = ["-ui-testing", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
-        app.launchEnvironment["UI_TEST_SCENARIO"] = scenario
-        app.launchEnvironment["TZ"] = "America/New_York"
-        app.launch()
+        let app = launchApp(scenario: scenario)
         XCTAssertTrue(app.buttons["Shows"].waitForExistence(timeout: 20))
         return app
     }
@@ -145,11 +141,6 @@ final class TVNavigationTests: XCTestCase {
             _ = focusArrives(on: target, within: 2)
         }
         XCTAssertTrue(target.hasFocus, "\(tab) didn't get focus")
-    }
-
-    @MainActor
-    private func element(_ identifier: String, in app: XCUIApplication) -> XCUIElement {
-        app.descendants(matching: .any).matching(identifier: identifier).firstMatch
     }
 
     /// In a list, the cell takes focus rather than the link or button in it.
@@ -208,14 +199,6 @@ final class TVNavigationTests: XCTestCase {
     private func waitForLabel(_ label: String, of element: XCUIElement, file: StaticString = #filePath, line: UInt = #line) {
         let matches = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label == %@", label), object: element)
         XCTAssertEqual(XCTWaiter.wait(for: [matches], timeout: 10), .completed, "\(element) isn't \(label)", file: file, line: line)
-    }
-
-    @MainActor
-    private func screenshot(_ name: String, _ app: XCUIApplication) {
-        let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.name = name
-        attachment.lifetime = .keepAlways
-        add(attachment)
     }
 }
 #endif

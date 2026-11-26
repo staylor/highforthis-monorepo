@@ -156,13 +156,3 @@ struct ShowsTests {
         #expect(days.map { Self.newYork.component(.day, from: $0.date) } == [5, 3, 4])
     }
 }
-
-extension Sequence {
-    func asyncMap<T>(_ transform: (Element) async -> T) async -> [T] {
-        var results: [T] = []
-        for element in self {
-            await results.append(transform(element))
-        }
-        return results
-    }
-}

@@ -10,7 +10,6 @@ struct VenueDetail: View {
         QueryView(VenueQuery(slug: slug)) { data in
             if let venue = data.venue {
                 let website = venue.website.flatMap(URL.webURL)
-                let attended = data.attended?.edges.map(\.node.fragments.showList_show) ?? []
                 List {
                     DetailIntro(hero: venue.coordinate.map { .map(name: venue.name, coordinate: $0) }) {
                         DetailHeader(eyebrow: Text(.venue), title: venue.name) {
@@ -34,14 +33,14 @@ struct VenueDetail: View {
                     }
                     DatedShowsSection(
                         title: .recommendedShows,
-                        shows: data.shows?.edges.map(\.node.fragments.showList_show) ?? [],
-                        all: data.shows?.pageInfo.hasNextPage == true ? ShowFilter(kind: .upcoming, venue: slug) : nil
+                        shows: data.shows?.fragments.datedShowsSection_shows,
+                        all: ShowFilter(kind: .upcoming, venue: slug)
                     ) { $0.headline }
                     DatedShowsSection(
                         title: .attended,
-                        count: data.attended?.count ?? attended.count,
-                        shows: attended,
-                        all: data.attended?.pageInfo.hasNextPage == true ? ShowFilter(kind: .history, venue: slug) : nil
+                        count: data.attended?.count,
+                        shows: data.attended?.fragments.datedShowsSection_shows,
+                        all: ShowFilter(kind: .history, venue: slug)
                     ) { $0.headline }
                 }
                 .listStyle(.plain)

@@ -48,7 +48,7 @@ struct PostContentTests {
                             destination: "2023/12"
                         )
                     ),
-                    Mock<QuoteNode>(children: [Mock<TextNode>(format: 2, text: "Quoted")]),
+                    Mock<QuoteNode>(children: [Mock<TextNode>(format: 2, text: "Quoted")], type: "quote"),
                     Mock<VideoNode>(video: Mock<Video>(dataId: "fbFeM3QW8Cc", id: "video")),
                 ])
             )

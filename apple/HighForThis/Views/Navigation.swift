@@ -17,19 +17,14 @@ private struct PushedRoute: Hashable {
     let depth: Int
 }
 
-/// How deep in its stack a screen is. A tab's first screen has none, and is at 0.
-@Observable
-private final class NavigationLevel {
-    let depth: Int
-
-    init(depth: Int) {
-        self.depth = depth
-    }
+extension EnvironmentValues {
+    /// How deep in its stack a screen is. A tab's first screen is at 0.
+    @Entry fileprivate var navigationDepth = 0
 }
 
 /// A link that pushes a route onto its tab's stack.
 struct RouteLink<Label: View>: View {
-    @Environment(NavigationLevel.self) private var level: NavigationLevel?
+    @Environment(\.navigationDepth) private var depth
     private let route: Route
     private let label: Label
 
@@ -39,7 +34,7 @@ struct RouteLink<Label: View>: View {
     }
 
     var body: some View {
-        NavigationLink(value: PushedRoute(route: route, depth: (level?.depth ?? 0) + 1)) { label }
+        NavigationLink(value: PushedRoute(route: route, depth: depth + 1)) { label }
     }
 }
 
@@ -65,7 +60,7 @@ struct BrowseStack<Root: View>: View {
                 .navigationDestination(for: PushedRoute.self) { pushed in
                     destination(pushed.route)
                         .modifier(PlayerInset(showPlayer: showPlayer))
-                        .environment(NavigationLevel(depth: pushed.depth))
+                        .environment(\.navigationDepth, pushed.depth)
                 }
         }
     }

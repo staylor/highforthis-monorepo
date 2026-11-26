@@ -47,16 +47,9 @@ nonisolated struct ShowMonth: Identifiable {
     /// Groups shows by the month they start in, in New York, as the website's calendar does. The months, the days in
     /// them and the shows on a day stay in the order `ShowDay` puts them in.
     static func months(from shows: [ShowList_show], calendar: Calendar = .newYork) -> [ShowMonth] {
-        var order: [Date] = []
-        var showsByMonth: [Date: [ShowList_show]] = [:]
-        for day in ShowDay.days(from: shows, calendar: calendar) {
-            let month = calendar.dateInterval(of: .month, for: day.date)?.start ?? day.date
-            if showsByMonth[month] == nil {
-                order.append(month)
-            }
-            showsByMonth[month, default: []].append(contentsOf: day.shows)
-        }
-        return order.map { ShowMonth(date: $0, shows: showsByMonth[$0, default: []]) }
+        ShowDay.days(from: shows, calendar: calendar)
+            .orderedGroups { calendar.dateInterval(of: .month, for: $0.date)?.start ?? $0.date }
+            .map { month, days in ShowMonth(date: month, shows: days.flatMap(\.shows)) }
     }
 }
 
@@ -71,18 +64,24 @@ nonisolated struct ShowDay: Identifiable {
     /// returns them: upcoming shows soonest first, and history most recent first. Shows on the same day are sorted by
     /// headline.
     static func days(from shows: [ShowList_show], calendar: Calendar = .newYork) -> [ShowDay] {
-        var order: [Date] = []
-        var showsByDay: [Date: [ShowList_show]] = [:]
-        for show in shows {
-            let day = calendar.startOfDay(for: show.startDate)
-            if showsByDay[day] == nil {
-                order.append(day)
+        shows.orderedGroups { calendar.startOfDay(for: $0.startDate) }.map { day, shows in
+            ShowDay(date: day, shows: shows.sorted { $0.headline.localizedStandardCompare($1.headline) == .orderedAscending })
+        }
+    }
+}
+
+nonisolated extension Sequence {
+    /// The elements in groups that share a key, in the order each key first appears.
+    fileprivate func orderedGroups<Key: Hashable>(by key: (Element) -> Key) -> [(key: Key, elements: [Element])] {
+        var keys: [Key] = []
+        var groups: [Key: [Element]] = [:]
+        for element in self {
+            let key = key(element)
+            if groups[key] == nil {
+                keys.append(key)
             }
-            showsByDay[day, default: []].append(show)
+            groups[key, default: []].append(element)
         }
-        return order.map { day in
-            let shows = showsByDay[day, default: []].sorted { $0.headline.localizedStandardCompare($1.headline) == .orderedAscending }
-            return ShowDay(date: day, shows: shows)
-        }
+        return keys.map { ($0, groups[$0, default: []]) }
     }
 }
