@@ -6,6 +6,7 @@ struct FeedList<Filter: Hashable, Item: FeedItem, Rows: View>: View {
     let emptyTitle: LocalizedStringResource
     let systemImage: String
     @ViewBuilder let rows: ([Item]) -> Rows
+    @Environment(Freshness.self) private var freshness: Freshness?
 
     var body: some View {
         List {
@@ -48,5 +49,10 @@ struct FeedList<Filter: Hashable, Item: FeedItem, Rows: View>: View {
         }
         .task(id: filter) { await feed.load(filter) }
         .refreshable(isLoading: feed.isLoading) { await feed.load(filter, refresh: true) }
+        // Back after a while away, what it lists may be out of date
+        .onChange(of: freshness?.generation) {
+            guard feed.filter == filter else { return }
+            Task { await feed.load(filter, refresh: true) }
+        }
     }
 }

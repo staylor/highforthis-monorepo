@@ -9,6 +9,8 @@ struct HighForThisApp: App {
     #if os(iOS)
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #endif
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var freshness = Freshness()
 
     init() {
         URLCache.shared = URLCache(memoryCapacity: 32 * 1024 * 1024, diskCapacity: 256 * 1024 * 1024)
@@ -25,9 +27,13 @@ struct HighForThisApp: App {
         WindowGroup {
             ContentView()
                 .environment(PodcastPlayer.shared)
+                .environment(freshness)
                 #if DEBUG
             .preferredColorScheme(UITestFixtures.isEnabled && ProcessInfo.processInfo.environment["UI_TEST_DARK"] == "1" ? .dark : nil)
                 #endif
+        }
+        .onChange(of: scenePhase) { _, phase in
+            Task { await freshness.appIsActive(phase == .active) }
         }
         #if os(macOS)
         .defaultSize(width: 900, height: 720)

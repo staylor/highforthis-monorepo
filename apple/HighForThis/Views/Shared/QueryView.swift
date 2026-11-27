@@ -5,6 +5,7 @@ struct QueryView<Query: GraphQLQuery, Content: View>: View where Query.ResponseF
     private let query: Query
     private let content: (Query.Data) -> Content
     @State private var state = QueryState<Query>()
+    @Environment(Freshness.self) private var freshness: Freshness?
 
     init(_ query: Query, @ViewBuilder content: @escaping (Query.Data) -> Content) {
         self.query = query
@@ -33,6 +34,11 @@ struct QueryView<Query: GraphQLQuery, Content: View>: View where Query.ResponseF
         }
         .task(id: query) { await state.load(query) }
         .refreshable(isLoading: state.isLoading) { await state.load(query, refresh: true) }
+        // Back after a while away, what it shows may be out of date
+        .onChange(of: freshness?.generation) {
+            guard state.query == query else { return }
+            Task { await state.load(query, refresh: true) }
+        }
     }
 }
 
