@@ -8,7 +8,7 @@ struct ArtistDetail: View {
     var body: some View {
         QueryView(ArtistQuery(slug: slug)) { data in
             if let artist = data.artist {
-                let artwork = artist.appleMusic?.artwork.flatMap { Artwork(template: $0.url, width: $0.width, height: $0.height) }
+                let artwork = artist.appleMusic?.artwork.flatMap { ArtworkTemplate(template: $0.url, width: $0.width, height: $0.height) }
                 let website = artist.website.flatMap(URL.webURL)
                 let appleMusic = artist.appleMusic?.url.flatMap(URL.webURL)
                 List {

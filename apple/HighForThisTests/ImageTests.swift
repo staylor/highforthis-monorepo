@@ -31,6 +31,33 @@ struct ImageTests {
     @Test(arguments: incompleteArtwork)
     func artworkNeedsATemplateAndASize(artwork: (template: String?, width: Int?, height: Int?)) {
         #expect(Artwork(template: artwork.template, width: artwork.width, height: artwork.height) == nil)
+        #expect(ArtworkTemplate(template: artwork.template, width: artwork.width, height: artwork.height) == nil)
+    }
+
+    private nonisolated static let template = "https://example.com/{w}x{h}bb.jpg"
+
+    // The square beside a detail screen's header, as an iPad draws it
+    @Test func artworkFillingASquareIsDownloadedAtTheSquaresSize() throws {
+        let square = try #require(ArtworkTemplate(template: Self.template, width: 3000, height: 3000))
+        #expect(square.filling(square: 260, scale: 2)?.url.absoluteString == "https://example.com/520x520bb.jpg")
+        // Artwork wider than it's tall is as tall as the square, so wider than it
+        let wide = try #require(ArtworkTemplate(template: Self.template, width: 3000, height: 2000))
+        #expect(wide.filling(square: 260, scale: 2)?.url.absoluteString == "https://example.com/780x520bb.jpg")
+    }
+
+    // Across a phone's screen, in a frame no taller than 440 points
+    @Test func artworkAcrossTheScreenIsDownloadedNoBiggerThanItsFrame() throws {
+        let square = try #require(ArtworkTemplate(template: Self.template, width: 3000, height: 3000))
+        #expect(square.fitting(height: 440, scale: 3)?.url.absoluteString == "https://example.com/1320x1320bb.jpg")
+        let tall = try #require(ArtworkTemplate(template: Self.template, width: 1000, height: 4000))
+        #expect(tall.fitting(height: 440, scale: 3)?.url.absoluteString == "https://example.com/330x1320bb.jpg")
+    }
+
+    @Test func artworkIsNeverDownloadedBiggerThanTheLargestOrThanItIs() throws {
+        let wide = try #require(ArtworkTemplate(template: Self.template, width: 4000, height: 1000))
+        #expect(wide.fitting(height: 440, scale: 3)?.url.absoluteString == "https://example.com/1500x375bb.jpg")
+        let small = try #require(ArtworkTemplate(template: Self.template, width: 400, height: 400))
+        #expect(small.fitting(height: 440, scale: 3)?.url.absoluteString == "https://example.com/400x400bb.jpg")
     }
 
     @Test func bestRenditionIsTheNarrowestThatIsWideEnough() {
