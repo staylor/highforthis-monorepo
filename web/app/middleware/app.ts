@@ -4,11 +4,9 @@ import { createFileResponse } from 'remix/response/file';
 import { createContextKey, type Middleware, type RequestContext } from 'remix/router';
 
 import { adminToken } from '#/lib/adminSession.ts';
-import { clientAddress } from '#/lib/client.ts';
 import { createGraphQLClient, graphqlHost, type GraphQLClient } from '#/lib/graphql.ts';
 import { getT, type TFunction } from '#/lib/i18n.ts';
 import { openObserveBundleFiles } from '#/lib/openobserve-bundles.ts';
-import { passkeyStarts } from '#/lib/rate-limits.ts';
 
 import { sameOrigin } from './admin.ts';
 
@@ -70,20 +68,11 @@ function forwardUpload(context: RequestContext) {
 
 /**
  * Signing in with a passkey asks GraphQL for its options from the browser, so this stays on this
- * domain, which is the passkeys' origin. Each start saves a challenge, so each address gets a few.
+ * domain, which is the passkeys' origin. Starting saves nothing, so it isn't limited: the sign-in
+ * form's posts are.
  */
 function forwardPasskeyStart({ request }: RequestContext) {
-  if (request.method !== 'POST') {
-    return onlyPost();
-  }
-  const address = clientAddress(request);
-  if (address && !passkeyStarts.attempt(address)) {
-    return Response.json(
-      { error: 'Too many sign-in attempts. Try again in a few minutes.' },
-      { status: 429, headers: { 'Retry-After': String(passkeyStarts.retryAfter(address)) } }
-    );
-  }
-  return graphqlProxy(request);
+  return request.method === 'POST' ? graphqlProxy(request) : onlyPost();
 }
 
 // The only GraphQL paths the browser needs on this domain, besides the API itself

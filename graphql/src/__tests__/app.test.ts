@@ -8,8 +8,9 @@ import { signToken } from '#/authentication';
 import { passkeys, webAuthnChallenges } from '#/database/tables';
 import type { AppContext, UserWithRoles } from '#/models';
 
-// The admin's passkeys, whose query's steps each answer the query
-const { db, passkeyQuery } = vi.hoisted(() => ({
+// The admin's passkeys, whose query's steps each answer the query, and the answered sign-in
+// challenges, which are saved with an upsert
+const { db, passkeyQuery, challengeQuery, webAuthn } = vi.hoisted(() => ({
   db: {
     create: vi.fn(),
     delete: vi.fn(),
@@ -17,11 +18,19 @@ const { db, passkeyQuery } = vi.hoisted(() => ({
     find: vi.fn(),
     findMany: vi.fn(),
     query: vi.fn(),
+    update: vi.fn(),
   },
   passkeyQuery: { all: vi.fn(), orderBy: vi.fn(), select: vi.fn(), where: vi.fn() },
+  challengeQuery: { upsert: vi.fn() },
+  // What SimpleWebAuthn makes of an answer, which only a real authenticator could give it
+  webAuthn: { verifyAuthenticationResponse: vi.fn(), verifyRegistrationResponse: vi.fn() },
 }));
 
 vi.mock('#/database/db', () => ({ default: db }));
+vi.mock('@simplewebauthn/server', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@simplewebauthn/server')>()),
+  ...webAuthn,
+}));
 
 const admin = {
   id: 'admin-1',
@@ -32,12 +41,19 @@ const admin = {
 } as UserWithRoles;
 const editor = { ...admin, id: 'editor-1', roles: [] } as UserWithRoles;
 
+// Each user's session is `session-<id>`, which the database stub answers with the user
+function session(sessionId: string) {
+  const user = [admin, editor].find(({ id }) => sessionId === `session-${id}`);
+  return user
+    ? { id: sessionId, userId: user.id, expiresAt: new Date(Date.now() + 60_000), user }
+    : null;
+}
+
 let server: ApolloServer<AppContext>;
 let app: ReturnType<typeof createApp>;
 
 const request = (path: string, init?: RequestInit) =>
   app.fetch(new Request(`http://localhost${path}`, init));
-// Each user's session is `session-<id>`, which the database stub answers with the user
 const signedIn = (user: UserWithRoles) => ({
   Authorization: `Bearer ${signToken(user.id, `session-${user.id}`)}`,
 });
@@ -67,13 +83,10 @@ describe('createApp', () => {
     db.findMany.mockImplementation(async (_table, { where }: { where: { value: string } }) =>
       [admin, editor].filter((user) => user.email === where.value.toLowerCase())
     );
-    db.find.mockImplementation(async (_table, sessionId: string) => {
-      const user = [admin, editor].find(({ id }) => sessionId === `session-${id}`);
-      return user
-        ? { id: sessionId, userId: user.id, expiresAt: new Date(Date.now() + 60_000), user }
-        : null;
-    });
-    db.query.mockReturnValue(passkeyQuery);
+    db.find.mockImplementation(async (_table, sessionId: string) => session(sessionId));
+    db.query.mockImplementation((table) =>
+      table === webAuthnChallenges ? challengeQuery : passkeyQuery
+    );
     for (const step of [passkeyQuery.orderBy, passkeyQuery.select, passkeyQuery.where]) {
       step.mockReturnValue(passkeyQuery);
     }
@@ -265,47 +278,180 @@ describe('createApp', () => {
       expect(db.delete).not.toHaveBeenCalled();
     });
 
-    describe('answering a challenge', () => {
-      const challenge = {
-        id: 'challenge-1',
-        challenge: 'abc',
-        type: 'authentication',
-        userId: null,
-        expiresAt: new Date(Date.now() + 60_000),
+    describe('signing in', () => {
+      const passkey = {
+        id: 'passkey-1',
+        userId: admin.id,
+        publicKey: Buffer.from('public key'),
+        counter: '0',
+        transports: [],
+        user: admin,
       };
-      const verify = () =>
+      const expiredOrInvalid = { error: 'The passkey request expired or is invalid' };
+
+      /** Starts a sign-in: its signed challenge, and the challenge the authenticator signs */
+      async function start() {
+        const response = await request('/auth/passkeys/authenticate/options', { method: 'POST' });
+        expect(response.status).toBe(200);
+        const { challengeId, options } = await response.json();
+        return { challengeId: challengeId as string, challenge: options.challenge as string };
+      }
+      const answer = (challengeId: string) =>
         request(
           '/auth/passkeys/authenticate/verify',
-          json({ challengeId: 'challenge-1', response: { id: 'passkey-1' } })
+          json({ challengeId, response: { id: passkey.id } })
         );
 
       beforeEach(() => {
-        db.find.mockImplementation(async (table) =>
-          table === webAuthnChallenges ? challenge : null
+        db.find.mockImplementation(async (table, id: string) =>
+          table === passkeys ? (id === passkey.id ? passkey : null) : session(id)
+        );
+        webAuthn.verifyAuthenticationResponse.mockResolvedValue({
+          verified: true,
+          authenticationInfo: {
+            newCounter: 1,
+            credentialBackedUp: true,
+            credentialDeviceType: 'multiDevice',
+          },
+        });
+        challengeQuery.upsert.mockResolvedValue({ affectedRows: 1 });
+      });
+
+      // Saving each start let anyone fill the table and turn every sign-in away
+      it('starts without saving anything, however many start', async () => {
+        const started = await Promise.all(Array.from({ length: 3 }, start));
+
+        expect(new Set(started.map(({ challenge }) => challenge)).size).toBe(3);
+        expect(db.create).not.toHaveBeenCalled();
+        expect(db.query).not.toHaveBeenCalled();
+      });
+
+      it('signs in with an answer to the challenge it signed, and saves the challenge', async () => {
+        const { challengeId, challenge } = await start();
+
+        const response = await answer(challengeId);
+
+        expect(response.status).toBe(200);
+        await expect(response.json()).resolves.toEqual({ token: expect.any(String) });
+        expect(webAuthn.verifyAuthenticationResponse).toHaveBeenCalledWith(
+          expect.objectContaining({ expectedChallenge: challenge })
+        );
+        expect(challengeQuery.upsert).toHaveBeenCalledWith(
+          expect.objectContaining({ challenge, type: 'authentication' }),
+          { conflictTarget: ['challenge'], update: {} }
+        );
+        expect(db.update).toHaveBeenCalledWith(
+          passkeys,
+          passkey.id,
+          expect.objectContaining({ counter: '1' })
         );
       });
 
-      it('goes on to the passkey once it has used the challenge up', async () => {
-        db.delete.mockResolvedValue(true);
+      // A replay, or the same answer sent twice at once: the challenge is saved only once
+      it('turns away an answer to a challenge that was answered already', async () => {
+        const { challengeId } = await start();
+        challengeQuery.upsert.mockResolvedValue({ affectedRows: 0 });
 
-        const response = await verify();
+        const response = await answer(challengeId);
 
-        expect(db.delete).toHaveBeenCalledWith(webAuthnChallenges, 'challenge-1');
-        expect(db.find).toHaveBeenCalledWith(passkeys, 'passkey-1', expect.anything());
-        await expect(response.json()).resolves.toEqual({ error: 'Passkey authentication failed' });
+        expect(response.status).toBe(401);
+        await expect(response.json()).resolves.toEqual(expiredOrInvalid);
+        expect(db.update).not.toHaveBeenCalled();
+        // No session either
+        expect(db.create).not.toHaveBeenCalled();
       });
 
-      // Two answers read the challenge before either deleted it, and only one may sign in
+      it("saves nothing for an answer that isn't the passkey's", async () => {
+        const { challengeId } = await start();
+        webAuthn.verifyAuthenticationResponse.mockResolvedValue({ verified: false });
+
+        const response = await answer(challengeId);
+
+        expect(response.status).toBe(401);
+        expect(challengeQuery.upsert).not.toHaveBeenCalled();
+      });
+
+      it("turns away a challenge it didn't sign, or a session's token, as one", async () => {
+        for (const challengeId of ['challenge-1', signToken(admin.id, `session-${admin.id}`)]) {
+          const response = await answer(challengeId);
+
+          expect(response.status).toBe(401);
+          await expect(response.json()).resolves.toEqual(expiredOrInvalid);
+        }
+        expect(db.find).not.toHaveBeenCalledWith(passkeys, expect.anything(), expect.anything());
+      });
+
+      it('turns away an answer after five minutes', async () => {
+        const { challengeId } = await start();
+        vi.useFakeTimers({ toFake: ['Date'], now: Date.now() + 5 * 60 * 1000 });
+        try {
+          const response = await answer(challengeId);
+
+          expect(response.status).toBe(401);
+          await expect(response.json()).resolves.toEqual(expiredOrInvalid);
+        } finally {
+          vi.useRealTimers();
+        }
+        expect(webAuthn.verifyAuthenticationResponse).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('adding a passkey', () => {
+      const challenge = {
+        id: 'challenge-1',
+        challenge: 'abc',
+        type: 'registration',
+        userId: admin.id,
+        expiresAt: new Date(Date.now() + 60_000),
+      };
+      let saved: typeof challenge | (Omit<typeof challenge, 'userId'> & { userId: null });
+      const answer = () =>
+        request(
+          '/auth/passkeys/register/verify',
+          json({ challengeId: challenge.id, response: { id: 'credential-1' } }, signedIn(admin))
+        );
+
+      beforeEach(() => {
+        saved = challenge;
+        db.find.mockImplementation(async (table, id: string) =>
+          table === webAuthnChallenges ? (id === saved.id ? saved : null) : session(id)
+        );
+        webAuthn.verifyRegistrationResponse.mockResolvedValue({ verified: false });
+      });
+
+      it('goes on to check the answer once it has used the challenge up', async () => {
+        db.delete.mockResolvedValue(true);
+
+        const response = await answer();
+
+        expect(db.delete).toHaveBeenCalledWith(webAuthnChallenges, challenge.id);
+        expect(webAuthn.verifyRegistrationResponse).toHaveBeenCalledWith(
+          expect.objectContaining({ expectedChallenge: 'abc' })
+        );
+        await expect(response.json()).resolves.toEqual({ error: 'Passkey registration failed' });
+      });
+
+      // Two answers read the challenge before either deleted it, and only one may add a passkey
       it('turns away an answer to a challenge another request used up first', async () => {
         db.delete.mockResolvedValue(false);
 
-        const response = await verify();
+        const response = await answer();
 
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(400);
         await expect(response.json()).resolves.toEqual({
           error: 'The passkey request expired or is invalid',
         });
-        expect(db.find).not.toHaveBeenCalledWith(passkeys, expect.anything(), expect.anything());
+        expect(webAuthn.verifyRegistrationResponse).not.toHaveBeenCalled();
+      });
+
+      // Removing it would let the sign-in's answer be used again
+      it("never uses up a sign-in's answered challenge", async () => {
+        saved = { ...challenge, type: 'authentication', userId: null };
+
+        const response = await answer();
+
+        expect(response.status).toBe(400);
+        expect(db.delete).not.toHaveBeenCalled();
       });
     });
 
