@@ -82,12 +82,18 @@ struct APIClientTests {
         let client = UITestFixtures.client(scenario: "normal")
         let post = try await client.data(for: PostQuery(slug: "post-0")).post
         let blocks = PostBlock.blocks(in: post?.editorState)
-        #expect(blocks.count == 5)
-        guard case .code(let code) = blocks.last else {
+        #expect(blocks.count == 7)
+        guard blocks.count == 7, case .code(let code) = blocks[4] else {
             Issue.record("The code block is missing")
             return
         }
         #expect(String(code.characters) == "side A\nside B")
+        #expect(
+            Array(blocks.suffix(2)) == [
+                .list(numbered: true, start: 1, items: [AttributedString("The opening track"), AttributedString("The encore")]),
+                .list(numbered: false, start: 1, items: [AttributedString("Vinyl"), AttributedString("Tape")]),
+            ]
+        )
     }
 
     @Test func allFeedsCanPageWithoutTheProductionAPI() async {
