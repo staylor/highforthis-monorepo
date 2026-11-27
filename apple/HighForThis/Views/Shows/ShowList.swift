@@ -9,6 +9,7 @@ struct ShowList: View {
     var name: String?
     @State private var year: Int?
     @State private var feed = Feeds.shows()
+    @Environment(\.statsHaveATab) private var statsHaveATab
 
     private var filter: ShowFilter { ShowFilter(kind: kind, artist: artist, venue: venue, year: year) }
 
@@ -77,7 +78,7 @@ struct ShowList: View {
 
     /// The History tab links to the stats where they have no tab of their own, as the website's history links to its.
     private var showsStatsLink: Bool {
-        filter.isByYear && !ShowStats.hasItsOwnTab
+        filter.isByYear && !statsHaveATab
     }
 
     private var showsYearFilter: Bool {

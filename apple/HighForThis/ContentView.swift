@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(PodcastPlayer.self) private var player
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var selection = AppTab.shows
     @State private var showingPlayer = false
 
@@ -70,7 +71,7 @@ struct ContentView: View {
             Tab(.showHistory, systemImage: "clock.arrow.circlepath", value: .history) {
                 BrowseStack(showPlayer: showPlayer) { ShowList(kind: .history) }
             }
-            if ShowStats.hasItsOwnTab {
+            if statsHaveATab {
                 Tab(.stats, systemImage: "chart.bar.xaxis", value: .stats) {
                     BrowseStack(showPlayer: showPlayer) { ShowStats() }
                 }
@@ -87,6 +88,22 @@ struct ContentView: View {
         }
         #if !os(tvOS)
         .tabViewStyle(.sidebarAdaptable)
+        #endif
+        .environment(\.statsHaveATab, statsHaveATab)
+        // A window narrowed past room for the Stats tab gives its place to History, which links to the stats.
+        .onChange(of: statsHaveATab) { _, hasTab in
+            if !hasTab, selection == .stats { selection = .history }
+        }
+    }
+
+    /// Whether Stats is a tab of its own. A tab bar along the bottom of the screen holds five tabs before it puts the
+    /// rest behind More, as an iPhone's always does and an iPad's does in a narrow window, so there the History tab
+    /// links to the stats instead.
+    private var statsHaveATab: Bool {
+        #if os(iOS)
+        UIDevice.current.userInterfaceIdiom == .pad && horizontalSizeClass == .regular
+        #else
+        true
         #endif
     }
 }

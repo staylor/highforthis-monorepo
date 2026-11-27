@@ -51,13 +51,29 @@ struct StatsTests {
         #expect(board.tiers.map { $0.entities.map(\.name) } == [["Artist 4", "Artist 5"], ["Artist 6", "Artist 7"]])
     }
 
+    // The website's podium has three places, so the fourth, tied with the third, shares its rank but not its place
+    @Test func aTieForThirdLeavesTheFourthOffThePodium() async {
+        let counts = [5, 4, 3, 3, 1]
+        let everyone = await counts.enumerated().asyncMap { index, count in
+            await StatsLineup_stat.from(Mock<ShowStat>(count: count, entity: Self.artist(index + 1)))
+        }
+        let leaders = await counts.enumerated().asyncMap { index, count in
+            await StatsLeader_stat.from(Mock<ShowStat>(count: count, entity: Self.artist(index + 1)))
+        }
+
+        let board = StatsBoard(leaders: leaders, everyone: everyone)
+
+        #expect(board.leaders.map(\.rank) == [1, 2, 3, 3, 5])
+        #expect(board.leaders.map(\.isOnThePodium) == [true, true, true, false, false])
+    }
+
     // 8 PM on New Year's Eve in New York is the next year in UTC
     @Test func aLeadersYearsAreNewYorks() async throws {
         let stat = await StatsLeader_stat.from(
             Mock<ShowStat>(count: 2, entity: Self.artist(1), firstDate: 1_230_771_600_000, lastDate: 1_735_693_200_000)
         )
 
-        let leader = try #require(StatsLeader(rank: 1, stat: stat))
+        let leader = try #require(StatsLeader(rank: 1, position: 0, stat: stat))
 
         #expect(leader.years == 2008...2024)
         #expect(leader.yearsText == "2008–2024")
@@ -68,7 +84,7 @@ struct StatsTests {
             Mock<ShowStat>(count: 2, entity: Self.artist(1), firstDate: 1_573_049_600_000, lastDate: 1_573_049_600_000)
         )
 
-        #expect(try #require(StatsLeader(rank: 1, stat: stat)).yearsText == "2019")
+        #expect(try #require(StatsLeader(rank: 1, position: 0, stat: stat)).yearsText == "2019")
     }
 
     @Test(
@@ -83,7 +99,7 @@ struct StatsTests {
                 count: 9, entity: Mock<Venue>(city: city, id: "venue", name: "Brooklyn Bowl", slug: "brooklyn-bowl", state: state))
         )
 
-        let leader = try #require(StatsLeader(rank: 1, stat: stat))
+        let leader = try #require(StatsLeader(rank: 1, position: 0, stat: stat))
 
         #expect(leader.entity == StatsEntity(kind: .venue, id: "venue", name: "Brooklyn Bowl", slug: "brooklyn-bowl"))
         #expect(leader.place == place)
@@ -96,7 +112,7 @@ struct StatsTests {
             id: "wilco", name: "Wilco", slug: "wilco")
         let stat = await StatsLeader_stat.from(Mock<ShowStat>(count: 7, entity: artist))
 
-        let leader = try #require(StatsLeader(rank: 4, stat: stat))
+        let leader = try #require(StatsLeader(rank: 4, position: 3, stat: stat))
 
         #expect(leader.place == nil)
         #expect(leader.isOnThePodium == false)
