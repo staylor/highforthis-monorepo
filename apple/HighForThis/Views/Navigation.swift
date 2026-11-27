@@ -49,6 +49,10 @@ extension RouteLink where Label == Text {
 struct BrowseStack<Root: View>: View {
     private let root: Root
     private let showPlayer: (() -> Void)?
+    @State private var path: [PushedRoute] = []
+    /// How many pushes the stack has turned away. Its path doesn't change when it turns one away, so this is what
+    /// redraws it then.
+    @State private var refusedPushes = 0
 
     init(showPlayer: (() -> Void)? = nil, @ViewBuilder root: () -> Root) {
         self.root = root()
@@ -56,7 +60,9 @@ struct BrowseStack<Root: View>: View {
     }
 
     var body: some View {
-        NavigationStack {
+        // Read here so that turning a push away redraws the stack, which drops the screen it showed for that push.
+        let _ = refusedPushes
+        NavigationStack(path: stackPath) {
             root
                 .modifier(PlayerInset(showPlayer: showPlayer))
                 .navigationDestination(for: PushedRoute.self) { pushed in
@@ -64,6 +70,21 @@ struct BrowseStack<Root: View>: View {
                         .modifier(PlayerInset(showPlayer: showPlayer))
                         .environment(\.navigationDepth, pushed.depth)
                 }
+        }
+    }
+
+    /// The stack's path, which takes each route only at the depth its link pushed it for. On a Mac, a list opens the
+    /// row it has selected, and the first time a screen three deep was popped, the tab's first list pushed its row
+    /// again, on top of the rest: Back from an artist's shows landed on the show that led to the artist.
+    private var stackPath: Binding<[PushedRoute]> {
+        Binding {
+            path
+        } set: { newPath in
+            let kept = Array(newPath.enumerated().prefix { $0.offset + 1 == $0.element.depth }.map(\.element))
+            if kept.count < newPath.count {
+                refusedPushes += 1
+            }
+            path = kept
         }
     }
 

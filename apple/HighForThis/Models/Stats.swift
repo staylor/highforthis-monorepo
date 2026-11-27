@@ -35,6 +35,8 @@ nonisolated struct StatsEntity: Hashable, Identifiable {
 /// tie shares its rank.
 nonisolated struct StatsLeader: Identifiable {
     let rank: Int
+    /// Where it comes on the leaderboard, from 0, which a tie doesn't share as it does a rank.
+    let position: Int
     let entity: StatsEntity
     let count: Int
     /// The years of its first show and its latest, in New York.
@@ -45,17 +47,19 @@ nonisolated struct StatsLeader: Identifiable {
 
     var id: String { entity.id }
 
-    /// The podium's three, which the website shows bigger than the rest.
-    var isOnThePodium: Bool { rank <= 3 }
+    /// The podium's three, which the website shows bigger than the rest: the first three, even when the fourth ties
+    /// the third.
+    var isOnThePodium: Bool { position < 3 }
 
     /// The years from its first show to its latest: 2009–2025, or just 2019.
     var yearsText: String {
         years.lowerBound == years.upperBound ? String(years.lowerBound) : "\(years.lowerBound)–\(years.upperBound)"
     }
 
-    init?(rank: Int, stat: StatsLeader_stat, calendar: Calendar = .newYork) {
+    init?(rank: Int, position: Int, stat: StatsLeader_stat, calendar: Calendar = .newYork) {
         guard let entity = stat.entity.statsEntity else { return nil }
         self.rank = rank
+        self.position = position
         self.entity = entity
         self.count = stat.count
         let first = calendar.component(.year, from: Date(apiTimestamp: stat.firstDate))
@@ -101,7 +105,7 @@ nonisolated struct StatsBoard {
         let ranks = Self.rankings(counts)
         let leaderCount = min(Self.leaderCount(counts, limit: limit), leaders.count)
         self.leaders = leaders.prefix(leaderCount).enumerated().compactMap { index, stat in
-            StatsLeader(rank: index < ranks.count ? ranks[index] : index + 1, stat: stat, calendar: calendar)
+            StatsLeader(rank: index < ranks.count ? ranks[index] : index + 1, position: index, stat: stat, calendar: calendar)
         }
         self.tiers = everyone.dropFirst(leaderCount).orderedGroups(by: \.count).map { count, stats in
             StatsTier(count: count, entities: stats.compactMap(\.entity.statsEntity))

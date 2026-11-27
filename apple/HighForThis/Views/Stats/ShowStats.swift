@@ -6,16 +6,6 @@ import SwiftUI
 /// many shows they had, billed like a festival poster. The query asks for the artists' stats and the venues' at once,
 /// so choosing between them doesn't wait for another request.
 struct ShowStats: View {
-    /// Whether the stats are a tab of their own. An iPhone's tab bar holds five tabs before it puts the rest behind
-    /// More, so there the History tab links to them instead.
-    static var hasItsOwnTab: Bool {
-        #if os(iOS)
-        UIDevice.current.userInterfaceIdiom != .phone
-        #else
-        true
-        #endif
-    }
-
     @State private var subject = StatsSubject.artists
 
     var body: some View {
@@ -48,6 +38,12 @@ struct ShowStats: View {
         }
         .detailTitle(String(localized: .showStatsTitle))
     }
+}
+
+extension EnvironmentValues {
+    /// Whether the stats are a tab of their own, as `ContentView` decides, so History links to them only where they
+    /// aren't.
+    @Entry var statsHaveATab = true
 }
 
 /// How many shows, artists and venues there have been, and since when: four across where they fit, and otherwise two.
