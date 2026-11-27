@@ -113,8 +113,13 @@ const headings = {
 
 /** Renders a post's Lexical JSON from GraphQL, without Lexical. */
 export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }>) {
-  return () =>
-    handle.props.editorState.root?.children?.map((elem, idx) => {
+  return () => {
+    const blocks = handle.props.editorState.root?.children ?? [];
+    // The first image shown can be on the screen as the post opens, so it loads right away
+    const firstImage = blocks.findIndex(
+      (elem) => elem?.type === 'image' && (elem as ImageNode).image?.crops?.length
+    );
+    return blocks.map((elem, idx) => {
       switch (elem?.type) {
         case 'code': {
           const children = (elem as CodeNode).children as TextNode[];
@@ -139,12 +144,18 @@ export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }
             return null;
           }
           const crop = image.crops.find(({ width }) => width === 640) || image.crops[0];
+          // Its size holds its place, so the text below doesn't jump down once it loads. The rest
+          // load as they near the screen, rather than all at once.
           return (
             <img
               key={image.id}
               mix={contentImage}
-              alt=""
+              alt={image.altText ?? ''}
               src={uploadUrl(image.destination, crop.fileName)}
+              width={crop.width}
+              height={crop.height}
+              loading={idx === firstImage ? undefined : 'lazy'}
+              decoding="async"
             />
           );
         }
@@ -190,4 +201,5 @@ export function PostContent(handle: Handle<{ editorState: Partial<EditorState> }
       }
       return null;
     });
+  };
 }

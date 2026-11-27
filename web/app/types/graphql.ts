@@ -1194,7 +1194,7 @@ export type PostQuery = { post: { id: string, slug: string, summary: string | nu
               | { type: string | null, version: number | null }
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
               | Record<PropertyKey, never>
-             | null> | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
+             | null> | null, image: { id: string, altText: string | null, destination: string, crops: Array<{ fileName: string, height: number, width: number }> } | null }
           | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
               | { type: string | null, version: number | null }
               | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }

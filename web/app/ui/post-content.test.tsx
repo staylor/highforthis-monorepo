@@ -80,6 +80,40 @@ describe('PostContent', () => {
     assert.match(html, /Plain and <strong[^>]*>bold<\/strong>/);
   });
 
+  it('gives images their sizes and descriptions, and loads all but the first as they near the screen', async () => {
+    const image = (id: string, altText: string | null) => ({
+      type: 'image',
+      image: {
+        id,
+        altText,
+        destination: '2024/05',
+        crops: [
+          { fileName: `${id}-300.jpg`, width: 300, height: 200 },
+          { fileName: `${id}-640.jpg`, width: 640, height: 427 },
+        ],
+      },
+    });
+
+    const html = await render(
+      block('paragraph', [text('Intro')]),
+      { type: 'image', image: null },
+      image('first', 'The band on stage'),
+      image('second', null)
+    );
+
+    const images = html.match(/<img [^>]*>/g) ?? [];
+    assert.equal(images.length, 2);
+    const [first = '', second = ''] = images;
+    assert.match(first, /src="[^"]*\/2024\/05\/first-640\.jpg"/);
+    assert.match(first, /alt="The band on stage"/);
+    assert.match(first, /width="640"/);
+    assert.match(first, /height="427"/);
+    assert.match(first, /decoding="async"/);
+    assert.doesNotMatch(first, /loading=/);
+    assert.match(second, /alt=""/);
+    assert.match(second, /loading="lazy"/);
+  });
+
   it('leaves out an image or a video that is gone', async () => {
     const html = await render(
       { type: 'image', image: null },
