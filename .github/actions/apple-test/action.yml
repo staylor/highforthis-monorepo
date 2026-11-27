@@ -17,10 +17,34 @@ inputs:
   only-testing:
     description: An -only-testing identifier, to run some of the tests.
     default: ''
+  products:
+    description: >-
+      The name of an artifact with a build for testing's products in test-products.tar, which the tests run from
+      instead of building the app. Without one, the tests build it.
+    default: ''
 
 runs:
   using: composite
   steps:
+    # An artifact loses the executables' permissions, so the products come in a tar, which keeps them.
+    - name: Download the test products
+      if: inputs.products != ''
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.products }}
+        path: ${{ runner.temp }}/test-products
+    - name: Unpack the test products
+      id: products
+      if: inputs.products != ''
+      shell: bash
+      run: |
+        tar -xf "$RUNNER_TEMP/test-products/test-products.tar" -C "$RUNNER_TEMP/test-products"
+        set -- "$RUNNER_TEMP"/test-products/Products/*.xctestrun
+        if [ ! -e "$1" ]; then
+          echo "::error::The test products have no .xctestrun file."
+          exit 1
+        fi
+        echo "xctestrun=$1" >> "$GITHUB_OUTPUT"
     - name: Install the simulator runtime
       if: inputs.build != ''
       shell: bash
@@ -89,6 +113,10 @@ runs:
     # runs the test that timed out. xcodebuild exits with 65 when the build or a test fails. Any other failure, such
     # as xcodebuild crashing or losing the simulator, isn't the app's, so the simulator is erased and the tests run
     # once more. The Mac run retries neither, so a flaky race in the unit tests still fails CI.
+    #
+    # Parallel testing is off on simulators: with the unit tests parallelizable, xcodebuild ran every test on a clone of
+    # the simulator booted above, which booted cold after the build. Given test products, the tests run from them
+    # without building; otherwise the build skips the index, which nothing on CI reads.
     - name: Test
       shell: bash
       working-directory: apple
@@ -96,18 +124,23 @@ runs:
         DESTINATION: ${{ steps.simulator.outputs.destination || 'platform=macOS' }}
         UDID: ${{ steps.simulator.outputs.udid }}
         ONLY_TESTING: ${{ inputs.only-testing }}
+        XCTESTRUN: ${{ steps.products.outputs.xctestrun }}
         BOOT: ${{ github.action_path }}/boot-simulator.sh
       run: |
         run_tests() {
-          xcodebuild test \
-            -project HighForThis.xcodeproj \
-            -scheme HighForThis \
+          if [ -n "$XCTESTRUN" ]; then
+            set -- test-without-building -xctestrun "$XCTESTRUN"
+          else
+            set -- test -project HighForThis.xcodeproj -scheme HighForThis \
+              COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=
+          fi
+          xcodebuild "$@" \
             -destination "$DESTINATION" \
             ${ONLY_TESTING:+-only-testing:"$ONLY_TESTING"} \
             -resultBundlePath Tests.xcresult \
+            ${UDID:+-parallel-testing-enabled NO} \
             ${UDID:+-retry-tests-on-failure -test-iterations 3 -test-repetition-relaunch-enabled YES} \
             ${UDID:+-test-timeouts-enabled YES -default-test-execution-time-allowance 300} \
-            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
             | xcbeautify --renderer github-actions
           return "${PIPESTATUS[0]}"
         }
