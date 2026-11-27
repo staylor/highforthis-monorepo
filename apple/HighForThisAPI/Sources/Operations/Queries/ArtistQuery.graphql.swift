@@ -8,7 +8,7 @@ nonisolated public struct ArtistQuery: GraphQLQuery {
   public static let operationName: String = "Artist"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Artist($slug: String!) { artist(slug: $slug) { __typename id name slug website appleMusic { __typename id url artwork { __typename height url width } } } attended: shows(artist: { slug: $slug }, attended: true, first: 5) { __typename ...DatedShowsSection_shows count } shows(artist: { slug: $slug }, first: 5, latest: true) { __typename ...DatedShowsSection_shows } }"#,
+      #"query Artist($slug: String!) { artist(slug: $slug) { __typename id name slug website appleMusic { __typename id url artwork { __typename height url width } } } attended: shows(artist: { slug: $slug }, attended: true, first: 100) { __typename ...DatedShowsSection_shows count } shows(artist: { slug: $slug }, first: 100, latest: true) { __typename ...DatedShowsSection_shows } }"#,
       fragments: [DatedShowsSection_shows.self, ShowList_show.self]
     ))
 
@@ -30,11 +30,11 @@ nonisolated public struct ArtistQuery: GraphQLQuery {
       .field("shows", alias: "attended", Attended?.self, arguments: [
         "artist": ["slug": .variable("slug")],
         "attended": true,
-        "first": 5
+        "first": 100
       ]),
       .field("shows", Shows?.self, arguments: [
         "artist": ["slug": .variable("slug")],
-        "first": 5,
+        "first": 100,
         "latest": true
       ]),
     ] }

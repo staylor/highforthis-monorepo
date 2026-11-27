@@ -25,12 +25,13 @@ struct DateBadge: View {
     }
 }
 
-/// A show in a list of shows: its day, its main artist's picture, then its headline and venue. At accessibility text
-/// sizes the picture goes above the text, which then has the row's width, and the day is spelled out over the headline.
+/// A show in a list of shows: its day, its main artist's picture, then its headline and venue, leaving out what all of
+/// the list's shows have in common (`rowWords(in:)`). At accessibility text sizes the picture goes above the text, which
+/// then has the row's width, and the day is spelled out over it.
 struct ShowListRow: View {
     let show: ShowList_show
-    /// Whether the row says where the show is, which a venue's page already does.
-    var showsVenue = true
+    /// The shows the list has, such as an artist's, whose rows needn't name the artist.
+    let filter: ShowFilter
     @ScaledMetric(relativeTo: .body) private var scaledImageSize: CGFloat = .readable(44)
     @Environment(\.displayScale) private var displayScale
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -39,21 +40,24 @@ struct ShowListRow: View {
     private var imageSize: CGFloat { min(scaledImageSize, .readable(72)) }
 
     var body: some View {
+        let words = show.rowWords(in: filter)
         if dynamicTypeSize.isAccessibilitySize {
             VStack(alignment: .leading, spacing: 8) {
-                picture
-                RowLabel(eyebrow: Text(show.startDate, format: .showDay), title: show.headline, detail: venue)
+                if words.hasPicture {
+                    picture
+                }
+                RowLabel(eyebrow: Text(show.startDate, format: .showDay), title: words.title, detail: words.detail)
             }
         } else {
             HStack(spacing: .readable(12)) {
                 DateBadge(date: show.startDate)
-                picture
-                RowLabel(title: show.headline, detail: venue)
+                if words.hasPicture {
+                    picture
+                }
+                RowLabel(title: words.title, detail: words.detail)
             }
         }
     }
-
-    private var venue: String? { showsVenue ? show.venue.name : nil }
 
     private var picture: some View {
         RemoteImage(
@@ -67,8 +71,8 @@ struct ShowListRow: View {
     }
 }
 
-/// A few of an artist's or a venue's shows, set as the show lists set theirs: headed by month, each with its day and its
-/// main artist's picture. A heading over them says which shows they are, and a link after them opens the rest of them.
+/// An artist's or a venue's shows, set as the show lists set theirs: headed by month, each with its day. A heading over
+/// them says which shows they are, and when there are more than the page asked for, a link after them opens the rest.
 /// Without any, there's no heading either, as on the website.
 struct DatedShowsSection: View {
     let title: LocalizedStringResource
@@ -79,8 +83,6 @@ struct DatedShowsSection: View {
     let all: ShowFilter
     /// The artist's or the venue's name, which that list opens with.
     let name: String
-    /// Whether the rows say where each show is, which a venue's page already does.
-    var showsVenue = true
 
     var body: some View {
         let rows = shows?.edges.map(\.node.fragments.showList_show) ?? []
@@ -94,7 +96,7 @@ struct DatedShowsSection: View {
                 Section {
                     ForEach(month.shows, id: \.id) { show in
                         RouteLink(.show(id: show.id, title: show.headline)) {
-                            ShowListRow(show: show, showsVenue: showsVenue)
+                            ShowListRow(show: show, filter: all)
                         }
                         .accessibilityIdentifier("show-\(show.id)")
                     }

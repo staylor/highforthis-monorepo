@@ -14,11 +14,12 @@ query Artist($slug: String!) {
       }
     }
   }
-  attended: shows(artist: { slug: $slug }, attended: true, first: 5) {
+  # Enough for every artist's shows, as the website lists them. View All opens the rest of any with more.
+  attended: shows(artist: { slug: $slug }, attended: true, first: 100) {
     ...DatedShowsSection_shows
     count
   }
-  shows(artist: { slug: $slug }, first: 5, latest: true) {
+  shows(artist: { slug: $slug }, first: 100, latest: true) {
     ...DatedShowsSection_shows
   }
 }

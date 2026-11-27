@@ -37,8 +37,8 @@ struct ShowList: View {
                     Section {
                         ForEach(month.shows, id: \.id) { show in
                             RouteLink(.show(id: show.id, title: show.headline)) {
-                                // A venue's shows are all there, which its header says.
-                                ShowListRow(show: show, showsVenue: venue == nil)
+                                // Without the artist or the venue whose shows these are, which the header names
+                                ShowListRow(show: show, filter: filter)
                             }
                             .accessibilityIdentifier("show-\(show.id)")
                         }

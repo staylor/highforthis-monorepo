@@ -6,7 +6,7 @@
 
 nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
   public static var fragmentDefinition: StaticString {
-    #"fragment ShowList_show on Show { __typename id date title artists { __typename id name slug appleMusic { __typename id artwork { __typename height url width } } } venue { __typename id address name slug } }"#
+    #"fragment ShowList_show on Show { __typename id date title artists { __typename id name slug appleMusic { __typename id artwork { __typename height url width } } } venue { __typename id address city name slug state } }"#
   }
 
   @_spi(Unsafe) public let __data: DataDict
@@ -112,8 +112,10 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
       .field("__typename", String.self),
       .field("id", String.self),
       .field("address", String?.self),
+      .field("city", String?.self),
       .field("name", String.self),
       .field("slug", String.self),
+      .field("state", String?.self),
     ] }
     @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
       ShowList_show.Venue.self
@@ -121,7 +123,9 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
 
     public var id: String { __data["id"] }
     public var address: String? { __data["address"] }
+    public var city: String? { __data["city"] }
     public var name: String { __data["name"] }
     public var slug: String { __data["slug"] }
+    public var state: String? { __data["state"] }
   }
 }

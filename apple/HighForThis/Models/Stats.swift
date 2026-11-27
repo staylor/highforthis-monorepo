@@ -65,11 +65,7 @@ nonisolated struct StatsLeader: Identifiable {
         let first = calendar.component(.year, from: Date(apiTimestamp: stat.firstDate))
         let last = calendar.component(.year, from: Date(apiTimestamp: stat.lastDate))
         self.years = min(first, last)...max(first, last)
-        let place = [stat.entity.asVenue?.city, stat.entity.asVenue?.state]
-            .compactMap { $0?.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
-            .joined(separator: ", ")
-        self.place = place.isEmpty ? nil : place
+        self.place = Place.name(city: stat.entity.asVenue?.city, state: stat.entity.asVenue?.state)
         self.artwork = stat.entity.asArtist?.appleMusic?.artwork
     }
 

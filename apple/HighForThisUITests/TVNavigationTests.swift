@@ -23,12 +23,19 @@ final class TVNavigationTests: XCTestCase {
         remote.press(.select)
         XCTAssertTrue(app.staticTexts["Recommended Shows"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["Artist Website"].exists)
+        // An artist's shows say where they were, rather than the artist's name again.
+        let artistsShow = element("show-show-2025-0", in: app)
+        XCTAssertTrue(artistsShow.label.contains("Sample Hall"), artistsShow.label)
         screenshot("Artist", app)
         remote.press(.menu)
         waitForFocus(on: artist)
         press(.down, untilFocusIsOn: row("venue-sample-hall", in: app))
         remote.press(.select)
         XCTAssertTrue(app.staticTexts["123 Music Street"].waitForExistence(timeout: 10))
+        // A venue's shows say who played, but not where.
+        let venuesShow = element("show-show-2025-0", in: app)
+        XCTAssertTrue(venuesShow.waitForExistence(timeout: 10))
+        XCTAssertFalse(venuesShow.label.contains("Sample Hall"), venuesShow.label)
         screenshot("Venue", app)
     }
 
