@@ -31,9 +31,6 @@ nonisolated extension FormatStyle where Self == Date.FormatStyle {
     /// A show's day as VoiceOver reads its date badge, which only has room for "30 Mon", in New York.
     static var showSpokenDay: Self { inNewYork(.dateTime.weekday(.wide).month(.wide).day()) }
 
-    /// A show's date, as an artist's or a venue's shows list it, in New York.
-    static var showDate: Self { inNewYork(.dateTime.month(.abbreviated).day().year()) }
-
     /// When a show starts, in New York. On a device that keeps another time, it names New York's time zone, so 8:00 PM
     /// doesn't read as 8:00 PM where the device is.
     static func showTime(_ start: Date, on device: TimeZone = .current) -> Self {

@@ -34,14 +34,18 @@ struct VenueDetail: View {
                     DatedShowsSection(
                         title: .recommendedShows,
                         shows: data.shows?.fragments.datedShowsSection_shows,
-                        all: ShowFilter(kind: .upcoming, venue: slug)
-                    ) { $0.headline }
+                        all: ShowFilter(kind: .upcoming, venue: slug),
+                        name: venue.name,
+                        showsVenue: false
+                    )
                     DatedShowsSection(
                         title: .attended,
                         count: data.attended?.count,
                         shows: data.attended?.fragments.datedShowsSection_shows,
-                        all: ShowFilter(kind: .history, venue: slug)
-                    ) { $0.headline }
+                        all: ShowFilter(kind: .history, venue: slug),
+                        name: venue.name,
+                        showsVenue: false
+                    )
                 }
                 .listStyle(.plain)
             } else {

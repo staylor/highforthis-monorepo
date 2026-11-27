@@ -6,4 +6,5 @@ import ApolloTestSupport
 
 public extension MockObject {
   typealias EditorNode = Union
+  typealias ShowEntity = Union
 }

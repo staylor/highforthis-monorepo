@@ -46,6 +46,8 @@ nonisolated public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     "Show": HighForThisAPI.Objects.Show,
     "ShowConnection": HighForThisAPI.Objects.ShowConnection,
     "ShowEdge": HighForThisAPI.Objects.ShowEdge,
+    "ShowStat": HighForThisAPI.Objects.ShowStat,
+    "ShowTotals": HighForThisAPI.Objects.ShowTotals,
     "TextNode": HighForThisAPI.Objects.TextNode,
     "Venue": HighForThisAPI.Objects.Venue,
     "VenueCoordinates": HighForThisAPI.Objects.VenueCoordinates,

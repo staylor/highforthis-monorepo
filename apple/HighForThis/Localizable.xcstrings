@@ -567,6 +567,210 @@
           }
         }
       }
+    },
+    "alsoOnTheBill" : {
+      "comment" : "The heading over the rest of the artists we've seen, billed like a festival poster.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Also on the Bill"
+          }
+        }
+      }
+    },
+    "artists" : {
+      "comment" : "The choice of the artists' stats, and how many artists we've seen in all.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artists"
+          }
+        }
+      }
+    },
+    "everywhereElse" : {
+      "comment" : "The heading over the rest of the venues we've been to.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "And Everywhere Else"
+          }
+        }
+      }
+    },
+    "mostSeen" : {
+      "comment" : "The heading over the artists we've seen at the most shows.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Most Seen"
+          }
+        }
+      }
+    },
+    "mostVisited" : {
+      "comment" : "The heading over the venues we've been to for the most shows.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Most Visited"
+          }
+        }
+      }
+    },
+    "once" : {
+      "comment" : "The heading over the artists or venues we've seen at one show.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Once"
+          }
+        }
+      }
+    },
+    "placeAndYears %@ %@" : {
+      "comment" : "Where a venue is and the years of its first show and its latest, in one line.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "rank %lld" : {
+      "comment" : "A place on the stats' leaderboard, as VoiceOver reads it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number %lld"
+          }
+        }
+      }
+    },
+    "showStatsTitle" : {
+      "comment" : "The stats' title, and on iPhone, the History tab's link to them.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Stats"
+          }
+        }
+      }
+    },
+    "since" : {
+      "comment" : "The label over the year of the first show we went to.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Since"
+          }
+        }
+      }
+    },
+    "stats" : {
+      "comment" : "The Stats tab's name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stats"
+          }
+        }
+      }
+    },
+    "statsEyebrow" : {
+      "comment" : "The line over the stats' title, as the website has it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We were there"
+          }
+        }
+      }
+    },
+    "statsFor" : {
+      "comment" : "The label of the choice between the artists' stats and the venues'.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Stats For"
+          }
+        }
+      }
+    },
+    "timesCount %lld" : {
+      "comment" : "The heading over the artists or venues we've seen at that many shows, three or more.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Time"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Times"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "twice" : {
+      "comment" : "The heading over the artists or venues we've seen at two shows.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Twice"
+          }
+        }
+      }
+    },
+    "venues" : {
+      "comment" : "The choice of the venues' stats, and how many venues we've been to in all.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venues"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

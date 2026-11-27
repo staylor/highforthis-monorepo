@@ -1,0 +1,27 @@
+fragment StatsLeader_stat on ShowStat {
+  count
+  firstDate
+  lastDate
+  entity {
+    ... on Artist {
+      id
+      name
+      slug
+      appleMusic {
+        id
+        artwork {
+          height
+          url
+          width
+        }
+      }
+    }
+    ... on Venue {
+      id
+      city
+      name
+      slug
+      state
+    }
+  }
+}

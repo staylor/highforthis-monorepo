@@ -70,6 +70,11 @@ struct ContentView: View {
             Tab(.showHistory, systemImage: "clock.arrow.circlepath", value: .history) {
                 BrowseStack(showPlayer: showPlayer) { ShowList(kind: .history) }
             }
+            if ShowStats.hasItsOwnTab {
+                Tab(.stats, systemImage: "chart.bar.xaxis", value: .stats) {
+                    BrowseStack(showPlayer: showPlayer) { ShowStats() }
+                }
+            }
             #if os(tvOS)
             // While an episode is loaded, the player is a tab of its own. It comes last, because adding a tab
             // before the others resets their navigation.
@@ -87,7 +92,7 @@ struct ContentView: View {
 }
 
 private enum AppTab: Hashable {
-    case nowPlaying, shows, podcast, videos, posts, history
+    case nowPlaying, shows, podcast, videos, posts, history, stats
 }
 
 #Preview {

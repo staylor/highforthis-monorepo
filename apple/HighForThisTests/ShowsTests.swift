@@ -87,7 +87,6 @@ struct ShowsTests {
         #expect(Calendar.newYork.component(.month, from: day.date) == 12)
         #expect(Calendar.newYork.component(.day, from: day.date) == 31)
         #expect(day.date.formatted(Date.FormatStyle.showDay.locale(Self.english)).contains("Dec 31, 2024"))
-        #expect(newYearsEve.startDate.formatted(Date.FormatStyle.showDate.locale(Self.english)) == "Dec 31, 2024")
     }
 
     @Test func aShowsTimeIsNewYorksAndSaysSoOnADeviceThatKeepsAnother() {

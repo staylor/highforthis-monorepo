@@ -1,6 +1,8 @@
 import XCTest
 
 #if os(iOS)
+import UIKit
+
 final class NavigationTests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
@@ -28,6 +30,39 @@ final class NavigationTests: XCTestCase {
         tap(element("venue-sample-hall", in: app))
         XCTAssertTrue(app.buttons["venue-map"].waitForExistence(timeout: 10))
         screenshot("Venue", app)
+    }
+
+    @MainActor
+    func testAnArtistsHistorySaysWhoseItIs() {
+        let app = launch()
+        select("History", in: app)
+        tap(element("show-show-2025-0", in: app))
+        tap(element("artist-sample-artist", in: app))
+        let viewAll = element("view-all-history", in: app)
+        scroll(to: viewAll, in: app)
+        tap(viewAll)
+        // The History tab's title is the same, so the list opens with whose shows these are, under which shows they are.
+        XCTAssertTrue(app.staticTexts["Sample Artist"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", "Show History")).firstMatch.exists)
+        XCTAssertTrue(element("show-show-2025-0", in: app).waitForExistence(timeout: 10))
+        screenshot("Artist History", app)
+    }
+
+    @MainActor
+    func testStatsRankTheArtistsAndVenuesAndLinkToThem() {
+        let app = launch()
+        openStats(in: app)
+        XCTAssertTrue(app.staticTexts["Most Seen"].waitForExistence(timeout: 10))
+        // Past the leaderboard, everyone else is billed by how many shows they had.
+        XCTAssertTrue(element("stats-artist-24", in: app).exists)
+        screenshot("Stats", app)
+        tap(element("stats-sample-artist", in: app))
+        XCTAssertTrue(app.staticTexts["Recommended Shows"].waitForExistence(timeout: 10))
+        back(app)
+        tap(app.buttons["Venues"])
+        XCTAssertTrue(app.staticTexts["Most Visited"].waitForExistence(timeout: 10))
+        tap(element("stats-sample-hall", in: app))
+        XCTAssertTrue(app.buttons["venue-map"].waitForExistence(timeout: 10))
     }
 
     @MainActor
@@ -139,6 +174,20 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testStatsStayUsableAtAccessibilityTextSizes() {
+        let app = launch(largeText: true, dark: true)
+        openStats(in: app)
+        let leader = element("stats-sample-artist", in: app)
+        XCTAssertTrue(leader.waitForExistence(timeout: 10))
+        screenshot("Large Text Stats", app)
+        app.swipeUp()
+        screenshot("Large Text Stats Scrolled", app)
+        tap(leader)
+        XCTAssertTrue(app.staticTexts["Recommended Shows"].waitForExistence(timeout: 10))
+        screenshot("Large Text Artist", app)
+    }
+
+    @MainActor
     private func launch(scenario: String = "normal", largeText: Bool = false, dark: Bool = false) -> XCUIApplication {
         launchApp(
             scenario: scenario,
@@ -154,6 +203,31 @@ final class NavigationTests: XCTestCase {
             tabButton.tap()
         } else {
             tap(app.buttons[tab].firstMatch)
+        }
+    }
+
+    /// iPad has a Stats tab, and an iPhone's History links to the stats instead.
+    @MainActor
+    private func openStats(in app: XCUIApplication) {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            select("History", in: app)
+            tap(app.buttons["show-stats"])
+        } else {
+            // Where the tab bar can't fit every tab, as on an 11-inch iPad held upright, it pages them.
+            let nextPage = app.buttons["Next Page"]
+            if !app.buttons["Stats"].waitForExistence(timeout: 3), nextPage.exists {
+                nextPage.tap()
+            }
+            select("Stats", in: app)
+        }
+        XCTAssertTrue(element("stats-subject", in: app).waitForExistence(timeout: 10))
+    }
+
+    /// A list makes its rows as they come into view, so swipe until the element's is there.
+    @MainActor
+    private func scroll(to element: XCUIElement, in app: XCUIApplication) {
+        for _ in 0..<6 where !element.exists {
+            app.swipeUp()
         }
     }
 

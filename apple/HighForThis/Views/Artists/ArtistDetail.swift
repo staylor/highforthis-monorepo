@@ -29,14 +29,16 @@ struct ArtistDetail: View {
                     DatedShowsSection(
                         title: .recommendedShows,
                         shows: data.shows?.fragments.datedShowsSection_shows,
-                        all: ShowFilter(kind: .upcoming, artist: slug)
-                    ) { $0.venue.name }
+                        all: ShowFilter(kind: .upcoming, artist: slug),
+                        name: artist.name
+                    )
                     DatedShowsSection(
                         title: .attended,
                         count: data.attended?.count,
                         shows: data.attended?.fragments.datedShowsSection_shows,
-                        all: ShowFilter(kind: .history, artist: slug)
-                    ) { $0.venue.name }
+                        all: ShowFilter(kind: .history, artist: slug),
+                        name: artist.name
+                    )
                 }
                 .listStyle(.plain)
             } else {
