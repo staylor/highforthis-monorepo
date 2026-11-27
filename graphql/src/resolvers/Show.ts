@@ -28,7 +28,7 @@ import {
   venues,
 } from '#/database/tables';
 import { getUniqueSlug, slugsIn } from '#/models/utils';
-import { siteYear, startOfSiteYear } from '#/time';
+import { siteYear, startOfSiteDay, startOfSiteYear } from '#/time';
 
 import { fillAppleMusicLater } from './utils/appleMusicData';
 import { type Connection, parseConnection, emptyConnection } from './utils/collection';
@@ -238,7 +238,9 @@ const resolvers = {
       if (attended) {
         conditions.push(eq('attended', true));
       } else if (latest) {
-        dates = gte('date', new Date());
+        // Today's shows, and the ones to come: a show stays listed until its day is over in New
+        // York, rather than leaving the moment it starts
+        dates = gte('date', startOfSiteDay(new Date()));
       }
 
       if (artist?.id) {

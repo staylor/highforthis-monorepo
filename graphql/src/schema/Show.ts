@@ -95,6 +95,7 @@ const Show = `#graphql
       after: String
       last: Int
       before: String
+      # The shows to come, soonest first. Today's stay listed until the day is over in New York.
       latest: Boolean
       attended: Boolean
       year: Int
