@@ -9,7 +9,6 @@ import { sessions } from '#/database/tables';
 import type { AppContext, UserWithRoles } from '#/models';
 
 const db = vi.hoisted(() => ({
-  count: vi.fn(),
   create: vi.fn(),
   deleteMany: vi.fn(),
   find: vi.fn(),
@@ -213,16 +212,6 @@ describe('authentication', () => {
       }
       expect((await signIn(admin.email, 'secret')).status).toBe(200);
       expect((await signIn(admin.email, 'wrong')).status).toBe(401);
-    });
-  });
-
-  describe('POST /auth/passkeys/authenticate/options', () => {
-    it('turns sign-ins away while too many are in progress', async () => {
-      db.count.mockResolvedValue(5000);
-
-      const response = await request('/auth/passkeys/authenticate/options', { method: 'POST' });
-
-      expect(response.status).toBe(429);
     });
   });
 });

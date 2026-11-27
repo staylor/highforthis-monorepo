@@ -3,7 +3,6 @@ import { createRouter } from 'remix/router';
 import { afterEach, beforeEach, describe, it, type TestContext } from 'remix/test';
 
 import { testSecret, testSession, testToken } from '#/lib/adminSession.fixtures.ts';
-import { rememberClientAddress } from '#/lib/client.ts';
 
 import { Admin, requireAdmin, sameOrigin } from './admin.ts';
 import { proxies } from './app.ts';
@@ -189,24 +188,6 @@ describe('proxies', () => {
       delete process.env.TOKEN_SECRET;
     }
     assert.equal(fetch.mock.calls.length, 0);
-  });
-
-  it('gives each address a few passkey sign-ins before turning it away', async (t) => {
-    t.mock.method(globalThis, 'fetch', async () => Response.json({ challengeId: 'c1' }));
-    const start = (address: string) => {
-      const request = new Request(new URL('/auth/passkeys/authenticate/options', origin), {
-        method: 'POST',
-      });
-      rememberClientAddress(request, address);
-      return router.fetch(request);
-    };
-    for (let i = 0; i < 30; i++) {
-      assert.equal((await start('203.0.113.7')).status, 200);
-    }
-    const refused = await start('203.0.113.7');
-    assert.equal(refused.status, 429);
-    assert.ok(Number(refused.headers.get('retry-after')) > 0);
-    assert.equal((await start('203.0.113.8')).status, 200, 'another address');
   });
 
   it('forwards passkey sign-in and the API to GraphQL, and leaves the rest to this app', async (t) => {

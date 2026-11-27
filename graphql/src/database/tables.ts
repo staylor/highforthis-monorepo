@@ -571,7 +571,10 @@ export const passkeys = table({
   beforeWrite: skipUndefined,
 });
 
-/** A passkey sign-in or registration in progress, and the challenge it has to answer */
+/**
+ * The challenge a passkey being added has to answer, or one a sign-in has answered, kept so it
+ * can't be answered again. A sign-in's challenge is signed, not saved, until then.
+ */
 export const webAuthnChallenges = table({
   name: 'WebAuthnChallenge',
   columns: {

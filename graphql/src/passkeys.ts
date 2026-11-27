@@ -1,5 +1,8 @@
+import crypto from 'node:crypto';
+
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server';
-import { and, gt, lt } from 'remix/data-table';
+import jsonwebtoken from 'jsonwebtoken';
+import { lt } from 'remix/data-table';
 import { z } from 'zod';
 
 import { createLogger } from '@highforthis/shared/logger';
@@ -19,19 +22,33 @@ import type { UserWithRoles } from '#/models';
 const CHALLENGE_TTL_MS = 5 * 60 * 1000;
 const AUTHENTICATION_CHALLENGE = 'authentication';
 const REGISTRATION_CHALLENGE = 'registration';
-// Anyone can start signing in, and each start saves a challenge for five minutes. Past this many
-// at once, starts are turned away until some expire, so the table can't be flooded.
-const MAX_PENDING_AUTHENTICATIONS = 5000;
+
+// Anyone can start signing in, so starting saves nothing: the challenge goes to the browser
+// signed, and comes back with its answer. A challenge is saved only once it has been answered, so
+// it can't be answered again, which only an admin's passkey can do. Saving each start instead let
+// anyone fill the table and turn every sign-in away. The key is made from TOKEN_SECRET but is its
+// own, so a signed challenge and a session's token can't stand in for each other.
+const challengeKey = crypto
+  .createHmac('sha256', env.TOKEN_SECRET)
+  .update('passkey sign-in challenges')
+  .digest();
+
+// An answered challenge is kept a minute past its signature, so an answer checked just before the
+// signature ran out can't find it already gone
+const USED_CHALLENGE_GRACE_MS = 60 * 1000;
 
 const logger = createLogger({ serviceName: 'graphql' });
 
 /** A failure whose message is meant for the browser. Any other error is logged, not shown. */
 class PasskeyError extends Error {}
 
+const expiredOrInvalid = () => new PasskeyError('The passkey request expired or is invalid');
+
 // The browser's WebAuthn answer: SimpleWebAuthn checks all of it, but its ID is looked up first
 const webAuthnResponse = z.looseObject({ id: z.string().min(1) });
 
 const authenticationVerificationSchema = z.object({
+  // A sign-in's signed challenge, or the ID of a registration's saved one
   challengeId: z.string().min(1),
   response: webAuthnResponse,
 });
@@ -39,6 +56,9 @@ const authenticationVerificationSchema = z.object({
 const registrationVerificationSchema = authenticationVerificationSchema.extend({
   name: z.string().trim().max(100).optional(),
 });
+
+// What a signed challenge says: the challenge, and when its signature runs out
+const signedChallengeSchema = z.object({ challenge: z.string().min(1), exp: z.number() });
 
 // What the passkey routes read from the request context
 interface PasskeyContext {
@@ -50,15 +70,57 @@ function getAdminUser({ authUser }: PasskeyContext): UserWithRoles | null {
   return isAdmin(authUser) ? authUser : null;
 }
 
-async function saveChallenge({
+/** A sign-in's challenge, signed to come back with its answer within five minutes */
+function signChallenge(challenge: string): string {
+  return jsonwebtoken.sign({ challenge }, challengeKey, {
+    algorithm: 'HS256',
+    expiresIn: CHALLENGE_TTL_MS / 1000,
+  });
+}
+
+/** The challenge this server signed, and when its signature runs out, or an error once it has */
+function signedChallenge(token: string): { challenge: string; expiresAt: Date } {
+  let payload: unknown;
+  try {
+    payload = jsonwebtoken.verify(token, challengeKey, { algorithms: ['HS256'] });
+  } catch {
+    // Signed with another key, changed, or out of time
+  }
+  const signed = signedChallengeSchema.safeParse(payload);
+  if (!signed.success) {
+    throw expiredOrInvalid();
+  }
+  return { challenge: signed.data.challenge, expiresAt: new Date(signed.data.exp * 1000) };
+}
+
+/**
+ * Saves an answered sign-in's challenge, which its unique index lets be saved once: of two
+ * requests with the same answer, such as a replay, only the one that saves it goes on.
+ */
+async function saveAnsweredChallenge({
   challenge,
-  type,
-  userId,
+  expiresAt,
 }: {
   challenge: string;
-  type: typeof AUTHENTICATION_CHALLENGE | typeof REGISTRATION_CHALLENGE;
-  userId?: string;
+  expiresAt: Date;
 }) {
+  await db.deleteMany(webAuthnChallenges, { where: lt('expiresAt', new Date()) });
+  const { affectedRows } = await db.query(webAuthnChallenges).upsert(
+    {
+      id: newId(),
+      challenge,
+      type: AUTHENTICATION_CHALLENGE,
+      expiresAt: new Date(expiresAt.getTime() + USED_CHALLENGE_GRACE_MS),
+    },
+    { conflictTarget: ['challenge'], update: {} }
+  );
+  if (affectedRows === 0) {
+    throw expiredOrInvalid();
+  }
+}
+
+/** Saves the challenge an admin adding a passkey has five minutes to answer */
+async function saveRegistrationChallenge(challenge: string, userId: string) {
   await db.deleteMany(webAuthnChallenges, { where: lt('expiresAt', new Date()) });
 
   return db.create(
@@ -66,7 +128,7 @@ async function saveChallenge({
     {
       id: newId(),
       challenge,
-      type,
+      type: REGISTRATION_CHALLENGE,
       userId,
       expiresAt: new Date(Date.now() + CHALLENGE_TTL_MS),
     },
@@ -74,28 +136,23 @@ async function saveChallenge({
   );
 }
 
-async function consumeChallenge({
-  id,
-  type,
-  userId,
-}: {
-  id: string;
-  type: typeof AUTHENTICATION_CHALLENGE | typeof REGISTRATION_CHALLENGE;
-  userId?: string;
-}) {
+/** Uses up the admin's registration challenge with this ID, answering it */
+async function consumeRegistrationChallenge(id: string, userId: string) {
   const challenge = await db.find(webAuthnChallenges, id);
   // A challenge is answered once, valid or not. Deleting it is what uses it up, so of two requests
-  // that answer the same one at once, only the one whose delete removed it goes on.
-  const consumed = challenge !== null && (await db.delete(webAuthnChallenges, challenge.id));
+  // that answer the same one at once, only the one whose delete removed it goes on. A sign-in's
+  // answered challenge is never deleted here, which would let its answer be used again.
+  const consumed =
+    challenge?.type === REGISTRATION_CHALLENGE &&
+    (await db.delete(webAuthnChallenges, challenge.id));
 
   if (
     !challenge ||
     !consumed ||
-    challenge.type !== type ||
     challenge.expiresAt.getTime() < Date.now() ||
-    (userId !== undefined && challenge.userId !== userId)
+    challenge.userId !== userId
   ) {
-    throw new PasskeyError('The passkey request expired or is invalid');
+    throw expiredOrInvalid();
   }
 
   return challenge.challenge;
@@ -114,15 +171,6 @@ function errorResponse(error: unknown, status = 400): Response {
 
 export async function authenticationOptionsHandler(): Promise<Response> {
   try {
-    const pending = await db.count(webAuthnChallenges, {
-      where: and({ type: AUTHENTICATION_CHALLENGE }, gt('expiresAt', new Date())),
-    });
-    if (pending >= MAX_PENDING_AUTHENTICATIONS) {
-      return Response.json(
-        { error: 'Too many sign-ins in progress. Try again in a few minutes.' },
-        { status: 429, headers: { 'Retry-After': String(CHALLENGE_TTL_MS / 1000) } }
-      );
-    }
     // Imported on first use: the library adds about 5 MB of heap to every idle process.
     const { generateAuthenticationOptions } = await import('@simplewebauthn/server');
     const options = await generateAuthenticationOptions({
@@ -130,12 +178,9 @@ export async function authenticationOptionsHandler(): Promise<Response> {
       timeout: 60_000,
       userVerification: 'required',
     });
-    const challenge = await saveChallenge({
-      challenge: options.challenge,
-      type: AUTHENTICATION_CHALLENGE,
-    });
 
-    return Response.json({ challengeId: challenge.id, options });
+    // The browser sends the signed challenge back with its answer, as a saved one's ID was
+    return Response.json({ challengeId: signChallenge(options.challenge), options });
   } catch (error) {
     return errorResponse(error);
   }
@@ -147,10 +192,7 @@ export async function authenticationVerificationHandler(
   try {
     const body = authenticationVerificationSchema.parse(context.body);
     const response = body.response as unknown as AuthenticationResponseJSON;
-    const expectedChallenge = await consumeChallenge({
-      id: body.challengeId,
-      type: AUTHENTICATION_CHALLENGE,
-    });
+    const signed = signedChallenge(body.challengeId);
     const passkey = await db.find(passkeysTable, response.id, { with: { user: passkeyUser } });
 
     if (!passkey?.user || !isAdmin(passkey.user)) {
@@ -160,7 +202,7 @@ export async function authenticationVerificationHandler(
     const { verifyAuthenticationResponse } = await import('@simplewebauthn/server');
     const verification = await verifyAuthenticationResponse({
       response,
-      expectedChallenge,
+      expectedChallenge: signed.challenge,
       expectedOrigin: env.WEBAUTHN_ORIGIN,
       expectedRPID: env.WEBAUTHN_RP_ID,
       credential: {
@@ -175,6 +217,7 @@ export async function authenticationVerificationHandler(
     if (!verification.verified) {
       throw new PasskeyError('Passkey authentication failed');
     }
+    await saveAnsweredChallenge(signed);
 
     await db.update(passkeysTable, passkey.id, {
       counter: String(verification.authenticationInfo.newCounter),
@@ -215,11 +258,7 @@ export async function registrationOptionsHandler(context: PasskeyContext): Promi
         userVerification: 'required',
       },
     });
-    const challenge = await saveChallenge({
-      challenge: options.challenge,
-      type: REGISTRATION_CHALLENGE,
-      userId: user.id,
-    });
+    const challenge = await saveRegistrationChallenge(options.challenge, user.id);
 
     return Response.json({ challengeId: challenge.id, options });
   } catch (error) {
@@ -236,11 +275,7 @@ export async function registrationVerificationHandler(context: PasskeyContext): 
 
     const body = registrationVerificationSchema.parse(context.body);
     const response = body.response as unknown as RegistrationResponseJSON;
-    const expectedChallenge = await consumeChallenge({
-      id: body.challengeId,
-      type: REGISTRATION_CHALLENGE,
-      userId: user.id,
-    });
+    const expectedChallenge = await consumeRegistrationChallenge(body.challengeId, user.id);
     const { verifyRegistrationResponse } = await import('@simplewebauthn/server');
     const verification = await verifyRegistrationResponse({
       response,
