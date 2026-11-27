@@ -66,6 +66,7 @@ describe('storeFile', () => {
       width: 4,
       height: 4,
       type: 'image',
+      mimeType: 'image/jpeg',
       crops: [{ width: 4, height: 4 }],
     });
     await expect(
@@ -128,6 +129,17 @@ describe('storeFile', () => {
     const stored = await storeFile(await fixture(name, type), uploadDir);
 
     expect(stored).toMatchObject({ type: 'video', width: 64, height: 48, duration: 1 });
+  });
+
+  it.each([
+    ['audio/mp3', 'audio/mpeg', '.mp3'],
+    ['audio/x-m4a', 'audio/mp4', '.m4a'],
+    ['audio/x-wav', 'audio/wav', '.wav'],
+  ])('records audio a browser calls %s as %s', async (given, standard, extension) => {
+    const stored = await storeFile(await fixture('tone.mp3', given), uploadDir);
+
+    expect(stored).toMatchObject({ type: 'audio', mimeType: standard });
+    expect(path.extname(stored.fileName)).toBe(extension);
   });
 
   it('stores audio and video whose details cannot be read, without them', async () => {
