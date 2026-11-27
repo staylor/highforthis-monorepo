@@ -109,10 +109,12 @@ runs:
         bash "$BOOT" "$udid"
     # CI simulators sometimes time out reading the UI or fail to quit the app, so failed tests run up to 3 times. A UI
     # test can also hang in a wait that never returns, so each test is killed after 5 minutes, about twice the slowest
-    # passing one. That kills the test runner too, so each retry starts a new one: a retry in the same runner never
-    # runs the test that timed out. xcodebuild exits with 65 when the build or a test fails. Any other failure, such
-    # as xcodebuild crashing or losing the simulator, isn't the app's, so the simulator is erased and the tests run
-    # once more. The Mac run retries neither, so a flaky race in the unit tests still fails CI.
+    # passing one. xcodebuild's own retries run a test that timed out again only in a new test runner, and with one
+    # they ran every test again, 5 to 10 minutes for one flaky test. So a retry here is a new xcodebuild, which starts
+    # a new runner, for only the tests that failed, read from the result bundle. xcodebuild exits with 65 when the
+    # build or a test fails. Any other failure, such as xcodebuild crashing or losing the simulator, isn't the app's,
+    # so the simulator is erased and the tests run once more. The Mac run retries neither, so a flaky race in the unit
+    # tests still fails CI.
     #
     # Parallel testing is off on simulators: with the unit tests parallelizable, xcodebuild ran every test on a clone of
     # the simulator booted above, which booted cold after the build. Given test products, the tests run from them
@@ -127,25 +129,27 @@ runs:
         XCTESTRUN: ${{ steps.products.outputs.xctestrun }}
         BOOT: ${{ github.action_path }}/boot-simulator.sh
       run: |
+        # Runs the tests into the result bundle named first, with the arguments after it, such as -only-testing.
         run_tests() {
+          local bundle=$1
+          shift
           if [ -n "$XCTESTRUN" ]; then
-            set -- test-without-building -xctestrun "$XCTESTRUN"
+            set -- test-without-building -xctestrun "$XCTESTRUN" "$@"
           else
-            set -- test -project HighForThis.xcodeproj -scheme HighForThis \
+            set -- test -project HighForThis.xcodeproj -scheme HighForThis "$@" \
               COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=
           fi
           xcodebuild "$@" \
             -destination "$DESTINATION" \
-            ${ONLY_TESTING:+-only-testing:"$ONLY_TESTING"} \
-            -resultBundlePath Tests.xcresult \
+            -resultBundlePath "$bundle" \
             ${UDID:+-parallel-testing-enabled NO} \
-            ${UDID:+-retry-tests-on-failure -test-iterations 3 -test-repetition-relaunch-enabled YES} \
             ${UDID:+-test-timeouts-enabled YES -default-test-execution-time-allowance 300} \
             | xcbeautify --renderer github-actions
           return "${PIPESTATUS[0]}"
         }
+        selection=(${ONLY_TESTING:+"-only-testing:$ONLY_TESTING"})
         status=0
-        run_tests || status=$?
+        run_tests Tests.xcresult "${selection[@]}" || status=$?
         if [ -n "$UDID" ] && [ "$status" -ne 0 ] && [ "$status" -ne 65 ]; then
           echo "::warning::xcodebuild exited with $status, which isn't a test failure, so the simulator is being erased and the tests run again."
           if [ -e Tests.xcresult ]; then
@@ -155,8 +159,30 @@ runs:
           xcrun simctl erase "$UDID"
           bash "$BOOT" "$UDID"
           status=0
-          run_tests || status=$?
+          run_tests Tests.xcresult "${selection[@]}" || status=$?
         fi
+        bundle=Tests.xcresult
+        for retry in 1 2; do
+          if [ -z "$UDID" ] || [ "$status" -ne 65 ]; then
+            break
+          fi
+          failed=$(xcrun xcresulttool get test-results tests --path "$bundle" | jq -r '
+            [.testNodes[] | .. | objects | select(.nodeType == "Unit test bundle" or .nodeType == "UI test bundle")
+              | .name as $bundle | .. | objects | select(.nodeType == "Test Case" and .result == "Failed")
+              | "\($bundle)/\(.nodeIdentifier)"] | unique | .[]') || failed=''
+          # 65 without a failed test is a failed build, which running again won't fix.
+          if [ -z "$failed" ]; then
+            break
+          fi
+          echo "::warning::Running again on their own, as they failed:" $failed
+          arguments=()
+          while IFS= read -r test; do
+            arguments+=("-only-testing:$test")
+          done <<< "$failed"
+          bundle=Tests-retry-$retry.xcresult
+          status=0
+          run_tests "$bundle" "${arguments[@]}" || status=$?
+        done
         exit "$status"
     - name: Upload test results
       if: failure()
