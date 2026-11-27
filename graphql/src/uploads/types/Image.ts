@@ -76,7 +76,7 @@ export default class Image extends Upload {
 
     return {
       ...original,
-      mimeType: file.type,
+      mimeType: this.mimeType,
       originalName: file.name,
       destination: this.destination.replace(`${this.uploadDir}/`, ''),
       title: '',
