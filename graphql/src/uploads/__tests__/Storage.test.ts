@@ -88,6 +88,89 @@ describe('storeFile', () => {
     await expect(storeFile(imageFile(await jpeg()), uploadDir)).rejects.toThrow('crop failed');
   });
 
+  // Phones save photos sideways, with EXIF saying which way is up
+  it('stores a sideways photo the right way up, without its metadata', async () => {
+    findMany.mockResolvedValue([{ width: 100, height: null }]);
+    const photo = await sharp({
+      create: { width: 400, height: 200, channels: 3, background: '#c33' },
+    })
+      .jpeg()
+      .withMetadata({ orientation: 6 })
+      .toBuffer();
+
+    const stored = await storeFile(imageFile(photo), uploadDir);
+
+    expect(stored).toMatchObject({ width: 200, height: 400, crops: [{ width: 100, height: 200 }] });
+    const folder = path.join(uploadDir, stored.destination);
+    const saved = await sharp(path.join(folder, stored.fileName)).metadata();
+    expect(saved).toMatchObject({ width: 200, height: 400 });
+    expect(saved.orientation).toBeUndefined();
+    expect(saved.exif).toBeUndefined();
+    await expect(
+      sharp(path.join(folder, stored.crops?.[0].fileName ?? '')).metadata()
+    ).resolves.toMatchObject({ width: 100, height: 200 });
+  });
+
+  it('stores an image without metadata as it was uploaded', async () => {
+    const upload = await sharp({
+      create: { width: 64, height: 48, channels: 3, background: '#39c' },
+    })
+      .jpeg({ quality: 100 })
+      .toBuffer();
+
+    const stored = await storeFile(imageFile(upload), uploadDir);
+
+    expect(stored).toMatchObject({ width: 64, height: 48, fileSize: upload.length });
+    await expect(
+      fs.readFile(path.join(uploadDir, stored.destination, stored.fileName))
+    ).resolves.toEqual(upload);
+  });
+
+  it('keeps every frame of an animated GIF, in the image and in its crops', async () => {
+    findMany.mockResolvedValue([{ width: 30, height: 30 }]);
+    const frames = await Promise.all(
+      ['#f00', '#0f0', '#00f'].map((background) =>
+        sharp({ create: { width: 60, height: 40, channels: 3, background } })
+          .png()
+          .toBuffer()
+      )
+    );
+    const gif = await sharp(frames, { join: { animated: true } })
+      .gif()
+      .toBuffer();
+
+    const stored = await storeFile(
+      new File([new Uint8Array(gif)], 'dance.gif', { type: 'image/gif' }),
+      uploadDir
+    );
+
+    expect(stored).toMatchObject({ width: 60, height: 40, crops: [{ width: 30, height: 30 }] });
+    const folder = path.join(uploadDir, stored.destination);
+    await expect(fs.readFile(path.join(folder, stored.fileName))).resolves.toEqual(gif);
+    await expect(
+      sharp(path.join(folder, stored.crops?.[0].fileName ?? '')).metadata()
+    ).resolves.toMatchObject({ pages: 3, width: 30, height: 30 });
+  });
+
+  it('turns down an image that stops partway, and removes what it wrote', async () => {
+    const photo = await sharp({
+      create: {
+        width: 800,
+        height: 600,
+        channels: 3,
+        background: '#000',
+        noise: { type: 'gaussian', mean: 128, sigma: 30 },
+      },
+    })
+      .jpeg()
+      .toBuffer();
+
+    await expect(
+      storeFile(imageFile(photo.subarray(0, photo.length / 2)), uploadDir)
+    ).rejects.toThrow('not an image that can be read');
+    await expect(filesIn(uploadDir)).resolves.toEqual([]);
+  });
+
   it("reads an audio file's tags and length, and stores its cover", async () => {
     const stored = await storeFile(await fixture('tone.mp3', 'audio/mpeg'), uploadDir);
 
