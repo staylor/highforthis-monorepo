@@ -93,7 +93,13 @@ const resolvers = {
         {
           count: () => query.count(),
           findMany: ({ skip, take }) =>
-            query.with(artistIncludes).orderBy('name', 'asc').offset(skip).limit(take).all(),
+            query
+              .with(artistIncludes)
+              .orderBy('name', 'asc')
+              .orderBy('id', 'asc')
+              .offset(skip)
+              .limit(take)
+              .all(),
         },
         connectionArgs
       );

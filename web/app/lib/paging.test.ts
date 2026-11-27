@@ -74,6 +74,20 @@ describe('withEveryPage', () => {
     assert.deepEqual(ids(connection), ['a', 'b']);
   });
 
+  it('continues past repeated records when their cursors advance', async () => {
+    const asked: string[] = [];
+    const page = { edges: [edge('a'), edge('b')], pageInfo: { hasNextPage: true as boolean } };
+    const connection = await withEveryPage(page, async (after) => {
+      asked.push(after);
+      return after === 'cursor-b'
+        ? { edges: [{ ...edge('b'), cursor: 'offset-3' }], pageInfo: { hasNextPage: true } }
+        : { edges: [edge('c')], pageInfo: { hasNextPage: false } };
+    });
+
+    assert.deepEqual(asked, ['cursor-b', 'offset-3']);
+    assert.deepEqual(ids(connection), ['a', 'b', 'c']);
+  });
+
   // A record added while the pages load moves the rest along by one
   it('lists a record once when the next page starts with it again', async () => {
     const connection = await withEveryPage(

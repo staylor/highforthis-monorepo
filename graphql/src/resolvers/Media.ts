@@ -97,7 +97,13 @@ const resolvers = {
         {
           count: () => query.count(),
           findMany: ({ skip, take }) =>
-            query.with(mediaDetails).orderBy('createdAt', 'desc').offset(skip).limit(take).all(),
+            query
+              .with(mediaDetails)
+              .orderBy('createdAt', 'desc')
+              .orderBy('id', 'desc')
+              .offset(skip)
+              .limit(take)
+              .all(),
         },
         connectionArgs
       );

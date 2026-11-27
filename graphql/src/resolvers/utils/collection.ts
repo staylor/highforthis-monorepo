@@ -32,15 +32,9 @@ interface ConnectionArgs {
   [key: string]: unknown;
 }
 
-interface FindManyArgs {
-  where?: Record<string, unknown>;
-  orderBy?: Record<string, unknown> | Record<string, unknown>[];
-  include?: Record<string, unknown>;
-}
-
 interface PaginatedDelegate<TNode> {
-  findMany: (args: FindManyArgs & { skip: number; take: number }) => Promise<TNode[]>;
-  count: (args?: { where: Record<string, unknown> }) => Promise<number>;
+  findMany: (args: { skip: number; take: number }) => Promise<TNode[]>;
+  count: () => Promise<number>;
 }
 
 /** A page of records, as the `...Connection` types answer it */
@@ -57,77 +51,48 @@ export interface Connection<TNode> {
 
 export async function parseConnection<TNode>(
   delegate: PaginatedDelegate<TNode>,
-  connectionArgs: ConnectionArgs,
-  findManyArgs: FindManyArgs = {}
+  connectionArgs: ConnectionArgs
 ): Promise<Connection<TNode>> {
-  const { after = null, before = null } = connectionArgs;
-  // A request that asks for neither the first nor the last so many gets the first 10, and is told
-  // whether there are more. A page of 0 is no records, with the count.
-  const last = connectionArgs.last ?? null;
+  const { after = null, before = null, last = null } = connectionArgs;
   const first = connectionArgs.first ?? (last === null ? 10 : null);
-
-  let limit = first ?? last ?? 10;
-  let offset = 0;
-
-  if (after) {
-    offset = cursorToOffset(after) + 1;
-  } else if (before) {
-    // The records before the cursor, which near the start are fewer than a page
-    const end = cursorToOffset(before);
-    offset = Math.max(0, end - limit);
-    limit = end - offset;
-  }
-
-  const countArgs = findManyArgs.where ? { where: findManyArgs.where } : undefined;
+  const lower = after === null ? 0 : cursorToOffset(after) + 1;
+  const upper = before === null ? Infinity : cursorToOffset(before);
   const records = (skip: number, take: number) =>
-    take > 0 ? delegate.findMany({ ...findManyArgs, skip, take }) : Promise.resolve([]);
+    take > 0 ? delegate.findMany({ skip, take }) : Promise.resolve([]);
 
   let count: number;
   let items: TNode[];
-  if (first === null && !before) {
-    // The last so many, with no cursor to count back from, are that many from the end, so they
-    // wait for the count
-    count = await delegate.count(countArgs);
-    offset = Math.max(offset, count - limit);
-    items = await records(offset, Math.min(limit, count - offset));
+  let offset = lower;
+  if (first === null) {
+    // A cursor from an older page can be past the end after records are deleted.
+    count = await delegate.count();
+    const end = Math.min(upper, count);
+    offset = Math.max(lower, end - last!);
+    items = await records(offset, end - offset);
   } else {
-    // Neither needs the other, so they share a round trip to the database
-    [count, items] = await Promise.all([delegate.count(countArgs), records(offset, limit)]);
+    // The first rows between the cursors can load while the database counts.
+    [count, items] = await Promise.all([
+      delegate.count(),
+      records(lower, Math.min(first, upper - lower)),
+    ]);
+    if (last !== null && items.length > last) {
+      // A request with both sizes takes the last of the first rows.
+      const drop = items.length - last;
+      offset += drop;
+      items = items.slice(drop);
+    }
   }
 
-  const arrayLength = count;
-  const sliceEnd = offset + items.length;
-  const beforeOffset = before ? cursorToOffset(before) : arrayLength;
-  const afterOffset = after ? cursorToOffset(after) : -1;
-  let startOffset = Math.max(offset - 1, afterOffset, -1) + 1;
-  let endOffset = Math.min(sliceEnd, beforeOffset, arrayLength);
-
-  if (last !== null) {
-    startOffset = Math.max(startOffset, endOffset - last);
-  } else {
-    endOffset = startOffset + first!;
-  }
-
-  // The records between the two ends: all that were read, unless the request asked for the first
-  // so many and the last of those
-  const edges = items.slice(startOffset - offset, endOffset - offset).map((value, index) => ({
-    cursor: offsetToCursor(startOffset + index),
-    node: value,
-  }));
-
-  const firstEdge = edges[0];
-  const lastEdge = edges[edges.length - 1];
-  const lowerBound = after ? afterOffset + 1 : 0;
-  const upperBound = before ? beforeOffset : arrayLength;
+  const edges = items.map((node, index) => ({ cursor: offsetToCursor(offset + index), node }));
 
   return {
     count,
     edges,
     pageInfo: {
-      startCursor: firstEdge ? firstEdge.cursor : null,
-      endCursor: lastEdge ? lastEdge.cursor : null,
-      hasPreviousPage: last !== null ? startOffset > lowerBound : false,
-      hasNextPage: first !== null ? endOffset < upperBound : false,
+      startCursor: edges[0]?.cursor ?? null,
+      endCursor: edges.at(-1)?.cursor ?? null,
+      hasPreviousPage: offset > lower,
+      hasNextPage: first !== null && lower + first < Math.min(count, upper),
     },
   };
 }

@@ -11,11 +11,10 @@ describe('parseConnection', () => {
   it('asks for the count and the page at once', async () => {
     const records = delegate(3, [{ id: 'a' }, { id: 'b' }]);
 
-    const connection = parseConnection(records, { first: 2 }, { where: { status: 'PUBLISH' } });
+    const connection = parseConnection(records, { first: 2 });
 
-    expect(records.count).toHaveBeenCalledWith({ where: { status: 'PUBLISH' } });
+    expect(records.count).toHaveBeenCalledOnce();
     expect(records.findMany).toHaveBeenCalledWith({
-      where: { status: 'PUBLISH' },
       skip: 0,
       take: 2,
     });
@@ -57,6 +56,34 @@ describe('parseConnection', () => {
 
     expect(records.findMany).toHaveBeenLastCalledWith({ skip: 10, take: 10 });
   });
+
+  it.each([
+    { first: 2, before: 8, expected: [0, 1], previous: false, next: true },
+    { first: 5, after: 2, before: 5, expected: [3, 4], previous: false, next: false },
+    { last: 2, after: 1, before: 8, expected: [6, 7], previous: true, next: false },
+    { first: 5, last: 2, before: 8, expected: [3, 4], previous: true, next: true },
+    { last: 2, before: 20, expected: [8, 9], previous: true, next: false },
+    { first: 4, after: 5, before: 3, expected: [], previous: false, next: false },
+  ])(
+    'respects both bounds for %j',
+    async ({ first, last, after, before, expected, previous, next }) => {
+      const rows = Array.from({ length: 10 }, (_, i) => i);
+      const cursor = (offset?: number) =>
+        offset === undefined
+          ? undefined
+          : Buffer.from(`arrayconnection:${offset}`).toString('base64');
+      const page = await parseConnection(
+        {
+          count: async () => rows.length,
+          findMany: async ({ skip, take }) => rows.slice(skip, skip + take),
+        },
+        { first, last, before: cursor(before), after: cursor(after) }
+      );
+
+      expect(page.edges).toEqual(expected.map((node) => ({ node, cursor: cursor(node) })));
+      expect(page.pageInfo).toMatchObject({ hasPreviousPage: previous, hasNextPage: next });
+    }
+  );
 
   // The podcast's feed asked without a page size, got 10 of its 11 episodes, and was told that
   // was all of them

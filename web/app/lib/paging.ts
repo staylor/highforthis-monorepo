@@ -13,26 +13,24 @@ export async function withEveryPage<TConnection extends Paged>(
   page: TConnection,
   next: (after: string) => Promise<Pick<TConnection, 'edges' | 'pageInfo'> | null | undefined>
 ): Promise<TConnection> {
-  const edges: TConnection['edges'][number][] = [...page.edges];
-  const listed = new Set(edges.map(({ node }) => node.id));
+  const edges: TConnection['edges'][number][] = [];
+  const listed = new Set<string>();
+  const requested = new Set<string>();
+  let current: Pick<TConnection, 'edges' | 'pageInfo'> | null | undefined = page;
   let { pageInfo } = page;
-  while (pageInfo?.hasNextPage) {
-    const after = edges.at(-1)?.cursor;
-    const following = after === undefined ? null : await next(after);
-    // Each record once: one added while the pages load moves the rest along, which brings the
-    // last record back at the start of the next page
-    const added = (following?.edges ?? []).filter(({ node }) => {
-      const isNew = !listed.has(node.id);
-      listed.add(node.id);
-      return isNew;
-    });
-    // A page with nothing new ends the list: its records were deleted in between, or it doesn't
-    // go on from the cursor, and asking again would never end
-    if (added.length === 0) {
-      break;
+  while (current) {
+    for (const edge of current.edges) {
+      if (!listed.has(edge.node.id)) {
+        listed.add(edge.node.id);
+        edges.push(edge);
+      }
     }
-    edges.push(...added);
-    pageInfo = following?.pageInfo;
+    // Insertions can move a whole page of familiar IDs to new cursors.
+    pageInfo = current.pageInfo;
+    const after = current.edges.at(-1)?.cursor;
+    if (!pageInfo?.hasNextPage || !after || requested.has(after)) break;
+    requested.add(after);
+    current = await next(after);
   }
   return { ...page, edges, pageInfo };
 }

@@ -57,6 +57,7 @@ const resolvers = {
               .with(videoIncludes)
               .orderBy('year', 'desc')
               .orderBy('position', 'desc')
+              .orderBy('id', 'desc')
               .offset(skip)
               .limit(take)
               .all(),
