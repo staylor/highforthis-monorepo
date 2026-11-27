@@ -128,6 +128,59 @@ describe('the YouTube import', () => {
     await expect(db.find(videos, 'video-removed')).resolves.toBeNull();
   });
 
+  it('writes nothing when YouTube lists every video as it is saved', async () => {
+    const listing = { items: [item('kept', 'Kept', 0), item('removed', 'Removed', 1)] };
+    stubYouTube((resource) => Response.json(resource === 'playlists' ? playlists : listing));
+    await importVideos();
+    const saved = await db.findMany(videoThumbnails, { orderBy: ['id', 'asc'] });
+    const transaction = vi.spyOn(db, 'transaction');
+
+    try {
+      await importVideos();
+    } finally {
+      transaction.mockRestore();
+    }
+
+    expect(transaction).not.toHaveBeenCalled();
+    await expect(db.findMany(videoThumbnails, { orderBy: ['id', 'asc'] })).resolves.toEqual(saved);
+  });
+
+  it('replaces only the thumbnails when they are all that changed', async () => {
+    stubYouTube((resource) =>
+      Response.json(resource === 'playlists' ? playlists : { items: [item('kept', 'kept', 0)] })
+    );
+    const saved = await db.find(videos, 'video-kept');
+
+    // An update would set the video's updatedAt to this
+    vi.useFakeTimers({ toFake: ['Date'], now: new Date('2030-01-01T00:00:00Z') });
+    try {
+      await importVideos();
+    } finally {
+      vi.useRealTimers();
+    }
+
+    await expect(db.find(videos, 'video-kept')).resolves.toEqual(saved);
+    await expect(
+      db.findMany(videoThumbnails, { where: { videoId: 'video-kept' } })
+    ).resolves.toMatchObject([{ url: 'https://i.ytimg.com/vi/kept/default.jpg' }]);
+  });
+
+  it('saves a video listed in two playlists once, as the last one lists it', async () => {
+    stubYouTube((resource, _, list) =>
+      Response.json(
+        resource === 'playlists'
+          ? { items: [playlist('2025'), playlist('2026')] }
+          : { items: [item('twice', 'Twice', list === 'playlist-2026' ? 1 : 0)] }
+      )
+    );
+
+    await importVideos();
+
+    await expect(db.findMany(videos, { where: { dataId: 'twice' } })).resolves.toMatchObject([
+      { year: 2026, position: 1, slug: 'twice' },
+    ]);
+  });
+
   it.each([
     ['2025', '2026'],
     ['2026', '2025'],
