@@ -92,24 +92,31 @@ function walk(
   }
 }
 
-/** How many fields an operation asks for at its root, counting those in fragments. */
-function rootFields(
+/**
+ * Counts the fields an operation asks for at its root, those in fragments as each is spread, and
+ * throws once there are too many. Like walk(), it stops there: fragments that each spread the next
+ * twice would otherwise have it count to 2^n, which a request of a few kilobytes can make years.
+ */
+function countRootFields(
   selectionSet: SelectionSetNode,
-  fragments: Map<string, FragmentDefinitionNode>
-): number {
-  let count = 0;
+  fragments: Map<string, FragmentDefinitionNode>,
+  counted = { fields: 0 }
+) {
   for (const selection of selectionSet.selections) {
     if (selection.kind === Kind.FIELD) {
-      count += 1;
+      if (++counted.fields > QUERY_LIMITS.rootFields) {
+        throw new TooLarge(`Queries can ask for at most ${QUERY_LIMITS.rootFields} root fields`);
+      }
     } else {
       const set =
         selection.kind === Kind.INLINE_FRAGMENT
           ? selection.selectionSet
           : fragments.get(selection.name.value)?.selectionSet;
-      count += set ? rootFields(set, fragments) : 0;
+      if (set) {
+        countRootFields(set, fragments, counted);
+      }
     }
   }
-  return count;
 }
 
 /**
@@ -140,9 +147,7 @@ function tooLarge(
   variables: Variables
 ): string | null {
   try {
-    if (rootFields(operation.selectionSet, fragments) > QUERY_LIMITS.rootFields) {
-      return `Queries can ask for at most ${QUERY_LIMITS.rootFields} root fields`;
-    }
+    countRootFields(operation.selectionSet, fragments);
     walk(operation.selectionSet, 1, fragments, variables, { fields: 0, paged: 0 });
     return null;
   } catch (error) {
