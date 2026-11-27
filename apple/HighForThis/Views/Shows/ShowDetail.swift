@@ -42,10 +42,10 @@ struct ShowDetail: View {
 
 extension ShowQuery.Data.Show {
     /// The first artist's artwork that Apple Music has.
-    fileprivate var artwork: Artwork? {
+    fileprivate var artwork: ArtworkTemplate? {
         artists.lazy
             .compactMap(\.appleMusic?.artwork)
-            .compactMap { Artwork(template: $0.url, width: $0.width, height: $0.height) }
+            .compactMap { ArtworkTemplate(template: $0.url, width: $0.width, height: $0.height) }
             .first
     }
 }

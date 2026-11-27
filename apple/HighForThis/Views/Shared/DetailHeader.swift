@@ -87,7 +87,7 @@ struct SectionHeading: View {
 
 /// The picture or map a detail screen opens with.
 enum DetailHero {
-    case artwork(Artwork)
+    case artwork(ArtworkTemplate)
     case map(name: String, coordinate: CLLocationCoordinate2D)
 }
 
@@ -96,8 +96,14 @@ enum DetailHero {
 struct DetailIntro<Header: View>: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.displayScale) private var displayScale
     private let hero: DetailHero?
     private let header: Header
+
+    /// The side of the square the hero fills where it's beside the header
+    private let squareSide: CGFloat = .readable(260)
+    /// The most the hero is tall where it's across the screen
+    private let maximumHeight: CGFloat = 440
 
     init(hero: DetailHero?, @ViewBuilder header: () -> Header) {
         self.hero = hero
@@ -108,7 +114,7 @@ struct DetailIntro<Header: View>: View {
         if let hero, horizontalSizeClass == .regular, !dynamicTypeSize.isAccessibilitySize {
             HStack(alignment: .center, spacing: .readable(28)) {
                 view(of: hero, isSquare: true)
-                    .frame(width: .readable(260), height: .readable(260))
+                    .frame(width: squareSide, height: squareSide)
                     .clipShape(.rect(cornerRadius: 12))
                 header
             }
@@ -129,13 +135,14 @@ struct DetailIntro<Header: View>: View {
     /// The hero filling a square it's given, or across the screen's width at a height that leaves room under it.
     @ViewBuilder private func view(of hero: DetailHero, isSquare: Bool) -> some View {
         switch hero {
+        // Downloaded at the size it's drawn at, rather than at the size that suits the largest screens
         case .artwork(let artwork):
             if isSquare {
-                RemoteImage(url: artwork.url, contentMode: .fill)
+                RemoteImage(url: artwork.filling(square: squareSide, scale: displayScale)?.url, contentMode: .fill)
                     .accessibilityHidden(true)
             } else {
-                RemoteImage(url: artwork.url, aspectRatio: artwork.aspectRatio)
-                    .frame(maxWidth: .infinity, maxHeight: 440)
+                RemoteImage(url: artwork.fitting(height: maximumHeight, scale: displayScale)?.url, aspectRatio: artwork.aspectRatio)
+                    .frame(maxWidth: .infinity, maxHeight: maximumHeight)
                     .accessibilityHidden(true)
             }
         case .map(let name, let coordinate):
