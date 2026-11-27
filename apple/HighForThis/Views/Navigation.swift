@@ -37,6 +37,7 @@ struct RouteLink<Label: View>: View {
 
     var body: some View {
         NavigationLink(value: PushedRoute(route: route, depth: depth + 1)) { label }
+            .spacedListRow()
     }
 }
 

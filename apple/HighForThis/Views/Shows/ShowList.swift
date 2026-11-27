@@ -31,6 +31,7 @@ struct ShowList: View {
                 // A tvOS toolbar button shows neither the selected year nor the filter's accessibility label.
                 if showsYearFilter {
                     yearFilter
+                        .spacedListRow()
                 }
                 #endif
                 ForEach(ShowMonth.months(from: shows)) { month in
@@ -44,6 +45,7 @@ struct ShowList: View {
                         }
                     } header: {
                         Text(month.date, format: .showMonth)
+                            .spacedSectionHeader()
                     }
                 }
             }

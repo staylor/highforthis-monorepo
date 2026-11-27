@@ -102,6 +102,7 @@ struct DatedShowsSection: View {
                     }
                 } header: {
                     Text(month.date, format: .showMonth)
+                        .spacedSectionHeader()
                 }
             }
             if shows?.pageInfo.hasNextPage == true {
