@@ -123,6 +123,23 @@ describe('hardening', () => {
       expect(result.errors?.[0].message).toMatch(/fields/);
     });
 
+    it('stops counting root fields at the limit, however the fragments multiply them', async () => {
+      // Each level spreads the one below twice, at the root: 2^28 copies of `show`, which took
+      // seconds to count, and a few more levels took hours
+      const levels = Array.from(
+        { length: 28 },
+        (_, i) => `fragment R${i} on Query { ...R${i + 1} ...R${i + 1} }`
+      );
+      const query = `{ ...R0 } ${levels.join(' ')} fragment R28 on Query { show { id } }`;
+
+      const started = performance.now();
+      const result = await run(query);
+
+      expect(performance.now() - started).toBeLessThan(1000);
+      expect(result.status).toBe(400);
+      expect(result.errors?.[0].message).toMatch(/root fields/);
+    });
+
     it('turns away an operation nested too deep', async () => {
       let selection = 'name';
       for (let i = 0; i < QUERY_LIMITS.depth; i++) {
