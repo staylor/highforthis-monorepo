@@ -30,6 +30,8 @@ final class CursorFeed<Filter: Equatable, Item: FeedItem> {
     @ObservationIgnored private var generation = 0
     @ObservationIgnored private var failedRequest: (cursor: String?, policy: CachePolicy.Query.SingleResponse)?
     @ObservationIgnored private var visitedCursors: Set<String> = []
+    /// Where the pages after the first come from: where the first did, so pages cached before a refresh don't follow it
+    @ObservationIgnored private var pagePolicy: CachePolicy.Query.SingleResponse = .cacheFirst
 
     init(loader: @escaping Loader) {
         self.loader = loader
@@ -45,12 +47,13 @@ final class CursorFeed<Filter: Equatable, Item: FeedItem> {
             endCursor = nil
             hasNextPage = false
         }
-        await fetch(after: nil, policy: refresh ? .networkOnly : .cacheFirst)
+        pagePolicy = refresh ? .networkOnly : .cacheFirst
+        await fetch(after: nil, policy: pagePolicy)
     }
 
     func loadMore() async {
         guard hasLoaded, hasNextPage, !isLoading, error == nil, let endCursor else { return }
-        await fetch(after: endCursor, policy: .cacheFirst)
+        await fetch(after: endCursor, policy: pagePolicy)
     }
 
     func retry() async {

@@ -64,8 +64,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
                 Logger.carPlay.error("Couldn't show the tabs: \(error.localizedDescription, privacy: .public)")
             }
         }
-        Task { await showFeed.load(ShowFilter(kind: .upcoming)) }
-        Task { await podcastFeed.load(.all) }
+        // From the server: the app may not have been in use since the last drive, or for days
+        Task { await showFeed.load(ShowFilter(kind: .upcoming), refresh: true) }
+        Task { await podcastFeed.load(.all, refresh: true) }
     }
 
     func templateApplicationScene(

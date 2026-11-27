@@ -39,6 +39,21 @@ struct CursorFeedTests {
         #expect(!feed.hasNextPage)
     }
 
+    @Test func pagesAfterARefreshComeFromTheServerToo() async {
+        var requests: [Request] = []
+        let feed = Feed { filter, cursor, policy in
+            requests.append(Request(filter: filter, cursor: cursor, policy: policy))
+            return cursor == nil ? Self.page(["a"], next: "page2") : Self.page(["b"])
+        }
+        await feed.load(2025)
+        await feed.loadMore()
+        await feed.load(2025, refresh: true)
+        await feed.loadMore()
+
+        #expect(requests.map(\.policy) == [.cacheFirst, .cacheFirst, .networkOnly, .networkOnly])
+        #expect(feed.items.map(\.id) == ["a", "b"])
+    }
+
     @Test func changingFiltersDiscardsLateResults() async {
         let old = Suspended<FeedPage<Item>>()
         let feed = Feed { filter, _, _ in
