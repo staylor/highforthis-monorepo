@@ -59,6 +59,50 @@ struct ShowsTests {
         #expect(show.headlinerArtwork(maximumWidth: 132) == nil)
     }
 
+    /// Phoebe Bridgers and Muna at Brooklyn Steel.
+    private nonisolated static var billed: Mock<Show> {
+        Mock<Show>(
+            artists: [Mock<Artist>(name: "Phoebe Bridgers", slug: "phoebe-bridgers"), Mock<Artist>(name: "Muna", slug: "muna")],
+            venue: Mock<Venue>(city: "Brooklyn", name: "Brooklyn Steel", slug: "brooklyn-steel", state: "NY")
+        )
+    }
+
+    @Test func anArtistsShowsSayWhereTheyAreInsteadOfTheArtist() async {
+        let show = await ShowList_show.from(Self.billed)
+
+        let words = show.rowWords(in: ShowFilter(kind: .history, artist: "phoebe-bridgers"))
+
+        #expect(words == ShowRowWords(title: "Brooklyn Steel", detail: "Brooklyn, NY", hasPicture: false))
+    }
+
+    @Test func aVenuesShowsSayWhoPlayedButNotWhere() async {
+        let show = await ShowList_show.from(Self.billed)
+
+        let words = show.rowWords(in: ShowFilter(kind: .upcoming, venue: "brooklyn-steel"))
+
+        #expect(words == ShowRowWords(title: "Phoebe Bridgers / Muna", detail: nil, hasPicture: true))
+    }
+
+    @Test func everyonesShowsSayWhoPlayedAndWhere() async {
+        let show = await ShowList_show.from(Self.billed)
+
+        let words = show.rowWords(in: ShowFilter(kind: .upcoming))
+
+        #expect(words == ShowRowWords(title: "Phoebe Bridgers / Muna", detail: "Brooklyn Steel", hasPicture: true))
+    }
+
+    @Test(
+        arguments: [
+            ("Brooklyn", "NY", "Brooklyn, NY"),
+            (nil, "NY", "NY"),
+            ("London", nil, "London"),
+            (" ", "", nil),
+            (nil, nil, nil),
+        ] as [(String?, String?, String?)])
+    func aPlaceIsItsCityAndState(city: String?, state: String?, name: String?) {
+        #expect(Place.name(city: city, state: state) == name)
+    }
+
     @Test func startDateReadsMilliseconds() async {
         let show = await ShowList_show.from(Mock<Show>(date: 1_793_840_400_000))
         #expect(show.startDate == Date(timeIntervalSince1970: 1_793_840_400))

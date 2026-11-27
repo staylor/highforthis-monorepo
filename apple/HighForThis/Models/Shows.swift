@@ -30,6 +30,39 @@ nonisolated extension ShowList_show: ShowSummary {
         guard let artwork = artists.first?.appleMusic?.artwork else { return nil }
         return Artwork(template: artwork.url, width: artwork.width, height: artwork.height, maximumWidth: maximumWidth)
     }
+
+    /// Where the show is: its venue's city and state.
+    var place: String? { Place.name(city: venue.city, state: venue.state) }
+
+    /// Its words in the list `filter` gives, which leave out what all of the list's shows have in common. A venue's
+    /// shows say who played, and an artist's say where, with the venue's city, as the website's artist page lists
+    /// them, rather than the artist's name and picture on every row. The rest say both.
+    func rowWords(in filter: ShowFilter) -> ShowRowWords {
+        if filter.artist != nil {
+            return ShowRowWords(title: venue.name, detail: place, hasPicture: false)
+        }
+        return ShowRowWords(title: headline, detail: filter.venue == nil ? venue.name : nil, hasPicture: true)
+    }
+}
+
+/// A show's words in a list of shows.
+nonisolated struct ShowRowWords: Equatable {
+    let title: String
+    let detail: String?
+    /// Whether the row has the main artist's picture.
+    let hasPicture: Bool
+}
+
+/// Where a venue is, as the website writes it: "Brooklyn, NY".
+nonisolated enum Place {
+    /// The city and the state, or whichever of them there is, or nil without either.
+    static func name(city: String?, state: String?) -> String? {
+        let name = [city, state]
+            .compactMap { $0?.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+            .joined(separator: ", ")
+        return name.isEmpty ? nil : name
+    }
 }
 
 nonisolated extension ShowQuery.Data.Show: ShowSummary {

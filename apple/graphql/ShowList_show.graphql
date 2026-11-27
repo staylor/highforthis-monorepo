@@ -18,7 +18,9 @@ fragment ShowList_show on Show {
   venue {
     id
     address
+    city
     name
     slug
+    state
   }
 }

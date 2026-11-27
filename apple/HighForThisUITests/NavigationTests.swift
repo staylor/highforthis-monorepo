@@ -25,10 +25,19 @@ final class NavigationTests: XCTestCase {
         let cameFrom = app.cells.containing(.any, identifier: "show-show-2025-0").firstMatch
         XCTAssertTrue(cameFrom.waitForExistence(timeout: 10))
         XCTAssertFalse(cameFrom.isSelected)
+        // An artist's shows say where they were, rather than the artist's name again.
+        let artistsShow = element("show-show-2025-0", in: app)
+        XCTAssertTrue(artistsShow.label.contains("Sample Hall"), artistsShow.label)
+        XCTAssertFalse(artistsShow.label.contains("Evening Set"), artistsShow.label)
         screenshot("Artist", app)
         back(app)
         tap(element("venue-sample-hall", in: app))
         XCTAssertTrue(app.buttons["venue-map"].waitForExistence(timeout: 10))
+        // A venue's shows say who played, but not where.
+        let venuesShow = element("show-show-2025-0", in: app)
+        scroll(to: venuesShow, in: app)
+        XCTAssertTrue(venuesShow.label.contains("Evening Set"), venuesShow.label)
+        XCTAssertFalse(venuesShow.label.contains("Sample Hall"), venuesShow.label)
         screenshot("Venue", app)
     }
 
