@@ -89,7 +89,7 @@ jobs:
   ci:
     name: CI
     if: always()
-    needs: [changes, build, test, generated-code, format]
+    needs: [changes, build, build-tests, test-ios, test, checks]
     runs-on: ubuntu-26.04
     steps:
       - name: Check results
@@ -97,64 +97,115 @@ jobs:
         run: exit 1
 
   build:
-    name: Build ${{ matrix.name }}
+    name: Build (${{ matrix.name }})
     needs: changes
     if: needs.changes.outputs.apple == 'true'
-    runs-on: ${{ matrix.runner || 'xcode-27' }}
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     env:
-      DEVELOPER_DIR: ${{ matrix.developer-dir || '/Applications/Xcode_27.2.app/Contents/Developer' }}
+      DEVELOPER_DIR: ${{ matrix.developer-dir }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: iOS
-            destination: generic/platform=iOS
-          - name: macOS
-            destination: generic/platform=macOS
-          - name: tvOS
-            destination: generic/platform=tvOS
+          - name: Xcode 27
+            runner: xcode-27
+            developer-dir: /Applications/Xcode_27.2.app/Contents/Developer
+            platforms: iOS macOS tvOS
           # Swift 6.2 infers main-actor isolation in places 6.4 doesn't, so check the image's default Xcode 26 too.
-          - name: iOS, Xcode 26
-            destination: generic/platform=iOS
+          - name: Xcode 26
             runner: macos-26
             developer-dir: /Applications/Xcode.app/Contents/Developer
-          - name: tvOS, Xcode 26
-            destination: generic/platform=tvOS
-            runner: macos-26
-            developer-dir: /Applications/Xcode.app/Contents/Developer
+            platforms: iOS tvOS
     defaults:
       run:
         working-directory: apple
     steps:
       - uses: actions/checkout@v5
       # The tests build Debug for the simulators, so this archives Release for devices, as an App Store build would.
+      # GitHub runs only five Mac jobs at once, so each Xcode archives its platforms one after another in one job: a job
+      # for each platform waited longer for a runner than it took to archive. A failed archive doesn't stop the next.
       - name: Archive
+        env:
+          PLATFORMS: ${{ matrix.platforms }}
         run: |
           set -o pipefail
-          xcodebuild archive \
-            -project HighForThis.xcodeproj \
-            -scheme HighForThis \
-            -destination "${{ matrix.destination }}" \
-            -archivePath "$RUNNER_TEMP/HighForThis.xcarchive" \
-            -resultBundlePath Build.xcresult \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcbeautify --renderer github-actions
+          failed=''
+          for platform in $PLATFORMS; do
+            echo "::group::$platform"
+            if ! xcodebuild archive \
+              -project HighForThis.xcodeproj \
+              -scheme HighForThis \
+              -destination "generic/platform=$platform" \
+              -archivePath "$RUNNER_TEMP/HighForThis-$platform.xcarchive" \
+              -resultBundlePath "Build-$platform.xcresult" \
+              CODE_SIGNING_ALLOWED=NO \
+              | xcbeautify --renderer github-actions; then
+              failed="$failed $platform"
+            fi
+            echo "::endgroup::"
+          done
+          if [ -n "$failed" ]; then
+            echo "::error::Archiving failed for$failed."
+            exit 1
+          fi
       # The result bundle counts every warning, from asset catalogs and the linker as well as the compiler, where
       # SWIFT_TREAT_WARNINGS_AS_ERRORS would only catch Swift's.
       - name: Check for warnings
+        env:
+          PLATFORMS: ${{ matrix.platforms }}
         run: |
-          warnings=$(xcrun xcresulttool get build-results --path Build.xcresult | jq .warningCount)
-          if [ "$warnings" != 0 ]; then
-            echo "::error::The build has $warnings warnings."
-            exit 1
-          fi
+          status=0
+          for platform in $PLATFORMS; do
+            warnings=$(xcrun xcresulttool get build-results --path "Build-$platform.xcresult" | jq .warningCount)
+            if [ "$warnings" != 0 ]; then
+              echo "::error::The $platform build has $warnings warnings."
+              status=1
+            fi
+          done
+          exit "$status"
 
   # A push to main is a merged pull request, whose run tested its changes, so the tests run only on pull requests and
   # manual runs. A push still builds, checks the generated code and formatting, and uploads to TestFlight.
-  test:
-    name: Test (${{ matrix.name }})
+  #
+  # The iPhone, iPhone Duo and iPad tests run one build for the simulator, which this job makes and uploads, rather than
+  # each building the app again.
+  build-tests:
+    name: Build tests (iOS)
     needs: changes
+    if: github.event_name != 'push' && needs.changes.outputs.apple == 'true'
+    runs-on: xcode-27
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: apple
+    steps:
+      - uses: actions/checkout@v5
+      # For any simulator, so one build serves iPhone, iPhone Duo and iPad, and for Apple silicon only, as CI's
+      # simulators are: a build for any simulator would otherwise build for Intel too. An artifact loses the
+      # executables' permissions, which a tar keeps.
+      - name: Build for testing
+        run: |
+          set -o pipefail
+          xcodebuild build-for-testing \
+            -project HighForThis.xcodeproj \
+            -scheme HighForThis \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            ARCHS=arm64 COMPILER_INDEX_STORE_ENABLE=NO \
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+            | xcbeautify --renderer github-actions
+          tar -cf "$RUNNER_TEMP/test-products.tar" -C "$RUNNER_TEMP/DerivedData/Build" Products
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iOS test products
+          path: ${{ runner.temp }}/test-products.tar
+          retention-days: 1
+          if-no-files-found: error
+
+  test-ios:
+    name: Test (${{ matrix.name }})
+    needs: [changes, build-tests]
     if: github.event_name != 'push' && needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     # The longest runs take about 30 minutes, which leaves room to run the tests again after a failure that isn't the
@@ -165,16 +216,32 @@ jobs:
       matrix:
         include:
           - name: iPhone
-            platform: iOS
             device: iPhone 18 Pro
           # Built with the iOS 27.2 SDK, the app fills iPhone Duo's displays, with its bars down the side. simctl can't
           # fold or unfold the simulator, so the tests see the pose it boots in.
           - name: iPhone Duo
-            platform: iOS
             device: iPhone Duo
           - name: iPad
-            platform: iOS
             device: iPad Pro 11-inch (M5)
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/apple-test
+        with:
+          name: ${{ matrix.name }}
+          platform: iOS
+          device: ${{ matrix.device }}
+          products: iOS test products
+
+  test:
+    name: Test (${{ matrix.name }})
+    needs: changes
+    if: github.event_name != 'push' && needs.changes.outputs.apple == 'true'
+    runs-on: xcode-27
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
           - name: Apple TV
             platform: tvOS
             device: Apple TV 4K (3rd generation)
@@ -195,13 +262,14 @@ jobs:
   # asking for version 26.5 sometimes installs its release candidate.
   # The xcode-27 image 20261119.0378, with macOS 27.2 and the Xcode 27.3 beta's CoreSimulator, breaks simulators of a
   # downloaded runtime: downloads fail, boots and tests hang, and the test runner can't launch. Until a fixed image
-  # ships, these still run on pull requests but aren't one of CI's needs, so a failure shows on the run without
-  # blocking a merge or TestFlight. Once one ships, move these back into test's matrix, and pass build to the action
-  # there again.
+  # ships, these run only on manual runs and aren't one of CI's needs, so a failure shows on the run without blocking
+  # TestFlight. On pull requests they took a third of the Mac runners' time, and GitHub runs only five Mac jobs at once.
+  # Once a fixed image ships, run them on pull requests again: move the iPhone and iPad ones into test-ios's matrix and
+  # Apple TV's into test's, passing build to the action.
   test-older-runtimes:
     name: Test (${{ matrix.name }})
     needs: changes
-    if: github.event_name != 'push' && needs.changes.outputs.apple == 'true'
+    if: github.event_name == 'workflow_dispatch' && needs.changes.outputs.apple == 'true'
     runs-on: xcode-27
     timeout-minutes: 60
     strategy:
@@ -248,9 +316,9 @@ jobs:
           device: iPhone 17 Pro
           only-testing: HighForThisUITests/NavigationTests/testPlayerStaysAvailableAcrossTabsAndCanBeStopped
 
-  # Unlike the other jobs, this also runs when the schema changed and the app didn't.
-  generated-code:
-    name: Generated code
+  # Unlike the other jobs, this also runs when the schema changed and the app didn't, to check the generated code.
+  checks:
+    name: Generated code and format
     needs: changes
     if: needs.changes.outputs.apple == 'true' || needs.changes.outputs.schema == 'true'
     runs-on: xcode-27
@@ -266,19 +334,10 @@ jobs:
             echo "::error::HighForThisAPI is out of date. Run pnpm codegen:ios and commit the result."
             exit 1
           fi
-
-  format:
-    name: Format
-    needs: changes
-    if: needs.changes.outputs.apple == 'true'
-    runs-on: xcode-27
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: apple
-    steps:
-      - uses: actions/checkout@v5
+      # This runs after a failed check of the generated code too, so a run reports both.
       - name: Lint
+        if: ${{ !cancelled() && needs.changes.outputs.apple == 'true' }}
+        working-directory: apple
         run: swift format lint --recursive --strict HighForThis HighForThisTests HighForThisUITests
 
   testflight:
