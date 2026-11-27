@@ -2,11 +2,13 @@ import SwiftUI
 
 enum Route: Hashable {
     case show(id: String, title: String)
-    case shows(ShowFilter)
+    /// An artist's or a venue's shows, which their page links to, with the artist's or the venue's name.
+    case shows(ShowFilter, name: String)
     case artist(slug: String, name: String)
     case venue(slug: String, name: String)
     case podcast(id: String, title: String)
     case post(slug: String, title: String)
+    case stats
 }
 
 /// A route as a link pushes it: with how deep in the stack the screen it opens is. A list draws a link as selected
@@ -69,8 +71,8 @@ struct BrowseStack<Root: View>: View {
         switch route {
         case .show(let id, let title):
             ShowDetail(id: id, title: title)
-        case .shows(let filter):
-            ShowList(kind: filter.kind, artist: filter.artist, venue: filter.venue)
+        case .shows(let filter, let name):
+            ShowList(kind: filter.kind, artist: filter.artist, venue: filter.venue, name: name)
         case .artist(let slug, let name):
             ArtistDetail(slug: slug, name: name)
         case .venue(let slug, let name):
@@ -79,6 +81,8 @@ struct BrowseStack<Root: View>: View {
             PodcastDetail(id: id, title: title)
         case .post(let slug, let title):
             PostDetail(slug: slug, title: title)
+        case .stats:
+            ShowStats()
         }
     }
 }
@@ -106,16 +110,16 @@ final class DetailHeaderVisibility {
 }
 
 extension View {
-    /// A detail screen's title. The screen opens with its title in a `DetailHeader`, so on iPhone and iPad the bar
-    /// has it only while that isn't on screen: once it has scrolled away, and while the screen loads. tvOS draws a
-    /// bar's title over whatever scrolls under it, so there the header's is the only one.
-    func detailTitle(_ title: String) -> some View {
-        #if os(iOS)
-        modifier(DetailTitle(title: title))
-        #elseif os(tvOS)
+    /// A detail screen's title, with what the screen shows of it when the title alone doesn't say, such as an artist's
+    /// show history. The screen opens with them in a `DetailHeader`, so on iPhone and iPad the bar has them only while
+    /// that isn't on screen: once it has scrolled away, and while the screen loads. A Mac's toolbar has them all along,
+    /// the subtitle under the title. tvOS draws a bar's title over whatever scrolls under it, so there the header's is
+    /// the only one.
+    func detailTitle(_ title: String, subtitle: LocalizedStringResource? = nil) -> some View {
+        #if os(tvOS)
         self
         #else
-        navigationTitle(title)
+        modifier(DetailTitle(title: title, subtitle: subtitle))
         #endif
     }
 }
@@ -123,6 +127,7 @@ extension View {
 #if os(iOS)
 private struct DetailTitle: ViewModifier {
     let title: String
+    let subtitle: LocalizedStringResource?
     @State private var header = DetailHeaderVisibility()
 
     func body(content: Content) -> some View {
@@ -131,15 +136,36 @@ private struct DetailTitle: ViewModifier {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(title)
-                        .font(.headline)
-                        .lineLimit(1)
-                        .opacity(header.isVisible ? 0 : 1)
-                        .animation(.easeInOut(duration: 0.2), value: header.isVisible)
-                        .accessibilityHidden(header.isVisible)
+                    VStack(spacing: 0) {
+                        Text(title)
+                            .font(.headline)
+                        if let subtitle {
+                            Text(subtitle)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .lineLimit(1)
+                    .opacity(header.isVisible ? 0 : 1)
+                    .animation(.easeInOut(duration: 0.2), value: header.isVisible)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityHidden(header.isVisible)
                 }
             }
             .environment(header)
+    }
+}
+#elseif os(macOS)
+private struct DetailTitle: ViewModifier {
+    let title: String
+    let subtitle: LocalizedStringResource?
+
+    func body(content: Content) -> some View {
+        if let subtitle {
+            content.navigationTitle(title).navigationSubtitle(Text(subtitle))
+        } else {
+            content.navigationTitle(title)
+        }
     }
 }
 #endif

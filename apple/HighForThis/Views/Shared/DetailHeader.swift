@@ -34,6 +34,8 @@ struct DetailHeader<Details: View>: View {
                     .font(.title.weight(.black))
                     .textCase(.uppercase)
                     .fixedSize(horizontal: false, vertical: true)
+                    // In capitals on the screen, but not to VoiceOver. A label that's text would be in capitals too.
+                    .accessibilityLabel(title)
                     .accessibilityAddTraits(.isHeader)
             }
             details
@@ -54,6 +56,32 @@ struct DetailHeader<Details: View>: View {
 extension DetailHeader where Details == EmptyView {
     init(eyebrow: Text? = nil, title: String) {
         self.init(eyebrow: eyebrow, title: title) { EmptyView() }
+    }
+}
+
+/// The heading over a section of a screen, as the website heads one: its name in heavy capitals, with a note under it,
+/// such as how many there are.
+struct SectionHeading: View {
+    private let title: LocalizedStringResource
+    private let note: Text?
+
+    init(_ title: LocalizedStringResource, note: Text? = nil) {
+        self.title = title
+        self.note = note
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+                .font(.title3.weight(.black))
+                .textCase(.uppercase)
+                .accessibilityLabel(String(localized: title))
+                .accessibilityAddTraits(.isHeader)
+            note?
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

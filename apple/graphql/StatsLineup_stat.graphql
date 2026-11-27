@@ -1,0 +1,15 @@
+fragment StatsLineup_stat on ShowStat {
+  count
+  entity {
+    ... on Artist {
+      id
+      name
+      slug
+    }
+    ... on Venue {
+      id
+      name
+      slug
+    }
+  }
+}

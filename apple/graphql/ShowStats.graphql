@@ -1,0 +1,20 @@
+query ShowStats($leaders: Int!) {
+  artistLeaders: showStats(entity: ARTIST, first: $leaders) {
+    ...StatsLeader_stat
+  }
+  artists: showStats(entity: ARTIST) {
+    ...StatsLineup_stat
+  }
+  showTotals {
+    artists
+    firstDate
+    shows
+    venues
+  }
+  venueLeaders: showStats(entity: VENUE, first: $leaders) {
+    ...StatsLeader_stat
+  }
+  venues: showStats(entity: VENUE) {
+    ...StatsLineup_stat
+  }
+}

@@ -117,6 +117,7 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
         [
             "__typename": "Venue", "id": "venue", "name": "Sample Hall", "slug": "sample-hall",
             "address": "123 Music Street", "capacity": "1,000", "website": "https://example.com/venue",
+            "city": "Brooklyn", "state": "NY",
             "coordinates": ["__typename": "VenueCoordinates", "latitude": 40.719, "longitude": -73.938],
         ]
     }
@@ -174,9 +175,54 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
         case "Posts":
             result["posts"] = connection("Post", items: scenario == "empty" ? [] : (0..<4).map(post), after: after)
         case "Post": result["post"] = post(0)
+        case "ShowStats":
+            let leaders = variables["leaders"] as? Int ?? 20
+            let artists = scenario == "empty" ? [] : statsArtists
+            let venues = scenario == "empty" ? [] : statsVenues
+            result.merge([
+                "artistLeaders": Array(artists.prefix(leaders)), "artists": artists,
+                "venueLeaders": Array(venues.prefix(leaders)), "venues": venues,
+                "showTotals": [
+                    "__typename": "ShowTotals", "artists": artists.count, "venues": venues.count, "shows": 30,
+                    "firstDate": artists.isEmpty ? null : 1_573_049_600_000.0 as Any,
+                ],
+            ]) { _, new in new }
         default: throw URLError(.badServerResponse)
         }
         return result
+    }
+
+    private static func stat(_ entity: [String: Any], count: Int) -> [String: Any] {
+        [
+            "__typename": "ShowStat", "count": count, "entity": entity,
+            "firstDate": 1_573_049_600_000.0, "lastDate": 1_762_300_800_000.0,
+        ]
+    }
+
+    /// The artists seen most first, led by the sample artist. The 20th and 21st tie, so the leaderboard stops at 19,
+    /// and the rest are in tiers: three that were at two shows, then two at one.
+    private static var statsArtists: [[String: Any]] {
+        [12, 10, 9, 9, 8, 7, 7, 6, 6, 5, 5, 5, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 1, 1].enumerated().map { index, count in
+            let entity: [String: Any] =
+                index == 0
+                ? artist
+                : [
+                    "__typename": "Artist", "id": "artist-\(index + 1)", "name": "Artist \(index + 1)",
+                    "slug": "artist-\(index + 1)", "appleMusic": null,
+                ]
+            return stat(entity, count: count)
+        }
+    }
+
+    private static var statsVenues: [[String: Any]] {
+        [stat(venue, count: 20)]
+            + (2...4).map { index in
+                stat(
+                    [
+                        "__typename": "Venue", "id": "venue-\(index)", "name": "Venue \(index)", "slug": "venue-\(index)",
+                        "city": index == 4 ? null : "New York" as Any, "state": "NY",
+                    ], count: 6 - index)
+            }
     }
 
     private static func podcast(_ index: Int, brokenAudio: Bool = false) -> [String: Any] {

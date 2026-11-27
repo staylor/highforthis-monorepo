@@ -33,6 +33,29 @@ final class TVNavigationTests: XCTestCase {
     }
 
     @MainActor
+    func testStatsLinkToTheirArtistsAndVenues() {
+        let app = launch()
+        select("Stats", in: app)
+        // The choice of artists or venues comes first, then the leaderboard.
+        let venues = app.buttons["Venues"]
+        let leader = app.buttons["stats-sample-artist"]
+        press(.down, untilFocusIsOn: leader, times: 4)
+        screenshot("Stats", app)
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts["Recommended Shows"].waitForExistence(timeout: 10))
+        remote.press(.menu)
+        waitForFocus(on: leader)
+        // Focus comes up to the chosen segment, Artists, and moves across to Venues.
+        press(.up, untilFocusIsOn: app.buttons["Artists"], times: 4)
+        press(.right, untilFocusIsOn: venues)
+        remote.press(.select)
+        let venue = app.buttons["stats-sample-hall"]
+        press(.down, untilFocusIsOn: venue, times: 4)
+        remote.press(.select)
+        XCTAssertTrue(app.staticTexts["123 Music Street"].waitForExistence(timeout: 10))
+    }
+
+    @MainActor
     func testEmptyYearKeepsTheFilterAndCanReturnToTheMostRecentYear() {
         let app = launch(scenario: "emptyYear")
         select("History", in: app)
@@ -132,7 +155,7 @@ final class TVNavigationTests: XCTestCase {
     /// Focus starts in the tab bar, and moving it across the tabs selects them.
     @MainActor
     private func select(_ tab: String, in app: XCUIApplication) {
-        let tabs = ["Shows", "Podcast", "Posts", "History", "Now Playing"].filter { app.buttons[$0].exists }
+        let tabs = ["Shows", "Podcast", "Posts", "History", "Stats", "Now Playing"].filter { app.buttons[$0].exists }
         let target = app.buttons[tab]
         guard let index = tabs.firstIndex(of: tab) else { return XCTFail("No \(tab) tab") }
         for _ in tabs.indices where !target.hasFocus {

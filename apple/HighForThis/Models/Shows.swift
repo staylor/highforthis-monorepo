@@ -72,7 +72,7 @@ nonisolated struct ShowDay: Identifiable {
 
 nonisolated extension Sequence {
     /// The elements in groups that share a key, in the order each key first appears.
-    fileprivate func orderedGroups<Key: Hashable>(by key: (Element) -> Key) -> [(key: Key, elements: [Element])] {
+    func orderedGroups<Key: Hashable>(by key: (Element) -> Key) -> [(key: Key, elements: [Element])] {
         var keys: [Key] = []
         var groups: [Key: [Element]] = [:]
         for element in self {
