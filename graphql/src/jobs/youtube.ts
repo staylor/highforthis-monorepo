@@ -100,28 +100,30 @@ async function saveVideo(
 
   // Two videos can have the same title, so a new video gets a unique slug. An existing video
   // keeps its slug, and with it its page's address.
-  const existing = await db.findOne(videos, { where: { dataId: data.dataId } });
-  const videoId = existing?.id ?? newId();
-  if (existing) {
-    await db.update(videos, videoId, data);
-  } else {
-    await db.create(videos, {
-      ...data,
-      id: videoId,
-      slug: await getUniqueSlug(slugsIn(db, videos), snippet.title),
-    });
-  }
+  return db.transaction(async (tx) => {
+    const existing = await tx.findOne(videos, { where: { dataId: data.dataId } });
+    const videoId = existing?.id ?? newId();
+    if (existing) {
+      await tx.update(videos, videoId, data);
+    } else {
+      await tx.create(videos, {
+        ...data,
+        id: videoId,
+        slug: await getUniqueSlug(slugsIn(tx, videos), snippet.title),
+      });
+    }
 
-  // Replace thumbnails
-  await db.deleteMany(videoThumbnails, { where: { videoId } });
-  if (thumbnails.length) {
-    await db.createMany(
-      videoThumbnails,
-      thumbnails.map((thumbnail) => ({ ...thumbnail, id: newId(), videoId }))
-    );
-  }
+    // Replace thumbnails
+    await tx.deleteMany(videoThumbnails, { where: { videoId } });
+    if (thumbnails.length) {
+      await tx.createMany(
+        videoThumbnails,
+        thumbnails.map((thumbnail) => ({ ...thumbnail, id: newId(), videoId }))
+      );
+    }
 
-  return Boolean(existing);
+    return Boolean(existing);
+  });
 }
 
 async function importPlaylist(year: number, playlistId: string) {
@@ -138,12 +140,6 @@ async function importPlaylist(year: number, playlistId: string) {
     return;
   }
 
-  const existing = await db
-    .query(videos)
-    .where({ dataPlaylistId: playlistId })
-    .select('dataId')
-    .all();
-
   // One at a time, so two new videos with the same title can't claim the same slug
   let added = 0;
   for (const item of items.filter(isPublished)) {
@@ -152,18 +148,11 @@ async function importPlaylist(year: number, playlistId: string) {
     }
   }
 
-  // A video that has gone private is still in the playlist, so it isn't removed
-  const listed = new Set(items.map((item) => item.contentDetails.videoId));
-  const removed = existing.map(({ dataId }) => dataId).filter((dataId) => !listed.has(dataId));
-  if (removed.length) {
-    await db.deleteMany(videos, {
-      where: and(inList('dataId', removed), { dataPlaylistId: playlistId }),
-    });
+  if (added) {
+    logger.info({ playlistId, year, added }, 'Added videos from a YouTube playlist');
   }
-
-  if (added || removed.length) {
-    logger.info({ playlistId, year, added, removed }, 'Imported a YouTube playlist');
-  }
+  // Private videos still belong to their playlists.
+  return items.map((item) => item.contentDetails.videoId);
 }
 
 /** Imports the videos in the channel's playlists that are named for a year, like "2025". */
@@ -185,9 +174,46 @@ export default async () => {
     return;
   }
 
-  for (const playlist of playlists) {
-    if (/^\d{4}$/.test(playlist.snippet.title)) {
-      await importPlaylist(Number(playlist.snippet.title), playlist.id);
+  const yearly = playlists.filter((playlist) => /^\d{4}$/.test(playlist.snippet.title));
+  if (!yearly.length) return;
+  const existing = await db
+    .query(videos)
+    .where(
+      inList(
+        'dataPlaylistId',
+        yearly.map(({ id }) => id)
+      )
+    )
+    .select('id', 'dataId', 'dataPlaylistId')
+    .all();
+
+  const listed = new Set<string>();
+  let complete = true;
+  for (const playlist of yearly) {
+    const ids = await importPlaylist(Number(playlist.snippet.title), playlist.id);
+    if (ids) {
+      for (const id of ids) listed.add(id);
+    } else {
+      complete = false;
+    }
+  }
+
+  // A video missing from one year may have moved to another. Removing it before seeing the
+  // destination loses its ID, which posts use for embeds, and its slug.
+  if (!complete) return;
+  const removed = existing.filter(({ dataId }) => !listed.has(dataId));
+  for (const [playlistId, rows] of Map.groupBy(removed, (row) => row.dataPlaylistId)) {
+    const { affectedRows } = await db.deleteMany(videos, {
+      where: and(
+        inList(
+          'id',
+          rows.map(({ id }) => id)
+        ),
+        { dataPlaylistId: playlistId }
+      ),
+    });
+    if (affectedRows) {
+      logger.info({ playlistId, removed: affectedRows }, 'Removed videos from a YouTube playlist');
     }
   }
 };
