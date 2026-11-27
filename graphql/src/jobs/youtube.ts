@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { createLogger } from '@highforthis/shared/logger';
 
 import db from '#/database/db';
-import { newId, videos, videoThumbnails } from '#/database/tables';
+import { newId, videos, videoThumbnailRows, videoThumbnails } from '#/database/tables';
 import env from '#/env';
 import { getUniqueSlug, slugsIn } from '#/models/utils';
 
@@ -78,16 +78,56 @@ async function fetchAll<T>(
 const isPublished = (item: PlaylistItem): item is PublishedItem =>
   item.snippet.title !== 'Private video' && Boolean(item.contentDetails.videoPublishedAt);
 
+type Thumbnail = { url: string; width: number; height: number };
+
+type VideoDetails = {
+  dataId: string;
+  dataType: string;
+  dataPlaylistId: string;
+  year: number;
+  publishedISO: string;
+  publishedAt: Date;
+  title: string;
+  position: number;
+};
+
+/** A saved video, as the import compares it with what YouTube lists */
+type KnownVideo = VideoDetails & { id: string; thumbnails: Thumbnail[] };
+
+/** Every saved video with its thumbnails, by its YouTube ID */
+async function knownVideos(): Promise<Map<string, KnownVideo>> {
+  const rows = await db.query(videos).with({ thumbnails: videoThumbnailRows }).all();
+  return new Map(rows.map((row) => [row.dataId, row]));
+}
+
+/** Whether YouTube lists any of a video's details differently from how they're saved */
+const detailsChanged = (saved: VideoDetails, listed: VideoDetails) =>
+  new Date(saved.publishedAt).getTime() !== listed.publishedAt.getTime() ||
+  (['dataType', 'dataPlaylistId', 'year', 'publishedISO', 'title', 'position'] as const).some(
+    (key) => saved[key] !== listed[key]
+  );
+
+const thumbnailKeys = (thumbnails: Thumbnail[]) =>
+  thumbnails
+    .map(({ url, width, height }) => `${width}x${height} ${url}`)
+    .sort()
+    .join('\n');
+
+/**
+ * Saves a video from a playlist, and answers whether it's new. Only what changed is written: the
+ * import runs every few hours, and most of the time YouTube lists every video as it did before.
+ */
 async function saveVideo(
   { contentDetails, snippet }: PublishedItem,
   year: number,
-  playlistId: string
+  playlistId: string,
+  known: Map<string, KnownVideo>
 ) {
   const thumbnails = Object.values(snippet.thumbnails ?? {}).flatMap(({ url, width, height }) =>
     width && height ? [{ url, width, height }] : []
   );
 
-  const data = {
+  const data: VideoDetails = {
     dataId: contentDetails.videoId,
     dataType: 'youtube',
     dataPlaylistId: playlistId,
@@ -98,35 +138,45 @@ async function saveVideo(
     position: snippet.position,
   };
 
+  const existing = known.get(data.dataId);
+  const changed = !existing || detailsChanged(existing, data);
+  const newThumbnails =
+    !existing || thumbnailKeys(existing.thumbnails) !== thumbnailKeys(thumbnails);
+  if (!changed && !newThumbnails) {
+    return false;
+  }
+
   // Two videos can have the same title, so a new video gets a unique slug. An existing video
   // keeps its slug, and with it its page's address.
-  return db.transaction(async (tx) => {
-    const existing = await tx.findOne(videos, { where: { dataId: data.dataId } });
-    const videoId = existing?.id ?? newId();
-    if (existing) {
-      await tx.update(videos, videoId, data);
-    } else {
+  const videoId = existing?.id ?? newId();
+  await db.transaction(async (tx) => {
+    if (!existing) {
       await tx.create(videos, {
         ...data,
         id: videoId,
         slug: await getUniqueSlug(slugsIn(tx, videos), snippet.title),
       });
+    } else if (changed) {
+      await tx.update(videos, videoId, data);
     }
 
-    // Replace thumbnails
-    await tx.deleteMany(videoThumbnails, { where: { videoId } });
-    if (thumbnails.length) {
-      await tx.createMany(
-        videoThumbnails,
-        thumbnails.map((thumbnail) => ({ ...thumbnail, id: newId(), videoId }))
-      );
+    if (newThumbnails) {
+      await tx.deleteMany(videoThumbnails, { where: { videoId } });
+      if (thumbnails.length) {
+        await tx.createMany(
+          videoThumbnails,
+          thumbnails.map((thumbnail) => ({ ...thumbnail, id: newId(), videoId }))
+        );
+      }
     }
-
-    return Boolean(existing);
   });
+
+  // A video listed in another playlist too is compared with what was just saved
+  known.set(data.dataId, { ...data, id: videoId, thumbnails });
+  return !existing;
 }
 
-async function importPlaylist(year: number, playlistId: string) {
+async function importPlaylist(year: number, playlistId: string, known: Map<string, KnownVideo>) {
   let items: PlaylistItem[];
   try {
     items = await fetchAll(
@@ -143,7 +193,7 @@ async function importPlaylist(year: number, playlistId: string) {
   // One at a time, so two new videos with the same title can't claim the same slug
   let added = 0;
   for (const item of items.filter(isPublished)) {
-    if (!(await saveVideo(item, year, playlistId))) {
+    if (await saveVideo(item, year, playlistId, known)) {
       added += 1;
     }
   }
@@ -176,21 +226,17 @@ export default async () => {
 
   const yearly = playlists.filter((playlist) => /^\d{4}$/.test(playlist.snippet.title));
   if (!yearly.length) return;
-  const existing = await db
-    .query(videos)
-    .where(
-      inList(
-        'dataPlaylistId',
-        yearly.map(({ id }) => id)
-      )
-    )
-    .select('id', 'dataId', 'dataPlaylistId')
-    .all();
+  // Read once, rather than a video at a time: there are hundreds
+  const known = await knownVideos();
+  const yearlyIds = new Set(yearly.map(({ id }) => id));
+  const existing = [...known.values()]
+    .filter(({ dataPlaylistId }) => yearlyIds.has(dataPlaylistId))
+    .map(({ id, dataId, dataPlaylistId }) => ({ id, dataId, dataPlaylistId }));
 
   const listed = new Set<string>();
   let complete = true;
   for (const playlist of yearly) {
-    const ids = await importPlaylist(Number(playlist.snippet.title), playlist.id);
+    const ids = await importPlaylist(Number(playlist.snippet.title), playlist.id, known);
     if (ids) {
       for (const id of ids) listed.add(id);
     } else {
