@@ -55,17 +55,27 @@ describe('matchListing', () => {
     expect(matchListing(listing(), [entered]).show).toBe(entered);
   });
 
-  it('compares days in the venue time zone', () => {
-    // 8 PM Eastern on New Year's Eve is still December 31 in Las Vegas
-    const entered = show('2027-01-01T01:00:00Z', ['Phish']);
+  // A show's time is stored as the venue's clock reads it, read as New York's
+  it("compares days on New York's clocks, whatever the venue's time zone", () => {
+    const sphere = (localDate: string) =>
+      listing({ localDate, timeZone: 'America/Los_Angeles', headliners: ['Phish'], support: [] });
+    // Phish at Sphere at 8 PM on New Year's Eve, and at 12:30 AM on New Year's Day
+    const newYearsEve = show('2027-01-01T01:00:00Z', ['Phish']);
+    const afterMidnight = show('2027-01-01T05:30:00Z', ['Phish']);
+
+    expect(matchListing(sphere('2026-12-31'), [newYearsEve]).show).toBe(newYearsEve);
+    expect(matchListing(sphere('2027-01-01'), [afterMidnight]).show).toBe(afterMidnight);
+  });
+
+  it("doesn't flag a show added from a listing at a venue outside New York", () => {
+    const added = show('2027-04-09T00:00:00Z', ['Phish'], { source: 'aeg', sourceId: 'sphere' });
     const sphere = listing({
-      localDate: '2026-12-31',
+      sourceId: 'sphere',
+      localDate: '2027-04-08',
       timeZone: 'America/Los_Angeles',
-      headliners: ['Phish'],
-      support: [],
     });
 
-    expect(matchListing(sphere, [entered]).show).toBe(entered);
+    expect(matchListing(sphere, [added])).toEqual({ show: added, dateChanged: false });
   });
 
   it('ignores shows on other days, with other artists, or from other listings', () => {

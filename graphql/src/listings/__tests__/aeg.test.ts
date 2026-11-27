@@ -75,8 +75,31 @@ describe('aegListings', () => {
       cancelled: false,
       url: 'https://www.axs.com/events/1480566/chat-pile-tickets',
     });
-    // without a UTC time, the venue-local time is converted
     expect(listings[1].startsAt).toEqual(new Date('2026-12-02T01:00:00Z'));
+  });
+
+  // As a show entered by hand is: the site shows every show's time as New York's clocks read it
+  it("stores a show outside New York at the venue's clock time, read as New York's", async () => {
+    serve({
+      [`${FEEDS}/events/2/events.json`]: {
+        events: [
+          event({
+            eventDateTime: '2026-12-01T20:00:00',
+            eventDateTimeUTC: '2026-12-02T02:00:00',
+            eventDateTimeZone: 'America/Chicago',
+          }),
+        ],
+      },
+    });
+
+    const [listing] = await aegListings(new URL(`${FEEDS}/events/2/events.json`));
+
+    expect(listing).toMatchObject({
+      localDate: '2026-12-01',
+      localTime: '20:00',
+      startsAt: new Date('2026-12-02T01:00:00Z'),
+      timeZone: 'America/Chicago',
+    });
   });
 
   it('leaves undated shows without a start and flags cancellations', async () => {
