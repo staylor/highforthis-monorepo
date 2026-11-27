@@ -52,6 +52,7 @@ describe('resolvers', () => {
         resolver,
       ]),
       ['Query.appleMusicAlbums', resolvers.Query.appleMusicAlbums],
+      ['Query.uploads', resolvers.Query.uploads],
       ['Query.user', resolvers.Query.user],
       ['Query.users', resolvers.Query.users],
       ['Query.venueListings', resolvers.Query.venueListings],

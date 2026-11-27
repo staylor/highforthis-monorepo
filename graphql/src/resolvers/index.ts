@@ -55,9 +55,11 @@ function forAdmins<TFields extends { [Name in keyof TFields]?: AnyResolver }>(
   return guarded;
 }
 
-// Every mutation, and any query listed here, requires an admin.
+// Every mutation, and any query listed here, requires an admin. `uploads` lists the whole media
+// library, with each file's original name, including the images for posts not yet published.
 const adminQueries: (keyof QueryResolvers)[] = [
   'appleMusicAlbums',
+  'uploads',
   'user',
   'users',
   'venueListings',
