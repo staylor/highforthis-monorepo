@@ -58,7 +58,7 @@ Uploads use the CMS's Cloud Storage bucket (`UPLOADS_URL`) at `destination/fileN
 
 `HighForThisTests` uses Swift Testing for loading races, cancellation, pagination, cache errors, media URLs, rendering and playback activation. Generated Apollo mocks build typed fixtures. `HighForThisUITests` covers navigation, the stats, pagination, empty filters, retries, playback, dark mode and accessibility text on iPhone and iPad. `TVNavigationTests` drives the same flows on Apple TV with `XCUIRemote`, waiting for focus rather than tapping.
 
-The test scheme enables `HIGHFORTHIS_TESTING` for the unit-test host; UI tests launch with `-ui-testing`. Debug-only `PreviewSupport/UITestFixtures.swift` intercepts the GraphQL transport and supplies local audio. Tests still exercise Apollo's response parser and the real AVPlayer. Fixture code and media are absent from Release builds. Map tiles are optional system downloads; test assertions do not depend on them.
+The test scheme enables `HIGHFORTHIS_TESTING` for the unit-test host; UI tests launch with `-ui-testing`. Debug-only `PreviewSupport/UITestFixtures.swift` intercepts the GraphQL transport and supplies local audio. Tests still exercise Apollo's response parser and the real AVPlayer. Under UI tests the iOS app turns off UIKit's animations, which a UI test waits out before each look at the screen; Apple TV keeps them, because a pushed screen didn't take focus without its animation. Fixture code and media are absent from Release builds. Map tiles are optional system downloads; test assertions do not depend on them.
 
 `AppIcon.icon` is the Icon Composer icon for iOS and macOS. tvOS can't use it, so the asset catalog's `Brand Assets` hold its layered icon and Top Shelf image.
 

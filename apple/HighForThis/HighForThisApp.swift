@@ -12,6 +12,13 @@ struct HighForThisApp: App {
 
     init() {
         URLCache.shared = URLCache(memoryCapacity: 32 * 1024 * 1024, diskCapacity: 256 * 1024 * 1024)
+        #if DEBUG && os(iOS)
+        // A UI test waits for each animation to end before it looks at the screen again, so under one nothing animates.
+        // On tvOS a pushed screen didn't take focus without its animation, so there it still animates.
+        if UITestFixtures.isEnabled {
+            UIView.setAnimationsEnabled(false)
+        }
+        #endif
     }
 
     var body: some Scene {
