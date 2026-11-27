@@ -78,7 +78,7 @@ const resolvers = {
       return db.update(
         podcasts,
         id,
-        { ...data, audioId: audio ?? undefined, imageId: image ?? undefined },
+        { ...data, audioId: audio, imageId: image },
         { with: podcastMedia }
       );
     },
