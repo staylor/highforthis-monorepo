@@ -3,7 +3,7 @@ import type { Resolvers } from 'types/graphql';
 
 import { batchBy } from '#/database/batch';
 import db from '#/database/db';
-import { mediaDetails, mediaUploads, videos } from '#/database/tables';
+import { mediaDetails, mediaUploads, videos, videoThumbnailRows } from '#/database/tables';
 
 import { resolveType } from './utils/helpers';
 
@@ -20,7 +20,7 @@ const loadImage = batchBy('id', (ids: string[]) =>
   db.findMany(mediaUploads, { where: inList('id', ids), with: { crops: mediaDetails.crops } })
 );
 const loadVideo = batchBy('id', (ids: string[]) =>
-  db.findMany(videos, { where: inList('id', ids) })
+  db.findMany(videos, { where: inList('id', ids), with: { thumbnails: videoThumbnailRows } })
 );
 
 // Some older posts have media nodes saved without an id (videos that had gone, kept as an error
