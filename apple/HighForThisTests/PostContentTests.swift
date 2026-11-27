@@ -72,12 +72,53 @@ struct PostContentTests {
         #expect(video.dataId == "fbFeM3QW8Cc")
     }
 
+    @Test func listsAreNumberedFromTheirStartOrBulleted() async {
+        let editorState = await PostQuery.Data.Post.EditorState.from(
+            Mock<EditorState>(
+                root: Mock<ElementNode>(children: [
+                    Mock<ListNode>(
+                        children: [
+                            Mock<ListItemNode>(children: [Mock<TextNode>(format: 1, text: "First")]),
+                            Mock<ListItemNode>(children: [Mock<TextNode>(text: " ")]),
+                            Mock<ListItemNode>(children: [
+                                Mock<TextNode>(text: "Second"), Mock<LinebreakNode>(), Mock<TextNode>(text: "line"),
+                            ]),
+                        ],
+                        listType: .case(.number),
+                        start: 3,
+                        type: "list"
+                    ),
+                    Mock<ListNode>(
+                        children: [Mock<ListItemNode>(children: [Mock<TextNode>(text: "Done")])],
+                        listType: .case(.check),
+                        type: "list"
+                    ),
+                ])
+            )
+        )
+
+        #expect(
+            PostBlock.blocks(in: editorState) == [
+                .list(
+                    numbered: true,
+                    start: 3,
+                    items: [
+                        AttributedString(lexicalRuns: [.text("First", .bold)]),
+                        AttributedString(lexicalRuns: [.text("Second"), .lineBreak, .text("line")]),
+                    ]
+                ),
+                .list(numbered: false, start: 1, items: [AttributedString("Done")]),
+            ]
+        )
+    }
+
     @Test func emptyTextAndUnsupportedNodesAreSkipped() async {
         let editorState = await PostQuery.Data.Post.EditorState.from(
             Mock<EditorState>(
                 root: Mock<ElementNode>(children: [
                     Mock<ElementNode>(children: [Mock<TextNode>(text: "  "), Mock<LinebreakNode>()], type: "paragraph"),
-                    Mock<ElementNode>(children: [Mock<TextNode>(text: "Item")], type: "list"),
+                    Mock<ElementNode>(children: [Mock<TextNode>(text: "Cell")], type: "table"),
+                    Mock<ListNode>(children: [Mock<ListItemNode>(children: [Mock<TextNode>(text: " ")])], listType: .case(.bullet)),
                     Mock<HeadingNode>(children: [], tag: .case(.h2)),
                     Mock<ImageNode>(image: Mock<ImageUpload>(crops: [])),
                     nil,

@@ -16,6 +16,18 @@ query Post($slug: String!) {
           ... on HeadingNode {
             tag
           }
+          ... on ListNode {
+            listType
+            start
+            children {
+              ... on ListItemNode {
+                children {
+                  ...TextNodes_linebreakNode
+                  ...TextNodes_textNode
+                }
+              }
+            }
+          }
           ... on ImageNode {
             image {
               id

@@ -90,6 +90,24 @@ private struct PostBlockView: View {
             }
             .background(.quaternary, in: .rect(cornerRadius: 8))
             #endif
+        case .list(let numbered, let start, let items):
+            // The markers in a column of their own, numbers lined up on the right, so the items line up too
+            Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: 8, verticalSpacing: 8) {
+                ForEach(Array(items.enumerated()), id: \.offset) { index, item in
+                    let marker = numbered ? "\(start + index)." : "•"
+                    GridRow {
+                        Text(verbatim: marker)
+                            .monospacedDigit()
+                            .gridColumnAlignment(.trailing)
+                            .accessibilityHidden(true)
+                        Text(item)
+                            .fixedSize(horizontal: false, vertical: true)
+                            // VoiceOver reads an item's number with it, though not a bullet
+                            .accessibilityLabel(Text(verbatim: numbered ? "\(marker) \(String(item.characters))" : String(item.characters)))
+                    }
+                }
+            }
+            .padding(.leading, 8)
         case .image(let url, let aspectRatio, let altText):
             RemoteImage(url: url, aspectRatio: aspectRatio)
                 .clipShape(.rect(cornerRadius: 8))
