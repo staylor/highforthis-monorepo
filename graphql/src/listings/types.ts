@@ -6,7 +6,8 @@ export interface Listing {
   // Venue-local calendar date (YYYY-MM-DD) and start time (HH:MM); null until announced
   localDate: string | null;
   localTime: string | null;
-  // When a show added from this listing starts; 8 PM venue time if the time isn't announced
+  // When a show added from this listing starts, as the site stores show times: the venue's clock
+  // time, read as New York's, as a show entered by hand is. 8 PM if the time isn't announced.
   startsAt: Date | null;
   timeZone: string;
   headliners: string[];

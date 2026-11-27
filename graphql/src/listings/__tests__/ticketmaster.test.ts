@@ -40,7 +40,7 @@ function serve(events: unknown[]) {
           _embedded: {
             venues: [
               { id: 'KovZpZAEF7FA', url: 'https://www.ticketmaster.com/other/venue/3990' },
-              ...[399, 400, 401, 403, 404].map((legacyId) => ({
+              ...[399, 400, 401, 403, 404, 405].map((legacyId) => ({
                 id: `KovZ${legacyId}`,
                 url: `https://www.ticketmaster.com/barclays-center-tickets-brooklyn/venue/${legacyId}`,
               })),
@@ -160,6 +160,32 @@ describe('ticketmasterListings', () => {
       startsAt: new Date('2027-03-17T00:00:00Z'),
       cancelled: true,
       status: 'Cancelled',
+    });
+  });
+
+  // As a show entered by hand is: the site shows every show's time as New York's clocks read it
+  it("stores a show outside New York at the venue's clock time, read as New York's", async () => {
+    serve([
+      event('sphere', 'Phish', {
+        dates: {
+          start: {
+            localDate: '2027-04-08',
+            localTime: '20:00:00',
+            dateTime: '2027-04-09T03:00:00Z',
+          },
+          timezone: 'America/Los_Angeles',
+          status: { code: 'onsale' },
+        },
+      }),
+    ]);
+
+    const [listing] = await ticketmasterListings(venuePage(405));
+
+    expect(listing).toMatchObject({
+      localDate: '2027-04-08',
+      localTime: '20:00',
+      startsAt: new Date('2027-04-09T00:00:00Z'),
+      timeZone: 'America/Los_Angeles',
     });
   });
 

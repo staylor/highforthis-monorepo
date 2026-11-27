@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import env from '#/env';
+import { SITE_TIME_ZONE } from '#/time';
 
 import { cached, fetchText } from './http';
 import { zonedTime } from './time';
@@ -113,13 +114,8 @@ function toListing(event: TicketmasterEvent): Listing {
   const timeZone = timezone ?? event._embedded?.venues?.[0]?.timezone ?? 'America/New_York';
   const localDate = start.dateTBD || start.dateTBA ? null : (start.localDate ?? null);
   const localTime = hasStartTime(start) ? (start.localTime?.slice(0, 5) ?? null) : null;
-  let startsAt: Date | null = null;
-  if (localDate) {
-    startsAt =
-      localTime && start.dateTime
-        ? new Date(start.dateTime)
-        : zonedTime(localDate, localTime ?? '20:00', timeZone);
-  }
+  // The venue's clock time, read as New York's, as the site stores every show's time
+  const startsAt = localDate ? zonedTime(localDate, localTime ?? '20:00', SITE_TIME_ZONE) : null;
   const code = status?.code ?? '';
 
   return {

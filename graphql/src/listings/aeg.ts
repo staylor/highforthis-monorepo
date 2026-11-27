@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { SITE_TIME_ZONE } from '#/time';
+
 import { cached, fetchText } from './http';
 import { zonedTime } from './time';
 import type { Listing } from './types';
@@ -108,12 +110,8 @@ function parseSections(html: string): Section[] {
 function toListing(event: z.infer<typeof eventSchema>): FeedListing {
   const local = LOCAL_DATE_TIME.exec(event.eventDateTime ?? '');
   const timeZone = event.eventDateTimeZone ?? event.venue.timezone ?? 'America/New_York';
-  let startsAt: Date | null = null;
-  if (local) {
-    startsAt = event.eventDateTimeUTC
-      ? new Date(`${event.eventDateTimeUTC}Z`)
-      : zonedTime(local[1], local[2], timeZone);
-  }
+  // The venue's clock time, read as New York's, as the site stores every show's time
+  const startsAt = local ? zonedTime(local[1], local[2], SITE_TIME_ZONE) : null;
   const status = event.ticketing?.status?.trim() || null;
   const headliner = event.title?.headlinersText?.trim() || event.title?.eventTitleText?.trim();
 
