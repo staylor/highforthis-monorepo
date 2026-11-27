@@ -82,7 +82,13 @@ const resolvers = {
         {
           count: () => query.count(),
           findMany: ({ skip, take }) =>
-            query.with(postIncludes).orderBy('date', 'desc').offset(skip).limit(take).all(),
+            query
+              .with(postIncludes)
+              .orderBy('date', 'desc')
+              .orderBy('id', 'desc')
+              .offset(skip)
+              .limit(take)
+              .all(),
         },
         connectionArgs
       );

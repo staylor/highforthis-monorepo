@@ -40,13 +40,15 @@ const resolvers = {
         const pattern = containing(search);
         query = query.where(or(ilike('title', pattern), ilike('description', pattern)));
       }
+      const direction = order === 'ASC' ? 'asc' : 'desc';
       return parseConnection(
         {
           count: () => query.count(),
           findMany: ({ skip, take }) =>
             query
               .with(podcastMedia)
-              .orderBy('createdAt', order === 'ASC' ? 'asc' : 'desc')
+              .orderBy('createdAt', direction)
+              .orderBy('id', direction)
               .offset(skip)
               .limit(take)
               .all(),
