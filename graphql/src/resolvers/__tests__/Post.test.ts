@@ -9,6 +9,8 @@ import {
   postMedia,
   posts,
   postTags,
+  videos,
+  videoThumbnailRows,
 } from '#/database/tables';
 import type { AppContext } from '#/models';
 import resolvers from '#/resolvers';
@@ -125,6 +127,77 @@ describe('posts', () => {
   });
 
   afterAll(() => server.stop());
+
+  it('loads thumbnails for all embedded videos together', async () => {
+    const videoIds = ['v1', 'v2', 'v1'];
+    const thumbnails = (id: string) => [{ url: `${id}.jpg` }];
+    postsQuery.all.mockResolvedValue([
+      {
+        editorState: {
+          root: { children: videoIds.map((videoId) => ({ type: 'video', videoId })) },
+        },
+      },
+    ]);
+    db.findMany.mockImplementation(async (table, { where, with: include }) =>
+      table === videos
+        ? where.value.map((id: string) => ({
+            id,
+            thumbnails: include?.thumbnails && thumbnails(id),
+          }))
+        : thumbnails(where.videoId)
+    );
+    const response = await server.executeOperation(
+      {
+        query: /* GraphQL */ `
+          {
+            posts(first: 1) {
+              edges {
+                node {
+                  editorState {
+                    root {
+                      children {
+                        ... on VideoNode {
+                          video {
+                            id
+                            thumbnails {
+                              url
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `,
+      },
+      { contextValue: {} }
+    );
+
+    if (response.body.kind !== 'single') throw new Error('Expected a single result');
+    expect(response.body.singleResult.errors).toBeUndefined();
+    expect(response.body.singleResult.data).toEqual({
+      posts: {
+        edges: [
+          {
+            node: {
+              editorState: {
+                root: {
+                  children: videoIds.map((id) => ({ video: { id, thumbnails: thumbnails(id) } })),
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+    expect(db.findMany).toHaveBeenCalledExactlyOnceWith(videos, {
+      where: inList('id', ['v1', 'v2']),
+      with: { thumbnails: videoThumbnailRows },
+    });
+  });
 
   it("loads the artwork's crops with the images, not with a query per image", async () => {
     const response = await server.executeOperation({ query: artworkQuery }, { contextValue: {} });
