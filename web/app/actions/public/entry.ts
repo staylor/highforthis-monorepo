@@ -36,11 +36,27 @@ window.navigation?.addEventListener('navigate', () => root.removeAttribute('data
 window.navigation?.addEventListener('navigatesuccess', markHydrated);
 window.navigation?.addEventListener('navigateerror', markHydrated);
 
+// The analytics SDKs weigh more than the site's own scripts, so they load once the page has and
+// the browser is idle, rather than compete with the page for the network and the main thread. The
+// first view is still timed from the start of the visit, from the timings the browser keeps.
 const rumConfig = window.__OPENOBSERVE_RUM__;
 if (rumConfig) {
-  import('./rum.ts')
-    .then(({ startRum }) => startRum(rumConfig))
-    .catch((error) => console.error('OpenObserve RUM failed to start', error));
+  const firstPath = window.location.pathname;
+  const start = () => {
+    import('./rum.ts')
+      .then(({ startRum }) => startRum(rumConfig, firstPath))
+      .catch((error) => console.error('OpenObserve RUM failed to start', error));
+  };
+  // Not every browser has requestIdleCallback
+  const startWhenIdle = () =>
+    'requestIdleCallback' in window
+      ? requestIdleCallback(start, { timeout: 2000 })
+      : setTimeout(start, 0);
+  if (document.readyState === 'complete') {
+    startWhenIdle();
+  } else {
+    window.addEventListener('load', startWhenIdle, { once: true });
+  }
 }
 
 if (import.meta.hot) {
