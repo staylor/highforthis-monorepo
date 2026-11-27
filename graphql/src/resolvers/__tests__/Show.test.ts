@@ -299,6 +299,20 @@ describe('shows', () => {
       ['id', 'asc'],
     ]);
   });
+
+  // A show at 8 PM is still tonight's show at 11:30, so it stays listed until midnight in New York
+  it('lists the shows to come from the start of the day in New York', async () => {
+    vi.useFakeTimers({ toFake: ['Date'], now: new Date('2026-07-05T03:30:00Z') });
+    try {
+      await resolvers.Query.shows({}, { latest: true, first: 50 });
+    } finally {
+      vi.useRealTimers();
+    }
+
+    expect(showsQuery.where).toHaveBeenCalledWith(
+      and(and(), gte('date', new Date('2026-07-04T04:00:00Z')))
+    );
+  });
 });
 
 describe('shows from the most recent year', () => {
