@@ -1,30 +1,17 @@
-import { and, inList } from 'remix/data-table';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { getTableColumns, getTableName } from 'remix/data-table';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import db from '#/database/db';
 import { videos, videoThumbnails } from '#/database/tables';
 
 import importVideos from '../youtube';
 
-// The query for a playlist's videos, whose steps each answer the query
-const { db, playlistQuery } = vi.hoisted(() => ({
-  db: {
-    count: vi.fn(),
-    create: vi.fn(),
-    createMany: vi.fn(),
-    deleteMany: vi.fn(),
-    findOne: vi.fn(),
-    query: vi.fn(),
-    update: vi.fn(),
-  },
-  playlistQuery: { all: vi.fn(), select: vi.fn(), where: vi.fn() },
-}));
-const logger = vi.hoisted(() => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn() }));
+vi.mock('#/database/db', async () => {
+  const { createSqliteDatabase } = await import('remix/data-table/sqlite');
+  return { default: createSqliteDatabase({ filename: ':memory:' }) };
+});
 
-vi.mock('#/database/db', () => ({ default: db }));
-vi.mock('#/database/tables', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('#/database/tables')>()),
-  newId: () => 'video-new',
-}));
+const logger = vi.hoisted(() => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn() }));
 vi.mock('@highforthis/shared/logger', () => ({ createLogger: () => logger }));
 
 const item = (videoId: string, title: string, position: number) => ({
@@ -43,34 +30,69 @@ const privateItem = (videoId: string) => ({
   contentDetails: { videoId },
 });
 
-const playlists = { items: [{ id: 'playlist-2025', snippet: { title: '2025' } }] };
+const playlist = (year: string) => ({ id: `playlist-${year}`, snippet: { title: year } });
+const playlists = { items: [playlist('2025')] };
 
-/** Answers each request to the YouTube API from `answer`, by resource and page */
-function stubYouTube(answer: (resource: string, pageToken: string | null) => Response) {
+/** Answers each request to the YouTube API from fixtures. */
+function stubYouTube(
+  answer: (resource: string, pageToken: string | null, list: string | null) => Response
+) {
   const requests: URL[] = [];
-  vi.stubGlobal(
-    'fetch',
-    vi.fn(async (input: URL | string) => {
-      const url = new URL(input);
-      requests.push(url);
-      return answer(url.pathname.split('/').pop() ?? '', url.searchParams.get('pageToken'));
-    })
-  );
+  vi.stubGlobal('fetch', async (input: URL | string) => {
+    const url = new URL(input);
+    requests.push(url);
+    return answer(
+      url.pathname.split('/').pop() ?? '',
+      url.searchParams.get('pageToken'),
+      url.searchParams.get('playlistId')
+    );
+  });
   return requests;
 }
 
 describe('the YouTube import', () => {
-  beforeEach(() => {
-    vi.resetAllMocks();
-    // The playlist's videos as they were last imported
-    db.query.mockReturnValue(playlistQuery);
-    playlistQuery.where.mockReturnValue(playlistQuery);
-    playlistQuery.select.mockReturnValue(playlistQuery);
-    playlistQuery.all.mockResolvedValue([{ dataId: 'kept' }, { dataId: 'removed' }]);
-    db.findOne.mockImplementation(async (_table, { where }) =>
-      where.dataId === 'kept' ? { id: 'video-kept' } : null
-    );
-    db.count.mockResolvedValue(0);
+  beforeAll(async () => {
+    for (const table of [videos, videoThumbnails]) {
+      const columns = Object.keys(getTableColumns(table)).map((name) => `"${name}"`);
+      await db.exec(`create table "${getTableName(table)}" (${columns}, primary key ("id"))`);
+    }
+    await db.exec('create unique index video_data_id on "Video" ("dataId")');
+    await db.exec('create unique index video_slug on "Video" ("slug")');
+    // A failed thumbnail write after the previous thumbnails were removed.
+    await db.exec(`create trigger refuse_thumbnail before insert on "VideoThumbnail"
+      when new.width = -1 begin select raise(abort, 'refused thumbnail'); end`);
+  });
+
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    await db.exec('delete from "VideoThumbnail"');
+    await db.exec('delete from "Video"');
+    for (const dataId of ['kept', 'removed']) {
+      await db.create(videos, {
+        id: `video-${dataId}`,
+        dataId,
+        slug: `original-${dataId}`,
+        dataType: 'youtube',
+        dataPlaylistId: 'playlist-2025',
+        year: 2025,
+        position: 0,
+        publishedISO: '2025-06-01T12:00:00Z',
+        publishedAt: new Date('2025-06-01T12:00:00Z'),
+        title: dataId,
+      });
+    }
+    await db.create(videoThumbnails, {
+      id: 'old-thumbnail',
+      videoId: 'video-kept',
+      width: 120,
+      height: 90,
+      url: 'old.jpg',
+    });
+  });
+
+  afterAll(async () => {
+    vi.unstubAllGlobals();
+    await db.close();
   });
 
   it('adds new videos, updates the ones it has and removes the ones no longer listed', async () => {
@@ -88,28 +110,75 @@ describe('the YouTube import', () => {
       '/youtube/v3/playlists',
       '/youtube/v3/playlistItems',
     ]);
-    expect(db.update).toHaveBeenCalledWith(
-      videos,
-      'video-kept',
-      expect.objectContaining({ dataId: 'kept', title: 'Kept (Night 1)', year: 2025 })
+    await expect(db.find(videos, 'video-kept')).resolves.toMatchObject({
+      title: 'Kept (Night 1)',
+      slug: 'original-kept',
+    });
+    const added = await db.findOne(videos, { where: { dataId: 'new' } });
+    expect(added).toMatchObject({
+      dataPlaylistId: 'playlist-2025',
+      position: 1,
+      year: 2025,
+      slug: 'new-night-2',
+    });
+    await expect(
+      db.findMany(videoThumbnails, { where: { videoId: added!.id } })
+    ).resolves.toMatchObject([{ width: 120, height: 90 }]);
+    await expect(db.find(videoThumbnails, 'old-thumbnail')).resolves.toBeNull();
+    await expect(db.find(videos, 'video-removed')).resolves.toBeNull();
+  });
+
+  it.each([
+    ['2025', '2026'],
+    ['2026', '2025'],
+  ])('keeps a moved video when reading %s then %s', async (a, b) => {
+    stubYouTube((resource, _, list) =>
+      Response.json(
+        resource === 'playlists'
+          ? { items: [playlist(a), playlist(b)] }
+          : { items: list === 'playlist-2026' ? [item('kept', 'Moved', 0)] : [] }
+      )
     );
-    expect(db.create).toHaveBeenCalledWith(
-      videos,
-      expect.objectContaining({
-        id: 'video-new',
-        dataId: 'new',
-        dataPlaylistId: 'playlist-2025',
-        position: 1,
-        publishedAt: new Date('2025-06-01T12:00:00Z'),
-        slug: 'new-night-2',
-      })
+
+    await importVideos();
+
+    await expect(db.find(videos, 'video-kept')).resolves.toMatchObject({
+      slug: 'original-kept',
+      year: 2026,
+      dataPlaylistId: 'playlist-2026',
+    });
+    await expect(db.find(videos, 'video-removed')).resolves.toBeNull();
+  });
+
+  it('defers removals when a possible destination playlist failed to load', async () => {
+    stubYouTube((resource, _, list) => {
+      if (resource === 'playlists')
+        return Response.json({ items: [playlist('2025'), playlist('2026')] });
+      return list === 'playlist-2026'
+        ? new Response(null, { status: 503 })
+        : Response.json({ items: [item('kept', 'Updated', 0)] });
+    });
+
+    await importVideos();
+
+    await expect(db.find(videos, 'video-kept')).resolves.toMatchObject({ title: 'Updated' });
+    await expect(db.find(videos, 'video-removed')).resolves.toMatchObject({
+      slug: 'original-removed',
+    });
+  });
+
+  it('rolls back the video and its thumbnails when replacement thumbnails cannot be saved', async () => {
+    const changed = item('kept', 'Renamed', 0);
+    changed.snippet.thumbnails.default.width = -1;
+    stubYouTube((resource) =>
+      Response.json(resource === 'playlists' ? playlists : { items: [changed] })
     );
-    expect(db.createMany).toHaveBeenCalledTimes(2);
-    expect(db.createMany).toHaveBeenCalledWith(videoThumbnails, [
-      expect.objectContaining({ videoId: 'video-new', width: 120, height: 90 }),
-    ]);
-    expect(db.deleteMany).toHaveBeenCalledWith(videos, {
-      where: and(inList('dataId', ['removed']), { dataPlaylistId: 'playlist-2025' }),
+
+    await expect(importVideos()).rejects.toThrow('Database execution failed');
+
+    await expect(db.find(videos, 'video-kept')).resolves.toMatchObject({ title: 'kept' });
+    await expect(db.find(videoThumbnails, 'old-thumbnail')).resolves.toMatchObject({
+      url: 'old.jpg',
     });
   });
 
@@ -125,7 +194,7 @@ describe('the YouTube import', () => {
 
     await importVideos();
 
-    expect(db.deleteMany).not.toHaveBeenCalledWith(videos, expect.anything());
+    await expect(db.find(videos, 'video-removed')).resolves.toMatchObject({ title: 'Second page' });
   });
 
   it('keeps a video that has gone private, without updating it', async () => {
@@ -139,13 +208,9 @@ describe('the YouTube import', () => {
 
     await importVideos();
 
-    expect(db.update).toHaveBeenCalledTimes(1);
-    expect(db.create).not.toHaveBeenCalled();
-    expect(db.deleteMany).not.toHaveBeenCalledWith(videos, expect.anything());
+    await expect(db.find(videos, 'video-removed')).resolves.toMatchObject({ title: 'removed' });
   });
 
-  // Each of these answers used to look like a playlist that had lost its videos, which deleted
-  // them, and with them the posts' links to them
   it.each([
     [
       'an error',
@@ -158,9 +223,7 @@ describe('the YouTube import', () => {
 
     await importVideos();
 
-    expect(db.deleteMany).not.toHaveBeenCalledWith(videos, expect.anything());
-    expect(db.update).not.toHaveBeenCalled();
-    expect(db.create).not.toHaveBeenCalled();
+    await expect(db.count(videos)).resolves.toBe(2);
     expect(logger.warn).toHaveBeenCalledWith(
       expect.objectContaining({ playlistId: 'playlist-2025' }),
       expect.any(String)
@@ -177,8 +240,8 @@ describe('the YouTube import', () => {
 
     await importVideos();
 
-    expect(db.deleteMany).not.toHaveBeenCalledWith(videos, expect.anything());
-    expect(db.update).not.toHaveBeenCalled();
+    await expect(db.count(videos)).resolves.toBe(2);
+    await expect(db.find(videos, 'video-kept')).resolves.toMatchObject({ title: 'kept' });
   });
 
   it('gives up quietly when the playlists cannot be listed', async () => {
@@ -187,6 +250,6 @@ describe('the YouTube import', () => {
     });
 
     await expect(importVideos()).resolves.toBeUndefined();
-    expect(db.query).not.toHaveBeenCalled();
+    await expect(db.count(videos)).resolves.toBe(2);
   });
 });
