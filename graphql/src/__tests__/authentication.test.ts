@@ -197,6 +197,16 @@ describe('authentication', () => {
       expect(Number(response.headers.get('retry-after'))).toBeGreaterThan(0);
     });
 
+    it('counts sign-ins sent at once as they start, so they can’t all get past the limit', async () => {
+      const responses = await Promise.all(
+        Array.from({ length: 20 }, () => signIn('burst@example.test', 'wrong'))
+      );
+      const statuses = responses.map((response) => response.status);
+
+      expect(statuses.filter((status) => status === 401)).toHaveLength(5);
+      expect(statuses.filter((status) => status === 429)).toHaveLength(15);
+    });
+
     it('starts counting again after a success', async () => {
       for (let i = 0; i < 4; i++) {
         await signIn(admin.email, 'wrong');

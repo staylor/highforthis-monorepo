@@ -64,8 +64,9 @@ const authBodySchema = z.object({
 // Compared against when no user has the email, so an unknown email takes as long as a wrong password
 const UNKNOWN_USER_HASH = '$2b$10$UB2COKhs.EjDJdDhQtWeAuESCXrYjeG1omp5MA/WQvUjOHq7XmL9C';
 
-// Failed sign-ins per email: 5 in 15 minutes, wherever they come from
-const failedSignIns = createRateLimiter({ limit: 5, windowMs: 15 * 60 * 1000 });
+// Sign-ins per email: 5 in 15 minutes, wherever they come from. Each is counted as it starts, and
+// a success forgets the count, so it's failures that use them up.
+const signIns = createRateLimiter({ limit: 5, windowMs: 15 * 60 * 1000 });
 
 function extractBearerToken(headers: Headers): string | null {
   const header = headers.get('authorization');
@@ -146,18 +147,19 @@ export async function authHandler({ body }: { body: unknown }): Promise<Response
   }
   const { email, password } = parsed.data;
 
-  // Failed sign-ins are counted by the email in lowercase
+  // Sign-ins are counted by the email in lowercase, before the password is checked: counted
+  // after, many sent at once would all be checked while the first waited for its answer
   const key = email.toLowerCase();
-  if (failedSignIns.isLimited(key)) {
+  if (!signIns.attempt(key)) {
     return Response.json(
       { error: 'Too many failed sign-ins. Try again later.' },
-      { status: 429, headers: { 'Retry-After': String(failedSignIns.retryAfter(key)) } }
+      { status: 429, headers: { 'Retry-After': String(signIns.retryAfter(key)) } }
     );
   }
 
   // An email is a user's whatever its case, as mail is delivered. Postgres finds those, and also
   // takes a few letters for others, such as İ for i, where lowercase here keeps them apart. So the
-  // email has to be the same in lowercase here too, which is what failures are counted by:
+  // email has to be the same in lowercase here too, which is what sign-ins are counted by:
   // otherwise typing İ for i would get an email five more tries. No two users' emails differ only
   // in case (see User.ts), and the oldest account would win if they did.
   const found = await db.findMany(users, {
@@ -167,10 +169,9 @@ export async function authHandler({ body }: { body: unknown }): Promise<Response
   const user = found.find((candidate) => candidate.email.toLowerCase() === key);
   const matches = await bcrypt.compare(password, user?.hash ?? UNKNOWN_USER_HASH);
   if (!user || !matches) {
-    failedSignIns.attempt(key);
     return Response.json({ error: 'Wrong email or password' }, { status: 401 });
   }
 
-  failedSignIns.reset(key);
+  signIns.reset(key);
   return Response.json({ token: await issueToken(user.id) });
 }
