@@ -243,13 +243,23 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
             .merging(fields) { _, new in new }
     }
 
+    private static func text(_ text: String) -> [String: Any] {
+        [
+            "__typename": "TextNode", "text": text, "format": 0, "detail": 0, "mode": "normal", "style": "", "textFormat": 0,
+            "textStyle": "", "type": "text",
+        ]
+    }
+
+    private static func list(_ listType: String, items: [String]) -> [String: Any] {
+        element(
+            "ListNode", type: "list",
+            fields: [
+                "listType": listType, "start": 1,
+                "children": items.map { element("ListItemNode", type: "listitem", fields: ["children": [text($0)]]) },
+            ])
+    }
+
     private static func post(_ index: Int) -> [String: Any] {
-        let text: (String) -> [String: Any] = {
-            [
-                "__typename": "TextNode", "text": $0, "format": 0, "detail": 0, "mode": "normal", "style": "", "textFormat": 0,
-                "textStyle": "", "type": "text",
-            ]
-        }
         return [
             "__typename": "Post", "id": "post-\(index)", "slug": "post-\(index)", "title": "Records Worth Hearing \(index + 1)",
             "date": 1_762_300_800_000.0, "summary": "Notes from the listening room.", "featuredMedia": [],
@@ -266,6 +276,8 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
                             element("HeadingNode", type: "heading", fields: ["tag": "h3", "children": [text("The live recording")]]),
                             element("QuoteNode", type: "quote", fields: ["children": [text("Music brings people together.")]]),
                             element("CodeNode", type: "code", fields: ["children": [text("side A\nside B")]]),
+                            list("number", items: ["The opening track", "The encore"]),
+                            list("bullet", items: ["Vinyl", "Tape"]),
                         ]
                     ]),
             ],

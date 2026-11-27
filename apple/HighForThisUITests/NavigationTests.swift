@@ -153,7 +153,7 @@ final class NavigationTests: XCTestCase {
     }
 
     @MainActor
-    func testPostRendersHeadingParagraphQuoteAndCode() {
+    func testPostRendersHeadingParagraphQuoteCodeAndLists() {
         let app = launch()
         select("Posts", in: app)
         tap(element("post-post-0", in: app))
@@ -162,6 +162,11 @@ final class NavigationTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Music brings people together."].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["side A\nside B"].exists)
         screenshot("Post", app)
+        app.swipeUp()
+        // VoiceOver reads a numbered item's number with it
+        XCTAssertTrue(app.staticTexts["2. The encore"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Tape"].exists)
+        screenshot("Post Lists", app)
     }
 
     @MainActor

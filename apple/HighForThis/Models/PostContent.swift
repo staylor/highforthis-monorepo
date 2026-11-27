@@ -47,6 +47,8 @@ nonisolated enum PostBlock: Equatable {
     case paragraph(AttributedString)
     case quote(AttributedString)
     case code(AttributedString)
+    /// A list's items, numbered from `start` or bulleted
+    case list(numbered: Bool, start: Int, items: [AttributedString])
     case image(url: URL, aspectRatio: Double, altText: String)
     case video(Video_video)
 
@@ -68,7 +70,17 @@ nonisolated enum PostBlock: Equatable {
         if let video = node.asVideoNode?.video {
             return .video(video.fragments.video_video)
         }
-        guard let element = node.asElementNodeType, let text = text(element.children) else { return nil }
+        // Lists are element nodes too, whose children are their items. A checklist is bulleted, as the website shows one.
+        if let list = node.asListNode {
+            let items = (list.children ?? []).compactMap { child in
+                child?.asListItemNode.flatMap { item in text((item.children ?? []).compactMap { $0?.run }) }
+            }
+            guard !items.isEmpty else { return nil }
+            return .list(numbered: list.listType?.value == .number, start: list.start ?? 1, items: items)
+        }
+        guard let element = node.asElementNodeType, let text = text((element.children ?? []).compactMap { $0?.run }) else {
+            return nil
+        }
         if let heading = node.asHeadingNode {
             return .heading(level: heading.tag?.value?.level ?? 3, text: text)
         }
@@ -81,9 +93,8 @@ nonisolated enum PostBlock: Equatable {
         }
     }
 
-    /// The text and line breaks in a block, or nil when it has no text.
-    private static func text(_ children: [Node.AsElementNodeType.Child?]?) -> AttributedString? {
-        let runs = (children ?? []).compactMap { $0?.run }
+    /// The text and line breaks in a block or a list item, or nil when it has no text.
+    private static func text(_ runs: [LexicalRun]) -> AttributedString? {
         let hasText = runs.contains { run in
             if case .text(let text, _) = run { !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } else { false }
         }
@@ -106,6 +117,15 @@ nonisolated extension HeadingTag {
 
 nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsElementNodeType.Child {
     /// The text or the line break this is, or nil for another kind of node.
+    var run: LexicalRun? {
+        if asLinebreakNode != nil { return .lineBreak }
+        return asTextNode.map { .text($0.text ?? "", LexicalFormat(rawValue: $0.format ?? 0)) }
+    }
+}
+
+nonisolated extension PostQuery.Data.Post.EditorState.Root.Child.AsListNode.Child.AsListItemNode.Child {
+    /// The text or the line break this is, as a block's child is, or nil for another kind of node, such as a list
+    /// nested in the item, which the website leaves out too.
     var run: LexicalRun? {
         if asLinebreakNode != nil { return .lineBreak }
         return asTextNode.map { .text($0.text ?? "", LexicalFormat(rawValue: $0.format ?? 0)) }

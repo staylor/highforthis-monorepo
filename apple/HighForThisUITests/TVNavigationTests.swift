@@ -150,6 +150,10 @@ final class TVNavigationTests: XCTestCase {
         press(.down, untilFocusIsOn: element("post-block-4", in: app), times: 8)
         XCTAssertTrue(app.staticTexts["side A\nside B"].exists)
         screenshot("Post Scrolled", app)
+        press(.down, untilFocusIsOn: element("post-block-6", in: app), times: 4)
+        XCTAssertTrue(app.staticTexts["2. The encore"].exists)
+        XCTAssertTrue(app.staticTexts["Tape"].exists)
+        screenshot("Post Lists", app)
     }
 
     @MainActor
