@@ -17,6 +17,26 @@ extension View {
         #endif
     }
 
+    /// A plain list on tvOS sets its rows close together, and draws the focused one as a platter the width of the
+    /// list, so there each row has more room above and below it.
+    func spacedListRow() -> some View {
+        #if os(tvOS)
+        listRowInsets(.vertical, 24)
+        #else
+        self
+        #endif
+    }
+
+    /// On tvOS a section's first row, when focused, has a platter that would touch the section's header, so there the
+    /// header has room under it.
+    func spacedSectionHeader() -> some View {
+        #if os(tvOS)
+        padding(.bottom, 12)
+        #else
+        self
+        #endif
+    }
+
     /// tvOS sets a row's icon right against its title, so there the rows' labels put some room between them.
     func rowLabelSpacing() -> some View {
         #if os(tvOS)
