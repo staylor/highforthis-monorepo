@@ -108,9 +108,11 @@ export const postQuery = gql`
             ... on ImageNode {
               image {
                 id
+                altText
                 destination
                 crops {
                   fileName
+                  height
                   width
                 }
               }
