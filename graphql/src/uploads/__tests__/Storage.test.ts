@@ -152,24 +152,43 @@ describe('storeFile', () => {
     ).resolves.toMatchObject({ pages: 3, width: 30, height: 30 });
   });
 
-  it('turns down an image that stops partway, and removes what it wrote', async () => {
-    const photo = await sharp({
-      create: {
-        width: 800,
-        height: 600,
-        channels: 3,
-        background: '#000',
-        noise: { type: 'gaussian', mean: 128, sigma: 30 },
-      },
-    })
-      .jpeg()
-      .toBuffer();
-
-    await expect(
-      storeFile(imageFile(photo.subarray(0, photo.length / 2)), uploadDir)
-    ).rejects.toThrow('not an image that can be read');
-    await expect(filesIn(uploadDir)).resolves.toEqual([]);
+  it('records and serves the original and crops in the decoded image format', async () => {
+    const upload = await jpeg();
+    const stored = await storeFile(
+      new File([new Uint8Array(upload)], 'picture.png', { type: 'image/png' }),
+      uploadDir
+    );
+    expect(stored.mimeType).toBe('image/jpeg');
+    for (const file of [stored, ...(stored.crops ?? [])]) {
+      expect(path.extname(file.fileName)).toBe('.jpg');
+      expect(
+        (await sharp(path.join(uploadDir, stored.destination, file.fileName)).metadata()).format
+      ).toBe('jpeg');
+    }
   });
+
+  it.each([{ crops: [] }, { crops: [{ width: 150, height: 150 }] }])(
+    'turns down a truncated image with crops $crops',
+    async ({ crops }) => {
+      findMany.mockResolvedValue(crops);
+      const photo = await sharp({
+        create: {
+          width: 800,
+          height: 600,
+          channels: 3,
+          background: '#000',
+          noise: { type: 'gaussian', mean: 128, sigma: 30 },
+        },
+      })
+        .jpeg()
+        .toBuffer();
+
+      await expect(
+        storeFile(imageFile(photo.subarray(0, photo.length / 2)), uploadDir)
+      ).rejects.toThrow('not an image that can be read');
+      await expect(filesIn(uploadDir)).resolves.toEqual([]);
+    }
+  );
 
   it("reads an audio file's tags and length, and stores its cover", async () => {
     const stored = await storeFile(await fixture('tone.mp3', 'audio/mpeg'), uploadDir);

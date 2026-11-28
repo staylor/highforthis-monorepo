@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mediaUploads } from '#/database/tables';
 
 import resolvers, { type PodcastSettingsSource } from '../Settings';
+import { mediaSettingsSchema } from '../validations';
 
 const db = vi.hoisted(() => ({ find: vi.fn() }));
 
@@ -38,5 +39,16 @@ describe('PodcastSettings.image', () => {
     const settings = { id: 'podcast', imageId: null } as PodcastSettingsSource;
 
     await expect(resolvers.PodcastSettings.image(settings)).resolves.toBeNull();
+  });
+});
+
+describe('media crop dimensions', () => {
+  it.each([-1, 0, 1.5, 100_000_001])('rejects a dimension of %s', (size) => {
+    expect(mediaSettingsSchema.safeParse({ crops: [{ name: 'thumb', width: size }] }).success).toBe(
+      false
+    );
+    expect(
+      mediaSettingsSchema.safeParse({ crops: [{ name: 'thumb', height: size }] }).success
+    ).toBe(false);
   });
 });

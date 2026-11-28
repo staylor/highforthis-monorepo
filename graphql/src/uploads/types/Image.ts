@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pipeline } from 'node:stream/promises';
 
-import { UploadError } from '../mediaTypes';
+import { mediaExtension, UploadError } from '../mediaTypes';
 
 import Upload, { type FileData, type IncomingFile } from './Upload';
 
@@ -68,11 +68,9 @@ export default class Image extends Upload {
     // Imported on first use: libvips adds about 13 MB of RSS to every idle process.
     const { default: sharp } = await import('sharp');
 
-    const finalPath = path.join(this.destination, this.fileName);
     // The file as it was uploaded, until it's known whether it can be stored as it is
-    const uploadPath = `${finalPath}.upload`;
+    const uploadPath = path.join(this.destination, `${this.basename}.upload`);
     const original = {
-      fileName: this.fileName,
       width: 0,
       height: 0,
       fileSize: 0,
@@ -83,6 +81,14 @@ export default class Image extends Upload {
     try {
       await pipeline(file.stream(), fs.createWriteStream(uploadPath));
       const metadata = await sharp(uploadPath).metadata();
+      const format =
+        metadata.format === 'heif' && metadata.compression === 'av1' ? 'avif' : metadata.format;
+      this.mimeType = `image/${format}`;
+      const extension = mediaExtension(this.mimeType);
+      if (!extension) throw new UploadError(415, `Unsupported image format: ${format}`);
+      this.ext = extension;
+      this.fileName = this.basename + extension;
+      const finalPath = path.join(this.destination, this.fileName);
       // The size it's shown at: phones save photos sideways, with EXIF saying which way is up
       original.width = metadata.autoOrient.width;
       original.height = metadata.autoOrient.height;
@@ -94,6 +100,8 @@ export default class Image extends Upload {
         await sharp(uploadPath, { animated: true }).autoOrient().keepIccProfile().toFile(finalPath);
         await fs.promises.rm(uploadPath);
       } else {
+        // A header can survive a truncated upload. With no crops, nothing else decodes the pixels.
+        if (this.settings.crops.length === 0) await sharp(uploadPath, { animated: true }).stats();
         await fs.promises.rename(uploadPath, finalPath);
       }
       original.fileSize = (await fs.promises.stat(finalPath)).size;
@@ -109,6 +117,7 @@ export default class Image extends Upload {
 
     return {
       ...original,
+      fileName: this.fileName,
       mimeType: this.mimeType,
       originalName: file.name,
       destination: this.destination.replace(`${this.uploadDir}/`, ''),
