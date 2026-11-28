@@ -544,54 +544,7 @@ export type UpdatePodcastMutationVariables = Exact<{
 
 export type UpdatePodcastMutation = { updatePodcast: { id: string, description: string, title: string, audio: { id: string, destination: string, fileName: string, type: string } | null, image: { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> } | null } | null };
 
-export type PostForm_PostFragment = { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, language: string | null, children: Array<
-            | { type: string | null, version: number | null }
-            | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-            | Record<PropertyKey, never>
-           | null> | null }
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-            | { type: string | null, version: number | null }
-            | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-            | Record<PropertyKey, never>
-           | null> | null }
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, tag: Types.HeadingTag | null, children: Array<
-            | { type: string | null, version: number | null }
-            | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-            | Record<PropertyKey, never>
-           | null> | null }
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, children: Array<
-            | { type: string | null, version: number | null }
-            | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-            | Record<PropertyKey, never>
-           | null> | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-            | { type: string | null, version: number | null }
-            | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-            | Record<PropertyKey, never>
-           | null> | null }
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, listType: Types.ListType | null, start: number | null, children: Array<
-            | { type: string | null, version: number | null }
-            | { checked: boolean | null, direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, value: number | null, version: number | null, children: Array<
-                | { type: string | null, version: number | null }
-                | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-                | Record<PropertyKey, never>
-               | null> | null }
-            | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-            | Record<PropertyKey, never>
-           | null> | null }
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-            | { type: string | null, version: number | null }
-            | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-            | Record<PropertyKey, never>
-           | null> | null }
-        | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-            | { type: string | null, version: number | null }
-            | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-            | Record<PropertyKey, never>
-           | null> | null, video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
-        | Record<PropertyKey, never>
-       | null> | null } | null } | null, featuredMedia: Array<
+export type PostForm_PostFragment = { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { forEditing: string } | null, featuredMedia: Array<
     | { id: string, destination: string, fileName: string, type: string }
     | { id: string, destination: string, fileName: string, type: string }
     | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
@@ -619,54 +572,7 @@ export type PostEditQueryVariables = Exact<{
 }>;
 
 
-export type PostEditQuery = { post: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, language: string | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, tag: Types.HeadingTag | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, listType: Types.ListType | null, start: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { checked: boolean | null, direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, value: number | null, version: number | null, children: Array<
-                  | { type: string | null, version: number | null }
-                  | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-                  | Record<PropertyKey, never>
-                 | null> | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null, video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
-          | Record<PropertyKey, never>
-         | null> | null } | null } | null, featuredMedia: Array<
+export type PostEditQuery = { post: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { forEditing: string } | null, featuredMedia: Array<
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
@@ -678,54 +584,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { createPost: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, language: string | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, tag: Types.HeadingTag | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, listType: Types.ListType | null, start: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { checked: boolean | null, direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, value: number | null, version: number | null, children: Array<
-                  | { type: string | null, version: number | null }
-                  | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-                  | Record<PropertyKey, never>
-                 | null> | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null, video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
-          | Record<PropertyKey, never>
-         | null> | null } | null } | null, featuredMedia: Array<
+export type CreatePostMutation = { createPost: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { forEditing: string } | null, featuredMedia: Array<
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
@@ -738,54 +597,7 @@ export type UpdatePostMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePostMutation = { updatePost: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { root: { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, language: string | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, tag: Types.HeadingTag | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, size: string | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null, image: { id: string, destination: string, crops: Array<{ fileName: string, width: number }> } | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, listType: Types.ListType | null, start: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { checked: boolean | null, direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, value: number | null, version: number | null, children: Array<
-                  | { type: string | null, version: number | null }
-                  | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-                  | Record<PropertyKey, never>
-                 | null> | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null }
-          | { direction: Types.ElementDirection | null, format: number | null, indent: number | null, type: string | null, version: number | null, children: Array<
-              | { type: string | null, version: number | null }
-              | { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null }
-              | Record<PropertyKey, never>
-             | null> | null, video: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } | null }
-          | Record<PropertyKey, never>
-         | null> | null } | null } | null, featuredMedia: Array<
+export type UpdatePostMutation = { updatePost: { id: string, date: number | null, slug: string, status: Types.PostStatus | null, summary: string | null, title: string, artists: Array<{ id: string, name: string } | null> | null, editorState: { forEditing: string } | null, featuredMedia: Array<
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }

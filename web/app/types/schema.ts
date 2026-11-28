@@ -245,6 +245,8 @@ export type EditorNodeInput = {
 
 export type EditorState = {
   __typename?: 'EditorState';
+  /** Complete Lexical JSON with media previews for the admin editor. */
+  forEditing: Scalars['String']['output'];
   root?: Maybe<ElementNode>;
 };
 

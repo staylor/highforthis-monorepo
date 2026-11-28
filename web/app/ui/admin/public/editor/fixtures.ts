@@ -52,7 +52,24 @@ export const savedPost = {
         listType: 'bullet',
         start: 1,
         tag: 'ul',
-        children: [{ ...block, type: 'listitem', value: 1, children: [text('One')] }],
+        children: [
+          { ...block, type: 'listitem', value: 1, children: [text('One')] },
+          {
+            ...block,
+            type: 'listitem',
+            value: 2,
+            children: [
+              {
+                ...block,
+                type: 'list',
+                listType: 'number',
+                start: 3,
+                tag: 'ol',
+                children: [{ ...block, type: 'listitem', value: 3, children: [text('Nested')] }],
+              },
+            ],
+          },
+        ],
       },
     ],
   },

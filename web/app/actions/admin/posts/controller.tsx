@@ -59,7 +59,7 @@ function bodyFields(t: TFunction, post?: Post, values?: Values): Field[] {
       type: 'custom',
       render: () => (
         <PostEditor
-          editorState={post?.editorState ? JSON.stringify(post.editorState) : ''}
+          editorState={post?.editorState?.forEditing ?? ''}
           labels={{
             placeholder: t('editor.placeholder'),
             blockTypes: t('editor.blockTypes'),
