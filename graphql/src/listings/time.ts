@@ -15,7 +15,16 @@ export function zonedTime(date: string, time: string, timeZone: string) {
 
 // The instant a wall time happens in a time zone, given as the instant it happens in UTC
 export function zonedInstant(wall: Date, timeZone: string) {
-  return new Date(wall.getTime() - offsetMinutes(wall, timeZone) * 60_000);
+  const firstOffset = offsetMinutes(wall, timeZone);
+  const candidate = new Date(wall.getTime() - firstOffset * 60_000);
+  const actualOffset = offsetMinutes(candidate, timeZone);
+  if (actualOffset === firstOffset) return candidate;
+  const corrected = new Date(wall.getTime() - actualOffset * 60_000);
+  // If neither offset gives the requested time, the clock skipped it. Use the
+  // later instant so a time in the gap moves forward.
+  return offsetMinutes(corrected, timeZone) === actualOffset || corrected > candidate
+    ? corrected
+    : candidate;
 }
 
 function offsetMinutes(instant: Date, timeZone: string) {

@@ -12,7 +12,7 @@ interface ExistingShow {
 
 // A show's time is stored as the venue's clock reads it, read as New York's, so its day there is
 // the day on New York's clocks
-const dayOf = (show: ExistingShow) => dayKey(show.date, SITE_TIME_ZONE);
+const dayOf = (show: ExistingShow) => dayKey(new Date(show.date), SITE_TIME_ZONE);
 
 // Compares artist names without regard to case, accents or punctuation: "Dinosaur Jr." = "dinosaur jr"
 export function normalizeName(name: string) {

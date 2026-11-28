@@ -234,6 +234,47 @@ describe('a list', () => {
     });
   });
 
+  it('recognizes a postponed listing even after its original date has passed', async () => {
+    const venueId = 'postponed-venue';
+    await db.create(venues, {
+      id: venueId,
+      name: 'Club',
+      slug: 'club',
+      listingsUrl: 'https://example.com',
+    });
+    await db.create(shows, {
+      id: 'postponed',
+      venueId,
+      source: 'aeg',
+      sourceId: 'moved',
+      date: new Date('2020-01-01T23:00:00Z'),
+    });
+    getListings.mockResolvedValue({
+      source: 'aeg',
+      listings: [
+        {
+          source: 'aeg',
+          sourceId: 'moved',
+          localDate: '2030-01-10',
+          startsAt: new Date('2030-01-11T01:00:00Z'),
+          headliners: ['Artist'],
+          support: [],
+        },
+      ],
+    });
+    const preview = await listingResolvers.Query.venueListings({}, { venueId });
+    expect(preview.listings[0]).toMatchObject({ show: { id: 'postponed' }, dateChanged: true });
+    await expect(
+      listingResolvers.Mutation.importListings(
+        {},
+        {
+          venueId,
+          input: [{ sourceId: 'moved', artists: ['Artist'] }],
+        }
+      )
+    ).resolves.toMatchObject({ showsCreated: 0 });
+  });
+
   describe("a venue's featured media", () => {
     const mediaOf = (id: string) =>
       read<VenueSource>(id, {

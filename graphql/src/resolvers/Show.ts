@@ -57,7 +57,7 @@ export type ShowSource = Show & {
 
 /** What `shows` answers with: a page of shows, and the filter `years` lists the years of. */
 export interface ShowConnectionSource extends Connection<ShowSource> {
-  // What the shows were filtered by, apart from their dates, or null when none can match
+  // What the shows were filtered by, apart from the selected year, or null when none can match
   filter?: ShowFilter | null;
 }
 
@@ -231,16 +231,16 @@ const resolvers = {
       if (year && (year < 1000 || year > 9999)) {
         throw badInput('`year` must have four digits');
       }
-      // Everything but the dates, which `years` leaves out
+      // Everything but the selected year, so the year picker lists the matching years
       const conditions: ShowFilter[] = [];
-      let dates: ShowFilter | undefined;
 
       if (attended) {
         conditions.push(eq('attended', true));
-      } else if (latest) {
+      }
+      if (latest) {
         // Today's shows, and the ones to come: a show stays listed until its day is over in New
         // York, rather than leaving the moment it starts
-        dates = gte('date', startOfSiteDay(new Date()));
+        conditions.push(gte('date', startOfSiteDay(new Date())));
       }
 
       if (artist?.id) {
@@ -294,11 +294,7 @@ const resolvers = {
 
       const filter = and(...conditions);
       const showYear = year || (mostRecentYear ? await newestYear(filter) : undefined);
-      if (showYear) {
-        dates = inYear(showYear);
-      }
-
-      const query = db.query(shows).where(dates ? and(filter, dates) : filter);
+      const query = db.query(shows).where(showYear ? and(filter, inYear(showYear)) : filter);
       const direction = order === 'ASC' || (!order && latest) ? 'asc' : 'desc';
       const connection = await parseConnection<ShowSource>(
         {
