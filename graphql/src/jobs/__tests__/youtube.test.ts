@@ -174,7 +174,16 @@ describe('the YouTube import', () => {
       )
     );
 
-    await importVideos();
+    const transaction = vi.spyOn(db, 'transaction');
+    try {
+      await importVideos();
+      expect(transaction).toHaveBeenCalledTimes(1);
+      transaction.mockClear();
+      await importVideos();
+      expect(transaction).not.toHaveBeenCalled();
+    } finally {
+      transaction.mockRestore();
+    }
 
     await expect(db.findMany(videos, { where: { dataId: 'twice' } })).resolves.toMatchObject([
       { year: 2026, position: 1, slug: 'twice' },
