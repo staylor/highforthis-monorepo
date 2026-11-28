@@ -3,6 +3,8 @@ import type { openobserveRum } from '@openobserve/browser-rum';
 
 import type { OpenObserveRumConfig } from '#/lib/rum.ts';
 
+import type { trackViews } from './rum-views.ts';
+
 // The SDKs are loaded as their prebuilt bundles (see lib/openobserve-bundles.ts), which set
 // these globals. Only their types are imported, so the asset server never serves the SDKs'
 // own modules.
@@ -30,7 +32,7 @@ function loadScript(src: string) {
 // Remix navigates with the browser's Navigation API rather than history.pushState, which the
 // RUM SDK watches to start views. So views are started here: one for the page the visit started
 // on and one after each navigation, which is what the admin dashboard counts as page views.
-export async function startRum(config: OpenObserveRumConfig, firstPath: string) {
+export async function startRum(config: OpenObserveRumConfig, views: ReturnType<typeof trackViews>) {
   await Promise.all([loadScript(config.scripts.rum), loadScript(config.scripts.logs)]);
   const rum = window[sdkGlobals.rum];
   const logs = window[sdkGlobals.logs];
@@ -73,12 +75,5 @@ export async function startRum(config: OpenObserveRumConfig, firstPath: string) 
     rum.startSessionReplayRecording();
   }
 
-  // The SDK times the first view from the start of the visit, whenever it starts. A visitor who
-  // has gone on to another page by then is on a view of that page too.
-  const startView = () => rum.startView({ name: window.location.pathname });
-  rum.startView({ name: firstPath });
-  if (window.location.pathname !== firstPath) {
-    startView();
-  }
-  window.navigation?.addEventListener('navigatesuccess', startView);
+  views.start((name) => rum.startView({ name }));
 }

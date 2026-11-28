@@ -5,6 +5,8 @@ import {
   preloadShim,
 } from 'remix/multiple-import-maps-polyfill';
 
+import { trackViews } from './rum-views.ts';
+
 const app = run({
   async loadModule(moduleUrl, exportName) {
     const mod = await importModule(moduleUrl);
@@ -41,11 +43,14 @@ window.navigation?.addEventListener('navigateerror', markHydrated);
 // first view is still timed from the start of the visit, from the timings the browser keeps.
 const rumConfig = window.__OPENOBSERVE_RUM__;
 if (rumConfig) {
-  const firstPath = window.location.pathname;
+  const views = trackViews(window.navigation, () => window.location.pathname);
   const start = () => {
     import('./rum.ts')
-      .then(({ startRum }) => startRum(rumConfig, firstPath))
-      .catch((error) => console.error('OpenObserve RUM failed to start', error));
+      .then(({ startRum }) => startRum(rumConfig, views))
+      .catch((error) => {
+        views.stop();
+        console.error('OpenObserve RUM failed to start', error);
+      });
   };
   // Not every browser has requestIdleCallback
   const startWhenIdle = () =>
