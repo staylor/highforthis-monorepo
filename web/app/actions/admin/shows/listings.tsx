@@ -12,6 +12,7 @@ import { Message } from '#/ui/admin/message.tsx';
 import { Alert, Heading } from '#/ui/admin/page.tsx';
 import { ListingsForm, type ListingRow } from '#/ui/admin/public/listings-form.tsx';
 import { NavigateSelect } from '#/ui/admin/public/navigate-select.tsx';
+import { formatClock } from '#/ui/shows/utils.ts';
 
 import { importListings, loadVenueListings } from './listings-data.ts';
 
@@ -24,20 +25,15 @@ const listingsRoute = routes.admin.shows.listings;
 type VenueListings = NonNullable<VenueListingsAdminQuery['venueListings']>;
 type Listing = VenueListings['listings'][number];
 
-/** A listing's day, such as "Sat, 8/15/26". Noon keeps the calendar day in every time zone. */
+/** A listing's day, such as "Sat, 8/15/26". The formatter reads the same UTC clock used to represent the day. */
 function formatDay(localDate: string) {
-  return new Date(`${localDate}T12:00:00`).toLocaleDateString('en-US', {
+  return new Date(`${localDate}T00:00:00Z`).toLocaleDateString('en-US', {
+    timeZone: 'UTC',
     weekday: 'short',
     month: 'numeric',
     day: 'numeric',
     year: '2-digit',
   });
-}
-
-/** A listing's time, such as "8:00 PM", from its local 20:00:00. */
-function formatTime(localTime: string) {
-  const [hours, minutes] = localTime.split(':').map(Number);
-  return `${hours % 12 || 12}:${String(minutes).padStart(2, '0')} ${hours < 12 ? 'AM' : 'PM'}`;
 }
 
 /** What the table needs for each listing, translated and formatted here. */
@@ -53,7 +49,7 @@ function listingRow(t: TFunction, listing: Listing): ListingRow {
   return {
     sourceId: listing.sourceId,
     day,
-    time: listing.localTime ? formatTime(listing.localTime) : null,
+    time: listing.localTime ? formatClock(listing.localTime) : null,
     artists: listing.headliners.join('; '),
     listed: listed.join(', '),
     support: listing.support,

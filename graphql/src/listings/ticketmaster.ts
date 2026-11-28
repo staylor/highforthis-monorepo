@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
 import env from '#/env';
-import { SITE_TIME_ZONE } from '#/time';
+import { feedSchedule } from '#/show-schedule';
 
 import { cached, fetchText } from './http';
-import { zonedTime } from './time';
 import type { Listing } from './types';
 
 const API = 'https://app.ticketmaster.com/discovery/v2';
@@ -111,20 +110,16 @@ function hasStartTime({ localTime, timeTBA, noSpecificTime }: TicketmasterEvent[
 function toListing(event: TicketmasterEvent): Listing {
   const { start, status, timezone } = event.dates;
   const attractions = event._embedded?.attractions ?? [];
-  const timeZone = timezone ?? event._embedded?.venues?.[0]?.timezone ?? 'America/New_York';
+  const timeZone = timezone ?? event._embedded?.venues?.[0]?.timezone ?? null;
   const localDate = start.dateTBD || start.dateTBA ? null : (start.localDate ?? null);
-  const localTime = hasStartTime(start) ? (start.localTime?.slice(0, 5) ?? null) : null;
-  // The venue's clock time, read as New York's, as the site stores every show's time
-  const startsAt = localDate ? zonedTime(localDate, localTime ?? '20:00', SITE_TIME_ZONE) : null;
+  const localTime = hasStartTime(start) ? (start.localTime ?? null) : null;
+
   const code = status?.code ?? '';
 
   return {
     source: 'ticketmaster',
     sourceId: event.id,
-    localDate,
-    localTime,
-    startsAt,
-    timeZone,
+    ...feedSchedule(localDate, localTime, timeZone, start.dateTime),
     headliners: [attractions[0]?.name ?? event.name],
     support: attractions.slice(1).map(({ name }) => name),
     status: STATUS[code] ?? null,

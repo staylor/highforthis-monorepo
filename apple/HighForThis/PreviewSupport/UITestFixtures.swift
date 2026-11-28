@@ -125,7 +125,9 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
     private static func show(_ index: Int, year: Int = 2025) -> [String: Any] {
         [
             "__typename": "Show", "id": "show-\(year)-\(index)", "title": "Evening Set \(index + 1)",
-            "date": year == 2019 ? 1_573_049_600_000.0 : 1_762_300_800_000.0,
+            "schedule": ["__typename": "ShowSchedule", "localDate": "\(year)-11-05", "localTime": "20:00"],
+            // The schedule on New York's clocks, as the API answers it: 8 PM on November 5
+            "date": year == 2019 ? 1_573_002_000_000.0 : 1_762_390_800_000.0,
             "url": "https://example.com/tickets", "artists": [artist], "venue": venue,
         ]
     }

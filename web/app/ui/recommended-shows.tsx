@@ -8,7 +8,7 @@ import { Link } from './link.tsx';
 import { card, colorTransition, label, lg, linkHover, merge, sm, text } from './public/styles.ts';
 import { SectionHeader } from './section-header.tsx';
 import { Headliner } from './shows/headliner.tsx';
-import { formatArtists, formatShowLink, monthNames, weekdayNames } from './shows/utils.ts';
+import { formatArtists, formatShowLink, formatSchedule } from './shows/utils.ts';
 
 type Shows = NonNullable<HomeQuery['shows']>;
 type Edges = Shows['edges'];
@@ -18,9 +18,9 @@ function groupShowsByMonth(edges: Edges) {
   const seen = new Map<string, number>();
 
   for (const edge of edges) {
-    const date = new Date(edge.node.date);
-    const key = `${date.getFullYear()}-${date.getMonth()}`;
-    const label = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+    const date = formatSchedule(edge.node.schedule);
+    const key = `${date.year}-${date.month}`;
+    const label = `${date.monthName} ${date.year}`;
 
     if (seen.has(key)) {
       groups[seen.get(key)!].shows.push(edge);
@@ -90,7 +90,7 @@ export function RecommendedShows(handle: Handle<{ shows: Shows }>) {
                 }}
               >
                 {group.shows.map(({ node }) => {
-                  const date = new Date(node.date);
+                  const date = formatSchedule(node.schedule);
                   return (
                     <Link href={formatShowLink(node)} mix={showCard}>
                       {/* As wide as the widest day, so the pictures and names line up */}
@@ -103,11 +103,9 @@ export function RecommendedShows(handle: Handle<{ shows: Shows }>) {
                             color: 'var(--pink)',
                           })}
                         >
-                          {String(date.getDate()).padStart(2, '0')}
+                          {String(date.day).padStart(2, '0')}
                         </div>
-                        <div mix={css({ ...label, fontWeight: 500 })}>
-                          {weekdayNames[date.getDay()]}
-                        </div>
+                        <div mix={css({ ...label, fontWeight: 500 })}>{date.weekday}</div>
                       </div>
                       <Headliner show={node} />
                       <div mix={css({ minWidth: 0, flex: '1 1 0%' })}>

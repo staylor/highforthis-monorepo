@@ -22,7 +22,7 @@ function listing(overrides: Partial<Listing> = {}): Listing {
 
 function show(date: string, artists: string[], source?: { source: string; sourceId: string }) {
   return {
-    date: new Date(date),
+    localDate: date,
     source: source?.source ?? null,
     sourceId: source?.sourceId ?? null,
     artists: artists.map((name) => ({ artist: { name } })),
@@ -31,7 +31,7 @@ function show(date: string, artists: string[], source?: { source: string; source
 
 describe('matchListing', () => {
   it('matches the show added from the listing', () => {
-    const added = show('2026-12-01T01:00:00Z', ['Someone Else'], {
+    const added = show('2026-11-30', ['Someone Else'], {
       source: 'aeg',
       sourceId: '1634214',
     });
@@ -40,7 +40,7 @@ describe('matchListing', () => {
   });
 
   it('flags a listing that moved to another day after it was added', () => {
-    const added = show('2026-11-29T01:00:00Z', ['Dinosaur Jr'], {
+    const added = show('2026-11-28', ['Dinosaur Jr'], {
       source: 'aeg',
       sourceId: '1634214',
     });
@@ -49,26 +49,24 @@ describe('matchListing', () => {
   });
 
   it('matches a hand-entered show on the same day by artist name', () => {
-    // 8 PM Eastern, as the admin form saves shows
-    const entered = show('2026-12-01T01:00:00Z', ['Dinosaur Jr.']);
+    const entered = show('2026-11-30', ['Dinosaur Jr.']);
 
     expect(matchListing(listing(), [entered]).show).toBe(entered);
   });
 
-  // A show's time is stored as the venue's clock reads it, read as New York's
-  it("compares days on New York's clocks, whatever the venue's time zone", () => {
+  it('compares advertised calendar days across New Year', () => {
     const sphere = (localDate: string) =>
       listing({ localDate, timeZone: 'America/Los_Angeles', headliners: ['Phish'], support: [] });
     // Phish at Sphere at 8 PM on New Year's Eve, and at 12:30 AM on New Year's Day
-    const newYearsEve = show('2027-01-01T01:00:00Z', ['Phish']);
-    const afterMidnight = show('2027-01-01T05:30:00Z', ['Phish']);
+    const newYearsEve = show('2026-12-31', ['Phish']);
+    const afterMidnight = show('2027-01-01', ['Phish']);
 
     expect(matchListing(sphere('2026-12-31'), [newYearsEve]).show).toBe(newYearsEve);
     expect(matchListing(sphere('2027-01-01'), [afterMidnight]).show).toBe(afterMidnight);
   });
 
   it("doesn't flag a show added from a listing at a venue outside New York", () => {
-    const added = show('2027-04-09T00:00:00Z', ['Phish'], { source: 'aeg', sourceId: 'sphere' });
+    const added = show('2027-04-08', ['Phish'], { source: 'aeg', sourceId: 'sphere' });
     const sphere = listing({
       sourceId: 'sphere',
       localDate: '2027-04-08',
@@ -80,17 +78,17 @@ describe('matchListing', () => {
 
   it('ignores shows on other days, with other artists, or from other listings', () => {
     const shows = [
-      show('2026-12-02T01:00:00Z', ['Dinosaur Jr']),
-      show('2026-12-01T01:00:00Z', ['Beirut']),
+      show('2026-12-01', ['Dinosaur Jr']),
+      show('2026-11-30', ['Beirut']),
       // the early show, added from its own listing, isn't the late show
-      show('2026-11-30T23:00:00Z', ['Dinosaur Jr'], { source: 'aeg', sourceId: 'early' }),
+      show('2026-11-30', ['Dinosaur Jr'], { source: 'aeg', sourceId: 'early' }),
     ];
 
     expect(matchListing(listing(), shows)).toEqual({ show: null, dateChanged: false });
   });
 
   it("doesn't match by artist before the date is announced", () => {
-    const entered = show('2026-12-01T01:00:00Z', ['Dinosaur Jr']);
+    const entered = show('2026-11-30', ['Dinosaur Jr']);
 
     expect(matchListing(listing({ localDate: null }), [entered]).show).toBeNull();
   });

@@ -31,14 +31,11 @@ nonisolated extension FormatStyle where Self == Date.FormatStyle {
     /// A show's day as VoiceOver reads its date badge, which only has room for "30 Mon", in New York.
     static var showSpokenDay: Self { inNewYork(.dateTime.weekday(.wide).month(.wide).day()) }
 
-    /// The venue's clock time. The API encodes every venue's wall time using New York's offset.
-    static var showTime: Self { inNewYork(.dateTime.weekday(.wide).month(.wide).day().year().hour().minute()) }
-
     /// The day an episode or a post was posted, as their lists show it.
-    static var postedDate: Self { .dateTime.month(.abbreviated).day().year() }
+    static var postedDate: Self { inNewYork(.dateTime.month(.abbreviated).day().year()) }
 
     /// The day an episode or a post was posted, as its own page shows it.
-    static var postedDay: Self { .dateTime.month(.wide).day().year() }
+    static var postedDay: Self { inNewYork(.dateTime.month(.wide).day().year()) }
 }
 
 /// The style, showing New York's clocks rather than the device's.
@@ -46,4 +43,15 @@ private nonisolated func inNewYork(_ style: Date.FormatStyle) -> Date.FormatStyl
     var style = style
     style.timeZone = .newYork
     return style
+}
+
+/// Format the advertised civil fields without resolving them in a device or venue time zone.
+/// UTC provides a clock with no DST gaps or repeated hours for Foundation's localized formatting.
+nonisolated func venueScheduleLabel(day: String, time: String?, locale: Locale = .current) -> String? {
+    let clock = time.map { String($0.prefix(5)) } ?? "00:00"
+    guard let value = try? Date("\(day)T\(clock):00Z", strategy: .iso8601) else { return nil }
+    var style = Date.FormatStyle.dateTime.weekday(.wide).month(.wide).day().year().locale(locale)
+    if time != nil { style = style.hour().minute() }
+    style.timeZone = .gmt
+    return value.formatted(style)
 }

@@ -1,8 +1,7 @@
 import { CronJob } from 'cron';
 
 import { createLogger } from '@highforthis/shared/logger';
-
-import { SITE_TIME_ZONE } from '#/time';
+import { SITE_TIME_ZONE } from '@highforthis/shared/time';
 
 import showsData from './shows';
 import youtubeData from './youtube';

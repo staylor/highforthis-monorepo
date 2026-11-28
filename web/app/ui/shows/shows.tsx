@@ -10,7 +10,7 @@ import { SectionHeader } from '#/ui/section-header.tsx';
 import { trans } from '#/ui/trans.tsx';
 
 import { Headliner } from './headliner.tsx';
-import { cell, formatArtists, formatDate, formatShowLink, row } from './utils.ts';
+import { cell, formatArtists, formatDate, formatSchedule, formatShowLink, row } from './utils.ts';
 
 export const showsGridFragment = gql`
   fragment ShowsGrid_shows on ShowConnection {
@@ -31,6 +31,10 @@ export const showsGridFragment = gql`
               url
             }
           }
+        }
+        schedule {
+          localDate
+          localTime
         }
         venue {
           id
@@ -59,6 +63,10 @@ export const attendedFragment = gql`
           id
           name
           slug
+        }
+        schedule {
+          localDate
+          localTime
         }
         venue {
           id
@@ -116,7 +124,13 @@ function headed(previous?: number) {
 const byDate =
   (newestFirst: boolean) =>
   ({ node: a }: ShowEdge, { node: b }: ShowEdge) => {
-    if (a.date === b.date) {
+    const day = a.schedule.localDate.localeCompare(b.schedule.localDate);
+    // PostgreSQL places a missing time last in ascending order.
+    const first = a.schedule.localTime ?? '24';
+    const second = b.schedule.localTime ?? '24';
+    const time = first < second ? -1 : first > second ? 1 : 0;
+    const order = day || time;
+    if (order === 0) {
       const artistA = a.artists[0]?.name ?? '';
       const artistB = b.artists[0]?.name ?? '';
       if (artistA === artistB) {
@@ -124,8 +138,7 @@ const byDate =
       }
       return artistA < artistB ? -1 : 1;
     }
-    const soonestFirst = a.date < b.date ? -1 : 1;
-    return newestFirst ? -soonestFirst : soonestFirst;
+    return newestFirst ? -order : order;
   };
 
 const table = css({ width: '100%', borderCollapse: 'collapse' });
@@ -257,7 +270,7 @@ export function ShowsTable(handle: Handle<Omit<GridProps, 'mix' | 'more'>>) {
 
     const rows: RemixNode[] = [];
     for (const { node } of sorted) {
-      const d = formatDate(node.date);
+      const d = formatSchedule(node.schedule);
       if (!years[d.year]) {
         const firstYear = Object.keys(years).length === 0;
         years[d.year] = 1;
@@ -345,7 +358,7 @@ export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
     return (
       <>
         {shows.edges.map(({ node }) => {
-          const d = formatDate(node.date);
+          const d = formatSchedule(node.schedule);
           const showRow = (
             <div mix={listRow}>
               <Headliner show={node} />
@@ -433,7 +446,7 @@ export function Attended(
         <table mix={table}>
           <tbody>
             {shows.edges.map(({ node }) => {
-              const d = formatDate(node.date);
+              const d = formatSchedule(node.schedule);
               const place = [node.venue.city, node.venue.state].filter(Boolean).join(', ');
               return (
                 <tr key={node.id} mix={borderedRow}>

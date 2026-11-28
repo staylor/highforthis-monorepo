@@ -60,8 +60,8 @@ export default class Upload {
 
   async setDestination() {
     const d = new Date();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const uploadsFolder = path.join(this.uploadDir, `${d.getFullYear()}`, month);
+    const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const uploadsFolder = path.join(this.uploadDir, `${d.getUTCFullYear()}`, month);
     await fs.promises.mkdir(uploadsFolder, { recursive: true });
     this.destination = uploadsFolder;
   }

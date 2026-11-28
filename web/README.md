@@ -87,6 +87,8 @@ Every page is sent with a Content Security Policy (`pagePolicy()` in `app/middle
 
 On Railway (detected by `RAILWAY_ENVIRONMENT_NAME`), the server trusts the `X-Forwarded-*` headers from Railway's edge, which replaces any the client sends, so requests get their public `https://` URL, which keeps redirects on https and lets form posts pass `sameOrigin()`.
 
+A merge that changes web and GraphQL deploys both at once, and web can be ready first. So before Railway starts a new web deployment, its pre-deploy command (`pnpm await-api`, in [`railway.toml`](railway.toml)) asks GraphQL for the fields this build needs that the GraphQL release before it doesn't have, every one skipped, so nothing runs. It waits up to four minutes for GraphQL to know them. If GraphQL still doesn't, the deploy fails and the web that's live stays: deploy web again once GraphQL is live. When a change has web ask GraphQL for something new, name it in `newFields` in [`app/lib/api-ready.ts`](app/lib/api-ready.ts).
+
 ## Scripts
 
 | Script           | Description                                   |
@@ -95,6 +97,7 @@ On Railway (detected by `RAILWAY_ENVIRONMENT_NAME`), the server trusts the `X-Fo
 | `pnpm hmr`       | Start in development with hot module reload   |
 | `pnpm build`     | Build shared                                  |
 | `pnpm start`     | Start the production server                   |
+| `pnpm await-api` | Wait for the GraphQL this build needs         |
 | `pnpm test`      | Run tests with Remix's test runner            |
 | `pnpm typecheck` | Type-check                                    |
 

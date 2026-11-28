@@ -1,6 +1,8 @@
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
+import { SITE_TIME_ZONE } from '@highforthis/shared/time';
+
 import {
   formActions,
   listAction,
@@ -29,10 +31,8 @@ const videos = routes.admin.videos;
 type VideoRow = NonNullable<VideosAdminQuery['videos']>['edges'][number]['node'];
 type Video = NonNullable<VideoEditQuery['video']>;
 
-function publishedDate(publishedAt: number) {
-  const date = new Date(publishedAt);
-  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-}
+const publishedFormatter = new Intl.DateTimeFormat('en-US', { timeZone: SITE_TIME_ZONE });
+const publishedDate = (timestamp: number) => publishedFormatter.format(timestamp);
 
 function videoFields(t: TFunction, video: Video): Field[] {
   return [

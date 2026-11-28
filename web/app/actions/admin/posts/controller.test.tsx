@@ -9,8 +9,8 @@ import {
   stubGraphQL,
 } from '#/actions/admin/test-support.ts';
 
-// 8:00 PM on May 10, 2024 wherever the tests run, since the list shows the server's time
-const postTime = new Date(2024, 4, 10, 20, 0).getTime();
+// 8 PM on May 10 in the site's editorial calendar
+const postTime = Date.UTC(2024, 4, 11, 0);
 
 const posts = {
   count: 2,
@@ -183,6 +183,31 @@ describe('admin posts', () => {
       operationName: 'UpdatePost',
       variables: { id: 'p1', input: { artists: [], title: 'Best of 2024', status: 'PUBLISH' } },
     });
+  });
+
+  it('saves a New York publication time from the native form without browser scripting', async (t) => {
+    const operations = stubGraphQL(t, { UpdatePost: { updatePost: savedPost } });
+    await post('/admin/post/p1', 'dateLocal=2026-11-01T01:30');
+    assert.deepEqual(operations.at(-1)?.variables.input, {
+      artists: [],
+      date: Date.UTC(2026, 10, 1, 5, 30),
+    });
+    const saved = Date.UTC(2026, 10, 1, 6, 30, 18, 245);
+    await post('/admin/post/p1', `date=${saved}&dateLocal=2026-11-01T01:30`);
+    assert.equal(operations.at(-1)?.variables.input.date, saved);
+  });
+
+  it('returns the entered spring-forward time for correction', async (t) => {
+    const operations = stubGraphQL(t);
+    const response = await post('/admin/post/add', 'dateLocal=2026-03-08T02:30');
+    assert.equal(response.status, 422);
+    const html = await response.text();
+    assert.match(html, /Enter a valid publication time in New York/);
+    assert.match(html, /name="dateLocal" value="2026-03-08T02:30"/);
+    assert.equal(
+      operations.some((op) => op.operationName === 'CreatePost'),
+      false
+    );
   });
 
   it('keeps an artist tag that is all digits as text', async (t) => {

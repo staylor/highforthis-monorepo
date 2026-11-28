@@ -144,7 +144,8 @@ export type AudioUpload = MediaUpload & {
 export type BulkCreateShowInput = {
   artists: Array<Scalars['String']['input']>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
-  date: Scalars['Float']['input'];
+  date?: InputMaybe<Scalars['Float']['input']>;
+  schedule?: InputMaybe<ShowScheduleInput>;
   venue: Scalars['String']['input'];
 };
 
@@ -196,8 +197,9 @@ export type CreatePostInput = {
 export type CreateShowInput = {
   artists: Array<Scalars['String']['input']>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
-  date: Scalars['Float']['input'];
+  date?: InputMaybe<Scalars['Float']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
+  schedule?: InputMaybe<ShowScheduleInput>;
   title?: InputMaybe<Scalars['String']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
   venue: Scalars['String']['input'];
@@ -949,9 +951,11 @@ export type Show = {
   __typename?: 'Show';
   artists: Array<Artist>;
   attended?: Maybe<Scalars['Boolean']['output']>;
+  /** Venue wall time encoded in New York for existing clients. */
   date: Scalars['Float']['output'];
   id: Scalars['String']['output'];
   notes?: Maybe<Scalars['String']['output']>;
+  schedule: ShowSchedule;
   title?: Maybe<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
   venue: Venue;
@@ -982,6 +986,25 @@ export enum ShowOrder {
   Asc = 'ASC',
   Desc = 'DESC',
 }
+
+export type ShowSchedule = {
+  __typename?: 'ShowSchedule';
+  /** Advertised calendar day at the venue (YYYY-MM-DD). */
+  localDate: Scalars['String']['output'];
+  /** Venue clock time, through milliseconds when supplied. Null until announced. */
+  localTime?: Maybe<Scalars['String']['output']>;
+  /** Confirmed start in Unix milliseconds, when known. */
+  startsAt?: Maybe<Scalars['Float']['output']>;
+  /** IANA zone identifier when known. */
+  timeZone?: Maybe<Scalars['String']['output']>;
+};
+
+export type ShowScheduleInput = {
+  localDate: Scalars['String']['input'];
+  localTime?: InputMaybe<Scalars['String']['input']>;
+  startsAt?: InputMaybe<Scalars['Float']['input']>;
+  timeZone?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type ShowStat = {
   __typename?: 'ShowStat';
@@ -1078,6 +1101,7 @@ export type UpdateShowInput = {
   attended?: InputMaybe<Scalars['Boolean']['input']>;
   date?: InputMaybe<Scalars['Float']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
+  schedule?: InputMaybe<ShowScheduleInput>;
   title?: InputMaybe<Scalars['String']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
   venue?: InputMaybe<Scalars['String']['input']>;
@@ -1424,6 +1448,8 @@ export type ResolversTypes = {
   ShowEntity: ResolverTypeWrapper<ShowEntitySource>;
   ShowEntityType: ShowEntityType;
   ShowOrder: ShowOrder;
+  ShowSchedule: ResolverTypeWrapper<ShowSchedule>;
+  ShowScheduleInput: ShowScheduleInput;
   ShowStat: ResolverTypeWrapper<
     Omit<ShowStat, 'entity'> & { entity: ResolversTypes['ShowEntity'] }
   >;
@@ -1531,6 +1557,8 @@ export type ResolversParentTypes = {
   ShowConnection: ShowConnectionSource;
   ShowEdge: Omit<ShowEdge, 'node'> & { node: ResolversParentTypes['Show'] };
   ShowEntity: ShowEntitySource;
+  ShowSchedule: ShowSchedule;
+  ShowScheduleInput: ShowScheduleInput;
   ShowStat: Omit<ShowStat, 'entity'> & { entity: ResolversParentTypes['ShowEntity'] };
   ShowTotals: ShowTotals;
   SiteSettings: SiteSettings;
@@ -2391,6 +2419,7 @@ export type ShowResolvers<
   date?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  schedule?: Resolver<ResolversTypes['ShowSchedule'], ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   venue?: Resolver<ResolversTypes['Venue'], ParentType, ContextType>;
@@ -2420,6 +2449,16 @@ export type ShowEntityResolvers<
   ParentType extends ResolversParentTypes['ShowEntity'] = ResolversParentTypes['ShowEntity'],
 > = {
   __resolveType: TypeResolveFn<'Artist' | 'Venue', ParentType, ContextType>;
+};
+
+export type ShowScheduleResolvers<
+  ContextType = AppContext,
+  ParentType extends ResolversParentTypes['ShowSchedule'] = ResolversParentTypes['ShowSchedule'],
+> = {
+  localDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  localTime?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  startsAt?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  timeZone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type ShowStatResolvers<
@@ -2688,6 +2727,7 @@ export type Resolvers<ContextType = AppContext> = {
   ShowConnection?: ShowConnectionResolvers<ContextType>;
   ShowEdge?: ShowEdgeResolvers<ContextType>;
   ShowEntity?: ShowEntityResolvers<ContextType>;
+  ShowSchedule?: ShowScheduleResolvers<ContextType>;
   ShowStat?: ShowStatResolvers<ContextType>;
   ShowTotals?: ShowTotalsResolvers<ContextType>;
   SiteSettings?: SiteSettingsResolvers<ContextType>;

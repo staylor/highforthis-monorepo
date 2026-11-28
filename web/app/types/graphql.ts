@@ -26,7 +26,8 @@ export type AppleMusicDataInput = {
 export type BulkCreateShowInput = {
   artists: Array<string>;
   attended?: boolean | null | undefined;
-  date: number;
+  date?: number | null | undefined;
+  schedule?: ShowScheduleInput | null | undefined;
   venue: string;
 };
 
@@ -59,8 +60,9 @@ export type CreatePostInput = {
 export type CreateShowInput = {
   artists: Array<string>;
   attended?: boolean | null | undefined;
-  date: number;
+  date?: number | null | undefined;
   notes?: string | null | undefined;
+  schedule?: ShowScheduleInput | null | undefined;
   title?: string | null | undefined;
   url?: string | null | undefined;
   venue: string;
@@ -205,6 +207,13 @@ export const ShowOrder = {
 } as const;
 
 export type ShowOrder = typeof ShowOrder[keyof typeof ShowOrder];
+export type ShowScheduleInput = {
+  localDate: string;
+  localTime?: string | null | undefined;
+  startsAt?: number | null | undefined;
+  timeZone?: string | null | undefined;
+};
+
 export type SiteSettingsInput = {
   copyrightText?: string | null | undefined;
   emailAddress?: string | null | undefined;
@@ -260,6 +269,7 @@ export type UpdateShowInput = {
   attended?: boolean | null | undefined;
   date?: number | null | undefined;
   notes?: string | null | undefined;
+  schedule?: ShowScheduleInput | null | undefined;
   title?: string | null | undefined;
   url?: string | null | undefined;
   venue?: string | null | undefined;
@@ -338,7 +348,7 @@ export type DeleteArtistMutationVariables = Exact<{
 
 export type DeleteArtistMutation = { removeArtist: boolean | null };
 
-export type ArtistForm_ShowsFragment = { edges: Array<{ cursor: string, node: { id: string, attended: boolean | null, date: number, venue: { id: string, name: string } } }>, pageInfo: { hasNextPage: boolean | null } };
+export type ArtistForm_ShowsFragment = { edges: Array<{ cursor: string, node: { id: string, attended: boolean | null, schedule: { localDate: string }, venue: { id: string, name: string } } }>, pageInfo: { hasNextPage: boolean | null } };
 
 export type ArtistShowsAdminQueryVariables = Exact<{
   id?: string | null | undefined;
@@ -346,7 +356,7 @@ export type ArtistShowsAdminQueryVariables = Exact<{
 }>;
 
 
-export type ArtistShowsAdminQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, attended: boolean | null, date: number, venue: { id: string, name: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ArtistShowsAdminQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, attended: boolean | null, schedule: { localDate: string }, venue: { id: string, name: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type ArtistEditQueryVariables = Exact<{
   id?: string | null | undefined;
@@ -358,7 +368,7 @@ export type ArtistEditQuery = { artist: { id: string, description: string | null
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
       | { id: string, destination: string, fileName: string, type: string }
-    > | null } | null, shows: { edges: Array<{ cursor: string, node: { id: string, attended: boolean | null, date: number, venue: { id: string, name: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+    > | null } | null, shows: { edges: Array<{ cursor: string, node: { id: string, attended: boolean | null, schedule: { localDate: string }, venue: { id: string, name: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type CreateArtistMutationVariables = Exact<{
   input: Types.CreateArtistInput;
@@ -643,7 +653,7 @@ export type UpdatePodcastSettingsMutationVariables = Exact<{
 
 export type UpdatePodcastSettingsMutation = { updatePodcastSettings: { id: string } | null };
 
-export type ShowForm_ShowFragment = { id: string, attended: boolean | null, date: number, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } };
+export type ShowForm_ShowFragment = { id: string, attended: boolean | null, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, schedule: { localDate: string, localTime: string | null, timeZone: string | null }, venue: { id: string, name: string } };
 
 export type ShowForm_ArtistsFragment = { edges: Array<{ cursor: string, node: { id: string, name: string } }>, pageInfo: { hasNextPage: boolean | null } };
 
@@ -673,7 +683,7 @@ export type ShowsAdminQueryVariables = Exact<{
 }>;
 
 
-export type ShowsAdminQuery = { shows: { count: number | null, edges: Array<{ node: { id: string, attended: boolean | null, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ShowsAdminQuery = { shows: { count: number | null, edges: Array<{ node: { id: string, attended: boolean | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type UpdateShowAttendedMutationVariables = Exact<{
   id: string;
@@ -693,7 +703,7 @@ export type DeleteShowMutation = { removeShow: boolean | null };
 export type ShowEntitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ShowEntitiesQuery = { show: { id: string, attended: boolean | null, date: number, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } } | null, artists: { edges: Array<{ cursor: string, node: { id: string, name: string } }>, pageInfo: { hasNextPage: boolean | null } } | null, venues: { edges: Array<{ cursor: string, node: { id: string, name: string } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ShowEntitiesQuery = { show: { id: string, attended: boolean | null, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, schedule: { localDate: string, localTime: string | null, timeZone: string | null }, venue: { id: string, name: string } } | null, artists: { edges: Array<{ cursor: string, node: { id: string, name: string } }>, pageInfo: { hasNextPage: boolean | null } } | null, venues: { edges: Array<{ cursor: string, node: { id: string, name: string } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type CreateShowMutationVariables = Exact<{
   input: Types.CreateShowInput;
@@ -707,7 +717,7 @@ export type ShowEditQueryVariables = Exact<{
 }>;
 
 
-export type ShowEditQuery = { show: { id: string, attended: boolean | null, date: number, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } } | null, artists: { edges: Array<{ cursor: string, node: { id: string, name: string } }>, pageInfo: { hasNextPage: boolean | null } } | null, venues: { edges: Array<{ cursor: string, node: { id: string, name: string } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ShowEditQuery = { show: { id: string, attended: boolean | null, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, schedule: { localDate: string, localTime: string | null, timeZone: string | null }, venue: { id: string, name: string } } | null, artists: { edges: Array<{ cursor: string, node: { id: string, name: string } }>, pageInfo: { hasNextPage: boolean | null } } | null, venues: { edges: Array<{ cursor: string, node: { id: string, name: string } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type UpdateShowMutationVariables = Exact<{
   id: string;
@@ -715,7 +725,7 @@ export type UpdateShowMutationVariables = Exact<{
 }>;
 
 
-export type UpdateShowMutation = { updateShow: { id: string, attended: boolean | null, date: number, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, venue: { id: string, name: string } } | null };
+export type UpdateShowMutation = { updateShow: { id: string, attended: boolean | null, notes: string | null, title: string | null, url: string | null, artists: Array<{ id: string, name: string }>, schedule: { localDate: string, localTime: string | null, timeZone: string | null }, venue: { id: string, name: string } } | null };
 
 export type BulkCreateShowsMutationVariables = Exact<{
   input: Array<Types.BulkCreateShowInput> | Types.BulkCreateShowInput;
@@ -823,7 +833,7 @@ export type DeleteVenueMutationVariables = Exact<{
 
 export type DeleteVenueMutation = { removeVenue: boolean | null };
 
-export type VenueForm_ShowsFragment = { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, artists: Array<{ id: string, name: string }> } }>, pageInfo: { hasNextPage: boolean | null } };
+export type VenueForm_ShowsFragment = { edges: Array<{ cursor: string, node: { id: string, title: string | null, artists: Array<{ id: string, name: string }>, schedule: { localDate: string } } }>, pageInfo: { hasNextPage: boolean | null } };
 
 export type VenueShowsAdminQueryVariables = Exact<{
   id?: string | null | undefined;
@@ -831,14 +841,14 @@ export type VenueShowsAdminQueryVariables = Exact<{
 }>;
 
 
-export type VenueShowsAdminQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, artists: Array<{ id: string, name: string }> } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type VenueShowsAdminQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, title: string | null, artists: Array<{ id: string, name: string }>, schedule: { localDate: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type VenueEditQueryVariables = Exact<{
   id?: string | null | undefined;
 }>;
 
 
-export type VenueEditQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, artists: Array<{ id: string, name: string }> } }>, pageInfo: { hasNextPage: boolean | null } } | null, venue: { id: string, capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
+export type VenueEditQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, title: string | null, artists: Array<{ id: string, name: string }>, schedule: { localDate: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null, venue: { id: string, capacity: string | null, city: string | null, description: string | null, excludeFromSearch: boolean | null, listingsUrl: string | null, name: string, permanentlyClosed: boolean | null, postalCode: string | null, slug: string, state: string | null, streetAddress: string | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
@@ -910,7 +920,7 @@ export type ArtistQueryVariables = Exact<{
 }>;
 
 
-export type ArtistQuery = { artist: { id: string, name: string, website: string | null, appleMusic: { id: string | null, url: string | null, artwork: { url: string | null } | null } | null } | null, attended: { count: number | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }>, pageInfo: { hasNextPage: boolean | null } } | null, shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ArtistQuery = { artist: { id: string, name: string, website: string | null, appleMusic: { id: string | null, url: string | null, artwork: { url: string | null } | null } | null } | null, attended: { count: number | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }>, pageInfo: { hasNextPage: boolean | null } } | null, shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type VenueQueryVariables = Exact<{
   first?: number | null | undefined;
@@ -918,7 +928,7 @@ export type VenueQueryVariables = Exact<{
 }>;
 
 
-export type VenueQuery = { apiKeys: { googleMaps: string | null } | null, attended: { count: number | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }>, pageInfo: { hasNextPage: boolean | null } } | null, shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null, venue: { id: string, address: string | null, capacity: string | null, name: string, permanentlyClosed: boolean | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
+export type VenueQuery = { apiKeys: { googleMaps: string | null } | null, attended: { count: number | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }>, pageInfo: { hasNextPage: boolean | null } } | null, shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null, venue: { id: string, address: string | null, capacity: string | null, name: string, permanentlyClosed: boolean | null, website: string | null, coordinates: { latitude: number | null, longitude: number | null } | null, featuredMedia: Array<
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string }
       | { id: string, destination: string, fileName: string, type: string, crops: Array<{ fileName: string, width: number }> }
@@ -942,7 +952,7 @@ export type HomeQuery = { posts: { edges: Array<{ node: { id: string, slug: stri
           | { id: string, destination: string }
           | { id: string, destination: string, crops: Array<{ fileName: string, width: number }> }
           | { id: string, destination: string }
-        > | null } }> } | null, shows: { edges: Array<{ node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } }> } | null, videos: { count: number, edges: Array<{ cursor: string, node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
+        > | null } }> } | null, shows: { edges: Array<{ node: { id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, schedule: { localDate: string }, venue: { id: string, name: string, slug: string } } }> } | null, videos: { count: number, edges: Array<{ cursor: string, node: { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> } }>, pageInfo: { hasNextPage: boolean | null, hasPreviousPage: boolean | null } } | null };
 
 export type PodcastsQueryVariables = Exact<{
   first?: number | null | undefined;
@@ -1050,7 +1060,7 @@ export type ShowQueryVariables = Exact<{
 }>;
 
 
-export type ShowQuery = { show: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } | null };
+export type ShowQuery = { show: { id: string, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, name: string, slug: string } } | null };
 
 export type ShowsHistoryQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -1059,7 +1069,7 @@ export type ShowsHistoryQueryVariables = Exact<{
 }>;
 
 
-export type ShowsHistoryQuery = { shows: { count: number | null, years: Array<number> | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ShowsHistoryQuery = { shows: { count: number | null, years: Array<number> | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type ShowsHistoryPageQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -1068,7 +1078,7 @@ export type ShowsHistoryPageQueryVariables = Exact<{
 }>;
 
 
-export type ShowsHistoryPageQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ShowsHistoryPageQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type ShowsQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -1078,7 +1088,7 @@ export type ShowsQueryVariables = Exact<{
 }>;
 
 
-export type ShowsQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type ShowsQuery = { shows: { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type AttendedShowsQueryVariables = Exact<{
   after?: string | null | undefined;
@@ -1088,7 +1098,7 @@ export type AttendedShowsQueryVariables = Exact<{
 }>;
 
 
-export type AttendedShowsQuery = { shows: { count: number | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
+export type AttendedShowsQuery = { shows: { count: number | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }>, pageInfo: { hasNextPage: boolean | null } } | null };
 
 export type ShowStatsQueryVariables = Exact<{
   entity: Types.ShowEntityType;
@@ -1136,9 +1146,9 @@ export type TextNodes_LinebreakNodeFragment = { type: string | null, version: nu
 
 export type TextNodes_TextNodeFragment = { detail: number | null, format: number | null, mode: Types.TextModeType | null, style: string | null, text: string | null, textFormat: number | null, textStyle: string | null, type: string | null, version: number | null };
 
-export type ShowsGrid_ShowsFragment = { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } };
+export type ShowsGrid_ShowsFragment = { edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string, appleMusic: { id: string | null, artwork: { url: string | null } | null } | null }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, name: string, slug: string } } }>, pageInfo: { hasNextPage: boolean | null } };
 
-export type Attended_ShowsFragment = { count: number | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }>, pageInfo: { hasNextPage: boolean | null } };
+export type Attended_ShowsFragment = { count: number | null, edges: Array<{ cursor: string, node: { id: string, date: number, title: string | null, url: string | null, artists: Array<{ id: string, name: string, slug: string }>, schedule: { localDate: string, localTime: string | null }, venue: { id: string, city: string | null, name: string, slug: string, state: string | null } } }>, pageInfo: { hasNextPage: boolean | null } };
 
 export type Video_VideoFragment = { id: string, dataId: string, slug: string, title: string, thumbnails: Array<{ height: number, url: string, width: number }> };
 

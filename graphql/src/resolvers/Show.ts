@@ -4,7 +4,7 @@ import {
   gte,
   ilike,
   inList,
-  lt,
+  lte,
   or,
   sql,
   type Predicate,
@@ -13,6 +13,8 @@ import {
   type TableRow,
 } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
+
+import { calendarDate, plainTime } from '@highforthis/shared/time';
 
 import db from '#/database/db';
 import { containing, matching } from '#/database/search';
@@ -28,7 +30,7 @@ import {
   venues,
 } from '#/database/tables';
 import { getUniqueSlug, slugsIn } from '#/models/utils';
-import { siteYear, startOfSiteDay, startOfSiteYear } from '#/time';
+import { legacyShowDate, resolveSchedule, type Schedule } from '#/show-schedule';
 
 import { fillAppleMusicLater } from './utils/appleMusicData';
 import { type Connection, parseConnection, emptyConnection } from './utils/collection';
@@ -112,21 +114,20 @@ async function showsOf(artistId: string) {
   );
 }
 
-/** The year a show is in, as `years` lists it: the year it's in where the site is */
-const yearOf = (date: Date | string) => siteYear(new Date(date));
-
-/**
- * The shows in a year, from New Year's Day where the site is. A year in UTC would put a show on
- * New Year's Eve, which starts after midnight UTC, in the year after the one the site dates it in.
- */
+/** Archive years follow the advertised calendar day, including New Year's Eve. */
 function inYear(year: number): ShowFilter {
-  return and(gte('date', startOfSiteYear(year)), lt('date', startOfSiteYear(year + 1)));
+  return and(gte('localDate', `${year}-01-01`), lte('localDate', `${year}-12-31`));
 }
 
 /** The year of the newest show the filter matches, the first that `years` lists */
 async function newestYear(filter: ShowFilter) {
-  const newest = await db.query(shows).where(filter).orderBy('date', 'desc').select('date').first();
-  return newest ? yearOf(newest.date) : undefined;
+  const newest = await db
+    .query(shows)
+    .where(filter)
+    .orderBy('localDate', 'desc')
+    .select('localDate')
+    .first();
+  return newest ? Number(newest.localDate.slice(0, 4)) : undefined;
 }
 
 /** An artist's or a venue's attended shows: how many, and when the first and the latest were */
@@ -175,9 +176,36 @@ async function getEntityStats<
   return typeof first === 'number' ? stats.slice(0, Math.max(0, first)) : stats;
 }
 
+type ShowTiming = Pick<Show, 'date'> &
+  Partial<Pick<Show, 'localDate' | 'localTime' | 'timeZone' | 'startsAt'>>;
+
+function scheduleColumns(schedule?: Schedule | null, date?: number | null): ShowTiming {
+  if (!schedule) {
+    if (typeof date !== 'number') throw badInput('A show needs a schedule or date');
+    return { date: new Date(date) };
+  }
+  try {
+    const resolved = resolveSchedule(schedule);
+    const legacy = legacyShowDate(resolved.localDate, resolved.localTime);
+    if (typeof date === 'number' && date !== legacy.getTime())
+      throw new RangeError('Schedule and date disagree');
+    return { ...resolved, date: legacy };
+  } catch (error) {
+    throw badInput(error instanceof Error ? error.message : 'Invalid show schedule');
+  }
+}
+
 const resolvers = {
   Show: {
     date: timestampResolver('date'),
+    schedule(show) {
+      return {
+        localDate: show.localDate,
+        localTime: show.localTime && plainTime(show.localTime),
+        timeZone: show.timeZone,
+        startsAt: show.startsAt && new Date(show.startsAt).getTime(),
+      };
+    },
     artists(show) {
       return resolveJoin(show.artists, 'artist', () =>
         db.findMany(showArtists, {
@@ -210,8 +238,8 @@ const resolvers = {
     async years({ filter }) {
       if (filter === null) return [];
       const query = db.query(shows);
-      const results = await (filter ? query.where(filter) : query).select('date').all();
-      const yearSet = new Set(results.map((r) => yearOf(r.date)));
+      const results = await (filter ? query.where(filter) : query).select('localDate').all();
+      const yearSet = new Set(results.map((r) => Number(r.localDate.slice(0, 4))));
       return Array.from(yearSet).sort((a, b) => b - a);
     },
   },
@@ -228,7 +256,7 @@ const resolvers = {
         order,
         ...connectionArgs
       } = args;
-      if (year && (year < 1000 || year > 9999)) {
+      if (typeof year === 'number' && (year < 1000 || year > 9999)) {
         throw badInput('`year` must have four digits');
       }
       // Everything but the selected year, so the year picker lists the matching years
@@ -240,7 +268,7 @@ const resolvers = {
       if (latest) {
         // Today's shows, and the ones to come: a show stays listed until its day is over in New
         // York, rather than leaving the moment it starts
-        conditions.push(gte('date', startOfSiteDay(new Date())));
+        conditions.push(gte('localDate', calendarDate(Date.now()).toString()));
       }
 
       if (artist?.id) {
@@ -303,7 +331,8 @@ const resolvers = {
           // to the next, without which a page can repeat a show and leave one out
           findMany: ({ skip, take }) =>
             query
-              .orderBy('date', direction)
+              .orderBy('localDate', direction)
+              .orderBy('localTime', direction)
               .orderBy('id', direction)
               .offset(skip)
               .limit(take)
@@ -445,7 +474,7 @@ const resolvers = {
           await tx.create(shows, {
             id: showId,
             attended: show.attended ?? false,
-            date: new Date(show.date),
+            ...scheduleColumns(show.schedule, show.date),
             venueId,
           });
           await tx.createMany(
@@ -465,11 +494,17 @@ const resolvers = {
     },
 
     async createShow(_, { input }) {
-      const { artists: artistIds, venue, date, ...data } = parseInput(createShowSchema, input);
+      const {
+        artists: artistIds,
+        venue,
+        date,
+        schedule,
+        ...data
+      } = parseInput(createShowSchema, input);
       const lineup = unique(artistIds);
       const id = newId();
       await db.transaction(async (tx) => {
-        await tx.create(shows, { ...data, id, date: new Date(date), venueId: venue });
+        await tx.create(shows, { ...data, id, ...scheduleColumns(schedule, date), venueId: venue });
         await tx.createMany(
           showArtists,
           lineup.map((artistId, position) => ({ showId: id, artistId, position }))
@@ -480,10 +515,11 @@ const resolvers = {
 
     async updateShow(_, { id, input }) {
       const validated = parseInput(updateShowSchema, input);
-      const { artists: artistIds, venue, date, ...data } = validated;
+      const { artists: artistIds, venue, date, schedule, ...data } = validated;
       const values: Partial<Show> = { ...data };
 
-      if (date) values.date = new Date(date);
+      const timing = schedule ? scheduleColumns(schedule, date) : null;
+      if (!schedule && typeof date === 'number') values.date = new Date(date);
       if (venue) values.venueId = venue;
 
       // A lineup that can't be saved, such as one with an artist deleted since, leaves the show
@@ -496,7 +532,31 @@ const resolvers = {
             unique(artistIds).map((artistId, position) => ({ showId: id, artistId, position }))
           );
         }
-        return tx.update(shows, id, values, { with: showIncludes });
+        if (!timing) return tx.update(shows, id, values, { with: showIncludes });
+
+        // The first update locks the row and answers the schedule it has. The venue waits for
+        // the next one: the trigger that keeps older writers' rows right clears a show's zone
+        // and start when only its venue changes, which would hide what there is to keep.
+        const { venueId, ...rest } = values;
+        const saved = await tx.update(shows, id, rest);
+        const moved = venueId !== undefined && venueId !== saved.venueId;
+        // Compared with the clock on that row, so an edit that leaves the schedule as it was,
+        // of the notes or of the venue, cannot discard a known fold offset or infer an instant
+        // from previously conflicting evidence
+        const unchanged =
+          typeof schedule?.startsAt !== 'number' &&
+          saved.localDate === timing.localDate &&
+          (saved.localTime && plainTime(saved.localTime)) === timing.localTime &&
+          saved.timeZone === timing.timeZone;
+        if (unchanged && !moved) {
+          return tx.find(shows, id, { with: showIncludes });
+        }
+        if (moved) {
+          await tx.update(shows, id, { venueId });
+        }
+        // After a move, the zone and start the trigger cleared: neither column is one it watches
+        const columns = unchanged ? { timeZone: saved.timeZone, startsAt: saved.startsAt } : timing;
+        return tx.update(shows, id, columns, { with: showIncludes });
       });
     },
 

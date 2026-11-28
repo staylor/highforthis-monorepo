@@ -7,6 +7,7 @@ import db from '#/database/db';
 import { newId, videos, videoThumbnailRows, videoThumbnails } from '#/database/tables';
 import env from '#/env';
 import { getUniqueSlug, slugsIn } from '#/models/utils';
+import { isoInstant } from '#/time';
 
 const API = 'https://www.googleapis.com/youtube/v3';
 const PER_PAGE = '50';
@@ -33,7 +34,10 @@ const playlistItemSchema = z.object({
       .optional(),
   }),
   // A private or deleted video has no publish date
-  contentDetails: z.object({ videoId: z.string(), videoPublishedAt: z.string().optional() }),
+  contentDetails: z.object({
+    videoId: z.string(),
+    videoPublishedAt: isoInstant.optional(),
+  }),
 });
 
 type PlaylistItem = z.infer<typeof playlistItemSchema>;

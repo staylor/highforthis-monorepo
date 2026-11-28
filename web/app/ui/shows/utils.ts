@@ -1,3 +1,5 @@
+import { clockAt, SITE_TIME_ZONE, plainDate } from '@highforthis/shared/time';
+
 import { routes } from '#/routes.ts';
 import type { Show } from '#/types/graphql.ts';
 import { colorTransition, text } from '#/ui/public/styles.ts';
@@ -11,39 +13,57 @@ export const row = {
   },
 };
 
-// toLocaleString() builds a new formatter on every call, which made formatting dates most of the
-// shows pages' render time. Names are looked up like the date's other parts, in the server's zone.
-const names = (options: Intl.DateTimeFormatOptions, count: number, date: (i: number) => number) => {
-  const format = new Intl.DateTimeFormat('en-US', { ...options, timeZone: 'UTC' });
-  return Array.from({ length: count }, (_, i) => format.format(date(i)));
-};
+const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+const weekdayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-/** January to December, by `getMonth()` */
-export const monthNames = names({ month: 'long' }, 12, (i) => Date.UTC(2000, i, 1));
-/** Sun to Sat, by `getDay()`. January 2, 2000 was a Sunday. */
-export const weekdayNames = names({ weekday: 'short' }, 7, (i) => Date.UTC(2000, 0, 2 + i));
+export function formatClock(time: string) {
+  const [hour, minute] = time.split(':');
+  return `${Number(hour) % 12 || 12}:${minute} ${Number(hour) < 12 ? 'AM' : 'PM'}`;
+}
 
-export const formatDate = (date?: number) => {
-  const d = date ? new Date(date) : new Date();
-  const month = d.getMonth() + 1;
-  const day = d.getDate();
-  const year = d.getFullYear();
-  const hours = d.getHours();
-  const minutes = d.getMinutes();
+function dateParts(d: { month: number; day: number; year: number; dayOfWeek: number }) {
+  const { month, day, year } = d;
   return {
     month,
     day,
-    weekday: weekdayNames[d.getDay()],
-    monthName: monthNames[d.getMonth()],
     year,
-    time: `${hours % 12 || 12}:${String(minutes).padStart(2, '0')} ${hours < 12 ? 'AM' : 'PM'}`,
-    formatted: `${month < 10 ? `0${month}` : month}/${day < 10 ? `0${day}` : day}`,
+    monthName: monthNames[month - 1],
+    weekday: weekdayNames[d.dayOfWeek - 1],
+    formatted: `${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}`,
   };
-};
+}
 
-const today = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+export function formatDate(timestamp: number) {
+  const clock = clockAt(timestamp);
+  return { ...dateParts(clock), time: formatClock(clock.toPlainTime().toString()) };
+}
 
-/** Today, as the calendar says it over its shows: Wednesday, November 25 */
+export function formatSchedule(schedule: { localDate: string; localTime?: string | null }) {
+  return {
+    ...dateParts(plainDate(schedule.localDate)),
+    time: schedule.localTime ? formatClock(schedule.localTime) : null,
+  };
+}
+
+const today = new Intl.DateTimeFormat('en-US', {
+  timeZone: SITE_TIME_ZONE,
+  weekday: 'long',
+  month: 'long',
+  day: 'numeric',
+});
 export const formatToday = () => today.format(new Date());
 
 type ShowLike = Pick<Show, 'id' | 'title' | 'url'> & {

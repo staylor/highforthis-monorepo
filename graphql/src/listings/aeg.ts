@@ -1,9 +1,8 @@
 import { z } from 'zod';
 
-import { SITE_TIME_ZONE } from '#/time';
+import { feedSchedule } from '#/show-schedule';
 
 import { cached, fetchText } from './http';
-import { zonedTime } from './time';
 import type { Listing } from './types';
 
 // Bowery Presents and other AEG venue sites load their show lists from JSON feeds on this host
@@ -48,7 +47,7 @@ interface Section {
   venueIds: string[];
 }
 
-const LOCAL_DATE_TIME = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/;
+const LOCAL_DATE_TIME = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?)$/;
 const SECTION = /<div\b[^>]*\bjs-axs-events-section\b[^>]*>/g;
 const SECTION_ATTRIBUTE = /\bdata-(file|venue_id_filter)="([^"]*)"/g;
 
@@ -109,9 +108,10 @@ function parseSections(html: string): Section[] {
 
 function toListing(event: z.infer<typeof eventSchema>): FeedListing {
   const local = LOCAL_DATE_TIME.exec(event.eventDateTime ?? '');
-  const timeZone = event.eventDateTimeZone ?? event.venue.timezone ?? 'America/New_York';
-  // The venue's clock time, read as New York's, as the site stores every show's time
-  const startsAt = local ? zonedTime(local[1], local[2], SITE_TIME_ZONE) : null;
+  const timeZone = event.eventDateTimeZone ?? event.venue.timezone ?? null;
+
+  const utc = event.eventDateTimeUTC;
+  const instant = utc && LOCAL_DATE_TIME.test(utc) ? `${utc}Z` : utc;
   const status = event.ticketing?.status?.trim() || null;
   const headliner = event.title?.headlinersText?.trim() || event.title?.eventTitleText?.trim();
 
@@ -119,10 +119,7 @@ function toListing(event: z.infer<typeof eventSchema>): FeedListing {
     source: 'aeg',
     sourceId: event.eventId,
     venueId: event.venue.venueId,
-    localDate: local?.[1] ?? null,
-    localTime: local?.[2] ?? null,
-    startsAt: startsAt && !Number.isNaN(startsAt.getTime()) ? startsAt : null,
-    timeZone,
+    ...feedSchedule(local?.[1], local?.[2], timeZone, instant),
     headliners: headliner ? [headliner] : [],
     support: parseSupport(event.title?.supportingText),
     status,

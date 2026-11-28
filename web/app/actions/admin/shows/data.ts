@@ -28,13 +28,17 @@ const showFormFragment = gql`
   fragment ShowForm_show on Show {
     id
     attended
-    date
     notes
     title
     url
     artists {
       id
       name
+    }
+    schedule {
+      localDate
+      localTime
+      timeZone
     }
     venue {
       id
@@ -113,13 +117,16 @@ const showsQuery = gql`
         node {
           id
           attended
-          date
           title
           url
           artists {
             id
             name
             slug
+          }
+          schedule {
+            localDate
+            localTime
           }
           venue {
             id

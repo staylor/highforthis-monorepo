@@ -74,7 +74,7 @@ const shows = [
   {
     node: {
       id: 's1',
-      date: Date.UTC(2024, 4, 10, 12),
+      schedule: { localDate: '2024-05-10' },
       title: null,
       artists: [
         { id: 'a1', name: 'Wilco' },
@@ -85,7 +85,7 @@ const shows = [
   {
     node: {
       id: 's2',
-      date: Date.UTC(2023, 9, 1, 12),
+      schedule: { localDate: '2023-10-01' },
       title: 'Opry Birthday Bash',
       artists: [{ id: 'a3', name: 'Various' }],
     },

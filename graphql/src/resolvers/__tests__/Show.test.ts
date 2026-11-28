@@ -1,4 +1,4 @@
-import { and, eq, gte, inList, lt, type TableRow } from 'remix/data-table';
+import { and, eq, gte, inList, lte, type TableRow } from 'remix/data-table';
 import type { ShowEntityType } from 'types/graphql';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -50,6 +50,7 @@ const { db, showsQuery, searchQuery, tx } = vi.hoisted(() => ({
     create: vi.fn(),
     createMany: vi.fn(),
     deleteMany: vi.fn(),
+    find: vi.fn(),
     findOne: vi.fn(),
     update: vi.fn(),
   },
@@ -162,6 +163,74 @@ describe('updateShow', () => {
       { showId: 'show-1', artistId: 'artist-2', position: 0 },
       { showId: 'show-1', artistId: 'artist-1', position: 1 },
     ]);
+  });
+
+  describe('with the schedule the edit form sends', () => {
+    // 1:30 AM happens twice on the day the clocks go back, and this show starts at the second
+    const saved = {
+      id: 'show-1',
+      venueId: 'venue-1',
+      localDate: '2026-11-01',
+      localTime: '01:30:00',
+      timeZone: 'America/New_York',
+      startsAt: new Date('2026-11-01T06:30:00Z'),
+    };
+    const schedule = { localDate: '2026-11-01', localTime: '01:30', timeZone: 'America/New_York' };
+    const updateShow = (input: Parameters<typeof resolvers.Mutation.updateShow>[1]['input']) =>
+      resolvers.Mutation.updateShow({}, { id: 'show-1', input });
+
+    beforeEach(() => {
+      tx.update.mockImplementation(async (_table, _id, values) => ({ ...saved, ...values }));
+    });
+
+    it("leaves the schedule as it is when an edit doesn't change it", async () => {
+      await updateShow({ notes: 'Sold out', venue: 'venue-1', schedule });
+
+      expect(tx.update.mock.calls).toEqual([[showsTable, 'show-1', { notes: 'Sold out' }]]);
+      expect(tx.find).toHaveBeenCalledWith(showsTable, 'show-1', expect.anything());
+    });
+
+    // The trigger that fills the schedule in for older writers clears the zone and the start of
+    // a show whose venue alone changes, and the start can't be worked out again
+    it('keeps the zone and the start a show had when only its venue changes', async () => {
+      await updateShow({ venue: 'venue-2', schedule });
+
+      expect(tx.update.mock.calls).toEqual([
+        // Read first, without the venue
+        [showsTable, 'show-1', {}],
+        [showsTable, 'show-1', { venueId: 'venue-2' }],
+        [
+          showsTable,
+          'show-1',
+          { timeZone: 'America/New_York', startsAt: saved.startsAt },
+          expect.anything(),
+        ],
+      ]);
+      expect(tx.find).not.toHaveBeenCalled();
+    });
+
+    it('saves a schedule that changed, after the venue', async () => {
+      await updateShow({ venue: 'venue-2', schedule: { ...schedule, localTime: '03:30' } });
+
+      // 3:30 AM is after the clocks have gone back
+      const start = new Date('2026-11-01T08:30:00Z');
+      expect(tx.update.mock.calls).toEqual([
+        [showsTable, 'show-1', {}],
+        [showsTable, 'show-1', { venueId: 'venue-2' }],
+        [
+          showsTable,
+          'show-1',
+          {
+            date: start,
+            localDate: '2026-11-01',
+            localTime: '03:30',
+            timeZone: 'America/New_York',
+            startsAt: start,
+          },
+          expect.anything(),
+        ],
+      ]);
+    });
   });
 });
 
@@ -287,7 +356,8 @@ describe('shows', () => {
     await shows();
 
     expect(showsQuery.orderBy.mock.calls).toEqual([
-      ['date', 'desc'],
+      ['localDate', 'desc'],
+      ['localTime', 'desc'],
       ['id', 'desc'],
     ]);
 
@@ -295,7 +365,8 @@ describe('shows', () => {
     await resolvers.Query.shows({}, { latest: true, first: 50 });
 
     expect(showsQuery.orderBy.mock.calls).toEqual([
-      ['date', 'asc'],
+      ['localDate', 'asc'],
+      ['localTime', 'asc'],
       ['id', 'asc'],
     ]);
   });
@@ -309,9 +380,7 @@ describe('shows', () => {
       vi.useRealTimers();
     }
 
-    expect(showsQuery.where).toHaveBeenCalledWith(
-      and(gte('date', new Date('2026-07-04T04:00:00Z')))
-    );
+    expect(showsQuery.where).toHaveBeenCalledWith(and(gte('localDate', '2026-07-04')));
   });
 });
 
@@ -323,14 +392,11 @@ describe('shows from the most recent year', () => {
   });
 
   // New Year's Day to New Year's Day in New York, where the site dates its shows
-  const in2024 = and(
-    gte('date', new Date('2024-01-01T05:00:00Z')),
-    lt('date', new Date('2025-01-01T05:00:00Z'))
-  );
+  const in2024 = and(gte('localDate', '2024-01-01'), lte('localDate', '2024-12-31'));
 
   // The app's history starts with the latest year, without first asking which years there are
   it('keeps to the year of the newest show, which `years` lists first', async () => {
-    showsQuery.first.mockResolvedValue({ date: new Date('2024-03-01T20:00:00Z') });
+    showsQuery.first.mockResolvedValue({ localDate: '2024-03-01' });
 
     const connection = await resolvers.Query.shows(
       {},
@@ -339,13 +405,13 @@ describe('shows from the most recent year', () => {
 
     const [[newest], [page]] = showsQuery.where.mock.calls;
     expect(newest).toEqual(and(eq('attended', true)));
-    expect(showsQuery.orderBy).toHaveBeenNthCalledWith(1, 'date', 'desc');
-    expect(showsQuery.select).toHaveBeenCalledWith('date');
+    expect(showsQuery.orderBy).toHaveBeenNthCalledWith(1, 'localDate', 'desc');
+    expect(showsQuery.select).toHaveBeenCalledWith('localDate');
     expect(page).toEqual(and(and(eq('attended', true)), in2024));
 
     showsQuery.all.mockResolvedValueOnce([
-      { date: new Date('2019-05-01T20:00:00Z') },
-      { date: new Date('2024-03-01T20:00:00Z') },
+      { localDate: '2019-05-01' },
+      { localDate: '2024-03-01' },
     ]);
     await expect(resolvers.ShowConnection.years(connection)).resolves.toEqual([2024, 2019]);
   });
@@ -355,7 +421,7 @@ describe('shows from the most recent year', () => {
     try {
       await resolvers.Query.shows({}, { latest: true, year: 2024 });
       expect(showsQuery.where).toHaveBeenCalledWith(
-        and(and(gte('date', new Date('2024-07-04T04:00:00Z'))), in2024)
+        and(and(gte('localDate', '2024-07-04')), in2024)
       );
     } finally {
       vi.useRealTimers();
@@ -377,8 +443,8 @@ describe('shows from the most recent year', () => {
   // 8 PM on New Year's Eve in New York is 1 AM on New Year's Day in UTC, and the site dates it
   // December 31st
   it("puts a show on New Year's Eve in the year that's ending", async () => {
-    const newYearsEve = new Date('2025-01-01T01:00:00Z');
-    showsQuery.first.mockResolvedValue({ date: newYearsEve });
+    const newYearsEve = '2024-12-31';
+    showsQuery.first.mockResolvedValue({ localDate: newYearsEve });
 
     const connection = await resolvers.Query.shows(
       {},
@@ -386,7 +452,7 @@ describe('shows from the most recent year', () => {
     );
 
     expect(showsQuery.where).toHaveBeenLastCalledWith(and(and(eq('attended', true)), in2024));
-    showsQuery.all.mockResolvedValueOnce([{ date: newYearsEve }]);
+    showsQuery.all.mockResolvedValueOnce([{ localDate: newYearsEve }]);
     await expect(resolvers.ShowConnection.years(connection)).resolves.toEqual([2024]);
   });
 
@@ -404,10 +470,7 @@ describe('shows from the most recent year', () => {
     expect(showsQuery.where).toHaveBeenLastCalledWith(
       and(
         and(eq('attended', true)),
-        and(
-          gte('date', new Date('9999-01-01T05:00:00Z')),
-          lt('date', new Date('+010000-01-01T05:00:00Z'))
-        )
+        and(gte('localDate', '9999-01-01'), lte('localDate', '9999-12-31'))
       )
     );
   });
@@ -435,9 +498,9 @@ describe('ShowConnection.years', () => {
   const years = async (args: Parameters<typeof resolvers.Query.shows>[1]) => {
     const connection = await resolvers.Query.shows({}, { first: 50, ...args });
     showsQuery.all.mockResolvedValueOnce([
-      { date: new Date('2019-05-01T20:00:00Z') },
-      { date: new Date('2024-03-01T20:00:00Z') },
-      { date: new Date('2019-09-01T20:00:00Z') },
+      { localDate: '2019-05-01' },
+      { localDate: '2024-03-01' },
+      { localDate: '2019-09-01' },
     ]);
     const list = await resolvers.ShowConnection.years(connection);
     return { list, where: showsQuery.where.mock.lastCall?.[0] };
@@ -457,10 +520,7 @@ describe('ShowConnection.years', () => {
     expect(showsQuery.where.mock.calls[0][0]).toEqual(
       and(
         and(eq('attended', true)),
-        and(
-          gte('date', new Date('2019-01-01T05:00:00Z')),
-          lt('date', new Date('2020-01-01T05:00:00Z'))
-        )
+        and(gte('localDate', '2019-01-01'), lte('localDate', '2019-12-31'))
       )
     );
     expect(where).toEqual(and(eq('attended', true)));

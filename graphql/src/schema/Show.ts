@@ -1,9 +1,29 @@
-const Show = `#graphql      
+const Show = `#graphql
+  type ShowSchedule {
+    """Advertised calendar day at the venue (YYYY-MM-DD)."""
+    localDate: String!
+    """Venue clock time, through milliseconds when supplied. Null until announced."""
+    localTime: String
+    """IANA zone identifier when known."""
+    timeZone: String
+    """Confirmed start in Unix milliseconds, when known."""
+    startsAt: Float
+  }
+
+  input ShowScheduleInput {
+    localDate: String!
+    localTime: String
+    timeZone: String
+    startsAt: Float
+  }
+
   type Show {
     id: String!
     title: String
     notes: String
+    """Venue wall time encoded in New York for existing clients."""
     date: Float!
+    schedule: ShowSchedule!
     url: String
     attended: Boolean
     artists: [Artist!]!
@@ -25,7 +45,8 @@ const Show = `#graphql
   input CreateShowInput {
     title: String
     notes: String
-    date: Float!
+    date: Float
+    schedule: ShowScheduleInput
     url: String
     attended: Boolean
     artists: [String!]!
@@ -35,7 +56,8 @@ const Show = `#graphql
   input BulkCreateShowInput {
     artists: [String!]!
     attended: Boolean
-    date: Float!
+    date: Float
+    schedule: ShowScheduleInput
     venue: String!
   }
 
@@ -49,6 +71,7 @@ const Show = `#graphql
     title: String
     notes: String
     date: Float
+    schedule: ShowScheduleInput
     url: String
     attended: Boolean
     artists: [String]

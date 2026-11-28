@@ -142,7 +142,7 @@ describe('ticketmasterListings', () => {
     expect(requests[1].searchParams.get('venueId')).toBe('KovZ591368');
   });
 
-  it('starts unannounced times at 8 PM and flags cancellations', async () => {
+  it('keeps unannounced times unknown and flags cancellations', async () => {
     serve([
       event('tba', 'Gracie Abrams', {
         dates: {
@@ -157,14 +157,13 @@ describe('ticketmasterListings', () => {
 
     expect(listing).toMatchObject({
       localTime: null,
-      startsAt: new Date('2027-03-17T00:00:00Z'),
+      startsAt: null,
       cancelled: true,
       status: 'Cancelled',
     });
   });
 
-  // As a show entered by hand is: the site shows every show's time as New York's clocks read it
-  it("stores a show outside New York at the venue's clock time, read as New York's", async () => {
+  it('preserves the advertised venue clock and the actual instant outside New York', async () => {
     serve([
       event('sphere', 'Phish', {
         dates: {
@@ -184,7 +183,7 @@ describe('ticketmasterListings', () => {
     expect(listing).toMatchObject({
       localDate: '2027-04-08',
       localTime: '20:00',
-      startsAt: new Date('2027-04-09T00:00:00Z'),
+      startsAt: new Date('2027-04-09T03:00:00Z'),
       timeZone: 'America/Los_Angeles',
     });
   });

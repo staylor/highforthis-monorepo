@@ -1,7 +1,8 @@
+import { plainDate, plainTime, instantMilliseconds } from '@highforthis/shared/time';
 interface BulkShowInput {
   artists: string[];
   attended: boolean;
-  date: number;
+  schedule: { localDate: string; localTime: string | null; startsAt?: number };
   venue: string;
 }
 
@@ -117,32 +118,37 @@ function getHeader(fields: string[]) {
   };
 }
 
-function localShowDate(year: number, month: number, day: number): number | null {
-  const date = new Date(year, month - 1, day, 20);
-  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
-    return null;
-  }
-  return date.getTime();
-}
+const INVALID_DATE = 'Date must be valid, such as 1/1/26 or 2026-01-01.';
+const UTC_DATE =
+  "Date can't be a time in UTC. Give the venue's time, with its offset if you know it: 2026-01-01T20:00-05:00.";
 
-function parseDate(value: string): number | null {
+/** A show's schedule from its date, or what's wrong with the date */
+function parseDate(value: string): BulkShowInput['schedule'] | string {
   const shorthand = /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/.exec(value);
   if (shorthand) {
-    const [, month, day, yearValue] = shorthand;
-    const shortYear = Number(yearValue);
-    const year =
-      yearValue.length === 2 ? (shortYear <= 49 ? 2000 + shortYear : 1900 + shortYear) : shortYear;
-    return localShowDate(year, Number(month), Number(day));
+    const [, month, day, year] = shorthand;
+    const century = year.length === 2 ? (Number(year) <= 49 ? '20' : '19') : '';
+    value = `${century}${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
-
-  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  if (dateOnly) {
-    const [, year, month, day] = dateOnly;
-    return localShowDate(Number(year), Number(month), Number(day));
+  const parts =
+    /^(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?)(Z|[+-]\d{2}:\d{2})?)?$/.exec(
+      value
+    );
+  if (!parts) return INVALID_DATE;
+  const [, day, time, offset] = parts;
+  // The date and time are kept as written, as the venue's clocks read, and Z or a zero offset
+  // says they're UTC's: 8 PM in New York, written 2026-01-02T01:00Z, would be saved as 1 AM the
+  // next day
+  if (offset && /^(?:Z|[+-]00:00)$/.test(offset)) return UTC_DATE;
+  try {
+    return {
+      localDate: plainDate(day).toString(),
+      localTime: time ? plainTime(time) : null,
+      ...(offset && { startsAt: instantMilliseconds(`${day}T${time}${offset}`) }),
+    };
+  } catch {
+    return INVALID_DATE;
   }
-
-  const timestamp = Date.parse(value);
-  return Number.isNaN(timestamp) ? null : timestamp;
 }
 
 function parseAttended(value: string): boolean | null {
@@ -192,11 +198,8 @@ export function parseBulkShowsCsv(csv: string): BulkShowsCsvResult {
     if (!venue) {
       errors.push({ line: record.line, message: 'Venue is required.' });
     }
-    if (date === null) {
-      errors.push({
-        line: record.line,
-        message: 'Date must be valid, such as 1/1/26 or 2026-01-01.',
-      });
+    if (typeof date === 'string') {
+      errors.push({ line: record.line, message: date });
     }
     if (attended === null) {
       errors.push({
@@ -205,8 +208,8 @@ export function parseBulkShowsCsv(csv: string): BulkShowsCsvResult {
       });
     }
 
-    if (artists.length > 0 && venue && date !== null && attended !== null) {
-      shows.push({ artists, attended, date, venue });
+    if (artists.length > 0 && venue && typeof date !== 'string' && attended !== null) {
+      shows.push({ artists, attended, schedule: date, venue });
     }
   }
 

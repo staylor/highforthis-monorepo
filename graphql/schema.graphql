@@ -102,7 +102,8 @@ type AudioUpload implements MediaUpload {
 input BulkCreateShowInput {
   artists: [String!]!
   attended: Boolean
-  date: Float!
+  date: Float
+  schedule: ShowScheduleInput
   venue: String!
 }
 
@@ -151,8 +152,9 @@ input CreatePostInput {
 input CreateShowInput {
   artists: [String!]!
   attended: Boolean
-  date: Float!
+  date: Float
   notes: String
+  schedule: ShowScheduleInput
   title: String
   url: String
   venue: String!
@@ -604,9 +606,11 @@ input RootNodeInput {
 type Show {
   artists: [Artist!]!
   attended: Boolean
+  """Venue wall time encoded in New York for existing clients."""
   date: Float!
   id: String!
   notes: String
+  schedule: ShowSchedule!
   title: String
   url: String
   venue: Venue!
@@ -634,6 +638,26 @@ enum ShowEntityType {
 enum ShowOrder {
   ASC
   DESC
+}
+
+type ShowSchedule {
+  """Advertised calendar day at the venue (YYYY-MM-DD)."""
+  localDate: String!
+  """
+  Venue clock time, through milliseconds when supplied. Null until announced.
+  """
+  localTime: String
+  """Confirmed start in Unix milliseconds, when known."""
+  startsAt: Float
+  """IANA zone identifier when known."""
+  timeZone: String
+}
+
+input ShowScheduleInput {
+  localDate: String!
+  localTime: String
+  startsAt: Float
+  timeZone: String
 }
 
 type ShowStat {
@@ -727,6 +751,7 @@ input UpdateShowInput {
   attended: Boolean
   date: Float
   notes: String
+  schedule: ShowScheduleInput
   title: String
   url: String
   venue: String

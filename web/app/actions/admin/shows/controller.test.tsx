@@ -9,8 +9,8 @@ import {
   stubGraphQL,
 } from '#/actions/admin/test-support.ts';
 
-// 8:00 PM on May 10, 2024 wherever the tests run, since the list shows the server's time
-const showTime = new Date(2024, 4, 10, 20, 0).getTime();
+// 8 PM on May 10 in the site's editorial calendar
+const showTime = Date.UTC(2024, 4, 11, 0);
 
 const ryman = { id: 'v1', name: 'Ryman', slug: 'ryman' };
 
@@ -22,7 +22,7 @@ const shows = {
         id: 's1',
         title: null,
         url: null,
-        date: showTime,
+        schedule: { localDate: '2024-05-10', localTime: '20:00', timeZone: null },
         attended: true,
         artists: [{ id: 'a1', name: 'Wilco', slug: 'wilco' }],
         venue: ryman,
@@ -33,7 +33,7 @@ const shows = {
         id: 's2',
         title: 'Opry Birthday Bash',
         url: null,
-        date: showTime,
+        schedule: { localDate: '2024-05-10', localTime: '20:00', timeZone: null },
         attended: false,
         artists: [
           { id: 'a1', name: 'Wilco', slug: 'wilco' },
@@ -51,7 +51,7 @@ const show = {
   title: 'Night One',
   url: null,
   notes: 'Great',
-  date: showTime,
+  schedule: { localDate: '2024-05-10', localTime: '20:00', timeZone: null },
   attended: true,
   artists: [{ id: 'a1', name: 'Wilco' }],
   venue: { id: 'v1', name: 'Ryman' },
@@ -74,7 +74,7 @@ describe('admin shows', () => {
       id: 's3',
       title: null,
       url: null,
-      date: showTime,
+      schedule: { localDate: '2024-05-10', localTime: null },
       attended: false,
       artists: [],
       venue: ryman,
@@ -140,7 +140,7 @@ describe('admin shows', () => {
     const html = await (await get('/admin/show/add')).text();
     assert.match(html, /<h1[^>]*>Add Show<\/h1>/);
     assert.match(html, /<input type="text" name="title" value="Night One"/);
-    assert.match(html, new RegExp(`<input type="hidden" name="date" value="${showTime}"`));
+    assert.match(html, /name="schedule\[localDate\]"[^>]*value="2024-05-10"/);
     assert.match(html, /<input type="hidden" name="artists\[0\]" value="a1"/);
     assert.match(html, /aria-label="Remove Wilco"/);
     // Sorted by name, with the venue the last show was at chosen
@@ -181,7 +181,7 @@ describe('admin shows', () => {
     const operations = stubGraphQL(t, { CreateShow: { createShow: { id: 's9' } } });
     const response = await post(
       '/admin/show/add',
-      `title=&date=${showTime}&artists%5B0%5D=a1&artists%5B1%5D=a2&venue=v1&url=&notes=`
+      `title=&schedule[localDate]=2024-05-10&schedule[localTime]=20:00&schedule[timeZone]=America/Chicago&artists%5B0%5D=a1&artists%5B1%5D=a2&venue=v1&url=&notes=`
     );
     assert.equal(
       response.headers.get('location'),
@@ -194,7 +194,7 @@ describe('admin shows', () => {
           input: {
             attended: false,
             title: null,
-            date: showTime,
+            schedule: { localDate: '2024-05-10', localTime: '20:00', timeZone: 'America/Chicago' },
             artists: ['a1', 'a2'],
             venue: 'v1',
             url: null,

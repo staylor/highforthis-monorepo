@@ -17,7 +17,7 @@ import { PageHeader } from '#/ui/page-header.tsx';
 import { colorTransition, pinkButton, text } from '#/ui/public/styles.ts';
 import { ShowsNav } from '#/ui/shows/nav.tsx';
 import { Shows, ShowsList } from '#/ui/shows/shows.tsx';
-import { formatArtists, formatDate, formatToday } from '#/ui/shows/utils.ts';
+import { formatArtists, formatSchedule, formatToday } from '#/ui/shows/utils.ts';
 
 import {
   HISTORY_PAGE_SIZE,
@@ -33,7 +33,6 @@ const showQuery = gql`
   query Show($id: String) {
     show(id: $id) {
       id
-      date
       title
       url
       artists {
@@ -46,6 +45,10 @@ const showQuery = gql`
             url
           }
         }
+      }
+      schedule {
+        localDate
+        localTime
       }
       venue {
         id
@@ -137,7 +140,11 @@ export default createController(routes.shows, {
             shows={shows}
             view={view}
             year={year}
-            previous={Number.isFinite(previous) ? previous : undefined}
+            previous={
+              Number.isSafeInteger(previous) && Math.abs(previous) <= 8640000000000000
+                ? previous
+                : undefined
+            }
             label={context.t('shows.more')}
           />
         ) : null
@@ -171,7 +178,7 @@ export default createController(routes.shows, {
         if (!show) {
           return renderNotFound(context);
         }
-        const d = formatDate(show.date);
+        const d = formatSchedule(show.schedule);
         const [artist] = show.artists;
         // Each artist on a line, linking to their page
         const artists = show.artists.map((each) => (
@@ -198,7 +205,7 @@ export default createController(routes.shows, {
           <article>
             <Billing name={artist?.name} data={artist?.appleMusic}>
               <PageHeader
-                eyebrow={`${d.weekday}, ${d.monthName} ${d.day}, ${d.year} · ${d.time}`}
+                eyebrow={`${d.weekday}, ${d.monthName} ${d.day}, ${d.year}${d.time ? ' · ' + d.time : ''}`}
                 title={show.title || (artists.length > 0 ? artists : venue)}
                 styles={{ marginBottom: '1rem' }}
               />

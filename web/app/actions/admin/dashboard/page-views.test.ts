@@ -135,6 +135,7 @@ describe('loadPageViews', () => {
     const searches: { url: string; sql: string; authorization: string | null }[] = [];
     t.mock.method(globalThis, 'fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
       const { query } = JSON.parse(String(init?.body));
+      assert.equal(query.start_time, Date.UTC(2026, 9, 20, 4) * 1000);
       searches.push({
         url: String(input),
         sql: query.sql,

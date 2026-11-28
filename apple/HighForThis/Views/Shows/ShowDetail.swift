@@ -10,7 +10,10 @@ struct ShowDetail: View {
             if let show = data.show {
                 List {
                     DetailIntro(hero: show.artwork.map(DetailHero.artwork)) {
-                        DetailHeader(eyebrow: Text(show.startDate, format: .showTime), title: show.headline) {
+                        DetailHeader(
+                            eyebrow: venueScheduleLabel(day: show.schedule.localDate, time: show.schedule.localTime).map { Text($0) },
+                            title: show.headline
+                        ) {
                             if let website = show.url.flatMap(URL.webURL) {
                                 DetailLinks {
                                     WebsiteButton(title: .eventWebsite, destination: website)

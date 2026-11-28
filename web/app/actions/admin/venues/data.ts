@@ -94,11 +94,13 @@ const venueShowsFragment = gql`
       cursor
       node {
         id
-        date
         title
         artists {
           id
           name
+        }
+        schedule {
+          localDate
         }
       }
     }

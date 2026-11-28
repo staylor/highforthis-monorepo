@@ -16,7 +16,8 @@ nonisolated extension ShowSummary {
         return artistNames.joined(separator: " / ")
     }
 
-    var startDate: Date {
+    /// The compatibility timestamp used to label a calendar day in New York.
+    var displayDate: Date {
         Date(apiTimestamp: date)
     }
 }
@@ -97,7 +98,7 @@ nonisolated struct ShowDay: Identifiable {
     /// returns them: upcoming shows soonest first, and history most recent first. Shows on the same day are sorted by
     /// headline.
     static func days(from shows: [ShowList_show], calendar: Calendar = .newYork) -> [ShowDay] {
-        shows.orderedGroups { calendar.startOfDay(for: $0.startDate) }.map { day, shows in
+        shows.orderedGroups { calendar.startOfDay(for: $0.displayDate) }.map { day, shows in
             ShowDay(date: day, shows: shows.sorted { $0.headline.localizedStandardCompare($1.headline) == .orderedAscending })
         }
     }

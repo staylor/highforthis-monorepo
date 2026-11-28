@@ -2,6 +2,8 @@
 import * as assert from 'remix/assert';
 import { describe, it, type TestContext } from 'remix/test';
 
+import { clockAt } from '@highforthis/shared/time';
+
 import { router } from '#/router.ts';
 import { routes } from '#/routes.ts';
 
@@ -88,13 +90,25 @@ const wilco = { id: 'a1', name: 'Wilco', slug: 'wilco' };
 const spoon = { id: 'a2', name: 'Spoon', slug: 'spoon' };
 const bowery = { id: 'v1', name: 'Bowery Ballroom', slug: 'bowery-ballroom' };
 
-// Local times, since pages show dates in the server's time zone
-const june14 = new Date(2030, 5, 14, 20, 0).getTime();
-const july4 = new Date(2030, 6, 4, 19, 30).getTime();
+// Instants for the June and July calendar fixtures, in the site's editorial zone
+const june14 = Date.UTC(2030, 5, 15, 0);
+const july4 = Date.UTC(2030, 6, 4, 23, 30);
 
 const show = (id: string, date: number, artists: object[], fields: object = {}) => ({
   cursor: `cursor-${id}`,
-  node: { id, date, title: null, url: null, artists, venue: bowery, ...fields },
+  node: {
+    id,
+    date,
+    schedule: {
+      localDate: clockAt(date).toPlainDate().toString(),
+      localTime: clockAt(date).toPlainTime().toString(),
+    },
+    title: null,
+    url: null,
+    artists,
+    venue: bowery,
+    ...fields,
+  },
 });
 
 const shows = {
@@ -338,7 +352,7 @@ describe('artists and venues', () => {
     edges: [
       {
         node: {
-          ...show('s9', new Date(2019, 2, 1, 20).getTime(), [wilco]).node,
+          ...show('s9', Date.UTC(2019, 2, 2, 1), [wilco]).node,
           venue: { ...bowery, city: 'New York', state: 'NY' },
         },
       },
@@ -386,7 +400,12 @@ describe('artists and venues', () => {
     const [first] = attended.edges;
     const later = {
       cursor: 'cursor-s10',
-      node: { ...first.node, id: 's10', date: new Date(2021, 5, 1, 20, 0).getTime() },
+      node: {
+        ...first.node,
+        id: 's10',
+        date: Date.UTC(2021, 5, 2, 0),
+        schedule: { localDate: '2021-06-01', localTime: '20:00' },
+      },
     };
     const operations = stubGraphQL(t, {
       App,
@@ -561,7 +580,7 @@ describe('shows', () => {
 
   // The list stopped at its first page, without a word about the rest
   it('lists every show coming up, a page at a time', async (t) => {
-    const later = show('s4', new Date(2030, 7, 1, 20, 0).getTime(), [spoon]);
+    const later = show('s4', Date.UTC(2030, 7, 2, 0), [spoon]);
     const operations = stubGraphQL(t, {
       App,
       Shows: ({ after }: { after?: string }) => ({
@@ -805,6 +824,21 @@ describe('shows', () => {
     assert.match(link(html, '/artist/spoon') ?? '', /Spoon →/);
     assert.match(link(html, '/venue/bowery-ballroom') ?? '', /Bowery Ballroom/);
     assert.match(link(html, 'https://tickets.example/jam') ?? '', /Event Website/);
+  });
+
+  it('displays the advertised venue clock during a New York gap and omits unannounced times', async (t) => {
+    const { node } = shows.edges[2];
+    for (const localTime of ['02:30', null]) {
+      stubGraphQL(t, {
+        App,
+        Show: { show: { ...node, schedule: { localDate: '2026-03-08', localTime } } },
+      });
+      const { html } = await page(routes.shows.show.href({ id: node.id }));
+      assert.match(
+        textOf(html),
+        localTime ? /March 8, 2026 · 2:30 AM Fourth/ : /March 8, 2026 Fourth/
+      );
+    }
   });
 
   it('shows a show whose artists have all been deleted', async (t) => {

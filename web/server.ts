@@ -5,7 +5,6 @@ import { createRequestListener, type ClientAddress } from 'remix/node-fetch-serv
 import { createHttpLogger } from '@highforthis/shared/logger';
 import { startObservability } from '@highforthis/shared/observability';
 
-process.env.TZ = 'America/New_York';
 startObservability({ serviceName: 'web' });
 
 const { assertSessionSecret } = await import('./app/lib/adminSession.ts');

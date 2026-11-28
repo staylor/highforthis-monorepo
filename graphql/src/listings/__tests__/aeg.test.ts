@@ -78,14 +78,13 @@ describe('aegListings', () => {
     expect(listings[1].startsAt).toEqual(new Date('2026-12-02T01:00:00Z'));
   });
 
-  // As a show entered by hand is: the site shows every show's time as New York's clocks read it
-  it("stores a show outside New York at the venue's clock time, read as New York's", async () => {
+  it('preserves the advertised venue clock and the actual instant outside New York', async () => {
     serve({
       [`${FEEDS}/events/2/events.json`]: {
         events: [
           event({
             eventDateTime: '2026-12-01T20:00:00',
-            eventDateTimeUTC: '2026-12-02T02:00:00',
+            eventDateTimeUTC: '2026-12-01T20:00:00-06:00',
             eventDateTimeZone: 'America/Chicago',
           }),
         ],
@@ -97,7 +96,7 @@ describe('aegListings', () => {
     expect(listing).toMatchObject({
       localDate: '2026-12-01',
       localTime: '20:00',
-      startsAt: new Date('2026-12-02T01:00:00Z'),
+      startsAt: new Date('2026-12-02T02:00:00Z'),
       timeZone: 'America/Chicago',
     });
   });

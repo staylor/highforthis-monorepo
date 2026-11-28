@@ -85,6 +85,19 @@ pnpm codegen
 
 CI fails when the schema or an operation changed without regenerating the TypeScript types. `pnpm codegen:ios` regenerates only `apple/HighForThisAPI/`, from the committed schema. See [`apple/README.md`](./apple/README.md).
 
+## Dates and times
+
+| Value | Representation and rule |
+| --- | --- |
+| A show’s advertised schedule | Store the venue’s Gregorian `localDate` and optional `localTime`. Use these fields for display, sorting and archive years. A date alone means the start time is unannounced. |
+| A show’s actual start | Keep the IANA `timeZone` when supplied. Store `startsAt` as PostgreSQL `timestamptz(3)` and expose Unix milliseconds in GraphQL. A supplied instant must agree with the venue clock when its zone is known. A skipped or repeated clock time needs additional evidence to identify an instant. |
+| Publication and system timestamps | Exchange an offset-bearing ISO timestamp or integer Unix milliseconds. Read and write the older PostgreSQL timestamp columns as UTC. Post and episode publication dates display on the New York editorial calendar. |
+| Calendar windows and elapsed time | Compute the public upcoming cutoff, retention and daily reporting with calendar days in `America/New_York`. Use elapsed durations for timeouts, cache lifetimes and rolling performance metrics. |
+
+Use the shared time functions at parsing and conversion boundaries. [Implementation](shared/src/time.ts) and [Temporal’s time zone guide](https://tc39.es/proposal-temporal/docs/timezone.html). The post editor rejects nonexistent New York times. For a newly entered repeated minute it uses the earlier occurrence. Editing an existing minute preserves the saved occurrence, seconds and milliseconds.
+
+`Show.date` remains available for older clients. It projects a venue clock into New York and uses 8 PM for an unannounced time. Use `Show.schedule` in new code. The migration recovers the historical clock already shown to readers and leaves historical zones and actual starts unknown. Apply the database migration before releasing the GraphQL server, and release GraphQL before clients that query the new field. On Railway, GraphQL's pre-deploy command applies the migration, and web's waits for a GraphQL that answers the field ([`web/README.md`](web/README.md#production)).
+
 ## Observability
 
 The shared [`@highforthis/shared`](./shared) workspace initializes OpenTelemetry before either application loads, allowing automatic HTTP, GraphQL, PostgreSQL, and runtime instrumentation plus structured Pino logging. Both apps are ES modules, which the HTTP instrumentation can't patch on import, so `startObservability()` requires `node:http` itself to trace incoming requests. Web names each request's span after the route that matched it, such as `GET /shows/:id` ([`web/app/lib/tracing.ts`](./web/app/lib/tracing.ts)), so its traces group by route and hold the GraphQL calls each page made. Requests receive an `x-request-id`; logs produced inside a trace also contain OpenTelemetry trace and span IDs.

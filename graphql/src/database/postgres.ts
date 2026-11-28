@@ -8,10 +8,13 @@ const TIMESTAMP = pg.types.builtins.TIMESTAMP;
 // writes them in the server's time zone, so a date would move by its offset. Read them as UTC on
 // these pools…
 const types = {
-  getTypeParser: ((oid, format) =>
-    oid === TIMESTAMP && format !== 'binary'
-      ? (value: string) => new Date(`${value.replace(' ', 'T')}Z`)
-      : pg.types.getTypeParser(oid, format)) as typeof pg.types.getTypeParser,
+  getTypeParser: ((oid, format) => {
+    if (format !== 'binary') {
+      if (oid === TIMESTAMP) return (value: string) => new Date(`${value.replace(' ', 'T')}Z`);
+      if (oid === pg.types.builtins.DATE) return (value: string) => value;
+    }
+    return pg.types.getTypeParser(oid, format);
+  }) as typeof pg.types.getTypeParser,
 };
 
 // …and write dates as UTC. pg has no per-pool setting for this.
@@ -27,7 +30,14 @@ const ignore = () => undefined;
  * next query. A connection that a transaction holds fails that transaction's next query instead.
  */
 export function createPool(connectionString: string, onIdleError: (error: Error) => void = ignore) {
-  const pool = new pg.Pool({ connectionString, types });
+  // CURRENT_TIMESTAMP defaults on legacy UTC columns must also run in a UTC session.
+  const pool = new pg.Pool({
+    connectionString,
+    types,
+    onConnect: async (client) => {
+      await client.query("SET TIME ZONE 'UTC'");
+    },
+  });
   pool.on('error', (error) => onIdleError(error));
   pool.on('connect', (client) => client.on('error', ignore));
   return pool;

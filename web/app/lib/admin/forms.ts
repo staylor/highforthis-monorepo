@@ -188,7 +188,7 @@ interface SubmitFormArgs extends FormArgs, ParseFormOptions {
   createMutation?: string;
   // Changes the form's parsed fields before they're sent, for what a form means by them that
   // parsing can't know, such as a venue's coordinates being a pair
-  prepare?: (input: Record<string, any>) => void;
+  prepare?: (input: Record<string, any>) => void | string;
 }
 
 // Saves an add or edit form, then comes back to the form's page with ?message=updated. When the
@@ -208,7 +208,8 @@ export async function submitForm({
     input.editorState = JSON.parse(input.editorState);
     clearElementFormats(input.editorState.root);
   }
-  prepare?.(input);
+  const reason = prepare?.(input);
+  if (reason) return { values: nestFields(formData), status: 422, reason };
 
   const mergedVariables = { ...variables, input: { ...variables?.input, ...input } };
   // A mutation fails when GraphQL turns its input down, or can't be reached

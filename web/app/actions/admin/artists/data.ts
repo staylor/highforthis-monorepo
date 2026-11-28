@@ -83,7 +83,9 @@ const artistShowsFragment = gql`
       node {
         id
         attended
-        date
+        schedule {
+          localDate
+        }
         venue {
           id
           name

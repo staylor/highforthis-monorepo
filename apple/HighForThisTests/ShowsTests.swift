@@ -103,9 +103,9 @@ struct ShowsTests {
         #expect(Place.name(city: city, state: state) == name)
     }
 
-    @Test func startDateReadsMilliseconds() async {
+    @Test func displayDateReadsMilliseconds() async {
         let show = await ShowList_show.from(Mock<Show>(date: 1_793_840_400_000))
-        #expect(show.startDate == Date(timeIntervalSince1970: 1_793_840_400))
+        #expect(show.displayDate == Date(timeIntervalSince1970: 1_793_840_400))
     }
 
     @Test func showsOnTheSameLocalDayShareADay() async throws {
@@ -134,10 +134,9 @@ struct ShowsTests {
     }
 
     @Test func aShowsTimeDisplaysTheVenuesClockWithoutAnEasternZoneLabel() {
-        let start = Date(timeIntervalSince1970: 1_735_693_200)
-        let displayed = start.formatted(Date.FormatStyle.showTime.locale(Self.english))
-        #expect(displayed.contains("December 31, 2024") && displayed.contains("8:00"))
-        #expect(!displayed.contains("EST"))
+        let displayed = venueScheduleLabel(day: "2026-03-08", time: "02:30", locale: Self.english)
+        #expect(displayed?.contains("March 8, 2026") == true && displayed?.contains("2:30") == true)
+        #expect(venueScheduleLabel(day: "2026-03-08", time: nil, locale: Self.english) == "Sunday, March 8, 2026")
     }
 
     private static let english = Locale(identifier: "en_US")

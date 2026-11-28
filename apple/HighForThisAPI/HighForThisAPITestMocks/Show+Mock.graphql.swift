@@ -13,6 +13,7 @@ nonisolated public final class Show: MockObject {
     @Field<[Artist]>("artists") public var artists
     @Field<Double>("date") public var date
     @Field<String>("id") public var id
+    @Field<ShowSchedule>("schedule") public var schedule
     @Field<String>("title") public var title
     @Field<String>("url") public var url
     @Field<Venue>("venue") public var venue
@@ -24,6 +25,7 @@ public extension Mock where O == Show {
     artists: [Mock<Artist>] = [],
     date: Double = 0.0,
     id: String = "",
+    schedule: Mock<ShowSchedule> = Mock<ShowSchedule>(),
     title: String? = nil,
     url: String? = nil,
     venue: Mock<Venue> = Mock<Venue>()
@@ -32,6 +34,7 @@ public extension Mock where O == Show {
     _setList(artists, for: \.artists)
     _setScalar(date, for: \.date)
     _setScalar(id, for: \.id)
+    _setEntity(schedule, for: \.schedule)
     _setScalar(title, for: \.title)
     _setScalar(url, for: \.url)
     _setEntity(venue, for: \.venue)

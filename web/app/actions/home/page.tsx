@@ -38,7 +38,6 @@ export const homeQuery = gql`
       edges {
         node {
           id
-          date
           title
           url
           artists {
@@ -51,6 +50,9 @@ export const homeQuery = gql`
                 url
               }
             }
+          }
+          schedule {
+            localDate
           }
           venue {
             id
