@@ -310,7 +310,7 @@ describe('shows', () => {
     }
 
     expect(showsQuery.where).toHaveBeenCalledWith(
-      and(and(), gte('date', new Date('2026-07-04T04:00:00Z')))
+      and(gte('date', new Date('2026-07-04T04:00:00Z')))
     );
   });
 });
@@ -348,6 +348,18 @@ describe('shows from the most recent year', () => {
       { date: new Date('2024-03-01T20:00:00Z') },
     ]);
     await expect(resolvers.ShowConnection.years(connection)).resolves.toEqual([2024, 2019]);
+  });
+
+  it('keeps the upcoming cutoff when a year is selected', async () => {
+    vi.useFakeTimers({ toFake: ['Date'], now: new Date('2024-07-04T12:00:00Z') });
+    try {
+      await resolvers.Query.shows({}, { latest: true, year: 2024 });
+      expect(showsQuery.where).toHaveBeenCalledWith(
+        and(and(gte('date', new Date('2024-07-04T04:00:00Z'))), in2024)
+      );
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('keeps to the year it is given', async () => {

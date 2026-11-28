@@ -133,16 +133,11 @@ struct ShowsTests {
         #expect(day.date.formatted(Date.FormatStyle.showDay.locale(Self.english)).contains("Dec 31, 2024"))
     }
 
-    @Test func aShowsTimeIsNewYorksAndSaysSoOnADeviceThatKeepsAnother() {
+    @Test func aShowsTimeDisplaysTheVenuesClockWithoutAnEasternZoneLabel() {
         let start = Date(timeIntervalSince1970: 1_735_693_200)
-        let london = TimeZone(identifier: "Europe/London")!
-
-        let atHome = start.formatted(Date.FormatStyle.showTime(start, on: .newYork).locale(Self.english))
-        let away = start.formatted(Date.FormatStyle.showTime(start, on: london).locale(Self.english))
-
-        #expect(atHome.contains("December 31, 2024") && atHome.contains("8:00"))
-        #expect(!atHome.contains("EST"))
-        #expect(away.contains("December 31, 2024") && away.contains("8:00") && away.contains("EST"))
+        let displayed = start.formatted(Date.FormatStyle.showTime.locale(Self.english))
+        #expect(displayed.contains("December 31, 2024") && displayed.contains("8:00"))
+        #expect(!displayed.contains("EST"))
     }
 
     private static let english = Locale(identifier: "en_US")

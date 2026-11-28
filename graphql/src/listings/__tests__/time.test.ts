@@ -5,6 +5,10 @@ import { dayKey, zonedTime } from '../time';
 describe('zonedTime', () => {
   it.each([
     ['2026-11-10', '20:00', 'America/New_York', '2026-11-11T01:00:00.000Z'],
+    ['2026-03-08', '04:30', 'America/New_York', '2026-03-08T08:30:00.000Z'],
+    ['2026-11-01', '02:30', 'America/New_York', '2026-11-01T07:30:00.000Z'],
+    ['2026-03-08', '02:30', 'America/New_York', '2026-03-08T07:30:00.000Z'],
+    ['2026-11-01', '01:30', 'America/New_York', '2026-11-01T05:30:00.000Z'],
     ['2026-07-04', '20:00', 'America/New_York', '2026-07-05T00:00:00.000Z'],
     ['2026-12-31', '19:00', 'America/Los_Angeles', '2027-01-01T03:00:00.000Z'],
   ])('converts %s %s in %s', (date, time, timeZone, instant) => {

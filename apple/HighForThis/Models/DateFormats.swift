@@ -1,7 +1,7 @@
 import Foundation
 
 nonisolated extension TimeZone {
-    /// New York's, where the shows are. The app dates shows there, as the website does, wherever the device is.
+    /// The zone used to encode venue clock times. The app reads them there, wherever the device is.
     static let newYork = TimeZone(identifier: "America/New_York")!
 }
 
@@ -31,13 +31,8 @@ nonisolated extension FormatStyle where Self == Date.FormatStyle {
     /// A show's day as VoiceOver reads its date badge, which only has room for "30 Mon", in New York.
     static var showSpokenDay: Self { inNewYork(.dateTime.weekday(.wide).month(.wide).day()) }
 
-    /// When a show starts, in New York. On a device that keeps another time, it names New York's time zone, so 8:00 PM
-    /// doesn't read as 8:00 PM where the device is.
-    static func showTime(_ start: Date, on device: TimeZone = .current) -> Self {
-        let style = inNewYork(.dateTime.weekday(.wide).month(.wide).day().year().hour().minute())
-        let sameClocks = device.secondsFromGMT(for: start) == TimeZone.newYork.secondsFromGMT(for: start)
-        return sameClocks ? style : style.timeZone(.specificName(.short))
-    }
+    /// The venue's clock time. The API encodes every venue's wall time using New York's offset.
+    static var showTime: Self { inNewYork(.dateTime.weekday(.wide).month(.wide).day().year().hour().minute()) }
 
     /// The day an episode or a post was posted, as their lists show it.
     static var postedDate: Self { .dateTime.month(.abbreviated).day().year() }
