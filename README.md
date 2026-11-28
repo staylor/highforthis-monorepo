@@ -96,7 +96,7 @@ CI fails when the schema or an operation changed without regenerating the TypeSc
 
 Use the shared time functions at parsing and conversion boundaries. [Implementation](shared/src/time.ts) and [Temporal’s time zone guide](https://tc39.es/proposal-temporal/docs/timezone.html). The post editor rejects nonexistent New York times. For a newly entered repeated minute it uses the earlier occurrence. Editing an existing minute preserves the saved occurrence, seconds and milliseconds.
 
-`Show.date` remains available for older clients. It projects a venue clock into New York and uses 8 PM for an unannounced time. Use `Show.schedule` in new code. The migration recovers the historical clock already shown to readers and leaves historical zones and actual starts unknown. Apply the database migration before releasing the GraphQL server, and release GraphQL before clients that query the new field. On Railway, GraphQL's pre-deploy command applies the migration, and web's waits for a GraphQL that answers the field ([`web/README.md`](web/README.md#production)).
+Show history groups by the venue’s calendar day. Statistics return the first and last venue days as ISO dates. Historical shows retain their advertised day and time, with an unknown zone and start where the source supplied neither.
 
 ## Observability
 

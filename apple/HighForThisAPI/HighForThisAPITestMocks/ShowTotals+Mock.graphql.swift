@@ -11,7 +11,7 @@ nonisolated public final class ShowTotals: MockObject {
 
   public struct MockFields: Sendable {
     @Field<Int>("artists") public var artists
-    @Field<Double>("firstDate") public var firstDate
+    @Field<String>("firstLocalDate") public var firstLocalDate
     @Field<Int>("shows") public var shows
     @Field<Int>("venues") public var venues
   }
@@ -20,13 +20,13 @@ nonisolated public final class ShowTotals: MockObject {
 public extension Mock where O == ShowTotals {
   convenience init(
     artists: Int = 0,
-    firstDate: Double? = nil,
+    firstLocalDate: String? = nil,
     shows: Int = 0,
     venues: Int = 0
   ) {
     self.init()
     _setScalar(artists, for: \.artists)
-    _setScalar(firstDate, for: \.firstDate)
+    _setScalar(firstLocalDate, for: \.firstLocalDate)
     _setScalar(shows, for: \.shows)
     _setScalar(venues, for: \.venues)
   }

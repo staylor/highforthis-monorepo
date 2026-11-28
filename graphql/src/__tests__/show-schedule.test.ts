@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { feedSchedule, legacyShowDate, resolveSchedule } from '#/show-schedule';
+import { feedSchedule, resolveSchedule } from '#/show-schedule';
 
 describe('show schedules', () => {
   const fold = { localDate: '2026-11-01', localTime: '01:30', timeZone: 'America/New_York' };
@@ -17,16 +17,13 @@ describe('show schedules', () => {
       /disagrees/
     );
   });
-  it('keeps a real Phoenix start distinct from its New York compatibility projection', () => {
+  it('resolves an advertised Phoenix clock during a New York spring gap', () => {
     const schedule = resolveSchedule({
       localDate: '2026-03-08',
       localTime: '02:30',
       timeZone: 'America/Phoenix',
     });
     expect(schedule.startsAt?.toISOString()).toBe('2026-03-08T09:30:00.000Z');
-    expect(legacyShowDate(schedule.localDate, schedule.localTime).toISOString()).toBe(
-      '2026-03-08T07:30:00.000Z'
-    );
   });
   it('keeps date-only records, unknown zones, and independently supplied instants', () => {
     expect(resolveSchedule({ localDate: '2024-02-29' })).toEqual({

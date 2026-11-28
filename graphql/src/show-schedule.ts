@@ -4,7 +4,6 @@ import {
   instantMilliseconds,
   plainDate,
   plainTime,
-  SITE_TIME_ZONE,
   zoneId,
 } from '@highforthis/shared/time';
 
@@ -80,9 +79,4 @@ export function feedSchedule(
     startFor(localDate, localTime, timeZone, iso ? instantMilliseconds(iso) : null)
   );
   return { localDate, localTime, timeZone, startsAt };
-}
-
-/** The date older clients read on New York's clocks. */
-export function legacyShowDate(localDate: string, localTime?: string | null) {
-  return new Date(clockInstant(`${localDate}T${localTime ?? '20:00'}`, SITE_TIME_ZONE));
 }

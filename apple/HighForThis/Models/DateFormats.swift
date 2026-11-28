@@ -1,35 +1,29 @@
 import Foundation
 
 nonisolated extension TimeZone {
-    /// The zone used to encode venue clock times. The app reads them there, wherever the device is.
+    /// The site's editorial time zone for posts and episodes.
     static let newYork = TimeZone(identifier: "America/New_York")!
 }
 
-nonisolated extension Calendar {
-    /// The calendar that says which day a show is on: New York's.
-    static let newYork: Calendar = {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = .newYork
-        return calendar
-    }()
+/// The venue's advertised Gregorian calendar day (YYYY-MM-DD).
+nonisolated struct VenueDay: Hashable {
+    let iso: String
+
+    init(_ iso: String) { self.iso = iso }
+
+    var monthStart: VenueDay { VenueDay(String(iso.prefix(7)) + "-01") }
+
+    func formatted(_ style: Date.FormatStyle) -> String {
+        formatVenueClock(day: iso, time: nil, style: style) ?? iso
+    }
 }
 
 nonisolated extension FormatStyle where Self == Date.FormatStyle {
-    /// A show's day with its weekday, in New York, as CarPlay heads a day of shows and as a show's row says it at the
-    /// text sizes that leave no room for its date badge.
-    static var showDay: Self { inNewYork(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()) }
-
-    /// A month of shows, as the show lists head it, in New York.
-    static var showMonth: Self { inNewYork(.dateTime.month(.wide).year()) }
-
-    /// The day of the month in a show's date badge, in New York: two digits, as the website's are.
-    static var showDayNumber: Self { inNewYork(.dateTime.day(.twoDigits)) }
-
-    /// The weekday in a show's date badge, in New York.
-    static var showWeekday: Self { inNewYork(.dateTime.weekday(.abbreviated)) }
-
-    /// A show's day as VoiceOver reads its date badge, which only has room for "30 Mon", in New York.
-    static var showSpokenDay: Self { inNewYork(.dateTime.weekday(.wide).month(.wide).day()) }
+    static var showDay: Self { .dateTime.weekday(.abbreviated).month(.abbreviated).day().year() }
+    static var showMonth: Self { .dateTime.month(.wide).year() }
+    static var showDayNumber: Self { .dateTime.day(.twoDigits) }
+    static var showWeekday: Self { .dateTime.weekday(.abbreviated) }
+    static var showSpokenDay: Self { .dateTime.weekday(.wide).month(.wide).day() }
 
     /// The day an episode or a post was posted, as their lists show it.
     static var postedDate: Self { inNewYork(.dateTime.month(.abbreviated).day().year()) }
@@ -45,13 +39,18 @@ private nonisolated func inNewYork(_ style: Date.FormatStyle) -> Date.FormatStyl
     return style
 }
 
-/// Format the advertised civil fields without resolving them in a device or venue time zone.
-/// UTC provides a clock with no DST gaps or repeated hours for Foundation's localized formatting.
 nonisolated func venueScheduleLabel(day: String, time: String?, locale: Locale = .current) -> String? {
-    let clock = time.map { String($0.prefix(5)) } ?? "00:00"
-    guard let value = try? Date("\(day)T\(clock):00Z", strategy: .iso8601) else { return nil }
     var style = Date.FormatStyle.dateTime.weekday(.wide).month(.wide).day().year().locale(locale)
     if time != nil { style = style.hour().minute() }
+    return formatVenueClock(day: day, time: time, style: style)
+}
+
+/// UTC lets Foundation localize civil fields even when the venue's clock skips or repeats an hour.
+private nonisolated func formatVenueClock(day: String, time: String?, style: Date.FormatStyle) -> String? {
+    let clock = time.map { String($0.prefix(5)) } ?? "00:00"
+    guard let value = try? Date("\(day)T\(clock):00Z", strategy: .iso8601) else { return nil }
+    var style = style
+    style.calendar = Calendar(identifier: .gregorian)
     style.timeZone = .gmt
     return value.formatted(style)
 }

@@ -7,7 +7,7 @@ query ShowStats($leaders: Int!) {
   }
   showTotals {
     artists
-    firstDate
+    firstLocalDate
     shows
     venues
   }

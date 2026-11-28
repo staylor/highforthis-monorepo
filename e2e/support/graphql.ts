@@ -284,7 +284,7 @@ export class GraphQL {
   async createShow(input: { title: string; artists: string[]; venue: string }) {
     const { createShow } = await this.query<{ createShow: Show }>(
       `mutation ($input: CreateShowInput!) { createShow(input: $input) { id title } }`,
-      { input: { date: Date.now(), ...input } }
+      { input: { schedule: { localDate: '2026-05-10' }, ...input } }
     );
     return createShow;
   }

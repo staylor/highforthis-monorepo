@@ -6,7 +6,7 @@
 
 nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
   public static var fragmentDefinition: StaticString {
-    #"fragment ShowList_show on Show { __typename id date title artists { __typename id name slug appleMusic { __typename id artwork { __typename height url width } } } venue { __typename id address city name slug state } }"#
+    #"fragment ShowList_show on Show { __typename id title artists { __typename id name slug appleMusic { __typename id artwork { __typename height url width } } } schedule { __typename localDate } venue { __typename id address city name slug state } }"#
   }
 
   @_spi(Unsafe) public let __data: DataDict
@@ -16,9 +16,9 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
   @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("id", String.self),
-    .field("date", Double.self),
     .field("title", String?.self),
     .field("artists", [Artist].self),
+    .field("schedule", Schedule.self),
     .field("venue", Venue.self),
   ] }
   @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
@@ -26,10 +26,9 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
   ] }
 
   public var id: String { __data["id"] }
-  /// Venue wall time encoded in New York for existing clients.
-  public var date: Double { __data["date"] }
   public var title: String? { __data["title"] }
   public var artists: [Artist] { __data["artists"] }
+  public var schedule: Schedule { __data["schedule"] }
   public var venue: Venue { __data["venue"] }
 
   /// Artist
@@ -99,6 +98,26 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
         public var width: Int? { __data["width"] }
       }
     }
+  }
+
+  /// Schedule
+  ///
+  /// Parent Type: `ShowSchedule`
+  nonisolated public struct Schedule: HighForThisAPI.SelectionSet {
+    @_spi(Unsafe) public let __data: DataDict
+    @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
+
+    @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { HighForThisAPI.Objects.ShowSchedule }
+    @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+      .field("__typename", String.self),
+      .field("localDate", String.self),
+    ] }
+    @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+      ShowList_show.Schedule.self
+    ] }
+
+    /// Advertised calendar day at the venue (YYYY-MM-DD).
+    public var localDate: String { __data["localDate"] }
   }
 
   /// Venue

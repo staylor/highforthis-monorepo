@@ -9,9 +9,6 @@ import {
   stubGraphQL,
 } from '#/actions/admin/test-support.ts';
 
-// 8 PM on May 10 in the site's editorial calendar
-const showTime = Date.UTC(2024, 4, 11, 0);
-
 const ryman = { id: 'v1', name: 'Ryman', slug: 'ryman' };
 
 const shows = {
@@ -209,7 +206,7 @@ describe('admin shows', () => {
     const operations = stubGraphQL(t, { UpdateShow: { updateShow: show } });
     const response = await post(
       '/admin/show/s1',
-      `title=&date=${showTime}&artists%5B0%5D=a1&venue=v1&url=&notes=`
+      `title=&schedule[localDate]=2024-05-10&artists%5B0%5D=a1&venue=v1&url=&notes=`
     );
     assert.equal(
       response.headers.get('location'),
@@ -224,7 +221,7 @@ describe('admin shows', () => {
           notes: null,
           title: null,
           url: null,
-          date: showTime,
+          schedule: { localDate: '2024-05-10' },
           artists: ['a1'],
           venue: 'v1',
         },
@@ -234,14 +231,14 @@ describe('admin shows', () => {
 
   it('keeps a title or notes that look like a number or a boolean as text', async (t) => {
     const operations = stubGraphQL(t, { UpdateShow: { updateShow: show } });
-    await post('/admin/show/s1', `title=1999&notes=true&url=&date=${showTime}`);
+    await post('/admin/show/s1', `title=1999&notes=true&url=&schedule[localDate]=2024-05-10`);
     assert.deepEqual(operations.at(-1)?.variables.input, {
       attended: false,
       artists: [],
       title: '1999',
       notes: 'true',
       url: null,
-      date: showTime,
+      schedule: { localDate: '2024-05-10' },
     });
   });
 
@@ -251,7 +248,10 @@ describe('admin shows', () => {
       ShowEdit: { show, ...entities },
       UpdateShow: invalid('Invalid input (artists: A show needs an artist)'),
     });
-    const response = await post('/admin/show/s1', `title=&date=${showTime}&venue=v1&url=&notes=`);
+    const response = await post(
+      '/admin/show/s1',
+      `title=&schedule[localDate]=2024-05-10&venue=v1&url=&notes=`
+    );
     assert.equal(response.status, 422);
     assert.deepEqual(
       operations.find((op) => op.operationName === 'UpdateShow')?.variables.input.artists,

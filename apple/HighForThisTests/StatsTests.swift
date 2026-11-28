@@ -38,7 +38,8 @@ struct StatsTests {
         }
         // The query asks for as many leaders as the limit, with their years and pictures
         let leaders = await counts.prefix(4).enumerated().asyncMap { index, count in
-            await StatsLeader_stat.from(Mock<ShowStat>(count: count, entity: Self.artist(index + 1)))
+            await StatsLeader_stat.from(
+                Mock<ShowStat>(count: count, entity: Self.artist(index + 1), firstLocalDate: "2019-01-01", lastLocalDate: "2025-12-31"))
         }
 
         let board = StatsBoard(leaders: leaders, everyone: everyone, limit: 4)
@@ -58,7 +59,8 @@ struct StatsTests {
             await StatsLineup_stat.from(Mock<ShowStat>(count: count, entity: Self.artist(index + 1)))
         }
         let leaders = await counts.enumerated().asyncMap { index, count in
-            await StatsLeader_stat.from(Mock<ShowStat>(count: count, entity: Self.artist(index + 1)))
+            await StatsLeader_stat.from(
+                Mock<ShowStat>(count: count, entity: Self.artist(index + 1), firstLocalDate: "2019-01-01", lastLocalDate: "2025-12-31"))
         }
 
         let board = StatsBoard(leaders: leaders, everyone: everyone)
@@ -67,10 +69,9 @@ struct StatsTests {
         #expect(board.leaders.map(\.isOnThePodium) == [true, true, true, false, false])
     }
 
-    // 8 PM on New Year's Eve in New York is the next year in UTC
-    @Test func aLeadersYearsAreNewYorks() async throws {
+    @Test func aLeadersYearsUseTheVenueCalendar() async throws {
         let stat = await StatsLeader_stat.from(
-            Mock<ShowStat>(count: 2, entity: Self.artist(1), firstDate: 1_230_771_600_000, lastDate: 1_735_693_200_000)
+            Mock<ShowStat>(count: 2, entity: Self.artist(1), firstLocalDate: "2008-12-31", lastLocalDate: "2024-12-31")
         )
 
         let leader = try #require(StatsLeader(rank: 1, position: 0, stat: stat))
@@ -81,7 +82,7 @@ struct StatsTests {
 
     @Test func aLeaderOfOneYearSaysOnlyThatYear() async throws {
         let stat = await StatsLeader_stat.from(
-            Mock<ShowStat>(count: 2, entity: Self.artist(1), firstDate: 1_573_049_600_000, lastDate: 1_573_049_600_000)
+            Mock<ShowStat>(count: 2, entity: Self.artist(1), firstLocalDate: "2019-11-05", lastLocalDate: "2019-11-05")
         )
 
         #expect(try #require(StatsLeader(rank: 1, position: 0, stat: stat)).yearsText == "2019")
@@ -96,7 +97,8 @@ struct StatsTests {
     func aVenueSaysWhereItIs(city: String?, state: String?, place: String?) async throws {
         let stat = await StatsLeader_stat.from(
             Mock<ShowStat>(
-                count: 9, entity: Mock<Venue>(city: city, id: "venue", name: "Brooklyn Bowl", slug: "brooklyn-bowl", state: state))
+                count: 9, entity: Mock<Venue>(city: city, id: "venue", name: "Brooklyn Bowl", slug: "brooklyn-bowl", state: state),
+                firstLocalDate: "2019-01-01", lastLocalDate: "2025-12-31")
         )
 
         let leader = try #require(StatsLeader(rank: 1, position: 0, stat: stat))
@@ -110,7 +112,8 @@ struct StatsTests {
             appleMusic: Mock<AppleMusicData>(
                 artwork: Mock<AppleMusicArtwork>(height: 2400, url: "https://example.com/{w}x{h}bb.jpg", width: 2400)),
             id: "wilco", name: "Wilco", slug: "wilco")
-        let stat = await StatsLeader_stat.from(Mock<ShowStat>(count: 7, entity: artist))
+        let stat = await StatsLeader_stat.from(
+            Mock<ShowStat>(count: 7, entity: artist, firstLocalDate: "2019-01-01", lastLocalDate: "2025-12-31"))
 
         let leader = try #require(StatsLeader(rank: 4, position: 3, stat: stat))
 
@@ -131,8 +134,8 @@ struct StatsTests {
         #expect(StatsEntity(kind: .venue, id: "", name: name, slug: "").initials == initials)
     }
 
-    @Test func theFirstShowsYearIsNewYorks() async {
-        let totals = await ShowStatsQuery.Data.ShowTotals.from(Mock<ShowTotals>(firstDate: 1_230_771_600_000))
-        #expect(totals.firstYear() == 2008)
+    @Test func theFirstShowUsesItsVenueYear() async {
+        let totals = await ShowStatsQuery.Data.ShowTotals.from(Mock<ShowTotals>(firstLocalDate: "2008-12-31"))
+        #expect(totals.firstYear == 2008)
     }
 }

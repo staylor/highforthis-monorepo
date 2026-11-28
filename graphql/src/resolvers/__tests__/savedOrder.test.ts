@@ -157,7 +157,7 @@ describe('a list', () => {
     it('is read in the order it was saved', async () => {
       const show = await showResolvers.Mutation.createShow(
         {},
-        { input: { artists: lineup, date: Date.UTC(2027, 6, 30), venue: 'venue-1' } }
+        { input: { artists: lineup, schedule: { localDate: '2027-07-30' }, venue: 'venue-1' } }
       );
 
       await expect(artistsOf(show!.id)).resolves.toEqual([lineup, lineup, lineup]);
@@ -170,7 +170,7 @@ describe('a list', () => {
     it("stays as it was when the show can't be saved", async () => {
       const show = await showResolvers.Mutation.createShow(
         {},
-        { input: { artists: lineup, date: Date.UTC(2027, 6, 31), venue: 'venue-1' } }
+        { input: { artists: lineup, schedule: { localDate: '2027-07-31' }, venue: 'venue-1' } }
       );
       // Turns down a show saved with this title, after its new lineup has been saved
       await db.exec(
@@ -192,7 +192,11 @@ describe('a list', () => {
         {},
         {
           input: [
-            { artists: names(lineup), date: Date.UTC(2027, 7, 1), venue: 'Ryman Auditorium' },
+            {
+              artists: names(lineup),
+              schedule: { localDate: '2027-08-01' },
+              venue: 'Ryman Auditorium',
+            },
           ],
         }
       );
@@ -247,7 +251,6 @@ describe('a list', () => {
       venueId,
       source: 'aeg',
       sourceId: 'moved',
-      date: new Date('2020-01-01T23:00:00Z'),
       localDate: '2020-01-01',
     });
     getListings.mockResolvedValue({

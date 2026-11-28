@@ -4,16 +4,16 @@ import SwiftUI
 /// A show's day in the lists that head their shows by month, as the website's home page has it: the day of the month
 /// in the accent color, over the day of the week.
 struct DateBadge: View {
-    let date: Date
+    let date: VenueDay
     @ScaledMetric(relativeTo: .title3) private var width: CGFloat = .readable(34)
 
     var body: some View {
         VStack(spacing: 0) {
-            Text(date, format: .showDayNumber)
+            Text(date.formatted(.showDayNumber))
                 .font(.title3.weight(.bold))
                 .monospacedDigit()
                 .foregroundStyle(.tint)
-            Text(date, format: .showWeekday)
+            Text(date.formatted(.showWeekday))
                 .font(.caption2.weight(.semibold))
                 .textCase(.uppercase)
                 .foregroundStyle(.secondary)
@@ -21,7 +21,7 @@ struct DateBadge: View {
         // As wide as the widest day, so the pictures and names beside the badges line up.
         .frame(minWidth: width)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(date, format: .showSpokenDay))
+        .accessibilityLabel(Text(date.formatted(.showSpokenDay)))
     }
 }
 
@@ -46,11 +46,11 @@ struct ShowListRow: View {
                 if words.hasPicture {
                     picture
                 }
-                RowLabel(eyebrow: Text(show.displayDate, format: .showDay), title: words.title, detail: words.detail)
+                RowLabel(eyebrow: Text(show.venueDay.formatted(.showDay)), title: words.title, detail: words.detail)
             }
         } else {
             HStack(spacing: .readable(12)) {
-                DateBadge(date: show.displayDate)
+                DateBadge(date: show.venueDay)
                 if words.hasPicture {
                     picture
                 }
@@ -101,7 +101,7 @@ struct DatedShowsSection: View {
                         .accessibilityIdentifier("show-\(show.id)")
                     }
                 } header: {
-                    Text(month.date, format: .showMonth)
+                    Text(month.date.formatted(.showMonth))
                         .spacedSectionHeader()
                 }
             }

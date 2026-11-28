@@ -125,7 +125,7 @@ export default createController(routes.shows, {
     async historyPage(context) {
       const { year, view } = context.params;
       const after = context.url.searchParams.get('after');
-      const previous = Number(context.url.searchParams.get('previous') || Number.NaN);
+      const previous = context.url.searchParams.get('previous');
       if ((year && !isYear(year)) || (view !== 'grid' && view !== 'list') || !after) {
         return new Response('Not Found', { status: 404 });
       }
@@ -140,11 +140,7 @@ export default createController(routes.shows, {
             shows={shows}
             view={view}
             year={year}
-            previous={
-              Number.isSafeInteger(previous) && Math.abs(previous) <= 8640000000000000
-                ? previous
-                : undefined
-            }
+            previous={previous && /^\d{4}-(0[1-9]|1[0-2])$/.test(previous) ? previous : undefined}
             label={context.t('shows.more')}
           />
         ) : null

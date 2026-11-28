@@ -8,7 +8,7 @@ nonisolated public struct ShowQuery: GraphQLQuery {
   public static let operationName: String = "Show"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query Show($id: String!) { show(id: $id) { __typename id date title url artists { __typename id name slug appleMusic { __typename id url artwork { __typename height url width } } } schedule { __typename localDate localTime } venue { __typename id name slug } } }"#
+      #"query Show($id: String!) { show(id: $id) { __typename id title url artists { __typename id name slug appleMusic { __typename id url artwork { __typename height url width } } } schedule { __typename localDate localTime } venue { __typename id name slug } } }"#
     ))
 
   public var id: String
@@ -44,7 +44,6 @@ nonisolated public struct ShowQuery: GraphQLQuery {
       @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("id", String.self),
-        .field("date", Double.self),
         .field("title", String?.self),
         .field("url", String?.self),
         .field("artists", [Artist].self),
@@ -56,8 +55,6 @@ nonisolated public struct ShowQuery: GraphQLQuery {
       ] }
 
       public var id: String { __data["id"] }
-      /// Venue wall time encoded in New York for existing clients.
-      public var date: Double { __data["date"] }
       public var title: String? { __data["title"] }
       public var url: String? { __data["url"] }
       public var artists: [Artist] { __data["artists"] }

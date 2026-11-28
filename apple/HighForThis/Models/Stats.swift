@@ -39,7 +39,7 @@ nonisolated struct StatsLeader: Identifiable {
     let position: Int
     let entity: StatsEntity
     let count: Int
-    /// The years of its first show and its latest, in New York.
+    /// The years of its first show and its latest, at their venues.
     let years: ClosedRange<Int>
     /// Where a venue is, such as "Brooklyn, NY", or nil for an artist or a venue without a city or state.
     let place: String?
@@ -56,14 +56,14 @@ nonisolated struct StatsLeader: Identifiable {
         years.lowerBound == years.upperBound ? String(years.lowerBound) : "\(years.lowerBound)–\(years.upperBound)"
     }
 
-    init?(rank: Int, position: Int, stat: StatsLeader_stat, calendar: Calendar = .newYork) {
-        guard let entity = stat.entity.statsEntity else { return nil }
+    init?(rank: Int, position: Int, stat: StatsLeader_stat) {
+        guard let entity = stat.entity.statsEntity,
+            let first = Int(stat.firstLocalDate.prefix(4)), let last = Int(stat.lastLocalDate.prefix(4))
+        else { return nil }
         self.rank = rank
         self.position = position
         self.entity = entity
         self.count = stat.count
-        let first = calendar.component(.year, from: Date(apiTimestamp: stat.firstDate))
-        let last = calendar.component(.year, from: Date(apiTimestamp: stat.lastDate))
         self.years = min(first, last)...max(first, last)
         self.place = Place.name(city: stat.entity.asVenue?.city, state: stat.entity.asVenue?.state)
         self.artwork = stat.entity.asArtist?.appleMusic?.artwork
@@ -96,12 +96,12 @@ nonisolated struct StatsBoard {
     var most: Int { leaders.first?.count ?? 0 }
 
     /// `leaders` are the first of `everyone`, with their pictures and years, which the rest go without.
-    init(leaders: [StatsLeader_stat], everyone: [StatsLineup_stat], limit: Int = Self.leaderLimit, calendar: Calendar = .newYork) {
+    init(leaders: [StatsLeader_stat], everyone: [StatsLineup_stat], limit: Int = Self.leaderLimit) {
         let counts = everyone.map(\.count)
         let ranks = Self.rankings(counts)
         let leaderCount = min(Self.leaderCount(counts, limit: limit), leaders.count)
         self.leaders = leaders.prefix(leaderCount).enumerated().compactMap { index, stat in
-            StatsLeader(rank: index < ranks.count ? ranks[index] : index + 1, position: index, stat: stat, calendar: calendar)
+            StatsLeader(rank: index < ranks.count ? ranks[index] : index + 1, position: index, stat: stat)
         }
         self.tiers = everyone.dropFirst(leaderCount).orderedGroups(by: \.count).map { count, stats in
             StatsTier(count: count, entities: stats.compactMap(\.entity.statsEntity))
@@ -144,9 +144,9 @@ nonisolated struct StatsBoard {
 }
 
 nonisolated extension ShowStatsQuery.Data.ShowTotals {
-    /// The year of the first show we went to, in New York.
-    func firstYear(calendar: Calendar = .newYork) -> Int? {
-        firstDate.map { calendar.component(.year, from: Date(apiTimestamp: $0)) }
+    /// The venue calendar year of the first show we went to.
+    var firstYear: Int? {
+        firstLocalDate.flatMap { Int($0.prefix(4)) }
     }
 }
 

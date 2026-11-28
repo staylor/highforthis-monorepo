@@ -56,7 +56,7 @@ private struct StatsTotals: View {
             StatsTotal(label: .artists, value: totals.artists.formatted()),
             StatsTotal(label: .venues, value: totals.venues.formatted()),
         ]
-        if let year = totals.firstYear() {
+        if let year = totals.firstYear {
             tiles.append(StatsTotal(label: .since, value: String(year)))
         }
         return tiles

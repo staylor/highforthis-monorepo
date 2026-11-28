@@ -3,7 +3,6 @@ import HighForThisAPI
 
 nonisolated protocol ShowSummary {
     var title: String? { get }
-    var date: Double { get }
     var artistNames: [String] { get }
 }
 
@@ -16,13 +15,10 @@ nonisolated extension ShowSummary {
         return artistNames.joined(separator: " / ")
     }
 
-    /// The compatibility timestamp used to label a calendar day in New York.
-    var displayDate: Date {
-        Date(apiTimestamp: date)
-    }
 }
 
 nonisolated extension ShowList_show: ShowSummary {
+    var venueDay: VenueDay { VenueDay(schedule.localDate) }
     var artistNames: [String] { artists.map(\.name) }
 
     /// The main artist's Apple Music artwork, at most `maximumWidth` pixels wide. The main artist is the first, as on
@@ -72,33 +68,27 @@ nonisolated extension ShowQuery.Data.Show: ShowSummary {
 
 /// The shows in one calendar month, which the show lists head them with. Each show's row has its own day.
 nonisolated struct ShowMonth: Identifiable {
-    /// The month's first day in New York.
-    let date: Date
+    let date: VenueDay
     let shows: [ShowList_show]
 
-    var id: Date { date }
+    var id: VenueDay { date }
 
-    /// Groups shows by the month they start in, in New York, as the website's calendar does. The months, the days in
-    /// them and the shows on a day stay in the order `ShowDay` puts them in.
-    static func months(from shows: [ShowList_show], calendar: Calendar = .newYork) -> [ShowMonth] {
-        ShowDay.days(from: shows, calendar: calendar)
-            .orderedGroups { calendar.dateInterval(of: .month, for: $0.date)?.start ?? $0.date }
+    static func months(from shows: [ShowList_show]) -> [ShowMonth] {
+        ShowDay.days(from: shows)
+            .orderedGroups { $0.date.monthStart }
             .map { month, days in ShowMonth(date: month, shows: days.flatMap(\.shows)) }
     }
 }
 
-/// The shows on one calendar day, which CarPlay heads them with.
+/// CarPlay displays venue days in API order, with each day's shows sorted by headline.
 nonisolated struct ShowDay: Identifiable {
-    let date: Date
+    let date: VenueDay
     let shows: [ShowList_show]
 
-    var id: Date { date }
+    var id: VenueDay { date }
 
-    /// Groups shows by the day they start in New York, as the website does, keeping the days in the order the API
-    /// returns them: upcoming shows soonest first, and history most recent first. Shows on the same day are sorted by
-    /// headline.
-    static func days(from shows: [ShowList_show], calendar: Calendar = .newYork) -> [ShowDay] {
-        shows.orderedGroups { calendar.startOfDay(for: $0.displayDate) }.map { day, shows in
+    static func days(from shows: [ShowList_show]) -> [ShowDay] {
+        shows.orderedGroups(by: \.venueDay).map { day, shows in
             ShowDay(date: day, shows: shows.sorted { $0.headline.localizedStandardCompare($1.headline) == .orderedAscending })
         }
     }

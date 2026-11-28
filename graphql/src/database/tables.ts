@@ -347,7 +347,6 @@ export const shows = table({
     id: c.text(),
     title: c.text().nullable(),
     notes: c.text().nullable(),
-    date: timestamp(),
     localDate: c.date() as ColumnBuilder<string>,
     localTime: (c.time({ precision: 3 }) as ColumnBuilder<string>).nullable(),
     timeZone: c.text().nullable(),

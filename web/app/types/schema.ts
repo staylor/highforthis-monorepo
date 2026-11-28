@@ -122,8 +122,7 @@ export type AudioUpload = MediaUpload & {
 export type BulkCreateShowInput = {
   artists: Array<Scalars['String']['input']>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
-  schedule?: InputMaybe<ShowScheduleInput>;
+  schedule: ShowScheduleInput;
   venue: Scalars['String']['input'];
 };
 
@@ -174,9 +173,8 @@ export type CreatePostInput = {
 export type CreateShowInput = {
   artists: Array<Scalars['String']['input']>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
-  schedule?: InputMaybe<ShowScheduleInput>;
+  schedule: ShowScheduleInput;
   title?: InputMaybe<Scalars['String']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
   venue: Scalars['String']['input'];
@@ -965,8 +963,6 @@ export type Show = {
   __typename?: 'Show';
   artists: Array<Artist>;
   attended?: Maybe<Scalars['Boolean']['output']>;
-  /** Venue wall time encoded in New York for existing clients. */
-  date: Scalars['Float']['output'];
   id: Scalars['String']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   schedule: ShowSchedule;
@@ -1026,15 +1022,15 @@ export type ShowStat = {
   __typename?: 'ShowStat';
   count: Scalars['Int']['output'];
   entity: ShowEntity;
-  firstDate: Scalars['Float']['output'];
-  lastDate: Scalars['Float']['output'];
+  firstLocalDate: Scalars['String']['output'];
+  lastLocalDate: Scalars['String']['output'];
 };
 
 export type ShowTotals = {
   __typename?: 'ShowTotals';
   artists: Scalars['Int']['output'];
-  firstDate?: Maybe<Scalars['Float']['output']>;
-  lastDate?: Maybe<Scalars['Float']['output']>;
+  firstLocalDate?: Maybe<Scalars['String']['output']>;
+  lastLocalDate?: Maybe<Scalars['String']['output']>;
   shows: Scalars['Int']['output'];
   venues: Scalars['Int']['output'];
 };
@@ -1116,7 +1112,6 @@ export type UpdatePostInput = {
 export type UpdateShowInput = {
   artists?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
   schedule?: InputMaybe<ShowScheduleInput>;
   title?: InputMaybe<Scalars['String']['input']>;

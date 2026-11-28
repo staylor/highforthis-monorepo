@@ -11,7 +11,6 @@ nonisolated public final class Show: MockObject {
 
   public struct MockFields: Sendable {
     @Field<[Artist]>("artists") public var artists
-    @Field<Double>("date") public var date
     @Field<String>("id") public var id
     @Field<ShowSchedule>("schedule") public var schedule
     @Field<String>("title") public var title
@@ -23,7 +22,6 @@ nonisolated public final class Show: MockObject {
 public extension Mock where O == Show {
   convenience init(
     artists: [Mock<Artist>] = [],
-    date: Double = 0.0,
     id: String = "",
     schedule: Mock<ShowSchedule> = Mock<ShowSchedule>(),
     title: String? = nil,
@@ -32,7 +30,6 @@ public extension Mock where O == Show {
   ) {
     self.init()
     _setList(artists, for: \.artists)
-    _setScalar(date, for: \.date)
     _setScalar(id, for: \.id)
     _setEntity(schedule, for: \.schedule)
     _setScalar(title, for: \.title)

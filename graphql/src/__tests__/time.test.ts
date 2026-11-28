@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { calendarDate, clockInstant } from '@highforthis/shared/time';
 
-describe('legacy clock conversion', () => {
+describe('compatible clock conversion', () => {
   it.each([
     ['2026-11-10', '20:00', 'America/New_York', '2026-11-11T01:00:00.000Z'],
     ['2026-03-08', '04:30', 'America/New_York', '2026-03-08T08:30:00.000Z'],
@@ -16,7 +16,7 @@ describe('legacy clock conversion', () => {
   });
 });
 
-describe('dayKey', () => {
+describe('calendarDate', () => {
   it('reads the calendar date in the given time zone', () => {
     const instant = Date.parse('2027-01-01T03:00:00Z');
 

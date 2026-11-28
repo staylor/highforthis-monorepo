@@ -7,12 +7,6 @@ import Testing
 @testable import HighForThis
 
 struct ShowsTests {
-    private static let newYork: Calendar = {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "America/New_York")!
-        return calendar
-    }()
-
     @Test func headlineIsTheTitleWhenThereIsOne() async {
         let show = await ShowList_show.from(Mock<Show>(artists: [Mock<Artist>(name: "Phish")], title: "New Year’s Eve"))
         #expect(show.headline == "New Year’s Eve")
@@ -103,34 +97,34 @@ struct ShowsTests {
         #expect(Place.name(city: city, state: state) == name)
     }
 
-    @Test func displayDateReadsMilliseconds() async {
-        let show = await ShowList_show.from(Mock<Show>(date: 1_793_840_400_000))
-        #expect(show.displayDate == Date(timeIntervalSince1970: 1_793_840_400))
-    }
-
     @Test func showsOnTheSameLocalDayShareADay() async throws {
-        // 6 PM and 9:30 PM in New York fall on different days in UTC.
-        let early = await ShowList_show.from(Mock<Show>(artists: [Mock<Artist>(name: "Wilco")], date: 1_793_833_200_000, id: "early"))
-        let late = await ShowList_show.from(Mock<Show>(artists: [Mock<Artist>(name: "Beck")], date: 1_793_845_800_000, id: "late"))
+        let early = await ShowList_show.from(
+            Mock<Show>(artists: [Mock<Artist>(name: "Wilco")], id: "early", schedule: Mock<ShowSchedule>(localDate: "2026-11-04")))
+        let late = await ShowList_show.from(
+            Mock<Show>(artists: [Mock<Artist>(name: "Beck")], id: "late", schedule: Mock<ShowSchedule>(localDate: "2026-11-04")))
 
-        let days = ShowDay.days(from: [early, late], calendar: Self.newYork)
+        let days = ShowDay.days(from: [early, late])
 
         let day = try #require(days.first)
         #expect(days.count == 1)
-        #expect(day.date == Self.newYork.date(from: DateComponents(year: 2026, month: 11, day: 4)))
+        #expect(day.date == VenueDay("2026-11-04"))
         #expect(day.shows.map(\.id) == ["late", "early"])
     }
 
-    // 8 PM on New Year's Eve in New York is 1 AM on New Year's Day in UTC, and later still to the east
-    @Test func aShowIsOnItsDayInNewYorkWhereverTheDeviceIs() async throws {
-        let newYearsEve = await ShowList_show.from(Mock<Show>(date: 1_735_693_200_000, id: "new-years-eve"))
+    @Test func aShowKeepsItsVenueDayAtTheYearBoundary() async throws {
+        let newYearsEve = await ShowList_show.from(Mock<Show>(id: "new-years-eve", schedule: Mock<ShowSchedule>(localDate: "2024-12-31")))
 
         let day = try #require(ShowDay.days(from: [newYearsEve]).first)
 
-        #expect(Calendar.newYork.component(.year, from: day.date) == 2024)
-        #expect(Calendar.newYork.component(.month, from: day.date) == 12)
-        #expect(Calendar.newYork.component(.day, from: day.date) == 31)
+        #expect(day.date == VenueDay("2024-12-31"))
         #expect(day.date.formatted(Date.FormatStyle.showDay.locale(Self.english)).contains("Dec 31, 2024"))
+    }
+
+    @Test func venueDayLabelsUseTheSameCalendarAsTheMonthGroups() {
+        var style = Date.FormatStyle.showDay.locale(Self.english)
+        style.calendar = Calendar(identifier: .hebrew)
+        style.timeZone = TimeZone(identifier: "Pacific/Honolulu")!
+        #expect(VenueDay("2024-12-31").formatted(style).contains("Dec 31, 2024"))
     }
 
     @Test func aShowsTimeDisplaysTheVenuesClockWithoutAnEasternZoneLabel() {
@@ -141,10 +135,9 @@ struct ShowsTests {
 
     private static let english = Locale(identifier: "en_US")
 
-    // 8 PM on November 30 in New York is 1 AM on December 1 in UTC
-    @Test func showsAreHeadedByTheirMonthInNewYork() async {
-        let november = await ShowList_show.from(Mock<Show>(date: 1_796_086_800_000, id: "november"))
-        let december = await ShowList_show.from(Mock<Show>(date: 1_796_173_200_000, id: "december"))
+    @Test func showsAreHeadedByTheirVenueMonth() async {
+        let november = await ShowList_show.from(Mock<Show>(id: "november", schedule: Mock<ShowSchedule>(localDate: "2026-11-30")))
+        let december = await ShowList_show.from(Mock<Show>(id: "december", schedule: Mock<ShowSchedule>(localDate: "2026-12-01")))
 
         let months = ShowMonth.months(from: [november, december])
 
@@ -157,24 +150,23 @@ struct ShowsTests {
     // The history comes most recent first, and two shows on one day by their headlines
     @Test func monthsKeepTheAPIOrderAndTheirDays() async {
         let shows = await [
-            (1_796_518_800_000, "the-fifth", "Wilco"),
-            (1_796_346_000_000, "the-third-late", "Spoon"),
-            (1_796_342_400_000, "the-third-early", "Low"),
-            (1_795_222_800_000, "november", "Bedhead"),
+            ("2026-12-05", "the-fifth", "Wilco"),
+            ("2026-12-03", "the-third-late", "Spoon"),
+            ("2026-12-03", "the-third-early", "Low"),
+            ("2026-11-20", "november", "Bedhead"),
         ].asyncMap { date, id, name in
-            await ShowList_show.from(Mock<Show>(artists: [Mock<Artist>(name: name)], date: date, id: id))
+            await ShowList_show.from(Mock<Show>(artists: [Mock<Artist>(name: name)], id: id, schedule: Mock<ShowSchedule>(localDate: date)))
         }
 
         let months = ShowMonth.months(from: shows)
 
-        #expect(months.map { Calendar.newYork.component(.month, from: $0.date) } == [12, 11])
+        #expect(months.map(\.date.iso) == ["2026-12-01", "2026-11-01"])
         #expect(months.map { $0.shows.map(\.id) } == [["the-fifth", "the-third-early", "the-third-late"], ["november"]])
     }
 
-    @Test func aShowsBadgeHasItsDayInNewYork() {
-        // 8 PM on New Year's Eve in New York, and on December 3
-        let newYearsEve = Date(timeIntervalSince1970: 1_735_693_200)
-        let third = Date(timeIntervalSince1970: 1_796_346_000)
+    @Test func aShowsBadgeHasItsVenueDay() {
+        let newYearsEve = VenueDay("2024-12-31")
+        let third = VenueDay("2026-12-03")
 
         #expect(newYearsEve.formatted(Date.FormatStyle.showDayNumber.locale(Self.english)) == "31")
         #expect(newYearsEve.formatted(Date.FormatStyle.showWeekday.locale(Self.english)) == "Tue")
@@ -184,12 +176,12 @@ struct ShowsTests {
     }
 
     @Test func daysKeepTheAPIOrder() async {
-        let shows = await [1_793_926_800_000, 1_793_754_000_000, 1_793_833_200_000].asyncMap { date in
-            await ShowList_show.from(Mock<Show>(date: date, id: String(date)))
+        let shows = await ["2026-11-05", "2026-11-03", "2026-11-04"].asyncMap { date in
+            await ShowList_show.from(Mock<Show>(id: date, schedule: Mock<ShowSchedule>(localDate: date)))
         }
 
-        let days = ShowDay.days(from: shows, calendar: Self.newYork)
+        let days = ShowDay.days(from: shows)
 
-        #expect(days.map { Self.newYork.component(.day, from: $0.date) } == [5, 3, 4])
+        #expect(days.map(\.date.iso) == ["2026-11-05", "2026-11-03", "2026-11-04"])
     }
 }

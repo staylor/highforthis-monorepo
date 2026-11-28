@@ -44,7 +44,7 @@ struct ShowList: View {
                             .accessibilityIdentifier("show-\(show.id)")
                         }
                     } header: {
-                        Text(month.date, format: .showMonth)
+                        Text(month.date.formatted(.showMonth))
                             .spacedSectionHeader()
                     }
                 }

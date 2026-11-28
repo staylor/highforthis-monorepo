@@ -7,7 +7,6 @@ import db from '#/database/db';
 import { artists, newId, showArtists, showLineup, shows, venues } from '#/database/tables';
 import { getListings, matchListing, normalizeName } from '#/listings';
 import { getUniqueSlug, slugsIn } from '#/models/utils';
-import { legacyShowDate } from '#/show-schedule';
 
 import { fillAppleMusicLater } from './utils/appleMusicData';
 import { badInput, parseInput } from './utils/helpers';
@@ -124,7 +123,6 @@ const resolvers = {
             await tx.create(shows, {
               id: showId,
               attended: false,
-              date: legacyShowDate(listing.localDate, listing.localTime),
               localDate: listing.localDate,
               localTime: listing.localTime,
               timeZone: listing.timeZone,
