@@ -1,0 +1,107 @@
+# Dependabot opens pull requests that update dependencies: the packages every week, and the
+# workflows' actions, the OpenObserve image and Terraform's provider every month. Each version
+# waits a week after its release before it's proposed, so one that's pulled or found compromised
+# in the meantime never is. Security updates, a repository setting apart from this file, don't
+# wait.
+#
+# The app's Apollo iOS isn't here. Its version is in apple/scripts/generate-api.sh, with the
+# checksum of the code generator that script downloads, in the Xcode project's package pin, and in
+# the Package.swift generated from them, and Dependabot could only change the last.
+# apple/README.md says how to upgrade it.
+version: 2
+
+updates:
+  # The pnpm workspace. From the root, Dependabot reads pnpm-workspace.yaml and updates every
+  # workspace's package.json and the one lockfile.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: America/New_York
+    cooldown:
+      default-days: 7
+    # Dependencies are pinned to exact versions (AGENTS.md): 1.2.3 becomes 1.2.4, never a range
+    versioning-strategy: increase
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: build
+      include: scope
+    # A dependency joins the first group it matches. The named groups are packages released
+    # together, which have to move together, majors included. The last takes the minor and patch
+    # releases of everything else, so a week's updates come as a few pull requests rather than
+    # dozens, and a major release of anything else comes on its own.
+    groups:
+      lexical:
+        patterns: ['lexical', '@lexical/*']
+      opentelemetry:
+        patterns: ['@opentelemetry/*']
+      graphql-codegen:
+        patterns: ['@graphql-codegen/*']
+      typescript:
+        patterns: ['typescript', '@typescript/*']
+      vitest:
+        patterns: ['vitest', 'vite']
+      simplewebauthn:
+        patterns: ['@simplewebauthn/*']
+      openobserve:
+        patterns: ['@openobserve/*']
+      lint:
+        patterns:
+          - 'oxlint'
+          - 'oxfmt'
+          - '@wonderboymusic/oxc-config'
+          - 'eslint'
+          - 'eslint-plugin-*'
+          - '@graphql-eslint/*'
+      minor-and-patch:
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+
+  # The workflows in .github/workflows, and the Apple workflow's composite action, which / leaves
+  # out
+  - package-ecosystem: github-actions
+    directories:
+      - /
+      - /.github/actions/*
+    schedule:
+      interval: monthly
+      time: '06:00'
+      timezone: America/New_York
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: ci
+      include: scope
+    groups:
+      actions:
+        patterns: ['*']
+
+  # The OpenObserve image Railway runs. Its README notes behavior of the pinned version, so check
+  # those notes against the new one before merging.
+  - package-ecosystem: docker
+    directory: /observability
+    schedule:
+      interval: monthly
+      time: '06:00'
+      timezone: America/New_York
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: build
+      include: scope
+
+  # The Google provider and its lock file. Nothing runs Terraform on merge, so check out the pull
+  # request and run terraform init and terraform plan (terraform/README.md) before merging.
+  - package-ecosystem: terraform
+    directory: /terraform
+    schedule:
+      interval: monthly
+      time: '06:00'
+      timezone: America/New_York
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: build
+      include: scope
