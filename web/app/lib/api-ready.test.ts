@@ -11,7 +11,7 @@ const ready = () => Response.json({ data: { __typename: 'Query' } });
 // What a GraphQL release without the field answers
 const missing = () =>
   Response.json(
-    { errors: [{ message: 'Cannot query field "schedule" on type "Show".' }] },
+    { errors: [{ message: 'Cannot query field "firstLocalDate" on type "ShowTotals".' }] },
     { status: 400 }
   );
 
@@ -46,7 +46,7 @@ describe('apiGap', () => {
 
   it("says which field a GraphQL release from before it doesn't have", async (t) => {
     stubGraphQL(t, missing);
-    assert.equal(await apiGap(), 'Cannot query field "schedule" on type "Show".');
+    assert.equal(await apiGap(), 'Cannot query field "firstLocalDate" on type "ShowTotals".');
   });
 
   it("says so when GraphQL answers something else, or can't be reached", async (t) => {
@@ -92,7 +92,10 @@ describe('apiReady', () => {
 
     assert.equal(sent.length, 3);
     assert.deepEqual(waits, [5000, 5000]);
-    assert.deepEqual(reasons, Array(2).fill('Cannot query field "schedule" on type "Show".'));
+    assert.deepEqual(
+      reasons,
+      Array(2).fill('Cannot query field "firstLocalDate" on type "ShowTotals".')
+    );
   });
 
   it('gives up, with why, when GraphQL still has not answered them in time', async (t) => {
@@ -101,7 +104,7 @@ describe('apiReady', () => {
 
     await assert.rejects(
       apiReady({ ...time, timeout: 12_000 }),
-      /GraphQL doesn't answer what this build asks for: Cannot query field "schedule"/
+      /GraphQL doesn't answer what this build asks for: Cannot query field "firstLocalDate"/
     );
     // At 0, 5 and 10 seconds: another wait would end after the 12 it has
     assert.equal(sent.length, 3);

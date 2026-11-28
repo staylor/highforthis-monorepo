@@ -6,7 +6,7 @@
 
 nonisolated public struct StatsLeader_stat: HighForThisAPI.SelectionSet, Fragment {
   public static var fragmentDefinition: StaticString {
-    #"fragment StatsLeader_stat on ShowStat { __typename count firstDate lastDate entity { __typename ... on Artist { id name slug appleMusic { __typename id artwork { __typename height url width } } } ... on Venue { id city name slug state } } }"#
+    #"fragment StatsLeader_stat on ShowStat { __typename count firstLocalDate lastLocalDate entity { __typename ... on Artist { id name slug appleMusic { __typename id artwork { __typename height url width } } } ... on Venue { id city name slug state } } }"#
   }
 
   @_spi(Unsafe) public let __data: DataDict
@@ -16,8 +16,8 @@ nonisolated public struct StatsLeader_stat: HighForThisAPI.SelectionSet, Fragmen
   @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("count", Int.self),
-    .field("firstDate", Double.self),
-    .field("lastDate", Double.self),
+    .field("firstLocalDate", String.self),
+    .field("lastLocalDate", String.self),
     .field("entity", Entity.self),
   ] }
   @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
@@ -25,8 +25,8 @@ nonisolated public struct StatsLeader_stat: HighForThisAPI.SelectionSet, Fragmen
   ] }
 
   public var count: Int { __data["count"] }
-  public var firstDate: Double { __data["firstDate"] }
-  public var lastDate: Double { __data["lastDate"] }
+  public var firstLocalDate: String { __data["firstLocalDate"] }
+  public var lastLocalDate: String { __data["lastLocalDate"] }
   public var entity: Entity { __data["entity"] }
 
   /// Entity

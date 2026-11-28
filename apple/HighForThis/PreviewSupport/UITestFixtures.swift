@@ -127,7 +127,6 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
             "__typename": "Show", "id": "show-\(year)-\(index)", "title": "Evening Set \(index + 1)",
             "schedule": ["__typename": "ShowSchedule", "localDate": "\(year)-11-05", "localTime": "20:00"],
             // The schedule on New York's clocks, as the API answers it: 8 PM on November 5
-            "date": year == 2019 ? 1_573_002_000_000.0 : 1_762_390_800_000.0,
             "url": "https://example.com/tickets", "artists": [artist], "venue": venue,
         ]
     }
@@ -186,7 +185,7 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
                 "venueLeaders": Array(venues.prefix(leaders)), "venues": venues,
                 "showTotals": [
                     "__typename": "ShowTotals", "artists": artists.count, "venues": venues.count, "shows": 30,
-                    "firstDate": artists.isEmpty ? null : 1_573_049_600_000.0 as Any,
+                    "firstLocalDate": artists.isEmpty ? null : "2019-11-05" as Any,
                 ],
             ]) { _, new in new }
         default: throw URLError(.badServerResponse)
@@ -197,7 +196,7 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
     private static func stat(_ entity: [String: Any], count: Int) -> [String: Any] {
         [
             "__typename": "ShowStat", "count": count, "entity": entity,
-            "firstDate": 1_573_049_600_000.0, "lastDate": 1_762_300_800_000.0,
+            "firstLocalDate": "2019-11-05", "lastLocalDate": "2025-11-05",
         ]
     }
 

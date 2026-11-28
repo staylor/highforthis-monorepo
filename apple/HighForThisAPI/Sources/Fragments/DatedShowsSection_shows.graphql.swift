@@ -61,10 +61,9 @@ nonisolated public struct DatedShowsSection_shows: HighForThisAPI.SelectionSet, 
       ] }
 
       public var id: String { __data["id"] }
-      /// Venue wall time encoded in New York for existing clients.
-      public var date: Double { __data["date"] }
       public var title: String? { __data["title"] }
       public var artists: [Artist] { __data["artists"] }
+      public var schedule: Schedule { __data["schedule"] }
       public var venue: Venue { __data["venue"] }
 
       public struct Fragments: FragmentContainer {
@@ -75,6 +74,8 @@ nonisolated public struct DatedShowsSection_shows: HighForThisAPI.SelectionSet, 
       }
 
       public typealias Artist = ShowList_show.Artist
+
+      public typealias Schedule = ShowList_show.Schedule
 
       public typealias Venue = ShowList_show.Venue
     }

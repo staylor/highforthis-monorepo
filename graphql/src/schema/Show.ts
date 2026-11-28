@@ -21,8 +21,6 @@ const Show = `#graphql
     id: String!
     title: String
     notes: String
-    """Venue wall time encoded in New York for existing clients."""
-    date: Float!
     schedule: ShowSchedule!
     url: String
     attended: Boolean
@@ -45,8 +43,7 @@ const Show = `#graphql
   input CreateShowInput {
     title: String
     notes: String
-    date: Float
-    schedule: ShowScheduleInput
+    schedule: ShowScheduleInput!
     url: String
     attended: Boolean
     artists: [String!]!
@@ -56,8 +53,7 @@ const Show = `#graphql
   input BulkCreateShowInput {
     artists: [String!]!
     attended: Boolean
-    date: Float
-    schedule: ShowScheduleInput
+    schedule: ShowScheduleInput!
     venue: String!
   }
 
@@ -70,7 +66,6 @@ const Show = `#graphql
   input UpdateShowInput {
     title: String
     notes: String
-    date: Float
     schedule: ShowScheduleInput
     url: String
     attended: Boolean
@@ -92,9 +87,9 @@ const Show = `#graphql
 
   type ShowStat {
     count: Int!
-    # When the first and the latest of those shows were
-    firstDate: Float!
-    lastDate: Float!
+    # The advertised venue days (YYYY-MM-DD) of the first and latest shows
+    firstLocalDate: String!
+    lastLocalDate: String!
     entity: ShowEntity!
   }
 
@@ -103,8 +98,8 @@ const Show = `#graphql
     shows: Int!
     artists: Int!
     venues: Int!
-    firstDate: Float
-    lastDate: Float
+    firstLocalDate: String
+    lastLocalDate: String
   }
 
   input EntityArg {

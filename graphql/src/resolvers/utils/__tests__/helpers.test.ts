@@ -6,15 +6,24 @@ import { parseInput } from '../helpers';
 
 const showSchema = z.object({
   artists: z.array(z.string()),
-  date: z.number(),
+  schedule: z.object({ localDate: z.string() }),
   title: z.string().min(1).nullish(),
 });
 
 describe('parseInput', () => {
   it('answers the input as its schema reads it, without fields the schema leaves out', () => {
-    const input = { artists: ['Phish'], date: 1, title: null, unknown: true };
+    const input = {
+      artists: ['Phish'],
+      schedule: { localDate: '2026-11-01' },
+      title: null,
+      unknown: true,
+    };
 
-    expect(parseInput(showSchema, input)).toEqual({ artists: ['Phish'], date: 1, title: null });
+    expect(parseInput(showSchema, input)).toEqual({
+      artists: ['Phish'],
+      schedule: { localDate: '2026-11-01' },
+      title: null,
+    });
   });
 
   it("says what's wrong with each field, as the request's mistake", () => {
@@ -28,7 +37,7 @@ describe('parseInput', () => {
     expect(error).toBeInstanceOf(GraphQLError);
     expect(error).toMatchObject({ extensions: { code: 'BAD_USER_INPUT' } });
     expect((error as GraphQLError).message).toMatch(
-      /^Invalid input \(artists\.1: .+; date: .+; title: .+\)$/
+      /^Invalid input \(artists\.1: .+; schedule: .+; title: .+\)$/
     );
   });
 });

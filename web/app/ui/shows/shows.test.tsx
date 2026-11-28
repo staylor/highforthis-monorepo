@@ -2,8 +2,6 @@ import * as assert from 'remix/assert';
 import { renderToString } from 'remix/component/server';
 import { describe, it } from 'remix/test';
 
-import { clockInstant, SITE_TIME_ZONE } from '@highforthis/shared/time';
-
 import { getT } from '#/lib/i18n.ts';
 import { AppProvider, type AppValue } from '#/ui/app-context.tsx';
 import { trans } from '#/ui/trans.tsx';
@@ -34,7 +32,6 @@ const show = (
   cursor: `cursor-${id}`,
   node: {
     id,
-    date: clockInstant(date, SITE_TIME_ZONE),
     schedule: { localDate: date.slice(0, 10), localTime: date.slice(11) },
     title: null,
     url: null,
@@ -127,7 +124,7 @@ describe('ShowsGrid', () => {
       <ShowsGrid
         newestFirst
         showMonths={false}
-        previous={clockInstant('2025-03-01T20:00:00', SITE_TIME_ZONE)}
+        previous="2025-03"
         more={<p>More to come</p>}
         shows={{
           edges: [
@@ -171,7 +168,7 @@ describe('ShowsList', () => {
   it('heads a new month, but not the year the page before already did', async () => {
     const html = await renderToString(
       <ShowsList
-        previous={clockInstant('2025-03-01T20:00:00', SITE_TIME_ZONE)}
+        previous="2025-03"
         more={<p>More to come</p>}
         shows={{
           edges: [show('2', '2025-02-01T20:00:00', 'Yo La Tengo')].map((edge) => ({

@@ -10,7 +10,7 @@ import { SectionHeader } from '#/ui/section-header.tsx';
 import { trans } from '#/ui/trans.tsx';
 
 import { Headliner } from './headliner.tsx';
-import { cell, formatArtists, formatDate, formatSchedule, formatShowLink, row } from './utils.ts';
+import { cell, formatArtists, formatSchedule, formatShowLink, row } from './utils.ts';
 
 export const showsGridFragment = gql`
   fragment ShowsGrid_shows on ShowConnection {
@@ -18,7 +18,6 @@ export const showsGridFragment = gql`
       cursor
       node {
         id
-        date
         title
         url
         artists {
@@ -56,7 +55,6 @@ export const attendedFragment = gql`
       cursor
       node {
         id
-        date
         title
         url
         artists {
@@ -94,7 +92,7 @@ interface ListProps {
    * When the show before these was, for a page of the history that goes on from the one before
    * it, so it doesn't head a year or month again
    */
-  previous?: number;
+  previous?: string;
   /** What follows the shows: the history's lazy frame for its next page */
   more?: RemixNode;
   /** Without each show's venue: on the venue's own page, every show's is the same */
@@ -109,15 +107,11 @@ interface GridProps extends ListProps {
 }
 
 /** The years and months that have their heading already: the previous show's, if there is one */
-function headed(previous?: number) {
-  const years: Record<number, number> = {};
-  const months: Record<string, number> = {};
-  if (previous !== undefined) {
-    const d = formatDate(previous);
-    years[d.year] = 1;
-    months[`${d.year}${d.month}`] = 1;
-  }
-  return { years, months };
+function headed(previous?: string) {
+  return {
+    years: new Set(previous ? [Number(previous.slice(0, 4))] : []),
+    months: new Set(previous ? [previous] : []),
+  };
 }
 
 /** By date, and shows on the same date by their first artist */
@@ -271,10 +265,11 @@ export function ShowsTable(handle: Handle<Omit<GridProps, 'mix' | 'more'>>) {
     const rows: RemixNode[] = [];
     for (const { node } of sorted) {
       const d = formatSchedule(node.schedule);
-      if (!years[d.year]) {
-        const firstYear = Object.keys(years).length === 0;
-        years[d.year] = 1;
-        months[`${d.year}${d.month}`] = 1;
+      const month = node.schedule.localDate.slice(0, 7);
+      if (!years.has(d.year)) {
+        const firstYear = years.size === 0;
+        years.add(d.year);
+        months.add(month);
         if (!firstYear) {
           rows.push(
             <tr>
@@ -294,8 +289,8 @@ export function ShowsTable(handle: Handle<Omit<GridProps, 'mix' | 'more'>>) {
         if (showMonths) {
           rows.push(...monthHeader(d.monthName, columns));
         }
-      } else if (showMonths && !months[`${d.year}${d.month}`]) {
-        months[`${d.year}${d.month}`] = 1;
+      } else if (showMonths && !months.has(month)) {
+        months.add(month);
         rows.push(...monthHeader(d.monthName, columns));
       }
       rows.push(
@@ -359,6 +354,7 @@ export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
       <>
         {shows.edges.map(({ node }) => {
           const d = formatSchedule(node.schedule);
+          const month = node.schedule.localDate.slice(0, 7);
           const showRow = (
             <div mix={listRow}>
               <Headliner show={node} />
@@ -378,9 +374,9 @@ export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
             </div>
           );
 
-          if (!years[d.year]) {
-            years[d.year] = 1;
-            months[`${d.year}${d.month}`] = 1;
+          if (!years.has(d.year)) {
+            years.add(d.year);
+            months.add(month);
             return (
               <div key={node.id}>
                 <p mix={css({ marginBottom: '0.25rem' })}>
@@ -391,8 +387,8 @@ export function ShowsListItems(handle: Handle<Omit<ListProps, 'mix'>>) {
               </div>
             );
           }
-          if (!months[`${d.year}${d.month}`]) {
-            months[`${d.year}${d.month}`] = 1;
+          if (!months.has(month)) {
+            months.add(month);
             return (
               <div key={node.id}>
                 <p mix={css({ marginBlock: '0.75rem 0.25rem', ...label })}>{d.monthName}</p>

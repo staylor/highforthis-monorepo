@@ -84,8 +84,16 @@ describe('bulkCreateShows', () => {
   });
 
   const shows = [
-    { artists: ['Phish', 'Goose'], date: Date.UTC(2026, 11, 30), venue: 'Madison Square Garden' },
-    { artists: ['Goose', 'Geese'], date: Date.UTC(2026, 11, 31), venue: 'Madison Square Garden' },
+    {
+      artists: ['Phish', 'Goose'],
+      schedule: { localDate: '2026-12-30' },
+      venue: 'Madison Square Garden',
+    },
+    {
+      artists: ['Goose', 'Geese'],
+      schedule: { localDate: '2026-12-31' },
+      venue: 'Madison Square Garden',
+    },
   ];
 
   it("looks up Apple Music's data for the artists it added, once they are saved", async () => {
@@ -190,46 +198,39 @@ describe('updateShow', () => {
       expect(tx.find).toHaveBeenCalledWith(showsTable, 'show-1', expect.anything());
     });
 
-    // The trigger that fills the schedule in for older writers clears the zone and the start of
-    // a show whose venue alone changes, and the start can't be worked out again
-    it('keeps the zone and the start a show had when only its venue changes', async () => {
+    it('preserves an explicitly resubmitted schedule when moving venues', async () => {
       await updateShow({ venue: 'venue-2', schedule });
-
-      expect(tx.update.mock.calls).toEqual([
-        // Read first, without the venue
-        [showsTable, 'show-1', {}],
-        [showsTable, 'show-1', { venueId: 'venue-2' }],
-        [
-          showsTable,
-          'show-1',
-          { timeZone: 'America/New_York', startsAt: saved.startsAt },
-          expect.anything(),
-        ],
-      ]);
-      expect(tx.find).not.toHaveBeenCalled();
+      expect(tx.update).toHaveBeenLastCalledWith(
+        showsTable,
+        'show-1',
+        { venueId: 'venue-2' },
+        expect.anything()
+      );
     });
 
-    it('saves a schedule that changed, after the venue', async () => {
-      await updateShow({ venue: 'venue-2', schedule: { ...schedule, localTime: '03:30' } });
+    it('clears the old zone and start when moving without a schedule', async () => {
+      await updateShow({ venue: 'venue-2' });
+      expect(tx.update).toHaveBeenLastCalledWith(
+        showsTable,
+        'show-1',
+        { venueId: 'venue-2', timeZone: null, startsAt: null },
+        expect.anything()
+      );
+    });
 
-      // 3:30 AM is after the clocks have gone back
-      const start = new Date('2026-11-01T08:30:00Z');
-      expect(tx.update.mock.calls).toEqual([
-        [showsTable, 'show-1', {}],
-        [showsTable, 'show-1', { venueId: 'venue-2' }],
-        [
-          showsTable,
-          'show-1',
-          {
-            date: start,
-            localDate: '2026-11-01',
-            localTime: '03:30',
-            timeZone: 'America/New_York',
-            startsAt: start,
-          },
-          expect.anything(),
-        ],
-      ]);
+    it('writes a changed schedule together with the new venue', async () => {
+      await updateShow({ venue: 'venue-2', schedule: { ...schedule, localTime: '03:30' } });
+      expect(tx.update).toHaveBeenLastCalledWith(
+        showsTable,
+        'show-1',
+        {
+          ...schedule,
+          localTime: '03:30',
+          venueId: 'venue-2',
+          startsAt: new Date('2026-11-01T08:30:00Z'),
+        },
+        expect.anything()
+      );
     });
   });
 });
@@ -257,7 +258,7 @@ describe('a show without an artist', () => {
     await expect(
       resolvers.Mutation.createShow(
         {},
-        { input: { artists: [], date: Date.UTC(2027, 6, 30), venue: 'venue-1' } }
+        { input: { artists: [], schedule: { localDate: '2027-07-30' }, venue: 'venue-1' } }
       )
     ).rejects.toMatchObject(refused);
     expect(db.transaction).not.toHaveBeenCalled();
@@ -391,7 +392,6 @@ describe('shows from the most recent year', () => {
     showsQuery.all.mockResolvedValue([]);
   });
 
-  // New Year's Day to New Year's Day in New York, where the site dates its shows
   const in2024 = and(gte('localDate', '2024-01-01'), lte('localDate', '2024-12-31'));
 
   // The app's history starts with the latest year, without first asking which years there are
@@ -440,8 +440,6 @@ describe('shows from the most recent year', () => {
     );
   });
 
-  // 8 PM on New Year's Eve in New York is 1 AM on New Year's Day in UTC, and the site dates it
-  // December 31st
   it("puts a show on New Year's Eve in the year that's ending", async () => {
     const newYearsEve = '2024-12-31';
     showsQuery.first.mockResolvedValue({ localDate: newYearsEve });
@@ -554,10 +552,10 @@ describe('showStats', () => {
     resolvers.Query.showStats({}, { entity: entity as ShowEntityType, first });
 
   // The first and the latest of a count's shows, as Postgres answers them
-  const firstDate = new Date('2009-07-04T20:00:00Z');
-  const lastDate = new Date('2025-06-21T20:00:00Z');
-  const counted = (id: string, count: number) => ({ id, count, firstDate, lastDate });
-  const dates = { firstDate: firstDate.getTime(), lastDate: lastDate.getTime() };
+  const firstLocalDate = '2009-07-04';
+  const lastLocalDate = '2025-06-21';
+  const counted = (id: string, count: number) => ({ id, count, firstLocalDate, lastLocalDate });
+  const dates = { firstLocalDate, lastLocalDate };
 
   beforeEach(() => {
     resetMocks();
@@ -617,20 +615,20 @@ describe('showTotals', () => {
   });
 
   it('counts the shows, artists and venues, and when the first and the latest were', async () => {
-    const firstDate = new Date('1989-08-01T20:00:00Z');
-    const lastDate = new Date('2025-06-21T20:00:00Z');
+    const firstLocalDate = '1989-08-01';
+    const lastLocalDate = '2025-06-21';
     db.exec.mockImplementation(async (statement) =>
       statement.text.includes('"artistId"')
         ? { rows: [{ artists: 249 }] }
-        : { rows: [{ shows: 458, venues: 65, firstDate, lastDate }] }
+        : { rows: [{ shows: 458, venues: 65, firstLocalDate, lastLocalDate }] }
     );
 
     await expect(resolvers.Query.showTotals()).resolves.toEqual({
       shows: 458,
       artists: 249,
       venues: 65,
-      firstDate: firstDate.getTime(),
-      lastDate: lastDate.getTime(),
+      firstLocalDate,
+      lastLocalDate,
     });
   });
 
@@ -638,15 +636,15 @@ describe('showTotals', () => {
     db.exec.mockImplementation(async (statement) =>
       statement.text.includes('"artistId"')
         ? { rows: [{ artists: 0 }] }
-        : { rows: [{ shows: 0, venues: 0, firstDate: null, lastDate: null }] }
+        : { rows: [{ shows: 0, venues: 0, firstLocalDate: null, lastLocalDate: null }] }
     );
 
     await expect(resolvers.Query.showTotals()).resolves.toEqual({
       shows: 0,
       artists: 0,
       venues: 0,
-      firstDate: null,
-      lastDate: null,
+      firstLocalDate: null,
+      lastLocalDate: null,
     });
   });
 });

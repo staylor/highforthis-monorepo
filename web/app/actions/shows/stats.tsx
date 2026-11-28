@@ -9,7 +9,7 @@ import { PageHeader } from '#/ui/page-header.tsx';
 import { artworkUrl } from '#/ui/public/media.ts';
 import { colorTransition, displayType, md, srOnly, text } from '#/ui/public/styles.ts';
 import { ShowsNav } from '#/ui/shows/nav.tsx';
-import { formatDate, initials } from '#/ui/shows/utils.ts';
+import { initials } from '#/ui/shows/utils.ts';
 
 export type StatsEntity = 'artist' | 'venue';
 
@@ -22,8 +22,8 @@ export const showStatsQuery = gql`
   query ShowStats($entity: ShowEntityType!, $leaders: Int!) {
     leaders: showStats(entity: $entity, first: $leaders) {
       count
-      firstDate
-      lastDate
+      firstLocalDate
+      lastLocalDate
       entity {
         ... on Artist {
           id
@@ -65,7 +65,7 @@ export const showStatsQuery = gql`
     }
     showTotals {
       artists
-      firstDate
+      firstLocalDate
       shows
       venues
     }
@@ -121,10 +121,10 @@ const hex = (color?: string | null) =>
   color && /^[0-9a-f]{6}$/i.test(color) ? `#${color}` : undefined;
 
 /** The years from the first show to the latest: 2009–2025, or just 2019 */
-function years(first: number, last: number) {
-  const from = formatDate(first).year;
-  const to = formatDate(last).year;
-  return from === to ? String(from) : `${from}–${to}`;
+function years(first: string, last: string) {
+  const from = first.slice(0, 4);
+  const to = last.slice(0, 4);
+  return from === to ? from : `${from}–${to}`;
 }
 
 const entityHref = (entity: Stat['entity'], type: StatsEntity) =>
@@ -242,16 +242,16 @@ function Totals(handle: Handle<{ totals: ShowStatsQuery['showTotals'] }>) {
   const { t } = getApp(handle);
 
   return () => {
-    const { shows, artists, venues, firstDate } = handle.props.totals;
+    const { shows, artists, venues, firstLocalDate } = handle.props.totals;
     const tiles = [
       { label: t('entity.stats.totals.shows'), value: shows.toLocaleString('en-US') },
       { label: t('entity.stats.totals.artists'), value: artists.toLocaleString('en-US') },
       { label: t('entity.stats.totals.venues'), value: venues.toLocaleString('en-US') },
     ];
-    if (firstDate) {
+    if (firstLocalDate) {
       tiles.push({
         label: t('entity.stats.totals.since'),
-        value: String(formatDate(firstDate).year),
+        value: firstLocalDate.slice(0, 4),
       });
     }
     return (
@@ -449,7 +449,7 @@ function PodiumPlace(handle: Handle<{ leader: Leader; place: number; entity: Sta
             <span mix={unit}>{t('entity.stats.showsUnit', { count })}</span>
           </p>
           <p mix={[secondary, css({ fontWeight: 600, letterSpacing: '0.04em' })]}>
-            {years(leader.firstDate, leader.lastDate)}
+            {years(leader.firstLocalDate, leader.lastLocalDate)}
           </p>
         </div>
       </li>
@@ -592,7 +592,7 @@ function Leaderboard(handle: Handle<{ leaders: Leader[]; most: number; entity: S
                   </a>
                   <span mix={boardDetail}>
                     {where ? `${where} · ` : ''}
-                    {years(leader.firstDate, leader.lastDate)}
+                    {years(leader.firstLocalDate, leader.lastLocalDate)}
                   </span>
                 </span>
                 <span mix={boardBar} aria-hidden="true">

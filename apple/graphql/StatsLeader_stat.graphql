@@ -1,7 +1,7 @@
 fragment StatsLeader_stat on ShowStat {
   count
-  firstDate
-  lastDate
+  firstLocalDate
+  lastLocalDate
   entity {
     ... on Artist {
       id

@@ -30,18 +30,11 @@ import {
   venues,
 } from '#/database/tables';
 import { getUniqueSlug, slugsIn } from '#/models/utils';
-import { legacyShowDate, resolveSchedule, type Schedule } from '#/show-schedule';
+import { resolveSchedule, type Schedule } from '#/show-schedule';
 
 import { fillAppleMusicLater } from './utils/appleMusicData';
 import { type Connection, parseConnection, emptyConnection } from './utils/collection';
-import {
-  badInput,
-  parseInput,
-  removeRows,
-  resolveJoin,
-  timestampResolver,
-  unique,
-} from './utils/helpers';
+import { badInput, parseInput, removeRows, resolveJoin, unique } from './utils/helpers';
 import { bulkCreateShowsSchema, createShowSchema, updateShowSchema } from './validations';
 
 type Show = TableRow<typeof shows>;
@@ -134,8 +127,8 @@ async function newestYear(filter: ShowFilter) {
 type AttendedCount = {
   id: string;
   count: number;
-  firstDate: Date;
-  lastDate: Date;
+  firstLocalDate: string;
+  lastLocalDate: string;
 };
 
 /** How many attended shows each artist or venue has, as the rows a query selects */
@@ -157,15 +150,15 @@ async function getEntityStats<
   const entities = await lookup(ids);
   const entityMap = new Map(entities.map((e) => [e.id, e]));
   const stats = counts
-    .flatMap(({ id, count, firstDate, lastDate }) => {
+    .flatMap(({ id, count, firstLocalDate, lastLocalDate }) => {
       const entity = entityMap.get(id);
       // An artist or venue deleted since the count has nothing to show
       return entity
         ? [
             {
               count,
-              firstDate: new Date(firstDate).getTime(),
-              lastDate: new Date(lastDate).getTime(),
+              firstLocalDate,
+              lastLocalDate,
               entity: { ...entity, type },
             },
           ]
@@ -176,20 +169,9 @@ async function getEntityStats<
   return typeof first === 'number' ? stats.slice(0, Math.max(0, first)) : stats;
 }
 
-type ShowTiming = Pick<Show, 'date'> &
-  Partial<Pick<Show, 'localDate' | 'localTime' | 'timeZone' | 'startsAt'>>;
-
-function scheduleColumns(schedule?: Schedule | null, date?: number | null): ShowTiming {
-  if (!schedule) {
-    if (typeof date !== 'number') throw badInput('A show needs a schedule or date');
-    return { date: new Date(date) };
-  }
+function scheduleColumns(schedule: Schedule) {
   try {
-    const resolved = resolveSchedule(schedule);
-    const legacy = legacyShowDate(resolved.localDate, resolved.localTime);
-    if (typeof date === 'number' && date !== legacy.getTime())
-      throw new RangeError('Schedule and date disagree');
-    return { ...resolved, date: legacy };
+    return resolveSchedule(schedule);
   } catch (error) {
     throw badInput(error instanceof Error ? error.message : 'Invalid show schedule');
   }
@@ -197,7 +179,6 @@ function scheduleColumns(schedule?: Schedule | null, date?: number | null): Show
 
 const resolvers = {
   Show: {
-    date: timestampResolver('date'),
     schedule(show) {
       return {
         localDate: show.localDate,
@@ -358,7 +339,7 @@ const resolvers = {
       if (entity.toLowerCase() === 'artist') {
         const counts = await countAttended(sql`
           select sa."artistId" as id, count(*)::int as count,
-            min(s.date) as "firstDate", max(s.date) as "lastDate"
+            min(s."localDate") as "firstLocalDate", max(s."localDate") as "lastLocalDate"
           from "ShowArtist" sa join "Show" s on s.id = sa."showId"
           where s.attended
           group by sa."artistId"
@@ -373,7 +354,7 @@ const resolvers = {
 
       const counts = await countAttended(sql`
         select "venueId" as id, count(*)::int as count,
-          min(date) as "firstDate", max(date) as "lastDate"
+          min("localDate") as "firstLocalDate", max("localDate") as "lastLocalDate"
         from "Show"
         where attended
         group by "venueId"
@@ -390,7 +371,7 @@ const resolvers = {
       const [{ rows: [shows] = [] }, { rows: [lineups] = [] }] = await Promise.all([
         db.exec(sql`
           select count(*)::int as shows, count(distinct "venueId")::int as venues,
-            min(date) as "firstDate", max(date) as "lastDate"
+            min("localDate") as "firstLocalDate", max("localDate") as "lastLocalDate"
           from "Show"
           where attended
         `),
@@ -400,15 +381,19 @@ const resolvers = {
         `),
       ]);
       const totals = shows as
-        | { shows: number; venues: number; firstDate: Date | null; lastDate: Date | null }
+        | {
+            shows: number;
+            venues: number;
+            firstLocalDate: string | null;
+            lastLocalDate: string | null;
+          }
         | undefined;
-      const timestamp = (date?: Date | null) => (date ? new Date(date).getTime() : null);
       return {
         shows: totals?.shows ?? 0,
         artists: (lineups as { artists: number } | undefined)?.artists ?? 0,
         venues: totals?.venues ?? 0,
-        firstDate: timestamp(totals?.firstDate),
-        lastDate: timestamp(totals?.lastDate),
+        firstLocalDate: totals?.firstLocalDate ?? null,
+        lastLocalDate: totals?.lastLocalDate ?? null,
       };
     },
   },
@@ -474,7 +459,7 @@ const resolvers = {
           await tx.create(shows, {
             id: showId,
             attended: show.attended ?? false,
-            ...scheduleColumns(show.schedule, show.date),
+            ...scheduleColumns(show.schedule),
             venueId,
           });
           await tx.createMany(
@@ -494,17 +479,11 @@ const resolvers = {
     },
 
     async createShow(_, { input }) {
-      const {
-        artists: artistIds,
-        venue,
-        date,
-        schedule,
-        ...data
-      } = parseInput(createShowSchema, input);
+      const { artists: artistIds, venue, schedule, ...data } = parseInput(createShowSchema, input);
       const lineup = unique(artistIds);
       const id = newId();
       await db.transaction(async (tx) => {
-        await tx.create(shows, { ...data, id, ...scheduleColumns(schedule, date), venueId: venue });
+        await tx.create(shows, { ...data, id, ...scheduleColumns(schedule), venueId: venue });
         await tx.createMany(
           showArtists,
           lineup.map((artistId, position) => ({ showId: id, artistId, position }))
@@ -515,12 +494,8 @@ const resolvers = {
 
     async updateShow(_, { id, input }) {
       const validated = parseInput(updateShowSchema, input);
-      const { artists: artistIds, venue, date, schedule, ...data } = validated;
-      const values: Partial<Show> = { ...data };
-
-      const timing = schedule ? scheduleColumns(schedule, date) : null;
-      if (!schedule && typeof date === 'number') values.date = new Date(date);
-      if (venue) values.venueId = venue;
+      const { artists: artistIds, venue, schedule, ...data } = validated;
+      const timing = schedule ? scheduleColumns(schedule) : null;
 
       // A lineup that can't be saved, such as one with an artist deleted since, leaves the show
       // as it was rather than without its artists
@@ -532,31 +507,28 @@ const resolvers = {
             unique(artistIds).map((artistId, position) => ({ showId: id, artistId, position }))
           );
         }
-        if (!timing) return tx.update(shows, id, values, { with: showIncludes });
+        if (!venue && !timing) return tx.update(shows, id, data, { with: showIncludes });
 
-        // The first update locks the row and answers the schedule it has. The venue waits for
-        // the next one: the trigger that keeps older writers' rows right clears a show's zone
-        // and start when only its venue changes, which would hide what there is to keep.
-        const { venueId, ...rest } = values;
-        const saved = await tx.update(shows, id, rest);
-        const moved = venueId !== undefined && venueId !== saved.venueId;
-        // Compared with the clock on that row, so an edit that leaves the schedule as it was,
-        // of the notes or of the venue, cannot discard a known fold offset or infer an instant
-        // from previously conflicting evidence
-        const unchanged =
-          typeof schedule?.startsAt !== 'number' &&
-          saved.localDate === timing.localDate &&
-          (saved.localTime && plainTime(saved.localTime)) === timing.localTime &&
-          saved.timeZone === timing.timeZone;
-        if (unchanged && !moved) {
-          return tx.find(shows, id, { with: showIncludes });
+        // Updating locks this show until the transaction completes. Compare with the clock
+        // stored on that row so resubmitting it preserves an independently supplied instant.
+        const saved = await tx.update(shows, id, data);
+        const move = venue && venue !== saved.venueId ? { venueId: venue } : undefined;
+        if (
+          timing &&
+          (typeof schedule?.startsAt === 'number' ||
+            saved.localDate !== timing.localDate ||
+            (saved.localTime && plainTime(saved.localTime)) !== timing.localTime ||
+            saved.timeZone !== timing.timeZone)
+        ) {
+          return tx.update(shows, id, { ...move, ...timing }, { with: showIncludes });
         }
-        if (moved) {
-          await tx.update(shows, id, { venueId });
+        if (move) {
+          // Moving without a schedule keeps the advertised clock and clears the old venue's zone and instant.
+          return tx.update(shows, id, timing ? move : { ...move, timeZone: null, startsAt: null }, {
+            with: showIncludes,
+          });
         }
-        // After a move, the zone and start the trigger cleared: neither column is one it watches
-        const columns = unchanged ? { timeZone: saved.timeZone, startsAt: saved.startsAt } : timing;
-        return tx.update(shows, id, columns, { with: showIncludes });
+        return tx.find(shows, id, { with: showIncludes });
       });
     },
 

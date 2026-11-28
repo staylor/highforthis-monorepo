@@ -8,7 +8,7 @@ nonisolated public struct ShowStatsQuery: GraphQLQuery {
   public static let operationName: String = "ShowStats"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query ShowStats($leaders: Int!) { artistLeaders: showStats(entity: ARTIST, first: $leaders) { __typename ...StatsLeader_stat } artists: showStats(entity: ARTIST) { __typename ...StatsLineup_stat } showTotals { __typename artists firstDate shows venues } venueLeaders: showStats(entity: VENUE, first: $leaders) { __typename ...StatsLeader_stat } venues: showStats(entity: VENUE) { __typename ...StatsLineup_stat } }"#,
+      #"query ShowStats($leaders: Int!) { artistLeaders: showStats(entity: ARTIST, first: $leaders) { __typename ...StatsLeader_stat } artists: showStats(entity: ARTIST) { __typename ...StatsLineup_stat } showTotals { __typename artists firstLocalDate shows venues } venueLeaders: showStats(entity: VENUE, first: $leaders) { __typename ...StatsLeader_stat } venues: showStats(entity: VENUE) { __typename ...StatsLineup_stat } }"#,
       fragments: [StatsLeader_stat.self, StatsLineup_stat.self]
     ))
 
@@ -66,8 +66,8 @@ nonisolated public struct ShowStatsQuery: GraphQLQuery {
       ] }
 
       public var count: Int { __data["count"] }
-      public var firstDate: Double { __data["firstDate"] }
-      public var lastDate: Double { __data["lastDate"] }
+      public var firstLocalDate: String { __data["firstLocalDate"] }
+      public var lastLocalDate: String { __data["lastLocalDate"] }
       public var entity: Entity { __data["entity"] }
 
       public struct Fragments: FragmentContainer {
@@ -121,7 +121,7 @@ nonisolated public struct ShowStatsQuery: GraphQLQuery {
       @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("artists", Int.self),
-        .field("firstDate", Double?.self),
+        .field("firstLocalDate", String?.self),
         .field("shows", Int.self),
         .field("venues", Int.self),
       ] }
@@ -130,7 +130,7 @@ nonisolated public struct ShowStatsQuery: GraphQLQuery {
       ] }
 
       public var artists: Int { __data["artists"] }
-      public var firstDate: Double? { __data["firstDate"] }
+      public var firstLocalDate: String? { __data["firstLocalDate"] }
       public var shows: Int { __data["shows"] }
       public var venues: Int { __data["venues"] }
     }
@@ -153,8 +153,8 @@ nonisolated public struct ShowStatsQuery: GraphQLQuery {
       ] }
 
       public var count: Int { __data["count"] }
-      public var firstDate: Double { __data["firstDate"] }
-      public var lastDate: Double { __data["lastDate"] }
+      public var firstLocalDate: String { __data["firstLocalDate"] }
+      public var lastLocalDate: String { __data["lastLocalDate"] }
       public var entity: Entity { __data["entity"] }
 
       public struct Fragments: FragmentContainer {

@@ -1,7 +1,6 @@
 query Show($id: String!) {
   show(id: $id) {
     id
-    date
     title
     url
     artists {

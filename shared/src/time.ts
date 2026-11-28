@@ -1,6 +1,6 @@
 import { Temporal } from '@js-temporal/polyfill';
 
-/** The editorial calendar and the zone used by older clients to read Show.date. */
+/** The time zone used for the editorial calendar. */
 export const SITE_TIME_ZONE = 'America/New_York';
 
 export function calendarDate(timestamp: number, zone = SITE_TIME_ZONE) {

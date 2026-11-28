@@ -46,8 +46,8 @@ export const showsHistoryPageQuery = gql`
 interface NextPage {
   year?: string;
   after: string;
-  /** The page's last date, so the next doesn't head its year again */
-  previous: number;
+  /** The page's last calendar month, so the next doesn't head its year again */
+  previous: string;
 }
 
 function nextPage(shows: ShowsGrid_ShowsFragment, year?: string): NextPage | undefined {
@@ -55,7 +55,7 @@ function nextPage(shows: ShowsGrid_ShowsFragment, year?: string): NextPage | und
   if (!shows.pageInfo.hasNextPage || !last) {
     return undefined;
   }
-  return { year, after: last.cursor, previous: last.node.date };
+  return { year, after: last.cursor, previous: last.node.schedule.localDate.slice(0, 7) };
 }
 
 const moreStyle = css({ paddingBlock: '1.5rem', textAlign: 'center' });
@@ -148,7 +148,7 @@ export function HistoryRows(
     shows: ShowsGrid_ShowsFragment;
     view: ShowsView;
     year?: string;
-    previous?: number;
+    previous?: string;
     label: string;
   }>
 ) {

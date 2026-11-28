@@ -117,8 +117,7 @@ const schedule = z.object({
 export const createShowSchema = z.object({
   artists: lineup,
   attended: z.boolean().optional(),
-  date: epochMillis.nullish(),
-  schedule: schedule.nullish(),
+  schedule,
   notes: z.string().nullish(),
   title: z.string().nullish(),
   url: z.string().nullish(),
@@ -130,8 +129,7 @@ export const bulkCreateShowsSchema = z
     z.object({
       artists: z.array(z.string().trim().min(1)).min(1),
       attended: z.boolean().nullish(),
-      date: epochMillis.nullish(),
-      schedule: schedule.nullish(),
+      schedule,
       venue: z.string().trim().min(1),
     })
   )
@@ -141,7 +139,6 @@ export const updateShowSchema = z.object({
   // Left out, the lineup stays as it is
   artists: lineup.optional(),
   attended: z.boolean().optional(),
-  date: epochMillis.nullish(),
   schedule: schedule.nullish(),
   notes: z.string().nullish(),
   title: z.string().nullish(),

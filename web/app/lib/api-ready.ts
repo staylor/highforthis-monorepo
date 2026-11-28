@@ -10,14 +10,8 @@ import { graphqlFetch } from './graphql.ts';
  */
 export const newFields = `{
   __typename
-  show @skip(if: true) {
-    schedule {
-      localDate
-      localTime
-      timeZone
-      startsAt
-    }
-  }
+  showTotals @skip(if: true) { firstLocalDate }
+  showStats(entity: ARTIST) @skip(if: true) { firstLocalDate lastLocalDate }
 }`;
 
 interface Answer {

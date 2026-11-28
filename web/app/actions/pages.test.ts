@@ -2,8 +2,6 @@
 import * as assert from 'remix/assert';
 import { describe, it, type TestContext } from 'remix/test';
 
-import { clockAt } from '@highforthis/shared/time';
-
 import { router } from '#/router.ts';
 import { routes } from '#/routes.ts';
 
@@ -90,19 +88,19 @@ const wilco = { id: 'a1', name: 'Wilco', slug: 'wilco' };
 const spoon = { id: 'a2', name: 'Spoon', slug: 'spoon' };
 const bowery = { id: 'v1', name: 'Bowery Ballroom', slug: 'bowery-ballroom' };
 
-// Instants for the June and July calendar fixtures, in the site's editorial zone
-const june14 = Date.UTC(2030, 5, 15, 0);
-const july4 = Date.UTC(2030, 6, 4, 23, 30);
+const june14 = { localDate: '2030-06-14', localTime: '20:00' };
+const july4 = { localDate: '2030-07-04', localTime: '19:30' };
 
-const show = (id: string, date: number, artists: object[], fields: object = {}) => ({
+const show = (
+  id: string,
+  schedule: { localDate: string; localTime?: string },
+  artists: object[],
+  fields: object = {}
+) => ({
   cursor: `cursor-${id}`,
   node: {
     id,
-    date,
-    schedule: {
-      localDate: clockAt(date).toPlainDate().toString(),
-      localTime: clockAt(date).toPlainTime().toString(),
-    },
+    schedule,
     title: null,
     url: null,
     artists,
@@ -352,7 +350,7 @@ describe('artists and venues', () => {
     edges: [
       {
         node: {
-          ...show('s9', Date.UTC(2019, 2, 2, 1), [wilco]).node,
+          ...show('s9', { localDate: '2019-03-01', localTime: '20:00' }, [wilco]).node,
           venue: { ...bowery, city: 'New York', state: 'NY' },
         },
       },
@@ -403,7 +401,6 @@ describe('artists and venues', () => {
       node: {
         ...first.node,
         id: 's10',
-        date: Date.UTC(2021, 5, 2, 0),
         schedule: { localDate: '2021-06-01', localTime: '20:00' },
       },
     };
@@ -580,7 +577,7 @@ describe('shows', () => {
 
   // The list stopped at its first page, without a word about the rest
   it('lists every show coming up, a page at a time', async (t) => {
-    const later = show('s4', Date.UTC(2030, 7, 2, 0), [spoon]);
+    const later = show('s4', { localDate: '2030-08-01', localTime: '20:00' }, [spoon]);
     const operations = stubGraphQL(t, {
       App,
       Shows: ({ after }: { after?: string }) => ({
@@ -642,8 +639,8 @@ describe('shows', () => {
     // Without JavaScript, a link to the next page. With it, a frame for each layout, which loads
     // that page when it nears the screen.
     assert.match(link(html, '/shows/history?after=cursor-s1') ?? '', /More Shows/);
-    assert.ok(html.includes(`"/shows/history/page/grid?after=cursor-s1&previous=${june14}"`));
-    assert.ok(html.includes(`"/shows/history/page/list?after=cursor-s1&previous=${june14}"`));
+    assert.ok(html.includes(`"/shows/history/page/grid?after=cursor-s1&previous=2030-06"`));
+    assert.ok(html.includes(`"/shows/history/page/list?after=cursor-s1&previous=2030-06"`));
     assert.match(html, /"status":"lazy"/);
 
     await page(`${routes.shows.history.href()}?after=cursor-s1`);
@@ -656,7 +653,7 @@ describe('shows', () => {
   it("answers a frame's next page with only its shows, which go on from the page before", async (t) => {
     const operations = stubGraphQL(t, { App, ShowsHistoryPage: { shows: history } });
     const grid = await page(
-      `${routes.shows.historyPage.href({ view: 'grid' })}?after=cursor-s0&previous=${july4}`
+      `${routes.shows.historyPage.href({ view: 'grid' })}?after=cursor-s0&previous=2030-07`
     );
     assert.equal(grid.status, 200);
     assert.match(grid.html, /<!--\s*rmx:flush fragment\s*-->/);
@@ -667,7 +664,7 @@ describe('shows', () => {
     // The page before ended in 2030, so these rows go on under that year's heading
     assert.doesNotMatch(textOf(`<body>${grid.html}`), /2030/);
     assert.match(textOf(`<body>${grid.html}`), /Fourth of July Jam .*Wilco \/ Spoon .*Wilco/);
-    assert.ok(grid.html.includes(`"/shows/history/page/grid?after=cursor-s1&previous=${june14}"`));
+    assert.ok(grid.html.includes(`"/shows/history/page/grid?after=cursor-s1&previous=2030-06"`));
     // Rows for a frame in a page that has the site's settings already
     assert.deepEqual(
       operations.map((op) => op.operationName),
@@ -697,8 +694,8 @@ describe('shows', () => {
   });
 
   // The stats: the leaders with their artwork and dates, everyone's counts, and the totals
-  const showTotals = { artists: 249, firstDate: Date.UTC(2005, 9, 7, 20), shows: 458, venues: 65 };
-  const seen = { firstDate: Date.UTC(2009, 6, 4, 20), lastDate: Date.UTC(2025, 5, 21, 20) };
+  const showTotals = { artists: 249, firstLocalDate: '2005-10-07', shows: 458, venues: 65 };
+  const seen = { firstLocalDate: '2009-07-04', lastLocalDate: '2025-06-21' };
   const artist = (name: string) => ({
     id: name,
     name,

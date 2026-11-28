@@ -1,6 +1,5 @@
 fragment ShowList_show on Show {
   id
-  date
   title
   artists {
     id
@@ -14,6 +13,9 @@ fragment ShowList_show on Show {
         width
       }
     }
+  }
+  schedule {
+    localDate
   }
   venue {
     id
