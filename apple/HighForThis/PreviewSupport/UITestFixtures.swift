@@ -9,15 +9,12 @@ nonisolated enum UITestFixtures {
         || ProcessInfo.processInfo.environment["HIGHFORTHIS_TESTING"] == "1"
 
     static func client(scenario: String = ProcessInfo.processInfo.environment["UI_TEST_SCENARIO"] ?? "normal") -> ApolloClient {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [FixtureURLProtocol.self]
         let store = ApolloStore(cache: InMemoryNormalizedCache())
         let transport = RequestChainNetworkTransport(
-            urlSession: URLSession(configuration: configuration),
+            urlSession: FixtureSession(scenario: scenario),
             interceptorProvider: DefaultInterceptorProvider.shared,
             store: store,
-            endpointURL: URL(string: "https://fixtures.highforthis.test/graphql")!,
-            additionalHeaders: ["X-Fixture-Scenario": scenario, "X-Fixture-Run": UUID().uuidString]
+            endpointURL: URL(string: "https://fixtures.highforthis.test/graphql")!
         )
         return ApolloClient(networkTransport: transport, store: store)
     }
@@ -52,60 +49,46 @@ nonisolated enum UITestFixtures {
     }
 }
 
-private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Sendable {
-    private static let requests = Mutex<[String: Int]>([:])
+/// An in-process session also works on watchOS, where URLSession can proxy requests outside the app.
+private nonisolated final class FixtureSession: ApolloURLSession {
+    private let requests = Mutex<[String: Int]>([:])
+    private let scenario: String
     private static let null = NSNull()
 
-    override class func canInit(with request: URLRequest) -> Bool { request.url?.host == "fixtures.highforthis.test" }
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    init(scenario: String) { self.scenario = scenario }
 
-    override func startLoading() {
-        do {
-            let body: Data
-            if let data = request.httpBody {
-                body = data
-            } else if let stream = request.httpBodyStream {
-                stream.open()
-                defer { stream.close() }
-                var data = Data()
-                var buffer = [UInt8](repeating: 0, count: 4096)
-                while stream.hasBytesAvailable {
-                    let count = stream.read(&buffer, maxLength: buffer.count)
-                    guard count >= 0 else { throw URLError(.cannotDecodeRawData) }
-                    if count == 0 { break }
-                    data.append(contentsOf: buffer.prefix(count))
-                }
-                body = data
-            } else {
-                throw URLError(.badServerResponse)
-            }
-            let json = try JSONSerialization.jsonObject(with: body) as? [String: Any] ?? [:]
-            let operation = json["operationName"] as? String ?? ""
-            let variables = json["variables"] as? [String: Any] ?? [:]
-            let scenario = request.value(forHTTPHeaderField: "X-Fixture-Scenario") ?? "normal"
-            let key = (request.value(forHTTPHeaderField: "X-Fixture-Run") ?? "") + operation
-            let attempt = Self.requests.withLock { requests in
-                requests[key, default: 0] += 1
-                return requests[key, default: 0]
-            }
-            let response: [String: Any]
-            if (scenario == "failOnce" && attempt == 1 && operation == "Shows") || scenario == "graphqlError" {
-                response = ["data": ["__typename": "Query", "shows": Self.null], "errors": [["message": "Temporary fixture failure"]]]
-            } else {
-                response = ["data": try Self.data(operation: operation, variables: variables, scenario: scenario)]
-            }
-            let data = try JSONSerialization.data(withJSONObject: response)
-            let http = HTTPURLResponse(
-                url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
-            client?.urlProtocol(self, didReceive: http, cacheStoragePolicy: .notAllowed)
-            client?.urlProtocol(self, didLoad: data)
-            client?.urlProtocolDidFinishLoading(self)
-        } catch {
-            client?.urlProtocol(self, didFailWithError: error)
+    func chunks(for request: URLRequest) async throws -> (any AsyncChunkSequence, URLResponse) {
+        try Task.checkCancellation()
+        guard let url = request.url, let body = request.httpBody,
+            let json = try JSONSerialization.jsonObject(with: body) as? [String: Any],
+            let operation = json["operationName"] as? String
+        else { throw URLError(.badServerResponse) }
+        let variables = json["variables"] as? [String: Any] ?? [:]
+        let attempt = requests.withLock { requests in
+            requests[operation, default: 0] += 1
+            return requests[operation, default: 0]
         }
+        let response: [String: Any]
+        if (scenario == "failOnce" && attempt == 1 && operation == "Shows") || scenario == "graphqlError" {
+            response = ["data": ["__typename": "Query", "shows": Self.null], "errors": [["message": "Temporary fixture failure"]]]
+        } else {
+            response = ["data": try Self.data(operation: operation, variables: variables, scenario: scenario)]
+        }
+        let data = try JSONSerialization.data(withJSONObject: response)
+        let http = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
+        return (Chunk(data: data), http)
     }
 
-    override func stopLoading() {}
+    private nonisolated struct Chunk: AsyncChunkSequence, AsyncIteratorProtocol {
+        var data: Data?
+
+        func makeAsyncIterator() -> Self { self }
+
+        mutating func next() async -> Data? {
+            defer { data = nil }
+            return data
+        }
+    }
 
     private static var artist: [String: Any] {
         [
@@ -154,6 +137,7 @@ private nonisolated final class FixtureURLProtocol: URLProtocol, @unchecked Send
         let showConnection = connection("Show", items: shows, after: after, years: [2025, 2019])
         var result: [String: Any] = ["__typename": "Query"]
         switch operation {
+        case "NextShow": result["shows"] = connection("Show", items: Array(shows.prefix(1)))
         case "Shows": result["shows"] = showConnection
         case "Show": result["show"] = variables["id"] as? String == "missing" ? null : show(0)
         case "Artist":

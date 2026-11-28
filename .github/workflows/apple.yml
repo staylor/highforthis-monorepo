@@ -245,6 +245,10 @@ jobs:
           - name: Apple TV
             platform: tvOS
             device: Apple TV 4K (3rd generation)
+          - name: Apple Watch
+            platform: watchOS
+            device: Apple Watch Series 12 (42mm)
+            scheme: HighForThisWatch
           # The Mac runs the unit tests alone.
           - name: Mac
             platform: macOS
@@ -256,6 +260,7 @@ jobs:
           name: ${{ matrix.name }}
           platform: ${{ matrix.platform }}
           device: ${{ matrix.device }}
+          scheme: ${{ matrix.scheme || 'HighForThis' }}
           only-testing: ${{ matrix.only-testing }}
 
   # The deployment target is 26.0, and the image only has 27 simulators, so these download the 26.5 releases' builds:
@@ -338,7 +343,7 @@ jobs:
       - name: Lint
         if: ${{ !cancelled() && needs.changes.outputs.apple == 'true' }}
         working-directory: apple
-        run: swift format lint --recursive --strict HighForThis HighForThisTests HighForThisUITests
+        run: swift format lint --recursive --strict HighForThis HighForThisWatch HighForThisWatchWidgets HighForThisTests HighForThisUITests
 
   testflight:
     name: TestFlight ${{ matrix.name }}

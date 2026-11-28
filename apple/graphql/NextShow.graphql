@@ -1,0 +1,21 @@
+query NextShow {
+  shows(first: 1, latest: true) {
+    edges {
+      node {
+        id
+        title
+        artists {
+          id
+          name
+        }
+        schedule {
+          localDate
+        }
+        venue {
+          id
+          name
+        }
+      }
+    }
+  }
+}

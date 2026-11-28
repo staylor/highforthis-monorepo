@@ -3,11 +3,14 @@ import SwiftUI
 enum Route: Hashable {
     case show(id: String, title: String)
     /// An artist's or a venue's shows, which their page links to, with the artist's or the venue's name.
-    case shows(ShowFilter, name: String)
+    case shows(ShowFilter, name: String?)
     case artist(slug: String, name: String)
     case venue(slug: String, name: String)
     case podcast(id: String, title: String)
     case post(slug: String, title: String)
+    #if os(watchOS)
+    case podcasts, posts, nowPlaying
+    #endif
     case stats
 }
 
@@ -58,6 +61,14 @@ struct BrowseStack<Root: View>: View {
     init(showPlayer: (() -> Void)? = nil, @ViewBuilder root: () -> Root) {
         self.root = root()
         self.showPlayer = showPlayer
+        #if DEBUG && os(watchOS)
+        // XCUI launches a watch app by bundle ID. Seed the stack once with the link WidgetKit would deliver.
+        if UITestFixtures.isEnabled, let value = ProcessInfo.processInfo.environment["UI_TEST_WIDGET_URL"],
+            let url = URL(string: value), let link = WatchShowLink(url: url)
+        {
+            _path = State(initialValue: Self.routes(for: link))
+        }
+        #endif
     }
 
     var body: some View {
@@ -72,7 +83,22 @@ struct BrowseStack<Root: View>: View {
                         .environment(\.navigationDepth, pushed.depth)
                 }
         }
+        #if os(watchOS)
+        .onOpenURL { url in
+            if let link = WatchShowLink(url: url) { path = Self.routes(for: link) }
+        }
+        #endif
     }
+
+    #if os(watchOS)
+    private static func routes(for link: WatchShowLink) -> [PushedRoute] {
+        var routes = [PushedRoute(route: .shows(ShowFilter(kind: .upcoming), name: nil), depth: 1)]
+        if let id = link.id {
+            routes.append(PushedRoute(route: .show(id: id, title: link.title ?? String(localized: .shows)), depth: 2))
+        }
+        return routes
+    }
+    #endif
 
     /// The stack's path, which takes each route only at the depth its link pushed it for. On a Mac, a list opens the
     /// row it has selected, and the first time a screen three deep was popped, the tab's first list pushed its row
@@ -103,6 +129,11 @@ struct BrowseStack<Root: View>: View {
             PodcastDetail(id: id, title: title)
         case .post(let slug, let title):
             PostDetail(slug: slug, title: title)
+        #if os(watchOS)
+        case .podcasts: PodcastList()
+        case .posts: PostList()
+        case .nowPlaying: NowPlayingView()
+        #endif
         case .stats:
             ShowStats()
         }
@@ -115,6 +146,9 @@ private struct PlayerInset: ViewModifier {
 
     func body(content: Content) -> some View {
         // On 26.0 the inset must belong to the scrolling content, not TabView or NavigationStack.
+        #if os(watchOS)
+        content
+        #else
         content.safeAreaInset(edge: .bottom, spacing: 0) {
             if let showPlayer, player.episode != nil {
                 PlayerAccessory(openPlayer: showPlayer)
@@ -122,6 +156,7 @@ private struct PlayerInset: ViewModifier {
                     .padding()
             }
         }
+        #endif
     }
 }
 
@@ -138,7 +173,9 @@ extension View {
     /// the subtitle under the title. tvOS draws a bar's title over whatever scrolls under it, so there the header's is
     /// the only one.
     func detailTitle(_ title: String, subtitle: LocalizedStringResource? = nil) -> some View {
-        #if os(tvOS)
+        #if os(watchOS)
+        navigationTitle(title)
+        #elseif os(tvOS)
         self
         #else
         modifier(DetailTitle(title: title, subtitle: subtitle))
@@ -191,3 +228,18 @@ private struct DetailTitle: ViewModifier {
     }
 }
 #endif
+
+extension EnvironmentValues {
+    /// Whether the stats are a tab of their own, as `ContentView` decides, so History links to them only where they
+    /// aren't.
+    @Entry var statsHaveATab = true
+}
+
+extension StatsEntity {
+    var route: Route {
+        switch kind {
+        case .artist: .artist(slug: slug, name: name)
+        case .venue: .venue(slug: slug, name: name)
+        }
+    }
+}

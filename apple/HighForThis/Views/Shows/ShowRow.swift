@@ -41,6 +41,9 @@ struct ShowListRow: View {
 
     var body: some View {
         let words = show.rowWords(in: filter)
+        #if os(watchOS)
+        RowLabel(eyebrow: Text(show.venueDay.formatted(.showDay)), title: words.title, detail: words.detail)
+        #else
         if dynamicTypeSize.isAccessibilitySize {
             VStack(alignment: .leading, spacing: 8) {
                 if words.hasPicture {
@@ -57,6 +60,7 @@ struct ShowListRow: View {
                 RowLabel(title: words.title, detail: words.detail)
             }
         }
+        #endif
     }
 
     private var picture: some View {

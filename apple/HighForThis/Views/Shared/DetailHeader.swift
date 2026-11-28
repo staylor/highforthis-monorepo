@@ -31,7 +31,11 @@ struct DetailHeader<Details: View>: View {
             VStack(alignment: .leading, spacing: 4) {
                 eyebrow?.eyebrowStyle()
                 Text(title)
-                    .font(.title.weight(.black))
+                    #if os(watchOS)
+                .font(.title3.bold())
+                    #else
+                .font(.title.weight(.black))
+                    #endif
                     .textCase(.uppercase)
                     .fixedSize(horizontal: false, vertical: true)
                     // In capitals on the screen, but not to VoiceOver. A label that's text would be in capitals too.
@@ -94,7 +98,9 @@ enum DetailHero {
 /// The top of a detail screen's list: its picture or map, and its header. Where there's room they're side by side,
 /// as the website lays them out. On a phone, and at the largest text sizes, the picture comes first, from edge to edge.
 struct DetailIntro<Header: View>: View {
+    #if !os(watchOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.displayScale) private var displayScale
     private let hero: DetailHero?
@@ -111,6 +117,12 @@ struct DetailIntro<Header: View>: View {
     }
 
     var body: some View {
+        #if os(watchOS)
+        header
+        if case .map(let name, let coordinate) = hero {
+            VenueMap(name: name, coordinate: coordinate)
+        }
+        #else
         if let hero, horizontalSizeClass == .regular, !dynamicTypeSize.isAccessibilitySize {
             HStack(alignment: .center, spacing: .readable(28)) {
                 view(of: hero, isSquare: true)
@@ -130,6 +142,7 @@ struct DetailIntro<Header: View>: View {
                 .padding(.vertical, 4)
                 .listRowSeparatorHidden()
         }
+        #endif
     }
 
     /// The hero filling a square it's given, or across the screen's width at a height that leaves room under it.
@@ -157,7 +170,7 @@ struct DetailLinks<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(watchOS)
         ViewThatFits(in: .horizontal) {
             HStack(spacing: 10) { content }
             VStack(alignment: .leading, spacing: 10) { content }

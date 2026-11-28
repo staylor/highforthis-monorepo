@@ -30,9 +30,13 @@ final class PodcastPlayer {
     @ObservationIgnored private var itemObservation: NSKeyValueObservation?
     @ObservationIgnored private var observers: [NSObjectProtocol] = []
     @ObservationIgnored private var timeObserver: Any?
-    #if os(iOS) || os(tvOS)
+    #if os(watchOS)
+    @ObservationIgnored private var playbackObservation: NSKeyValueObservation?
+    #elseif os(iOS) || os(tvOS)
     @ObservationIgnored private var nowPlayingSession: MPNowPlayingSession?
-    @ObservationIgnored private var remoteCommands: [MPRemoteCommand] = []
+    #endif
+    #if os(iOS) || os(tvOS) || os(watchOS)
+    @ObservationIgnored private var remoteCommands: [(command: MPRemoteCommand, target: Any)] = []
     @ObservationIgnored private var resumeAfterInterruption = false
     #endif
 
@@ -51,7 +55,7 @@ final class PodcastPlayer {
             }
         }
         observePlaybackEvents()
-        #if os(iOS) || os(tvOS)
+        #if os(iOS) || os(tvOS) || os(watchOS)
         configureRemoteCommands()
         observeAudioSession()
         #endif
@@ -61,8 +65,8 @@ final class PodcastPlayer {
         activation?.cancel()
         if let timeObserver { player.removeTimeObserver(timeObserver) }
         for observer in observers { NotificationCenter.default.removeObserver(observer) }
-        #if os(iOS) || os(tvOS)
-        for command in remoteCommands { command.removeTarget(nil) }
+        #if os(iOS) || os(tvOS) || os(watchOS)
+        for (command, target) in remoteCommands { command.removeTarget(target) }
         #endif
     }
 
@@ -144,7 +148,7 @@ final class PodcastPlayer {
         isPreparing = false
         wantsPlayback = false
         player.pause()
-        #if os(iOS) || os(tvOS)
+        #if os(iOS) || os(tvOS) || os(watchOS)
         resumeAfterInterruption = false
         #endif
         let revision = revision
@@ -161,6 +165,9 @@ final class PodcastPlayer {
         player.replaceCurrentItem(with: nil)
         itemObservation = nil
         episode = nil
+        #if os(watchOS)
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        #endif
         elapsed = 0
         error = nil
         hasEnded = false
@@ -172,6 +179,9 @@ final class PodcastPlayer {
         let target = min(max(0, seconds), duration)
         player.seek(to: CMTime(seconds: target, preferredTimescale: 600))
         elapsed = target
+        #if os(watchOS)
+        updateNowPlaying()
+        #endif
     }
 
     func skip(by seconds: Double) { seek(to: elapsed + seconds) }
@@ -197,6 +207,19 @@ final class PodcastPlayer {
         }
         player.replaceCurrentItem(with: item)
     }
+
+    #if os(watchOS)
+    private func updateNowPlaying() {
+        guard let episode else { return }
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [
+            MPMediaItemPropertyTitle: episode.title,
+            MPMediaItemPropertyArtist: "High For This",
+            MPMediaItemPropertyPlaybackDuration: duration,
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: elapsed,
+            MPNowPlayingInfoPropertyPlaybackRate: player.timeControlStatus == .playing ? player.rate : 0,
+        ]
+    }
+    #endif
 
     private func observePlaybackEvents() {
         observers.append(
@@ -229,12 +252,20 @@ final class PodcastPlayer {
         Logger.playback.error("Playback failed: \(error.localizedDescription)")
     }
 
-    #if os(iOS) || os(tvOS)
+    #if os(iOS) || os(tvOS) || os(watchOS)
     private func configureRemoteCommands() {
+        #if os(watchOS)
+        // MPNowPlayingSession is unavailable on watchOS. Publish when playback actually starts, buffers or pauses.
+        playbackObservation = player.observe(\.timeControlStatus, options: [.new]) { @Sendable [weak self] _, _ in
+            Task { @MainActor in self?.updateNowPlaying() }
+        }
+        let commands = MPRemoteCommandCenter.shared()
+        #else
         let session = MPNowPlayingSession(players: [player])
         session.automaticallyPublishesNowPlayingInfo = true
         nowPlayingSession = session
         let commands = session.remoteCommandCenter
+        #endif
         commands.skipBackwardCommand.preferredIntervals = [15]
         commands.skipForwardCommand.preferredIntervals = [15]
         handle(commands.playCommand) { $0.play() }
@@ -242,24 +273,24 @@ final class PodcastPlayer {
         handle(commands.togglePlayPauseCommand) { $0.togglePlayback() }
         handle(commands.skipBackwardCommand) { $0.skip(by: -15) }
         handle(commands.skipForwardCommand) { $0.skip(by: 15) }
-        commands.changePlaybackPositionCommand.addTarget { @Sendable [weak self] event in
+        let target = commands.changePlaybackPositionCommand.addTarget { @Sendable [weak self] event in
             guard let event = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
             let position = event.positionTime
             Task { @MainActor in self?.seek(to: position) }
             return .success
         }
-        remoteCommands.append(commands.changePlaybackPositionCommand)
+        remoteCommands.append((commands.changePlaybackPositionCommand, target))
     }
 
     /// Handles a remote command on the main actor until the player is released.
     private func handle(_ command: MPRemoteCommand, _ action: @escaping @MainActor @Sendable (PodcastPlayer) -> Void) {
-        command.addTarget { @Sendable [weak self] _ in
+        let target = command.addTarget { @Sendable [weak self] _ in
             Task { @MainActor in
                 if let self { action(self) }
             }
             return .success
         }
-        remoteCommands.append(command)
+        remoteCommands.append((command, target))
     }
 
     private func observeAudioSession() {
@@ -297,13 +328,32 @@ final class PodcastPlayer {
 private actor PlaybackAudioSession {
     private var revision = 0
 
-    func setActive(_ active: Bool, revision: Int) throws {
+    #if os(watchOS)
+    private var activation: Task<Bool, any Error>?
+    #endif
+
+    func setActive(_ active: Bool, revision: Int) async throws {
         guard revision >= self.revision else { return }
         self.revision = revision
-        #if os(iOS) || os(tvOS)
+        #if os(iOS) || os(tvOS) || os(watchOS)
+        #if os(watchOS)
+        // Activation may wait for the route picker. Finish it before applying a newer play or pause.
+        if let activation {
+            _ = await activation.result
+            guard revision == self.revision else { return }
+            self.activation = nil
+        }
+        #endif
         let session = AVAudioSession.sharedInstance()
         if active {
             try session.setCategory(.playback, mode: .spokenAudio, policy: .longFormAudio)
+            #if os(watchOS)
+            let task = Task { try await session.activate(options: []) }
+            activation = task
+            defer { if revision == self.revision { activation = nil } }
+            guard try await task.value else { throw PlaybackError.unavailable }
+            return
+            #endif
         }
         try session.setActive(active, options: active ? [] : .notifyOthersOnDeactivation)
         #endif

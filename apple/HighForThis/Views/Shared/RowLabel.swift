@@ -38,9 +38,14 @@ struct PictureRow<Picture: View, Words: View>: View {
     @ViewBuilder let picture: Picture
     @ViewBuilder let words: Words
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    #if !os(watchOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
 
     var body: some View {
+        #if os(watchOS)
+        words
+        #else
         let stacked = dynamicTypeSize.isAccessibilitySize
         let layout = stacked ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12)) : AnyLayout(HStackLayout(spacing: .readable(12)))
         layout {
@@ -52,5 +57,6 @@ struct PictureRow<Picture: View, Words: View>: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.vertical, 4)
+        #endif
     }
 }
