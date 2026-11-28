@@ -140,6 +140,7 @@
 				API/HighForThisClient.swift,
 				Localizable.xcstrings,
 				Models/DateFormats.swift,
+				Models/NextShowMemory.swift,
 				Models/ShowSummary.swift,
 				PreviewSupport/UITestFixtures.swift,
 				PrivacyInfo.xcprivacy,

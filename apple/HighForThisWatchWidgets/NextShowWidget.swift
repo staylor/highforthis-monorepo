@@ -15,10 +15,18 @@ private struct FeaturedShow {
     let day: VenueDay
 }
 
+extension FeaturedShow {
+    init(_ show: NextShowMemory.Show) {
+        self.init(id: show.id, title: show.title, venue: show.venue, day: VenueDay(show.localDate))
+    }
+}
+
 private struct NextShowEntry: TimelineEntry {
     let date: Date
     let show: FeaturedShow?
+    /// Whether the fetch failed, and how many have in a row
     var unavailable = false
+    var failures = 0
 
     var link: WatchShowLink { WatchShowLink(id: show?.id, title: show?.title) }
 }
@@ -47,23 +55,31 @@ private struct NextShowProvider: TimelineProvider {
             calendar.timeZone = .newYork
             let midnight = calendar.startOfDay(for: current.date)
             let tomorrow = calendar.date(byAdding: .day, value: 1, to: midnight)!
-            let refresh = min(tomorrow, current.date.addingTimeInterval(current.unavailable ? 15 * 60 : 3 * 60 * 60))
+            let wait = current.unavailable ? NextShowMemory.retryDelay(afterFailures: current.failures) : 3 * 60 * 60
+            let refresh = min(tomorrow, current.date.addingTimeInterval(wait))
             completion(Timeline(entries: [current], policy: .after(refresh)))
         }
     }
 
     private func entry() async -> NextShowEntry {
+        var memory = NextShowMemory.load(from: .standard)
         do {
             let data = try await ApolloClient.highForThis.data(for: NextShowQuery(), cachePolicy: .networkOnly)
             guard let shows = data.shows else { throw MissingDataError() }
             let show = shows.edges.first.map { edge in
                 let node = edge.node
-                return FeaturedShow(id: node.id, title: node.headline, venue: node.venue.name, day: VenueDay(node.schedule.localDate))
+                return NextShowMemory.Show(id: node.id, title: node.headline, venue: node.venue.name, localDate: node.schedule.localDate)
             }
-            return NextShowEntry(date: .now, show: show)
+            memory.found(show)
+            memory.save(to: .standard)
+            return NextShowEntry(date: .now, show: show.map { FeaturedShow($0) })
         } catch {
             Logger.api.error("Couldn't load next show: \(error.localizedDescription)")
-            return NextShowEntry(date: .now, show: nil, unavailable: true)
+            // The show the last fetch found, rather than none, until its day has passed
+            memory.failed()
+            memory.save(to: .standard)
+            let show = memory.fallback(at: .now)
+            return NextShowEntry(date: .now, show: show.map { FeaturedShow($0) }, unavailable: true, failures: memory.failures)
         }
     }
 }
