@@ -1,6 +1,8 @@
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
+import { calendarDate } from '@highforthis/shared/time';
+
 import {
   backTo,
   formActions,
@@ -21,7 +23,6 @@ import { documentLoad } from '#/ui/admin/links.ts';
 import { ListTable, Search, TitleCell, toggleColumn } from '#/ui/admin/list-table.tsx';
 import { Message } from '#/ui/admin/message.tsx';
 import { Alert, HeaderAdd, Heading } from '#/ui/admin/page.tsx';
-import { DateTimeInput } from '#/ui/admin/public/date-time-input.tsx';
 import { EntitiesPicker } from '#/ui/admin/public/entities-picker.tsx';
 import { input, saveButton, select } from '#/ui/admin/public/styles.ts';
 import { merge, text } from '#/ui/public/styles.ts';
@@ -61,19 +62,17 @@ function choices(saved: Entity[], connection?: { edges: { node: Entity }[] } | n
   return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
-/** A new show's date before anything sets it: today at 8:00 PM. */
-function tonight() {
-  const date = new Date();
-  date.setHours(20, 0, 0, 0);
-  return date.getTime();
-}
-
 function showFields(t: TFunction, data: ShowFormData, values?: SaveFailure['values']): Field[] {
   const show = data.show;
   const artists = choices(show?.artists ?? [], data.artists);
   // What a save that failed submitted, or what's saved
   const venueId: string = values ? (values.venue ?? '') : (show?.venue?.id ?? '');
-  const date = values?.date ? Number(values.date) : (show?.date ?? tonight());
+  const schedule = values?.schedule ??
+    show?.schedule ?? {
+      localDate: calendarDate(Date.now()).toString(),
+      localTime: null,
+      timeZone: '',
+    };
   const picked: Entity[] = values
     ? [values.artists ?? []]
         .flat()
@@ -95,7 +94,44 @@ function showFields(t: TFunction, data: ShowFormData, values?: SaveFailure['valu
       prop: 'date',
       type: 'custom',
       render: () => (
-        <DateTimeInput name="date" value={date} id="field-date" hint={t('admin.newYorkTime')} />
+        <input
+          type="date"
+          id="field-date"
+          name="schedule[localDate]"
+          value={schedule.localDate}
+          required
+          mix={css(input)}
+        />
+      ),
+    },
+    {
+      label: t('shows.venueTime'),
+      prop: 'localTime',
+      type: 'custom',
+      render: () => (
+        <input
+          type="time"
+          step="0.001"
+          id="field-localTime"
+          name="schedule[localTime]"
+          value={schedule.localTime ?? ''}
+          mix={css(input)}
+        />
+      ),
+    },
+    {
+      label: t('shows.timeZone'),
+      prop: 'timeZone',
+      type: 'custom',
+      render: () => (
+        <input
+          type="text"
+          id="field-timeZone"
+          name="schedule[timeZone]"
+          placeholder="America/New_York"
+          value={schedule.timeZone ?? ''}
+          mix={css(input)}
+        />
       ),
     },
     {
@@ -192,7 +228,7 @@ export const showsList = createController(shows.list, {
           ),
         },
         toggleColumn('attended', t('shows.attended.label'), (show: ShowRow) => formatArtists(show)),
-        { label: t('shows.date'), render: (show: ShowRow) => dateTime(show.date) },
+        { label: t('shows.date'), render: (show: ShowRow) => dateTime(show.schedule) },
       ];
 
       return renderAdminPage(

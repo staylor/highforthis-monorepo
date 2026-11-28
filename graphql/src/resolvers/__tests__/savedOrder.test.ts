@@ -248,6 +248,7 @@ describe('a list', () => {
       source: 'aeg',
       sourceId: 'moved',
       date: new Date('2020-01-01T23:00:00Z'),
+      localDate: '2020-01-01',
     });
     getListings.mockResolvedValue({
       source: 'aeg',
@@ -340,6 +341,15 @@ describe('a list', () => {
       read<PostSource>(id, { ...reading, list: (post) => postResolvers.Post.featuredMedia(post) });
     const artistsOf = (id: string) =>
       read<PostSource>(id, { ...reading, list: (post) => postResolvers.Post.artists(post) });
+
+    it('accepts the Unix epoch on create and update', async () => {
+      const { createPost, updatePost } = postResolvers.Mutation;
+      const created = await createPost({}, { input: { title: 'At the epoch', date: 0 } });
+      expect(new Date(created!.date).getTime()).toBe(0);
+      await updatePost({}, { id: created!.id, input: { date: 1 } });
+      const updated = await updatePost({}, { id: created!.id, input: { date: 0 } });
+      expect(new Date(updated!.date).getTime()).toBe(0);
+    });
 
     it('rolls back new artists and skips enrichment when a post save fails', async () => {
       const { createPost, updatePost } = postResolvers.Mutation;

@@ -37,7 +37,7 @@ export type PostSource = Post & {
 const resolvers = {
   Post: {
     date(post) {
-      return new Date(post.date || post.createdAt).getTime();
+      return new Date(post.date ?? post.createdAt).getTime();
     },
     featuredMedia(post) {
       return resolveJoin(post.featuredMedia, 'media', () =>
@@ -136,7 +136,7 @@ const resolvers = {
           slug,
           contentBody,
           editorState: editorState ?? undefined,
-          date: date ? new Date(date) : new Date(),
+          date: typeof date === 'number' ? new Date(date) : new Date(),
         });
         if (media.length) {
           await tx.createMany(
@@ -165,7 +165,7 @@ const resolvers = {
       } = parseInput(updatePostSchema, input);
       const values: Partial<Post> = { ...data };
       // Every post has a date, so one left out or sent as null keeps the saved one
-      if (date) {
+      if (typeof date === 'number') {
         values.date = new Date(date);
       }
       if (editorState) {

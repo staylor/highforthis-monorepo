@@ -1,3 +1,5 @@
+import { calendarDate, clockInstant, SITE_TIME_ZONE } from '@highforthis/shared/time';
+
 import { logger } from '#/lib/logger.ts';
 
 import { openObserveConfig, search } from './openobserve.ts';
@@ -6,7 +8,6 @@ import { openObserveConfig, search } from './openobserve.ts';
 // The SDK sends several updates for one view, so views are counted by distinct view_id.
 
 const DAYS = 30;
-const TIME_ZONE = 'America/New_York';
 const VIEWS = `FROM "_rumdata" WHERE type = 'view'`;
 
 export interface PageViews {
@@ -21,20 +22,11 @@ type PageViewsResult =
   | { status: 'unconfigured' }
   | { status: 'error' };
 
-// YYYY-MM-DD in the site's time zone
-const dateKey = (date: Date) => date.toLocaleDateString('en-CA', { timeZone: TIME_ZONE });
-
-// The last `days` dates up to today in the site's time zone, oldest first. Counts back calendar
-// days rather than 24 hours at a time, since the day the clocks change is 23 or 25 hours long.
 function lastDates(now: Date, days: number) {
-  const [year, month, day] = dateKey(now).split('-').map(Number);
-  return Array.from({ length: days }, (_, index) =>
-    // Date.UTC rolls a day before the 1st back into the month before
-    new Date(Date.UTC(year, month - 1, day - (days - 1 - index))).toISOString().slice(0, 10)
-  );
+  const today = calendarDate(now.getTime());
+  return Array.from({ length: days }, (_, i) => today.subtract({ days: days - 1 - i }).toString());
 }
 
-// Sums hourly view counts into the last `days` days, oldest first, with empty days as 0.
 export function dailyViews(
   hours: { hour: string; views: number }[],
   now: Date,
@@ -43,7 +35,9 @@ export function dailyViews(
   const totals = new Map<string, number>(lastDates(now, days).map((date) => [date, 0]));
   for (const { hour, views } of hours) {
     // OpenObserve's histogram buckets are UTC, without a zone suffix
-    const key = dateKey(new Date(hour.endsWith('Z') ? hour : `${hour}Z`));
+    const timestamp = Date.parse(/(?:Z|[+-]\d{2}:?\d{2})$/i.test(hour) ? hour : `${hour}Z`);
+    if (!Number.isFinite(timestamp)) continue;
+    const key = calendarDate(timestamp).toString();
     if (totals.has(key)) {
       totals.set(key, (totals.get(key) ?? 0) + views);
     }
@@ -78,7 +72,8 @@ export async function loadPageViews(now = new Date(), env = process.env): Promis
     return { status: 'unconfigured' };
   }
 
-  const range = { start: new Date(now.getTime() - DAYS * 24 * 60 * 60 * 1000), end: now };
+  const firstDay = calendarDate(now.getTime()).subtract({ days: DAYS - 1 });
+  const range = { start: new Date(clockInstant(`${firstDay}T00:00`, SITE_TIME_ZONE)), end: now };
   try {
     const [hours, totals, urls] = await Promise.all([
       search<{ hour: string; views: number }>(

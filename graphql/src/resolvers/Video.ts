@@ -8,7 +8,7 @@ import { newId, videos, videoThumbnailRows, videoThumbnails } from '#/database/t
 import { getUniqueSlug, slugsIn } from '#/models/utils';
 
 import { parseConnection } from './utils/collection';
-import { parseInput, removeRows, timestampResolver } from './utils/helpers';
+import { badInput, parseInput, removeRows, timestampResolver } from './utils/helpers';
 import { createVideoSchema, updateVideoSchema } from './validations';
 
 const videoIncludes = { thumbnails: videoThumbnailRows };
@@ -17,6 +17,19 @@ const videoIncludes = { thumbnails: videoThumbnailRows };
 export type VideoSource = TableRow<typeof videos> & {
   thumbnails?: Loaded<typeof videoThumbnailRows>;
 };
+
+function publication(publishedAt?: number, publishedISO?: string | null) {
+  if (publishedISO) {
+    const millis = Date.parse(publishedISO);
+    if (publishedAt !== undefined && publishedAt !== millis) {
+      throw badInput('publishedAt and publishedISO must identify the same instant');
+    }
+    return { publishedAt: new Date(millis), publishedISO };
+  }
+  if (publishedAt === undefined) return {};
+  const instant = new Date(publishedAt);
+  return { publishedAt: instant, publishedISO: instant.toISOString() };
+}
 
 const resolvers = {
   Video: {
@@ -78,22 +91,21 @@ const resolvers = {
   },
   Mutation: {
     async createVideo(_, { input }) {
-      const { publishedAt, ...rest } = parseInput(createVideoSchema, input);
+      const { publishedAt, publishedISO, ...rest } = parseInput(createVideoSchema, input);
       const slug = await getUniqueSlug(slugsIn(db, videos), rest.title);
       const id = newId();
-      await db.create(videos, { ...rest, id, slug, publishedAt: new Date(publishedAt) });
+      await db.create(videos, { ...rest, id, slug, ...publication(publishedAt, publishedISO) });
       return db.find(videos, id, { with: videoIncludes });
     },
 
     async updateVideo(_, { id, input }) {
-      const { publishedAt, ...rest } = parseInput(updateVideoSchema, input);
+      const { publishedAt, publishedISO, ...rest } = parseInput(updateVideoSchema, input);
       return db.update(
         videos,
         id,
         {
           ...rest,
-          // A form that leaves the date out sends no publishedAt, which keeps the saved one
-          ...(publishedAt !== undefined && { publishedAt: new Date(publishedAt) }),
+          ...publication(publishedAt, publishedISO),
         },
         { with: videoIncludes }
       );

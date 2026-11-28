@@ -4,6 +4,7 @@ installCommand = "corepack enable && pnpm install"
 buildCommand = "pnpm --filter @highforthis/web build"
 
 [deploy]
+preDeployCommand = "pnpm --filter @highforthis/web await-api"
 startCommand = "cd web && exec node --import remix/node-tsx server.ts"
 healthcheckPath = "/health"
 restartPolicyType = "ON_FAILURE"

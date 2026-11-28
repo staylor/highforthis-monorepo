@@ -21,11 +21,7 @@ describe('parseBulkShowsCsv', () => {
       attended: true,
       venue: 'Venue, Inc.',
     });
-    const date = new Date(result.shows[0].date);
-    assert.deepEqual(
-      [date.getFullYear(), date.getMonth(), date.getDate(), date.getHours()],
-      [2026, 0, 1, 20]
-    );
+    assert.deepEqual(result.shows[0].schedule, { localDate: '2026-01-01', localTime: null });
   });
 
   it('accepts rows without a header and defaults attended to false', () => {
@@ -43,7 +39,7 @@ describe('parseBulkShowsCsv', () => {
     const result = parseBulkShowsCsv('Artist One,The Venue,12/1/99,true');
 
     assert.deepEqual(result.errors, []);
-    assert.equal(new Date(result.shows[0].date).getFullYear(), 1999);
+    assert.equal(result.shows[0].schedule.localDate, '1999-12-01');
   });
 
   it('allows header columns in a different order', () => {
@@ -55,6 +51,51 @@ describe('parseBulkShowsCsv', () => {
       attended: false,
       venue: 'The Venue',
     });
+  });
+
+  it('keeps the advertised date and preserves an explicit offset including milliseconds', () => {
+    const result = parseBulkShowsCsv('A,V,2026-12-31T23:30:04.123-08:00\nB,V,2026-03-08T02:30');
+    assert.deepEqual(result.errors, []);
+    assert.deepEqual(
+      result.shows.map(({ schedule }) => schedule),
+      [
+        {
+          localDate: '2026-12-31',
+          localTime: '23:30:04.123',
+          startsAt: Date.UTC(2027, 0, 1, 7, 30, 4, 123),
+        },
+        { localDate: '2026-03-08', localTime: '02:30' },
+      ]
+    );
+  });
+
+  // Its date and time were kept as the venue's: 8 PM in New York on New Year's Day became 1 AM on
+  // the 2nd
+  it("turns away a time in UTC, which doesn't say what the venue's clocks read", () => {
+    const result = parseBulkShowsCsv(
+      'A,V,2026-01-02T01:00:00Z\nB,V,2026-01-02T01:00+00:00\nC,V,2026-01-02T01:00-00:00\nD,V,2026-01-01T20:00-05:00'
+    );
+
+    const message =
+      "Date can't be a time in UTC. Give the venue's time, with its offset if you know it: 2026-01-01T20:00-05:00.";
+    assert.deepEqual(result.errors, [
+      { line: 1, message },
+      { line: 2, message },
+      { line: 3, message },
+    ]);
+    assert.deepEqual(
+      result.shows.map(({ artists, schedule }) => ({ artists, schedule })),
+      [
+        {
+          artists: ['D'],
+          schedule: {
+            localDate: '2026-01-01',
+            localTime: '20:00',
+            startsAt: Date.UTC(2026, 0, 2, 1),
+          },
+        },
+      ]
+    );
   });
 
   it('reports each invalid field using the CSV line number', () => {

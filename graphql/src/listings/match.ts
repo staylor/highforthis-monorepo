@@ -1,18 +1,11 @@
-import { SITE_TIME_ZONE } from '#/time';
-
-import { dayKey } from './time';
 import type { Listing } from './types';
 
 interface ExistingShow {
-  date: Date;
+  localDate: string;
   source: string | null;
   sourceId: string | null;
   artists: { artist: { name: string } | null }[];
 }
-
-// A show's time is stored as the venue's clock reads it, read as New York's, so its day there is
-// the day on New York's clocks
-const dayOf = (show: ExistingShow) => dayKey(new Date(show.date), SITE_TIME_ZONE);
 
 // Compares artist names without regard to case, accents or punctuation: "Dinosaur Jr." = "dinosaur jr"
 export function normalizeName(name: string) {
@@ -32,7 +25,7 @@ export function matchListing<T extends ExistingShow>(listing: Listing, shows: T[
     (show) => show.source === listing.source && show.sourceId === listing.sourceId
   );
   if (added) {
-    const dateChanged = listing.localDate !== null && dayOf(added) !== listing.localDate;
+    const dateChanged = listing.localDate !== null && added.localDate !== listing.localDate;
     return { show: added, dateChanged };
   }
   if (!listing.localDate) {
@@ -43,7 +36,7 @@ export function matchListing<T extends ExistingShow>(listing: Listing, shows: T[
   const sameDay = shows.find(
     (show) =>
       show.source !== listing.source &&
-      dayOf(show) === listing.localDate &&
+      show.localDate === listing.localDate &&
       show.artists.some(({ artist }) => artist !== null && names.has(normalizeName(artist.name)))
   );
   return { show: sameDay ?? null, dateChanged: false };

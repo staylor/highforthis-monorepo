@@ -26,6 +26,7 @@ nonisolated public struct ShowList_show: HighForThisAPI.SelectionSet, Fragment {
   ] }
 
   public var id: String { __data["id"] }
+  /// Venue wall time encoded in New York for existing clients.
   public var date: Double { __data["date"] }
   public var title: String? { __data["title"] }
   public var artists: [Artist] { __data["artists"] }

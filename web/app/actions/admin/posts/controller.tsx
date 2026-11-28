@@ -1,6 +1,8 @@
 import { css } from 'remix/component';
 import { createController } from 'remix/router';
 
+import { clockAt } from '@highforthis/shared/time';
+
 import { mediaField } from '#/actions/admin/media/field.tsx';
 import {
   formActions,
@@ -20,12 +22,11 @@ import { AdminForm, FormField, type Field } from '#/ui/admin/form.tsx';
 import { ListTable, Search, TitleCell } from '#/ui/admin/list-table.tsx';
 import { Message } from '#/ui/admin/message.tsx';
 import { HeaderAdd, Heading } from '#/ui/admin/page.tsx';
-import { DateTimeInput } from '#/ui/admin/public/date-time-input.tsx';
 import { PostEditor } from '#/ui/admin/public/editor/post-editor.tsx';
 import { HeadingField } from '#/ui/admin/public/heading-field.tsx';
-import { button } from '#/ui/admin/public/styles.ts';
+import { button, input } from '#/ui/admin/public/styles.ts';
 import { TagsInput } from '#/ui/admin/public/tags-input.tsx';
-import { merge } from '#/ui/public/styles.ts';
+import { merge, sm, text } from '#/ui/public/styles.ts';
 
 import { createPost, deletePosts, loadPost, loadPosts, updatePost } from './data.ts';
 
@@ -75,14 +76,37 @@ function bodyFields(t: TFunction, post?: Post, values?: Values): Field[] {
 }
 
 function info(t: TFunction, post?: Post, values?: Values) {
-  const date = values?.date ? Number(values.date) : (post?.date ?? null);
+  const submitted = values?.date ? Number(values.date) : (post?.date ?? null);
+  const date =
+    typeof submitted === 'number' && Number.isFinite(new Date(submitted).getTime())
+      ? submitted
+      : null;
   const fields: Field[] = [
     {
       label: t('posts.publishDate'),
       prop: 'date',
       type: 'custom',
       render: () => (
-        <DateTimeInput name="date" value={date} id="field-date" hint={t('admin.newYorkTime')} />
+        <>
+          <input type="hidden" name="date" value={typeof date !== 'number' ? '' : String(date)} />
+          <input
+            type="datetime-local"
+            id="field-date"
+            name="dateLocal"
+            value={
+              values?.dateLocal ??
+              (typeof date !== 'number' ? '' : clockAt(date).toString({ smallestUnit: 'minute' }))
+            }
+            aria-describedby="date-hint"
+            mix={css(merge(input, { width: '100%', [sm]: { width: 'auto' } }))}
+          />
+          <span
+            id="date-hint"
+            mix={css({ marginLeft: '0.5rem', ...text.sm, color: 'var(--neutral-600)' })}
+          >
+            {t('admin.newYorkTime')}
+          </span>
+        </>
       ),
     },
     {
@@ -215,7 +239,10 @@ export const postsList = createController(posts.list, {
           },
         },
         { label: t('posts.slug'), render: (post: PostRow) => post.slug },
-        { label: t('posts.date'), render: (post: PostRow) => post.date && dateTime(post.date) },
+        {
+          label: t('posts.date'),
+          render: (post: PostRow) => typeof post.date === 'number' && dateTime(post.date),
+        },
       ];
 
       return renderAdminPage(

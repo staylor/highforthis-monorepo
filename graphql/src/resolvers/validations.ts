@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { epochMillis, isoInstant } from '#/time';
+
 // --- Artist ---
 
 const appleMusicArtworkInput = z.object({
@@ -79,7 +81,7 @@ const editorStateInput = z
 
 export const createPostSchema = z.object({
   artists: z.array(z.string()).nullish(),
-  date: z.number().nullish(),
+  date: epochMillis.nullish(),
   editorState: editorStateInput,
   featuredMedia: z.array(z.string()).nullish(),
   status: z.enum(['DRAFT', 'PUBLISH']).optional(),
@@ -89,7 +91,7 @@ export const createPostSchema = z.object({
 
 export const updatePostSchema = z.object({
   artists: z.array(z.string()).nullish(),
-  date: z.number().nullish(),
+  date: epochMillis.nullish(),
   editorState: editorStateInput,
   featuredMedia: z.array(z.string()).nullish(),
   status: z.enum(['DRAFT', 'PUBLISH']).optional(),
@@ -105,10 +107,18 @@ const SHOW_NEEDS_ARTIST = 'A show needs an artist';
 // listings have
 const lineup = z.array(z.string(), SHOW_NEEDS_ARTIST).min(1, SHOW_NEEDS_ARTIST);
 
+const schedule = z.object({
+  localDate: z.string(),
+  localTime: z.string().nullish(),
+  timeZone: z.string().nullish(),
+  startsAt: epochMillis.nullish(),
+});
+
 export const createShowSchema = z.object({
   artists: lineup,
   attended: z.boolean().optional(),
-  date: z.number(),
+  date: epochMillis.nullish(),
+  schedule: schedule.nullish(),
   notes: z.string().nullish(),
   title: z.string().nullish(),
   url: z.string().nullish(),
@@ -120,7 +130,8 @@ export const bulkCreateShowsSchema = z
     z.object({
       artists: z.array(z.string().trim().min(1)).min(1),
       attended: z.boolean().nullish(),
-      date: z.number(),
+      date: epochMillis.nullish(),
+      schedule: schedule.nullish(),
       venue: z.string().trim().min(1),
     })
   )
@@ -130,7 +141,8 @@ export const updateShowSchema = z.object({
   // Left out, the lineup stays as it is
   artists: lineup.optional(),
   attended: z.boolean().optional(),
-  date: z.number().optional(),
+  date: epochMillis.nullish(),
+  schedule: schedule.nullish(),
   notes: z.string().nullish(),
   title: z.string().nullish(),
   url: z.string().nullish(),
@@ -219,8 +231,8 @@ export const createVideoSchema = z.object({
   dataPlaylistId: z.string(),
   dataType: z.string().optional(),
   position: z.number().int().optional(),
-  publishedAt: z.number(),
-  publishedISO: z.string(),
+  publishedAt: epochMillis,
+  publishedISO: isoInstant.nullish(),
   slug: z.string(),
   title: z.string().min(1),
   year: z.number().int(),
@@ -231,8 +243,8 @@ export const updateVideoSchema = z.object({
   dataPlaylistId: z.string().optional(),
   dataType: z.string().optional(),
   position: z.number().int().optional(),
-  publishedAt: z.number().optional(),
-  publishedISO: z.string().optional(),
+  publishedAt: epochMillis.optional(),
+  publishedISO: isoInstant.optional(),
   slug: z.string().optional(),
   title: z.string().optional(),
   year: z.number().int().optional(),

@@ -202,7 +202,7 @@ async function editPage(context: AdminEditContext, failure?: SaveFailure) {
   const label = t('venues.edit');
   const venueShows = (shows?.edges ?? []).map(({ node }) => ({
     id: node.id,
-    date: node.date,
+    schedule: node.schedule,
     name: node.title || node.artists.map((artist) => artist.name).join(' / '),
   }));
   return renderAdminPage(

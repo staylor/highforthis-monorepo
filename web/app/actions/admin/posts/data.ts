@@ -1,5 +1,13 @@
 import { gql } from 'graphql-tag';
 
+import {
+  clockInstant,
+  clockAt,
+  SITE_TIME_ZONE,
+  plainDate,
+  plainTime,
+} from '@highforthis/shared/time';
+
 import { featuredMediaFragment } from '#/actions/admin/media/data.ts';
 import {
   deleteSelected,
@@ -100,11 +108,35 @@ export function loadPost({ gql: client, id }: { gql: GraphQLClient; id: string }
   return client.query<PostEditQuery>(postQuery, { id });
 }
 
+// An untouched minute retains any saved seconds and the exact occurrence of a repeated hour.
+function publicationDate(input: Record<string, any>) {
+  const value = input.dateLocal;
+  delete input.dateLocal;
+  if (!value) return;
+  try {
+    const parts = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})$/.exec(value);
+    if (!parts) throw new RangeError();
+    plainDate(parts[1]);
+    plainTime(parts[2]);
+    if (
+      typeof input.date === 'number' &&
+      clockAt(input.date).toString({ smallestUnit: 'minute' }) === value
+    )
+      return;
+    const timestamp = clockInstant(value, SITE_TIME_ZONE);
+    if (clockAt(timestamp).toString({ smallestUnit: 'minute' }) !== value) throw new RangeError();
+    input.date = timestamp;
+  } catch {
+    return 'Enter a valid publication time in New York.';
+  }
+}
+
 export function createPost(args: FormArgs) {
   return submitForm({
     ...args,
     mutation: createPostMutation,
     createMutation: 'createPost',
+    prepare: publicationDate,
     textFields,
   });
 }
@@ -116,6 +148,7 @@ export function updatePost({ id, ...args }: FormArgs & { id: string }) {
     // A post whose tags were all removed submits none, and tags left out are kept, so this
     // default clears them
     variables: { id, input: { artists: [] } },
+    prepare: publicationDate,
     textFields,
   });
 }

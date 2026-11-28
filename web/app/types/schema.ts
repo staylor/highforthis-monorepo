@@ -122,7 +122,8 @@ export type AudioUpload = MediaUpload & {
 export type BulkCreateShowInput = {
   artists: Array<Scalars['String']['input']>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
-  date: Scalars['Float']['input'];
+  date?: InputMaybe<Scalars['Float']['input']>;
+  schedule?: InputMaybe<ShowScheduleInput>;
   venue: Scalars['String']['input'];
 };
 
@@ -173,8 +174,9 @@ export type CreatePostInput = {
 export type CreateShowInput = {
   artists: Array<Scalars['String']['input']>;
   attended?: InputMaybe<Scalars['Boolean']['input']>;
-  date: Scalars['Float']['input'];
+  date?: InputMaybe<Scalars['Float']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
+  schedule?: InputMaybe<ShowScheduleInput>;
   title?: InputMaybe<Scalars['String']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
   venue: Scalars['String']['input'];
@@ -963,9 +965,11 @@ export type Show = {
   __typename?: 'Show';
   artists: Array<Artist>;
   attended?: Maybe<Scalars['Boolean']['output']>;
+  /** Venue wall time encoded in New York for existing clients. */
   date: Scalars['Float']['output'];
   id: Scalars['String']['output'];
   notes?: Maybe<Scalars['String']['output']>;
+  schedule: ShowSchedule;
   title?: Maybe<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
   venue: Venue;
@@ -999,6 +1003,25 @@ export const ShowOrder = {
 } as const;
 
 export type ShowOrder = typeof ShowOrder[keyof typeof ShowOrder];
+export type ShowSchedule = {
+  __typename?: 'ShowSchedule';
+  /** Advertised calendar day at the venue (YYYY-MM-DD). */
+  localDate: Scalars['String']['output'];
+  /** Venue clock time, through milliseconds when supplied. Null until announced. */
+  localTime?: Maybe<Scalars['String']['output']>;
+  /** Confirmed start in Unix milliseconds, when known. */
+  startsAt?: Maybe<Scalars['Float']['output']>;
+  /** IANA zone identifier when known. */
+  timeZone?: Maybe<Scalars['String']['output']>;
+};
+
+export type ShowScheduleInput = {
+  localDate: Scalars['String']['input'];
+  localTime?: InputMaybe<Scalars['String']['input']>;
+  startsAt?: InputMaybe<Scalars['Float']['input']>;
+  timeZone?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type ShowStat = {
   __typename?: 'ShowStat';
   count: Scalars['Int']['output'];
@@ -1095,6 +1118,7 @@ export type UpdateShowInput = {
   attended?: InputMaybe<Scalars['Boolean']['input']>;
   date?: InputMaybe<Scalars['Float']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
+  schedule?: InputMaybe<ShowScheduleInput>;
   title?: InputMaybe<Scalars['String']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
   venue?: InputMaybe<Scalars['String']['input']>;

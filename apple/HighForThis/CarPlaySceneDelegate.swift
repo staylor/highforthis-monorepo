@@ -132,7 +132,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     private func row(for show: ShowList_show, dated: Bool, reusing previousRows: [ShowRowKey: CPListItem]) -> CPListItem {
         let key = ShowRowKey(id: show.id, dated: dated)
         let venue = show.venue.name
-        let detail = dated ? String(localized: .dateAndVenue(show.startDate.formatted(.showDay), venue)) : venue
+        let detail = dated ? String(localized: .dateAndVenue(show.displayDate.formatted(.showDay), venue)) : venue
         let item: CPListItem
         if let previous = previousRows[key] {
             item = previous

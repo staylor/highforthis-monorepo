@@ -3,8 +3,7 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '../support/test.ts';
 import { addedId, cell, deleteRow, field, hydrated } from '../support/ui.ts';
 
-// The artists picker and the date are client entries, which work once the page's scripts have
-// loaded.
+// The artists picker hydrates before accepting selections.
 async function openAddForm(page: Page) {
   await page.goto('/admin/show/add');
   await hydrated(page);
@@ -28,6 +27,9 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
 
   await openAddForm(page);
   await field(page, 'Title').fill(title);
+  await field(page, 'Date').fill('2026-03-08');
+  await field(page, 'Venue time (if announced)').fill('02:30');
+  await field(page, 'Venue time zone (if known)').fill('America/Phoenix');
   // Any one artist and venue will do
   await removeArtists(page);
   await field(page, 'Artists').selectOption({ index: 1 });
@@ -38,7 +40,15 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
   await expect(page.getByRole('heading', { name: 'Edit Show' })).toBeVisible();
   await expect(page.getByText('Show updated.')).toBeVisible();
   const id = await addedId(page, 'show');
-  expect((await graphql.show(id))?.title).toBe(title);
+  expect(await graphql.show(id)).toMatchObject({
+    title,
+    schedule: {
+      localDate: '2026-03-08',
+      localTime: '02:30',
+      timeZone: 'America/Phoenix',
+      startsAt: Date.UTC(2026, 2, 8, 9, 30),
+    },
+  });
 
   await field(page, 'Title').fill(editedTitle);
   await field(page, 'Notes').fill('Added by the end-to-end tests');
@@ -65,6 +75,43 @@ test('adds a show, edits it, marks it attended from the list and deletes it', as
   await expect(page.getByText('Deleted 1 show.')).toBeVisible();
   await expect(row).toHaveCount(0);
   expect(await graphql.show(id)).toBeNull();
+});
+
+test('keeps the later occurrence of a repeated venue time through an ordinary edit', async ({
+  page,
+  prefix,
+  graphql,
+}) => {
+  const venue = await graphql.createVenue(`${prefix} Venue`);
+  const other = await graphql.createVenue(`${prefix} Other Venue`);
+  const artist = await graphql.firstArtist();
+  const { id } = await graphql.createShow({
+    title: `${prefix} Show`,
+    artists: [artist.id],
+    venue: venue.id,
+  });
+  const schedule = {
+    localDate: '2026-11-01',
+    localTime: '01:30',
+    timeZone: 'America/New_York',
+    startsAt: Date.UTC(2026, 10, 1, 6, 30),
+  };
+  await graphql.query(
+    'mutation($id: String!, $input: UpdateShowInput!) { updateShow(id: $id, input: $input) { id } }',
+    { id, input: { schedule } }
+  );
+  await page.goto(`/admin/show/${id}`);
+  await field(page, 'Notes').fill('Updated the notes');
+  await page.getByRole('button', { name: 'Update Show' }).click();
+  await expect(page.getByText('Show updated.')).toBeVisible();
+  expect((await graphql.show(id))?.schedule).toEqual(schedule);
+
+  // A move to another venue, with the schedule as it was, keeps it too
+  await field(page, 'Venue').selectOption({ label: other.name });
+  await page.getByRole('button', { name: 'Update Show' }).click();
+  // The message is already showing from the first save, so wait for the save itself
+  await expect.poll(async () => (await graphql.show(id))?.venue.name).toBe(other.name);
+  expect((await graphql.show(id))?.schedule).toEqual(schedule);
 });
 
 test("lists an artist once, and says so when a show can't be saved", async ({ page, prefix }) => {

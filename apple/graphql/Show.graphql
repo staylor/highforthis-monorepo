@@ -18,6 +18,10 @@ query Show($id: String!) {
         }
       }
     }
+    schedule {
+      localDate
+      localTime
+    }
     venue {
       id
       name

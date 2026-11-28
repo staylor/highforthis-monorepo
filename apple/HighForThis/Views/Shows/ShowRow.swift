@@ -46,11 +46,11 @@ struct ShowListRow: View {
                 if words.hasPicture {
                     picture
                 }
-                RowLabel(eyebrow: Text(show.startDate, format: .showDay), title: words.title, detail: words.detail)
+                RowLabel(eyebrow: Text(show.displayDate, format: .showDay), title: words.title, detail: words.detail)
             }
         } else {
             HStack(spacing: .readable(12)) {
-                DateBadge(date: show.startDate)
+                DateBadge(date: show.displayDate)
                 if words.hasPicture {
                     picture
                 }

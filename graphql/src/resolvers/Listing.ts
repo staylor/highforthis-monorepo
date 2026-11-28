@@ -1,23 +1,28 @@
 import { and, gte, inList, or, type Database } from 'remix/data-table';
 import type { Resolvers } from 'types/graphql';
 
+import { calendarDate } from '@highforthis/shared/time';
+
 import db from '#/database/db';
 import { artists, newId, showArtists, showLineup, shows, venues } from '#/database/tables';
 import { getListings, matchListing, normalizeName } from '#/listings';
 import { getUniqueSlug, slugsIn } from '#/models/utils';
+import { legacyShowDate } from '#/show-schedule';
 
 import { fillAppleMusicLater } from './utils/appleMusicData';
 import { badInput, parseInput } from './utils/helpers';
 import { importListingsSchema } from './validations';
 
 // Listings start today; the margin covers shows in other time zones
-const RECENT_MS = 2 * 24 * 60 * 60 * 1000;
 
 function matchingShows(database: Database, venueId: string, sourceIds: string[]) {
   return database.findMany(shows, {
     where: and(
       { venueId },
-      or(gte('date', new Date(Date.now() - RECENT_MS)), inList('sourceId', sourceIds))
+      or(
+        gte('localDate', calendarDate(Date.now()).subtract({ days: 2 }).toString()),
+        inList('sourceId', sourceIds)
+      )
     ),
     with: { artists: showLineup },
   });
@@ -90,7 +95,7 @@ const resolvers = {
 
           for (const { sourceId, artists: names } of selections.values()) {
             const listing = byId.get(sourceId);
-            if (!listing?.startsAt || listing.cancelled) {
+            if (!listing?.localDate || listing.cancelled) {
               throw badInput(`Listing ${sourceId} is gone, cancelled, or doesn't have a date yet.`);
             }
             if (matchListing(listing, candidates).show) {
@@ -119,7 +124,11 @@ const resolvers = {
             await tx.create(shows, {
               id: showId,
               attended: false,
-              date: listing.startsAt,
+              date: legacyShowDate(listing.localDate, listing.localTime),
+              localDate: listing.localDate,
+              localTime: listing.localTime,
+              timeZone: listing.timeZone,
+              startsAt: listing.startsAt,
               url: listing.url,
               venueId,
               source: listing.source,

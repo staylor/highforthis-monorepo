@@ -1,6 +1,7 @@
+import { calendarDate, SITE_TIME_ZONE } from '@highforthis/shared/time';
+
 import { aegListings } from './aeg';
 import { isTicketmasterUrl, ticketmasterListings } from './ticketmaster';
-import { dayKey } from './time';
 import type { Listing, ListingSource } from './types';
 
 export { matchListing, normalizeName } from './match';
@@ -22,12 +23,15 @@ export async function getListings(listingsUrl: string) {
   const source: ListingSource = isTicketmasterUrl(url) ? 'ticketmaster' : 'aeg';
   const listings =
     source === 'ticketmaster' ? await ticketmasterListings(url) : await aegListings(url);
-  const now = new Date();
+  const now = Date.now();
 
   return {
     source,
     listings: listings
-      .filter(({ localDate, timeZone }) => !localDate || localDate >= dayKey(now, timeZone))
+      .filter(
+        ({ localDate, timeZone }) =>
+          !localDate || localDate >= calendarDate(now, timeZone ?? SITE_TIME_ZONE).toString()
+      )
       .sort(byDate),
   };
 }

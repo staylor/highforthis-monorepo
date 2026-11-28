@@ -278,6 +278,8 @@
     "updated": "Settings Updated."
   },
   "shows": {
+    "venueTime": "Venue time (if announced)",
+    "timeZone": "Venue time zone (if known)",
     "add": "Add Show",
     "all": "All Shows",
     "artists": "Artists",
@@ -287,7 +289,7 @@
     "bulk": {
       "artistsHelp": "Separate multiple artists with semicolons. Artist and venue names are matched without regard to capitalization and are created when no match exists.",
       "csv": "Shows CSV",
-      "dateHelp": "Dates can use shorthand such as 1/1/26 (January 1, 2026) or the YYYY-MM-DD format. Date-only shows are saved at 8:00 PM.",
+      "dateHelp": "Dates can use shorthand such as 1/1/26 (January 1, 2026) or the YYYY-MM-DD format. Leave the time unannounced with a date alone. To include the venue's time, use 2026-01-01T20:00, with the venue's offset if you know it: 2026-01-01T20:00-05:00. A time in UTC, ending in Z or +00:00, isn't accepted.",
       "description": "Paste one show per line. Include a header row, or use the column order shown below. The attended value is optional and defaults to false.",
       "errors": "Fix these rows and try again:",
       "format": "artists,venue,date,attended",

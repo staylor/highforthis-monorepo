@@ -27,6 +27,12 @@ interface Show {
   id: string;
   title: string | null;
   attended: boolean;
+  schedule: {
+    localDate: string;
+    localTime: string | null;
+    timeZone: string | null;
+    startsAt: number | null;
+  };
   venue: { name: string };
 }
 
@@ -285,7 +291,7 @@ export class GraphQL {
 
   async show(id: string) {
     const { show } = await this.query<{ show: Show | null }>(
-      `query ($id: String!) { show(id: $id) { id title attended venue { name } } }`,
+      `query ($id: String!) { show(id: $id) { id title attended schedule { localDate localTime timeZone startsAt } venue { name } } }`,
       { id }
     );
     return show;

@@ -66,7 +66,7 @@ const artist = {
 const shows = Array.from({ length: 12 }, (_, i) => ({
   node: {
     id: `s${i}`,
-    date: Date.UTC(2024, 4, 10 + i, 12),
+    schedule: { localDate: `2024-05-${10 + i}` },
     attended: true,
     venue: { id: 'v1', name: 'Ryman' },
   },

@@ -2,7 +2,7 @@ import { css, type Handle, type RemixNode } from 'remix/component';
 
 import { routes } from '#/routes.ts';
 import { text } from '#/ui/public/styles.ts';
-import { formatDate } from '#/ui/shows/utils.ts';
+import { formatSchedule } from '#/ui/shows/utils.ts';
 
 import { getAdmin } from './context.tsx';
 import { documentLoad } from './links.ts';
@@ -29,7 +29,7 @@ export function PageLink(handle: Handle<{ href: string; children?: RemixNode }>)
 
 interface EntityShow {
   id: string;
-  date?: number | null;
+  schedule: { localDate: string };
   /** Who played, or where, whichever the page isn't about. */
   name: string;
 }
@@ -46,7 +46,7 @@ export function EntityShows(handle: Handle<{ shows: EntityShow[] }>) {
     const { t } = getAdmin(handle);
     const { shows } = handle.props;
     const item = (show: EntityShow) => {
-      const date = formatDate(show.date ?? undefined);
+      const date = formatSchedule(show.schedule);
       const href = routes.admin.shows.edit.index.href({ id: show.id });
       return (
         <li mix={css({ marginBlock: '0.75rem' })}>
