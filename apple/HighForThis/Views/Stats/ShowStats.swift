@@ -40,12 +40,6 @@ struct ShowStats: View {
     }
 }
 
-extension EnvironmentValues {
-    /// Whether the stats are a tab of their own, as `ContentView` decides, so History links to them only where they
-    /// aren't.
-    @Entry var statsHaveATab = true
-}
-
 /// How many shows, artists and venues there have been, and since when: four across where they fit, and otherwise two.
 private struct StatsTotals: View {
     let totals: ShowStatsQuery.Data.ShowTotals
@@ -334,15 +328,6 @@ extension StatsTier {
         case 2: .body
         case 3: .title3
         default: .title2
-        }
-    }
-}
-
-extension StatsEntity {
-    fileprivate var route: Route {
-        switch kind {
-        case .artist: .artist(slug: slug, name: name)
-        case .venue: .venue(slug: slug, name: name)
         }
     }
 }

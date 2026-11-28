@@ -12,6 +12,14 @@
 		D2CBDD1A2B894B5E00F4437D /* HighForThisAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D2CBDD192B894B5E00F4437D /* HighForThisAPI */; };
 		A61C0E5D3B2F48D19E7C4B10 /* HighForThisAPITestMocks in Frameworks */ = {isa = PBXBuildFile; productRef = A61C0E5D3B2F48D19E7C4B11 /* HighForThisAPITestMocks */; };
 		A61C0E5D3B2F48D19E7C4B12 /* ApolloTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = A61C0E5D3B2F48D19E7C4B13 /* ApolloTestSupport */; };
+		B2C1F50B90CF59E593A6761B /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 0F24E5C427F5521A90ADC531 /* Apollo */; };
+		B97333A1962A5C1D817C06D2 /* ApolloAPI in Frameworks */ = {isa = PBXBuildFile; productRef = C2E16EF9B9F95399A57D5B9A /* ApolloAPI */; };
+		EB585BCE7CB55B6AB5A37683 /* HighForThisAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 02B6B3BAEAE65DA0B5D79686 /* HighForThisAPI */; };
+		34759868A6855E3D83632BBD /* Watch product in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A22F6129790C595597B09DF1 /* HighForThisWatch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2E1D39A8E3755D78BFFB7C1D /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 2A23E4D52E785C4BA333570D /* Apollo */; };
+		2C8DDB853E5D54209306E74B /* ApolloAPI in Frameworks */ = {isa = PBXBuildFile; productRef = FE2C433D89C158B49D04D166 /* ApolloAPI */; };
+		5D5B35D866E35A1AB68C24B8 /* HighForThisAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 8FF4E8CAF22B593A930B1E76 /* HighForThisAPI */; };
+		E90E5470434D502FA3F69F5F /* Widget in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2DF78D70D94350F399398F79 /* HighForThisWatchWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,12 +37,61 @@
 			remoteGlobalIDString = D2D50F792B6AB472007F335C;
 			remoteInfo = HighForThis;
 		};
+		D59D5D97F4BB5820859B51D3 /* Embed watch app proxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D2D50F722B6AB472007F335C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EDB311EE4F16512EAE754AFC;
+			remoteInfo = HighForThisWatch;
+		};
+		08060744BE3D5331A2A1BAC0 /* Test watch app proxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D2D50F722B6AB472007F335C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EDB311EE4F16512EAE754AFC;
+			remoteInfo = HighForThisWatch;
+		};
+		1ADF7ABA972C59038F3A640A /* Widget proxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D2D50F722B6AB472007F335C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F368009D62658809835B78A;
+			remoteInfo = HighForThisWatchWidgets;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		52D6AE52E0355BD898A4F2EC /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				34759868A6855E3D83632BBD /* Watch product in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB82ECC1060D51F492C753A2 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E90E5470434D502FA3F69F5F /* Widget in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		053A2D8E17BCDFA4467E6490 /* HighForThisTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HighForThisTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		31D9FB7B6FB574F765067DAC /* HighForThisUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HighForThisUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D25099C72BB3E093003904A8 /* HighForThis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HighForThis.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A22F6129790C595597B09DF1 /* HighForThisWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HighForThisWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9859E9A21DC5C7A84E186DE /* HighForThisWatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HighForThisWatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DF78D70D94350F399398F79 /* HighForThisWatchWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HighForThisWatchWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -51,13 +108,62 @@
 			};
 			target = D2D50F792B6AB472007F335C /* HighForThis */;
 		};
+		3A8197C7E3765D199FC34A4E /* Watch Info */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = EDB311EE4F16512EAE754AFC /* HighForThisWatch */;
+		};
+		A9949BD16A655316AF341441 /* Watch shared files */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ContentView.swift,
+				HighForThis.entitlements,
+				Info.plist,
+				Views/Podcasts/PlaybackControls.swift,
+				Views/Stats/ShowStats.swift,
+			);
+			target = EDB311EE4F16512EAE754AFC /* HighForThisWatch */;
+		};
+		65E1064ADB9F57BB9F4E3D9E /* Widget Info */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7F368009D62658809835B78A /* HighForThisWatchWidgets */;
+		};
+		92A293B666245DAC8C217DA6 /* Widget shared files */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				API/AppConfiguration.swift,
+				API/HighForThisClient.swift,
+				Localizable.xcstrings,
+				Models/DateFormats.swift,
+				Models/ShowSummary.swift,
+				PreviewSupport/UITestFixtures.swift,
+				PrivacyInfo.xcprivacy,
+				Utilities/Logging.swift,
+				"Utilities/URL+Web.swift",
+			);
+			target = 7F368009D62658809835B78A /* HighForThisWatchWidgets */;
+		};
+		927BDA7756E95F9599F9F920 /* Widget show links */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				WatchShowLink.swift,
+			);
+			target = 7F368009D62658809835B78A /* HighForThisWatchWidgets */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D2D50F7C2B6AB472007F335C /* HighForThis */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				92A293B666245DAC8C217DA6 /* Widget shared files */,
 				7D3D94F5A0C6DB3E736880B1 /* Exceptions for "HighForThis" folder in "HighForThis" target */,
+				A9949BD16A655316AF341441 /* Watch shared files */,
 			);
 			path = HighForThis;
 			sourceTree = "<group>";
@@ -75,6 +181,23 @@
 		5E0B6B1E2F4A9C7D8E1F3A20 /* graphql */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = graphql;
+			sourceTree = "<group>";
+		};
+		0673F41AD17F53C1865309D5 /* HighForThisWatch */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				927BDA7756E95F9599F9F920 /* Widget show links */,
+				3A8197C7E3765D199FC34A4E /* Watch Info */,
+			);
+			path = HighForThisWatch;
+			sourceTree = "<group>";
+		};
+		63B92689F99A5A339796AB85 /* HighForThisWatchWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				65E1064ADB9F57BB9F4E3D9E /* Widget Info */,
+			);
+			path = HighForThisWatchWidgets;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -106,6 +229,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		57F9648F8ACC5D2E95DB5492 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2C1F50B90CF59E593A6761B /* Apollo in Frameworks */,
+				B97333A1962A5C1D817C06D2 /* ApolloAPI in Frameworks */,
+				EB585BCE7CB55B6AB5A37683 /* HighForThisAPI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51FD5AEF17815938BD1752FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80EC7A69A1115AD7924C9126 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E1D39A8E3755D78BFFB7C1D /* Apollo in Frameworks */,
+				2C8DDB853E5D54209306E74B /* ApolloAPI in Frameworks */,
+				5D5B35D866E35A1AB68C24B8 /* HighForThisAPI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -113,6 +263,8 @@
 			isa = PBXGroup;
 			children = (
 				D2D50F7C2B6AB472007F335C /* HighForThis */,
+				0673F41AD17F53C1865309D5 /* HighForThisWatch */,
+				63B92689F99A5A339796AB85 /* HighForThisWatchWidgets */,
 				BF688470FAB3CEBABC65FB72 /* HighForThisTests */,
 				19B2F50A8B173F7F9A63ACB9 /* HighForThisUITests */,
 				5E0B6B1E2F4A9C7D8E1F3A20 /* graphql */,
@@ -124,6 +276,9 @@
 			isa = PBXGroup;
 			children = (
 				D25099C72BB3E093003904A8 /* HighForThis.app */,
+				A22F6129790C595597B09DF1 /* HighForThisWatch.app */,
+				2DF78D70D94350F399398F79 /* HighForThisWatchWidgets.appex */,
+				B9859E9A21DC5C7A84E186DE /* HighForThisWatchUITests.xctest */,
 				053A2D8E17BCDFA4467E6490 /* HighForThisTests.xctest */,
 				31D9FB7B6FB574F765067DAC /* HighForThisUITests.xctest */,
 			);
@@ -140,10 +295,12 @@
 				D2D50F762B6AB472007F335C /* Sources */,
 				D2D50F772B6AB472007F335C /* Frameworks */,
 				D2D50F782B6AB472007F335C /* Resources */,
+				52D6AE52E0355BD898A4F2EC /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D1C5610F059C59129B733AE1 /* Embed watch app */,
 			);
 			fileSystemSynchronizedGroups = (
 				D2D50F7C2B6AB472007F335C /* HighForThis */,
@@ -206,6 +363,82 @@
 			productReference = 31D9FB7B6FB574F765067DAC /* HighForThisUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		EDB311EE4F16512EAE754AFC /* HighForThisWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05A4792F38345418953E30F4 /* HighForThisWatch configs */;
+			buildPhases = (
+				42ED070C38C85EF7BD80F1F8 /* Sources */,
+				57F9648F8ACC5D2E95DB5492 /* Frameworks */,
+				C94FB1C051865880978C71A7 /* Resources */,
+				CB82ECC1060D51F492C753A2 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7D8922EA89EF5423A9765167 /* Watch widgets */,
+			);
+			fileSystemSynchronizedGroups = (
+				D2D50F7C2B6AB472007F335C /* HighForThis */,
+				0673F41AD17F53C1865309D5 /* HighForThisWatch */,
+			);
+			name = HighForThisWatch;
+			packageProductDependencies = (
+				0F24E5C427F5521A90ADC531 /* Apollo */,
+				C2E16EF9B9F95399A57D5B9A /* ApolloAPI */,
+				02B6B3BAEAE65DA0B5D79686 /* HighForThisAPI */,
+			);
+			productName = HighForThisWatch;
+			productReference = A22F6129790C595597B09DF1 /* HighForThisWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+		902A7A19A59756A989B4B7BF /* HighForThisWatchUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A78EFD6AA84A53BB9DF4741F /* HighForThisWatchUITests configs */;
+			buildPhases = (
+				2B46F49CC5725096AB1C62B5 /* Sources */,
+				51FD5AEF17815938BD1752FA /* Frameworks */,
+				D1FE2BD73FB35D91B5589867 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F9D87614EF035E7185E50812 /* Test watch app */,
+			);
+			fileSystemSynchronizedGroups = (
+				19B2F50A8B173F7F9A63ACB9 /* HighForThisUITests */,
+			);
+			name = HighForThisWatchUITests;
+			packageProductDependencies = (
+			);
+			productName = HighForThisWatchUITests;
+			productReference = B9859E9A21DC5C7A84E186DE /* HighForThisWatchUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		7F368009D62658809835B78A /* HighForThisWatchWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6009EA57C7A45B4296948128 /* HighForThisWatchWidgets configs */;
+			buildPhases = (
+				3B3D562039135E9C8FB8B80C /* Sources */,
+				80EC7A69A1115AD7924C9126 /* Frameworks */,
+				C8A1FADA0EC25E10A31E6743 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				63B92689F99A5A339796AB85 /* HighForThisWatchWidgets */,
+			);
+			name = HighForThisWatchWidgets;
+			packageProductDependencies = (
+				2A23E4D52E785C4BA333570D /* Apollo */,
+				FE2C433D89C158B49D04D166 /* ApolloAPI */,
+				8FF4E8CAF22B593A930B1E76 /* HighForThisAPI */,
+			);
+			productName = HighForThisWatchWidgets;
+			productReference = 2DF78D70D94350F399398F79 /* HighForThisWatchWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -216,6 +449,13 @@
 				LastSwiftUpdateCheck = 2720;
 				LastUpgradeCheck = 2720;
 				TargetAttributes = {
+					EDB311EE4F16512EAE754AFC = {
+						CreatedOnToolsVersion = 27.2;
+					};
+					902A7A19A59756A989B4B7BF = {
+						CreatedOnToolsVersion = 27.2;
+						TestTargetID = EDB311EE4F16512EAE754AFC;
+					};
 					D2D50F792B6AB472007F335C = {
 						CreatedOnToolsVersion = 15.2;
 					};
@@ -248,6 +488,9 @@
 			projectRoot = "";
 			targets = (
 				D2D50F792B6AB472007F335C /* HighForThis */,
+				902A7A19A59756A989B4B7BF /* HighForThisWatchUITests */,
+				EDB311EE4F16512EAE754AFC /* HighForThisWatch */,
+				7F368009D62658809835B78A /* HighForThisWatchWidgets */,
 				D2D50F8A2B6AB474007F335C /* HighForThisTests */,
 				D2D50F942B6AB474007F335C /* HighForThisUITests */,
 			);
@@ -270,6 +513,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2A7E1EAEF27466A75571A216 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C94FB1C051865880978C71A7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1FE2BD73FB35D91B5589867 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C8A1FADA0EC25E10A31E6743 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -300,6 +564,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		42ED070C38C85EF7BD80F1F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B46F49CC5725096AB1C62B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B3D562039135E9C8FB8B80C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -313,6 +598,22 @@
 			target = D2D50F792B6AB472007F335C /* HighForThis */;
 			targetProxy = 4142E2E60A2E421962793752 /* PBXContainerItemProxy */;
 		};
+		D1C5610F059C59129B733AE1 /* Embed watch app */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = EDB311EE4F16512EAE754AFC /* HighForThisWatch */;
+			targetProxy = D59D5D97F4BB5820859B51D3 /* Embed watch app proxy */;
+		};
+		F9D87614EF035E7185E50812 /* Test watch app */ = {
+			isa = PBXTargetDependency;
+			target = EDB311EE4F16512EAE754AFC /* HighForThisWatch */;
+			targetProxy = 08060744BE3D5331A2A1BAC0 /* Test watch app proxy */;
+		};
+		7D8922EA89EF5423A9765167 /* Watch widgets */ = {
+			isa = PBXTargetDependency;
+			target = 7F368009D62658809835B78A /* HighForThisWatchWidgets */;
+			targetProxy = 1ADF7ABA972C59038F3A640A /* Widget proxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -320,6 +621,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				UPLOADS_URL = "https://storage.googleapis.com/wonderboymusic";
+				GRAPHQL_ENDPOINT = "https://graphql.highforthis.com/graphql";
+				MARKETING_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -388,6 +693,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				UPLOADS_URL = "https://storage.googleapis.com/wonderboymusic";
+				GRAPHQL_ENDPOINT = "https://graphql.highforthis.com/graphql";
+				MARKETING_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -453,13 +762,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				"CODE_SIGN_ENTITLEMENTS[sdk=iphone*]" = HighForThis/HighForThis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				GRAPHQL_ENDPOINT = "https://graphql.highforthis.com/graphql";
 				INFOPLIST_FILE = HighForThis/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphone*]" = YES;
@@ -468,7 +775,6 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -481,7 +787,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				UPLOADS_URL = "https://storage.googleapis.com/wonderboymusic";
 			};
 			name = Debug;
 		};
@@ -493,13 +798,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				"CODE_SIGN_ENTITLEMENTS[sdk=iphone*]" = HighForThis/HighForThis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				GRAPHQL_ENDPOINT = "https://graphql.highforthis.com/graphql";
 				INFOPLIST_FILE = HighForThis/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphone*]" = YES;
@@ -508,7 +811,6 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -521,7 +823,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				UPLOADS_URL = "https://storage.googleapis.com/wonderboymusic";
 			};
 			name = Release;
 		};
@@ -530,9 +831,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThisTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -554,9 +853,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThisTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -577,9 +874,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThisUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -599,9 +894,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThisUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -614,6 +907,146 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
 				TEST_TARGET_NAME = HighForThis;
+			};
+			name = Release;
+		};
+		F63893BC4EBC52D09E27CADB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HighForThisWatch/Info.plist;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.scottctaylor.HighForThis;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThis.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		F6C9EE828C0554308BC80EF7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HighForThisWatch/Info.plist;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.scottctaylor.HighForThis;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThis.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		32C9BEF505465A219A591519 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThisWatchUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = HighForThisWatch;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		670ED255EE41505CAF8AF9CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThisWatchUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = HighForThisWatch;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		7DB4A36927605029B054EEAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HighForThisWatchWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThis.watchkitapp.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		00935709A3BA56068746650D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HighForThisWatchWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.scottctaylor.HighForThis.watchkitapp.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
@@ -652,6 +1085,33 @@
 			buildConfigurations = (
 				F2DB950712B5EF52F59A8453 /* Debug */,
 				868954FB9694D7FAFD1CE13C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05A4792F38345418953E30F4 /* HighForThisWatch configs */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F63893BC4EBC52D09E27CADB /* Debug */,
+				F6C9EE828C0554308BC80EF7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A78EFD6AA84A53BB9DF4741F /* HighForThisWatchUITests configs */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				32C9BEF505465A219A591519 /* Debug */,
+				670ED255EE41505CAF8AF9CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6009EA57C7A45B4296948128 /* HighForThisWatchWidgets configs */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DB4A36927605029B054EEAB /* Debug */,
+				00935709A3BA56068746650D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -699,6 +1159,34 @@
 		A61C0E5D3B2F48D19E7C4B11 /* HighForThisAPITestMocks */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = HighForThisAPITestMocks;
+		};
+		0F24E5C427F5521A90ADC531 /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2A1168B2B89365900CA5EFD /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+		C2E16EF9B9F95399A57D5B9A /* ApolloAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2A1168B2B89365900CA5EFD /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = ApolloAPI;
+		};
+		02B6B3BAEAE65DA0B5D79686 /* HighForThisAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HighForThisAPI;
+		};
+		2A23E4D52E785C4BA333570D /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2A1168B2B89365900CA5EFD /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+		FE2C433D89C158B49D04D166 /* ApolloAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2A1168B2B89365900CA5EFD /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = ApolloAPI;
+		};
+		8FF4E8CAF22B593A930B1E76 /* HighForThisAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HighForThisAPI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -29,7 +29,7 @@ struct VideoLink: View {
     }
 
     @ViewBuilder private var link: some View {
-        #if os(tvOS)
+        #if os(tvOS) || os(watchOS)
         label
             .accessibilityElement(children: .ignore)
         #else

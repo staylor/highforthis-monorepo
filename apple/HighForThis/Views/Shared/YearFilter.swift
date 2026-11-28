@@ -13,15 +13,13 @@ struct YearFilter: View {
     }
 
     var body: some View {
+        #if os(watchOS)
+        picker
+            .pickerStyle(.navigationLink)
+            .accessibilityIdentifier("year-filter")
+        #else
         Menu {
-            Picker(.filterByYear, selection: $selection) {
-                if includesAllYears {
-                    Text(.allYears).tag(Int?.none)
-                }
-                ForEach(availableYears, id: \.self) { year in
-                    Text(verbatim: String(year)).tag(Int?.some(year))
-                }
-            }
+            picker
         } label: {
             #if os(tvOS)
             LabeledContent {
@@ -41,6 +39,18 @@ struct YearFilter: View {
         .accessibilityLabel(.filterByYear)
         .accessibilityValue(selectionTitle)
         .accessibilityIdentifier("year-filter")
+        #endif
+    }
+
+    private var picker: some View {
+        Picker(.filterByYear, selection: $selection) {
+            if includesAllYears {
+                Text(.allYears).tag(Int?.none)
+            }
+            ForEach(availableYears, id: \.self) { year in
+                Text(verbatim: String(year)).tag(Int?.some(year))
+            }
+        }
     }
 
     private var selectionTitle: String {

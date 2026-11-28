@@ -2,7 +2,7 @@ import SwiftUI
 
 extension View {
     func listRowSeparatorHidden() -> some View {
-        #if os(tvOS)
+        #if os(tvOS) || os(watchOS)
         self
         #else
         listRowSeparator(.hidden)
@@ -10,7 +10,7 @@ extension View {
     }
 
     func selectableText() -> some View {
-        #if os(tvOS)
+        #if os(tvOS) || os(watchOS)
         self
         #else
         textSelection(.enabled)
@@ -105,7 +105,7 @@ struct WebLink<Label: View>: View {
     @ViewBuilder let label: Label
 
     var body: some View {
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(watchOS)
         Link(destination: destination) { label }
         #endif
     }

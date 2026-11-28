@@ -27,7 +27,7 @@ struct ShowList: View {
                         .padding(.vertical, 4)
                         .listRowSeparatorHidden()
                 }
-                #if os(tvOS)
+                #if os(tvOS) || os(watchOS)
                 // A tvOS toolbar button shows neither the selected year nor the filter's accessibility label.
                 if showsYearFilter {
                     yearFilter
@@ -50,7 +50,7 @@ struct ShowList: View {
                 }
             }
         )
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(watchOS)
         .toolbar {
             if showsStatsLink {
                 ToolbarItem {
@@ -67,7 +67,13 @@ struct ShowList: View {
         #endif
     }
 
-    private var title: LocalizedStringResource { kind == .upcoming ? .recommendedShows : .showHistoryTitle }
+    private var title: LocalizedStringResource {
+        #if os(watchOS)
+        kind == .upcoming ? .shows : .showHistory
+        #else
+        kind == .upcoming ? .recommendedShows : .showHistoryTitle
+        #endif
+    }
 
     /// An artist's or a venue's shows have the name for a title, and which shows they are under it.
     @ViewBuilder private func titled(_ list: some View) -> some View {

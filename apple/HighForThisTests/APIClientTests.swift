@@ -70,6 +70,20 @@ struct APIClientTests {
         #expect(shows.years == [2025, 2019])
     }
 
+    @Test func complicationQueryReadsTheNextShowAndAnEmptySchedule() async throws {
+        let query = NextShowQuery()
+        let data = try await UITestFixtures.client().data(for: query)
+        let shows = try #require(data.shows)
+        #expect(shows.edges.count == 1)
+        let show = try #require(shows.edges.first?.node)
+        #expect(show.id == "show-2025-0")
+        #expect(show.venue.name == "Sample Hall")
+        #expect(show.schedule.localDate == "2025-11-05")
+
+        let empty = try await UITestFixtures.client(scenario: "empty").data(for: query)
+        #expect(empty.shows?.edges.isEmpty == true)
+    }
+
     @Test func anActualEmptyConnectionIsASuccess() async {
         let feed = Feeds.shows(client: UITestFixtures.client(scenario: "empty"))
         await feed.load(ShowFilter(kind: .upcoming))

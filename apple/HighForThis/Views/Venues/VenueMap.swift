@@ -8,7 +8,11 @@ struct VenueMap: View {
     var height: CGFloat? = 240
 
     var body: some View {
-        #if os(tvOS)
+        #if os(watchOS)
+        Button(.openInMaps, systemImage: "map", action: openInMaps)
+            .accessibilityValue(name)
+            .accessibilityIdentifier("venue-map")
+        #elseif os(tvOS)
         // There's no Maps app on tvOS to open.
         map
         #else
@@ -20,6 +24,7 @@ struct VenueMap: View {
         #endif
     }
 
+    #if !os(watchOS)
     private var map: some View {
         Map(
             initialPosition: .region(
@@ -35,6 +40,8 @@ struct VenueMap: View {
         .allowsHitTesting(false)
         .accessibilityHidden(true)
     }
+
+    #endif
 
     #if !os(tvOS)
     private func openInMaps() {

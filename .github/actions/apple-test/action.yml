@@ -6,8 +6,11 @@ inputs:
     description: The job's name, for the result bundle's artifact.
     required: true
   platform:
-    description: iOS, tvOS or macOS.
+    description: iOS, tvOS, watchOS or macOS.
     required: true
+  scheme:
+    description: The Xcode scheme to test.
+    default: HighForThis
   build:
     description: A simulator runtime build to install, such as 23F77. Without one, the image's newest runtime is used.
     default: ''
@@ -125,6 +128,7 @@ runs:
       env:
         DESTINATION: ${{ steps.simulator.outputs.destination || 'platform=macOS' }}
         UDID: ${{ steps.simulator.outputs.udid }}
+        SCHEME: ${{ inputs.scheme }}
         ONLY_TESTING: ${{ inputs.only-testing }}
         XCTESTRUN: ${{ steps.products.outputs.xctestrun }}
         BOOT: ${{ github.action_path }}/boot-simulator.sh
@@ -136,7 +140,7 @@ runs:
           if [ -n "$XCTESTRUN" ]; then
             set -- test-without-building -xctestrun "$XCTESTRUN" "$@"
           else
-            set -- test -project HighForThis.xcodeproj -scheme HighForThis "$@" \
+            set -- test -project HighForThis.xcodeproj -scheme "$SCHEME" "$@" \
               COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=
           fi
           xcodebuild "$@" \
