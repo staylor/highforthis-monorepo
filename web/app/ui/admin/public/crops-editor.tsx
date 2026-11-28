@@ -70,6 +70,8 @@ export const CropsEditor = clientEntry(
       <input
         type="number"
         name={`crops[${i}][${prop}]`}
+        min={1}
+        max={100_000_000}
         defaultValue={crop[prop] === null ? '' : String(crop[prop])}
         aria-label={`${handle.props.labels[prop]} ${i + 1}`}
         mix={sizeInput}

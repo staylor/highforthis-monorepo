@@ -133,7 +133,7 @@ function submittedCrops(formData: FormData) {
       rows.set(index, { ...rows.get(index), [match[2]]: value.trim() });
     }
   }
-  const size = (value?: string) => (value ? Number.parseInt(value, 10) || null : null);
+  const size = (value?: string) => (value ? Number(value) : null);
   return [...rows.entries()]
     .sort(([a], [b]) => a - b)
     .map(([, row]) => row)

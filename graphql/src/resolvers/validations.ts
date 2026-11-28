@@ -249,10 +249,12 @@ export const siteSettingsSchema = z.object({
   tagline: z.string().nullish(),
 });
 
+const cropDimension = z.number().int().positive().max(100_000_000).nullish();
+
 const mediaCropSettingInput = z.object({
-  height: z.number().int().nullish(),
+  height: cropDimension,
   name: z.string(),
-  width: z.number().int().nullish(),
+  width: cropDimension,
 });
 
 export const mediaSettingsSchema = z.object({
