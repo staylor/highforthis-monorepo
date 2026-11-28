@@ -26,6 +26,7 @@ import listingResolvers from '../Listing';
 import postResolvers, { type PostSource } from '../Post';
 import showResolvers, { type ShowSource } from '../Show';
 import venueResolvers, { type VenueSource } from '../Venue';
+import { fillAppleMusicLater } from '../utils/appleMusicData';
 
 const { fillAppleMusic, getListings } = vi.hoisted(() => ({
   fillAppleMusic: vi.fn(async () => 0),
@@ -298,6 +299,29 @@ describe('a list', () => {
       read<PostSource>(id, { ...reading, list: (post) => postResolvers.Post.featuredMedia(post) });
     const artistsOf = (id: string) =>
       read<PostSource>(id, { ...reading, list: (post) => postResolvers.Post.artists(post) });
+
+    it('rolls back new artists and skips enrichment when a post save fails', async () => {
+      const { createPost, updatePost } = postResolvers.Mutation;
+      const post = await createPost({}, { input: { title: 'Original' } });
+      await db.exec(`create trigger refuse_post_tag before insert on "PostArtist"
+        when new."artistId" not in ('artist-1','artist-2','artist-3')
+        begin select raise(abort, 'refused tag'); end`);
+      vi.mocked(fillAppleMusicLater).mockClear();
+      try {
+        const input = { title: 'Refused post', artists: ['Unsaved artist'] };
+        await expect(createPost({}, { input })).rejects.toThrow('Database execution failed');
+        await expect(updatePost({}, { id: post!.id, input })).rejects.toThrow(
+          'Database execution failed'
+        );
+        await expect(
+          db.findOne(artists, { where: { name: 'Unsaved artist' } })
+        ).resolves.toBeNull();
+        await expect(db.findOne(posts, { where: { title: 'Refused post' } })).resolves.toBeNull();
+        expect(fillAppleMusicLater).not.toHaveBeenCalled();
+      } finally {
+        await db.exec('drop trigger refuse_post_tag');
+      }
+    });
 
     it('are read in the order they were saved', async () => {
       const post = await postResolvers.Mutation.createPost(

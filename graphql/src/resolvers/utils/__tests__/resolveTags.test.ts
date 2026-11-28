@@ -1,19 +1,20 @@
 import { ilike } from 'remix/data-table';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import database from '#/database/db';
 import { artists as artistsTable } from '#/database/tables';
 
-import resolveTags from '../resolveTags';
+import resolveArtistTags from '../resolveTags';
 
 const db = vi.hoisted(() => ({ count: vi.fn(), create: vi.fn(), findOne: vi.fn() }));
-const fillAppleMusicLater = vi.hoisted(() => vi.fn());
+const resolveTags = (names: string[], newArtists: string[] = []) =>
+  resolveArtistTags(database, names, newArtists);
 
 vi.mock('#/database/db', () => ({ default: db }));
 vi.mock('#/database/tables', async (importOriginal) => ({
   ...(await importOriginal<typeof import('#/database/tables')>()),
   newId: () => `new-${db.create.mock.calls.length + 1}`,
 }));
-vi.mock('../appleMusicData', () => ({ fillAppleMusicLater }));
 
 /** The artists there are, by name */
 function artists(names: Record<string, string>) {
@@ -47,12 +48,12 @@ describe('resolveTags', () => {
     });
   });
 
-  it("looks up Apple Music's data for the artists it added, and only those", async () => {
+  it('collects the newly added artists for enrichment after commit', async () => {
     artists({ phish: 'artist-1' });
 
-    await resolveTags(['Phish', 'Sum 41']);
-
-    expect(fillAppleMusicLater).toHaveBeenCalledExactlyOnceWith(['new-1']);
+    const added: string[] = [];
+    await resolveTags(['Phish', 'Sum 41'], added);
+    expect(added).toEqual(['new-1']);
   });
 
   it('finds an artist however the name is capitalized or spaced', async () => {

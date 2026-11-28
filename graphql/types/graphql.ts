@@ -278,6 +278,8 @@ export type EditorNodeInput = {
 
 export type EditorState = {
   __typename?: 'EditorState';
+  /** Complete Lexical JSON with media previews for the admin editor. */
+  forEditing: Scalars['String']['output'];
   root?: Maybe<ElementNode>;
 };
 
@@ -1731,6 +1733,7 @@ export type EditorStateResolvers<
   ContextType = AppContext,
   ParentType extends ResolversParentTypes['EditorState'] = ResolversParentTypes['EditorState'],
 > = {
+  forEditing?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   root?: Resolver<Maybe<ResolversTypes['ElementNode']>, ParentType, ContextType>;
 };
 

@@ -9,10 +9,6 @@ import {
 } from '#/lib/admin/forms.ts';
 import { listVariables, type ListArgs } from '#/lib/admin/list-variables.ts';
 import type { PostEditQuery, PostsAdminQuery } from '#/types/graphql.ts';
-import { linebreakNodeFragment, textNodeFragment } from '#/ui/post-content.tsx';
-import { videoFragment } from '#/ui/videos.tsx';
-
-// The post's body uses the public site's text and video fragments.
 
 const postFormFragment = gql`
   fragment PostForm_post on Post {
@@ -27,76 +23,13 @@ const postFormFragment = gql`
       name
     }
     editorState {
-      root {
-        direction
-        format
-        indent
-        type
-        version
-        children {
-          ... on ElementNodeType {
-            direction
-            format
-            indent
-            type
-            version
-            children {
-              ...TextNodes_linebreakNode
-              ...TextNodes_textNode
-            }
-          }
-          ... on HeadingNode {
-            tag
-          }
-          ... on ImageNode {
-            size
-            image {
-              id
-              destination
-              crops {
-                fileName
-                width
-              }
-            }
-          }
-          ... on VideoNode {
-            video {
-              ...Video_video
-            }
-          }
-          ... on CodeNode {
-            language
-          }
-          ... on ListNode {
-            listType
-            start
-            children {
-              ... on ListItemNode {
-                checked
-                direction
-                format
-                indent
-                type
-                value
-                version
-                children {
-                  ...TextNodes_linebreakNode
-                  ...TextNodes_textNode
-                }
-              }
-            }
-          }
-        }
-      }
+      forEditing
     }
     featuredMedia {
       ...FeaturedMedia_media
     }
   }
-  ${linebreakNodeFragment}
-  ${textNodeFragment}
   ${featuredMediaFragment}
-  ${videoFragment}
 `;
 
 const postsQuery = gql`

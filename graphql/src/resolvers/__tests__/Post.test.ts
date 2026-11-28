@@ -12,7 +12,7 @@ import {
   videos,
   videoThumbnailRows,
 } from '#/database/tables';
-import type { AppContext } from '#/models';
+import type { AppContext, UserWithRoles } from '#/models';
 import resolvers from '#/resolvers';
 import typeDefs from '#/schema';
 
@@ -127,6 +127,38 @@ describe('posts', () => {
   });
 
   afterAll(() => server.stop());
+
+  it('opens the complete nested list and its embedded media in the admin editor', async () => {
+    const nest = (leaf: object) => ({
+      type: 'list',
+      listType: 'number',
+      start: 3,
+      children: [{ type: 'listitem', value: 3, children: [leaf] }],
+    });
+    const tree = (leaf: object) => ({ root: { type: 'root', children: [nest(nest(nest(leaf)))] } });
+    const query = '{ posts(first: 1) { edges { node { editorState { forEditing } } } } }';
+    const media = { type: 'image', imageId: 'body-1', size: 'FEATURE' };
+    postsQuery.all.mockResolvedValue([{ editorState: tree(media) }]);
+    type Result = { posts: { edges: { node: { editorState: { forEditing: string } } }[] } };
+    const response = await server.executeOperation<Result>(
+      { query },
+      {
+        contextValue: { authUser: { roles: [{ name: 'admin' }] } as UserWithRoles },
+      }
+    );
+    if (response.body.kind !== 'single') throw new Error('Expected a single result');
+    expect(response.body.singleResult.errors).toBeUndefined();
+    const state = response.body.singleResult.data!.posts.edges[0]!.node.editorState;
+    expect(JSON.parse(state.forEditing)).toEqual(
+      tree({
+        ...media,
+        image: { id: 'body-1', crops: [{ fileName: 'body-1-640.jpg', width: 640 }] },
+      })
+    );
+    const guest = await server.executeOperation({ query }, { contextValue: {} });
+    if (guest.body.kind !== 'single') throw new Error('Expected a single result');
+    expect(guest.body.singleResult.errors?.[0].extensions?.code).toBe('UNAUTHENTICATED');
+  });
 
   it('loads thumbnails for all embedded videos together', async () => {
     const videoIds = ['v1', 'v2', 'v1'];

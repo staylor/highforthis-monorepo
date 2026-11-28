@@ -87,6 +87,10 @@ describe('post editor', () => {
     );
     assert.deepEqual(blocks[1], savedImage);
     assert.deepEqual(blocks[3], savedVideo);
+    const nested = blocks[4].children[1].children[0];
+    assert.equal(root.querySelector('ul ol li')?.textContent, 'Nested');
+    assert.equal(nested.start, 3);
+    assert.equal(nested.children[0].children[0].text, 'Nested');
   });
 
   it('leaves out images and videos whose media is gone, so the post can be saved', (t) => {

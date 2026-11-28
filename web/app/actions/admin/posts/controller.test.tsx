@@ -57,7 +57,7 @@ const savedPost = {
   date: postTime,
   artists: [{ id: 'a1', name: 'Wilco' }],
   featuredMedia: [],
-  editorState,
+  editorState: { forEditing: JSON.stringify(editorState) },
 };
 
 /** The props the page gave a client entry, from the JSON the browser hydrates it with. */

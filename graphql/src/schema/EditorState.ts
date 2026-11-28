@@ -180,6 +180,8 @@ const EditorState = `#graphql
   }
 
   type EditorState {
+    """Complete Lexical JSON with media previews for the admin editor."""
+    forEditing: String!
     root: ElementNode
   }
 

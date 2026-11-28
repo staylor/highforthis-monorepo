@@ -18,6 +18,7 @@ import {
 import { getUniqueSlug, slugsIn } from '#/models/utils';
 import { extractText } from '#/utils/lexical';
 
+import { fillAppleMusicLater } from './utils/appleMusicData';
 import { parseConnection } from './utils/collection';
 import { parseInput, removeRows, resolveJoin, unique } from './utils/helpers';
 import resolveTags from './utils/resolveTags';
@@ -125,13 +126,10 @@ const resolvers = {
       const contentBody = editorState ? extractText(editorState) : null;
       const media = unique(featuredMedia ?? []);
 
-      let artistIds: string[] = [];
-      if (inputArtists?.length) {
-        artistIds = unique(await resolveTags(inputArtists));
-      }
-
+      const newArtists: string[] = [];
       const id = newId();
       await db.transaction(async (tx) => {
+        const artistIds = unique(await resolveTags(tx, inputArtists ?? [], newArtists));
         await tx.create(posts, {
           ...rest,
           id,
@@ -153,6 +151,7 @@ const resolvers = {
           );
         }
       });
+      fillAppleMusicLater(newArtists);
       return db.find(posts, id, { with: postIncludes });
     },
 
@@ -176,13 +175,8 @@ const resolvers = {
 
       // Tags left out keep the ones the post has, as featured media left out do. The admin's form
       // sends an empty list once every tag is removed.
-      let artistIds: string[] | undefined;
-      if (inputArtists !== undefined) {
-        artistIds = inputArtists?.length ? unique(await resolveTags(inputArtists)) : [];
-      }
-
-      // The lists and the rest are saved together, so a list that can't be saved isn't lost
-      return db.transaction(async (tx) => {
+      const newArtists: string[] = [];
+      const post = await db.transaction(async (tx) => {
         if (featuredMedia !== undefined) {
           const media = unique(featuredMedia ?? []);
           await tx.deleteMany(postFeaturedMedia, { where: { postId: id } });
@@ -193,7 +187,8 @@ const resolvers = {
             );
           }
         }
-        if (artistIds !== undefined) {
+        if (inputArtists !== undefined) {
+          const artistIds = unique(await resolveTags(tx, inputArtists ?? [], newArtists));
           await tx.deleteMany(postArtists, { where: { postId: id } });
           if (artistIds.length) {
             await tx.createMany(
@@ -204,6 +199,8 @@ const resolvers = {
         }
         return tx.update(posts, id, values, { with: postIncludes });
       });
+      fillAppleMusicLater(newArtists);
+      return post;
     },
 
     async removePost(_, { ids }) {
