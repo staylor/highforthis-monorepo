@@ -171,38 +171,19 @@ async function saveVideo(
     }
   });
 
-  // A video listed in another playlist too is compared with what was just saved
-  known.set(data.dataId, { ...data, id: videoId, thumbnails });
   return !existing;
 }
 
-async function importPlaylist(year: number, playlistId: string, known: Map<string, KnownVideo>) {
-  let items: PlaylistItem[];
+async function loadPlaylist(year: number, playlistId: string) {
   try {
-    items = await fetchAll(
+    return await fetchAll(
       'playlistItems',
       { part: 'snippet,contentDetails', playlistId },
       playlistItemSchema
     );
   } catch (error) {
-    // Nothing is saved or removed from a playlist that didn't load in full
     logger.warn({ err: error, playlistId, year }, 'Could not load a YouTube playlist');
-    return;
   }
-
-  // One at a time, so two new videos with the same title can't claim the same slug
-  let added = 0;
-  for (const item of items.filter(isPublished)) {
-    if (await saveVideo(item, year, playlistId, known)) {
-      added += 1;
-    }
-  }
-
-  if (added) {
-    logger.info({ playlistId, year, added }, 'Added videos from a YouTube playlist');
-  }
-  // Private videos still belong to their playlists.
-  return items.map((item) => item.contentDetails.videoId);
 }
 
 /** Imports the videos in the channel's playlists that are named for a year, like "2025". */
@@ -234,15 +215,29 @@ export default async () => {
     .map(({ id, dataId, dataPlaylistId }) => ({ id, dataId, dataPlaylistId }));
 
   const listed = new Set<string>();
+  const published = new Map<string, { item: PublishedItem; year: number; playlistId: string }>();
   let complete = true;
   for (const playlist of yearly) {
-    const ids = await importPlaylist(Number(playlist.snippet.title), playlist.id, known);
-    if (ids) {
-      for (const id of ids) listed.add(id);
-    } else {
+    const year = Number(playlist.snippet.title);
+    const items = await loadPlaylist(year, playlist.id);
+    if (!items) {
       complete = false;
+      continue;
+    }
+    for (const item of items) {
+      const id = item.contentDetails.videoId;
+      listed.add(id); // Private videos still belong to the playlist.
+      if (isPublished(item)) published.set(id, { item, year, playlistId: playlist.id });
     }
   }
+
+  // Only the last published occurrence determines a shared video's saved details.
+  // Save one at a time so new videos with the same title get distinct slugs.
+  let added = 0;
+  for (const { item, year, playlistId } of published.values()) {
+    if (await saveVideo(item, year, playlistId, known)) added++;
+  }
+  if (added) logger.info({ added }, 'Added videos from YouTube playlists');
 
   // A video missing from one year may have moved to another. Removing it before seeing the
   // destination loses its ID, which posts use for embeds, and its slug.
