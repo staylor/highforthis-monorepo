@@ -5,6 +5,7 @@ import { describe, it, type TestContext } from 'remix/test';
 
 import type { OpenObserveRumConfig } from '#/lib/rum.ts';
 
+import { trackViews } from './rum-views.ts';
 import { sdkGlobals, startRum } from './rum.ts';
 
 // The SDK bundles load as this script, which does nothing: each test puts stand-ins for the SDKs
@@ -46,17 +47,29 @@ describe('startRum', () => {
   it('starts a view of the page the visit started on', async (t) => {
     const views = standInSdks(t);
 
-    await startRum(config, window.location.pathname);
+    await startRum(
+      config,
+      trackViews(undefined, () => window.location.pathname)
+    );
 
     assert.deepEqual(views, [window.location.pathname]);
   });
 
-  // The SDKs start once the page has loaded and the browser is idle, which can be after a click
-  it('starts one of the page the visitor has gone on to by then, too', async (t) => {
+  it('replays every view in order and records subsequent navigations once', async (t) => {
     const views = standInSdks(t);
-
-    await startRum(config, '/post/the-first-page');
-
-    assert.deepEqual(views, ['/post/the-first-page', window.location.pathname]);
+    const navigation = new EventTarget();
+    let path = '/a';
+    const tracker = trackViews(navigation, () => path);
+    t.after(() => tracker.stop());
+    const go = (next: string) => {
+      path = next;
+      navigation.dispatchEvent(new Event('navigatesuccess'));
+    };
+    go('/b');
+    const ready = startRum(config, tracker);
+    go('/a');
+    await ready;
+    go('/c');
+    assert.deepEqual(views, ['/a', '/b', '/a', '/c']);
   });
 });
